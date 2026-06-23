@@ -53,7 +53,7 @@ DWORD CInfoTalkEventBase::GetDataSize(void)
 	dwRet += sizeof(m_nEventType);	// 会話イベント種別
 	dwRet += sizeof(m_nPage);	// 所属ページ番号
 	dwRet += sizeof(m_dwData);	// バイナリデータ
-	dwRet += (m_strText.GetLegacyStoreLength() + 1);	// 文字列データ
+	dwRet += (m_strText.GetStoreLength() + 1);	// 文字列データ
 
 	return dwRet;
 }
@@ -68,7 +68,7 @@ DWORD CInfoTalkEventBase::GetDataSizeNo(int nNo)
 	case 0:	dwRet = sizeof(m_nEventType);	break;	// 会話イベント種別
 	case 1:	dwRet = sizeof(m_nPage);	break;	// 所属ページ番号
 	case 2:	dwRet = sizeof(m_dwData);	break;	// バイナリデータ
-	case 3:	dwRet = m_strText.GetLegacyStoreLength() + 1;	break;	// 文字列データ
+	case 3:	dwRet = m_strText.GetStoreLength() + 1;	break;	// 文字列データ
 	}
 
 	return dwRet;
@@ -98,7 +98,7 @@ PBYTE CInfoTalkEventBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 0:	pSrc = (PBYTE)&m_nEventType;	break;	// 会話イベント種別
 	case 1:	pSrc = (PBYTE)&m_nPage;	break;	// 所属ページ番号
 	case 2:	pSrc = (PBYTE)&m_dwData;	break;	// バイナリデータ
-	case 3:	pSrc = (PBYTE)(LPCSTR)m_strText;	break;	// 文字列データ
+	case 3:	pSrc = (PBYTE)m_strText.GetUtf8Pointer();	break;	// 文字列データ
 	}
 
 	if (pSrc) {
@@ -144,7 +144,7 @@ DWORD CInfoTalkEventBase::GetSendDataSize(void)
 	dwRet += sizeof(m_nEventType);	// 会話イベント種別
 	dwRet += sizeof(m_nPage);	// 所属ページ番号
 	dwRet += sizeof(m_dwData);	// バイナリデータ
-	dwRet += (m_strText.GetLegacyStoreLength() + 1);	// 文字列データ
+	dwRet += (m_strText.GetStoreLength() + 1);	// 文字列データ
 
 	return dwRet;
 }

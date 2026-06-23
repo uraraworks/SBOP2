@@ -47,7 +47,7 @@ DWORD CInfoDisable::GetDataSize(void)
 
 	dwRet = 0;
 	dwRet += sizeof(m_dwDisableID);	// 拒否情報ID
-	dwRet += (m_strMacAddress.GetLegacyStoreLength() + 1);	// MACアドレス
+	dwRet += (m_strMacAddress.GetStoreLength() + 1);	// MACアドレス
 
 	return dwRet;
 }
@@ -60,7 +60,7 @@ DWORD CInfoDisable::GetDataSizeNo(int nNo)
 
 	switch (nNo) {
 	case 0:	dwRet = sizeof(m_dwDisableID);	break;	// 拒否情報ID
-	case 1:	dwRet = (m_strMacAddress.GetLegacyStoreLength() + 1);	break;	// MACアドレス
+	case 1:	dwRet = (m_strMacAddress.GetStoreLength() + 1);	break;	// MACアドレス
 	}
 
 	return dwRet;
@@ -88,7 +88,7 @@ PBYTE CInfoDisable::GetWriteData(int nNo, PDWORD pdwSize)
 
 	switch (nNo) {
 	case 0:	pSrc = (PBYTE)&m_dwDisableID;	break;	// 拒否情報ID
-	case 1:	pSrc = (PBYTE)(LPCSTR)m_strMacAddress;	break;	// MACアドレス
+	case 1:	pSrc = (PBYTE)m_strMacAddress.GetUtf8Pointer();	break;	// MACアドレス
 	}
 
 	if (pSrc) {
@@ -129,7 +129,7 @@ DWORD CInfoDisable::GetSendDataSize(void)
 	DWORD dwRet;
 
 	dwRet = sizeof(m_dwDisableID)	+
-			(m_strMacAddress.GetLegacyStoreLength() + 1);
+			(m_strMacAddress.GetStoreLength() + 1);
 
 	return dwRet;
 }

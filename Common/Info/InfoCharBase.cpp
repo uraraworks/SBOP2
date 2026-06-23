@@ -319,9 +319,9 @@ DWORD CInfoCharBase::GetDataSize(void)
 	dwRet += sizeof(m_dwMaxSP);
 	dwRet += sizeof(m_clName);
 	dwRet += sizeof(m_clSpeak);
-	dwRet += (m_strCharName.GetLegacyStoreLength() + 1);
-	dwRet += (m_strSpeak.GetLegacyStoreLength() + 1);
-	dwRet += (m_strTalk.GetLegacyStoreLength() + 1);
+	dwRet += (m_strCharName.GetStoreLength() + 1);
+	dwRet += (m_strSpeak.GetStoreLength() + 1);
+	dwRet += (m_strTalk.GetStoreLength() + 1);
 	dwRet += ((m_adwItemID.size() + 1) * sizeof(DWORD));
 	dwRet += ((m_adwSkillID.size() + 1) * sizeof(DWORD));
 	dwRet += sizeof(m_sizeSearchDistance);	// 策敵範囲
@@ -373,9 +373,9 @@ DWORD CInfoCharBase::GetDataSizeNo(int nNo)
 	case 28:	dwRet = sizeof(m_dwMotionTypeID);	break;
 	case 29:	dwRet = sizeof(m_clName);	break;
 	case 30:	dwRet = sizeof(m_clSpeak);	break;
-	case 31:	dwRet = (m_strCharName.GetLegacyStoreLength() + 1);	break;
-	case 32:	dwRet = (m_strSpeak.GetLegacyStoreLength() + 1);	break;
-	case 33:	dwRet = (m_strTalk.GetLegacyStoreLength() + 1);	break;
+	case 31:	dwRet = (m_strCharName.GetStoreLength() + 1);	break;
+	case 32:	dwRet = (m_strSpeak.GetStoreLength() + 1);	break;
+	case 33:	dwRet = (m_strTalk.GetStoreLength() + 1);	break;
 	case 34:	dwRet = ((m_adwItemID.size() + 1) * sizeof(DWORD));	break;
 	case 35:	dwRet = ((m_adwSkillID.size() + 1) * sizeof(DWORD));	break;
 	case 36:	dwRet = sizeof(m_bBlock);	break;
@@ -492,9 +492,9 @@ PBYTE CInfoCharBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 28:	pSrc = (PBYTE)&m_dwMotionTypeID;	break;
 	case 29:	pSrc = (PBYTE)&m_clName;	break;
 	case 30:	pSrc = (PBYTE)&m_clSpeak;	break;
-	case 31:	pSrc = (PBYTE)(LPCSTR)m_strCharName;	break;
-	case 32:	pSrc = (PBYTE)(LPCSTR)m_strSpeak;	break;
-	case 33:	pSrc = (PBYTE)(LPCSTR)m_strTalk;	break;
+	case 31:	pSrc = (PBYTE)m_strCharName.GetUtf8Pointer();	break;
+	case 32:	pSrc = (PBYTE)m_strSpeak.GetUtf8Pointer();	break;
+	case 33:	pSrc = (PBYTE)m_strTalk.GetUtf8Pointer();	break;
 	case 34:
 		pTmp	= pRet;
 		nCount	= m_adwItemID.size();
@@ -804,9 +804,9 @@ DWORD CInfoCharBase::GetSendDataSize(void)
 	dwRet += sizeof(m_dwMaxSP);
 	dwRet += sizeof(m_clName);
 	dwRet += sizeof(m_clSpeak);
-	dwRet += (m_strCharName.GetLegacyStoreLength() + 1);
-	dwRet += (m_strSpeak.GetLegacyStoreLength() + 1);
-	dwRet += (m_strTalk.GetLegacyStoreLength() + 1);
+	dwRet += (m_strCharName.GetStoreLength() + 1);
+	dwRet += (m_strSpeak.GetStoreLength() + 1);
+	dwRet += (m_strTalk.GetStoreLength() + 1);
 	dwRet += (m_abyMark.	GetSize() + 1);
 	dwRet += ((m_adwItemID.	GetSize() + 1) * sizeof(DWORD));
 	dwRet += ((m_adwSkillID.size() + 1) * sizeof(DWORD));

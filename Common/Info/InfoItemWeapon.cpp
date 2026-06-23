@@ -58,7 +58,7 @@ DWORD CInfoItemWeapon::GetDataSize(void)
 	dwRet += sizeof(m_dwMotionType);	// 使用可能な攻撃モーション
 	dwRet += sizeof(m_dwMotionTypeStand);	// 戦闘モード中の立ちモーション
 	dwRet += sizeof(m_dwMotionTypeWalk);	// 戦闘モード中のすり足モーション
-	dwRet += (m_strName.GetLegacyStoreLength() + 1);	// 武器種別名
+	dwRet += (m_strName.GetStoreLength() + 1);	// 武器種別名
 	dwRet += ((m_adwEffectIDAtack.size() + 1) * sizeof(DWORD));	// 通常攻撃時のエフェクトID
 	dwRet += ((m_adwEffectIDCritical.size() + 1) * sizeof(DWORD));	// クリティカル時のエフェクトID
 
@@ -76,7 +76,7 @@ DWORD CInfoItemWeapon::GetDataSizeNo(int nNo)
 	case 1:	dwRet = sizeof(m_dwMotionType);	break;	// 使用可能な攻撃モーション
 	case 2:	dwRet = sizeof(m_dwMotionTypeStand);	break;	// 戦闘モード中の立ちモーション
 	case 3:	dwRet = sizeof(m_dwMotionTypeWalk);	break;	// 戦闘モード中のすり足モーション
-	case 4:	dwRet = (m_strName.GetLegacyStoreLength() + 1);	break;	// 武器種別名
+	case 4:	dwRet = (m_strName.GetStoreLength() + 1);	break;	// 武器種別名
 	case 5:	dwRet = ((m_adwEffectIDAtack.size() + 1) * sizeof(DWORD));	break;	// 通常攻撃時のエフェクトID数
 	case 6:	dwRet = ((m_adwEffectIDCritical.size() + 1) * sizeof(DWORD));	break;	// クリティカル時のエフェクトID数
 
@@ -111,7 +111,7 @@ PBYTE CInfoItemWeapon::GetWriteData(int nNo, PDWORD pdwSize)
 	case 1:	pSrc = (PBYTE)&m_dwMotionType;	break;	// 使用可能な攻撃モーション
 	case 2:	pSrc = (PBYTE)&m_dwMotionTypeStand;	break;	// 戦闘モード中の立ちモーション
 	case 3:	pSrc = (PBYTE)&m_dwMotionTypeWalk;	break;	// 戦闘モード中のすり足モーション
-	case 4:	pSrc = (PBYTE)(LPCSTR)m_strName;	break;	// 武器種別名
+	case 4:	pSrc = (PBYTE)m_strName.GetUtf8Pointer();	break;	// 武器種別名
 	case 5:	// 通常攻撃時のエフェクトID
 		pTmp	= pRet;
 		nCount	= m_adwEffectIDAtack.size();

@@ -258,7 +258,7 @@ DWORD CInfoMapBase::GetDataSize(void)
 	dwRet += ((m_sizeMap.cx * sizeof(WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof(WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof(WORD)) * m_sizeMap.cy);
-	dwRet += (m_strMapName.GetLegacyStoreLength() + 1);
+	dwRet += (m_strMapName.GetStoreLength() + 1);
 	if (m_pLibInfoMapEvent) {
 		dwRet += m_pLibInfoMapEvent->GetDataSize();
 	}
@@ -286,7 +286,7 @@ DWORD CInfoMapBase::GetDataSizeNo(int nNo)
 	case 7:	dwRet = (m_sizeMap.cx * sizeof(WORD)) * m_sizeMap.cy;	break;
 	case 8:	dwRet = (m_sizeMap.cx * sizeof(WORD)) * m_sizeMap.cy;	break;
 	case 9:	dwRet = (m_sizeMap.cx * sizeof(WORD)) * m_sizeMap.cy;	break;
-	case 10:dwRet = m_strMapName.GetLegacyStoreLength() + 1;	break;
+	case 10:dwRet = m_strMapName.GetStoreLength() + 1;	break;
 	case 11:
 		if (m_pLibInfoMapEvent) {
 			dwRet = m_pLibInfoMapEvent->GetDataSize();
@@ -333,7 +333,7 @@ PBYTE CInfoMapBase::GetWriteData(int nNo, PDWORD pdwSize)
 	case 7:	pSrc = (PBYTE)m_pwMap;	break;
 	case 8:	pSrc = (PBYTE)m_pwMapPile;	break;
 	case 9:	pSrc = (PBYTE)m_pwMapShadow;	break;
-	case 10:pSrc = (PBYTE)(LPCSTR)m_strMapName;	break;
+	case 10:pSrc = (PBYTE)m_strMapName.GetUtf8Pointer();	break;
 	case 11:
 		if (m_pLibInfoMapEvent) {
 			pSrc = m_pLibInfoMapEvent->GetWriteData(pdwSize);
@@ -755,7 +755,7 @@ DWORD CInfoMapBase::GetSendDataSize(void)
 	dwRet += ((m_sizeMap.cx * sizeof(WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof(WORD)) * m_sizeMap.cy);
 	dwRet += ((m_sizeMap.cx * sizeof(WORD)) * m_sizeMap.cy);
-	dwRet += (m_strMapName.GetLegacyStoreLength() + 1);
+	dwRet += (m_strMapName.GetStoreLength() + 1);
 	if (m_pLibInfoMapEvent) {
 		dwRet += m_pLibInfoMapEvent->GetSendDataSize();
 	}

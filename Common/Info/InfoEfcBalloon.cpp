@@ -63,7 +63,7 @@ DWORD CInfoEfcBalloon::GetDataSize(void)
 			sizeof(m_dwListID)	+	// 噴出し種別ID
 			sizeof(m_dwAnimeID)	+	// コマ番号
 			sizeof(m_dwSoundID)	+	// 効果音ID
-			(m_strName.GetLegacyStoreLength() + 1)	+	// 画像ID
+			(m_strName.GetStoreLength() + 1)	+	// 画像ID
 			sizeof(m_dwGrpID);	// 噴出し名
 
 	return dwRet;
@@ -83,7 +83,7 @@ DWORD CInfoEfcBalloon::GetDataSizeNo(int nNo)
 	case 4:	dwRet = sizeof(m_dwAnimeID);	break;	// コマ番号
 	case 5:	dwRet = sizeof(m_dwSoundID);	break;	// 効果音ID
 	case 6:	dwRet = sizeof(m_dwGrpID);	break;	// 画像ID
-	case 7:	dwRet = (m_strName.GetLegacyStoreLength() + 1);	break;	// 噴出し名
+	case 7:	dwRet = (m_strName.GetStoreLength() + 1);	break;	// 噴出し名
 	}
 
 	return dwRet;
@@ -117,7 +117,7 @@ PBYTE CInfoEfcBalloon::GetWriteData(int nNo, PDWORD pdwSize)
 	case 4:	pSrc = (PBYTE)&m_dwAnimeID;	break;	// コマ番号
 	case 5:	pSrc = (PBYTE)&m_dwSoundID;	break;	// 効果音ID
 	case 6:	pSrc = (PBYTE)&m_dwGrpID;	break;	// 画像ID
-	case 7:	pSrc = (PBYTE)(LPCSTR)m_strName;	break;	// 噴出し名
+	case 7:	pSrc = (PBYTE)m_strName.GetUtf8Pointer();	break;	// 噴出し名
 	}
 
 	if (pSrc) {

@@ -73,9 +73,9 @@ DWORD CInfoAccount::GetDataSize(void)
 	dwRet += sizeof(m_dwLoginCount);
 	dwRet += ((m_adwCharID.size() + 1) * sizeof(DWORD));
 	dwRet += sizeof(m_nAdminLevel);
-	dwRet += (m_strAccount.GetLegacyStoreLength() + 1);
-	dwRet += (m_strPassword.GetLegacyStoreLength() + 1);
-	dwRet += (m_strMacAddr.GetLegacyStoreLength() + 1);
+	dwRet += (m_strAccount.GetStoreLength() + 1);
+	dwRet += (m_strPassword.GetStoreLength() + 1);
+	dwRet += (m_strMacAddr.GetStoreLength() + 1);
 
 	return dwRet;
 }
@@ -95,9 +95,9 @@ DWORD CInfoAccount::GetDataSizeNo(int nNo)
 	case 5:	dwRet = sizeof(m_dwLoginCount);	break;
 	case 6:	dwRet = ((m_adwCharID.size() + 1) * sizeof(DWORD));	break;
 	case 7:	dwRet = sizeof(m_nAdminLevel);	break;
-	case 8:	dwRet = (m_strAccount.GetLegacyStoreLength() + 1);	break;
-	case 9:	dwRet = (m_strPassword.GetLegacyStoreLength() + 1);	break;
-	case 10:dwRet = (m_strMacAddr.GetLegacyStoreLength() + 1);	break;	// アカウント登録MACアドレス
+	case 8:	dwRet = (m_strAccount.GetStoreLength() + 1);	break;
+	case 9:	dwRet = (m_strPassword.GetStoreLength() + 1);	break;
+	case 10:dwRet = (m_strMacAddr.GetStoreLength() + 1);	break;	// アカウント登録MACアドレス
 	}
 
 	return dwRet;
@@ -146,9 +146,9 @@ PBYTE CInfoAccount::GetWriteData(int nNo, PDWORD pdwSize)
 		}
 		break;
 	case 7:	pSrc = (PBYTE)&m_nAdminLevel;	break;
-	case 8:	pSrc = (PBYTE)(LPCSTR)m_strAccount;	break;
-	case 9:	pSrc = (PBYTE)(LPCSTR)m_strPassword;	break;
-	case 10:pSrc = (PBYTE)(LPCSTR)m_strMacAddr;	break;
+	case 8:	pSrc = (PBYTE)m_strAccount.GetUtf8Pointer();	break;
+	case 9:	pSrc = (PBYTE)m_strPassword.GetUtf8Pointer();	break;
+	case 10:pSrc = (PBYTE)m_strMacAddr.GetUtf8Pointer();	break;
 	}
 
 	if (pSrc) {
@@ -317,9 +317,9 @@ PBYTE CInfoAccount::GetTmpData(DWORD &dwDataSize)
 	// サイズを計算
 	dwDataSize += sizeof(m_dwAccountID);
 	dwDataSize += sizeof(m_dwIP);
-	dwDataSize += (m_strAccount.GetLegacyStoreLength() + 1);
-	dwDataSize += (m_strPassword.GetLegacyStoreLength() + 1);
-	dwDataSize += (m_strLastMacAddr.GetLegacyStoreLength() + 1);
+	dwDataSize += (m_strAccount.GetStoreLength() + 1);
+	dwDataSize += (m_strPassword.GetStoreLength() + 1);
+	dwDataSize += (m_strLastMacAddr.GetStoreLength() + 1);
 
 	pRet = ZeroNew(dwDataSize);
 	pDataTmp = pRet;

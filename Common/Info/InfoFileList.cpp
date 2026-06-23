@@ -95,8 +95,8 @@ DWORD CInfoFileList::GetSendDataSize(void)
 	for (i = 0; i < nCount; i ++) {
 		pInfo = GetPtr(i);
 		dwRet += sizeof(pInfo->dwFileSize);	// ファイルサイズ
-		dwRet += (pInfo->strMD5.GetLegacyStoreLength() + 1);	// MD5ハッシュ
-		dwRet += (pInfo->strFileName.GetLegacyStoreLength() + 1);	// ファイル名
+		dwRet += (pInfo->strMD5.GetStoreLength() + 1);	// MD5ハッシュ
+		dwRet += (pInfo->strFileName.GetStoreLength() + 1);	// ファイル名
 	}
 	dwRet += sizeof(DWORD);
 
