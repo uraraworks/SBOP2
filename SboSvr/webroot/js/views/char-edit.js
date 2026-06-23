@@ -466,9 +466,9 @@ function buildItemsTab() {
 
   var table = mkEl("table", "data-table");
   var thead = mkEl("thead");
-  thead.innerHTML = "<tr><th>スロット</th><th>画像</th><th>アイテム</th><th>操作</th></tr>";
+  thead.innerHTML = "<tr><th>スロット</th><th>アイテム</th><th>操作</th></tr>";
   var tbody = mkEl("tbody");
-  tbody.innerHTML = "<tr><td colspan='4'>（データなし）</td></tr>";
+  tbody.innerHTML = "<tr><td colspan='3'>（データなし）</td></tr>";
   table.append(thead, tbody);
   panel.appendChild(table);
 
@@ -942,7 +942,7 @@ export function mount(container) {
 
   function renderItems(items) {
     if (!items.length) {
-      itemsTab.tbody.innerHTML = "<tr><td colspan='4'>（データなし）</td></tr>";
+      itemsTab.tbody.innerHTML = "<tr><td colspan='3'>（データなし）</td></tr>";
       return;
     }
     itemsTab.tbody.innerHTML = "";
@@ -951,23 +951,25 @@ export function mount(container) {
       var tr = mkEl("tr");
       var tdSlot = mkEl("td", "", String(item.slot));
 
-      // アイコン列
-      var tdIcon = mkEl("td");
+      // アイテム列: アイコン + [ID] 名前 を横並び
+      var tdItem = mkEl("td");
+      tdItem.style.display = "flex";
+      tdItem.style.alignItems = "center";
+      tdItem.style.gap = "6px";
       if (info && info.iconGrpId) {
         var thumb = createSpriteThumb({ categoryKey: "item", sub: info.iconGrpId, size: 20 });
-        tdIcon.appendChild(thumb);
+        tdItem.appendChild(thumb.el);
       }
-
-      // [itemId] アイテム名 列
       var itemName = (info && info.name) ? info.name : "(名前なし)";
-      var tdName = mkEl("td", "", "[" + String(item.itemId) + "] " + itemName);
+      var spanLabel = mkEl("span", "", "[" + String(item.itemId) + "] " + itemName);
+      tdItem.appendChild(spanLabel);
 
       var tdOp   = mkEl("td");
       var delBtn = mkEl("button", "button danger btn-sm", "削除");
       delBtn.type = "button";
       delBtn.addEventListener("click", function () { doDeleteItem(item.slot); });
       tdOp.appendChild(delBtn);
-      tr.append(tdSlot, tdIcon, tdName, tdOp);
+      tr.append(tdSlot, tdItem, tdOp);
       itemsTab.tbody.appendChild(tr);
     });
   }
