@@ -174,18 +174,19 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	m_pLog->Write(
-		"[MOVE_RECV] dwSessionID:%u [PACKET:%s][CHARID:%u][MAP:%u][POS:%d,%d][DIR:%d][UPDATE:%d][TS:%u][SPD:%d]",
-		dwSessionID,
-		pszPacketName,
-		dwCharID,
-		dwMapID,
-		nPacketPosX,
-		nPacketPosY,
-		nDirection,
-		bUpdate ? 1 : 0,
-		dwPacketTime,
-		nSpeedLevel);
+	// 移動トレースログ抑制（いったん無効化）
+	//m_pLog->Write(
+	//	"[MOVE_RECV] dwSessionID:%u [PACKET:%s][CHARID:%u][MAP:%u][POS:%d,%d][DIR:%d][UPDATE:%d][TS:%u][SPD:%d]",
+	//	dwSessionID,
+	//	pszPacketName,
+	//	dwCharID,
+	//	dwMapID,
+	//	nPacketPosX,
+	//	nPacketPosY,
+	//	nDirection,
+	//	bUpdate ? 1 : 0,
+	//	dwPacketTime,
+	//	nSpeedLevel);
 
 	if (nSpeedLevel <= 0) {
 		nSpeedLevel = 1;
@@ -193,30 +194,33 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 
 	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtr(dwCharID);
 	if (pInfoChar == NULL) {
-		m_pLog->Write(
-			"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:CHAR_NOT_FOUND][CHARID:%u]",
-			dwSessionID,
-			pszPacketName,
-			dwCharID);
+		// 移動トレースログ抑制（いったん無効化）
+		//m_pLog->Write(
+		//	"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:CHAR_NOT_FOUND][CHARID:%u]",
+		//	dwSessionID,
+		//	pszPacketName,
+		//	dwCharID);
 		return;
 	}
 	if (pInfoChar->m_dwMapID != dwMapID) {
-		m_pLog->Write(
-			"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:MAP_MISMATCH][CHAR:%s][SERVER_MAP:%u][PACKET_MAP:%u]",
-			dwSessionID,
-			pszPacketName,
-			(LPCSTR)pInfoChar->m_strCharName,
-			pInfoChar->m_dwMapID,
-			dwMapID);
+		// 移動トレースログ抑制（いったん無効化）
+		//m_pLog->Write(
+		//	"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:MAP_MISMATCH][CHAR:%s][SERVER_MAP:%u][PACKET_MAP:%u]",
+		//	dwSessionID,
+		//	pszPacketName,
+		//	(LPCSTR)pInfoChar->m_strCharName,
+		//	pInfoChar->m_dwMapID,
+		//	dwMapID);
 		return;
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		m_pLog->Write(
-			"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:SESSION_MISMATCH][CHAR:%s]",
-			dwSessionID,
-			pszPacketName,
-			(LPCSTR)pInfoChar->m_strCharName);
+		// 移動トレースログ抑制（いったん無効化）
+		//m_pLog->Write(
+		//	"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:SESSION_MISMATCH][CHAR:%s]",
+		//	dwSessionID,
+		//	pszPacketName,
+		//	(LPCSTR)pInfoChar->m_strCharName);
 		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
 		return;
 	}
@@ -241,23 +245,25 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 			// これを許可しないと 2 パケット目以降が弾かれて MoveSync が機能しない。
 			if (pInfoChar->IsStateMove() == FALSE) {
 				// 移動できない状態なので無視
-				m_pLog->Write(
-					"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:MOVE_DISABLED][CHAR:%s][STATE:%d]",
-					dwSessionID,
-					pszPacketName,
-					(LPCSTR)pInfoChar->m_strCharName,
-					pInfoChar->m_nMoveState);
+				// 移動トレースログ抑制（いったん無効化）
+				//m_pLog->Write(
+				//	"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:MOVE_DISABLED][CHAR:%s][STATE:%d]",
+				//	dwSessionID,
+				//	pszPacketName,
+				//	(LPCSTR)pInfoChar->m_strCharName,
+				//	pInfoChar->m_nMoveState);
 				return;
 			}
 		}
 	}
 	if (pInfoChar->m_dwHP == 0) {
 		// HP0で歩こうとした時は気絶させる
-		m_pLog->Write(
-			"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:HP_ZERO][CHAR:%s]",
-			dwSessionID,
-			pszPacketName,
-			(LPCSTR)pInfoChar->m_strCharName);
+		// 移動トレースログ抑制（いったん無効化）
+		//m_pLog->Write(
+		//	"[MOVE_RECV_DROP] dwSessionID:%u [PACKET:%s][理由:HP_ZERO][CHAR:%s]",
+		//	dwSessionID,
+		//	pszPacketName,
+		//	(LPCSTR)pInfoChar->m_strCharName);
 		pInfoChar->SetMoveState(CHARMOVESTATE_SWOON);
 		return;
 	}
@@ -294,15 +300,16 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 
 		if (bHasPacketTime && (dwPacketTime != 0) && (pInfoChar->m_dwLastRecvMovePacketTime != 0)) {
 			if (dwPacketTime <= pInfoChar->m_dwLastRecvMovePacketTime) {
-				m_pLog->Write(
-					"移動時刻逆行を拒否 dwSessionID:%u [PACKET:%s][CHAR:%s][受信:%u][前回:%u][座標:%d,%d]",
-					dwSessionID,
-					pszPacketName,
-					(LPCSTR)pInfoChar->m_strCharName,
-					dwPacketTime,
-					pInfoChar->m_dwLastRecvMovePacketTime,
-					nPacketPosX,
-					nPacketPosY);
+				// 移動トレースログ抑制（いったん無効化）
+				//m_pLog->Write(
+				//	"移動時刻逆行を拒否 dwSessionID:%u [PACKET:%s][CHAR:%s][受信:%u][前回:%u][座標:%d,%d]",
+				//	dwSessionID,
+				//	pszPacketName,
+				//	(LPCSTR)pInfoChar->m_strCharName,
+				//	dwPacketTime,
+				//	pInfoChar->m_dwLastRecvMovePacketTime,
+				//	nPacketPosX,
+				//	nPacketPosY);
 				return;
 			}
 			dwElapsed = dwPacketTime - pInfoChar->m_dwLastRecvMovePacketTime;
@@ -409,14 +416,15 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	// PC の移動系だけは同一マップ全体へ中継して配送漏れを避ける。
 	// NPC は従来通り ProcChgPos で MoveSync を発行する。
 	if (!pInfoChar->IsNPC()) {
-		m_pLog->Write(
-			"[MOVE_RELAY] [PACKET:%s][CHAR:%s][POS:%d,%d][DIR:%d][UPDATE:%d]",
-			pszPacketName,
-			(LPCSTR)pInfoChar->m_strCharName,
-			nPacketPosX,
-			nPacketPosY,
-			nDirection,
-			bUpdate ? 1 : 0);
+		// 移動トレースログ抑制（いったん無効化）
+		//m_pLog->Write(
+		//	"[MOVE_RELAY] [PACKET:%s][CHAR:%s][POS:%d,%d][DIR:%d][UPDATE:%d]",
+		//	pszPacketName,
+		//	(LPCSTR)pInfoChar->m_strCharName,
+		//	nPacketPosX,
+		//	nPacketPosY,
+		//	nDirection,
+		//	bUpdate ? 1 : 0);
 		switch (nCmdSub) {
 		case SBOCOMMANDID_SUB_CHAR_MOVE_START:
 			pRelayPacket = &PacketMoveStart;
