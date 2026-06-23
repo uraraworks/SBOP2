@@ -25,7 +25,9 @@ public:
 
 private:
         bool            BuildFilePath(const std::string &requestPath, std::wstring &outPath, std::string &outRelativePath) const;
-        bool            LoadFile(const std::wstring &path, std::string &outContent, FileMetaInfo *outMeta = nullptr) const;
+        // ファイル本文を読まず、サイズ・mtime だけを取得する軽量メソッド
+        bool            StatFile(const std::wstring &path, FileMetaInfo &outMeta) const;
+        bool            LoadFile(const std::wstring &path, std::string &outContent) const;
         std::string     DetermineContentType(const std::string &relativePath) const;
         std::string     DetermineCacheControl(const std::string &relativePath) const;
         static std::string NormalizeRequestPath(const std::string &path);

@@ -53,9 +53,9 @@ void CStaticFileHandler::Handle(const HttpRequest &request, HttpResponse &respon
                 return;
         }
 
-        std::string content;
+        // --- Phase 1: ファイルのサイズ・mtime だけを取得（本文は読まない）---
         FileMetaInfo meta = {};
-        if (!LoadFile(filePath, content, &meta)) {
+        if (!StatFile(filePath, meta)) {
                 response.statusLine = "HTTP/1.1 404 Not Found";
                 response.SetJsonBody("{\"error\":\"not_found\"}");
                 return;
@@ -72,7 +72,7 @@ void CStaticFileHandler::Handle(const HttpRequest &request, HttpResponse &respon
                 lastModified = BuildLastModified(meta);
         }
 
-        // --- 条件付きリクエスト判定 ---
+        // --- Phase 2: 条件付きリクエスト判定（LoadFile より前）---
         bool send304 = false;
         if (meta.valid) {
                 // If-None-Match が優先
@@ -98,12 +98,20 @@ void CStaticFileHandler::Handle(const HttpRequest &request, HttpResponse &respon
                 response.SetHeader("Cache-Control", cacheControl);
                 if (!etag.empty())         { response.SetHeader("ETag",          etag); }
                 if (!lastModified.empty()) { response.SetHeader("Last-Modified",  lastModified); }
-                // 304 は body 無し。Content-Length=0 をセット。
+                // 304 は body 無し。Content-Length=0 をセット。LoadFile は呼ばない。
                 response.SetHeader("Content-Length", "0");
                 return;
         }
 
-        // --- 通常 200 応答 ---
+        // --- Phase 3: 200 確定後に初めてファイル本文を読む ---
+        std::string content;
+        if (!LoadFile(filePath, content)) {
+                // StatFile 後にファイルが消えるレース等 → 404
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"not_found\"}");
+                return;
+        }
+
         response.statusLine = "HTTP/1.1 200 OK";
         response.body.swap(content);
         response.SetHeader("Content-Type",  contentType);
@@ -191,16 +199,19 @@ bool CStaticFileHandler::BuildFilePath(const std::string &requestPath, std::wstr
 }
 
 // ---------------------------------------------------------------------------
-// LoadFile（outMeta が非nullptr の場合、サイズ・mtime を設定する）
+// StatFile: ファイル本文を読まず、サイズ・mtime のみ取得する軽量メソッド
+// kMaxStaticFileSize 超過時は false を返す（配信拒否）。
 // ---------------------------------------------------------------------------
-bool CStaticFileHandler::LoadFile(const std::wstring &path, std::string &outContent, FileMetaInfo *outMeta) const
+bool CStaticFileHandler::StatFile(const std::wstring &path, FileMetaInfo &outMeta) const
 {
 #if !defined(_WIN32)
         (void)path;
-        (void)outContent;
         (void)outMeta;
         return false;
 #else
+        outMeta.valid    = false;
+        outMeta.fileSize = 0;
+
         HANDLE hFile = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         if (hFile == INVALID_HANDLE_VALUE) {
                 return false;
@@ -220,15 +231,47 @@ bool CStaticFileHandler::LoadFile(const std::wstring &path, std::string &outCont
                 return false;
         }
 
-        // mtime 取得（失敗してもファイル配信は続行）
-        if (outMeta) {
-                outMeta->valid    = false;
-                outMeta->fileSize = static_cast<unsigned long long>(size.QuadPart);
-                FILETIME ftCreate, ftAccess, ftWrite;
-                if (GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite)) {
-                        outMeta->mtime = ftWrite;
-                        outMeta->valid = true;
-                }
+        outMeta.fileSize = static_cast<unsigned long long>(size.QuadPart);
+
+        // mtime 取得（失敗しても valid=false のまま → ETag なし・200 配信は続行）
+        FILETIME ftCreate, ftAccess, ftWrite;
+        if (GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite)) {
+                outMeta.mtime = ftWrite;
+                outMeta.valid = true;
+        }
+
+        CloseHandle(hFile);
+        return true;
+#endif
+}
+
+// ---------------------------------------------------------------------------
+// LoadFile（200 確定後に本文を読む。meta 取得は StatFile に移管済み）
+// ---------------------------------------------------------------------------
+bool CStaticFileHandler::LoadFile(const std::wstring &path, std::string &outContent) const
+{
+#if !defined(_WIN32)
+        (void)path;
+        (void)outContent;
+        return false;
+#else
+        HANDLE hFile = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+        if (hFile == INVALID_HANDLE_VALUE) {
+                return false;
+        }
+
+        LARGE_INTEGER size;
+        if (!GetFileSizeEx(hFile, &size)) {
+                CloseHandle(hFile);
+                return false;
+        }
+        if (size.QuadPart < 0) {
+                CloseHandle(hFile);
+                return false;
+        }
+        if (static_cast<unsigned long long>(size.QuadPart) > kMaxStaticFileSize) {
+                CloseHandle(hFile);
+                return false;
         }
 
         outContent.resize(static_cast<size_t>(size.QuadPart));
