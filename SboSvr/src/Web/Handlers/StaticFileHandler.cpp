@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstdio>
 
 #if defined(_WIN32)
 #include <windows.h>
@@ -11,8 +12,19 @@
 namespace
 {
 const unsigned long long kMaxStaticFileSize = 64ULL * 1024ULL * 1024ULL;
-}
 
+// 曜日・月の英語短縮名（RFC 7231 HTTP-date 生成用）
+static const char* const kDayNames[7]   = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+static const char* const kMonthNames[12] = {
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+};
+
+} // anonymous namespace
+
+// ---------------------------------------------------------------------------
+// コンストラクタ
+// ---------------------------------------------------------------------------
 CStaticFileHandler::CStaticFileHandler(const std::wstring &rootDirectory, const std::wstring &defaultDocument, const std::string &mountPath)
         : m_rootDirectory(rootDirectory)
         , m_defaultDocument(defaultDocument)
@@ -28,6 +40,9 @@ CStaticFileHandler::CStaticFileHandler(const std::wstring &rootDirectory, const 
         }
 }
 
+// ---------------------------------------------------------------------------
+// Handle
+// ---------------------------------------------------------------------------
 void CStaticFileHandler::Handle(const HttpRequest &request, HttpResponse &response)
 {
         std::wstring filePath;
@@ -39,17 +54,67 @@ void CStaticFileHandler::Handle(const HttpRequest &request, HttpResponse &respon
         }
 
         std::string content;
-        if (!LoadFile(filePath, content)) {
+        FileMetaInfo meta = {};
+        if (!LoadFile(filePath, content, &meta)) {
                 response.statusLine = "HTTP/1.1 404 Not Found";
                 response.SetJsonBody("{\"error\":\"not_found\"}");
                 return;
         }
 
+        const std::string cacheControl = DetermineCacheControl(relativePath);
+        const std::string contentType  = DetermineContentType(relativePath);
+
+        // ETag / Last-Modified を生成（meta が有効な場合のみ）
+        std::string etag;
+        std::string lastModified;
+        if (meta.valid) {
+                etag         = BuildETag(meta);
+                lastModified = BuildLastModified(meta);
+        }
+
+        // --- 条件付きリクエスト判定 ---
+        bool send304 = false;
+        if (meta.valid) {
+                // If-None-Match が優先
+                const char* ifNoneMatch = request.FindHeader("If-None-Match");
+                if (ifNoneMatch && !etag.empty()) {
+                        if (std::string(ifNoneMatch) == etag) {
+                                send304 = true;
+                        }
+                } else {
+                        // If-Modified-Since（文字列完全一致による簡易比較）
+                        // ※ 自分が返した Last-Modified を次回受け取って比較する往復用途には十分
+                        const char* ifModifiedSince = request.FindHeader("If-Modified-Since");
+                        if (ifModifiedSince && !lastModified.empty()) {
+                                if (std::string(ifModifiedSince) == lastModified) {
+                                        send304 = true;
+                                }
+                        }
+                }
+        }
+
+        if (send304) {
+                response.statusLine = "HTTP/1.1 304 Not Modified";
+                response.SetHeader("Cache-Control", cacheControl);
+                if (!etag.empty())         { response.SetHeader("ETag",          etag); }
+                if (!lastModified.empty()) { response.SetHeader("Last-Modified",  lastModified); }
+                // 304 は body 無し。Content-Length=0 をセット。
+                response.SetHeader("Content-Length", "0");
+                return;
+        }
+
+        // --- 通常 200 応答 ---
         response.statusLine = "HTTP/1.1 200 OK";
         response.body.swap(content);
-        response.SetHeader("Content-Type", DetermineContentType(relativePath));
+        response.SetHeader("Content-Type",  contentType);
+        response.SetHeader("Cache-Control", cacheControl);
+        if (!etag.empty())         { response.SetHeader("ETag",         etag); }
+        if (!lastModified.empty()) { response.SetHeader("Last-Modified", lastModified); }
 }
 
+// ---------------------------------------------------------------------------
+// BuildFilePath
+// ---------------------------------------------------------------------------
 bool CStaticFileHandler::BuildFilePath(const std::string &requestPath, std::wstring &outPath, std::string &outRelativePath) const
 {
         std::string normalized = NormalizeRequestPath(requestPath);
@@ -125,11 +190,15 @@ bool CStaticFileHandler::BuildFilePath(const std::string &requestPath, std::wstr
         return true;
 }
 
-bool CStaticFileHandler::LoadFile(const std::wstring &path, std::string &outContent) const
+// ---------------------------------------------------------------------------
+// LoadFile（outMeta が非nullptr の場合、サイズ・mtime を設定する）
+// ---------------------------------------------------------------------------
+bool CStaticFileHandler::LoadFile(const std::wstring &path, std::string &outContent, FileMetaInfo *outMeta) const
 {
 #if !defined(_WIN32)
         (void)path;
         (void)outContent;
+        (void)outMeta;
         return false;
 #else
         HANDLE hFile = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -151,10 +220,21 @@ bool CStaticFileHandler::LoadFile(const std::wstring &path, std::string &outCont
                 return false;
         }
 
+        // mtime 取得（失敗してもファイル配信は続行）
+        if (outMeta) {
+                outMeta->valid    = false;
+                outMeta->fileSize = static_cast<unsigned long long>(size.QuadPart);
+                FILETIME ftCreate, ftAccess, ftWrite;
+                if (GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite)) {
+                        outMeta->mtime = ftWrite;
+                        outMeta->valid = true;
+                }
+        }
+
         outContent.resize(static_cast<size_t>(size.QuadPart));
         DWORD dwRead = 0;
         DWORD dwTotalRead = 0;
-        while (dwTotalRead < outContent.size()) {
+        while (dwTotalRead < static_cast<DWORD>(outContent.size())) {
                 DWORD dwToRead = static_cast<DWORD>(outContent.size() - dwTotalRead);
                 if (!ReadFile(hFile, &outContent[dwTotalRead], dwToRead, &dwRead, NULL)) {
                         CloseHandle(hFile);
@@ -167,13 +247,16 @@ bool CStaticFileHandler::LoadFile(const std::wstring &path, std::string &outCont
                 dwTotalRead += dwRead;
         }
         CloseHandle(hFile);
-        if (dwTotalRead != outContent.size()) {
+        if (dwTotalRead != static_cast<DWORD>(outContent.size())) {
                 outContent.resize(dwTotalRead);
         }
         return true;
 #endif
 }
 
+// ---------------------------------------------------------------------------
+// DetermineContentType
+// ---------------------------------------------------------------------------
 std::string CStaticFileHandler::DetermineContentType(const std::string &relativePath) const
 {
         size_t nDot = relativePath.find_last_of('.');
@@ -221,6 +304,95 @@ std::string CStaticFileHandler::DetermineContentType(const std::string &relative
         return "application/octet-stream";
 }
 
+// ---------------------------------------------------------------------------
+// DetermineCacheControl（拡張子で出し分け）
+// ---------------------------------------------------------------------------
+std::string CStaticFileHandler::DetermineCacheControl(const std::string &relativePath) const
+{
+        size_t nDot = relativePath.find_last_of('.');
+        std::string extension;
+        if (nDot != std::string::npos) {
+                extension = relativePath.substr(nDot);
+                std::transform(extension.begin(), extension.end(), extension.begin(), [](unsigned char ch) {
+                        return static_cast<char>(std::tolower(ch));
+                });
+        }
+
+        // HTML は毎回 ETag 検証（即時反映）
+        if ((extension == ".html") || (extension == ".htm")) {
+                return "no-cache";
+        }
+        // 大容量バイナリは 1 時間キャッシュ
+        if ((extension == ".wasm") || (extension == ".data") || (extension == ".js")) {
+                return "public, max-age=3600";
+        }
+        // その他も無難に 1 時間
+        return "public, max-age=3600";
+}
+
+// ---------------------------------------------------------------------------
+// BuildETag: nginx 風 "<hex_mtime_low>-<hex_size>" （ダブルクォート含む強い ETag）
+// ---------------------------------------------------------------------------
+/*static*/
+std::string CStaticFileHandler::BuildETag(const FileMetaInfo &meta)
+{
+        // FILETIME は 100ns 単位 ULARGE_INTEGER で 64bit。下位 32bit を hex 化（nginx 準拠）
+        ULARGE_INTEGER ul;
+        ul.LowPart  = meta.mtime.dwLowDateTime;
+        ul.HighPart = meta.mtime.dwHighDateTime;
+
+        char buf[64];
+        // nginx は mtime (秒) と size を hex 化するが、ここでは 100ns 単位の下位 32bit を使用
+        // 同一ファイルへの書き込み粒度が 100ns のため十分に衝突しにくい
+        std::snprintf(buf, sizeof(buf), "\"%x-%llx\"",
+                      ul.LowPart,
+                      static_cast<unsigned long long>(meta.fileSize));
+        return std::string(buf);
+}
+
+// ---------------------------------------------------------------------------
+// BuildLastModified: RFC 7231 HTTP-date に整形（例: Wed, 21 Oct 2026 07:28:00 GMT）
+// ---------------------------------------------------------------------------
+/*static*/
+std::string CStaticFileHandler::BuildLastModified(const FileMetaInfo &meta)
+{
+        SYSTEMTIME st;
+        if (!FileTimeToSystemTime(&meta.mtime, &st)) {
+                return std::string();
+        }
+        if (st.wDayOfWeek > 6 || st.wMonth < 1 || st.wMonth > 12) {
+                return std::string();
+        }
+
+        char buf[64];
+        std::snprintf(buf, sizeof(buf),
+                      "%s, %02d %s %04d %02d:%02d:%02d GMT",
+                      kDayNames[st.wDayOfWeek],
+                      static_cast<int>(st.wDay),
+                      kMonthNames[st.wMonth - 1],
+                      static_cast<int>(st.wYear),
+                      static_cast<int>(st.wHour),
+                      static_cast<int>(st.wMinute),
+                      static_cast<int>(st.wSecond));
+        return std::string(buf);
+}
+
+// ---------------------------------------------------------------------------
+// ParseHttpDate: 未使用（If-Modified-Since は文字列完全一致で比較するため）
+// 将来的に厳密なパースが必要な場合に備えてスタブとして残す。
+// ---------------------------------------------------------------------------
+/*static*/
+bool CStaticFileHandler::ParseHttpDate(const std::string &httpDate, FILETIME &outFt)
+{
+        (void)httpDate;
+        (void)outFt;
+        return false;
+}
+
+// ---------------------------------------------------------------------------
+// NormalizeRequestPath
+// ---------------------------------------------------------------------------
+/*static*/
 std::string CStaticFileHandler::NormalizeRequestPath(const std::string &path)
 {
         size_t nQuery = path.find('?');
@@ -230,6 +402,10 @@ std::string CStaticFileHandler::NormalizeRequestPath(const std::string &path)
         return path;
 }
 
+// ---------------------------------------------------------------------------
+// ContainsParentReference
+// ---------------------------------------------------------------------------
+/*static*/
 bool CStaticFileHandler::ContainsParentReference(const std::string &path)
 {
         if (path.find("..") == std::string::npos) {
@@ -253,6 +429,10 @@ bool CStaticFileHandler::ContainsParentReference(const std::string &path)
         return false;
 }
 
+// ---------------------------------------------------------------------------
+// ToUtf8
+// ---------------------------------------------------------------------------
+/*static*/
 std::string CStaticFileHandler::ToUtf8(const std::wstring &text)
 {
         std::string result;
