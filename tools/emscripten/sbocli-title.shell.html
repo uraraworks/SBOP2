@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content">
   <title>SBOP2 SboCli Title</title>
   <style>
     :root {
@@ -17,6 +17,7 @@
       --game-scale: 1;
       --pad-h: 160px; /* モバイル時のパッド領域の高さ */
       --embed-height: 100dvh;
+      --app-height: 100dvh; /* 可視ビューポート高さ(JSが visualViewport.height を反映)。iOSのキーボード追従用 */
     }
 
     * {
@@ -305,10 +306,17 @@
       height: 100%;
     }
     body.mobile-pad {
+      /* position:fixed で layout viewport に固定し、ドキュメントスクロールを根本的に発生させない。
+         JS が visualViewport.offsetTop 分だけ translateY して可視領域へ重ねる（iOSキーボード対策） */
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
       overflow: hidden;
       overscroll-behavior: none;
       height: 100vh;
       height: 100dvh;
+      height: var(--app-height); /* iOSのソフトキーボード表示時に可視領域へ追従させる */
       display: flex;
       background: var(--bg);
     }
@@ -337,7 +345,7 @@
       border-radius: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       /* 固定パッドとゲーム画面が重ならないよう下にパッド高分の余白を確保 */
       padding-bottom: var(--pad-h);
@@ -360,6 +368,10 @@
     /* ゲーム画面を短辺基準でパッド高を差し引いた領域にフィット（正方形キャンバス想定） */
     body.mobile-pad .canvas-stage {
       /* dvh 非対応の古い iOS 向けに vh フォールバックを先に指定し、対応環境では下の dvh が上書きする */
+      /* キャンバスは可視領域(--app-height)に連動させない。連動させるとキーボード表示時に
+         ゲーム画面が縮小してログイン欄が小さくなりタップしづらくなるため、安定した 100dvh で
+         フルサイズを保ち、縮小ではなく上端寄せ(flex-start)で「ずらす」挙動にする。
+         可視領域へのアンカリングは body 側の position:fixed + top=offsetTop が担当する。 */
       width: min(100vw, calc(100vh - var(--pad-h)));
       height: min(100vw, calc(100vh - var(--pad-h)));
       width: min(100vw, calc(100dvh - var(--pad-h)));
@@ -1238,6 +1250,35 @@
     window.addEventListener('resize', updateIntegerGameScale);
     updateIntegerGameScale();
 
+    // ── iOS等でソフトキーボード表示時に画面が上にめり込み、閉じても戻らない問題への対処 ──
+    // iOS Safari/Chrome(WebKit) は interactive-widget を無視し、キーボード表示時も 100dvh を
+    // 縮めない。さらに入力欄を見せるため visual viewport を下方向に「パン」してオフセットを残し、
+    // 閉じても戻らず、見た目とタッチ判定がズレてタップ無反応になる。
+    // 対策(visual viewport アンカリング): body は position:fixed で layout viewport に固定し、
+    //  ・--app-height = visualViewport.height で高さを可視領域へ追従
+    //  ・body を translateY(visualViewport.offsetTop) してパン分を相殺し、常に可視領域へ重ねる
+    // これで見た目・タッチともにズレが消え、閉じれば offset=0 に戻って画面も降りてくる。
+    if (window.visualViewport) {
+      const vv = window.visualViewport;
+      const syncVisualViewport = function() {
+        // mobile-pad(タッチ全画面)以外では未使用なので何もしない
+        if (!document.body.classList.contains('mobile-pad')) {
+          return;
+        }
+        document.documentElement.style.setProperty('--app-height', Math.round(vv.height) + 'px');
+        // admin-embed(管理画面iframe)は position:relative 運用なので追従はしない。
+        // ※ transform ではなく top で動かすこと: 祖先に transform があると子孫の
+        //   position:fixed の基準がビューポートから body に変わり、バーチャルパッドや
+        //   チャットUI(固定配置)が壊れるため。top は包含ブロックを作らないので安全。
+        if (!document.body.classList.contains('admin-embed')) {
+          document.body.style.top = Math.round(vv.offsetTop) + 'px';
+        }
+      };
+      vv.addEventListener('resize', syncVisualViewport);
+      vv.addEventListener('scroll', syncVisualViewport);
+      syncVisualViewport();
+    }
+
     window.SBOP2RequestWebAdminSession = function(account, password) {
       if (!account || !password) {
         return;
@@ -2002,6 +2043,9 @@
           document.body.classList.remove('chat-sheet-open');
           window.sbop2ChatSheetOpen = false;
           chatSheetInput.blur();
+          // キーボード対応で付けたインラインスタイルを解除し CSS 既定(bottom:0/height:50dvh)へ戻す
+          chatBottomSheet.style.bottom = '';
+          chatBottomSheet.style.height = '';
         }
 
         // チャット開くボタン (touchstart で同期 focus のため touchstart 使用)
@@ -2057,16 +2101,23 @@
           });
         }
 
-        // ---- visualViewport resize: ソフトキーボード表示時にシート高さを調整 ----
+        // ---- visualViewport: ソフトキーボード表示時にシート高さと位置を調整 ----
+        // body は position:fixed でページがスクロールしないため、シート(bottom:0)は
+        // キーボードの裏に隠れてしまう。キーボードで隠れる高さ分だけ bottom を持ち上げて
+        // 入力欄を可視領域内に出す。閉じるときに closeSheet でインラインスタイルを解除する。
         if (window.visualViewport) {
-          window.visualViewport.addEventListener('resize', function() {
+          var vvSheet = window.visualViewport;
+          var adjustSheetForKeyboard = function() {
             if (!chatBottomSheet || !chatBottomSheet.classList.contains('sheet-open')) { return; }
-            // ビューポート上端から可視領域の下端までの高さをシートに使う
-            var vh = window.visualViewport.height;
-            // シートは50%か視覚高さの90%の小さい方にする
-            var maxH = Math.floor(vh * 0.9);
+            // シートは視覚高さの90%
+            var maxH = Math.floor(vvSheet.height * 0.9);
             chatBottomSheet.style.height = maxH + 'px';
-          });
+            // キーボードで隠れる下端の高さ分だけ持ち上げる(layout viewport 下端から可視下端までの差)
+            var keyboardInset = Math.max(0, Math.round(window.innerHeight - vvSheet.height - vvSheet.offsetTop));
+            chatBottomSheet.style.bottom = keyboardInset + 'px';
+          };
+          vvSheet.addEventListener('resize', adjustSheetForKeyboard);
+          vvSheet.addEventListener('scroll', adjustSheetForKeyboard);
         }
       }
 
