@@ -2803,6 +2803,12 @@ void CLibInfoCharSvr::TargetChar(CInfoCharSvr *pInfoChar)
 	DWORD dwTargetCharID;
 	PCInfoCharSvr pCharTarget;
 
+	// ターゲット変更要求は一度処理したら必ずクリアする（対象が見つからなくても）。
+	// クリアし忘れると m_bChgTargetChar が立ちっぱなしになり、Proc の else-if チェーンで
+	// この分岐が毎tick優先されて後段の消滅DELETE予約に到達できず、撃破した敵が消えなくなる
+	// （索敵対象がいない＝敵1体マップで、かつ索敵中=ターゲット未取得のまま遠距離で倒した時に顕著）。
+	pInfoChar->m_bChgTargetChar = FALSE;
+
 	dwTargetCharID = GetNearCharID(pInfoChar->m_dwCharID, pInfoChar->m_sizeSearchDistance);
 	if (dwTargetCharID == 0) {
 		return;
@@ -2811,7 +2817,6 @@ void CLibInfoCharSvr::TargetChar(CInfoCharSvr *pInfoChar)
 	if (pCharTarget) {
 		pInfoChar->SetTarget(pCharTarget);
 	}
-	pInfoChar->m_bChgTargetChar = FALSE;
 }
 
 void CLibInfoCharSvr::DropItem(CInfoCharSvr *pInfoChar)
@@ -3012,6 +3017,11 @@ void CLibInfoCharSvr::Damage(CInfoCharSvr *pInfoChar, CInfoCharSvr *pCharTarget,
 	// 気絶？
 	if (pCharTarget->m_dwHP == 0) {
 		pCharTarget->SetMoveState(CHARMOVESTATE_SWOON);
+		// ProcHit() は STAND/MOVE 中の敵に m_nReserveChgMoveState=BATTLE を予約するが、
+		// この一撃が致命傷だと、その予約が次tickで SWOON を BATTLE に上書きし、撃破
+		// フェード/消滅シーケンスを妨げる（遠距離=弓矢で STAND/MOVE 中の敵を一撃した時に
+		// 顕著）。死亡時は古い移動状態変更予約を解除して SWOON を維持する。
+		pCharTarget->m_nReserveChgMoveState = 0;
 //Todo:暫定
 		dwStartTime = 5000;
 		bResult	= TRUE;
