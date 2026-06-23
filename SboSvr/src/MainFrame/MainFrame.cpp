@@ -614,7 +614,7 @@ void CMainFrame::OnDecClient(DWORD dwSessionID)
 	pChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrSessionID(dwSessionID);
 	if (pChar == NULL) {
 		if (pInfoAccount) {
-			m_pLog->Write("ログアウト dwSessionID:%u [%s]", dwSessionID, (LPCSTR)pInfoAccount->m_strAccount);
+			m_pLog->Write("ログアウト dwSessionID:%u [%s]", dwSessionID, pInfoAccount->m_strAccount.GetUtf8Pointer());
 		}
 		return;
 	}
@@ -622,8 +622,8 @@ void CMainFrame::OnDecClient(DWORD dwSessionID)
 		dwLoginTime = (DWORD)timeTmp - pInfoAccount->m_dwTimeLastLogin;
 		m_pLog->Write("ログアウト dwSessionID:%u [ACC:%s][CHAR:%s][TIME:%02d:%02d:%02d]",
 				dwSessionID,
-				(LPCSTR)pInfoAccount->m_strAccount,
-				(LPCSTR)pChar->m_strCharName,
+				pInfoAccount->m_strAccount.GetUtf8Pointer(),
+				pChar->m_strCharName.GetUtf8Pointer(),
 				dwLoginTime / 600,
 				(dwLoginTime % 600) / 60,
 				(dwLoginTime % 60));
@@ -708,8 +708,8 @@ void CMainFrame::TimerProcKeepalive(void)
 		dwTmp = dwTimeTmp - pInfoAccount->m_dwTimeLastLogin;
 		m_pLog->Write("生存確認タイムアウト dwSessionID:%u [ACC:%s][CHAR:%s][時間:%ds]",
 				pInfoChar->m_dwSessionID,
-				(LPCSTR)pInfoAccount->m_strAccount,
-				(LPCSTR)pInfoChar->m_strCharName,
+				pInfoAccount->m_strAccount.GetUtf8Pointer(),
+				pInfoChar->m_strCharName.GetUtf8Pointer(),
 				dwTmp);
 		pInfoAccount->m_dwLastKeepalive = dwTimeTmp;
 	}

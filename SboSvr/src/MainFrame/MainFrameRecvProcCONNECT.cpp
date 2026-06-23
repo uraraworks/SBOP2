@@ -94,8 +94,8 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 			m_pLog->Write("ログイン拒否 dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
 					dwSessionID,
 					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
-					(LPCSTR)strTmp,
-					(LPCSTR)pInfoAccount->m_strAccount);
+					strTmp.GetUtf8Pointer(),
+					pInfoAccount->m_strAccount.GetUtf8Pointer());
 			// IPアドレスで拒否しておく
 			m_pLibInfoDisable->AddIP(AddrTmp.S_un.S_addr);
 		// 使用中？
@@ -113,9 +113,9 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 			m_pLog->Write("ログイン dwSessionID:%u [%d.%d.%d.%d][%s][%s][%s]",
 					dwSessionID,
 					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
-					(LPCSTR)strTmp,
-					(LPCSTR)pInfoAccount->m_strAccount,
-					(LPCSTR)pInfoAccount->m_strPassword);
+					strTmp.GetUtf8Pointer(),
+					pInfoAccount->m_strAccount.GetUtf8Pointer(),
+					pInfoAccount->m_strPassword.GetUtf8Pointer());
 		}
 		PacketCHAR_MOTION.Make(0, 0, m_pLibInfoMotion);
 		m_pSock->SendTo(dwSessionID, &PacketCHAR_MOTION);
@@ -180,14 +180,14 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoChar->m_dwMapID);
 	if (pInfoMap == NULL) {
-		m_pLog->Write("所属マップ不明 dwSessionID:%u [%s] dwMapID:%d", dwSessionID, (LPCSTR)pInfoChar->m_strCharName, pInfoChar->m_dwMapID);
+		m_pLog->Write("所属マップ不明 dwSessionID:%u [%s] dwMapID:%d", dwSessionID, pInfoChar->m_strCharName.GetUtf8Pointer(), pInfoChar->m_dwMapID);
 	}
 
 	m_pLibInfoChar->LogIn(Packet.m_dwCharID, dwSessionID, pInfoAccount->m_dwAccountID);
 	pInfoAccount->m_dwLastKeepalive = (DWORD)timeTmp;
 	nOnlineCount = m_pLibInfoChar->GetCountOnline();
 
-	m_pLog->Write("ゲーム開始 dwSessionID:%u [%s](Online:%d)", dwSessionID, (LPCSTR)pInfoChar->m_strCharName, nOnlineCount);
+	m_pLog->Write("ゲーム開始 dwSessionID:%u [%s](Online:%d)", dwSessionID, pInfoChar->m_strCharName.GetUtf8Pointer(), nOnlineCount);
 
 	for (i = 0; i < 4; i ++) {
 		nTmp = i;
@@ -207,7 +207,7 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 		pInfoChar->m_bProcMoveMapOut = TRUE;
 		pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoChar->m_dwMapID);
 		if (pInfoMap == NULL) {
-			m_pLog->Write("所属マップ不明 dwSessionID:%u [%s] dwMapID:%d", dwSessionID, (LPCSTR)pInfoChar->m_strCharName, pInfoChar->m_dwMapID);
+			m_pLog->Write("所属マップ不明 dwSessionID:%u [%s] dwMapID:%d", dwSessionID, pInfoChar->m_strCharName.GetUtf8Pointer(), pInfoChar->m_dwMapID);
 			goto Exit;
 		}
 	}

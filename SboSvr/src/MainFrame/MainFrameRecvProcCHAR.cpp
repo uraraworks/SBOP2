@@ -334,7 +334,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 					"移動速度超過を拒否 dwSessionID:%u [PACKET:%s][CHAR:%s][現在:%d,%d][受信:%d,%d][移動:%dpx][許容:%dpx][経過:%ums][段階:%d]",
 					dwSessionID,
 					pszPacketName,
-					(LPCSTR)pInfoChar->m_strCharName,
+					pInfoChar->m_strCharName.GetUtf8Pointer(),
 					pInfoChar->m_nMapX,
 					pInfoChar->m_nMapY,
 					nNextPosX,
