@@ -103,7 +103,7 @@ void CWindowMSG::SetMsg(LPCSTR pszMsg, DWORD dwTime, int nType)
 		SdlFontGetTextExtent((void*)m_hFont, (LPCTSTR)m_strMsg, m_strMsg.GetLength(), &nTextWidth, &nTextHeight);
 	}
 	if (nTextWidth <= 0) {
-		nTextWidth = m_strMsg.GetLegacyStoreLength() * 8;
+		nTextWidth = m_strMsg.GetLength() * 8;
 	}
 	m_sizeWindow.cx = 16 * 2 + nTextWidth;
 	m_ptViewPos.x	= SCRSIZEX / 2 - m_sizeWindow.cx / 2;

@@ -174,15 +174,6 @@ inline CStringA TStringToAnsi(LPCTSTR pszSrc, UINT codePage = CP_ACP)
 #endif
 }
 
-inline CString LegacyAnsiToTString(LPCSTR pszSrc)
-{
-	return AnsiToTString(pszSrc, SBO_LEGACY_CODEPAGE);
-}
-
-inline CStringA TStringToLegacyAnsi(LPCTSTR pszSrc)
-{
-	return TStringToAnsi(pszSrc, SBO_LEGACY_CODEPAGE);
-}
 
 /// @brief SJIS (CP932) バイト列を UTF-8 に変換する
 /// CString (SJIS) をログ出力に渡す際に使用する
@@ -247,9 +238,7 @@ public:
 
 	LPCSTR	GetUtf8Pointer() const;									// UTF-8文字列ポインタを取得
 	LPCSTR	GetAnsiPointer(UINT codePage = CP_UTF8) const;			// 指定コードページの文字列ポインタを取得
-	LPCSTR	GetLegacyAnsiPointer() const;							// 旧保存形式互換(CP932)の文字列ポインタを取得
 	int		GetStoreLength(UINT codePage = CP_UTF8) const;			// 保存用文字列長を取得
-	int		GetLegacyStoreLength() const;							// 旧保存形式互換(CP932)の文字列長を取得
 
 	int		CompareNoCase(LPCSTR pszSrc) const;			// 文字列比較(大文字小文字区別無し)
 	int		CompareNoCase(LPCTSTR pszSrc) const;		// 文字列比較(大文字小文字区別無し)

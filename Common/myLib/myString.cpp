@@ -206,7 +206,7 @@ CmyString::operator LPCTSTR()
 CmyString::operator LPCSTR() const
 {
 #ifdef _UNICODE
-	return GetLegacyAnsiPointer();
+	return GetUtf8Pointer();
 #else
 	return (LPCSTR)m_strString;
 #endif
@@ -215,7 +215,7 @@ CmyString::operator LPCSTR() const
 CmyString::operator LPCSTR()
 {
 #ifdef _UNICODE
-	return GetLegacyAnsiPointer();
+	return GetUtf8Pointer();
 #else
 	return (LPCSTR)m_strString;
 #endif
@@ -242,11 +242,6 @@ LPCSTR CmyString::GetAnsiPointer(UINT codePage) const
 #endif
 }
 
-LPCSTR CmyString::GetLegacyAnsiPointer() const
-{
-	return GetAnsiPointer(SBO_LEGACY_CODEPAGE);
-}
-
 int CmyString::GetStoreLength(UINT codePage) const
 {
 #ifdef _UNICODE
@@ -256,11 +251,6 @@ int CmyString::GetStoreLength(UINT codePage) const
 	UNREFERENCED_PARAMETER(codePage);
 	return m_strString.GetLength();
 #endif
-}
-
-int CmyString::GetLegacyStoreLength() const
-{
-	return GetStoreLength(SBO_LEGACY_CODEPAGE);
 }
 
 // 文字列比較(大文字小文字区別無し)
