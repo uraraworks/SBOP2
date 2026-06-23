@@ -107,7 +107,7 @@ function ensureAdminWebSocket() {
 
 
 
-const DEFAULT_ROUTE = "map-window";
+const DEFAULT_ROUTE = "server-dashboard";
 const views = document.querySelectorAll("[data-view]");
 const navLinks = document.querySelectorAll("[data-route]");
 let currentRoute = null;
@@ -449,6 +449,19 @@ window.addEventListener("load", async () => {
 
   const initialRoute = window.location.hash ? window.location.hash.replace(/^#/, "") : DEFAULT_ROUTE;
   activateRoute(initialRoute, { initial: true });
+
+  // メインメニューの details 排他制御: 1つ開くと他は閉じる
+  document.querySelectorAll(".main-nav details").forEach(function (details) {
+    details.addEventListener("toggle", function () {
+      if (details.open) {
+        document.querySelectorAll(".main-nav details").forEach(function (other) {
+          if (other !== details && other.open) {
+            other.removeAttribute("open");
+          }
+        });
+      }
+    });
+  });
 
   navLinks.forEach((link) => {
     link.addEventListener("click", (event) => {

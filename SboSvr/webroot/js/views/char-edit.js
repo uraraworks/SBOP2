@@ -18,6 +18,30 @@
 
 import { fetchJson } from "../core/api.js";
 import { createSpriteField } from "../components/sprite-picker.js";
+import { createSpriteThumb } from "../components/sprite-thumb.js";
+
+// ----------------------------------------------------------------
+// アイテム情報マップキャッシュ (itemId → { name, iconGrpId })
+// ----------------------------------------------------------------
+var _itemInfoMap = null;
+
+async function ensureItemInfoMap() {
+  if (_itemInfoMap !== null) { return; }
+  try {
+    var { response, data } = await fetchJson("/api/items");
+    if (!response || !response.ok) {
+      _itemInfoMap = new Map();
+      return;
+    }
+    var list = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : []);
+    _itemInfoMap = new Map();
+    list.forEach(function (it) {
+      _itemInfoMap.set(it.itemId, { name: it.name || "", iconGrpId: it.iconGrpId || null });
+    });
+  } catch (_) {
+    _itemInfoMap = new Map(); // 失敗時は空 Map にして再試行ループを避ける
+  }
+}
 
 // ----------------------------------------------------------------
 // ユーティリティ
@@ -442,9 +466,9 @@ function buildItemsTab() {
 
   var table = mkEl("table", "data-table");
   var thead = mkEl("thead");
-  thead.innerHTML = "<tr><th>スロット</th><th>アイテムID</th><th>操作</th></tr>";
+  thead.innerHTML = "<tr><th>スロット</th><th>画像</th><th>アイテム</th><th>操作</th></tr>";
   var tbody = mkEl("tbody");
-  tbody.innerHTML = "<tr><td colspan='3'>（データなし）</td></tr>";
+  tbody.innerHTML = "<tr><td colspan='4'>（データなし）</td></tr>";
   table.append(thead, tbody);
   panel.appendChild(table);
 
@@ -909,6 +933,7 @@ export function mount(container) {
         return;
       }
       setFb(itemsTab.fb, "", "");
+      await ensureItemInfoMap();
       renderItems(data || []);
     } catch (err) {
       setFb(itemsTab.fb, "通信エラーが発生しました", "error");
@@ -917,20 +942,32 @@ export function mount(container) {
 
   function renderItems(items) {
     if (!items.length) {
-      itemsTab.tbody.innerHTML = "<tr><td colspan='3'>（データなし）</td></tr>";
+      itemsTab.tbody.innerHTML = "<tr><td colspan='4'>（データなし）</td></tr>";
       return;
     }
     itemsTab.tbody.innerHTML = "";
     items.forEach(function (item) {
+      var info = (_itemInfoMap && _itemInfoMap.get(item.itemId)) || null;
       var tr = mkEl("tr");
       var tdSlot = mkEl("td", "", String(item.slot));
-      var tdId   = mkEl("td", "", String(item.itemId));
+
+      // アイコン列
+      var tdIcon = mkEl("td");
+      if (info && info.iconGrpId) {
+        var thumb = createSpriteThumb({ categoryKey: "item", sub: info.iconGrpId, size: 20 });
+        tdIcon.appendChild(thumb);
+      }
+
+      // [itemId] アイテム名 列
+      var itemName = (info && info.name) ? info.name : "(名前なし)";
+      var tdName = mkEl("td", "", "[" + String(item.itemId) + "] " + itemName);
+
       var tdOp   = mkEl("td");
       var delBtn = mkEl("button", "button danger btn-sm", "削除");
       delBtn.type = "button";
       delBtn.addEventListener("click", function () { doDeleteItem(item.slot); });
       tdOp.appendChild(delBtn);
-      tr.append(tdSlot, tdId, tdOp);
+      tr.append(tdSlot, tdIcon, tdName, tdOp);
       itemsTab.tbody.appendChild(tr);
     });
   }
