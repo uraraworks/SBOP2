@@ -38,7 +38,11 @@ BOOL CLibInfoCharSvr::UseSkill(CInfoCharSvr *pInfoChar, DWORD dwSkillID)
 		goto Exit;
 	}
 	if (pInfoChar->m_dwSP < pInfoSkill->m_dwSP) {
-		SendSystemMsg(pInfoChar->m_dwSessionID, "SPが足りません", SYSTEMMSGTYPE_NOLOG);
+		// narrow リテラルは実行時文字セット (既定 CP932) で焼き込まれてしまうので
+		// 必ず _T() ワイドリテラル経由で CmyString に詰めて UTF-8 で送る
+		CmyString strMsgNoSP;
+		strMsgNoSP.Format(_T("SPが足りません"));
+		SendSystemMsg(pInfoChar->m_dwSessionID, strMsgNoSP, SYSTEMMSGTYPE_NOLOG);
 		goto Exit;
 	}
 
