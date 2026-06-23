@@ -282,12 +282,11 @@ bool SdlFontTextOutA(void* hDC, int x, int y, const char* pStr, int nLen)
     if (!entry || !entry->pFont) return false;
     TTF_Font* pFont = entry->pFont;
 
-    // Win32 版と同じく pStr は SJIS(CP932) 前提。TTF_RenderUTF8_Blended は
-    // UTF-8 を要求するため、SJIS → wstring → UTF-8 で変換してから渡す。
-    std::wstring wstr = SjisToWstring(pStr, nLen);
-    if (wstr.empty()) return false;
-    std::string text = WideToUtf8(wstr.c_str(), (int)wstr.size());
-    if (text.empty()) return false;
+    // pStr は UTF-8 バイト列 (移行完了後)
+    if (pStr == nullptr) return false;
+    size_t srcLen = (nLen < 0) ? strlen(pStr) : static_cast<size_t>(nLen);
+    if (srcLen == 0) return false;
+    std::string text(pStr, srcLen);
 
     SDL_Color color;
     color.r = (unsigned char)(ctx->textColor & 0xFF);

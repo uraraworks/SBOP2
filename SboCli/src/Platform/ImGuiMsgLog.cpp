@@ -93,15 +93,14 @@ void CImGuiMsgLog::Add(const char *pszLog, unsigned int color)
         char szCssColor[8]; // "#RRGGBB\0"
         snprintf(szCssColor, sizeof(szCssColor), "#%02X%02X%02X", r, g, b);
 
-        // SJIS → UTF-8 変換してから JS へ渡す
-        std::string utf8Text = SjisBytesToUtf8(pszLog);
+        // UTF-8 をそのまま使用
+        std::string utf8Text = pszLog ? pszLog : "";
         sbop2_chat_log_add_js(utf8Text.c_str(), szCssColor);
     }
 #else
     LogLine line;
-    // SJIS (CP932) 文字列を UTF-8 に変換してから保持する
-    // ImGui は UTF-8 を要求するため、SJIS のまま渡すと文字化けする
-    line.text = SjisBytesToUtf8(pszLog);
+    // UTF-8 をそのまま使用 (ImGui は UTF-8 を要求)
+    line.text = pszLog ? std::string(pszLog) : std::string();
     line.color = color;
     m_lines.push_back(line);
 

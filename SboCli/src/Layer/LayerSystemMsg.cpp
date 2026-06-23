@@ -98,10 +98,8 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 		}
 	}
 
-        // pszMsg は CmyString::operator LPCSTR() 経由で渡るため、
-        // Win32・ブラウザ版ともに SJIS (CP932) バイト列。
-        // SjisToWstring で確定的に CP932 → wchar_t へ変換する。
-        CString strMsg = CString(SjisToWstring(pszMsg, -1).c_str());
+        // pszMsg は CmyString::operator LPCSTR() 経由で UTF-8 として渡る
+        CString strMsg = Utf8ToTString(pszMsg);
         nLen = strMsg.GetLength();
         pInfo->pImg->Create(nLen * 14 + 1, 14);
 
