@@ -951,18 +951,21 @@ export function mount(container) {
       var tr = mkEl("tr");
       var tdSlot = mkEl("td", "", String(item.slot));
 
-      // アイテム列: アイコン + [ID] 名前 を横並び
+      // アイテム列: アイコン + [ID] 名前 を横並び (td 自体は table-cell のまま、
+      // 内側 div を flex にして他列の vertical-align: middle と整合させる)
       var tdItem = mkEl("td");
-      tdItem.style.display = "flex";
-      tdItem.style.alignItems = "center";
-      tdItem.style.gap = "6px";
+      var itemWrap = mkEl("div");
+      itemWrap.style.display = "flex";
+      itemWrap.style.alignItems = "center";
+      itemWrap.style.gap = "6px";
       if (info && info.iconGrpId) {
         var thumb = createSpriteThumb({ categoryKey: "item", sub: info.iconGrpId, size: 20 });
-        tdItem.appendChild(thumb.el);
+        itemWrap.appendChild(thumb.el);
       }
       var itemName = (info && info.name) ? info.name : "(名前なし)";
       var spanLabel = mkEl("span", "", "[" + String(item.itemId) + "] " + itemName);
-      tdItem.appendChild(spanLabel);
+      itemWrap.appendChild(spanLabel);
+      tdItem.appendChild(itemWrap);
 
       var tdOp   = mkEl("td");
       var delBtn = mkEl("button", "button danger btn-sm", "削除");
