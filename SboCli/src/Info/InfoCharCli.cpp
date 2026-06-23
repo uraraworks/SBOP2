@@ -598,19 +598,17 @@ BOOL CInfoCharCli::TimerProc(DWORD dwTime)
 			m_nFlyDir = m_nDirection;	// 初回に進行方向を固定
 		}
 		if (m_nFollowThrough == 0) {
-			// 前進し終えた。論理位置(m_nMapX/Y)は敵へ届いているが、描画は時間補間
-			// (draw segment)で遅れて追従するため、即削除すると見た目が手前で消える。
-			// 描画が論理位置(敵)に追いつくまでの間に m_nFadeLevel を 0→99 へ上げて
-			// フェードアウトさせ、到達(セグメント完了)と同時に削除する。
-			// これで矢が敵へ近づきながら溶けるように消える(パッと消えるのを防ぐ)。
+			// 前進し終えた。固定時間(ARROW_FADE_MS)でフェードアウトしてから削除する。
+			// 描画補間は実移動速度に合わせてあり(GetDrawMoveDuration)、論理位置(敵)へは
+			// 数十msで追いつくため、このフェード中に矢が敵へ届いてから溶けるように消える。
 			m_bRedraw = TRUE;
-			if ((m_dwDrawMoveEndTime > m_dwDrawMoveStartTime) && (dwTime < m_dwDrawMoveEndTime)) {
-				int nProg = (int)((dwTime - m_dwDrawMoveStartTime) * 100
-				                  / (m_dwDrawMoveEndTime - m_dwDrawMoveStartTime));
-				m_nFadeLevel = (nProg < 0) ? 0 : ((nProg > 99) ? 99 : nProg);
-			} else {
+			const DWORD ARROW_FADE_MS = 200;
+			DWORD dwFadeElapsed = dwTime - m_dwLastAutoFlyTime;
+			if (dwFadeElapsed >= ARROW_FADE_MS) {
 				m_nFadeLevel = 99;
 				m_nMoveState = CHARMOVESTATE_DELETE;
+			} else {
+				m_nFadeLevel = (int)(dwFadeElapsed * 99 / ARROW_FADE_MS);
 			}
 		} else if ((m_nFlyDir >= 0) && (m_nFlyDir < 4)) {
 			// 二重駆動を断つ: サーバのウェイポイント/予測補正を無効化し経由点も破棄
@@ -641,10 +639,12 @@ BOOL CInfoCharCli::TimerProc(DWORD dwTime)
 				m_bRedraw = TRUE;
 				nGuard++;
 				// follow-through 中は1歩ごとに消化。進め終えたら(==0)前進を止め、
-				// 次フレーム以降の「描画追いつき待ち」分岐で削除する。
+				// 次フレーム以降のフェードアウト分岐で消す。m_dwLastAutoFlyTime は
+				// 飛行に使い終えたのでフェード開始時刻として再利用する。
 				if (m_nFollowThrough > 0) {
 					m_nFollowThrough--;
 					if (m_nFollowThrough == 0) {
+						m_dwLastAutoFlyTime = dwTime;
 						break;
 					}
 				}

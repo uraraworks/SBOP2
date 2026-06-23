@@ -2606,6 +2606,15 @@ BOOL CLibInfoCharSvr::ProcLocalStateBATTLEATACK(CInfoCharSvr *pInfoChar)
 			pInfoCharTmp = (PCInfoCharMOVEATACKSvr)AddNPC(&InfoCharTmp);
 			pInfoCharTmp->SetMap(pInfoMap);
 			pInfoCharTmp->SetLibInfoChar(this);
+			// 矢を即座にクライアントへ生成通知(RES_CHARINFO)する。矢は短命(~600ms)で、
+			// 画面内キャラ同期(プレイヤー移動時等)に相乗りする従来方式だと、通信ラグ環境
+			// では同期到達前に矢が削除され初回 RES_CHARINFO が届かず、2発目以降が見えなく
+			// なる。後続の MOVE パケットは矢キャラ生成済みが前提のため、ここで先に送る。
+			{
+				CPacketCHAR_RES_CHARINFO PacketArrowInfo;
+				PacketArrowInfo.Make(pInfoCharTmp);
+				m_pMainFrame->SendToScreenChar(pInfoCharTmp, &PacketArrowInfo);
+			}
 		}
 		break;
 	}
