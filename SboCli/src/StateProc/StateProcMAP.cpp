@@ -3285,22 +3285,6 @@ Exit:
 
 
 #if defined(__EMSCRIPTEN__)
-/// @brief UTF-8 文字列を SJIS (CP932) に変換するローカルヘルパー（Emscripten 版）
-/// @details DOM 入力は UTF-8 なので、SendChat へ渡す前に SJIS へ変換する
-/// @param pszUtf8 UTF-8 文字列（NULL 終端）
-/// @return SJIS std::string。変換失敗時は元の文字列をそのまま返す
-static std::string StateProcMAP_Utf8ToSjis(const char *pszUtf8)
-{
-	if (pszUtf8 == NULL || pszUtf8[0] == '\0') {
-		return std::string();
-	}
-	// Emscripten 環境では SjisToWstring 等を逆用できないため
-	// UTF-8 文字列をそのまま返す（サーバー側が UTF-8 を受け付ける場合に有効）。
-	// サーバーが SJIS を要求する場合は EM_JS で TextEncoder/TextDecoder を用いた
-	// 変換を別途追加すること。現状は OnWindowMsgCHAT に合わせ生文字列を渡す。
-	return std::string(pszUtf8);
-}
-
 /// @brief DOM(JS)→C++ チャット送信ブリッジの実体
 /// @details OnWindowMsgCHAT と同等の処理をブラウザ向けに提供する。
 ///          プレイヤーキャラ未設定・キー入力無効時は何もしない。
@@ -3334,12 +3318,8 @@ void CStateProcMAP::BrowserChatSubmit(const char *pszText, int nType)
 		return;
 	}
 
-	// DOM 入力は UTF-8 で届く。ブラウザ経路の ImGuiMsgLog 送信と同様に
-	// UTF-8→SJIS 変換してから SendChat へ渡す
-	{
-		std::string sjisMsg = StateProcMAP_Utf8ToSjis(pszText);
-		pMainFrame->SendChat(nType, sjisMsg.c_str(), &m_dwLastBalloonID);
-	}
+	// DOM 入力は UTF-8 で届く。サーバ側も UTF-8 前提なのでそのまま送る
+	pMainFrame->SendChat(nType, pszText, &m_dwLastBalloonID);
 }
 #endif // __EMSCRIPTEN__
 
