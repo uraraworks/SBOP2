@@ -110,8 +110,8 @@ void CSaveLoadInfoItemType::SaveToNormalTable(void)
 		sqlite3_bind_int(pStmt,  7, (int)pInfo->m_dwGrpID);
 		sqlite3_bind_int(pStmt,  8, (int)pInfo->m_dwIconGrpID);
 
-		// m_strName: SJIS バイト列をそのまま TEXT として格納
-		LPCSTR pszName = (LPCSTR)pInfo->m_strName;
+		// m_strName: UTF-8 バイト列としてバインド
+		LPCSTR pszName = pInfo->m_strName.GetUtf8Pointer();
 		sqlite3_bind_text(pStmt, 9, pszName, -1, SQLITE_TRANSIENT);
 
 		sqlite3_bind_int(pStmt, 10, (int)pInfo->m_dwDropSoundID);
@@ -167,10 +167,10 @@ BOOL CSaveLoadInfoItemType::LoadFromNormalTable(PCLibInfoBase pDst)
 		pInfo->m_dwGrpID       = (DWORD)sqlite3_column_int(pStmt,  6);
 		pInfo->m_dwIconGrpID   = (DWORD)sqlite3_column_int(pStmt,  7);
 
-		// Name: SJIS バイト列として格納されているので LegacyAnsiToTString で変換
+		// Name: UTF-8 バイト列として格納されているので Utf8ToTString で変換
 		const char* pszName = (const char*)sqlite3_column_text(pStmt, 8);
 		if (pszName != NULL) {
-			pInfo->m_strName = (LPCTSTR)LegacyAnsiToTString(pszName);
+			pInfo->m_strName = (LPCTSTR)Utf8ToTString(pszName);
 		}
 
 		pInfo->m_dwDropSoundID = (DWORD)sqlite3_column_int(pStmt,  9);

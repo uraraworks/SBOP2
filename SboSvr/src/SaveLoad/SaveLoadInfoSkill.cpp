@@ -165,8 +165,8 @@ void CSaveLoadInfoSkill::SaveToNormalTable(void)
 		sqlite3_bind_int(pStmtMain, 5, (int)pBase->m_nTypeSub);
 		sqlite3_bind_int(pStmtMain, 6, (int)pBase->m_nUse);
 
-		// m_strName: SJIS バイト列をそのまま TEXT として格納
-		LPCSTR pszName = (LPCSTR)pBase->m_strName;
+		// m_strName: UTF-8 バイト列としてバインド
+		LPCSTR pszName = pBase->m_strName.GetUtf8Pointer();
 		sqlite3_bind_text(pStmtMain, 7, pszName, -1, SQLITE_TRANSIENT);
 
 		sqlite3_step(pStmtMain);
@@ -272,10 +272,10 @@ BOOL CSaveLoadInfoSkill::LoadFromNormalTable(PCLibInfoBase pDst)
 		pBase->m_nTypeSub   = nTypeSub;
 		pBase->m_nUse       = nUse;
 
-		// Name: SJIS バイト列として格納されているので LegacyAnsiToTString で変換
+		// Name: UTF-8 バイト列として格納されているので Utf8ToTString で変換
 		const char* pszName = (const char*)sqlite3_column_text(pStmt, 6);
 		if (pszName != NULL) {
-			pBase->m_strName = (LPCTSTR)LegacyAnsiToTString(pszName);
+			pBase->m_strName = (LPCTSTR)Utf8ToTString(pszName);
 		}
 
 		// ----- 派生フィールドをサブテーブルから取得 -----

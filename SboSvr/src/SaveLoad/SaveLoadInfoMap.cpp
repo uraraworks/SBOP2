@@ -132,8 +132,8 @@ void CSaveLoadInfoMap::SaveToNormalTable(void)
 		sqlite3_bind_int(pStmt, 7,  (int)pInfo->m_bRecovery);
 		sqlite3_bind_int(pStmt, 8,  (int)pInfo->m_byLevel);
 
-		// m_strMapName: SJIS バイト列をそのまま TEXT としてバインド
-		LPCSTR pszName = (LPCSTR)pInfo->m_strMapName;
+		// m_strMapName: UTF-8 バイト列としてバインド
+		LPCSTR pszName = pInfo->m_strMapName.GetUtf8Pointer();
 		sqlite3_bind_text(pStmt, 9, pszName, -1, SQLITE_TRANSIENT);
 
 		// m_pwMap: cx*cy 個の WORD を BLOB 格納（折衷 BLOB）
@@ -202,10 +202,10 @@ BOOL CSaveLoadInfoMap::LoadFromNormalTable(PCLibInfoBase pDst)
 		pInfo->m_bRecovery      = (BOOL) sqlite3_column_int(pStmt, 6);
 		pInfo->m_byLevel        = (BYTE) sqlite3_column_int(pStmt, 7);
 
-		// MapName: SJIS バイト列として格納されているので LegacyAnsiToTString で変換
+		// MapName: UTF-8 バイト列として格納されているので Utf8ToTString で変換
 		const char* pszName = (const char*)sqlite3_column_text(pStmt, 8);
 		if (pszName != NULL) {
-			pInfo->m_strMapName = (LPCTSTR)LegacyAnsiToTString(pszName);
+			pInfo->m_strMapName = (LPCTSTR)Utf8ToTString(pszName);
 		}
 
 		// Init() でタイル配列を確保しマップイベント/HitTmp も初期化する

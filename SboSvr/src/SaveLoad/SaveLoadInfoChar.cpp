@@ -135,7 +135,7 @@ static BOOL s_LoadLegacyBlobRows(sqlite3* pDb, CLibInfoCharBase* pLibChar)
 		pInfo->m_nGrpSize               = sqlite3_column_int(pStmt,  24);
 
 		const char* pszName = (const char*)sqlite3_column_text(pStmt, 25);
-		if (pszName != NULL) pInfo->m_strCharName = (LPCTSTR)LegacyAnsiToTString(pszName);
+		if (pszName != NULL) pInfo->m_strCharName = (LPCTSTR)Utf8ToTString(pszName);
 
 		// ---- BLOB: 外見 GrpID 群 (WORD×15) ----
 		{
@@ -553,7 +553,7 @@ void CSaveLoadInfoChar::SaveToNormalTable(void)
 		sqlite3_bind_int(pStmtChar, 25, pInfo->m_nGrpSize);
 
 		// キャラ名 (26)
-		LPCSTR pszName = (LPCSTR)pInfo->m_strCharName;
+		LPCSTR pszName = pInfo->m_strCharName.GetUtf8Pointer();
 		sqlite3_bind_text(pStmtChar, 26, pszName, -1, SQLITE_TRANSIENT);
 
 		// 外見 GrpID 群 (27-41)
@@ -736,7 +736,7 @@ BOOL CSaveLoadInfoChar::LoadFromNormalTable(PCLibInfoBase pDst)
 		pInfo->m_nGrpSize               = sqlite3_column_int(pStmt,  24);
 
 		const char* pszName = (const char*)sqlite3_column_text(pStmt, 25);
-		if (pszName != NULL) pInfo->m_strCharName = (LPCTSTR)LegacyAnsiToTString(pszName);
+		if (pszName != NULL) pInfo->m_strCharName = (LPCTSTR)Utf8ToTString(pszName);
 
 		// 外見 GrpID 群 (26-40)
 		pInfo->m_wGrpIDNPC          = (WORD)sqlite3_column_int(pStmt, 26);

@@ -125,10 +125,10 @@ void CSaveLoadInfoAccount::SaveToNormalTable(void)
 		sqlite3_bind_int(pStmtMain, 6, (int)pInfo->m_dwLoginCount);
 		sqlite3_bind_int(pStmtMain, 7, (int)pInfo->m_nAdminLevel);
 
-		// 文字列は SJIS バイト列をそのまま TEXT としてバインド（Disable と同じ方針）
-		LPCSTR pszAccount  = (LPCSTR)pInfo->m_strAccount;
-		LPCSTR pszPassword = (LPCSTR)pInfo->m_strPassword;
-		LPCSTR pszMacAddr  = (LPCSTR)pInfo->m_strMacAddr;
+		// 文字列は UTF-8 バイト列としてバインド
+		LPCSTR pszAccount  = pInfo->m_strAccount.GetUtf8Pointer();
+		LPCSTR pszPassword = pInfo->m_strPassword.GetUtf8Pointer();
+		LPCSTR pszMacAddr  = pInfo->m_strMacAddr.GetUtf8Pointer();
 		sqlite3_bind_text(pStmtMain, 8, pszAccount,  -1, SQLITE_TRANSIENT);
 		sqlite3_bind_text(pStmtMain, 9, pszPassword, -1, SQLITE_TRANSIENT);
 		sqlite3_bind_text(pStmtMain, 10, pszMacAddr, -1, SQLITE_TRANSIENT);
@@ -208,9 +208,9 @@ BOOL CSaveLoadInfoAccount::LoadFromNormalTable(PCLibInfoBase pDst)
 		const char* pszAccount  = (const char*)sqlite3_column_text(pStmtMain, 7);
 		const char* pszPassword = (const char*)sqlite3_column_text(pStmtMain, 8);
 		const char* pszMacAddr  = (const char*)sqlite3_column_text(pStmtMain, 9);
-		if (pszAccount  != NULL) pInfo->m_strAccount  = (LPCTSTR)LegacyAnsiToTString(pszAccount);
-		if (pszPassword != NULL) pInfo->m_strPassword = (LPCTSTR)LegacyAnsiToTString(pszPassword);
-		if (pszMacAddr  != NULL) pInfo->m_strMacAddr  = (LPCTSTR)LegacyAnsiToTString(pszMacAddr);
+		if (pszAccount  != NULL) pInfo->m_strAccount  = (LPCTSTR)Utf8ToTString(pszAccount);
+		if (pszPassword != NULL) pInfo->m_strPassword = (LPCTSTR)Utf8ToTString(pszPassword);
+		if (pszMacAddr  != NULL) pInfo->m_strMacAddr  = (LPCTSTR)Utf8ToTString(pszMacAddr);
 
 		// ---- サブテーブルからキャラIDリストを復元 ----
 		//   prepared statement を bind + reset で再利用

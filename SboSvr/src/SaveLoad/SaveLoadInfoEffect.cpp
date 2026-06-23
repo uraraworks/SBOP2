@@ -147,8 +147,8 @@ void CSaveLoadInfoEffect::SaveToNormalTable(void)
 		sqlite3_bind_int(pStmtMain, 5, (int)pInfo->m_bLoopSound);
 		sqlite3_bind_int(pStmtMain, 6, (int)pInfo->m_dwGrpIDMain);
 
-		// m_strName: SJIS バイト列をそのまま TEXT としてバインド
-		LPCSTR pszName = (LPCSTR)pInfo->m_strName;
+		// m_strName: UTF-8 バイト列としてバインド
+		LPCSTR pszName = pInfo->m_strName.GetUtf8Pointer();
 		sqlite3_bind_text(pStmtMain, 7, pszName, -1, SQLITE_TRANSIENT);
 
 		sqlite3_step(pStmtMain);
@@ -226,10 +226,10 @@ BOOL CSaveLoadInfoEffect::LoadFromNormalTable(PCLibInfoBase pDst)
 		pInfo->m_bLoopSound  = (BOOL) sqlite3_column_int(pStmtMain, 4);
 		pInfo->m_dwGrpIDMain = (DWORD)sqlite3_column_int(pStmtMain, 5);
 
-		// Name: SJIS バイト列として格納されているので LegacyAnsiToTString で変換
+		// Name: UTF-8 バイト列として格納されているので Utf8ToTString で変換
 		const char* pszName = (const char*)sqlite3_column_text(pStmtMain, 6);
 		if (pszName != NULL) {
-			pInfo->m_strName = (LPCTSTR)LegacyAnsiToTString(pszName);
+			pInfo->m_strName = (LPCTSTR)Utf8ToTString(pszName);
 		}
 
 		// ---- サブテーブルからアニメーションコマを復元 ----

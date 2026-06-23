@@ -80,8 +80,8 @@ void CSaveLoadInfoDisable::SaveToNormalTable(void)
 		// DisableID をバインド
 		sqlite3_bind_int(pStmt, 1, (int)pInfo->m_dwDisableID);
 
-		// MacAddress: SJIS バイト列をそのまま TEXT としてバインド（-1 で NULL 終端まで）
-		LPCSTR pszMac = (LPCSTR)pInfo->m_strMacAddress;
+		// MacAddress: UTF-8 バイト列としてバインド
+		LPCSTR pszMac = pInfo->m_strMacAddress.GetUtf8Pointer();
 		sqlite3_bind_text(pStmt, 2, pszMac, -1, SQLITE_TRANSIENT);
 
 		sqlite3_step(pStmt);
@@ -117,8 +117,7 @@ BOOL CSaveLoadInfoDisable::LoadFromNormalTable(PCLibInfoBase pDst)
 		// MacAddress: SJIS バイト列として格納されているので LPCSTR で取得
 		const char* pszMac = (const char*)sqlite3_column_text(pStmt, 1);
 		if (pszMac != NULL) {
-			// LegacyAnsiToTString と同様に SJIS → TCHAR 変換して格納
-			pInfo->m_strMacAddress = (LPCTSTR)LegacyAnsiToTString(pszMac);
+			pInfo->m_strMacAddress = (LPCTSTR)Utf8ToTString(pszMac);
 		}
 
 		// ライブラリに追加（DisableID が 0 でないので GetNewID() は呼ばれない）

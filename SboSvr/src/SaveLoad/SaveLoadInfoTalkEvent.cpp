@@ -166,8 +166,8 @@ void CSaveLoadInfoTalkEvent::SaveToNormalTable(void)
 			sqlite3_bind_int(pStmtEvent, 4, (int)pEvt->m_nPage);
 			sqlite3_bind_int(pStmtEvent, 5, (int)pEvt->m_dwData);
 
-			// m_strText: SJIS バイト列をそのまま TEXT として格納
-			LPCSTR pszText = (LPCSTR)pEvt->m_strText;
+			// m_strText: UTF-8 バイト列としてバインド
+			LPCSTR pszText = pEvt->m_strText.GetUtf8Pointer();
 			sqlite3_bind_text(pStmtEvent, 6, pszText, -1, SQLITE_TRANSIENT);
 
 			// PAGE 派生フィールド（非 PAGE は NULL）
@@ -196,8 +196,8 @@ void CSaveLoadInfoTalkEvent::SaveToNormalTable(void)
 					sqlite3_bind_int(pStmtMenu, 3, k);
 					sqlite3_bind_int(pStmtMenu, 4, (int)pMenuItem->nPage);
 
-					// strName: SJIS バイト列をそのまま TEXT として格納
-					LPCSTR pszItemName = (LPCSTR)pMenuItem->strName;
+					// strName: UTF-8 バイト列としてバインド
+					LPCSTR pszItemName = pMenuItem->strName.GetUtf8Pointer();
 					sqlite3_bind_text(pStmtMenu, 5, pszItemName, -1, SQLITE_TRANSIENT);
 
 					sqlite3_step(pStmtMenu);
@@ -284,7 +284,7 @@ BOOL CSaveLoadInfoTalkEvent::LoadFromNormalTable(PCLibInfoBase pDst)
 			pEvt->m_dwData     = (DWORD)nData;
 
 			if (pszText != NULL) {
-				pEvt->m_strText = (LPCTSTR)LegacyAnsiToTString(pszText);
+				pEvt->m_strText = (LPCTSTR)Utf8ToTString(pszText);
 			}
 
 			// PAGE 派生フィールドの復元
