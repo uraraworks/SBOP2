@@ -1416,7 +1416,10 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 		} else {
 			hDC = pDst->Lock();
 			x += 16;
-			x -= (pInfoItem->m_strName.GetLength() * 6 / 2);
+			int nNameLen = pInfoItem->m_strName.GetLength();
+			int textW = 0, textH = 0;
+			SdlFontGetTextExtent((void*)m_hFont, (LPCTSTR)pInfoItem->m_strName, nNameLen, &textW, &textH);
+			x -= textW / 2;
 			y += 32;
 			TextOut2(hDC, m_hFont, x, y, (LPCTSTR)pInfoItem->m_strName, RGB(255, 255, 255));
 			pDst->Unlock();
