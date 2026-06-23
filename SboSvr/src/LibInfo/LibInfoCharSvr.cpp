@@ -2193,28 +2193,21 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 		DWORD dwItemID, dwItemTypeID;
 		POINT ptPos;
 		PCInfoItem pInfoItem;
-		CPacketCHAR_ITEMINFO PacketCHAR_ITEMINFO;
 		CPacketITEM_RES_ITEMINFO PacketITEM_RES_ITEMINFO;
 
-		bResult = pInfoChar->IsItemAdd();
-		if (bResult) {
-			ptPos.x = ptPos.y = 0;
+		ptPos.x = pInfoChar->m_nMapX;
+		ptPos.y = pInfoChar->m_nMapY;
 //Todo:
-			dwItemTypeID = 9 + (genrand() % 2);
-//			dwItemTypeID = (genrand () % 30) + 1;
-//			if (dwItemTypeID == 5) {
-//				dwItemTypeID = 16;
-//			}
-			dwItemID = m_pLibInfoItem->MakeItem(0, &ptPos, dwItemTypeID);
-			if (dwItemID != 0) {
-				m_pLibInfoItem->AddItem(pInfoChar->m_dwCharID, dwItemID, &pInfoChar->m_adwItemID);
-				pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr(dwItemID);
-
-				PacketCHAR_ITEMINFO.Make(pInfoChar->m_dwCharID, &pInfoChar->m_adwItemID);
-				m_pMainFrame->SendToClient(pInfoChar->m_dwSessionID, &PacketCHAR_ITEMINFO);
-				PacketITEM_RES_ITEMINFO.Make(pInfoItem);
-				m_pMainFrame->SendToMapChar(pInfoChar->m_dwMapID, &PacketITEM_RES_ITEMINFO);
-			}
+		dwItemTypeID = 9 + (genrand() % 2);
+//		dwItemTypeID = (genrand () % 30) + 1;
+//		if (dwItemTypeID == 5) {
+//			dwItemTypeID = 16;
+//		}
+		dwItemID = m_pLibInfoItem->MakeItem(pInfoChar->m_dwMapID, &ptPos, dwItemTypeID);
+		if (dwItemID != 0) {
+			pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr(dwItemID);
+			PacketITEM_RES_ITEMINFO.Make(pInfoItem);
+			m_pMainFrame->SendToMapChar(pInfoChar->m_dwMapID, &PacketITEM_RES_ITEMINFO);
 		}
 		pInfoChar->m_bChgFishingHit = FALSE;
 
