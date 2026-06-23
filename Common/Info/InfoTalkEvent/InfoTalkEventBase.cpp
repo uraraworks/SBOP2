@@ -124,7 +124,7 @@ DWORD CInfoTalkEventBase::ReadElementData(
 	case 1: pDst = (PBYTE)&m_nPage;	dwSize = sizeof(m_nPage);	break;	// 所属ページ番号
 	case 2: pDst = (PBYTE)&m_dwData;	dwSize = sizeof(m_dwData);	break;	// バイナリデータ
 	case 3:	// 文字列データ
-		m_strText = (LPCTSTR)LegacyAnsiToTString((LPCSTR)pSrc);
+		m_strText = (LPCTSTR)Utf8ToTString((LPCSTR)pSrc);
 		dwSize = (DWORD)(strlen((LPCSTR)pSrc) + 1);
 		break;
 	}

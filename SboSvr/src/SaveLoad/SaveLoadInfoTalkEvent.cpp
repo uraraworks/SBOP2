@@ -272,7 +272,7 @@ BOOL CSaveLoadInfoTalkEvent::LoadFromNormalTable(PCLibInfoBase pDst)
 			int nPage      = sqlite3_column_int(pStmtEvent, 2);
 			int nData      = sqlite3_column_int(pStmtEvent, 3);
 
-			// Text: SJIS バイト列として格納されているので LegacyAnsiToTString で変換
+			// Text: UTF-8 バイト列として格納されているので Utf8ToTString で変換
 			const char* pszText = (const char*)sqlite3_column_text(pStmtEvent, 4);
 
 			// EventType に応じた派生クラスを生成

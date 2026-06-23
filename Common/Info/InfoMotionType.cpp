@@ -117,7 +117,7 @@ DWORD CInfoMotionType::ReadElementData(
 	case 0:	pDst = (PBYTE)&m_dwMotionTypeID;	dwSize = sizeof(m_dwMotionTypeID);	break;	// モーション種別ID
 	case 1:	pDst = (PBYTE)&m_wGrpIDSub;	dwSize = sizeof(m_wGrpIDSub);	break;	// プレビュー用グラフィックIDサブ
 	case 2:	// モーション種別名
-		m_strName = (LPCTSTR)LegacyAnsiToTString((LPCSTR)pSrc);
+		m_strName = (LPCTSTR)Utf8ToTString((LPCSTR)pSrc);
 		dwSize = (DWORD)(strlen((LPCSTR)pSrc) + 1);
 		break;
 	}

@@ -394,7 +394,7 @@ DWORD CInfoMapBase::ReadElementData(
 		dwSize	= (m_sizeMap.cx * sizeof(WORD)) * m_sizeMap.cy;
 		break;
         case 10:
-                m_strMapName = (LPCTSTR)LegacyAnsiToTString((LPCSTR)pSrc);
+                m_strMapName = (LPCTSTR)Utf8ToTString((LPCSTR)pSrc);
                 dwSize = (DWORD)(strlen((LPCSTR)pSrc) + 1);
                 break;
 	case 11:

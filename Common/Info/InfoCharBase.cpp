@@ -620,15 +620,15 @@ DWORD CInfoCharBase::ReadElementData(
 	case 29:	pDst = (PBYTE)&m_clName;	dwSize = sizeof(m_clName);	break;
 	case 30:	pDst = (PBYTE)&m_clSpeak;	dwSize = sizeof(m_clSpeak);	break;
 	case 31:
-		m_strCharName = (LPCTSTR)LegacyAnsiToTString((LPCSTR)pSrc);
+		m_strCharName = (LPCTSTR)Utf8ToTString((LPCSTR)pSrc);
 		dwSize = (DWORD)(strlen((LPCSTR)pSrc) + 1);
 		break;
 	case 32:
-		m_strSpeak = (LPCTSTR)LegacyAnsiToTString((LPCSTR)pSrc);
+		m_strSpeak = (LPCTSTR)Utf8ToTString((LPCSTR)pSrc);
 		dwSize = (DWORD)(strlen((LPCSTR)pSrc) + 1);
 		break;
 	case 33:
-		m_strTalk = (LPCTSTR)LegacyAnsiToTString((LPCSTR)pSrc);
+		m_strTalk = (LPCTSTR)Utf8ToTString((LPCSTR)pSrc);
 		dwSize = (DWORD)(strlen((LPCSTR)pSrc) + 1);
 		break;
 	case 34:
