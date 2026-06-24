@@ -363,6 +363,7 @@ function buildGraphicsTab() {
   var fields = {};
   var graphicsContext = { is2x2: false, familyId: 0, sex: 0, baseGrpIdSubDown: 2 };
   var catalogCache = null;
+  var motionTypeIdRef = null; // openNpcMotionPicker が motionTypeId input を更新するための参照
 
   function raw(key) {
     var field = fields[key];
@@ -409,11 +410,11 @@ function buildGraphicsTab() {
   }
 
   function npc2x2FileIndex(value) {
-    return Math.floor((Math.max(1, clampValue(value)) - 1) / 2);
-  }
-
-  function npc2x2SlotOffset(category, value) {
-    return ((Math.max(1, clampValue(value)) - 1) % 2) * category.cellSize * 8;
+    // クライアントの GetDib2x2NPC(wNPCID) は wNPCID をそのまま配列インデックスとして使い、
+    // i = wNPCID で読み込んだ IDP_2X2_NPC_%03d (i+1) を返す。
+    // つまり DB の wGrpIDNPC = N → サーバの sheetIndex = N → IDP_2X2_NPC_(N+1).png となる。
+    // ここで割り算/スロット分割をしてはいけない (1ファイル=1NPC)。
+    return clampValue(value);
   }
 
   async function drawFromSheet(ctx, categoryKey, sheetIndex, sx, sy, sw, sh, dx, dy, dw, dh) {
@@ -472,6 +473,8 @@ function buildGraphicsTab() {
       categoryKey = "spCloth2x2";
       sheetIndex = Math.max(0, clampValue(value) - 1);
     } else if (kind === "npc") {
+      // value=0 (= NPC未設定) は NPC欄サムネを空欄にするためスキップ。
+      // 新しい NPC ピッカーは自前で drawImage を呼ぶのでここを通らない。
       if (clampValue(value) <= 0) { return; }
       categoryKey = "npc2x2";
       sheetIndex = npc2x2FileIndex(value >= 50000 ? value - 50000 : value);
@@ -493,7 +496,7 @@ function buildGraphicsTab() {
     var coord = kind === "eye" ? calcSpriteCoord(category, 0) : twoByTwoDownCoord(category);
     var img = await loadSheetImage(category.sheetUrl + "/" + sheetIndex);
     var sy = coord.y + ((kind !== "eye" && graphicsContext.sex === 2) ? size * 4 : 0);
-    var sx = coord.x + (kind === "npc" ? npc2x2SlotOffset(category, value >= 50000 ? value - 50000 : value) : 0);
+    var sx = coord.x;
     if (sx + size > img.naturalWidth || sy + size > img.naturalHeight) { return; }
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(img, sx, sy, size, size, dx, dy, dst, dst);
@@ -573,14 +576,18 @@ function buildGraphicsTab() {
     var sy = coord.y + (graphicsContext.sex === 2 ? category.cellSize * 4 : 0);
     var values = [0];
     var misses = 0;
-    for (var fileIndex = 0; fileIndex <= 127; fileIndex++) {
+    // 1ファイル=1NPC。sheetIndex N → IDP_2X2_NPC_(N+1).png に対応するため、
+    // 値 N を sheetIndex として直接プローブする。
+    for (var fileIndex = 0; fileIndex <= 255; fileIndex++) {
       try {
         var img = await loadSheetImage(category.sheetUrl + "/" + fileIndex);
-        for (var slot = 0; slot < 2; slot++) {
-          var value = fileIndex * 2 + slot + 1;
-          var sx = coord.x + slot * category.cellSize * 8;
-          if (sx + category.cellSize <= img.naturalWidth && sy + category.cellSize <= img.naturalHeight) {
-            values.push(value);
+        var sx = coord.x;
+        if (sx + category.cellSize <= img.naturalWidth && sy + category.cellSize <= img.naturalHeight) {
+          if (fileIndex === 0) {
+            // 既に [0] で初期化済みなので push しない (重複防止)。
+            // fileIndex=0 (= IDP_2X2_NPC_001) のサムネイルは draw2x2Part で描画される。
+          } else {
+            values.push(fileIndex);
           }
         }
         misses = 0;
@@ -683,6 +690,181 @@ function buildGraphicsTab() {
     });
   }
 
+  // NPC 専用ピッカー: GrpIDNPC と MotionTypeID を同時に設定する
+  // is2x2() が true で key="npc" の場合のみ呼ばれる
+  async function openNpcMotionPicker(field) {
+    var backdrop = mkEl("div", "cg-backdrop");
+    var dialog = mkEl("div", "cg-dialog");
+    var header = mkEl("div", "cg-header");
+    var title = mkEl("h3", "", field.label + " (NPC モーション選択)");
+    header.appendChild(title);
+    var list = mkEl("div", "cg-candidate-grid");
+    var footer = mkEl("div", "cg-footer");
+    var closeBtn = mkEl("button", "button", "閉じる");
+    closeBtn.type = "button";
+    footer.appendChild(closeBtn);
+    dialog.append(header, list, footer);
+    backdrop.appendChild(dialog);
+    document.body.appendChild(backdrop);
+
+    // ローディング表示
+    list.textContent = "読み込み中...";
+    var motionTypes, fileCount;
+    try {
+      var resp = await fetch("/api/npc-motion-pairs");
+      if (!resp.ok) { throw new Error("HTTP " + resp.status); }
+      var data = await resp.json();
+      motionTypes = data.motionTypes || [];
+      fileCount = Number(data.fileCount) || 0;
+    } catch (err) {
+      list.textContent = "取得失敗: " + err.message;
+      closeBtn.addEventListener("click", function () { backdrop.remove(); });
+      backdrop.addEventListener("click", function (ev) { if (ev.target === backdrop) { backdrop.remove(); } });
+      return;
+    }
+
+    var category = await getCategory("npc2x2");
+    if (!category || !category.sheetUrl) {
+      list.textContent = "スプライトカテゴリが見つかりません";
+      closeBtn.addEventListener("click", function () { backdrop.remove(); });
+      backdrop.addEventListener("click", function (ev) { if (ev.target === backdrop) { backdrop.remove(); } });
+      return;
+    }
+    var cellSize = category.cellSize || 32;
+    var sexOffsetY = graphicsContext.sex === 2 ? cellSize * 4 : 0;
+
+    // ファイル F に表示する motion は sys_motion_type.GrpIDSub == F のものだけ。
+    // クライアントが用意した「このモーション種別はこの NPC ファイル用」というメタ情報を
+    // 使うことで、(file × motion) のクロスから「実際に絵が入っている組合せ」だけを残せる。
+    // セル中身チェック (cellHasContent) は念のためのサニティ用。
+    var currentGrpIdNpc = raw("npc");
+    list.textContent = "";
+
+    function cellHasContent(img, sx, sy) {
+      // セルの代表点 (4×4 サンプル) のうち 1 点でも不透明があれば「中身あり」と判定。
+      // 完全に透明なセルだけ落とせれば十分なので軽量サンプリング。
+      var tmp = document.createElement("canvas");
+      tmp.width = cellSize; tmp.height = cellSize;
+      var c = tmp.getContext("2d");
+      c.imageSmoothingEnabled = false;
+      try {
+        c.drawImage(img, sx, sy, cellSize, cellSize, 0, 0, cellSize, cellSize);
+        var pixels = c.getImageData(0, 0, cellSize, cellSize).data;
+        for (var py = 2; py < cellSize; py += 4) {
+          for (var px = 2; px < cellSize; px += 4) {
+            var a = pixels[(py * cellSize + px) * 4 + 3];
+            if (a > 0) { return true; }
+          }
+        }
+      } catch (_e) {
+        // CORS 等で getImageData 失敗 → 中身ありと仮定 (落とさない)
+        return true;
+      }
+      return false;
+    }
+
+    var canvasSize = 128;
+    var renderedCount = 0;
+
+    // sub-base (1始まり) → セル左上座標 (sex 補正含む)
+    function subToXY(sub) {
+      if (!sub) { return null; }
+      var coord = calcSpriteCoord(category, Math.max(0, sub - 1));
+      return { x: coord.x, y: coord.y + sexOffsetY };
+    }
+
+    // motion の定義済み方向 (sub != 0) のセル全てに描画があるかチェック。
+    // クライアントの描画パスは StandXxx の sub-base ごとに該当セルを引くため、
+    // どこか1つでも空セルがあるとその NPC として成立しない。
+    // = ファイル内に「実際に居る NPC」のみが残るフィルタ。
+    function motionFitsFile(img, mt) {
+      var dirs = [mt.subUp, mt.subDown, mt.subLeft, mt.subRight];
+      var checked = 0;
+      for (var i = 0; i < dirs.length; i++) {
+        if (!dirs[i]) { continue; }  // この方向は未定義 → スキップ (チェック対象外)
+        var p = subToXY(dirs[i]);
+        if (!p) { continue; }
+        if (p.x + cellSize > img.naturalWidth || p.y + cellSize > img.naturalHeight) { return false; }
+        if (!cellHasContent(img, p.x, p.y)) { return false; }
+        checked++;
+      }
+      return checked > 0;  // 1 方向以上有効なら OK
+    }
+
+    // ファイル順 → モーション順で並べる
+    for (var fIdx = 0; fIdx < fileCount; fIdx++) {
+      var img;
+      try {
+        img = await loadSheetImage(category.sheetUrl + "/" + fIdx);
+      } catch (_e) {
+        continue; // 読めないファイルはスキップ
+      }
+      for (var mIdx = 0; mIdx < motionTypes.length; mIdx++) {
+        var mt = motionTypes[mIdx];
+        // 対象 NPC ファイルが一致するモーション種別だけを表示。
+        // (例: motion 6〜30 は GrpIDSub=5 → npc006 用)
+        if (Number(mt.targetGrpIdNpc) !== fIdx) { continue; }
+        if (!motionFitsFile(img, mt)) { continue; }
+
+        // サムネは STAND_DOWN が有れば優先、無ければ定義済み最初の方向を使う
+        var thumbSub = mt.subDown || mt.subUp || mt.subLeft || mt.subRight;
+        var thumbXY = subToXY(thumbSub);
+        if (!thumbXY) { continue; }
+
+        renderedCount++;
+
+        var entry = { grpIdNpc: fIdx, motionTypeId: mt.motionTypeId, baseGrpIdSubDown: thumbSub };
+        var btn = mkEl("button", "cg-candidate");
+        btn.type = "button";
+        btn.dataset.grpIdNpc = String(entry.grpIdNpc);
+        btn.dataset.motionTypeId = String(entry.motionTypeId);
+
+        var canvas = document.createElement("canvas");
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
+        var scale = Math.max(1, Math.floor(canvasSize / cellSize));
+        var dst = cellSize * scale;
+        var dx = Math.floor((canvasSize - dst) / 2);
+        var dy = Math.floor((canvasSize - dst) / 2);
+        var ctx2 = canvas.getContext("2d");
+        ctx2.imageSmoothingEnabled = false;
+        ctx2.drawImage(img, thumbXY.x, thumbXY.y, cellSize, cellSize, dx, dy, dst, dst);
+
+        var lbl = mkEl("span", "", "npc" + entry.grpIdNpc + "/mtn" + entry.motionTypeId);
+        btn.append(canvas, lbl);
+        list.appendChild(btn);
+
+        if (entry.grpIdNpc === currentGrpIdNpc) { btn.classList.add("selected"); }
+
+        (function (e, b) {
+          b.addEventListener("click", function () {
+            // GrpIDNPC・MotionTypeID を同時更新し、プレビュー用 sub-base も差し替え。
+            // motionTypeIdRef.dispatchEvent(change) で他リスナにも通知。
+            fields[field.key].setValue(e.grpIdNpc);
+            if (motionTypeIdRef) {
+              motionTypeIdRef.value = String(e.motionTypeId);
+              try { motionTypeIdRef.dispatchEvent(new Event("change", { bubbles: true })); } catch (_x) {}
+            }
+            graphicsContext.baseGrpIdSubDown = e.baseGrpIdSubDown;
+            redrawGraphics();
+            Array.from(list.querySelectorAll(".cg-candidate")).forEach(function (other) {
+              other.classList.toggle("selected", other === b);
+            });
+          });
+        })(entry, btn);
+      }
+    }
+
+    if (renderedCount === 0) {
+      list.textContent = "選択可能な NPC がありません";
+    }
+
+    closeBtn.addEventListener("click", function () { backdrop.remove(); });
+    backdrop.addEventListener("click", function (ev) {
+      if (ev.target === backdrop) { backdrop.remove(); }
+    });
+  }
+
   function createGraphicField(field) {
     var wrap = mkEl("div", "char-graphic-field");
     var label = mkEl("span", "char-graphic-label", field.label);
@@ -696,11 +878,19 @@ function buildGraphicsTab() {
     input.min = String(field.min || 0);
     wrap.append(label, canvas, input);
     input.addEventListener("change", redrawGraphics);
-    canvas.addEventListener("click", function () { openPartPicker(field); });
+
+    function openPicker() {
+      if (field.key === "npc" && is2x2()) {
+        openNpcMotionPicker(field);
+      } else {
+        openPartPicker(field);
+      }
+    }
+    canvas.addEventListener("click", openPicker);
     canvas.addEventListener("keydown", function (ev) {
       if (ev.key === "Enter" || ev.key === " ") {
         ev.preventDefault();
-        openPartPicker(field);
+        openPicker();
       }
     });
     return {
@@ -712,7 +902,7 @@ function buildGraphicsTab() {
   }
 
   var graphicFields = [
-    { key: "npc", label: "NPC", kind: "npc", min: 0, getMax: function () { return is2x2() ? 6 : 64; } },
+    { key: "npc", label: "NPC", kind: "npc", min: 0, getMax: function () { return is2x2() ? 5 : 64; } },
     { key: "cloth", label: "服", kind: "cloth", min: 0, getMax: function () { return is2x2() ? 4 : 63; } },
     { key: "eye", label: "目", kind: "eye", min: 0, getMax: function () { return is2x2() ? 3 : 31; } },
     { key: "eyeColor", label: "目色", kind: "eyeColor", min: 1, getMax: function () { return is2x2() ? 1 : 6; } },
@@ -726,7 +916,7 @@ function buildGraphicsTab() {
     { key: "armsSub", label: "持ち物(サブ)", number: true },
     { key: "armsLeftMain", label: "盾(メイン)", number: true },
     { key: "armsLeftSub", label: "盾(サブ)", number: true },
-    { key: "initNpc", label: "初期NPC", kind: "npc", min: 0, getMax: function () { return is2x2() ? 6 : 64; } },
+    { key: "initNpc", label: "初期NPC", kind: "npc", min: 0, getMax: function () { return is2x2() ? 5 : 64; } },
     { key: "initCloth", label: "初期服", kind: "cloth", min: 0, getMax: function () { return is2x2() ? 4 : 63; } },
     { key: "initEye", label: "初期目", kind: "eye", min: 0, sampleRefs: { eyeColorKey: "initEyeColor" }, getMax: function () { return is2x2() ? 3 : 31; } },
     { key: "initEyeColor", label: "初期目色", kind: "eyeColor", min: 1, sampleRefs: { eyeKey: "initEye" }, getMax: function () { return is2x2() ? 1 : 6; } },
@@ -761,7 +951,11 @@ function buildGraphicsTab() {
     redrawGraphics();
   }
 
-  return { panel, fb, form, spriteFields: fields, syncGraphicsThumbs: redrawGraphics, setGraphicsContext };
+  function setMotionTypeIdRef(inp) {
+    motionTypeIdRef = inp;
+  }
+
+  return { panel, fb, form, spriteFields: fields, syncGraphicsThumbs: redrawGraphics, setGraphicsContext, setMotionTypeIdRef };
 }
 
 // ----------------------------------------------------------------
@@ -1060,6 +1254,8 @@ export function mount(container) {
   var statusTab     = buildStatusTab();
   var equipTab      = buildEquipTab();
   var graphicsTab   = buildGraphicsTab();
+  // NPC ピッカーで motionTypeId input を更新できるよう参照を渡す
+  graphicsTab.setMotionTypeIdRef(basicTab.motionTypeIdInp);
   var movementTab   = buildMovementTab();
   var npcSpawnTab   = buildNpcSpawnTab();
   var itemsTab      = buildItemsTab();

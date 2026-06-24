@@ -305,6 +305,7 @@
     <ClCompile Include="src\Web\Handlers\MapShadowHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\CharacterListHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\CharacterDetailHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\NpcMotionPairsHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\CharacterUpdateHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\CharacterItemHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\ItemTypeHandler.cpp" />
@@ -459,6 +460,7 @@
     <ClInclude Include="src\Web\Handlers\MapShadowHandler.h" />
     <ClInclude Include="src\Web\Handlers\CharacterListHandler.h" />
     <ClInclude Include="src\Web\Handlers\CharacterDetailHandler.h" />
+    <ClInclude Include="src\Web\Handlers\NpcMotionPairsHandler.h" />
     <ClInclude Include="src\Web\Handlers\CharacterUpdateHandler.h" />
     <ClInclude Include="src\Web\Handlers\CharacterItemHandler.h" />
     <ClInclude Include="src\Web\Handlers\ItemTypeHandler.h" />

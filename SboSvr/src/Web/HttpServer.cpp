@@ -29,6 +29,7 @@
 #include "Handlers/SelectionHandler.h"
 #include "Handlers/CharacterListHandler.h"
 #include "Handlers/CharacterDetailHandler.h"
+#include "Handlers/NpcMotionPairsHandler.h"
 #include "Handlers/CharacterUpdateHandler.h"
 #include "Handlers/CharacterItemHandler.h"
 #include "Handlers/ItemTypeHandler.h"
@@ -1024,6 +1025,10 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> selectionDeleteHandler(new CSelectionDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/selection", std::move(selectionDeleteHandler));
+
+        // NPC モーションペア一覧 API  GET /api/npc-motion-pairs
+        std::unique_ptr<IApiHandler> npcMotionPairsHandler(new CNpcMotionPairsHandler(m_pMgrData));
+        m_router.Register("GET", "/api/npc-motion-pairs", std::move(npcMotionPairsHandler));
 
         // キャラクター一覧検索 API
         std::unique_ptr<IApiHandler> characterListHandler(new CCharacterListHandler(m_pMgrData));
