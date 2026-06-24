@@ -12,11 +12,54 @@ import { createListDetail } from "../components/list-detail.js";
 // ----------------------------------------------------------------
 
 async function fetchMotionTypeList() {
-  const { response, data } = await fetchJson("/api/motion-types");
+  const [{ response, data }, motionsResult] = await Promise.all([
+    fetchJson("/api/motion-types"),
+    fetchJson("/api/motions").catch(() => null),
+  ]);
   if (!response.ok || !Array.isArray(data?.motionTypes)) {
     throw new Error("モーション種別の取得に失敗しました (HTTP " + response.status + ")");
   }
-  return data.motionTypes.slice().sort((a, b) => a.motionTypeId - b.motionTypeId);
+  const motions = Array.isArray(motionsResult?.data?.motions) ? motionsResult.data.motions : [];
+  const stats = new Map();
+  motions.forEach((motion) => {
+    const typeId = Number(motion.motionTypeId || 0);
+    if (!stats.has(typeId)) {
+      stats.set(typeId, { frameCount: 0, listIds: new Set(), configuredListIds: new Set() });
+    }
+    const stat = stats.get(typeId);
+    stat.frameCount += 1;
+    stat.listIds.add(Number(motion.motionListId || 0));
+    if (hasMotionContent(motion)) {
+      stat.configuredListIds.add(Number(motion.motionListId || 0));
+    }
+  });
+  return data.motionTypes
+    .map((mt) => {
+      const stat = stats.get(Number(mt.motionTypeId)) ?? { frameCount: 0, listIds: new Set(), configuredListIds: new Set() };
+      return {
+        ...mt,
+        frameCount: stat.frameCount,
+        motionListCount: stat.listIds.size,
+        configuredListCount: stat.configuredListIds.size,
+      };
+    })
+    .sort((a, b) => a.motionTypeId - b.motionTypeId);
+}
+
+function hasMotionContent(motion) {
+  return Boolean(
+    Number(motion.wait ?? 0) ||
+    Number(motion.grpIdMainBase ?? 0) ||
+    Number(motion.grpIdSubBase ?? 0) ||
+    Number(motion.grpIdMainPile1 ?? 0) ||
+    Number(motion.grpIdSubPile1 ?? 0) ||
+    Number(motion.grpIdMainPile2 ?? 0) ||
+    Number(motion.grpIdSubPile2 ?? 0) ||
+    Number(motion.grpIdMainPile3 ?? 0) ||
+    Number(motion.grpIdSubPile3 ?? 0) ||
+    Number(motion.soundId ?? 0) ||
+    Number(motion.procId ?? 0)
+  );
 }
 
 // ----------------------------------------------------------------
@@ -24,7 +67,10 @@ async function fetchMotionTypeList() {
 // ----------------------------------------------------------------
 
 function renderListItem(mt) {
-  return "[" + mt.motionTypeId + "] " + (mt.name || "(名前なし)");
+  return "[" + mt.motionTypeId + "] " + (mt.name || "(名前なし)")
+    + " / 設定あり" + (mt.configuredListCount ?? 0) + "リスト"
+    + " / 総" + (mt.motionListCount ?? 0) + "リスト"
+    + " / " + (mt.frameCount ?? 0) + "フレーム";
 }
 
 // ----------------------------------------------------------------
@@ -79,6 +125,26 @@ function renderDetail(mt) {
   grid.appendChild(grpLabel);
 
   wrap.appendChild(grid);
+
+  const summary = document.createElement("div");
+  summary.className = "motion-type-summary";
+
+  const countText = document.createElement("p");
+  countText.className = "muted";
+  countText.textContent = "登録済み: 設定あり " + (mt?.configuredListCount ?? 0)
+    + " リスト / 総 " + (mt?.motionListCount ?? 0)
+    + " リスト / " + (mt?.frameCount ?? 0) + " フレーム";
+
+  const editLink = document.createElement("button");
+  editLink.type = "button";
+  editLink.className = "button secondary";
+  editLink.textContent = "この種別のモーション編集へ";
+  editLink.addEventListener("click", () => {
+    window.location.hash = "motion-edit";
+  });
+
+  summary.append(countText, editLink);
+  wrap.appendChild(summary);
 
   // ペイロード収集
   wrap._collectData = function () {

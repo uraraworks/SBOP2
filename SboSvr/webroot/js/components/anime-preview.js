@@ -84,7 +84,12 @@ export function createAnimePreview({ width = 64, height = 64, scale = 2 } = {}) 
   let _elapsed = 0;
   let _destroyed = false;
 
-  loadCatalog().then((c) => { _catalog = c; }).catch(() => {});
+  loadCatalog().then((c) => {
+    _catalog = c;
+    if (!_destroyed && _frames.length > 0) {
+      _drawFrame(_frameIndex);
+    }
+  }).catch(() => {});
 
   // ----------------------------------------------------------------
   // 描画
@@ -106,13 +111,17 @@ export function createAnimePreview({ width = 64, height = 64, scale = 2 } = {}) 
         if (_destroyed) return;
         const prevAlpha = ctx.globalAlpha;
         ctx.globalAlpha = layer.alpha ?? 1;
+        const drawW = cat.cellSize * scale;
+        const drawH = cat.cellSize * scale;
+        const baseX = Math.floor((dispW - drawW) / 2);
+        const baseY = Math.floor((dispH - drawH) / 2);
         ctx.drawImage(
           img,
           coord.x, coord.y, cat.cellSize, cat.cellSize,
-          (layer.offsetX ?? 0) * scale,
-          (layer.offsetY ?? 0) * scale,
-          cat.cellSize * scale,
-          cat.cellSize * scale
+          baseX + (layer.offsetX ?? 0) * scale,
+          baseY + (layer.offsetY ?? 0) * scale,
+          drawW,
+          drawH
         );
         ctx.globalAlpha = prevAlpha;
       } catch {
@@ -135,7 +144,7 @@ export function createAnimePreview({ width = 64, height = 64, scale = 2 } = {}) 
     _elapsed += dt;
 
     const frame = _frames[_frameIndex];
-    const waitMs = frame ? (frame.wait * 10) : 100;
+    const waitMs = frame ? Math.max(10, frame.wait * 10) : 100;
 
     if (_elapsed >= waitMs) {
       _elapsed -= waitMs;
