@@ -1205,10 +1205,10 @@ void CLibInfoCharSvr::SetInitStatus(CInfoCharSvr *pInfoChar, BOOL bInitPos/*FALS
 	pInfoChar->m_wAttrDark	= pInitCharStatus->wAttrDark;	// 属性[闇]
 	pInfoChar->m_dwMaxHP	= pInitCharStatus->dwMaxHP;	// 最大HP
 	pInfoChar->m_dwMaxSP	= pInitCharStatus->dwMaxSP;	// 最大SP
-	// 新規キャラの移動待ち時間は初期値 11 を固定で設定
+	// 新規キャラの移動待ち時間は初期値 10 を固定で設定
 	// （本来は pInitCharStatus に dwMoveWait メンバを追加すべきだが、
 	//  Admin UI が不具合中で値入力できないため暫定でハードコード）
-	pInfoChar->m_dwMoveWait	= 11;
+	pInfoChar->m_dwMoveWait	= 10;
 
 	if (bInitPos) {
 		pInfoChar->m_dwMapID	= pInitCharStatus->dwInitPosMapID;	// マップID
