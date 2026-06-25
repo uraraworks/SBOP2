@@ -162,6 +162,19 @@ const DEFAULT_PARAMS = {
   cutoffPercent: 25,
 };
 
+/**
+ * アルゴ種別ごとの推奨パラメータ。
+ * floorAreaMin は「グリッド面積 × fillPct」で算出する（マップサイズに比例）。
+ * fillPct は各アルゴが確実に成功する保守的な値（全サイズ50/50実測）。
+ *   L3洞窟/L1聖堂は密、L2墓地/L4地獄は構造上どうしても疎。
+ */
+const ALGO_PRESETS = {
+  0: { fillPct: 0.08,  blockMin: 3, blockMax: 4,  cutoffPercent: 25 }, // L3洞窟
+  1: { fillPct: 0.18,  blockMin: 4, blockMax: 6,  cutoffPercent: 25 }, // L1聖堂
+  2: { fillPct: 0.02,  blockMin: 5, blockMax: 10, cutoffPercent: 25 }, // L2地下墓地
+  3: { fillPct: 0.012, blockMin: 6, blockMax: 12, cutoffPercent: 25 }, // L4地獄
+};
+
 /** roleMapJson の既定値 */
 const DEFAULT_ROLE_MAP = {
   floor: 0,
@@ -333,9 +346,30 @@ function buildDetailPane({ feedbackEl }) {
     }
   }
 
+  /**
+   * アルゴ種別の推奨パラメータを各スピナーに流し込む。
+   * floorAreaMin は現在の width×height からスケール算出する。
+   * 注意: パターン読込時は呼ばない（保存値を上書きしないため）。algo変更イベント専用。
+   * @param {number} type
+   */
+  function applyAlgoPresets(type) {
+    const preset = ALGO_PRESETS[type];
+    if (!preset) return;
+    const w = widthSpin.getValue();
+    const h = heightSpin.getValue();
+    let fam = Math.round(w * h * preset.fillPct);
+    if (fam < 50) fam = 50;
+    floorAreaMinSpin.setValue(fam);
+    blockMinSpin.setValue(preset.blockMin);
+    blockMaxSpin.setValue(preset.blockMax);
+    cutoffSpin.setValue(preset.cutoffPercent);
+  }
+
   // アルゴ種別変更イベント
   algoSelect.addEventListener("change", () => {
-    applyAlgoType(Number(algoSelect.value));
+    const t = Number(algoSelect.value);
+    applyAlgoType(t);
+    applyAlgoPresets(t);
   });
 
   // ================================================================
