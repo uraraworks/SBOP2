@@ -24,7 +24,7 @@ struct Params
 {
     int width;          // グリッド幅（デフォルト 40）
     int height;         // グリッド高（デフォルト 40）
-    int floorAreaMin;   // 最小床面積（デフォルト 600）
+    int floorAreaMin;   // 最小床面積（デフォルト 150）
     int blockMin;       // ブロック辺最小サイズ（デフォルト 3）
     int blockMax;       // ブロック辺最大サイズ（デフォルト 4）
     int cutoffPercent;  // 再帰打ち切り確率 % （デフォルト 25 = 1/4）
@@ -35,7 +35,7 @@ struct Params
     Params()
         : width(40)
         , height(40)
-        , floorAreaMin(600)
+        , floorAreaMin(150)
         , blockMin(3)
         , blockMax(4)
         , cutoffPercent(25)

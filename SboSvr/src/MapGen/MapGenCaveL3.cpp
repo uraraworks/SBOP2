@@ -176,61 +176,66 @@ void CreateBlock(GeneratorContext &ctx, int px, int py, int obs)
 }
 
 // ---------------------------------------------------------------------------
-// CountFloor — グリッド内の床セル数を数える
-// ---------------------------------------------------------------------------
-int CountFloor(const GeneratorContext &ctx)
-{
-    int count = 0;
-    for (int v : ctx.grid)
-        if (v == 1) ++count;
-    return count;
-}
-
-// ---------------------------------------------------------------------------
-// FloodFill — 再帰フラッドフィルで到達床セルを visited にマークし数を返す
-// ---------------------------------------------------------------------------
-void FloodFill(const GeneratorContext &ctx, int x, int y,
-               std::vector<bool> &visited, int &count)
-{
-    if (!ctx.InBounds(x, y))     return;
-    if (visited[y * ctx.W + x]) return;
-    if (ctx.Cell(x, y) != 1)    return;
-
-    visited[y * ctx.W + x] = true;
-    ++count;
-
-    FloodFill(ctx, x + 1, y, visited, count);
-    FloodFill(ctx, x - 1, y, visited, count);
-    FloodFill(ctx, x, y + 1, visited, count);
-    FloodFill(ctx, x, y - 1, visited, count);
-}
-
-// ---------------------------------------------------------------------------
-// Lockout — 全床セルが連結しているか確認
+// KeepLargestComponent — 最大連結成分だけ残し、他の床を壁に戻す
 //
-// 任意の床1マスからフラッドフィルし、到達数 == 全床数なら true。
+// 50% 確率の縁で生じた孤立ポケットを除去する。残った床は定義上 100% 連結。
+// 戻り値: 残した（最大成分の）床セル数。スタック安全のため明示スタックで反復。
 // ---------------------------------------------------------------------------
-bool Lockout(const GeneratorContext &ctx)
+int KeepLargestComponent(GeneratorContext &ctx)
 {
-    int totalFloor = CountFloor(ctx);
-    if (totalFloor == 0)
-        return false;
+    const int W = ctx.W, H = ctx.H;
+    std::vector<int> label(W * H, 0); // 0=未訪問/壁, >0=成分ID
+    std::vector<int> compSize;        // compSize[id-1] = サイズ
+    std::vector<int> stack;
+    stack.reserve(W * H);
 
-    // 最初の床セルを探す
-    int startX = -1, startY = -1;
-    for (int y = 0; y < ctx.H && startX < 0; ++y)
-        for (int x = 0; x < ctx.W && startX < 0; ++x)
-            if (ctx.Cell(x, y) == 1)
+    int bestId = 0, bestSize = 0;
+    for (int sy = 0; sy < H; ++sy)
+    {
+        for (int sx = 0; sx < W; ++sx)
+        {
+            int sidx = sy * W + sx;
+            if (ctx.grid[sidx] != 1 || label[sidx] != 0)
+                continue;
+
+            int id = static_cast<int>(compSize.size()) + 1;
+            int sz = 0;
+            stack.clear();
+            stack.push_back(sidx);
+            label[sidx] = id;
+            while (!stack.empty())
             {
-                startX = x;
-                startY = y;
+                int idx = stack.back();
+                stack.pop_back();
+                ++sz;
+                int x = idx % W, y = idx / W;
+                const int nb[4][2] = {{1,0},{-1,0},{0,1},{0,-1}};
+                for (int k = 0; k < 4; ++k)
+                {
+                    int nx = x + nb[k][0], ny = y + nb[k][1];
+                    if (nx < 0 || nx >= W || ny < 0 || ny >= H) continue;
+                    int nidx = ny * W + nx;
+                    if (ctx.grid[nidx] == 1 && label[nidx] == 0)
+                    {
+                        label[nidx] = id;
+                        stack.push_back(nidx);
+                    }
+                }
             }
+            compSize.push_back(sz);
+            if (sz > bestSize) { bestSize = sz; bestId = id; }
+        }
+    }
 
-    std::vector<bool> visited(ctx.W * ctx.H, false);
-    int reached = 0;
-    FloodFill(ctx, startX, startY, visited, reached);
+    if (bestId == 0)
+        return 0;
 
-    return reached == totalFloor;
+    // 最大成分以外の床を壁に戻す
+    for (int i = 0; i < W * H; ++i)
+        if (ctx.grid[i] == 1 && label[i] != bestId)
+            ctx.grid[i] = 0;
+
+    return bestSize;
 }
 
 // ---------------------------------------------------------------------------
@@ -303,12 +308,11 @@ bool GenerateCaveL3(
     {
         GenerateOnce(ctx);
 
-        // 床面積チェック
-        if (CountFloor(ctx) < p.floorAreaMin)
-            continue;
+        // 最大連結成分だけ残し、孤立ポケットを壁に戻す（残り床は100%連結）
+        int kept = KeepLargestComponent(ctx);
 
-        // 連結チェック（Lockout）
-        if (!Lockout(ctx))
+        // 連結後の床面積チェック
+        if (kept < p.floorAreaMin)
             continue;
 
         // 成功

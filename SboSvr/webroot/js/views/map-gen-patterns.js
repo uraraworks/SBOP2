@@ -156,7 +156,7 @@ const ALGO_TYPE_DESC = {
 const DEFAULT_PARAMS = {
   width: 40,
   height: 40,
-  floorAreaMin: 600,
+  floorAreaMin: 150,
   blockMin: 3,
   blockMax: 4,
   cutoffPercent: 25,
