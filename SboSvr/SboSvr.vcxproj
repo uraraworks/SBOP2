@@ -315,6 +315,7 @@
     <ClCompile Include="src\MapGen\MapGenCathedralL1.cpp" />
     <ClCompile Include="src\MapGen\MapGenCatacombsL2.cpp" />
     <ClCompile Include="src\MapGen\MapGenHellL4.cpp" />
+    <ClCompile Include="src\MapGen\MapGenAutoTile.cpp" />
     <ClCompile Include="src\Web\Handlers\SkillHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\MotionHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\SoundCatalogHandler.cpp" />
@@ -471,6 +472,7 @@
     <ClInclude Include="src\MapGen\MapGenCathedralL1.h" />
     <ClInclude Include="src\MapGen\MapGenCatacombsL2.h" />
     <ClInclude Include="src\MapGen\MapGenHellL4.h" />
+    <ClInclude Include="src\MapGen\MapGenAutoTile.h" />
     <ClInclude Include="src\Web\Handlers\SkillHandler.h" />
     <ClInclude Include="src\Web\Handlers\MotionHandler.h" />
     <ClInclude Include="src\Web\Handlers\SoundCatalogHandler.h" />

@@ -14,6 +14,21 @@
 #include "MapGen/MapGenCathedralL1.h"
 #include "MapGen/MapGenCatacombsL2.h"
 #include "MapGen/MapGenHellL4.h"
+#include "MapGen/MapGenAutoTile.h"
+
+namespace
+{
+// 生成グリッドのセル値 → ロール種別 変換
+// 現状、全アルゴ(L1/L2/L3/L4)とも 0=壁, 1=床 の2値しか生成しない。
+// door/hall/stairs 相当のセル値は存在しないため、それ以外の値も暫定的に wall 扱いする。
+MapGenAutoTile::RoleKind CellValueToRole(int cellValue)
+{
+    if (cellValue == 1) {
+        return MapGenAutoTile::ROLE_FLOOR;
+    }
+    return MapGenAutoTile::ROLE_WALL;
+}
+} // namespace
 
 // ---------------------------------------------------------------------------
 // CMapGenPreviewHandler — POST /api/map-gen-patterns/preview
@@ -45,9 +60,11 @@ void CMapGenPreviewHandler::Handle(const HttpRequest &request, HttpResponse &res
 
     // patternId が指定されているか確認し、あれば DB から既定値を読む
     MapGen::Params genParams; // デフォルト値で初期化済み
-    int floorGrpId = 1;       // roleMap.floor のデフォルト
-    int wallGrpId  = 0;       // roleMap.wall のデフォルト
+    int floorGrpId = 1;       // roleMap.floor のデフォルト（単一チップ・後方互換用）
+    int wallGrpId  = 0;       // roleMap.wall のデフォルト（単一チップ・後方互換用）
     int algoType   = 0;       // 0=L3洞窟 1=L1聖堂 2=L2地下墓地 3=L4地獄
+    std::string dbRoleMapJson;  // DB レコードの roleMapJson（オートタイル設定含む）
+    std::string reqRoleMapJson; // リクエスト body の roleMap サブオブジェクト（同上）
 
     int patternId = 0;
     bool hasPatternId = JsonUtils::TryGetInt(body, "patternId", patternId);
@@ -101,6 +118,7 @@ void CMapGenPreviewHandler::Handle(const HttpRequest &request, HttpResponse &res
         const std::string &rm = pRec->strRoleMapJson;
         if (JsonUtils::TryGetInt(rm, "floor", v)) floorGrpId = v;
         if (JsonUtils::TryGetInt(rm, "wall",  v)) wallGrpId  = v;
+        dbRoleMapJson = rm;
     }
     else if (!hasPatternId)
     {
@@ -182,6 +200,7 @@ void CMapGenPreviewHandler::Handle(const HttpRequest &request, HttpResponse &res
                     int v = 0;
                     if (JsonUtils::TryGetInt(roleMapJson, "floor", v)) floorGrpId = v;
                     if (JsonUtils::TryGetInt(roleMapJson, "wall",  v)) wallGrpId  = v;
+                    reqRoleMapJson = roleMapJson;
                 }
             }
         }
@@ -273,8 +292,30 @@ void CMapGenPreviewHandler::Handle(const HttpRequest &request, HttpResponse &res
         return;
     }
 
+    // roleMap 設定（オートタイル）を組み立てる。
+    // 1) floor/wall の単一チップ既定値（後方互換のフォールバック）
+    // 2) DB の roleMapJson でマージ上書き（存在するキーのみ）
+    // 3) リクエスト body の roleMap でマージ上書き（存在するキーのみ）
+    MapGenAutoTile::RoleTileSet tileSet;
+    tileSet.roles[MapGenAutoTile::ROLE_FLOOR].bEdge13     = false;
+    tileSet.roles[MapGenAutoTile::ROLE_FLOOR].singleGrpId = floorGrpId;
+    tileSet.roles[MapGenAutoTile::ROLE_WALL].bEdge13      = false;
+    tileSet.roles[MapGenAutoTile::ROLE_WALL].singleGrpId  = wallGrpId;
+    // door/hall/stairs は既定 grpId 0（未使用セル値のため実際には塗られない）
+
+    if (!dbRoleMapJson.empty())
+    {
+        MapGenAutoTile::ParseRoleMapJson(dbRoleMapJson, tileSet);
+    }
+    if (!reqRoleMapJson.empty())
+    {
+        MapGenAutoTile::ParseRoleMapJson(reqRoleMapJson, tileSet);
+    }
+
+    std::vector<int> tilesBase;
+    MapGenAutoTile::GenerateTilesBase(grid, outW, outH, &CellValueToRole, tileSet, tilesBase);
+
     // レスポンス JSON を組み立てる
-    // tilesBase: 床→floorGrpId、壁→wallGrpId
     std::ostringstream oss;
     oss << '{';
     oss << "\"width\":"  << outW  << ',';
@@ -285,7 +326,7 @@ void CMapGenPreviewHandler::Handle(const HttpRequest &request, HttpResponse &res
     int total = outW * outH;
     for (int i = 0; i < total; ++i)
     {
-        oss << (grid[i] == 1 ? floorGrpId : wallGrpId);
+        oss << tilesBase[i];
         if (i + 1 < total)
             oss << ',';
     }

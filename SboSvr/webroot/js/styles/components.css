@@ -221,6 +221,93 @@
   font-size: 0.85rem;
 }
 
+/* role-assign-field — ロール割り当て(単一/縁取りセット切替)フィールド */
+.role-assign-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background-color: rgba(15, 23, 42, 0.35);
+}
+
+.role-assign-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.role-assign-head select {
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background-color: rgba(15, 23, 42, 0.6);
+  color: #f9fafb;
+  font-size: 0.85rem;
+}
+
+/* edge13-wrap — 縁取りセット編集エリア */
+.edge13-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edge13-anchor-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.edge13-anchor-warn {
+  font-size: 0.8rem;
+  color: #fbbf24;
+}
+
+/* edge13-grid — 3x3(外角/辺/中央) のスロット群 */
+.edge13-grid {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-auto-rows: auto;
+  gap: 0.4rem;
+  align-items: start;
+}
+
+/* edge13-grid-inner — 内角4個は3x3の外の別枠に4列で並べる */
+.edge13-grid-inner {
+  grid-template-columns: repeat(4, auto);
+}
+
+.edge13-inner-caption {
+  font-size: 0.75rem;
+  margin: 0.2rem 0 0;
+}
+
+.edge13-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.25rem;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background-color: rgba(11, 18, 26, 0.5);
+}
+
+/* 内角4スロットは3x3グリッドから独立させ、折り返しで別枠に並べる */
+.edge13-slot-inner {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+.edge13-slot-caption {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
 /* ================================================================
    char graphics editor
    ================================================================ */

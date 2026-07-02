@@ -18,7 +18,8 @@
  */
 
 import { fetchJson } from "../core/api.js";
-import { createSpriteField } from "../components/sprite-picker.js";
+import { createSpriteField, openSpritePicker } from "../components/sprite-picker.js";
+import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
 
 // ================================================================
@@ -183,6 +184,112 @@ const DEFAULT_ROLE_MAP = {
   hall: 0,
   stairs: 0,
 };
+
+// ================================================================
+// 縁取りセット（edge13）関連の定数・ユーティリティ
+// ================================================================
+
+/**
+ * 縁取りセットの13スロット定義。
+ * key: RoleMapJson v2 の tiles オブジェクトのキー
+ * label: UI表示用の短いラベル
+ * grid: 3×3配置での [col,row]（0-2）。内角4個はグリッド外表示のため null。
+ */
+const EDGE13_SLOTS = [
+  { key: "nw", label: "外角(左上)", grid: [0, 0] },
+  { key: "n",  label: "辺(上)",     grid: [1, 0] },
+  { key: "ne", label: "外角(右上)", grid: [2, 0] },
+  { key: "w",  label: "辺(左)",     grid: [0, 1] },
+  { key: "c",  label: "中央",       grid: [1, 1] },
+  { key: "e",  label: "辺(右)",     grid: [2, 1] },
+  { key: "sw", label: "外角(左下)", grid: [0, 2] },
+  { key: "s",  label: "辺(下)",     grid: [1, 2] },
+  { key: "se", label: "外角(右下)", grid: [2, 2] },
+  { key: "inNW", label: "内角(左上)", grid: null },
+  { key: "inNE", label: "内角(右上)", grid: null },
+  { key: "inSW", label: "内角(左下)", grid: null },
+  { key: "inSE", label: "内角(右下)", grid: null },
+];
+
+/** アンカー（nwスロット）からの自動充填対象キー一覧 */
+const EDGE13_ANCHOR_FILL_KEYS = ["nw", "n", "ne", "w", "c", "e", "sw", "s", "se"];
+
+/** アンカー（同一シート内の grpId offset）: nw=+0 を基準とした相対 offset */
+const EDGE13_ANCHOR_OFFSETS = {
+  nw: 0,  n: 1,  ne: 2,
+  w: 32,  c: 33, e: 34,
+  sw: 64, s: 65, se: 66,
+};
+
+/** 内角4スロットのキー（アンカー充填対象外・既定0） */
+const EDGE13_INNER_KEYS = ["inNW", "inNE", "inSW", "inSE"];
+
+/** 縁取りセットのシート幅（map-paint.js の規約と同じ、固定32タイル） */
+const EDGE13_SHEET_TILE_WIDTH = 32;
+
+/**
+ * 値が縁取りセット（オブジェクト形式）かどうかを判定する。
+ * @param {number|object|undefined} v
+ */
+function isEdgeSetValue(v) {
+  return v != null && typeof v === "object" && v.mode === "edge13";
+}
+
+/**
+ * 縁取りセットの既定オブジェクトを生成する（13スロットすべて0）。
+ * @returns {{ mode: "edge13", tiles: object }}
+ */
+function makeDefaultEdgeSet() {
+  const tiles = {};
+  EDGE13_SLOTS.forEach(({ key }) => { tiles[key] = 0; });
+  return { mode: "edge13", tiles };
+}
+
+/**
+ * roleMapJson の1ロール分の値を { mode:"single"|"edge13", single, tiles } に正規化する。
+ * 後方互換: 数値ならsingle、edge13オブジェクトならそのまま、それ以外は既定(single 0)。
+ * @param {number|object|undefined} v
+ */
+function normalizeRoleValue(v) {
+  if (isEdgeSetValue(v)) {
+    const def = makeDefaultEdgeSet();
+    return { mode: "edge13", single: 0, tiles: { ...def.tiles, ...(v.tiles || {}) } };
+  }
+  const single = typeof v === "number" ? v : 0;
+  return { mode: "single", single, tiles: makeDefaultEdgeSet().tiles };
+}
+
+/**
+ * grpId からシート内 (tileX, tileY) を算出する（map-paint.js の grpIdToCoord と同じ規約）。
+ * @param {number} grpId
+ */
+function edge13GrpIdToXY(grpId) {
+  const tile = grpId % 1024;
+  return {
+    sheet: Math.floor(grpId / 1024),
+    tileX: tile % EDGE13_SHEET_TILE_WIDTH,
+    tileY: Math.floor(tile / EDGE13_SHEET_TILE_WIDTH),
+  };
+}
+
+/**
+ * アンカー grpId（nwスロットの値）から3×3ブロック9スロット分の grpId を算出する。
+ * シート右端・下端をはみ出す場合は null を返す（呼び出し側で警告表示）。
+ * @param {number} anchorGrpId
+ * @returns {object|null} { nw, n, ne, w, c, e, sw, s, se } の grpId マップ、または null
+ */
+function fillEdge13FromAnchor(anchorGrpId) {
+  const { sheet, tileX, tileY } = edge13GrpIdToXY(anchorGrpId);
+  // nw を左上として3列3行を使うため、tileX <= 29 かつ tileY <= 29 が必要
+  if (tileX > EDGE13_SHEET_TILE_WIDTH - 3 || tileY > EDGE13_SHEET_TILE_WIDTH - 3) {
+    return null;
+  }
+  const result = {};
+  EDGE13_ANCHOR_FILL_KEYS.forEach((key) => {
+    result[key] = anchorGrpId + EDGE13_ANCHOR_OFFSETS[key];
+  });
+  return result;
+}
 
 // ================================================================
 // ユーティリティ
@@ -393,16 +500,182 @@ function buildDetailPane({ feedbackEl }) {
     { key: "stairs", label: "階段" },
   ];
 
-  // 各ロールの sprite-picker フィールドを生成
-  const roleFields = {};
-  ROLE_LABELS.forEach(({ key, label }) => {
-    const sf = createSpriteField({
+  /**
+   * ロール1件分の「単一 / 縁取りセット」割り当てUIを生成する。
+   * 単一用 sprite-field と 縁取りセット用13スロットグリッドの両方を作り、
+   * モード切替セレクトで表示/非表示を切り替える。
+   * @param {string} label
+   */
+  function createRoleAssignField(label) {
+    const wrap = document.createElement("div");
+    wrap.className = "role-assign-field";
+
+    const headRow = document.createElement("div");
+    headRow.className = "role-assign-head";
+    const lbl = document.createElement("span");
+    lbl.className = "sprite-field-label";
+    lbl.textContent = label;
+    headRow.appendChild(lbl);
+
+    // モード切替セレクト
+    const modeSelect = document.createElement("select");
+    const optSingle = document.createElement("option");
+    optSingle.value = "single";
+    optSingle.textContent = "単一";
+    const optEdge = document.createElement("option");
+    optEdge.value = "edge13";
+    optEdge.textContent = "縁取りセット";
+    modeSelect.append(optSingle, optEdge);
+    headRow.appendChild(modeSelect);
+    wrap.appendChild(headRow);
+
+    // --- 単一モード用 sprite-field ---
+    const singleField = createSpriteField({
       categoryKey: "mapParts",
-      label: label,
       value: 0,
     });
-    roleGrid.appendChild(sf.el);
-    roleFields[key] = sf;
+    wrap.appendChild(singleField.el);
+
+    // --- 縁取りセットモード用 UI ---
+    const edgeWrap = document.createElement("div");
+    edgeWrap.className = "edge13-wrap";
+
+    // アンカー選択ボタン + 警告表示
+    const anchorRow = document.createElement("div");
+    anchorRow.className = "edge13-anchor-row";
+    const anchorBtn = document.createElement("button");
+    anchorBtn.type = "button";
+    anchorBtn.className = "button small";
+    anchorBtn.textContent = "アンカーから自動充填";
+    const anchorWarn = document.createElement("span");
+    anchorWarn.className = "edge13-anchor-warn muted";
+    anchorWarn.style.display = "none";
+    anchorWarn.textContent = "アンカーがシート端に近すぎるため自動充填できません（3×3が収まる位置を選んでください）";
+    anchorRow.append(anchorBtn, anchorWarn);
+    edgeWrap.appendChild(anchorRow);
+
+    // 3×3グリッド（外角/辺/中央）
+    const mainGrid = document.createElement("div");
+    mainGrid.className = "edge13-grid";
+
+    // 内角4個（3×3の外側の別枠）
+    const innerGrid = document.createElement("div");
+    innerGrid.className = "edge13-grid edge13-grid-inner";
+    const innerCaption = document.createElement("p");
+    innerCaption.className = "edge13-inner-caption muted";
+    innerCaption.textContent = "内角（アンカー充填対象外）";
+
+    /** key → { thumb, slotEl, grpId } */
+    const slotEntries = {};
+
+    EDGE13_SLOTS.forEach(({ key, label: slotLabel, grid }) => {
+      const slotEl = document.createElement("div");
+      slotEl.className = "edge13-slot" + (grid ? "" : " edge13-slot-inner");
+      if (grid) {
+        slotEl.style.gridColumn = String(grid[0] + 1);
+        slotEl.style.gridRow = String(grid[1] + 1);
+      }
+      slotEl.title = slotLabel;
+
+      const thumb = createSpriteThumb({ categoryKey: "mapParts", sub: 0, size: 32 });
+      thumb.el.style.cursor = "pointer";
+      thumb.el.title = slotLabel + "（クリックして選択）";
+      thumb.el.setAttribute("role", "button");
+      thumb.el.setAttribute("tabindex", "0");
+
+      const caption = document.createElement("span");
+      caption.className = "edge13-slot-caption";
+      caption.textContent = slotLabel;
+
+      slotEl.append(thumb.el, caption);
+
+      // スロットクリックで個別差し替え
+      function openSlotPicker() {
+        openSpritePicker({
+          categoryKey: "mapParts",
+          current: slotEntries[key].grpId,
+          onSelect: ({ sub }) => {
+            slotEntries[key].grpId = sub;
+            thumb.update({ categoryKey: "mapParts", sub });
+          },
+        });
+      }
+      thumb.el.addEventListener("click", openSlotPicker);
+      thumb.el.addEventListener("keydown", (e) => {
+        if (e.key === " " || e.key === "Enter") { e.preventDefault(); openSlotPicker(); }
+      });
+
+      (grid ? mainGrid : innerGrid).appendChild(slotEl);
+      slotEntries[key] = { thumb, slotEl, grpId: 0 };
+    });
+
+    edgeWrap.append(mainGrid, innerCaption, innerGrid);
+    wrap.appendChild(edgeWrap);
+
+    // --- アンカー選択ボタンのイベント ---
+    anchorBtn.addEventListener("click", () => {
+      openSpritePicker({
+        categoryKey: "mapParts",
+        current: slotEntries.nw.grpId,
+        onSelect: ({ sub }) => {
+          const filled = fillEdge13FromAnchor(sub);
+          if (!filled) {
+            anchorWarn.style.display = "";
+            return;
+          }
+          anchorWarn.style.display = "none";
+          EDGE13_ANCHOR_FILL_KEYS.forEach((key) => {
+            slotEntries[key].grpId = filled[key];
+            slotEntries[key].thumb.update({ categoryKey: "mapParts", sub: filled[key] });
+          });
+        },
+      });
+    });
+
+    /** モード表示切替（値は保持したまま見た目だけ切り替える） */
+    function applyMode(mode) {
+      modeSelect.value = mode;
+      singleField.el.style.display = mode === "single" ? "" : "none";
+      edgeWrap.style.display = mode === "edge13" ? "" : "none";
+      if (mode !== "edge13") anchorWarn.style.display = "none";
+    }
+
+    modeSelect.addEventListener("change", () => applyMode(modeSelect.value));
+
+    /** 現在値を取得する（数値 or { mode:"edge13", tiles }） */
+    function getValue() {
+      if (modeSelect.value === "single") {
+        return singleField.getValue();
+      }
+      const tiles = {};
+      EDGE13_SLOTS.forEach(({ key }) => { tiles[key] = slotEntries[key].grpId; });
+      return { mode: "edge13", tiles };
+    }
+
+    /** 値をセットする（数値 or { mode:"edge13", tiles }。後方互換フォールバックあり） */
+    function setValue(v) {
+      const norm = normalizeRoleValue(v);
+      singleField.setValue(norm.single);
+      EDGE13_SLOTS.forEach(({ key }) => {
+        const grpId = norm.tiles[key] ?? 0;
+        slotEntries[key].grpId = grpId;
+        slotEntries[key].thumb.update({ categoryKey: "mapParts", sub: grpId });
+      });
+      applyMode(norm.mode);
+    }
+
+    // 初期表示は単一モード
+    applyMode("single");
+
+    return { el: wrap, getValue, setValue };
+  }
+
+  // 各ロールの割り当てフィールドを生成
+  const roleFields = {};
+  ROLE_LABELS.forEach(({ key, label }) => {
+    const rf = createRoleAssignField(label);
+    roleGrid.appendChild(rf.el);
+    roleFields[key] = rf;
   });
 
   roleSec.appendChild(roleGrid);
