@@ -597,10 +597,12 @@ Exit:
 
 BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 {
-	int i, nCount;
-	BOOL bRet, bHitQuit;
+	int i, j, k, nCount;
+	int nDirCount;
+	int anAtackDir[2];
+	BOOL bRet, bHitQuit, bDup;
 	DWORD dwCharID;
-	ARRAYDWORD adwCharID;
+	ARRAYDWORD adwCharID, adwCharIDDir;
 	PCInfoCharMOVEATACKSvr pInfoCharTmp;
 
 	bRet = FALSE;
@@ -609,10 +611,16 @@ BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 		return FALSE;
 	}
 
-	if (pChar->m_nDirection >= 4) {
-		// 斜め方向には攻撃判定しない
-		goto Exit;
+	// 判定方向リスト(斜め向きは縦横2方向に分解して判定する)
+	nDirCount = 1;
+	anAtackDir[0] = pChar->m_nDirection;
+	switch (pChar->m_nDirection) {
+	case 4:	anAtackDir[0] = 0;	anAtackDir[1] = 3;	nDirCount = 2;	break;
+	case 5:	anAtackDir[0] = 1;	anAtackDir[1] = 3;	nDirCount = 2;	break;
+	case 6:	anAtackDir[0] = 1;	anAtackDir[1] = 2;	nDirCount = 2;	break;
+	case 7:	anAtackDir[0] = 0;	anAtackDir[1] = 2;	nDirCount = 2;	break;
 	}
+
 	bHitQuit = TRUE;
 	switch (pChar->m_nMoveType) {
 	case CHARMOVETYPE_MOVEATACK:	// 移動して攻撃
@@ -622,7 +630,13 @@ BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 	}
 
 	if (bHitQuit) {
-		dwCharID = GetFrontCharIDTarget(pChar->m_dwCharID, -1, 1);
+		dwCharID = 0;
+		for (j = 0; j < nDirCount; j ++) {
+			dwCharID = GetFrontCharIDTarget(pChar->m_dwCharID, anAtackDir[j], 1);
+			if (dwCharID != 0) {
+				break;
+			}
+		}
 		// 一歩前にいない？
 		if (dwCharID == 0) {
 			goto Exit;
@@ -630,9 +644,27 @@ BOOL CLibInfoCharSvr::Atack(PCInfoCharSvr pChar)
 		bRet = AtackImple(pChar, dwCharID);
 
 	} else {
-		GetFrontCharIDTarget(pChar->m_dwCharID, -1, 1, &adwCharID);
+		for (j = 0; j < nDirCount; j ++) {
+			adwCharIDDir.clear();
+			GetFrontCharIDTarget(pChar->m_dwCharID, anAtackDir[j], 1, &adwCharIDDir);
+			nCount = adwCharIDDir.size();
+			for (k = 0; k < nCount; k ++) {
+				adwCharID.push_back(adwCharIDDir[k]);
+			}
+		}
+		// 斜め分解で同一ターゲットが両方向に重複して入る場合があるため、重複IDはスキップする
 		nCount = adwCharID.size();
 		for (i = 0; i < nCount; i ++) {
+			bDup = FALSE;
+			for (k = 0; k < i; k ++) {
+				if (adwCharID[k] == adwCharID[i]) {
+					bDup = TRUE;
+					break;
+				}
+			}
+			if (bDup) {
+				continue;
+			}
 			bRet |= AtackImple(pChar, adwCharID[i]);
 		}
 	}
@@ -1752,9 +1784,8 @@ DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 	DWORD dwRet;
 	RECT rcFrontRect, rcTmp;
 	PCInfoCharSvr pInfoCharSrc, pInfoCharTmp;
-	// 移動ブロックがハーフタイル(16px)粒度で止まり、敵の手前に約16pxの隙間が残るため、
-	// 隣接時に確実に攻撃が届くようリーチを拡大（調整つまみ）。
-	const int nAttackReach = 20;
+	// 隙間最大16px + Dead Reckoningの座標ズレ分のマージンを見て24px（調整つまみ）。
+	const int nAttackReach = 24;
 
 	dwRet = 0;
 
@@ -2749,6 +2780,13 @@ void CLibInfoCharSvr::PutNpc(CInfoCharSvr *pInfoChar)
 	pInfoCharTmp->m_dwCharID	= 0;
 	pInfoCharTmp->m_dwParentCharID	= pInfoChar->m_dwCharID;
 	pInfoCharTmp->m_nMoveType	= pInfoChar->m_nPutMoveType;
+	switch (pInfoCharTmp->m_nMoveType) {
+	case CHARMOVETYPE_BATTLE1:
+	case CHARMOVETYPE_BATTLE2:
+		// 戦闘NPCはスポーナーのBlock設定に関係なく必ずぶつかり判定を持たせる
+		pInfoCharTmp->m_bBlock = TRUE;
+		break;
+	}
 	pInfoCharTmp->m_nMapX	= ptPos.x;
 	pInfoCharTmp->m_nMapY	= ptPos.y;
 	pInfoCharTmp->m_nDirection	= pInfoChar->m_nDirection;
