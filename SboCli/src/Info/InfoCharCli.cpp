@@ -88,6 +88,10 @@ static int ClampPredictMovePixelsPerSec(int nSpeed)
 	return nSpeed;
 }
 
+// この時間(ms)以上、新しい同期(受信)が来なければ、停止パケットが欠落したとみなして
+// 予測移動を打ち切り、最後の確定同期位置へスナップする（先読み暴走の自己修復）。
+#define PREDICT_STALE_STOP_MS 500
+
 static DWORD GetPredictLeadLimitMs(PCInfoCharCli pInfoChar)
 {
 	DWORD dwLeadLimitMs;
@@ -1674,6 +1678,14 @@ void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
 	}
 
 	dwPredictElapsed = dwNowTime - m_dwPredictRecvTime;
+	// 失効ウォッチドッグ: 一定時間新しい同期が来なければ、停止パケットが欠落した
+	// とみなして予測を止め、最後の確定同期位置へスナップする。これが無いと、
+	// 停止が届かない環境で予測が延々と先読みを続けて止まらなくなる。
+	if (dwPredictElapsed >= PREDICT_STALE_STOP_MS) {
+		StopPredictedMove(m_nPredictSyncX, m_nPredictSyncY);
+		m_bRedraw = TRUE;
+		return;
+	}
 	if (dwPredictElapsed > GetPredictLeadLimitMs(this)) {
 		dwPredictElapsed = GetPredictLeadLimitMs(this);
 	}

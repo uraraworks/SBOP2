@@ -25,6 +25,10 @@
 #include "MgrWindow.h"
 #include "MainFrame.h"
 
+// POS_SYNC(update) を予測移動として扱う最小変位(px)。前回同期からこの値未満しか
+// 動いていなければ、実際には移動していない静止キャラへの定期同期とみなす。
+#define PREDICT_MIN_MOVE_PIXELS 4
+
 namespace {
 
 }
@@ -90,6 +94,7 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 	int nDeltaX, nDeltaY, nDeltaMax;
 	int nStateMove, nStateStop;
 	int nSetX, nSetY, nBeforeX, nBeforeY, nApplyX, nApplyY;
+	int nPrevSyncX, nPrevSyncY, nSyncDisp;
 	LPCSTR pszAdjustType;
 	DWORD dwRecvTime;
 	PCInfoCharCli pInfoChar;
@@ -125,6 +130,9 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 	if (pInfoChar == NULL) {
 		return;
 	}
+	// 前回の確定同期座標（m_nPredictSyncX/Y は後段で今回パケット値に上書きされる）
+	nPrevSyncX = pInfoChar->m_nPredictSyncX;
+	nPrevSyncY = pInfoChar->m_nPredictSyncY;
 	// 撃破フェードアウト中(DELETEREADY)のキャラはサーバ更新を無視し、
 	// フェードを完走させる（プレイヤー移動等に伴う再送での中断/即消滅を防ぐ）。
 	if (pInfoChar->m_nMoveState == CHARMOVESTATE_DELETEREADY) {
@@ -208,7 +216,15 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 			(int)((int)dwSdlNow - (int)Packet.m_dwTimeStamp));
 	}
 #endif
-	if (Packet.m_bUpdate) {
+	// 前回同期からの実変位。update フラグでも変位がほぼゼロなら、実際には
+	// 移動していない静止キャラへの定期同期とみなす。これを予測移動として
+	// 扱うと、最後の方向へ先読み→次の同期で引き戻し、を繰り返して
+	// 「止まっているのに前後にぴくぴく」揺れて見えるため、停止扱いにする。
+	nSyncDisp = abs(Packet.m_pos.x - nPrevSyncX);
+	if (nSyncDisp < abs(Packet.m_pos.y - nPrevSyncY)) {
+		nSyncDisp = abs(Packet.m_pos.y - nPrevSyncY);
+	}
+	if (Packet.m_bUpdate && (nSyncDisp >= PREDICT_MIN_MOVE_PIXELS)) {
 		pInfoChar->StartPredictedMove(Packet.m_nDirection, Packet.m_pos.x, Packet.m_pos.y, dwRecvTime);
 		/*
 		   Web 版では MOVE_* が欠けても POS_SYNC(update) は届くことがある。
