@@ -27,6 +27,8 @@ public:
 	virtual BOOL	HandleSDLMouseLeftButtonDown(int x, int y);	// SDL左クリックを処理
 	void	SetCompositionTextFromBrowser(LPCSTR pszText);	// browser IME変換中テキストを設定
 	void	CommitTextFromBrowser(LPCSTR pszText);	// browser IME確定テキストを入力
+	void	SetNameFromBrowser(LPCSTR pszText);	// browser DOM入力欄の値でキャラ名を置換
+	void	SubmitFromBrowser(void);	// browser DOM入力欄からの確定
 
 
 private:
@@ -36,6 +38,10 @@ private:
 	void	AppendText(LPCSTR pszText);	// テキスト追記
 	void	SetCompositionText(LPCSTR pszText);	// IME変換中テキストを設定
 	void	SubmitCharName(void);	// キャラ名確定
+#if defined(__EMSCRIPTEN__)
+	void	UpdateBrowserDom(void);	// DOM入力欄オーバーレイを更新
+	void	HideBrowserDom(void);	// DOM入力欄オーバーレイを隠す
+#endif
 
 
 public:

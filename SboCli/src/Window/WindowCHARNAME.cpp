@@ -16,6 +16,7 @@
 #include "WindowCHARNAME.h"
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/emscripten.h>
+#include <emscripten/em_js.h>
 #endif
 
 namespace {
@@ -46,6 +47,28 @@ static int GetFontTextWidthCN(HFONT hFont, LPCTSTR pszText)
 }
 
 #if defined(__EMSCRIPTEN__)
+EM_JS(void, SBOP2_UpdateCharNameDom, (int visible,
+	int windowX, int windowY, int windowW, int windowH,
+	int inputX, int inputY, int inputW, int inputH,
+	const char *pszText, int nMaxLen), {
+	if (typeof window.SBOP2UpdateCharNameOverlay !== 'function') {
+		return;
+	}
+	window.SBOP2UpdateCharNameOverlay({
+		visible: !!visible,
+		windowX: windowX, windowY: windowY, windowW: windowW, windowH: windowH,
+		inputX: inputX, inputY: inputY, inputW: inputW, inputH: inputH,
+		text: UTF8ToString(pszText),
+		maxLen: nMaxLen
+	});
+});
+
+EM_JS(void, SBOP2_HideCharNameDom, (), {
+	if (typeof window.SBOP2HideCharNameOverlay === 'function') {
+		window.SBOP2HideCharNameOverlay();
+	}
+});
+
 extern "C" {
 EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserCharNameSetComposition(const char *pszText)
 {
@@ -58,6 +81,20 @@ EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserCharNameCommitText(const char *pszText)
 {
 	if (g_pBrowserCharNameWindow != NULL) {
 		g_pBrowserCharNameWindow->CommitTextFromBrowser(pszText);
+	}
+}
+
+EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserCharNameSetText(const char *pszText)
+{
+	if (g_pBrowserCharNameWindow != NULL) {
+		g_pBrowserCharNameWindow->SetNameFromBrowser(pszText);
+	}
+}
+
+EMSCRIPTEN_KEEPALIVE void SBOP2_BrowserCharNameSubmit(void)
+{
+	if (g_pBrowserCharNameWindow != NULL) {
+		g_pBrowserCharNameWindow->SubmitFromBrowser();
 	}
 }
 }
@@ -82,6 +119,7 @@ CWindowCHARNAME::~CWindowCHARNAME()
 	if (g_pBrowserCharNameWindow == this) {
 		g_pBrowserCharNameWindow = NULL;
 	}
+	HideBrowserDom();
 #endif
 	UpdateSDLTextInput();
 }
@@ -146,6 +184,9 @@ void CWindowCHARNAME::Draw(PCImg32 pDst)
 
 Exit:
 	pDst->Blt(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
+#if defined(__EMSCRIPTEN__)
+	UpdateBrowserDom();
+#endif
 }
 
 
@@ -160,6 +201,13 @@ void CWindowCHARNAME::SetActive(BOOL bActive)
 	}
 #endif
 	UpdateSDLTextInput();
+#if defined(__EMSCRIPTEN__)
+	if (bActive && (!m_bDelete)) {
+		UpdateBrowserDom();
+	} else {
+		HideBrowserDom();
+	}
+#endif
 	Redraw();
 }
 
@@ -365,3 +413,66 @@ void CWindowCHARNAME::SubmitCharName(void)
 	}
 	m_pMgrData->PostWindowMessage(WINDOWTYPE_CHARNAME, 0);
 }
+
+
+void CWindowCHARNAME::SetNameFromBrowser(LPCSTR pszText)
+{
+	CString strWide;
+	CString strFiltered;
+	CmyString strName;
+	int nLength;
+
+	m_strComposition.Empty();
+	if (pszText == NULL) {
+		pszText = "";
+	}
+	strWide = Utf8ToTString(pszText);
+	nLength = strWide.GetLength();
+	for (int i = 0; i < nLength; ++i) {
+		TCHAR ch = strWide[i];
+
+		if (ch < _T(' ')) {
+			continue;
+		}
+		strFiltered.AppendChar(ch);
+		if (strFiltered.GetLength() >= MAXLEN_CHARNAME) {
+			break;
+		}
+	}
+	TrimViewString(strName, (LPCTSTR)strFiltered);
+	m_strName = strName;
+	Redraw();
+}
+
+
+void CWindowCHARNAME::SubmitFromBrowser(void)
+{
+	m_dwSuppressSubmitUntil = 0;
+	SubmitCharName();
+}
+
+
+#if defined(__EMSCRIPTEN__)
+void CWindowCHARNAME::UpdateBrowserDom(void)
+{
+	const int nWindowX = m_ptViewPos.x + 32;
+	const int nWindowY = m_ptViewPos.y + 32;
+	const int nInputX = nWindowX + 16;
+	const int nInputY = nWindowY + 48;
+	const int nInputW = 8 * MAXLEN_CHARNAME;
+	const int nInputH = 14;
+	const BOOL bVisible = (m_bActive && (!m_bDelete));
+
+	SBOP2_UpdateCharNameDom(
+		bVisible ? 1 : 0,
+		nWindowX, nWindowY, m_sizeWindow.cx, m_sizeWindow.cy,
+		nInputX, nInputY, nInputW, nInputH,
+		m_strName, MAXLEN_CHARNAME);
+}
+
+
+void CWindowCHARNAME::HideBrowserDom(void)
+{
+	SBOP2_HideCharNameDom();
+}
+#endif

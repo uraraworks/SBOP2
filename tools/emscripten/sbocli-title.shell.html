@@ -795,6 +795,11 @@
             <button id="loginConnect" class="login-button" type="button">接続</button>
           </div>
         </div>
+        <div id="charNameOverlay" class="login-overlay" hidden>
+          <div id="charNamePanel" class="login-panel">
+            <input id="charNameInput" class="login-input" type="text" spellcheck="false" autocomplete="off" maxlength="15">
+          </div>
+        </div>
       </div>
       <!-- バーチャルパッド: タッチ端末のみ表示（JS でタッチ判定後に display:flex を付与） -->
       <div id="virtualPad">
@@ -930,6 +935,9 @@
     const loginSaveWrap = document.getElementById('loginSaveWrap');
     const loginSaveInput = document.getElementById('loginSave');
     const loginConnectButton = document.getElementById('loginConnect');
+    const charNameOverlay = document.getElementById('charNameOverlay');
+    const charNamePanel = document.getElementById('charNamePanel');
+    const charNameInput = document.getElementById('charNameInput');
 
     function focusGameInput(force) {
       // モバイル全画面モード(body.mobile-pad)では仮想パッドで操作するため、
@@ -1217,6 +1225,74 @@
 
       focusLoginControl(state.focusIndex);
     };
+
+    let charNameOverlayShown = false;
+    function callCharNameBridge(name, argTypes, argVals) {
+      if (!Module || typeof Module.ccall !== 'function') {
+        return;
+      }
+      Module.ccall(name, null, argTypes, argVals);
+    }
+
+    window.SBOP2HideCharNameOverlay = function() {
+      if (!charNameOverlay) {
+        return;
+      }
+      if (charNameOverlay.contains(document.activeElement)) {
+        focusGameInput(true);
+      }
+      charNameOverlay.hidden = true;
+      charNameOverlayShown = false;
+    };
+
+    window.SBOP2UpdateCharNameOverlay = function(state) {
+      if (!state || !state.visible) {
+        window.SBOP2HideCharNameOverlay();
+        return;
+      }
+      const canvasRect = canvasElement.getBoundingClientRect();
+      const scaleX = canvasRect.width / canvasElement.width;
+      const scaleY = canvasRect.height / canvasElement.height;
+
+      charNameOverlay.hidden = false;
+      const overlayOffsetX = Math.round(-22 * scaleX);
+      const overlayOffsetY = Math.round(-22 * scaleY);
+      charNamePanel.style.left = ((state.windowX * scaleX) + overlayOffsetX) + 'px';
+      charNamePanel.style.top = ((state.windowY * scaleY) + overlayOffsetY) + 'px';
+      charNamePanel.style.width = (state.windowW * scaleX) + 'px';
+      charNamePanel.style.height = (state.windowH * scaleY) + 'px';
+
+      charNameInput.style.left = Math.round((state.inputX - state.windowX) * scaleX) + 'px';
+      charNameInput.style.top = Math.round((state.inputY - state.windowY) * scaleY) + 'px';
+      charNameInput.style.width = (state.inputW * scaleX) + 'px';
+      charNameInput.style.height = (state.inputH * scaleY) + 'px';
+      charNameInput.style.fontSize = Math.max(11, Math.round(12 * scaleY)) + 'px';
+
+      if (state.maxLen > 0) {
+        charNameInput.maxLength = state.maxLen;
+      }
+      if (charNameInput.value !== state.text) {
+        charNameInput.value = state.text;
+      }
+
+      // 非表示→表示の遷移時のみフォーカス（PCは即入力可、iOSはタップで確実にキーボード）
+      if (!charNameOverlayShown) {
+        charNameOverlayShown = true;
+        if (document.activeElement !== charNameInput) {
+          charNameInput.focus({ preventScroll: true });
+        }
+      }
+    };
+
+    charNameInput.addEventListener('input', (event) => {
+      callCharNameBridge('SBOP2_BrowserCharNameSetText', ['string'], [event.target.value]);
+    });
+    charNameInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        callCharNameBridge('SBOP2_BrowserCharNameSubmit', [], []);
+      }
+    });
 
     loginAccountInput.addEventListener('focus', () => callLoginBridge('SBOP2_BrowserLoginSetFocus', ['number'], [0]));
     loginPasswordInput.addEventListener('focus', () => callLoginBridge('SBOP2_BrowserLoginSetFocus', ['number'], [1]));
