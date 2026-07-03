@@ -26,6 +26,9 @@ enum {
 	CHARPROCID_MAX
 };
 
+// 発火済みマップイベントタイル集合の最大数
+#define MAPEVENT_FIRED_MAX 8
+
 // 行動情報
 typedef struct _CHARPROCINFO {
 	DWORD	dwProcID,	// 行動ID
@@ -75,6 +78,11 @@ public:
 	void DeleteAllProcInfo(void);	// 行動情報を全て削除
 	void AddProcInfo(DWORD dwProcID, DWORD dwStartTime, DWORD dwPara);	// 行動情報を追加
 
+	// マップイベント発火済み集合の管理
+	void ClearFiredMapEvent();	// 発火済み集合をクリア
+	void AddFiredMapEvent(DWORD dwMapID, int nTileX, int nTileY);	// 発火済みタイルを追加
+	BOOL IsFiredMapEventInRect(DWORD dwMapID, int nLeft, int nTop, int nRight, int nBottom);	// 矩形内に発火済みタイルがあるか
+
 	// 移動種別による処理
 	virtual void IncPutCount(void);	// 発生NPC数を増加
 	virtual void DecPutCount(void);	// 発生NPC数を減少
@@ -117,14 +125,14 @@ public:
 			m_dwMotionID,	// モーションID
 			m_dwMoveCount,	// 移動歩数
 			m_dwLastMoveSyncSendTime,	// 最終移動同期送信時刻
-			m_dwSuppressMapEventMapID,	// 再発火抑止中のマップID
+			m_dwFiredMapEventMapID,	// 発火済みイベント集合の対象マップID
 			m_dwLastRecvMoveTime,	// 最終移動受信時刻(ms)
 			m_dwLastRecvMovePacketTime;	// 最終移動受信パケット時刻(ms)
-	int	m_nSuppressMapEventTileX,	// 再発火抑止中のタイルX
-			m_nSuppressMapEventTileY,	// 再発火抑止中のタイルY
+	int	m_nFiredMapEventCount,	// 発火済みイベント数
 			m_nLastMoveSyncDirection;	// 最終移動同期向き
-	BOOL	m_bSuppressMapEventUntilLeave,	// 抑止タイルを出るまでイベント再発火を抑止
-			m_bMoveSyncActive,	// 移動同期中
+	int	m_nFiredMapEventTileX[MAPEVENT_FIRED_MAX];	// 発火済みイベントのタイルX（集合）
+	int	m_nFiredMapEventTileY[MAPEVENT_FIRED_MAX];	// 発火済みイベントのタイルY（集合）
+	BOOL	m_bMoveSyncActive,	// 移動同期中
 			m_bPendingMapEvent;	// イベント自動歩行フェーズ待機中
 	int	m_nPendingEventTileX,	// 待機中イベントのタイルX
 			m_nPendingEventTileY;	// 待機中イベントのタイルY

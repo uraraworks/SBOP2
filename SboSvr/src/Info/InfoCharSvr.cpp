@@ -92,12 +92,10 @@ CInfoCharSvr::CInfoCharSvr()
 	m_dwMotionID	= 0;
 	m_dwMoveCount	= 0;
 	m_dwLastMoveSyncSendTime = 0;
-	m_dwSuppressMapEventMapID = 0;
+	m_dwFiredMapEventMapID = 0;
 	m_dwLastRecvMoveTime	= 0;
 	m_dwLastRecvMovePacketTime = 0;
-	m_nSuppressMapEventTileX = 0;
-	m_nSuppressMapEventTileY = 0;
-	m_bSuppressMapEventUntilLeave = FALSE;
+	m_nFiredMapEventCount = 0;
 	m_nLastMoveSyncDirection = -1;
 	m_bMoveSyncActive = FALSE;
 	m_bPendingMapEvent = FALSE;
@@ -241,10 +239,15 @@ void CInfoCharSvr::CopyAll(CInfoCharSvr *pSrc)
 	m_bChgScreenPos	= pSrc->m_bChgScreenPos;
 	m_bChgPosRenew	= pSrc->m_bChgPosRenew;
 	m_dwLastMoveSyncSendTime = pSrc->m_dwLastMoveSyncSendTime;
-	m_dwSuppressMapEventMapID = pSrc->m_dwSuppressMapEventMapID;
-	m_nSuppressMapEventTileX = pSrc->m_nSuppressMapEventTileX;
-	m_nSuppressMapEventTileY = pSrc->m_nSuppressMapEventTileY;
-	m_bSuppressMapEventUntilLeave = pSrc->m_bSuppressMapEventUntilLeave;
+	m_dwFiredMapEventMapID = pSrc->m_dwFiredMapEventMapID;
+	m_nFiredMapEventCount = pSrc->m_nFiredMapEventCount;
+	{
+		int k;
+		for (k = 0; k < MAPEVENT_FIRED_MAX; k ++) {
+			m_nFiredMapEventTileX[k] = pSrc->m_nFiredMapEventTileX[k];
+			m_nFiredMapEventTileY[k] = pSrc->m_nFiredMapEventTileY[k];
+		}
+	}
 	m_nLastMoveSyncDirection = pSrc->m_nLastMoveSyncDirection;
 	m_bMoveSyncActive = pSrc->m_bMoveSyncActive;
 	m_dwLastRecvMoveTime	= pSrc->m_dwLastRecvMoveTime;
@@ -259,10 +262,60 @@ void CInfoCharSvr::Copy(CInfoCharBase *pSrc)
 	CInfoCharBase::Copy(pSrc);
 
 	m_dwMoveCount	= pSrcTmp->m_dwMoveCount;
-	m_dwSuppressMapEventMapID = pSrcTmp->m_dwSuppressMapEventMapID;
-	m_nSuppressMapEventTileX = pSrcTmp->m_nSuppressMapEventTileX;
-	m_nSuppressMapEventTileY = pSrcTmp->m_nSuppressMapEventTileY;
-	m_bSuppressMapEventUntilLeave = pSrcTmp->m_bSuppressMapEventUntilLeave;
+	m_dwFiredMapEventMapID = pSrcTmp->m_dwFiredMapEventMapID;
+	m_nFiredMapEventCount = pSrcTmp->m_nFiredMapEventCount;
+	{
+		int k;
+		for (k = 0; k < MAPEVENT_FIRED_MAX; k ++) {
+			m_nFiredMapEventTileX[k] = pSrcTmp->m_nFiredMapEventTileX[k];
+			m_nFiredMapEventTileY[k] = pSrcTmp->m_nFiredMapEventTileY[k];
+		}
+	}
+}
+
+void CInfoCharSvr::ClearFiredMapEvent()
+{
+	m_dwFiredMapEventMapID = 0;
+	m_nFiredMapEventCount = 0;
+}
+
+void CInfoCharSvr::AddFiredMapEvent(DWORD dwMapID, int nTileX, int nTileY)
+{
+	int k;
+
+	// 別マップの集合になっていたら作り直す
+	if (m_dwFiredMapEventMapID != dwMapID) {
+		m_dwFiredMapEventMapID = dwMapID;
+		m_nFiredMapEventCount = 0;
+	}
+	// 既に登録済みなら何もしない
+	for (k = 0; k < m_nFiredMapEventCount; k ++) {
+		if ((m_nFiredMapEventTileX[k] == nTileX) && (m_nFiredMapEventTileY[k] == nTileY)) {
+			return;
+		}
+	}
+	// 満杯なら黙って無視（同時に重なるイベントは通常数個で上限に達しない）
+	if (m_nFiredMapEventCount < MAPEVENT_FIRED_MAX) {
+		m_nFiredMapEventTileX[m_nFiredMapEventCount] = nTileX;
+		m_nFiredMapEventTileY[m_nFiredMapEventCount] = nTileY;
+		m_nFiredMapEventCount ++;
+	}
+}
+
+BOOL CInfoCharSvr::IsFiredMapEventInRect(DWORD dwMapID, int nLeft, int nTop, int nRight, int nBottom)
+{
+	int k;
+
+	if (m_dwFiredMapEventMapID != dwMapID) {
+		return FALSE;
+	}
+	for (k = 0; k < m_nFiredMapEventCount; k ++) {
+		if ((nLeft <= m_nFiredMapEventTileX[k]) && (m_nFiredMapEventTileX[k] <= nRight) &&
+			(nTop <= m_nFiredMapEventTileY[k]) && (m_nFiredMapEventTileY[k] <= nBottom)) {
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
 void CInfoCharSvr::ProcAtack(void)

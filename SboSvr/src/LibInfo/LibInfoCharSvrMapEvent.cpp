@@ -136,10 +136,11 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	int *pnTileY/*=NULL*/,		// [out] イベントタイルY（省略可）
 	BOOL bIgnoreDirection/*=FALSE*/)	// [in] TRUE:向き条件を無視
 {
-	BOOL bRet, bResult, bSuppressCurrentTile;
+	BOOL bRet, bResult;
 	int i, nEventCount, nEventLeft, nEventTop, nEventRight, nEventBottom,
 		nCharCenterX, nCharCenterY, nEventCenterX, nEventCenterY, nDistSq, nBestDistSq;
-	RECT rcChar, rcMap, rcMapEvent, rcSuppressEvent;
+	DWORD dwMapBefore;
+	RECT rcChar, rcMap, rcMapEvent;
 	POINT *pptPos1, *pptPos2;
 	PCInfoMapBase pInfoMap;
 	PCInfoMapEventBase pInfoMapEventBase, pInfoMapEventBest;
@@ -150,7 +151,6 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	bRet = TRUE;
 	pInfoMapEventBase = NULL;
 	pInfoMapEventBest = NULL;
-	bSuppressCurrentTile = FALSE;
 
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoChar->m_dwMapID);
 	if (pInfoMap == NULL) {
@@ -164,20 +164,26 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	nCharCenterX = (rcChar.left + rcChar.right) / 2;
 	nCharCenterY = (rcChar.top + rcChar.bottom) / 2;
 
-	if (pInfoChar->m_bSuppressMapEventUntilLeave) {
-		if (pInfoChar->m_dwSuppressMapEventMapID == pInfoChar->m_dwMapID) {
-			GetMapEventTileRect(
-				rcSuppressEvent,
-				pInfoChar->m_nSuppressMapEventTileX,
-				pInfoChar->m_nSuppressMapEventTileY);
-			if (IsMapEventRectOverlapEnough(rcChar, rcSuppressEvent, 1)) {
-				bSuppressCurrentTile = TRUE;
-			}
-		}
+	// 発火済み集合：別マップに移っていたらクリア、もう重なっていないタイルは再武装
+	if (!bCheck) {
+		if (pInfoChar->m_dwFiredMapEventMapID != pInfoChar->m_dwMapID) {
+			pInfoChar->ClearFiredMapEvent();
+		} else {
+			int nFiredIdx, nFiredWrite;
+			RECT rcFired;
 
-		if (!bSuppressCurrentTile) {
-			pInfoChar->m_bSuppressMapEventUntilLeave = FALSE;
-			pInfoChar->m_dwSuppressMapEventMapID = 0;
+			nFiredWrite = 0;
+			for (nFiredIdx = 0; nFiredIdx < pInfoChar->m_nFiredMapEventCount; nFiredIdx ++) {
+				GetMapEventTileRect(rcFired,
+					pInfoChar->m_nFiredMapEventTileX[nFiredIdx],
+					pInfoChar->m_nFiredMapEventTileY[nFiredIdx]);
+				if (IsMapEventRectOverlapEnough(rcChar, rcFired, 1)) {
+					pInfoChar->m_nFiredMapEventTileX[nFiredWrite] = pInfoChar->m_nFiredMapEventTileX[nFiredIdx];
+					pInfoChar->m_nFiredMapEventTileY[nFiredWrite] = pInfoChar->m_nFiredMapEventTileY[nFiredIdx];
+					nFiredWrite ++;
+				}
+			}
+			pInfoChar->m_nFiredMapEventCount = nFiredWrite;
 		}
 	}
 
@@ -240,11 +246,9 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 				: IsMapEventRectOverlapEnough(rcChar, rcMapEvent, 8);
 			break;
 		}
-		if (bResult && bSuppressCurrentTile) {
-			if ((nEventLeft <= pInfoChar->m_nSuppressMapEventTileX) && (pInfoChar->m_nSuppressMapEventTileX <= nEventRight) &&
-				(nEventTop <= pInfoChar->m_nSuppressMapEventTileY) && (pInfoChar->m_nSuppressMapEventTileY <= nEventBottom)) {
-				bResult = FALSE;
-			}
+		// 発火済み集合に入っているイベントは、そこから出るまで再発火させない
+		if (bResult && pInfoChar->IsFiredMapEventInRect(pInfoChar->m_dwMapID, nEventLeft, nEventTop, nEventRight, nEventBottom)) {
+			bResult = FALSE;
 		}
 		if (bResult) {
 			nEventCenterX = (rcMapEvent.left + rcMapEvent.right) / 2;
@@ -285,12 +289,19 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 		m_pMainFrame->SendToClient(pInfoChar->m_dwSessionID, &PacketPLAYSOUND);
 	}
 
+	dwMapBefore = pInfoChar->m_dwMapID;
 	switch (pInfoMapEventBase->m_nType) {
 	case MAPEVENTTYPE_MOVE:	bRet = MapEventProcMOVE(pInfoChar, pInfoMapEventBase);	break;	// マップ内移動
 	case MAPEVENTTYPE_MAPMOVE:	bRet = MapEventProcMAPMOVE(pInfoChar, pInfoMapEventBase);	break;	// マップ間移動
 	case MAPEVENTTYPE_INITSTATUS:	bRet = MapEventProcINITSTATUS(pInfoChar, pInfoMapEventBase);	break;	// ステータス初期化
 	case MAPEVENTTYPE_GRPIDTMP:	bRet = MapEventProcGRPIDTMP(pInfoChar, pInfoMapEventBase);	break;	// 一時画像設定
 	case MAPEVENTTYPE_LIGHT:	bRet = MapEventProcLIGHT(pInfoChar, pInfoMapEventBase);	break;	// 灯り
+	}
+
+	// 発火元タイルを集合へ登録（同一マップに留まった場合のみ。立ち止まり時の再発火を防ぐ）
+	// マップ間移動系は移動先タイルを各 Proc 内で登録する
+	if (pInfoChar->m_dwMapID == dwMapBefore) {
+		pInfoChar->AddFiredMapEvent(pInfoChar->m_dwMapID, pInfoMapEventBase->m_ptPos.x, pInfoMapEventBase->m_ptPos.y);
 	}
 
 Exit:
@@ -377,10 +388,8 @@ BOOL CLibInfoCharSvr::MapEventProcMOVE(CInfoCharSvr *pInfoChar, CInfoMapEventBas
 			MapTileToPixelX(pInfoMapEvent->m_ptDst.x),
 			MapTileToPixelY(pInfoMapEvent->m_ptDst.y) + MAPPARTSSIZE,
 			TRUE);
-		pInfoCharTmp->m_bSuppressMapEventUntilLeave = TRUE;
-		pInfoCharTmp->m_dwSuppressMapEventMapID = pInfoCharTmp->m_dwMapID;
-		pInfoCharTmp->m_nSuppressMapEventTileX = pInfoMapEvent->m_ptDst.x;
-		pInfoCharTmp->m_nSuppressMapEventTileY = pInfoMapEvent->m_ptDst.y;
+		// 着地点でのループを防ぐため、移動先タイルを発火済み集合へ登録
+		pInfoCharTmp->AddFiredMapEvent(pInfoCharTmp->m_dwMapID, pInfoMapEvent->m_ptDst.x, pInfoMapEvent->m_ptDst.y);
 		if (nDirection >= 0) {
 			pInfoCharTmp->SetDirection(nDirection);
 		}
@@ -427,10 +436,8 @@ BOOL CLibInfoCharSvr::MapEventProcMAPMOVE(CInfoCharSvr *pInfoChar, CInfoMapEvent
 			MapTileToPixelX(pInfoMapEvent->m_ptDst.x),
 			MapTileToPixelY(pInfoMapEvent->m_ptDst.y) + MAPPARTSSIZE,
 			TRUE);
-		pInfoCharTmp->m_bSuppressMapEventUntilLeave = TRUE;
-		pInfoCharTmp->m_dwSuppressMapEventMapID = pInfoCharTmp->m_dwMapID;
-		pInfoCharTmp->m_nSuppressMapEventTileX = pInfoMapEvent->m_ptDst.x;
-		pInfoCharTmp->m_nSuppressMapEventTileY = pInfoMapEvent->m_ptDst.y;
+		// 移動先マップの着地点タイルを発火済み集合へ登録
+		pInfoCharTmp->AddFiredMapEvent(pInfoCharTmp->m_dwMapID, pInfoMapEvent->m_ptDst.x, pInfoMapEvent->m_ptDst.y);
 		if (nDirection >= 0) {
 			pInfoCharTmp->SetDirection(nDirection);
 		}
