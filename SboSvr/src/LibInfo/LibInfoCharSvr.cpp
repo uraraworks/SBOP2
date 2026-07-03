@@ -2094,14 +2094,20 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 			DWORD dwPara = 0;
 			pInfoChar->m_bWaitCheckMapEvent = FALSE;
 			if (!pInfoChar->m_bPendingMapEvent) {
-				// Phase 1: クライアント自動移動前に検出のみ
-				int nTileX = -1, nTileY = -1;
-				bResult = CheckMapEvent(pInfoChar, TRUE, &nTileX, &nTileY, TRUE);
+				// Phase 1: 検出。移動系(MOVE/MAPMOVE)だけクライアント自動移動させ、
+				// 非移動系はその場で即発火する（自動移動補正による跳ね返り/多段移動を防ぐ）
+				int nTileX = -1, nTileY = -1, nType = MAPEVENTTYPE_NONE;
+				bResult = CheckMapEvent(pInfoChar, TRUE, &nTileX, &nTileY, TRUE, &nType);
 				if (bResult && nTileX >= 0 && nTileY >= 0) {
-					pInfoChar->m_bPendingMapEvent = TRUE;
-					pInfoChar->m_nPendingEventTileX = nTileX;
-					pInfoChar->m_nPendingEventTileY = nTileY;
-					dwPara = 0x80000000 | ((DWORD)(nTileX & 0x7FFF) << 16) | (DWORD)(nTileY & 0xFFFF);
+					if ((nType == MAPEVENTTYPE_MOVE) || (nType == MAPEVENTTYPE_MAPMOVE)) {
+						pInfoChar->m_bPendingMapEvent = TRUE;
+						pInfoChar->m_nPendingEventTileX = nTileX;
+						pInfoChar->m_nPendingEventTileY = nTileY;
+						dwPara = 0x80000000 | ((DWORD)(nTileX & 0x7FFF) << 16) | (DWORD)(nTileY & 0xFFFF);
+					} else {
+						// 非移動系: 自動移動させずその場で発火（dwPara=0 のまま）
+						bResult = CheckMapEvent(pInfoChar, FALSE, NULL, NULL, TRUE);
+					}
 				}
 			} else {
 				// Phase 2: クライアント自動移動後にイベント実行
@@ -2262,14 +2268,20 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 		DWORD dwPara = 0;
 		pInfoChar->m_bWaitCheckMapEvent = FALSE;
 		if (!pInfoChar->m_bPendingMapEvent) {
-			// Phase 1: detect only before client auto-walk
-			int nTileX = -1, nTileY = -1;
-			bResult = CheckMapEvent(pInfoChar, TRUE, &nTileX, &nTileY, TRUE);
+			// Phase 1: 検出。移動系(MOVE/MAPMOVE)だけクライアント自動移動させ、
+			// 非移動系はその場で即発火する（自動移動補正による跳ね返り/多段移動を防ぐ）
+			int nTileX = -1, nTileY = -1, nType = MAPEVENTTYPE_NONE;
+			bResult = CheckMapEvent(pInfoChar, TRUE, &nTileX, &nTileY, TRUE, &nType);
 			if (bResult && nTileX >= 0 && nTileY >= 0) {
-				pInfoChar->m_bPendingMapEvent = TRUE;
-				pInfoChar->m_nPendingEventTileX = nTileX;
-				pInfoChar->m_nPendingEventTileY = nTileY;
-				dwPara = 0x80000000 | ((DWORD)(nTileX & 0x7FFF) << 16) | (DWORD)(nTileY & 0xFFFF);
+				if ((nType == MAPEVENTTYPE_MOVE) || (nType == MAPEVENTTYPE_MAPMOVE)) {
+					pInfoChar->m_bPendingMapEvent = TRUE;
+					pInfoChar->m_nPendingEventTileX = nTileX;
+					pInfoChar->m_nPendingEventTileY = nTileY;
+					dwPara = 0x80000000 | ((DWORD)(nTileX & 0x7FFF) << 16) | (DWORD)(nTileY & 0xFFFF);
+				} else {
+					// 非移動系: 自動移動させずその場で発火（dwPara=0 のまま）
+					bResult = CheckMapEvent(pInfoChar, FALSE, NULL, NULL, TRUE);
+				}
 			}
 		} else {
 			// Phase 2: execute event after client auto-walked

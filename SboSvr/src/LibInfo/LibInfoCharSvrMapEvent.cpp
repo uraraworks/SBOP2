@@ -134,7 +134,8 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	BOOL bCheck/*=FALSE*/,		// [in] TRUE:チェックのみ
 	int *pnTileX/*=NULL*/,		// [out] イベントタイルX（省略可）
 	int *pnTileY/*=NULL*/,		// [out] イベントタイルY（省略可）
-	BOOL bIgnoreDirection/*=FALSE*/)	// [in] TRUE:向き条件を無視
+	BOOL bIgnoreDirection/*=FALSE*/,	// [in] TRUE:向き条件を無視
+	int *pnType/*=NULL*/)		// [out] イベント種別（省略可）
 {
 	BOOL bRet, bResult;
 	int i, nEventCount, nEventLeft, nEventTop, nEventRight, nEventBottom,
@@ -273,9 +274,10 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 			goto Exit;
 		}
 	}
-	// イベントタイル座標を出力（省略可能）
+	// イベントタイル座標・種別を出力（省略可能）
 	if (pnTileX != NULL) { *pnTileX = pInfoMapEventBase->m_ptPos.x; }
 	if (pnTileY != NULL) { *pnTileY = pInfoMapEventBase->m_ptPos.y; }
+	if (pnType != NULL) { *pnType = pInfoMapEventBase->m_nType; }
 
 	// チェックのみ？
 	if (bCheck) {
