@@ -135,9 +135,44 @@
       cursor: default;
     }
 
-    /* ロード中表示 */
+    /* ロード中ブロック: loading クラスがある間のみ表示 */
     #startOverlay .start-loading {
+      display: none;
+    }
+    #startOverlay.loading .start-loading {
+      display: block;
       font-size: clamp(14px, 3vw, 20px);
+      color: var(--subtle);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+
+    /* ready ブロック: loading クラスがある間は非表示 */
+    #startOverlay .start-ready {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #startOverlay.loading .start-ready {
+      display: none;
+    }
+
+    #startOverlay .start-title {
+      font-size: clamp(18px, 4vw, 26px);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    #startOverlay .start-sub {
+      font-size: clamp(12px, 2.5vw, 16px);
+      color: var(--accent);
+      letter-spacing: 0.12em;
+    }
+
+    #startOverlay .start-hint {
+      margin-top: 20px;
+      font-size: 11px;
       color: var(--subtle);
       animation: blink 1.4s ease-in-out infinite;
     }
@@ -735,10 +770,17 @@
       <div class="canvas-stage">
         <canvas id="canvas" width="480" height="480" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
         <textarea id="sbop2ImeInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
-        <!-- 読み込み中オーバーレイ -->
-        <!-- 初期状態は loading クラス付き → 読み込み完了で自動非表示 -->
+        <!-- Click to Start オーバーレイ（Autoplay Policy 対策） -->
+        <!-- 初期状態は loading クラス付き → 操作不可・読み込み中表示 -->
         <div id="startOverlay" class="loading">
+          <!-- ロード中ブロック（loading 中のみ表示） -->
           <div class="start-loading">読み込み中...</div>
+          <!-- ready ブロック（loading 解除後に表示） -->
+          <div class="start-ready">
+            <div class="start-title">クリックしてスタート</div>
+            <div class="start-sub">Click to Start</div>
+            <div class="start-hint">▼ タップまたはキーを押してください ▼</div>
+          </div>
         </div>
         <div id="loginOverlay" class="login-overlay" hidden>
           <div id="loginPanel" class="login-panel">
@@ -1013,48 +1055,65 @@
       }
     }, true);
 
-    // 読み込み完了後にキー入力ゲートを開くためのフラグ
+    // ── Click to Start: ユーザー操作による AudioContext の resume ──
     let startGameCalled = false;
-
-    // onRuntimeInitialized から呼ばれる: 読み込み完了後オーバーレイを自動的に消してそのままゲームへ進める。
-    // AudioContext.resume はブラウザの Autoplay Policy 上ユーザ操作が必要なので、初回操作で一度だけ resume するリスナを仕込む。
-    function markStartOverlayReady() {
+    let lastStartTouchTime = 0;
+    function startGame() {
       if (startGameCalled) return;
       startGameCalled = true;
 
-      // オーバーレイは即時に閉じてロゴ画面へ進む
+      // オーバーレイを非表示にしてIME対応のゲーム入力欄へフォーカス移動
       if (startOverlay) {
         startOverlay.style.display = 'none';
       }
       focusGameInput(false);
 
-      // 初回のユーザ操作で AudioContext を一度だけ resume する。
-      // (Autoplay Policy 上、ページロード直後の自動 resume はブロックされるため必須)
-      const resumeAudioOnce = function() {
-        try {
-          const audioCtx = (Module && Module.SDL2 && Module.SDL2.audioContext)
-            || (window.SDL2 && window.SDL2.audioContext)
-            || null;
-          if (audioCtx && audioCtx.state === 'suspended') {
-            audioCtx.resume().catch(function(e) {
-              console.warn('[SBOP2] AudioContext.resume failed:', e);
-            });
-          }
-        } catch (e) {
-          console.warn('[SBOP2] AudioContext resume error:', e);
+      // SDL2 の AudioContext を resume する（Autoplay Policy 対策）
+      try {
+        const audioCtx = (Module && Module.SDL2 && Module.SDL2.audioContext)
+          || (window.SDL2 && window.SDL2.audioContext)
+          || null;
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume().catch(function(e) {
+            console.warn('[SBOP2] AudioContext.resume failed:', e);
+          });
         }
-        window.removeEventListener('pointerdown', resumeAudioOnce, true);
-        window.removeEventListener('touchstart', resumeAudioOnce, true);
-        window.removeEventListener('keydown', resumeAudioOnce, true);
-      };
-      window.addEventListener('pointerdown', resumeAudioOnce, true);
-      window.addEventListener('touchstart', resumeAudioOnce, true);
-      window.addEventListener('keydown', resumeAudioOnce, true);
+      } catch (e) {
+        console.warn('[SBOP2] AudioContext resume error:', e);
+      }
 
-      // C++ 側が参照する活性化フラグもこのタイミングで立てる
+      // C++ 側が参照できるフラグをセット
       if (Module) {
         Module.sbop2UserActivated = true;
       }
+    }
+
+    // onRuntimeInitialized から呼ばれる: loading → ready に切り替えてリスナ登録
+    function markStartOverlayReady() {
+      if (!startOverlay) return;
+      // loading クラスを外すと CSS で ready ブロックが表示され pointer-events も戻る
+      startOverlay.classList.remove('loading');
+
+      // touchstart 後にブラウザが合成 click を発行する端末があるため、タッチ起動時は後続 click を抑止する。
+      startOverlay.addEventListener('touchstart', function onFirstTouch(event) {
+        lastStartTouchTime = performance.now();
+        event.preventDefault();
+        startGame();
+        startOverlay.removeEventListener('touchstart', onFirstTouch);
+      }, { passive: false });
+      startOverlay.addEventListener('click', function onFirstClick(event) {
+        if (performance.now() - lastStartTouchTime < 700) {
+          event.preventDefault();
+          return;
+        }
+        startGame();
+        startOverlay.removeEventListener('click', onFirstClick);
+      });
+      // キーダウンでも開始できるようにする（オーバーレイが表示中の間のみ）
+      window.addEventListener('keydown', function onFirstKey() {
+        startGame();
+        window.removeEventListener('keydown', onFirstKey);
+      });
     }
 
     function updateStartLoadingText(text) {
