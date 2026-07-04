@@ -165,27 +165,28 @@ BOOL CLibInfoCharSvr::CheckMapEvent(
 	nCharCenterX = (rcChar.left + rcChar.right) / 2;
 	nCharCenterY = (rcChar.top + rcChar.bottom) / 2;
 
-	// 発火済み集合：別マップに移っていたらクリア、もう重なっていないタイルは再武装
-	if (!bCheck) {
-		if (pInfoChar->m_dwFiredMapEventMapID != pInfoChar->m_dwMapID) {
-			pInfoChar->ClearFiredMapEvent();
-		} else {
-			int nFiredIdx, nFiredWrite;
-			RECT rcFired;
+	// 発火済み集合：別マップに移っていたらクリア、もう重なっていないタイルは再武装。
+	// 通常移動時のイベント検出は bCheck=TRUE で呼ばれるため、ここを bCheck で
+	// ゲートすると移動先タイルを離れても再武装されず、着地点の MOVE イベントが
+	// 永久に抑止されて戻れなくなる。検出・発火どちらの経路でも必ず再武装する。
+	if (pInfoChar->m_dwFiredMapEventMapID != pInfoChar->m_dwMapID) {
+		pInfoChar->ClearFiredMapEvent();
+	} else {
+		int nFiredIdx, nFiredWrite;
+		RECT rcFired;
 
-			nFiredWrite = 0;
-			for (nFiredIdx = 0; nFiredIdx < pInfoChar->m_nFiredMapEventCount; nFiredIdx ++) {
-				GetMapEventTileRect(rcFired,
-					pInfoChar->m_nFiredMapEventTileX[nFiredIdx],
-					pInfoChar->m_nFiredMapEventTileY[nFiredIdx]);
-				if (IsMapEventRectOverlapEnough(rcChar, rcFired, 1)) {
-					pInfoChar->m_nFiredMapEventTileX[nFiredWrite] = pInfoChar->m_nFiredMapEventTileX[nFiredIdx];
-					pInfoChar->m_nFiredMapEventTileY[nFiredWrite] = pInfoChar->m_nFiredMapEventTileY[nFiredIdx];
-					nFiredWrite ++;
-				}
+		nFiredWrite = 0;
+		for (nFiredIdx = 0; nFiredIdx < pInfoChar->m_nFiredMapEventCount; nFiredIdx ++) {
+			GetMapEventTileRect(rcFired,
+				pInfoChar->m_nFiredMapEventTileX[nFiredIdx],
+				pInfoChar->m_nFiredMapEventTileY[nFiredIdx]);
+			if (IsMapEventRectOverlapEnough(rcChar, rcFired, 1)) {
+				pInfoChar->m_nFiredMapEventTileX[nFiredWrite] = pInfoChar->m_nFiredMapEventTileX[nFiredIdx];
+				pInfoChar->m_nFiredMapEventTileY[nFiredWrite] = pInfoChar->m_nFiredMapEventTileY[nFiredIdx];
+				nFiredWrite ++;
 			}
-			pInfoChar->m_nFiredMapEventCount = nFiredWrite;
 		}
+		pInfoChar->m_nFiredMapEventCount = nFiredWrite;
 	}
 
 	nEventCount = pInfoMap->GetEventCount();
