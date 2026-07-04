@@ -517,5 +517,62 @@ if ($LASTEXITCODE -ne 0) {
     throw "browser link に失敗しました。"
 }
 
+# ファイル別ハッシュのキャッシュバスターと表示バージョンを埋め込む。
+# 通常のリロードだけで最新の .js/.wasm/.data を確実に取得させ、
+# ハードリロード/キャッシュクリアを不要にするための後処理。
+# 失敗してもビルドは止めない（try/catch で安全側に倒す）。
+try {
+    $htmlFile = Join-Path $outPath "sbocli-title.html"
+    $jsFile   = Join-Path $outPath "sbocli-title.js"
+    $wasmFile = Join-Path $outPath "sbocli-title.wasm"
+    $dataFile = Join-Path $outPath "sbocli-title.data"
+
+    # 出力3ファイルの短縮ハッシュ（SHA1先頭10桁・小文字）を算出
+    $jsHash   = (Get-FileHash -Algorithm SHA1 $jsFile).Hash.Substring(0, 10).ToLower()
+    $wasmHash = (Get-FileHash -Algorithm SHA1 $wasmFile).Hash.Substring(0, 10).ToLower()
+    $dataHash = (Get-FileHash -Algorithm SHA1 $dataFile).Hash.Substring(0, 10).ToLower()
+
+    # 表示バージョンは Common/SBOVersion.h の VERTEXT を単一ソースとして読み取る
+    $versionHeaderFile = Join-Path $repoRoot "Common\SBOVersion.h"
+    $versionHeaderText = Get-Content -Path $versionHeaderFile -Raw -Encoding UTF8
+    $versionMatch = [regex]::Match($versionHeaderText, 'VERTEXT\s+"([^"]+)"')
+    if (-not $versionMatch.Success) {
+        throw "SBOVersion.h から VERTEXT を取得できませんでした。"
+    }
+    $displayVersion = $versionMatch.Groups[1].Value
+
+    # ビルド識別子はビルド日時（コミット有無に依存せず常に正直な値）を用いる
+    $buildStamp = Get-Date -Format "yyyy-MM-dd HH:mm"
+
+    $htmlText = Get-Content -Path $htmlFile -Raw -Encoding UTF8
+
+    # (1) script の js 参照にクエリを付与する。
+    #     Emscripten 生成物は `<script async src=sbocli-title.js>` のように
+    #     引用符なしで出力されるため、引用符あり/なし両対応の正規表現にする。
+    $htmlText = [regex]::Replace(
+        $htmlText,
+        '(src=["'']?sbocli-title\.js)(["''\s>])',
+        { param($m) $m.Groups[1].Value + "?v=$jsHash" + $m.Groups[2].Value }
+    )
+
+    # (2) プレースホルダをアセットハッシュ表＋表示バージョン情報の埋め込みJSに置換する
+    $injectJs = 'window.__SBOP2_ASSET_HASHES__={"sbocli-title.wasm":"' + $wasmHash + '","sbocli-title.data":"' + $dataHash + '"};' +
+        'window.SBOP2_BUILD={display:"' + $displayVersion + '",build:"' + $buildStamp + '"};'
+    $placeholder = [regex]::Escape('/*__SBOP2_BUILD_INJECT__*/')
+    if ([regex]::IsMatch($htmlText, $placeholder)) {
+        $htmlText = [regex]::Replace($htmlText, $placeholder, { param($m) $injectJs })
+    } else {
+        throw "生成HTMLにキャッシュバスター埋め込み用プレースホルダが見つかりませんでした。"
+    }
+
+    # UTF-8 BOMなしで書き戻す
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [IO.File]::WriteAllText($htmlFile, $htmlText, $utf8NoBom)
+
+    Write-Host "[browser-cachebust] embedded asset hashes (js=$jsHash wasm=$wasmHash data=$dataHash) version=$displayVersion build=$buildStamp"
+} catch {
+    Write-Warning "[browser-cachebust] キャッシュバスター埋め込みに失敗しました: $_"
+}
+
 Sync-BrowserTitleToAdminWebroot -SourceDir $outPath
 Write-Host "[browser-link] success"

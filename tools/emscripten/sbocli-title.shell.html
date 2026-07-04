@@ -755,6 +755,7 @@
   </style>
 </head>
 <body>
+  <div id="sbop2VersionBadge" style="position:fixed;right:6px;bottom:4px;z-index:9999;font:11px/1.4 Consolas,monospace;color:rgba(255,255,255,.45);pointer-events:none;user-select:none;display:none;"></div>
   <main class="layout">
     <section class="panel header debug-panel">
       <div>SBOP2 browser title build</div>
@@ -870,6 +871,19 @@
   </div>
 
   <script>
+    /*__SBOP2_BUILD_INJECT__*/
+    // ビルドスクリプトが window.SBOP2_BUILD を埋め込んでいれば右下に控えめにバージョン表示する
+    (function showVersionBadge() {
+      try {
+        var badge = document.getElementById('sbop2VersionBadge');
+        var info = window.SBOP2_BUILD;
+        if (badge && info && info.display) {
+          badge.textContent = 'v' + info.display + ' (build ' + info.build + ')';
+          badge.style.display = 'block';
+        }
+      } catch (e) {}
+    })();
+
     // URL クエリ ?admin=1 が指定されたら管理者画面の iframe 埋め込みとして
     // ゲーム画面のみを表示するように body にクラスを付与する
     (function applyAdminEmbedMode() {
@@ -1556,6 +1570,12 @@
     }
 
     var Module = {
+      // ビルドスクリプトが埋め込んだファイル別ハッシュを使い、.wasm/.data のURLにクエリを付与する
+      // （通常のリロードだけで最新ファイルを取得させ、ハードリロードを不要にするため）
+      locateFile: function(path, prefix) {
+        var h = (window.__SBOP2_ASSET_HASHES__ || {})[path];
+        return prefix + path + (h ? "?v=" + h : "");
+      },
       canvas: canvasElement,
       totalDependencies: 0,
       print(...args) {
