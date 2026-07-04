@@ -5,9 +5,9 @@
 
 .DESCRIPTION
     以下を順に行います:
-      1) ブラウザクライアント (out/browser-title) のビルド
+      1) ブラウザクライアント (out/browser-title) のクリーンビルド (-Force で全再コンパイル)
          （tools/build-sbocli-browser-title.ps1 に委譲。-SkipBrowserBuild で抑止可）
-      2) SboSvr Release|Win32 のビルド (MSBuild)
+      2) SboSvr Release|Win32 のクリーンビルド (MSBuild Rebuild)
          （PostBuildEvent で webroot/ , webroot/game/ , SboGrpData.dll が SboSvr/Release/ に入る）
       3) staging ディレクトリへ成果物を集約
             SboSvr/        ... SboSvr.exe, SboGrpData.dll, SboSvr.ini, webroot/, SBODATA/seed
@@ -118,9 +118,11 @@ if (-not $SkipBrowserBuild) {
     if (-not (Test-Path $browserScript)) {
         throw "ブラウザビルドスクリプトが見つかりません: $browserScript"
     }
+    # publish はデプロイ用なので必ずクリーンビルドする（全オブジェクトを再コンパイル）。
+    # -Force(=-Rebuild) で up-to-date チェックをスキップし preflight でも全ソースを作り直す。
+    $browserArgs = @("-Force")
     # em++ が無い環境では preflight(cl.exe フォールバック) が必ず失敗するので、
     # em++ が解決できないときだけ -SkipPreflight を付ける
-    $browserArgs = @()
     if (-not (Get-Command em++ -ErrorAction SilentlyContinue) -and
         -not ($env:EMSDK -and (Test-Path (Join-Path $env:EMSDK "upstream\emscripten\em++.bat")))) {
         Write-Warning "em++ が解決できないため preflight をスキップします (本ビルド側で em++ が必要)"
@@ -148,12 +150,13 @@ $svrExePath  = Join-Path $svrOutDir "SboSvr.exe"
 $svrDllPath  = Join-Path $svrOutDir "SboGrpData.dll"
 
 if (-not $SkipServerBuild) {
-    Write-Step "SboSvr ($Configuration|$Platform) をビルド"
+    Write-Step "SboSvr ($Configuration|$Platform) をクリーンビルド (Rebuild)"
     $msbuild = Resolve-MsBuild
     $slnPath = Join-Path $repoRoot "SBO.sln"
     $logPath = Join-Path $repoRoot "publish_build.log"
+    # publish はデプロイ用なので Clean+Build（Rebuild）で古い中間物を残さない
     & $msbuild $slnPath `
-        "/t:SboSvr" `
+        "/t:SboSvr:Rebuild" `
         "/p:Configuration=$Configuration" `
         "/p:Platform=$Platform" `
         "/m" `
