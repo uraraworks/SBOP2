@@ -22,7 +22,8 @@
 static void GetMoveCheckMapRect(
 	PCInfoCharBase pInfoChar,
 	RECT &rcDst,
-	int nDirection)
+	int nDirection,
+	int nLookAheadPixel)
 {
 	int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	int nMapXBack, nMapYBack;
@@ -30,12 +31,10 @@ static void GetMoveCheckMapRect(
 
 	nMapXBack = pInfoChar->m_nMapX;
 	nMapYBack = pInfoChar->m_nMapY;
-	nMovePixel = CHAR_MOVE_COLLISION_LOOKAHEAD;
-	if (nMovePixel <= 0) {
-		nMovePixel = 1;
-	}
-	if (nMovePixel > CHAR_MOVE_SPEED) {
-		nMovePixel = CHAR_MOVE_SPEED;
+	nMovePixel = nLookAheadPixel;
+	if (nMovePixel < 0) {
+		// 負値のみガード。0 は「現在位置のリーディングエッジ」を意味するのでそのまま許す
+		nMovePixel = 0;
 	}
 
 	pInfoChar->m_nMapX = nMapXBack + anPosX[nDirection] * nMovePixel;
@@ -44,7 +43,8 @@ static void GetMoveCheckMapRect(
 	pInfoChar->m_nMapX = nMapXBack;
 	pInfoChar->m_nMapY = nMapYBack;
 
-	// 直進時は進行先の先頭辺だけを調べ、壁沿い移動時の引っ掛かりを減らす
+	// 直進時は移動方向のリーディングエッジ(先頭辺)だけを調べ、壁沿い移動時の引っ掛かりを減らす
+	// (nLookAheadPixel=0 なら現在位置、正値なら移動先のリーディングエッジタイルになる)
 	switch (nDirection) {
 	case 0:
 		rcDst.bottom = rcDst.top;
@@ -76,38 +76,55 @@ static BOOL CanMoveDirection(
 	int nDirection)
 {
 	int x, y;
-	BOOL bResult;
-	RECT rcMap;
+	int nLookAheadPixel;
+	RECT rcMapNow, rcMapDst;
 
 	if (pInfoMap == NULL) {
 		return FALSE;
 	}
 
-	bResult = FALSE;
-	GetMoveCheckMapRect(pInfoChar, rcMap, nDirection);
-	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
-		for (x = rcMap.left; x <= rcMap.right; x ++) {
-			bResult |= !pInfoMap->IsMoveOut(x, y, nDirection);
-		}
+	// 方向ブロックビットはタイルの辺属性なので、タイル境界を跨ぐ瞬間だけ判定する
+	nLookAheadPixel = CHAR_MOVE_COLLISION_LOOKAHEAD;
+	if (nLookAheadPixel <= 0) {
+		nLookAheadPixel = 1;
 	}
-	bResult = !bResult;
-	if (bResult == FALSE) {
+	if (nLookAheadPixel > CHAR_MOVE_SPEED) {
+		nLookAheadPixel = CHAR_MOVE_SPEED;
+	}
+	GetMoveCheckMapRect(pInfoChar, rcMapNow, nDirection, 0);
+	GetMoveCheckMapRect(pInfoChar, rcMapDst, nDirection, nLookAheadPixel);
+
+	// 移動先がマップ外(無効矩形)なら移動不可
+	if ((rcMapDst.left == -1) && (rcMapDst.top == -1) &&
+	    (rcMapDst.right == -1) && (rcMapDst.bottom == -1)) {
 		return FALSE;
 	}
 
-	bResult = FALSE;
-	GetMoveCheckMapRect(pInfoChar, rcMap, nDirection);
-	for (y = rcMap.top; y <= rcMap.bottom; y ++) {
-		for (x = rcMap.left; x <= rcMap.right; x ++) {
-			bResult |= !pInfoMap->IsMove(x, y, nDirection);
-		}
-	}
-	bResult = !bResult;
-	if (rcMap.top < 0) {
-		bResult = FALSE;
+	// タイル境界を跨がない移動は辺ビット判定不要
+	if ((rcMapNow.left == rcMapDst.left) && (rcMapNow.top == rcMapDst.top) &&
+	    (rcMapNow.right == rcMapDst.right) && (rcMapNow.bottom == rcMapDst.bottom)) {
+		return TRUE;
 	}
 
-	return bResult;
+	// 出口チェック: 今いるタイルの辺から出られるか
+	for (y = rcMapNow.top; y <= rcMapNow.bottom; y ++) {
+		for (x = rcMapNow.left; x <= rcMapNow.right; x ++) {
+			if (!pInfoMap->IsMoveOut(x, y, nDirection)) {
+				return FALSE;
+			}
+		}
+	}
+
+	// 入口チェック: 移動先タイルの辺から入れるか
+	for (y = rcMapDst.top; y <= rcMapDst.bottom; y ++) {
+		for (x = rcMapDst.left; x <= rcMapDst.right; x ++) {
+			if (!pInfoMap->IsMove(x, y, nDirection)) {
+				return FALSE;
+			}
+		}
+	}
+
+	return TRUE;
 }
 
 static BOOL TrySlideMove(
