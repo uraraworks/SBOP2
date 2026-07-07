@@ -40,6 +40,7 @@ function renderAccountInfo(data, container) {
   const fields = {
     "ca-acct-accountId": data.accountId,
     "ca-acct-loginId":   data.loginId,
+    "ca-acct-password":  data.password,
     "ca-acct-ip":        data.ip,
     "ca-acct-mac":       data.mac,
   };
@@ -74,6 +75,7 @@ export function mount(container) {
             <dl class="detail-list">
               <div><dt>アカウントID</dt><dd id="ca-acct-accountId">-</dd></div>
               <div><dt>ログインID</dt><dd id="ca-acct-loginId">-</dd></div>
+              <div><dt>パスワード</dt><dd id="ca-acct-password">-</dd></div>
               <div><dt>IP アドレス</dt><dd id="ca-acct-ip">-</dd></div>
               <div><dt>MAC アドレス</dt><dd id="ca-acct-mac">-</dd></div>
             </dl>

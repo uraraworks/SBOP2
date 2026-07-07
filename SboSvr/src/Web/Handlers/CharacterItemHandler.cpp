@@ -618,15 +618,24 @@ void CCharacterItemHandler::HandleGetAccount(const HttpRequest & /*request*/, Ht
         DWORD dwAccountId = pChar->m_dwAccountID;
         pCharLib->Leave();
 
-        // アカウントIDが 0 の場合はアカウント情報なし
+        // アカウントライブラリを取得する（pCharLib のロックとネストさせない）
+        CLibInfoAccount *pAccountLib = m_pMgrData->GetLibInfoAccount();
+
+        // m_dwAccountID はログイン中のみ設定されるため、0 の場合はアカウント側から逆引きする
+        if (dwAccountId == 0 && pAccountLib != NULL) {
+                pAccountLib->Enter();
+                dwAccountId = pAccountLib->FindAccountIDByCharID(static_cast<DWORD>(nCharId));
+                pAccountLib->Leave();
+        }
+
+        // 逆引きしてもアカウントIDが 0 の場合はアカウント情報なし
         if (dwAccountId == 0) {
                 response.statusLine = "HTTP/1.1 200 OK";
-                response.SetJsonBody("{\"accountId\":0,\"loginId\":\"\",\"ip\":\"\",\"mac\":\"\"}");
+                response.SetJsonBody("{\"accountId\":0,\"loginId\":\"\",\"password\":\"\",\"ip\":\"\",\"mac\":\"\"}");
                 return;
         }
 
         // アカウントライブラリからアカウント情報を取得する
-        CLibInfoAccount *pAccountLib = m_pMgrData->GetLibInfoAccount();
         if (pAccountLib == NULL) {
                 response.statusLine = "HTTP/1.1 503 Service Unavailable";
                 response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
@@ -640,7 +649,7 @@ void CCharacterItemHandler::HandleGetAccount(const HttpRequest & /*request*/, Ht
                 // アカウントIDはあるがアカウントレコードが見つからない場合
                 response.statusLine = "HTTP/1.1 200 OK";
                 std::ostringstream ossNone;
-                ossNone << "{\"accountId\":" << dwAccountId << ",\"loginId\":\"\",\"ip\":\"\",\"mac\":\"\"}";
+                ossNone << "{\"accountId\":" << dwAccountId << ",\"loginId\":\"\",\"password\":\"\",\"ip\":\"\",\"mac\":\"\"}";
                 response.SetJsonBody(ossNone.str());
                 return;
         }
@@ -662,6 +671,15 @@ void CCharacterItemHandler::HandleGetAccount(const HttpRequest & /*request*/, Ht
                 }
         }
 
+        // パスワードを取得する（UTF-8 で保持されているため GetUtf8Pointer を使う）
+        std::string password;
+        {
+                LPCSTR pszPassword = pAcc->m_strPassword.GetUtf8Pointer();
+                if (pszPassword != NULL) {
+                        password = pszPassword;
+                }
+        }
+
         // MAC アドレス（ログイン時に記録された最新値）を取得する
         std::string macAddr;
         {
@@ -675,6 +693,7 @@ void CCharacterItemHandler::HandleGetAccount(const HttpRequest & /*request*/, Ht
         oss << '{';
         oss << "\"accountId\":" << dwAccountId << ',';
         oss << "\"loginId\":\"" << JsonUtils::Escape(loginId) << "\",";
+        oss << "\"password\":\"" << JsonUtils::Escape(password) << "\",";
         oss << "\"ip\":\"" << JsonUtils::Escape(ossIp.str()) << "\",";
         oss << "\"mac\":\"" << JsonUtils::Escape(macAddr) << '"';
         oss << '}';

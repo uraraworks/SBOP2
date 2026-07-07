@@ -28,6 +28,7 @@ public:
 	void	Delete(DWORD dwAccountID);	// 削除
 	void	DeleteAll(void);	// 全て削除
 	DWORD	GetAccountID(DWORD dwCharID);	// キャラIDからアカウントIDを取得
+	DWORD	FindAccountIDByCharID(DWORD dwCharID);	// キャラIDからアカウントIDを逆引き（キャラIDテーブルも走査）
 
 	PCInfoBase	GetPtr(int nNo);	// アカウント情報を取得
 	PCInfoAccount	GetPtr(DWORD dwAccountID);	// アカウント情報を取得

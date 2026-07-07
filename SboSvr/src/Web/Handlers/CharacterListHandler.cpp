@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <map>
 #include <cstring>
 #include <cstdlib>
 #include <algorithm>
@@ -12,6 +13,7 @@
 #include "Web/JsonUtils.h"
 #include "MgrData.h"
 #include "LibInfo/LibInfoCharSvr.h"
+#include "LibInfo/LibInfoAccount.h"
 #include "Info/InfoCharBase.h"
 #include "myLib/myString.h"
 
@@ -302,6 +304,37 @@ void CCharacterListHandler::Handle(const HttpRequest &request, HttpResponse &res
                 }
         }
 
+        // アカウントライブラリから charID→accountID の逆引きマップを構築する
+        // （キャラ側の m_dwAccountID はログイン中のみ設定されるため、オフラインキャラの補完に使う）
+        // pCharLib のロックとネストしないよう、pCharLib->Enter() の前に構築を済ませる
+        std::map<DWORD, DWORD> charToAccount;
+        {
+                CLibInfoAccount *pAccountLib = m_pMgrData->GetLibInfoAccount();
+                if (pAccountLib != NULL) {
+                        pAccountLib->Enter();
+                        int nAccCount = pAccountLib->GetCount();
+                        for (int i = 0; i < nAccCount; ++i) {
+                                PCInfoAccount pAcc = static_cast<PCInfoAccount>(pAccountLib->GetPtr(i));
+                                if (pAcc == NULL) {
+                                        continue;
+                                }
+                                // 使用中のキャラID
+                                if (pAcc->m_dwCharID != 0) {
+                                        charToAccount[pAcc->m_dwCharID] = pAcc->m_dwAccountID;
+                                }
+                                // キャラIDテーブルの全要素
+                                int nCharCount = pAcc->m_adwCharID.size();
+                                for (int j = 0; j < nCharCount; ++j) {
+                                        DWORD dwCharID = pAcc->m_adwCharID[j];
+                                        if (dwCharID != 0) {
+                                                charToAccount[dwCharID] = pAcc->m_dwAccountID;
+                                        }
+                                }
+                        }
+                        pAccountLib->Leave();
+                }
+        }
+
         // キャラライブラリをロックして全件スキャン・フィルタリング
         pCharLib->Enter();
 
@@ -325,9 +358,16 @@ void CCharacterListHandler::Handle(const HttpRequest &request, HttpResponse &res
                         }
                 }
 
-                // accountId 完全一致フィルタ
+                // accountId 完全一致フィルタ（オフラインキャラは逆引きマップで補完して比較）
                 if (filterAccountId >= 0) {
-                        if (static_cast<int>(pChar->m_dwAccountID) != filterAccountId) {
+                        DWORD dwAccountId = pChar->m_dwAccountID;
+                        if (dwAccountId == 0 && !pChar->m_bNPC) {
+                                std::map<DWORD, DWORD>::const_iterator it = charToAccount.find(pChar->m_dwCharID);
+                                if (it != charToAccount.end()) {
+                                        dwAccountId = it->second;
+                                }
+                        }
+                        if (static_cast<int>(dwAccountId) != filterAccountId) {
                                 continue;
                         }
                 }
@@ -380,7 +420,15 @@ void CCharacterListHandler::Handle(const HttpRequest &request, HttpResponse &res
                 oss << "\"mapId\":"     << pChar->m_dwMapID << ',';
                 oss << "\"x\":"         << pChar->m_nMapX << ',';
                 oss << "\"y\":"         << pChar->m_nMapY << ',';
-                oss << "\"accountId\":" << pChar->m_dwAccountID << ',';
+                // m_dwAccountID はログイン中のみ設定されるため、0 の場合は逆引きマップで補完する
+                DWORD dwAccountId = pChar->m_dwAccountID;
+                if (dwAccountId == 0 && !pChar->m_bNPC) {
+                        std::map<DWORD, DWORD>::const_iterator it = charToAccount.find(pChar->m_dwCharID);
+                        if (it != charToAccount.end()) {
+                                dwAccountId = it->second;
+                        }
+                }
+                oss << "\"accountId\":" << dwAccountId << ',';
                 oss << "\"isNpc\":"     << (pChar->m_bNPC ? "true" : "false");
                 oss << '}';
         }

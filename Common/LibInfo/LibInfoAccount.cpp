@@ -178,6 +178,45 @@ DWORD CLibInfoAccount::GetAccountID(DWORD dwCharID)
 	return dwRet;
 }
 
+DWORD CLibInfoAccount::FindAccountIDByCharID(
+	DWORD dwCharID)	// [in] キャラID
+{
+	int i, j, nCount, nCharCount;
+	DWORD dwRet;
+	PCInfoAccount pInfo;
+
+	dwRet = 0;
+
+	// キャラID未指定の場合は逆引きしない
+	if (dwCharID == 0) {
+		goto Exit;
+	}
+
+	nCount = GetCount();
+	for (i = 0; i < nCount; i ++) {
+		pInfo = m_paInfo->at(i);
+		// 使用中のキャラIDと一致するかチェック
+		if (pInfo->m_dwCharID == dwCharID) {
+			dwRet = pInfo->m_dwAccountID;
+			break;
+		}
+		// キャラIDテーブルに含まれるかチェック
+		nCharCount = pInfo->m_adwCharID.size();
+		for (j = 0; j < nCharCount; j ++) {
+			if (pInfo->m_adwCharID[j] == dwCharID) {
+				dwRet = pInfo->m_dwAccountID;
+				break;
+			}
+		}
+		if (dwRet != 0) {
+			break;
+		}
+	}
+
+Exit:
+	return dwRet;
+}
+
 PCInfoBase CLibInfoAccount::GetPtr(int nNo)
 {
 	return (PCInfoBase)m_paInfo->at(nNo);
