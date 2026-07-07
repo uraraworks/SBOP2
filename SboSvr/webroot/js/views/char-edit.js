@@ -1119,7 +1119,7 @@ function buildAccountTab() {
 
   var dl = mkEl("dl", "detail-list");
   var acctSpans = {};
-  [["accountId","アカウントID"],["loginId","ログインID"],["ip","IPアドレス"],["mac","MACアドレス"]].forEach(function (pair) {
+  [["accountId","アカウントID"],["loginId","ログインID"],["password","パスワード"],["ip","IPアドレス"],["mac","MACアドレス"]].forEach(function (pair) {
     var div = mkEl("div");
     var dt = mkEl("dt", "", pair[1]);
     var dd = mkEl("dd", "", "-");
@@ -1735,6 +1735,7 @@ export function mount(container) {
       var sp = accountTab.acctSpans;
       if (sp.accountId) { sp.accountId.textContent = String(data.accountId ?? "-"); }
       if (sp.loginId)   { sp.loginId.textContent = String(data.loginId ?? "-"); }
+      if (sp.password)  { sp.password.textContent = String(data.password ?? "-"); }
       if (sp.ip)        { sp.ip.textContent = String(data.ip ?? "-"); }
       if (sp.mac)       { sp.mac.textContent = String(data.mac ?? "-"); }
     } catch (err) {
