@@ -3017,6 +3017,11 @@ BOOL CStateProcMAP::MoveProc(
 		bResult = m_pLibInfoChar->IsMove(m_pPlayerChar, nDirection);
 	}
 	if (bResult) {
+		/* IsMove 内のスライド補正・斜め補正はキャラ座標を直接ずらして許可を返すことがある。
+		   補正後の座標を基準にしないと、未検証の元座標のまま移動が適用されて
+		   障害物にめり込むため、ここで基準座標を最新化する */
+		x = m_pPlayerChar->m_nMapX;
+		y = m_pPlayerChar->m_nMapY;
 		if (nTmp != nDirection) {
 			xx = anPosChangeX[nDirection] * nMovePixel;
 			yy = anPosChangeY[nDirection] * nMovePixel;

@@ -77,6 +77,8 @@ static BOOL CanMoveDirection(
 {
 	int x, y;
 	int nLookAheadPixel;
+	int nDirTmp;
+	BOOL bEscape;
 	RECT rcMapNow, rcMapDst;
 
 	if (pInfoMap == NULL) {
@@ -110,7 +112,20 @@ static BOOL CanMoveDirection(
 	for (y = rcMapNow.top; y <= rcMapNow.bottom; y ++) {
 		for (x = rcMapNow.left; x <= rcMapNow.right; x ++) {
 			if (!pInfoMap->IsMoveOut(x, y, nDirection)) {
-				return FALSE;
+				// どの方向からも進入できないタイル（全方向ブロック等）に
+				// めり込んでいる場合だけ、脱出用に出口チェックを免除する。
+				// 一部方向からのみ進入できるタイル（例: 右からだけ入れるイス）は
+				// 正規に重なれるため、辺ビット通りに出口をブロックする
+				bEscape = TRUE;
+				for (nDirTmp = 0; nDirTmp < 4; nDirTmp ++) {
+					if (pInfoMap->IsMove(x, y, nDirTmp)) {
+						bEscape = FALSE;
+						break;
+					}
+				}
+				if (bEscape == FALSE) {
+					return FALSE;
+				}
 			}
 		}
 	}
@@ -534,7 +549,7 @@ BOOL CLibInfoCharCli::IsMove(
 	int nDirectionTmp;
 	BOOL bRet, bResult;
 	PCInfoMapBase pInfoMap;
-	POINT ptFront, ptBack;
+	POINT ptBack;
 
 	bRet = FALSE;
 	pInfoMap = m_pMgrData->GetMap();
@@ -563,9 +578,19 @@ BOOL CLibInfoCharCli::IsMove(
 	       左ブロック: (X-1)/32 のタイル  → スナップ X = ((X-1)/32+1)*32
 	   スナップは障害物に数px食み込んだ状態を境界手前に修正する。
 	   食み込みがない場合はスナップ前後で値が変わらないため副作用なし。
+	   ※斜め判定そのものは、以前は縦方向が通った後に16px先へ仮置きして
+	     横方向を検証していたが、実移動は1pxのため16px先で通れても実際の
+	     斜め1歩は障害物に重なる場合があった。現在は CanMoveDirection による
+	     1px斜め直接検証に変更している。
 	*/
 	switch (nDirection) {
 	case 4:	// 右上 = 上(0) + 右(3)
+		// 実際の1px斜めステップを直接検証（GetMoveCheckMapRect は方向4〜7で
+		// 移動先の当たり矩形全体をタイル判定するため、斜めの角タイルも含めて安全）
+		bResult = CanMoveDirection(pInfoMap, pInfoChar, nDirection);
+		if (bResult) {
+			return TRUE;
+		}
 		nDirectionTmp = 0;
 		bRet = IsMove(pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
@@ -575,17 +600,7 @@ BOOL CLibInfoCharCli::IsMove(
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 		} else {
-			pInfoChar->GetFrontPos(ptFront, nDirectionTmp, TRUE);
-			pInfoChar->m_nMapX = ptFront.x;
-			pInfoChar->m_nMapY = ptFront.y;
-			nDirectionTmp = 3;
-			bRet = IsMove(pInfoChar, nDirectionTmp);
-			pInfoChar->m_nMapX = ptBack.x;
-			pInfoChar->m_nMapY = ptBack.y;
-			if (bRet) {
-				return TRUE;
-			}
-			// 右がブロック: 現在地 ±8px ずらしてコーナー補正
+			// 斜めは不可・上は可 → 右がブロック: 現在地 ±8px ずらしてコーナー補正
 			{
 				int nCorner;
 				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
@@ -622,6 +637,12 @@ BOOL CLibInfoCharCli::IsMove(
 		}
 		break;
 	case 5:	// 右下 = 下(1) + 右(3)
+		// 実際の1px斜めステップを直接検証（GetMoveCheckMapRect は方向4〜7で
+		// 移動先の当たり矩形全体をタイル判定するため、斜めの角タイルも含めて安全）
+		bResult = CanMoveDirection(pInfoMap, pInfoChar, nDirection);
+		if (bResult) {
+			return TRUE;
+		}
 		nDirectionTmp = 1;
 		bRet = IsMove(pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
@@ -631,17 +652,7 @@ BOOL CLibInfoCharCli::IsMove(
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 		} else {
-			pInfoChar->GetFrontPos(ptFront, nDirectionTmp, TRUE);
-			pInfoChar->m_nMapX = ptFront.x;
-			pInfoChar->m_nMapY = ptFront.y;
-			nDirectionTmp = 3;
-			bRet = IsMove(pInfoChar, nDirectionTmp);
-			pInfoChar->m_nMapX = ptBack.x;
-			pInfoChar->m_nMapY = ptBack.y;
-			if (bRet) {
-				return TRUE;
-			}
-			// 右がブロック: 現在地 ±8px ずらしてコーナー補正
+			// 斜めは不可・下は可 → 右がブロック: 現在地 ±8px ずらしてコーナー補正
 			{
 				int nCorner;
 				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
@@ -678,6 +689,12 @@ BOOL CLibInfoCharCli::IsMove(
 		}
 		break;
 	case 6:	// 左下 = 下(1) + 左(2)
+		// 実際の1px斜めステップを直接検証（GetMoveCheckMapRect は方向4〜7で
+		// 移動先の当たり矩形全体をタイル判定するため、斜めの角タイルも含めて安全）
+		bResult = CanMoveDirection(pInfoMap, pInfoChar, nDirection);
+		if (bResult) {
+			return TRUE;
+		}
 		nDirectionTmp = 1;
 		bRet = IsMove(pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
@@ -687,17 +704,7 @@ BOOL CLibInfoCharCli::IsMove(
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 		} else {
-			pInfoChar->GetFrontPos(ptFront, nDirectionTmp, TRUE);
-			pInfoChar->m_nMapX = ptFront.x;
-			pInfoChar->m_nMapY = ptFront.y;
-			nDirectionTmp = 2;
-			bRet = IsMove(pInfoChar, nDirectionTmp);
-			pInfoChar->m_nMapX = ptBack.x;
-			pInfoChar->m_nMapY = ptBack.y;
-			if (bRet) {
-				return TRUE;
-			}
-			// 左がブロック: 現在地 ±8px ずらしてコーナー補正
+			// 斜めは不可・下は可 → 左がブロック: 現在地 ±8px ずらしてコーナー補正
 			{
 				int nCorner;
 				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
@@ -734,6 +741,12 @@ BOOL CLibInfoCharCli::IsMove(
 		}
 		break;
 	case 7:	// 左上 = 上(0) + 左(2)
+		// 実際の1px斜めステップを直接検証（GetMoveCheckMapRect は方向4〜7で
+		// 移動先の当たり矩形全体をタイル判定するため、斜めの角タイルも含めて安全）
+		bResult = CanMoveDirection(pInfoMap, pInfoChar, nDirection);
+		if (bResult) {
+			return TRUE;
+		}
 		nDirectionTmp = 0;
 		bRet = IsMove(pInfoChar, nDirectionTmp);
 		if (bRet == FALSE) {
@@ -743,17 +756,7 @@ BOOL CLibInfoCharCli::IsMove(
 			pInfoChar->m_nMapX = ptBack.x;
 			pInfoChar->m_nMapY = ptBack.y;
 		} else {
-			pInfoChar->GetFrontPos(ptFront, nDirectionTmp, TRUE);
-			pInfoChar->m_nMapX = ptFront.x;
-			pInfoChar->m_nMapY = ptFront.y;
-			nDirectionTmp = 2;
-			bRet = IsMove(pInfoChar, nDirectionTmp);
-			pInfoChar->m_nMapX = ptBack.x;
-			pInfoChar->m_nMapY = ptBack.y;
-			if (bRet) {
-				return TRUE;
-			}
-			// 左がブロック: 現在地 ±8px ずらしてコーナー補正
+			// 斜めは不可・上は可 → 左がブロック: 現在地 ±8px ずらしてコーナー補正
 			{
 				int nCorner;
 				for (nCorner = 0; nCorner < (int)(sizeof (anCornerOffset) / sizeof (anCornerOffset[0])); nCorner ++) {
