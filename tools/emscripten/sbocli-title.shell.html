@@ -1953,6 +1953,8 @@
 
       // ---- PC ログエリアに1行追加 ----
       function appendPcLine(text, color) {
+        // 追加後は scrollHeight が増えるため、追従可否は追加前に判定する
+        var shouldFollow = isAtBottom(chatLogWrap);
         var line = document.createElement('div');
         line.className = 'chat-log-line';
         line.textContent = text;
@@ -1962,13 +1964,15 @@
         while (chatLogWrap.children.length > CHAT_LOG_MAX) {
           chatLogWrap.removeChild(chatLogWrap.firstChild);
         }
-        if (isAtBottom(chatLogWrap)) {
+        if (shouldFollow) {
           scrollToBottom(chatLogWrap);
         }
       }
 
       // ---- シートログエリアに1行追加 ----
       function appendSheetLine(text, color) {
+        // 追加後は scrollHeight が増えるため、追従可否は追加前に判定する
+        var shouldFollow = isAtBottom(chatSheetLog);
         var line = document.createElement('div');
         line.className = 'chat-log-line';
         line.textContent = text;
@@ -1977,7 +1981,7 @@
         while (chatSheetLog.children.length > CHAT_LOG_MAX) {
           chatSheetLog.removeChild(chatSheetLog.firstChild);
         }
-        if (isAtBottom(chatSheetLog)) {
+        if (shouldFollow) {
           scrollToBottom(chatSheetLog);
         }
       }
