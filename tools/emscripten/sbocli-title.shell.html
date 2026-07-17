@@ -729,12 +729,38 @@
       padding: 8px 14px;
       cursor: pointer;
     }
-    /* ---- チャット UI は admin-embed 時は非表示 ---- */
-    body.admin-embed #chatPanel,
+    /* ---- チャット UI は admin-embed 時は非表示 ----
+       ただし PC(非 mobile-pad) の #chatPanel だけは、ゲーム画面下の
+       余白へチャットログとして表示する（下の配置ルール参照） */
     body.admin-embed #chatMiniLog,
     body.admin-embed #chatOpenBtn,
-    body.admin-embed #chatBottomSheet {
+    body.admin-embed #chatBottomSheet,
+    body.admin-embed.mobile-pad #chatPanel {
       display: none !important;
+    }
+
+    /* ---- admin-embed(PC): チャットパネルをキャンバス直下の余白へフロー配置 ---- */
+    /* body を縦 flex にし、キャンバス(.layout)の残り高さをチャットパネルに割り当てる */
+    body.admin-embed:not(.mobile-pad) {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    body.admin-embed:not(.mobile-pad) .layout {
+      flex: 0 0 auto;
+    }
+    body.admin-embed:not(.mobile-pad) #chatPanel {
+      position: static;
+      flex: 1 1 auto;
+      min-height: 0;
+      width: calc(480px * var(--game-scale));
+      margin: 8px auto;
+    }
+    body.admin-embed:not(.mobile-pad) #chatLogWrap {
+      flex: 1 1 auto;
+      height: auto;
+      min-height: 40px;
+      resize: none;
     }
 
     /* ---- ゲーム開始(マップ画面)前はスマホ用チャット UI を出さない ---- */
