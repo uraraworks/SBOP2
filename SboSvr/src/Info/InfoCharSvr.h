@@ -127,7 +127,8 @@ public:
 			m_dwLastMoveSyncSendTime,	// 最終移動同期送信時刻
 			m_dwFiredMapEventMapID,	// 発火済みイベント集合の対象マップID
 			m_dwLastRecvMoveTime,	// 最終移動受信時刻(ms)
-			m_dwLastRecvMovePacketTime;	// 最終移動受信パケット時刻(ms)
+			m_dwLastRecvMovePacketTime,	// 最終移動受信パケット時刻(ms)
+			m_dwLastMoveRejectSyncTime;	// 移動速度超過拒否時に権威座標を送り返した最終時刻(ms)。連続拒否時の送信頻度を抑制するため
 	int	m_nFiredMapEventCount,	// 発火済みイベント数
 			m_nLastMoveSyncDirection;	// 最終移動同期向き
 	int	m_nFiredMapEventTileX[MAPEVENT_FIRED_MAX];	// 発火済みイベントのタイルX（集合）

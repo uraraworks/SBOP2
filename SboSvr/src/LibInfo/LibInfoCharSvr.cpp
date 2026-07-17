@@ -304,6 +304,7 @@ void CLibInfoCharSvr::LogIn(
 		PCInfoCharSvr pCharSvr = (PCInfoCharSvr)pChar;
 		pCharSvr->m_dwLastRecvMovePacketTime = 0;
 		pCharSvr->m_dwLastMoveSyncSendTime = 0;
+		pCharSvr->m_dwLastMoveRejectSyncTime = 0;
 	}
 	m_paInfoLogin->push_back(pChar);
 }
@@ -1170,6 +1171,11 @@ void CLibInfoCharSvr::MoveMapIn(CInfoCharSvr *pInfoChar)
 	m_pSock->SendTo(dwSessionID, &PacketCHAR_RES_CHARINFO);
 
 	pInfoChar->m_bStateFadeInOut = FALSE;
+	// ワープ完了時に移動速度チェックの基準時刻をリセットする。
+	// これをしないと旧座標基準の経過時間・距離で速度超過判定されてしまい、
+	// ワープ後の新座標からの最初の移動パケットが誤って拒否される。
+	pInfoChar->m_dwLastRecvMoveTime = 0;
+	pInfoChar->m_dwLastRecvMovePacketTime = 0;
 	PacketMAP_PARA1.Make(SBOCOMMANDID_SUB_MAP_FADEINOUT, pInfoChar->m_dwMapID, 0);
 	m_pSock->SendTo(dwSessionID, &PacketMAP_PARA1);
 

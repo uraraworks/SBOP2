@@ -95,6 +95,7 @@ CInfoCharSvr::CInfoCharSvr()
 	m_dwFiredMapEventMapID = 0;
 	m_dwLastRecvMoveTime	= 0;
 	m_dwLastRecvMovePacketTime = 0;
+	m_dwLastMoveRejectSyncTime = 0;
 	m_nFiredMapEventCount = 0;
 	m_nLastMoveSyncDirection = -1;
 	m_bMoveSyncActive = FALSE;
@@ -252,6 +253,7 @@ void CInfoCharSvr::CopyAll(CInfoCharSvr *pSrc)
 	m_bMoveSyncActive = pSrc->m_bMoveSyncActive;
 	m_dwLastRecvMoveTime	= pSrc->m_dwLastRecvMoveTime;
 	m_dwLastRecvMovePacketTime = pSrc->m_dwLastRecvMovePacketTime;
+	m_dwLastMoveRejectSyncTime = pSrc->m_dwLastMoveRejectSyncTime;
 }
 
 void CInfoCharSvr::Copy(CInfoCharBase *pSrc)

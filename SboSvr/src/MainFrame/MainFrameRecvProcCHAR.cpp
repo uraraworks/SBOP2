@@ -224,6 +224,13 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
 		return;
 	}
+	if (pInfoChar->m_bStateFadeInOut) {
+		// ワープ遷移中（フェードイン・アウト中）は、クライアントが旧座標のまま
+		// 送ってくる残留移動パケットが届くことがあるため破棄する。
+		// 同一マップ内ワープの場合は上の m_dwMapID 不一致チェック（205行付近）を
+		// すり抜けてしまうため、ここで明示的にガードする。
+		return;
+	}
 	bResult = pInfoChar->IsEnableMove();
 	if (bResult == FALSE) {
 		if (pInfoChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
@@ -327,11 +334,20 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 				nMoveDist = abs(nNextPosY - pInfoChar->m_nMapY);
 			}
 
-			// 基準120px/s(=4px*30fps) × 速度段階 + 16px余裕
-			nAllowDist = (int)((dwElapsed * 120 * nSpeedLevel) / 1000) + 16;
+			// 基準120px/s(=4px*30fps) × 速度段階 + 32px余裕（フレームジャンクによるまとめ送信を許容）
+			nAllowDist = (int)((dwElapsed * 120 * nSpeedLevel) / 1000) + 32;
 			if (nMoveDist > nAllowDist) {
+				BOOL bDoSyncSend;
+
+				bDoSyncSend = FALSE;
+				if ((pInfoChar->m_dwLastMoveRejectSyncTime == 0) ||
+					(dwNowTime - pInfoChar->m_dwLastMoveRejectSyncTime >= 1000)) {
+					pInfoChar->m_dwLastMoveRejectSyncTime = dwNowTime;
+					bDoSyncSend = TRUE;
+				}
+
 				m_pLog->Write(
-					"移動速度超過を拒否 dwSessionID:%u [PACKET:%s][CHAR:%s][現在:%d,%d][受信:%d,%d][移動:%dpx][許容:%dpx][経過:%ums][段階:%d]",
+					"移動速度超過を拒否 dwSessionID:%u [PACKET:%s][CHAR:%s][現在:%d,%d][受信:%d,%d][移動:%dpx][許容:%dpx][経過:%ums][段階:%d]%s",
 					dwSessionID,
 					pszPacketName,
 					pInfoChar->m_strCharName.GetUtf8Pointer(),
@@ -342,7 +358,16 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 					nMoveDist,
 					nAllowDist,
 					dwElapsed,
-					nSpeedLevel);
+					nSpeedLevel,
+					bDoSyncSend ? "[補正:送信]" : "[補正:抑制中]");
+
+				if (bDoSyncSend) {
+					// クライアントが誤った座標のまま動き続けないよう、
+					// サーバー権威の現在座標を本人へ送り返して補正する。
+					CPacketCHAR_RES_CHARINFO PacketResCharInfoSync;
+					PacketResCharInfoSync.Make(pInfoChar);
+					m_pSock->SendTo(dwSessionID, &PacketResCharInfoSync);
+				}
 				return;
 			}
 		}
