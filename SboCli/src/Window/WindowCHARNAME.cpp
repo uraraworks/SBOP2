@@ -462,12 +462,20 @@ void CWindowCHARNAME::UpdateBrowserDom(void)
 	const int nInputW = 8 * MAXLEN_CHARNAME;
 	const int nInputH = 14;
 	const BOOL bVisible = (m_bActive && (!m_bDelete));
+	CString strTmp;
+	CmyString strView;
+
+	// DOM 入力欄は不透明で canvas 描画のテキストを覆い隠すため、
+	// IME 変換中の未確定文字列も連結して DOM 側に表示する
+	strTmp = (LPCTSTR)m_strName;
+	strTmp += (LPCTSTR)m_strComposition;
+	strView = (LPCTSTR)strTmp;
 
 	SBOP2_UpdateCharNameDom(
 		bVisible ? 1 : 0,
 		nWindowX, nWindowY, m_sizeWindow.cx, m_sizeWindow.cy,
 		nInputX, nInputY, nInputW, nInputH,
-		m_strName, MAXLEN_CHARNAME);
+		strView, MAXLEN_CHARNAME);
 }
 
 

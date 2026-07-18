@@ -223,6 +223,10 @@
       box-shadow: 0 0 0 1px #ffc96d;
     }
 
+    #charNameInput {
+      box-sizing: border-box;
+    }
+
     .login-check {
       position: absolute;
       display: flex;
@@ -1049,8 +1053,30 @@
     let compositionInputFallbackUntil = 0;
     canvasElement.addEventListener('mousedown', () => focusGameInput(false));
     canvasElement.addEventListener('touchstart', () => focusGameInput(false), { passive: true });
+    // IME 候補ウィンドウは #sbop2ImeInput の位置に追従して表示されるため、
+    // 変換開始時にアクティブな入力欄（キャラ名入力 or ゲーム内チャット入力行）の直下へ移動する。
+    // 要素は 1x1 透明・pointer-events:none なので位置を動かしても表示や操作には影響しない。
+    function placeImeInputForCandidates() {
+      const scale = canvasElement.getBoundingClientRect().width / canvasElement.width;
+      let x, y;
+      if (!charNameOverlay.hidden) {
+        // キャラ名入力欄の直下（canvas-stage 内の絶対座標 = charNameInput と同じ座標系）
+        const stageRect = canvasElement.parentElement.getBoundingClientRect();
+        const r = charNameInput.getBoundingClientRect();
+        x = r.left - stageRect.left;
+        y = r.bottom - stageRect.top + 2;
+      } else {
+        // ゲーム内チャット入力行の直下（WindowCHAT: canvas座標 (17,414)〜(463,428)）
+        x = 17 * scale;
+        y = 430 * scale;
+      }
+      imeInputElement.style.left = Math.round(x) + 'px';
+      imeInputElement.style.top = Math.round(y) + 'px';
+    }
+
     imeInputElement.addEventListener('compositionstart', () => {
       gameInputComposing = true;
+      placeImeInputForCandidates();
       setChatComposition('');
     });
     imeInputElement.addEventListener('compositionupdate', (event) => {
@@ -1295,10 +1321,10 @@
       const scaleY = canvasRect.height / canvasElement.height;
 
       charNameOverlay.hidden = false;
-      const overlayOffsetX = Math.round(-22 * scaleX);
-      const overlayOffsetY = Math.round(-22 * scaleY);
-      charNamePanel.style.left = ((state.windowX * scaleX) + overlayOffsetX) + 'px';
-      charNamePanel.style.top = ((state.windowY * scaleY) + overlayOffsetY) + 'px';
+      // 画面合成時、ウィンドウは C++ が報告する座標より (32,32) 左上（= m_ptViewPos そのまま）に
+      // 描画される（ログイン画面クリーム枠の実測で確認）。描画された入力枠に重ねるため -32 補正する
+      charNamePanel.style.left = ((state.windowX - 32) * scaleX) + 'px';
+      charNamePanel.style.top = ((state.windowY - 32) * scaleY) + 'px';
       charNamePanel.style.width = (state.windowW * scaleX) + 'px';
       charNamePanel.style.height = (state.windowH * scaleY) + 'px';
 
