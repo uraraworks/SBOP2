@@ -908,7 +908,7 @@ void CHttpServer::RegisterDefaultHandlers()
                 return;
         }
 
-        std::unique_ptr<IApiHandler> healthHandler(new CHealthHandler());
+        std::unique_ptr<IApiHandler> healthHandler(new CHealthHandler(m_pMgrData));
         m_router.Register("GET", "/health", std::move(healthHandler));
 
         std::unique_ptr<IApiHandler> serverHandler(new CServerInfoHandler(m_pMgrData));
