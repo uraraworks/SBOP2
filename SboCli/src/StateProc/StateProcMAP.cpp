@@ -441,6 +441,12 @@ int CStateProcMAP::GetPlayerMoveStep(DWORD dwNowTime, int &nAccumOut, DWORD &dwL
 		return 0;
 	}
 
+	/* ヒッチ（タブ非表示・GC等）明けの追いつき移動でサーバーの速度超過チェック
+	   （120px/s＋32px余裕）を超えないよう、1回の加算分を頭打ちにする */
+	if (dwElapsed > 250) {
+		dwElapsed = 250;
+	}
+
 	nMovePixelsPerSec = GetPlayerMovePixelsPerSec(m_pPlayerChar);
 	ullAccumulated = (ULONGLONG)nAccumOut + (ULONGLONG)dwElapsed * nMovePixelsPerSec;
 	nMoveStep = (int)(ullAccumulated / 1000);
