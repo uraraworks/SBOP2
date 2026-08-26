@@ -259,17 +259,37 @@ $posBlock
 [Setting]
 Port=$GamePort
 HttpPort=$HttpPort
+CookieSecure=1
 "@
 Set-Content -Path $iniDst -Value $iniContent -Encoding ASCII
 Write-Host "  SboSvr.ini  Port=$GamePort / HttpPort=$HttpPort"
 
 # SBODATA seed (既存 Release/SBODATA の .dat と ServerInfo.csv を初期データとして同梱)
+#
+# 【重要】個人データを含む .dat は同梱しない。
+#   SboDataAccount.dat には当時の実ユーザーのアカウント・パスワード・MACアドレスが、
+#   SboDataChar.dat / SboDataItem.dat には実キャラクターと所持品が、
+#   SboDataDisable.dat には BAN 済みの MAC / IP が入っている。いずれも git 追跡外で
+#   ローカルにだけ存在するため、無条件コピーすると気付かないまま本番へ載ってしまう。
+#   同梱するのはマスタデータ (Map / Motion / ItemType 等) だけに限定する。
+$personalDataFiles = @(
+    "SboDataAccount.dat",
+    "SboDataChar.dat",
+    "SboDataItem.dat",
+    "SboDataDisable.dat"
+)
 $sbodataSrc = Join-Path $repoRoot "Release\SBODATA"
 $sbodataDst = Join-Path $stageSvr "SBODATA"
 New-Item -ItemType Directory -Force -Path $sbodataDst | Out-Null
 if (Test-Path $sbodataSrc) {
     Get-ChildItem $sbodataSrc -Filter "*.dat" -ErrorAction SilentlyContinue |
-        ForEach-Object { Copy-Item $_.FullName $sbodataDst -Force }
+        ForEach-Object {
+            if ($personalDataFiles -contains $_.Name) {
+                Write-Host "  SBODATA 除外 (個人データ): $($_.Name)"
+            } else {
+                Copy-Item $_.FullName $sbodataDst -Force
+            }
+        }
     $csv = Join-Path $sbodataSrc "ServerInfo.csv"
     if (Test-Path $csv) { Copy-Item $csv $sbodataDst -Force }
 } else {

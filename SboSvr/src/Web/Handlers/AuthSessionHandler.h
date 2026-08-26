@@ -27,5 +27,9 @@ private:
 class CAuthLogoutHandler : public IApiHandler
 {
 public:
+        explicit CAuthLogoutHandler(CMgrData *pMgrData);
         virtual void Handle(const HttpRequest &request, HttpResponse &response);
+
+private:
+        CMgrData *m_pMgrData;
 };

@@ -32,4 +32,8 @@ enum AuthStatus
 AuthStatus Authenticate(const HttpRequest &request, CMgrData *pMgrData, AuthContext &outContext);
 bool HasRole(const AuthContext &context, const char *pszRoleId);
 std::string BuildForbiddenBody(const char *pszRequiredRole);
+
+/// @brief リクエストのCookieヘッダからSESSIDトークンを取り出す。
+/// @return 見つかれば true。
+bool TryGetSessionCookie(const HttpRequest &request, std::string &outToken);
 }

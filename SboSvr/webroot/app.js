@@ -1,4 +1,9 @@
 ﻿const adminLogoutButton = document.getElementById("admin-logout-button");
+const adminLoginForm = document.getElementById("admin-login-form");
+const adminLoginIdInput = document.getElementById("admin-login-id");
+const adminLoginPasswordInput = document.getElementById("admin-login-password");
+const adminLoginSubmitButton = document.getElementById("admin-login-submit");
+const adminLoginErrorEl = document.getElementById("admin-login-error");
 
 function updateAppViewportHeight() {
   const viewport = window.visualViewport;
@@ -347,6 +352,69 @@ async function handleLogoutQuery() {
   return true;
 }
 
+function showAdminLoginError(message) {
+  if (!adminLoginErrorEl) {
+    return;
+  }
+  adminLoginErrorEl.textContent = message;
+  adminLoginErrorEl.hidden = !message;
+}
+
+async function handleAdminLoginSubmit(event) {
+  event.preventDefault();
+  if (!adminLoginIdInput || !adminLoginPasswordInput) {
+    return;
+  }
+  const loginId = adminLoginIdInput.value.trim();
+  const password = adminLoginPasswordInput.value;
+
+  showAdminLoginError("");
+  if (adminLoginSubmitButton) {
+    adminLoginSubmitButton.disabled = true;
+  }
+
+  try {
+    const { response, data } = await fetchJson("/api/auth/admin-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ loginId, password })
+    });
+
+    if (response.ok) {
+      adminLoginPasswordInput.value = "";
+      const authorized = await checkAdminAuthAndReveal();
+      if (authorized) {
+        initializeAdminWorkspace();
+      }
+      return;
+    }
+
+    if (response.status === 401) {
+      showAdminLoginError("ログインIDまたはパスワードが違います。");
+    } else if (response.status === 403) {
+      showAdminLoginError("このアカウントには管理者権限がありません。");
+    } else if (response.status === 429) {
+      const retryAfterSeconds = data && Number(data.retryAfterSeconds);
+      const waitMessage = Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0
+        ? `試行回数が多すぎます。${retryAfterSeconds}秒後にもう一度お試しください。`
+        : "試行回数が多すぎます。しばらくしてからもう一度お試しください。";
+      showAdminLoginError(waitMessage);
+    } else if (response.status === 400) {
+      showAdminLoginError("ログインIDとパスワードを入力してください。");
+    } else {
+      showAdminLoginError("ログインに失敗しました。時間をおいて再度お試しください。");
+    }
+  } catch (error) {
+    showAdminLoginError("ログインに失敗しました。時間をおいて再度お試しください。");
+  } finally {
+    if (adminLoginSubmitButton) {
+      adminLoginSubmitButton.disabled = false;
+    }
+  }
+}
+
 /* server-dashboard 全関数は server-dashboard.js に移行済み */
 /* account-create / role-management 全関数は各 views/*.js に移行済み */
 /* map-parts 全関数は map-parts-edit.js / map-parts-place.js に移行済み */
@@ -448,12 +516,18 @@ window.addEventListener("load", async () => {
     });
   }
 
+  if (adminLoginForm) {
+    adminLoginForm.addEventListener("submit", handleAdminLoginSubmit);
+  }
+
   await handleLogoutQuery();
   const authorized = await checkAdminAuthAndReveal();
   if (authorized) {
     adminWorkspaceInitialized = true;
     // 管理 WebSocket を起動する（再接続は ensureAdminWebSocket 内で自動管理）
     ensureAdminWebSocket();
+  } else if (adminLoginIdInput) {
+    adminLoginIdInput.focus();
   }
 
   const initialRoute = window.location.hash ? window.location.hash.replace(/^#/, "") : DEFAULT_ROUTE;

@@ -8,6 +8,7 @@
 #include "LibInfo/LibInfoAccount.h"
 #include "Info/InfoAccount.h"
 #include "Web/JsonUtils.h"
+#include "Web/SessionStore.h"
 
 namespace AdminRoleCatalog
 {
@@ -72,14 +73,13 @@ AuthStatus Authenticate(const HttpRequest &request, CMgrData *pMgrData, AuthCont
 {
         outContext = AuthContext();
 
-        const char *pszCookie = request.FindHeader("Cookie");
-        if (pszCookie == NULL) {
+        std::string token;
+        if (!TryGetSessionCookie(request, token)) {
                 return AuthStatusMissingSession;
         }
 
-        std::string cookieHeader = pszCookie;
-        std::string sessionId;
-        if (!TryGetCookieValue(cookieHeader, "SESSID", sessionId) || sessionId.empty()) {
+        SessionStore::SessionInfo sessionInfo;
+        if (!SessionStore::Touch(token, sessionInfo)) {
                 return AuthStatusMissingSession;
         }
 
@@ -93,15 +93,21 @@ AuthStatus Authenticate(const HttpRequest &request, CMgrData *pMgrData, AuthCont
         }
 
         pAccountLib->Enter();
-        PCInfoAccount pAccount = pAccountLib->GetPtr(sessionId.c_str());
+        PCInfoAccount pAccount = pAccountLib->GetPtr(sessionInfo.dwAccountID);
         if (pAccount == NULL) {
                 pAccountLib->Leave();
+                return AuthStatusAccountNotFound;
+        }
+        // ログイン拒否フラグが立ったアカウントは、既存セッションであっても即座に無効化する
+        if (pAccount->m_bDisable) {
+                pAccountLib->Leave();
+                SessionStore::Destroy(token);
                 return AuthStatusAccountNotFound;
         }
 
         AuthContext context;
         context.authenticated = true;
-        context.sessionId = sessionId;
+        context.sessionId = token;
         context.loginId = (LPCSTR)pAccount->m_strAccount;
         {
                 std::ostringstream oss;
@@ -115,6 +121,25 @@ AuthStatus Authenticate(const HttpRequest &request, CMgrData *pMgrData, AuthCont
 
         outContext = context;
         return AuthStatusOk;
+}
+
+bool TryGetSessionCookie(const HttpRequest &request, std::string &outToken)
+{
+        outToken.clear();
+
+        const char *pszCookie = request.FindHeader("Cookie");
+        if (pszCookie == NULL) {
+                return false;
+        }
+
+        std::string cookieHeader = pszCookie;
+        std::string token;
+        if (!TryGetCookieValue(cookieHeader, "SESSID", token) || token.empty()) {
+                return false;
+        }
+
+        outToken = token;
+        return true;
 }
 
 bool HasRole(const AuthContext &context, const char *pszRoleId)

@@ -44,6 +44,7 @@ public:
 	void	ReadHashList(void);	// ファイルリストを読み込み
 	WORD	GetPort(void)	{ return m_wPort;	}	// 待ちうけポート番号を取得
 	WORD	GetHttpPort(void)	{ return m_wHttpPort;	}	// 管理HTTPポートを取得
+	BOOL	GetCookieSecure(void)	{ return m_bCookieSecure;	}	// Cookieに Secure 属性を付けるか取得
 	void	AddOnline(void)	{ m_byOnline ++;	}	// オンライン数を追加
 	void	DecOnline(void)	{ m_byOnline --;	}	// オンライン数を減算
 	BYTE	GetOnline(void)	{ return m_byOnline;	}	// オンライン数を取得
@@ -86,6 +87,7 @@ private:
 private:
 	WORD	m_wPort;	// 待ちうけポート
 	WORD	m_wHttpPort;	// 管理HTTPポート
+	BOOL	m_bCookieSecure;	// Cookieに Secure 属性を付けるか（本番はIISが443で受けるため1）
 	BYTE	m_byOnline,	// オンライン数
 						m_byLastSendClock;	// 最後に送信した時刻
 	CmyString	m_strAdminAccount,	// 管理者権限アカウント名

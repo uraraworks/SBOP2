@@ -8,6 +8,20 @@
   <link rel="stylesheet" href="js/styles/components.css" />
 </head>
 <body class="auth-pending">
+  <div id="admin-login-screen">
+    <div class="admin-login-card">
+      <h1>スクラップブックオンラインPage2 管理画面</h1>
+      <p>管理者アカウントのログインID・パスワードを入力してください。</p>
+      <form id="admin-login-form">
+        <label for="admin-login-id">ログインID</label>
+        <input type="text" id="admin-login-id" name="loginId" autocomplete="username" required>
+        <label for="admin-login-password">パスワード</label>
+        <input type="password" id="admin-login-password" name="password" autocomplete="current-password" required>
+        <p id="admin-login-error" role="alert" hidden></p>
+        <button type="submit" class="button" id="admin-login-submit">ログイン</button>
+      </form>
+    </div>
+  </div>
   <header class="page-header">
     <div>
       <h1>スクラップブックオンラインPage2</h1>

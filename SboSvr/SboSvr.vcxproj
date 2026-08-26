@@ -295,6 +295,7 @@
     <ClCompile Include="src\Web\GrpImageStore.cpp" />
     <ClCompile Include="src\Web\Handlers\ServerInfoHandler.cpp" />
     <ClCompile Include="src\Web\AuthProvider.cpp" />
+    <ClCompile Include="src\Web\SessionStore.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\AdminRolesHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\SelectionHandler.cpp" />
@@ -493,6 +494,7 @@
     <ClInclude Include="src\Web\HttpTypes.h" />
     <ClInclude Include="src\Web\JsonUtils.h" />
     <ClInclude Include="src\Web\AuthProvider.h" />
+    <ClInclude Include="src\Web\SessionStore.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>
   <ItemGroup>

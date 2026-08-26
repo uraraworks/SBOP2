@@ -920,7 +920,7 @@ void CHttpServer::RegisterDefaultHandlers()
         std::unique_ptr<IApiHandler> adminLoginHandler(new CAdminLoginHandler(m_pMgrData));
         m_router.Register("POST", "/api/auth/admin-login", std::move(adminLoginHandler));
 
-        std::unique_ptr<IApiHandler> authLogoutHandler(new CAuthLogoutHandler());
+        std::unique_ptr<IApiHandler> authLogoutHandler(new CAuthLogoutHandler(m_pMgrData));
         m_router.Register("POST", "/api/auth/logout", std::move(authLogoutHandler));
 
         std::unique_ptr<IApiHandler> accountCreateHandler(new CAccountCreateHandler(m_pMgrData));

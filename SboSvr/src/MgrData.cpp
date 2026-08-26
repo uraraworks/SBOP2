@@ -36,6 +36,7 @@ CMgrData::CMgrData()
 {
 	m_wPort	= 2005;
 	m_wHttpPort	= 18080;
+	m_bCookieSecure	= FALSE;
 	m_byOnline	= 0;
 	m_byLastSendClock	= -1;
 	m_pMainFrame	= NULL;
@@ -414,6 +415,8 @@ void CMgrData::ReadIniData(void)
         m_wPort = static_cast<WORD>(GetPrivateProfileInt(_T("Setting"), _T("Port"), 2006, szFileName));
         // HTTP待ちうけポート
         m_wHttpPort = static_cast<WORD>(GetPrivateProfileInt(_T("Setting"), _T("HttpPort"), 18080, szFileName));
+        // Cookieに Secure 属性を付けるか（本番はIISが443で受けるため1にする）
+        m_bCookieSecure = static_cast<BOOL>(GetPrivateProfileInt(_T("Setting"), _T("CookieSecure"), 0, szFileName));
         // 管理者権限アカウント
         GetPrivateProfileString(_T("Setting"), _T("AdminAccount"), _T("Admin"), szTmp, _countof(szTmp), szFileName);
         m_strAdminAccount = szTmp;
