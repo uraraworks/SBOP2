@@ -128,6 +128,7 @@ $sources = @(
     "SboCli/src/Window/WindowMSG.cpp",
     "Common/Lib/CryptUtil.cpp",
     "Common/Lib/DataSlot.cpp",
+    "Common/GrpLayout.cpp",
     "Common/SBOGlobal.cpp",
     "Common/myLib/mySection.cpp",
     "Common/myLib/myString.cpp",

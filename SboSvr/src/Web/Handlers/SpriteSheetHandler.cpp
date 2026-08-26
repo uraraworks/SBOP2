@@ -10,78 +10,23 @@
 
 #include "lodepng.h"
 
-// ---------------------------------------------------------------------------
-// カテゴリ定義テーブル
-//
-// !! MgrGrpData.cpp の GetGrpSize / GetGrpCountX / GetGrpCountY /
-//    読込ループと同期が必須 !!
-//
-// key 文字列は ImageCatalogHandler.cpp の kCategories[] と一致させること。
-// リソース名パターンは sprintf_s の書式と同じ wchar_t 版（%02d = 01 始まり）。
-// ---------------------------------------------------------------------------
-
 namespace
 {
 
-// キャラ体の固定リソース名（body/earの組、NULL終端）
-static const wchar_t *const kBodyNames[] = {
-    L"IDP_BODY_BST", L"IDP_BODY_BST_EAR",
-    L"IDP_BODY_DRK", L"IDP_BODY_DRK_EAR",
-    L"IDP_BODY_ELF", L"IDP_BODY_ELF_EAR",
-    L"IDP_BODY_HUM", NULL,
-    NULL
-};
-
-// 2x2 キャラ体の固定リソース名
-static const wchar_t *const k2x2BodyNames[] = {
-    L"IDP_2X2_BODY_HUM", NULL,
-    NULL
-};
-
-// !! MgrGrpData.cpp と同期必須 !!
-// cellSize / countX / countY は GetGrpSize / GetGrpCountX / GetGrpCountY より転記
-static const SSpriteCategoryDef kSpriteCategories[] = {
-    // idMain                 key            リソース名パターン       固定名配列    cellSize  countX  countY first
-    { GRPIDMAIN_CHAR,         "char",        NULL,                    kBodyNames,   16,       32,     1,     0 },
-    { 0,                      "cloth",       L"IDP_CLOTH_%02d",      NULL,         16,       1,      32,    1 },
-    { 0,                      "eye",         L"IDP_EYE_%02d",        NULL,         16,       1,      32,    1 },
-    { 0,                      "hairDown",    L"IDP_HAIR_D%02d",      NULL,         16,       1,      32,    1 },
-    { 0,                      "hairUp",      L"IDP_HAIR_U%02d",      NULL,         16,       1,      32,    1 },
-    { 0,                      "spCloth",     L"IDP_CLOTH_SP%02d",    NULL,         16,       1,      32,    1 },
-    { 0,                      "acce",        L"IDP_ACCE_%02d",       NULL,         16,       1,      32,    1 },
-    { 0,                      "npcRow",      L"IDP_NPC_%02d",        NULL,         16,       1,      32,    1 },
-    { GRPIDMAIN_NPC,          "npc",         L"IDP_NPC_%02d",        NULL,         16,       16,     32,    1 },
-    { GRPIDMAIN_WEAPON,       "weapon",      L"IDP_WEAPON_%02d",     NULL,         32,       32,     18,    1 },
-    { GRPIDMAIN_WEAPON_BOW,   "weaponBow",   L"IDP_WEAPON_BOW_%02d", NULL,         32,       20,     18,    1 },
-    { GRPIDMAIN_WEAPON_GLOVE, "weaponGlove", L"IDP_WEAPON_GLOVE_%02d", NULL,       32,       20,     18,    1 },
-    { GRPIDMAIN_WEAPON_ETC,   "weaponEtc",   L"IDP_WEAPON_ETC_%02d", NULL,         32,       20,     18,    1 },
-    { GRPIDMAIN_EFFECT32,     "effect32",    L"IDP_EFC_32_%02d",     NULL,         32,       16,     16,    1 },
-    { GRPIDMAIN_EFFECT64,     "effect64",    L"IDP_EFC_64_%02d",     NULL,         64,       8,      8,     1 },
-    { GRPIDMAIN_EFCBALLOON,   "efcBalloon",  L"IDP_BALLOON_%02d",    NULL,         16,       10,     15,    1 },
-    { GRPIDMAIN_ICON32,       "icon32",      L"IDP_ICON",            NULL,         16,       20,     20,    0 },
-    { GRPIDMAIN_2X2_CHAR,     "char2x2",     NULL,                   k2x2BodyNames,32,       16,     8,     0 },
-    { GRPIDMAIN_2X2_CLOTH,    "cloth2x2",    L"IDP_2X2_CLOTH_%02d", NULL,         32,       16,     8,     0 },
-    { GRPIDMAIN_2X2_EYE,      "eye2x2",      L"IDP_2X2_EYE_%02d",   NULL,         32,       12,     8,     1 },
-    { GRPIDMAIN_2X2_HAIR,     "hair2x2",     L"IDP_2X2_HAIR_%02d",  NULL,         32,       16,     8,     1 },
-    { GRPIDMAIN_2X2_SPCLOTH,  "spCloth2x2",  L"IDP_2X2_SP_CLOTH_%02d", NULL,      32,       16,     8,     1 },
-    { GRPIDMAIN_2X2_SPHAIR,   "spHair2x2",   L"IDP_2X2_SP_HAIR_%02d", NULL,       32,       16,     8,     1 },
-    { GRPIDMAIN_2X2_ARMS,     "arms2x2",     L"IDP_2X2_ARMS_%02d",  NULL,         24,       12,     25,    1 },
-    { GRPIDMAIN_2X2_SHIELD,   "shield2x2",   L"IDP_2X2_SHIELD_%02d",NULL,         16,       5,      25,    1 },
-    { GRPIDMAIN_2X2_ARMSSP,   "armsSp2x2",   L"IDP_2X2_ARMS_SP_%02d",NULL,        24,       11,     25,    1 },
-    { GRPIDMAIN_2X2_BOW,      "bow2x2",      L"IDP_2X2_BOW_%02d",   NULL,         24,       11,     25,    1 },
-    { GRPIDMAIN_2X2_NPC,      "npc2x2",      L"IDP_2X2_NPC_%03d",   NULL,         32,       16,     8,     1 },
-    // マップパーツ / マップ影は GRPIDMAIN_* に列挙値が無いため 0 を使用。
-    // key は ImageCatalogHandler.cpp の kCategories[] と一致させること。
-    // cellSize / countX / countY は MgrGrpData.cpp の読込ループ相当の設定:
-    //   マップパーツ: 16px セル、32x32 タイル / シート
-    //   マップ影    : 16px セル、32x32 タイル / シート（IDP_MAP_01 と同サイズ）
-    { 0,                      "mapParts",    L"IDP_MAP_%02d",        NULL,         16,       32,     32,    1 },
-    { 0,                      "mapShadow",   L"IDP_MAPSHADOW_%02d",  NULL,         16,       32,     32,    1 },
-    // アイテム地面画像: IDP_ITEM_%02d (512x512, 16px セル, 横32×縦32)
-    { 0,                      "item",        L"IDP_ITEM_%02d",       NULL,         16,       32,     32,    1 },
-};
-
-static const size_t kSpriteCategoryCount = sizeof(kSpriteCategories) / sizeof(kSpriteCategories[0]);
+// char* (ASCII 前提) を wstring に変換する簡易ヘルパ。
+// レイアウト定義テーブル (Common/GrpLayout.h) は char で持つが、
+// FindResourceW / _snwprintf_s は wchar_t を要求するためここで変換する。
+std::wstring ToWString(const char *pszSrc)
+{
+    std::wstring out;
+    if (pszSrc == NULL) {
+        return out;
+    }
+    for (const char *p = pszSrc; *p != '\0'; ++p) {
+        out.push_back(static_cast<wchar_t>(static_cast<unsigned char>(*p)));
+    }
+    return out;
+}
 
 } // namespace
 
@@ -122,7 +67,7 @@ bool CGrpResourceProvider::GetSheetPng(
         return false;
     }
 
-    const SSpriteCategoryDef *pCat = FindCategory(categoryKey);
+    const SGrpLayoutDef *pCat = FindCategory(categoryKey);
     if (pCat == NULL) {
         return false;
     }
@@ -149,7 +94,7 @@ int CGrpResourceProvider::GetSheetCount(const std::string &categoryKey)
         return 0;
     }
 
-    const SSpriteCategoryDef *pCat = FindCategory(categoryKey);
+    const SGrpLayoutDef *pCat = FindCategory(categoryKey);
     if (pCat == NULL) {
         return 0;
     }
@@ -161,25 +106,26 @@ int CGrpResourceProvider::GetSheetCount(const std::string &categoryKey)
 
     // リソース存在プローブで遅延カウント
     int count = 0;
-    if (pCat->apszFixedNames != NULL) {
+    if (pCat->ppszFixedNames != NULL) {
         // 固定名テーブル: NULL になるまで body/ear の組で走査
-        for (int i = 0; pCat->apszFixedNames[i] != NULL; i += 2) {
-            HRSRC hResInfo = FindResourceW(m_hModule, pCat->apszFixedNames[i], L"PNG");
+        for (int i = 0; pCat->ppszFixedNames[i] != NULL; i += 2) {
+            std::wstring name = ToWString(pCat->ppszFixedNames[i]);
+            HRSRC hResInfo = FindResourceW(m_hModule, name.c_str(), L"PNG");
             if (hResInfo == NULL) {
                 break;
             }
             ++count;
         }
-    } else if (pCat->pszResourcePattern != NULL) {
+    } else if (pCat->pszResPattern != NULL) {
         // 単一固定名（パターンに %02d が含まれない場合は1枚）
-        std::wstring pattern(pCat->pszResourcePattern);
+        std::wstring pattern = ToWString(pCat->pszResPattern);
         if (pattern.find(L'%') == std::wstring::npos) {
             HRSRC hResInfo = FindResourceW(m_hModule, pattern.c_str(), L"PNG");
             count = (hResInfo != NULL) ? 1 : 0;
         } else {
             while (true) {
                 wchar_t szName[64] = {};
-                _snwprintf_s(szName, _countof(szName), _TRUNCATE, pCat->pszResourcePattern, count + 1);
+                _snwprintf_s(szName, _countof(szName), _TRUNCATE, pattern.c_str(), count + 1);
                 HRSRC hResInfo = FindResourceW(m_hModule, szName, L"PNG");
                 if (hResInfo == NULL) {
                     break;
@@ -199,7 +145,7 @@ bool CGrpResourceProvider::GetCategoryLayout(
     int &nCountX,
     int &nCountY) const
 {
-    const SSpriteCategoryDef *pCat = FindCategory(std::string(pszKey));
+    const SGrpLayoutDef *pCat = FindCategory(std::string(pszKey));
     if (pCat == NULL) {
         return false;
     }
@@ -248,38 +194,43 @@ bool CGrpResourceProvider::ResolveLibraryPath(std::wstring &outPath) const
     return true;
 }
 
-const SSpriteCategoryDef *CGrpResourceProvider::FindCategory(const std::string &key) const
+const SGrpLayoutDef *CGrpResourceProvider::FindCategory(const std::string &key) const
 {
-    for (size_t i = 0; i < kSpriteCategoryCount; ++i) {
-        if (key == kSpriteCategories[i].pszKey) {
-            return &kSpriteCategories[i];
-        }
+    const SGrpLayoutDef *pDef = GrpLayout_FindByKey(key.c_str());
+    if (pDef == NULL) {
+        return NULL;
     }
-    return NULL;
+    // "none"（cellSize == 0）は疑似カテゴリの並び順維持のためだけの
+    // プレースホルダで、旧 kSpriteCategories[] には存在しなかった。
+    // 従来どおり「レイアウトなし」として扱う。
+    if (pDef->nCellSize == 0) {
+        return NULL;
+    }
+    return pDef;
 }
 
 bool CGrpResourceProvider::BuildResourceName(
-    const SSpriteCategoryDef &cat,
+    const SGrpLayoutDef &cat,
     int sheetIndex,
     std::wstring &outName) const
 {
-    if (cat.apszFixedNames != NULL) {
+    if (cat.ppszFixedNames != NULL) {
         // 固定名テーブル: 偶数位置が本体名・NULL終端。
         // sheetIndex*2 が終端を超える範囲外参照を防ぐため、
         // 0 から idx まで偶数位置を走査し、終端(NULL)に達したら範囲外とみなす。
         int idx = sheetIndex * 2;
         for (int j = 0; j <= idx; j += 2) {
-            if (cat.apszFixedNames[j] == NULL) {
+            if (cat.ppszFixedNames[j] == NULL) {
                 return false;  // 終端に到達 = sheetIndex が範囲外
             }
         }
-        outName = cat.apszFixedNames[idx];
+        outName = ToWString(cat.ppszFixedNames[idx]);
         return true;
     }
-    if (cat.pszResourcePattern == NULL) {
+    if (cat.pszResPattern == NULL) {
         return false;
     }
-    std::wstring pattern(cat.pszResourcePattern);
+    std::wstring pattern = ToWString(cat.pszResPattern);
     if (pattern.find(L'%') == std::wstring::npos) {
         // 固定名（IDP_ICON 等）
         if (sheetIndex != 0) {
@@ -290,13 +241,13 @@ bool CGrpResourceProvider::BuildResourceName(
     }
     // 番号付き
     wchar_t szName[64] = {};
-    _snwprintf_s(szName, _countof(szName), _TRUNCATE, cat.pszResourcePattern, sheetIndex + cat.nFirstResourceIndex);
+    _snwprintf_s(szName, _countof(szName), _TRUNCATE, pattern.c_str(), sheetIndex + cat.nFirstResourceIndex);
     outName = szName;
     return true;
 }
 
 bool CGrpResourceProvider::LoadSheetLocked(
-    const SSpriteCategoryDef &cat,
+    const SGrpLayoutDef &cat,
     int sheetIndex,
     std::vector<unsigned char> &outData)
 {

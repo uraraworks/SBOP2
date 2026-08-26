@@ -9,6 +9,7 @@
 #include <SDL.h>
 #endif
 #include "../../SboGrpData/resource.h"
+#include "GrpLayout.h"
 #include "Img32.h"
 #include "third_party/lodepng.h"
 #include "MgrGrpData.h"
@@ -2285,151 +2286,22 @@ void CMgrGrpData::DeleteItemTmp(void)
 
 int CMgrGrpData::GetGrpSize(DWORD dwGrpIDMain)
 {
-	int nRet;
-
-	nRet = 0;
-
-	switch (dwGrpIDMain) {
-	case GRPIDMAIN_CHAR:			// キャラ画像
-	case GRPIDMAIN_NPC:				// キャラ(NPC)
-	case GRPIDMAIN_EFCBALLOON:		// 噴出し
-	case GRPIDMAIN_2X2_SHIELD:		// 盾(2x2)
-	case GRPIDMAIN_ICON32:			// アイコン(２倍表示)
-		nRet = 16;
-		break;
-	case GRPIDMAIN_WEAPON:			// 武器
-	case GRPIDMAIN_WEAPON_BOW:		// 弓
-	case GRPIDMAIN_EFFECT32:		// エフェクト(32)
-	case GRPIDMAIN_WEAPON_GLOVE:	// 武器(打撃)
-	case GRPIDMAIN_WEAPON_ETC:		// 武器(その他)
-	case GRPIDMAIN_2X2_CHAR:		// キャラ(32x32)画像
-	case GRPIDMAIN_2X2_CLOTH:		// 服(32x32)
-	case GRPIDMAIN_2X2_EYE:			// 目(32x32)
-	case GRPIDMAIN_2X2_HAIR:		// 髪(32x32)
-	case GRPIDMAIN_2X2_SPCLOTH:		// 特殊服(32x32)
-	case GRPIDMAIN_2X2_SPHAIR:		// 特殊髪(32x32)
-	case GRPIDMAIN_2X2_NPC:			// NPC(2x2)
-		nRet = 32;
-		break;
-	case GRPIDMAIN_2X2_ARMS:		// 持ち物(2x2)
-	case GRPIDMAIN_2X2_ARMSSP:		// 特殊持ち物(2x2)
-	case GRPIDMAIN_2X2_BOW:			// 弓(2x2)
-		nRet = 24;
-		break;
-	case GRPIDMAIN_EFFECT64:		// エフェクト(64)
-		nRet = 64;
-		break;
-	}
-
-	return nRet;
+	// レイアウト定義は Common/GrpLayout.h/.cpp に一本化済み。
+	return GrpLayout_GetCellSize(static_cast<int>(dwGrpIDMain));
 }
 
 
 int CMgrGrpData::GetGrpCountX(DWORD dwGrpIDMain)
 {
-	int nRet;
-
-	nRet = 0;
-
-	switch (dwGrpIDMain) {
-	case GRPIDMAIN_CHAR:			// キャラ画像
-		nRet = 32;
-		break;
-	case GRPIDMAIN_NPC:				// キャラ(NPC)
-		nRet = 16;
-		break;
-	case GRPIDMAIN_WEAPON:			// 武器
-		nRet = 32;
-		break;
-	case GRPIDMAIN_WEAPON_BOW:		// 弓
-	case GRPIDMAIN_WEAPON_GLOVE:	// 武器(打撃)
-	case GRPIDMAIN_WEAPON_ETC:		// 武器(その他)
-	case GRPIDMAIN_ICON32:			// アイコン(２倍表示)
-		nRet = 20;
-		break;
-	case GRPIDMAIN_EFFECT32:		// エフェクト(32)
-		nRet = 16;
-		break;
-	case GRPIDMAIN_EFCBALLOON:		// 噴出し
-		nRet = 10;
-		break;
-	case GRPIDMAIN_2X2_CHAR:		// キャラ(32x32)画像
-	case GRPIDMAIN_2X2_CLOTH:		// 服(32x32)
-	case GRPIDMAIN_2X2_HAIR:		// 髪(32x32)
-	case GRPIDMAIN_2X2_SPCLOTH:		// 特殊服(32x32)
-	case GRPIDMAIN_2X2_SPHAIR:		// 特殊髪(32x32)
-	case GRPIDMAIN_2X2_NPC:			// NPC(2x2)
-		nRet = 16;
-		break;
-	case GRPIDMAIN_2X2_EYE:			// 目(32x32)
-	case GRPIDMAIN_2X2_ARMS:		// 持ち物(2x2)
-		nRet = 12;
-		break;
-	case GRPIDMAIN_2X2_ARMSSP:		// 特殊持ち物(2x2)
-	case GRPIDMAIN_2X2_BOW:			// 弓(2x2)
-		nRet = 11;
-		break;
-	case GRPIDMAIN_2X2_SHIELD:		// 盾(2x2)
-		nRet = 5;
-		break;
-	case GRPIDMAIN_EFFECT64:		// エフェクト(64)
-		nRet = 8;
-		break;
-	}
-
-	return nRet;
+	// レイアウト定義は Common/GrpLayout.h/.cpp に一本化済み。
+	return GrpLayout_GetCountX(static_cast<int>(dwGrpIDMain));
 }
 
 
 int CMgrGrpData::GetGrpCountY(DWORD dwGrpIDMain)
 {
-	int nRet;
-
-	nRet = 0;
-
-	switch (dwGrpIDMain) {
-	case GRPIDMAIN_CHAR:			// キャラ画像
-		nRet = 1;
-		break;
-	case GRPIDMAIN_WEAPON:			// 武器
-	case GRPIDMAIN_WEAPON_BOW:		// 弓
-	case GRPIDMAIN_WEAPON_GLOVE:	// 武器(打撃)
-	case GRPIDMAIN_WEAPON_ETC:		// 武器(その他)
-		nRet = 18;
-		break;
-	case GRPIDMAIN_EFFECT32:		// エフェクト(32)
-		nRet = 16;
-		break;
-	case GRPIDMAIN_NPC:				// キャラ(NPC)
-		nRet = 32;
-		break;
-	case GRPIDMAIN_EFCBALLOON:		// 噴出し
-		nRet = 15;
-		break;
-	case GRPIDMAIN_2X2_CHAR:		// キャラ(32x32)画像
-	case GRPIDMAIN_2X2_CLOTH:		// 服(32x32)
-	case GRPIDMAIN_2X2_EYE:			// 目(32x32)
-	case GRPIDMAIN_2X2_HAIR:		// 髪(32x32)
-	case GRPIDMAIN_2X2_SPCLOTH:		// 特殊服(32x32)
-	case GRPIDMAIN_2X2_SPHAIR:		// 特殊髪(32x32)
-	case GRPIDMAIN_2X2_NPC:			// NPC(2x2)
-		nRet = 8;
-		break;
-	case GRPIDMAIN_2X2_ARMS:		// 持ち物(2x2)
-	case GRPIDMAIN_2X2_SHIELD:		// 盾(2x2)
-	case GRPIDMAIN_2X2_ARMSSP:		// 特殊持ち物(2x2)
-	case GRPIDMAIN_2X2_BOW:			// 弓(2x2)
-		nRet = 25;
-		break;
-	case GRPIDMAIN_EFFECT64:		// エフェクト(64)
-		nRet = 8;
-		break;
-	case GRPIDMAIN_ICON32:			// アイコン(２倍表示)
-		nRet = 20;
-		break;
-	}
-
-	return nRet;
+	// レイアウト定義は Common/GrpLayout.h/.cpp に一本化済み。
+	return GrpLayout_GetCountY(static_cast<int>(dwGrpIDMain));
 }
 
 

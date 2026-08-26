@@ -3,10 +3,9 @@
 // SpriteSheetHandler.h
 // 汎用スプライトシート配信プロバイダ + ハンドラ
 //
-// 注意: kSpriteCategories[] のセルサイズ・枚数レイアウトは
-//   SboCli/src/MgrGrpData.cpp の
-//     GetGrpSize / GetGrpCountX / GetGrpCountY / 読込ループ
-//   と同期が必須。MgrGrpData.cpp を変更した場合は必ずこちらも更新すること。
+// レイアウト定義（セルサイズ・枚数・リソース名パターン）は
+// Common/GrpLayout.h の SGrpLayoutDef / GrpLayout_* に一本化されている。
+// レイアウトを変更する場合は Common/GrpLayout.cpp のテーブルだけを直せばよい。
 
 #include "Web/ApiHandler.h"
 
@@ -20,22 +19,7 @@
 #include <windows.h>
 
 #include "GlobalDefine.h"
-
-// ---------------------------------------------------------------------------
-// カテゴリ定義レコード
-// ---------------------------------------------------------------------------
-struct SSpriteCategoryDef
-{
-    int         nIDMain;            // GRPIDMAIN_* 値
-    const char *pszKey;             // URL / ImageCatalog と共通のキー文字列
-    const wchar_t *pszResourcePattern; // _snwprintf で使う wchar_t フォーマット文字列
-                                       // (NULL の場合は apszFixedNames を使う)
-    const wchar_t * const *apszFixedNames; // 固定名配列 (NULL 終端)。pattern が NULL の時のみ参照
-    int         nCellSize;          // 1セルのピクセル幅・高さ
-    int         nCountX;            // 横セル数
-    int         nCountY;            // 縦セル数
-    int         nFirstResourceIndex; // sheetIndex=0 に対応するリソース番号
-};
+#include "GrpLayout.h"
 
 // ---------------------------------------------------------------------------
 // CGrpResourceProvider: SboGrpData.dll からスプライトシートを配信する汎用プロバイダ
@@ -55,7 +39,7 @@ public:
     int GetSheetCount(const std::string &categoryKey);
 
     // カテゴリキーに対応するレイアウト情報を返す。
-    // kSpriteCategories に存在すれば true を返し、各出力引数に値を格納する。
+    // Common/GrpLayout.h のテーブルに存在すれば true を返し、各出力引数に値を格納する。
     // 存在しなければ false を返す。
     bool GetCategoryLayout(const char *pszKey,
                            int &nCellSize,
@@ -71,13 +55,13 @@ private:
     bool ResolveLibraryPath(std::wstring &outPath) const;
 
     // カテゴリ定義検索
-    const SSpriteCategoryDef *FindCategory(const std::string &key) const;
+    const SGrpLayoutDef *FindCategory(const std::string &key) const;
 
     // リソース名を生成する（固定名テーブル or printf パターン）
-    bool BuildResourceName(const SSpriteCategoryDef &cat, int sheetIndex, std::wstring &outName) const;
+    bool BuildResourceName(const SGrpLayoutDef &cat, int sheetIndex, std::wstring &outName) const;
 
     // 実際のロード処理（m_mutex 保持中に呼ぶこと）
-    bool LoadSheetLocked(const SSpriteCategoryDef &cat, int sheetIndex, std::vector<unsigned char> &outData);
+    bool LoadSheetLocked(const SGrpLayoutDef &cat, int sheetIndex, std::vector<unsigned char> &outData);
 
     // パレット 0 を透過化して PNG を返す（MapPartsHandler と同じロジック）
     bool MakeTransparentPng(const unsigned char *pSrc, size_t nSrcSize, std::vector<unsigned char> &outData);
