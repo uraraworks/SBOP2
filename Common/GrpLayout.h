@@ -46,3 +46,25 @@ const SGrpLayoutDef *GrpLayout_FindByIDMain(int nIDMain);
 int GrpLayout_GetCellSize(int nIDMain);
 int GrpLayout_GetCountX(int nIDMain);
 int GrpLayout_GetCountY(int nIDMain);
+
+// ---------------------------------------------------------------------------
+// リソース名 → ファイル名 対応表
+//
+// SboCli の CMgrGrpData::GetFileNameForResource が持っていた
+// s_map[]（SboGrpData.rc のリソース定義に基づくマッピング）を一本化する。
+// ---------------------------------------------------------------------------
+
+// リソース名（"IDP_HAIR_D01"）から SboGrpData/res/ 配下の相対ファイル名を取得する。
+// 返る文字列は Windows 形式の区切り（例 "hair\\hair_d01.png"）。
+// 非 Windows 環境で使う場合は呼び出し側でスラッシュに変換すること。
+// 見つからなければ NULL を返す。
+const char *GrpLayout_GetResFileName(const char *pszResName);
+
+// 対応表を列挙する（S5 のマニフェスト生成などで使う想定）。
+// *pnCount にエントリ数を格納し、先頭要素へのポインタを返す。
+struct SGrpResFileEntry
+{
+	const char *pszResName;   // "IDP_HAIR_D01"
+	const char *pszFileName;  // "hair\\hair_d01.png"
+};
+const SGrpResFileEntry *GrpLayout_GetResFileTable(size_t *pnCount);

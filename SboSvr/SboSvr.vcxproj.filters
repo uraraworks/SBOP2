@@ -159,6 +159,9 @@
     <ClCompile Include="src\Web\AuditLog.cpp">
       <Filter>Source Files\Web</Filter>
     </ClCompile>
+    <ClCompile Include="src\Web\GrpImageStore.cpp">
+      <Filter>Source Files\Web</Filter>
+    </ClCompile>
     <ClCompile Include="src\Web\Handlers\ServerInfoHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
@@ -573,6 +576,9 @@
       <Filter>Header Files\Web\Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\AuditLog.h">
+      <Filter>Header Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\GrpImageStore.h">
       <Filter>Header Files\Web</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\Handlers\ServerInfoHandler.h">

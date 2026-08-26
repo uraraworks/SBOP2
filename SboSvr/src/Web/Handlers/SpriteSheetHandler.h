@@ -31,8 +31,20 @@ public:
     ~CGrpResourceProvider();
 
     // カテゴリキーとシートインデックス(0始まり)から PNG バイト列を取得する。
-    // 成功すれば true を返し outData に PNG を格納する。
-    bool GetSheetPng(const std::string &categoryKey, int sheetIndex, std::vector<unsigned char> &outData);
+    // 成功すれば true を返し outData に PNG、outETag に ETag 文字列（ダブルクォート込み）を格納する。
+    //
+    // 取得経路は以下の3段フォールバック（優先順）:
+    //   1. 画像ストア（SBODATA/SboGrpData.db, CGrpImageStore）
+    //   2. ファイル（SboGrpData/res/ 配下、開発時のみヒットする想定）
+    //   3. SboGrpData.dll のリソース（従来経路）
+    // いずれの経路でもパレット0の透過化（MakeTransparentPng）を同じように適用する。
+    bool GetSheetPng(const std::string &categoryKey, int sheetIndex,
+                      std::vector<unsigned char> &outData, std::string &outETag);
+
+    // res_name を指定してメモリキャッシュを破棄する（NULL/空なら全破棄）。
+    // S2 で画像ストアへの PUT 後にキャッシュを追従させるために使う想定。
+    // 今回は呼び出し元を作らない。
+    void InvalidateCache(const char *pszResName);
 
     // カテゴリキーに対応するシート総数を返す（存在確認プローブで遅延カウント）。
     // B2 フェーズで ImageCatalogHandler から参照できるようシングルトンを公開する。
@@ -60,8 +72,22 @@ private:
     // リソース名を生成する（固定名テーブル or printf パターン）
     bool BuildResourceName(const SGrpLayoutDef &cat, int sheetIndex, std::wstring &outName) const;
 
-    // 実際のロード処理（m_mutex 保持中に呼ぶこと）
-    bool LoadSheetLocked(const SGrpLayoutDef &cat, int sheetIndex, std::vector<unsigned char> &outData);
+    // 実際のロード処理（m_mutex 保持中に呼ぶこと）。
+    // resName（BuildResourceName で得た wchar_t 名。ASCII 前提）に対して
+    // 画像ストア → ファイル → DLL リソースの順に探し、見つかった生 PNG を
+    // MakeTransparentPng に通した結果と ETag を返す。
+    bool LoadSheetLocked(const SGrpLayoutDef &cat, int sheetIndex,
+                         std::vector<unsigned char> &outData, std::string &outETag);
+
+    // 画像ストア（SboGrpData.db）から取得を試みる
+    bool TryLoadFromImageStoreLocked(const std::wstring &resourceName,
+                                     std::vector<unsigned char> &outRawPng, std::string &outETag);
+    // SboGrpData/res/ 配下のファイルから取得を試みる
+    bool TryLoadFromFileLocked(const std::wstring &resourceName,
+                               std::vector<unsigned char> &outRawPng, std::string &outETag);
+    // SboGrpData.dll のリソースから取得を試みる（従来経路）
+    bool TryLoadFromDllLocked(const std::wstring &resourceName,
+                              std::vector<unsigned char> &outRawPng, std::string &outETag);
 
     // パレット 0 を透過化して PNG を返す（MapPartsHandler と同じロジック）
     bool MakeTransparentPng(const unsigned char *pSrc, size_t nSrcSize, std::vector<unsigned char> &outData);
@@ -69,8 +95,15 @@ private:
     std::mutex  m_mutex;
     HMODULE     m_hModule;
 
+    struct SSheetCacheEntry
+    {
+        std::vector<unsigned char> png;
+        std::string                etag;
+        std::string                resName;   // InvalidateCache の逆引き用
+    };
+
     // キャッシュキー: (categoryKey, sheetIndex)
-    std::map<std::pair<std::string, int>, std::vector<unsigned char> > m_sheetCache;
+    std::map<std::pair<std::string, int>, SSheetCacheEntry> m_sheetCache;
     // シート総数キャッシュ: categoryKey -> count (-1 で未確認)
     std::map<std::string, int> m_sheetCountCache;
 };
