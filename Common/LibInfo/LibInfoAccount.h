@@ -17,7 +17,7 @@ public:
 
 	void Create(void);	// 作成
 	void Destroy(void);	// 破棄
-	BOOL CheckPassword(LPCSTR pszAccount, LPCSTR pszPassword);	// パスワードのチェック
+	BOOL CheckPassword(LPCSTR pszAccount, LPCSTR pszPassword);	// パスワードのチェック ※平文比較のため使用禁止。パスワード照合は SboSvr の PasswordHash::Verify を使うこと
 	BOOL IsUseMacAddr(LPCSTR pszMacAddr);	// MACアドレスが使用済みかチェック
 
 	virtual PCInfoBase GetNew(void);	// 新規データを取得

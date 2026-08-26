@@ -18,6 +18,7 @@
 #include "LibInfoMapShadow.h"
 #include "LibInfoDisable.h"
 #include "LibInfoAccount.h"
+#include "PasswordHash.h"
 #include "LibInfoItem.h"
 #include "LibInfoItemWeapon.h"
 #include "LibInfoMotion.h"
@@ -1091,8 +1092,7 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID
 		if (pInfoAccount) {
 			pInfoAccount->m_bDisable = Packet.m_bDisable;
 			strTmp.Format(_T("アカウント[%s]をログイン拒否しました"),
-					(LPCSTR)pInfoAccount->m_strAccount,
-					(LPCSTR)pInfoAccount->m_strPassword);
+					(LPCSTR)pInfoAccount->m_strAccount);
 			PacketMsg.Make(strTmp, RGB(255, 255, 255));
 			m_pSock->SendTo(dwSessionID, &PacketMsg);
 		}
@@ -1105,11 +1105,22 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID
 	}
 
 	pInfoAccount->m_strAccount	= Packet.m_strAccount;
-	pInfoAccount->m_strPassword	= Packet.m_strPassword;
+	{
+		std::string strHashed = PasswordHash::Hash(Packet.m_strPassword.GetUtf8Pointer());
+		if (strHashed.empty()) {
+			// ハッシュ化失敗。パスワードは書き換えずアカウント名変更のみ反映する
+			m_pLog->Write("アカウント変更失敗(パスワードハッシュ化エラー) dwAccountID:%u", Packet.m_dwAccountID);
+			strTmp.Format(_T("アカウントを[%s]に変更しましたが、パスワードの変更に失敗しました"),
+					(LPCSTR)pInfoAccount->m_strAccount);
+			PacketMsg.Make(strTmp, RGB(255, 255, 255));
+			m_pSock->SendTo(dwSessionID, &PacketMsg);
+			return;
+		}
+		pInfoAccount->m_strPassword = strHashed.c_str();
+	}
 
-	strTmp.Format(_T("アカウントを[%s] パスワードを[%s]に変更しました"),
-			(LPCSTR)pInfoAccount->m_strAccount,
-			(LPCSTR)pInfoAccount->m_strPassword);
+	strTmp.Format(_T("アカウントを[%s]に変更し、パスワードを再設定しました"),
+			(LPCSTR)pInfoAccount->m_strAccount);
 	PacketMsg.Make(strTmp, RGB(255, 255, 255));
 	m_pSock->SendTo(dwSessionID, &PacketMsg);
 }
@@ -1217,9 +1228,23 @@ void CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD(PBYTE pData, DWORD dwSessionID)
 	if (pInfoAccount) {
 		strTmp = "そのアカウント名は登録済みです";
 	} else {
+		CmyString strNewPassword;
+		std::string strHashed;
+
+		TrimViewString(strNewPassword, (LPCTSTR)Packet.m_strPassword);
+		strHashed = PasswordHash::Hash(strNewPassword.GetUtf8Pointer());
+		if (strHashed.empty()) {
+			// ハッシュ化失敗。アカウントは作らない
+			m_pLog->Write("アカウント登録失敗(パスワードハッシュ化エラー)");
+			strTmp = "アカウント登録に失敗しました(パスワード処理エラー)";
+			PacketMAP_SYSTEMMSG.Make((LPCSTR)strTmp, RGB(255, 255, 255), TRUE, SYSTEMMSGTYPE_NOLOG);
+			m_pSock->SendTo(dwSessionID, &PacketMAP_SYSTEMMSG);
+			return;
+		}
+
 		pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetNew();
-		TrimViewString(pInfoAccount->m_strAccount,  (LPCTSTR)Packet.m_strAccount);
-		TrimViewString(pInfoAccount->m_strPassword, (LPCTSTR)Packet.m_strPassword);
+		TrimViewString(pInfoAccount->m_strAccount, (LPCTSTR)Packet.m_strAccount);
+		pInfoAccount->m_strPassword = strHashed.c_str();
 		m_pLibInfoAccount->Add(pInfoAccount);
 		strTmp = "アカウントを登録しました";
 	}

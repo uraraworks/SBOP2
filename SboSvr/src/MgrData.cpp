@@ -31,6 +31,8 @@
 #include "SaveLoadInfoBase.h"
 #include "LibInfoCharSVr.h"
 #include "MgrData.h"
+#include "PasswordHash.h"
+#include <string>
 
 CMgrData::CMgrData()
 {
@@ -308,6 +310,71 @@ void CMgrData::Load(void)
 	m_pLibInfoTalkEvent->	DeleteAll();
 
 	SaveLoadInfoAccount.	Load((PCLibInfoBase)m_pLibInfoAccount);
+
+	// アカウントパスワードの自動ハッシュ化移行(平文のままのものだけ対象。冪等)
+	{
+		int nAccountCount = m_pLibInfoAccount->GetCount();
+		int nPlainCount = 0;
+		int nMigrated = 0;
+
+		// PBKDF2 は1件あたり数十msかかる。件数が多いと数十秒間まったく反応が無いように
+		// 見えてしまうため、先に対象件数を数えて開始時点でログを出しておく
+		for (int i = 0; i < nAccountCount; i ++) {
+			PCInfoAccount pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetPtr(i);
+
+			if (!PasswordHash::IsHashed(pInfoAccount->m_strPassword.GetUtf8Pointer())) {
+				nPlainCount ++;
+			}
+		}
+		if (nPlainCount > 0) {
+			if (m_pLog != NULL) {
+				m_pLog->Write("アカウントのパスワードをハッシュ化します(%d件)。完了までしばらくかかります", nPlainCount);
+			} else {
+				OutputDebugStringA("CMgrData: password hash migration start\n");
+			}
+		}
+
+		for (int i = 0; i < nAccountCount; i ++) {
+			PCInfoAccount pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetPtr(i);
+
+			if (PasswordHash::IsHashed(pInfoAccount->m_strPassword.GetUtf8Pointer())) {
+				continue;
+			}
+
+			std::string strHashed = PasswordHash::Hash(pInfoAccount->m_strPassword.GetUtf8Pointer());
+			if (strHashed.empty()) {
+				// ハッシュ化に失敗した場合は平文のまま残す(空文字列で上書きしない)
+				if (m_pLog != NULL) {
+					m_pLog->Write("警告: アカウントのパスワードハッシュ化に失敗したため平文のまま残します [AccountID:%u]", pInfoAccount->m_dwAccountID);
+				} else {
+					OutputDebugStringA("CMgrData: password hash failed, keep plain text\n");
+				}
+				continue;
+			}
+
+			pInfoAccount->m_strPassword = (LPCTSTR)Utf8ToTString(strHashed.c_str());
+			nMigrated ++;
+		}
+
+		if (nMigrated > 0) {
+			// 全件 DELETE + INSERT のため、トランザクションで囲まないと
+			// INSERT ごとにコミットが走って極端に遅くなる(CMgrData::Save と同じ扱い)
+			if (pDb != NULL) {
+				sqlite3_exec(pDb, "BEGIN TRANSACTION;", NULL, NULL, NULL);
+			}
+			SaveLoadInfoAccount.	Save((PCLibInfoBase)m_pLibInfoAccount);
+			if (pDb != NULL) {
+				sqlite3_exec(pDb, "COMMIT;", NULL, NULL, NULL);
+			}
+
+			if (m_pLog != NULL) {
+				m_pLog->Write("アカウントのパスワードを%d件ハッシュ化しました", nMigrated);
+			} else {
+				OutputDebugStringA("CMgrData: password hash migration done\n");
+			}
+		}
+	}
+
 	SaveLoadInfoChar.	Load((PCLibInfoBase)m_pLibInfoChar);
 	SaveLoadInfoDisable.	Load((PCLibInfoBase)m_pLibInfoDisable);
 	SaveLoadInfoMap.	Load((PCLibInfoBase)m_pLibInfoMap);

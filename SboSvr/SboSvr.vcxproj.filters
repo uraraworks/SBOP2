@@ -123,6 +123,9 @@
     <ClCompile Include="src\MgrData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\PasswordHash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\SboSvr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -537,6 +540,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\MgrData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PasswordHash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">

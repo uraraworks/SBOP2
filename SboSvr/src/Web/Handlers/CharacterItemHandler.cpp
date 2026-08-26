@@ -671,14 +671,9 @@ void CCharacterItemHandler::HandleGetAccount(const HttpRequest & /*request*/, Ht
                 }
         }
 
-        // パスワードを取得する（UTF-8 で保持されているため GetUtf8Pointer を使う）
+        // パスワードはハッシュ化されているため画面には表示しない。
+        // 互換のためキー自体は残し、値は常に空文字列を返す
         std::string password;
-        {
-                LPCSTR pszPassword = pAcc->m_strPassword.GetUtf8Pointer();
-                if (pszPassword != NULL) {
-                        password = pszPassword;
-                }
-        }
 
         // MAC アドレス（ログイン時に記録された最新値）を取得する
         std::string macAddr;

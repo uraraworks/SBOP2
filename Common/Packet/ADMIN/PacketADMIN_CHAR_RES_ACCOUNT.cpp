@@ -32,7 +32,7 @@ void CPacketADMIN_CHAR_RES_ACCOUNT::Make(
 			 sizeof (dwIP) +
 			 sizeof (pInfoAccount->m_dwAccountID) +
 			 	(pInfoAccount->m_strAccount.GetStoreLength() + 1) +
-			 	(pInfoAccount->m_strPassword.GetStoreLength() + 1) +
+			 	1 +	// パスワードは常に空文字列を送信するため固定サイズ
 			(strlen(pszMacAddress) + 1);
 
 	pData = new BYTE[dwSize];
@@ -46,7 +46,7 @@ void CPacketADMIN_CHAR_RES_ACCOUNT::Make(
 	CopyMemoryRenew(pDataTmp, &pInfoAccount->m_dwAccountID, sizeof (pInfoAccount->m_dwAccountID), pDataTmp);	// アカウントID
 	CopyMemoryRenew(pDataTmp, &dwIP, sizeof (dwIP), pDataTmp);	// IPアドレス
 	strcpyRenew((LPSTR)pDataTmp, pInfoAccount->m_strAccount.GetUtf8Pointer(),  pDataTmp);	// アカウント
-	strcpyRenew((LPSTR)pDataTmp, pInfoAccount->m_strPassword.GetUtf8Pointer(), pDataTmp);	// パスワード
+	strcpyRenew((LPSTR)pDataTmp, "", pDataTmp);	// パスワード(ハッシュ値の流出を避けるため常に空文字列)
 	strcpyRenew((LPSTR)pDataTmp, pszMacAddress, pDataTmp);	// MACアドレス
 
 	RenewPacket(pData, dwSize);

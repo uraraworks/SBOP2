@@ -18,6 +18,7 @@
 #include "TextOutput.h"
 #include "MgrData.h"
 #include "MainFrame.h"
+#include "PasswordHash.h"
 
 void CMainFrame::RecvProcCONNECT(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
@@ -60,7 +61,7 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 
 	// 登録済み？
 	if (pInfoAccount) {
-		bResult = m_pLibInfoAccount->CheckPassword(Packet.m_strAccount, Packet.m_strPassword);
+		bResult = PasswordHash::Verify(pInfoAccount->m_strPassword.GetUtf8Pointer(), Packet.m_strPassword.GetUtf8Pointer());
 		if (bResult) {
 			nResult = LOGINRES_OK;
 		}
@@ -73,18 +74,34 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 //			m_pSock->SendTo (dwSessionID, &PacketRes);
 //			return;
 //		}
-		nResult = LOGINRES_OK;
-		pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetNew();
-		TrimViewString(pInfoAccount->m_strAccount,  (LPCTSTR)Packet.m_strAccount);
-		TrimViewString(pInfoAccount->m_strPassword, (LPCTSTR)Packet.m_strPassword);
-		pInfoAccount->m_strMacAddr = strTmp;
+		{
+			CmyString strNewPassword;
+			std::string strHashed;
 
-		// 管理者権限アカウント？
-		if (pInfoAccount->m_strAccount == m_pMgrData->GetAdminAccount()) {
-			pInfoAccount->m_nAdminLevel = ADMINLEVEL_ALL;
+			TrimViewString(strNewPassword, (LPCTSTR)Packet.m_strPassword);
+			strHashed = PasswordHash::Hash(strNewPassword.GetUtf8Pointer());
+			if (strHashed.empty()) {
+				// ハッシュ化失敗。アカウントは作らずログインを拒否する
+				nResult = LOGINRES_NG_PASSWORD;
+				m_pLog->Write("新規アカウント作成失敗(パスワードハッシュ化エラー) dwSessionID:%u", dwSessionID);
+				PacketRes.Make(nResult, 0);
+				m_pSock->SendTo(dwSessionID, &PacketRes);
+				return;
+			}
+
+			nResult = LOGINRES_OK;
+			pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetNew();
+			TrimViewString(pInfoAccount->m_strAccount, (LPCTSTR)Packet.m_strAccount);
+			pInfoAccount->m_strPassword = strHashed.c_str();
+			pInfoAccount->m_strMacAddr = strTmp;
+
+			// 管理者権限アカウント？
+			if (pInfoAccount->m_strAccount == m_pMgrData->GetAdminAccount()) {
+				pInfoAccount->m_nAdminLevel = ADMINLEVEL_ALL;
+			}
+
+			m_pLibInfoAccount->Add(pInfoAccount);
 		}
-
-		m_pLibInfoAccount->Add(pInfoAccount);
 	}
 
 	if (nResult == LOGINRES_OK) {
@@ -110,12 +127,11 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 			pInfoAccount->m_dwTimeLastLogin = (DWORD)timeTmp;
 			pInfoAccount->m_strLastMacAddr	= strTmp;
 
-			m_pLog->Write("ログイン dwSessionID:%u [%d.%d.%d.%d][%s][%s][%s]",
+			m_pLog->Write("ログイン dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
 					dwSessionID,
 					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
 					strTmp.GetUtf8Pointer(),
-					pInfoAccount->m_strAccount.GetUtf8Pointer(),
-					pInfoAccount->m_strPassword.GetUtf8Pointer());
+					pInfoAccount->m_strAccount.GetUtf8Pointer());
 		}
 		PacketCHAR_MOTION.Make(0, 0, m_pLibInfoMotion);
 		m_pSock->SendTo(dwSessionID, &PacketCHAR_MOTION);

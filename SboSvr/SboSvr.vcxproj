@@ -102,6 +102,7 @@
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
       <IgnoreSpecificDefaultLibraries>MSVCRT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -152,7 +153,7 @@
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
       <IgnoreSpecificDefaultLibraries>MSVCRTD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;winmm.lib;bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Common\myLib\myZlib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
@@ -263,6 +264,7 @@
     <ClCompile Include="src\MainFrame\MainFrameRecvProcMSGCMD.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcVERSION.cpp" />
     <ClCompile Include="src\MgrData.cpp" />
+    <ClCompile Include="src\PasswordHash.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoAccount.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoBase.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoChar.cpp" />
@@ -421,6 +423,7 @@
     <ClInclude Include="src\LibInfo\LibInfoCharSvr.h" />
     <ClInclude Include="src\MainFrame\MainFrame.h" />
     <ClInclude Include="src\MgrData.h" />
+    <ClInclude Include="src\PasswordHash.h" />
     <ClInclude Include="src\SaveLoad\SaveLoad.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoAccount.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoBase.h" />

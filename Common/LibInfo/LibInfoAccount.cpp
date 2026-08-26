@@ -28,6 +28,7 @@ void CLibInfoAccount::Destroy(void)
 	SAFE_DELETE(m_paInfo);
 }
 
+// 平文比較のため使用禁止。パスワード照合は SboSvr の PasswordHash::Verify を使うこと
 BOOL CLibInfoAccount::CheckPassword(LPCSTR pszAccount, LPCSTR pszPassword)
 {
 	BOOL bRet;

@@ -16,6 +16,7 @@
 #include "LibInfo/LibInfoAccount.h"
 #include "Info/InfoAccount.h"
 #include "TextOutput.h"
+#include "PasswordHash.h"
 
 namespace
 {
@@ -208,7 +209,7 @@ void CAdminLoginHandler::Handle(const HttpRequest &request, HttpResponse &respon
         AuthProvider::AuthContext context;
         pAccountLib->Enter();
         PCInfoAccount pAccount = pAccountLib->GetPtr(loginId.c_str());
-        if ((pAccount == NULL) || (pAccount->m_strPassword != password.c_str())) {
+        if ((pAccount == NULL) || (!PasswordHash::Verify(pAccount->m_strPassword.GetUtf8Pointer(), password.c_str()))) {
                 pAccountLib->Leave();
                 RecordFailure(loginId);
                 if (m_pMgrData->GetLog() != NULL) {

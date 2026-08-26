@@ -16,6 +16,7 @@
 #include "GlobalDefine.h"
 #include "LibInfo/LibInfoAccount.h"
 #include "Info/InfoAccount.h"
+#include "PasswordHash.h"
 
 CAccountCreateHandler::CAccountCreateHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
@@ -186,7 +187,6 @@ void CAccountCreateHandler::Handle(const HttpRequest &request, HttpResponse &res
         }
 
         TrimViewString(pAccount->m_strAccount, loginId.c_str());
-        TrimViewString(pAccount->m_strPassword, password.c_str());
         if (pAccount->m_strAccount.IsEmpty()) {
                 SAFE_DELETE(pAccount);
                 pAccountLib->Leave();
@@ -194,6 +194,17 @@ void CAccountCreateHandler::Handle(const HttpRequest &request, HttpResponse &res
                 response.SetJsonBody("{\"error\":\"invalid_login_id\"}");
                 return;
         }
+
+        // password は呼び出し元で既にTrim済み。UTF-8のままハッシュ化して格納する
+        std::string strHashedPassword = PasswordHash::Hash(password.c_str());
+        if (strHashedPassword.empty()) {
+                SAFE_DELETE(pAccount);
+                pAccountLib->Leave();
+                response.statusLine = "HTTP/1.1 500 Internal Server Error";
+                response.SetJsonBody("{\"error\":\"password_hash_failed\"}");
+                return;
+        }
+        pAccount->m_strPassword = strHashedPassword.c_str();
 
         time_t currentTime = time(NULL);
         if (currentTime < 0) {
