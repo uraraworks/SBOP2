@@ -272,7 +272,8 @@ foreach ($source in $Sources) {
         $cmdParts = @(
             "call `"$vsDevCmd`"",
             "&&",
-            "cl.exe /nologo /c /TP /std:c++17 /D__EMSCRIPTEN__ /DUNICODE /D_UNICODE /DNO_DIRECTMUSIC /D_WFL_NONDMUSIC",
+            # UTF-8のソース/ヘッダをCP932と誤読して構文崩壊するのを防ぐ。vcxproj 側と揃える
+            "cl.exe /nologo /utf-8 /c /TP /std:c++17 /D__EMSCRIPTEN__ /DUNICODE /D_UNICODE /DNO_DIRECTMUSIC /D_WFL_NONDMUSIC",
             "/FI`"$repoRoot\Common\rpcsal_fallback.h`"",
             "/FI`"$repoRoot\SboCli\StdAfx.h`"",
             $includeFlat,
