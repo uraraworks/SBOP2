@@ -1621,7 +1621,108 @@
       });
     }
 
+    // ── サーバー配信の画像上書き（/grp_override/<resName>.png を MEMFS に書き込む） ──
+    // DBに登録された「ビルド同梱と異なる」画像シートだけをサーバーから取得し、
+    // C++側の CMgrGrpData::Read/Read256 が最優先で参照する /grp_override/ に配置する。
+    // 1枚でも最終的に取得できなければ reject し、preRun 側で runDependency を解除しない
+    // （中途半端な画像セットで起動させない）。
+    const SBOP2_GRP_OVERRIDE_RESNAME_RE = /^[A-Z0-9_]{1,64}$/;
+
+    function sbop2ShowAssetError(err) {
+      console.error('[SBOP2] grp override load failed:', err);
+      Module.setStatus('画像データの取得に失敗しました');
+      appendLogLine('画像データの取得に失敗しました。時間をおいて再読み込みしてください。');
+      updateStartLoadingText('画像データの取得に失敗しました。時間をおいて再読み込みしてください。');
+    }
+
+    // no-storeだとブラウザキャッシュを無視しIf-None-Matchが送られず毎回フル取得になる。
+    // サーバーはCache-Control: no-cacheで304返却に対応しているため、再検証を活かすno-cacheにする
+    function sbop2FetchWithRetry(url, maxRetries) {
+      const delays = [300, 900, 2700];
+      let attempt = 0;
+      function tryOnce() {
+        return fetch(url, { cache: 'no-cache' }).then(function(response) {
+          if (!response.ok) {
+            throw new Error('HTTP ' + response.status + ' for ' + url);
+          }
+          return response;
+        });
+      }
+      function attemptWithRetry() {
+        return tryOnce().catch(function(err) {
+          if (attempt >= maxRetries) {
+            throw err;
+          }
+          const delay = delays[Math.min(attempt, delays.length - 1)];
+          attempt++;
+          return new Promise(function(resolve) {
+            window.setTimeout(resolve, delay);
+          }).then(attemptWithRetry);
+        });
+      }
+      return attemptWithRetry();
+    }
+
+    function sbop2LoadGrpOverrides() {
+      return sbop2FetchWithRetry('/assets/manifest', 3)
+        .then(function(response) { return response.json(); })
+        .then(function(manifest) {
+          const sheets = (manifest && Array.isArray(manifest.sheets)) ? manifest.sheets : [];
+          if (sheets.length === 0) {
+            // 上書き対象なし＝ビルド同梱のままで正常
+            return;
+          }
+
+          for (let i = 0; i < sheets.length; i++) {
+            const resName = sheets[i] && sheets[i].resName;
+            if (typeof resName !== 'string' || !SBOP2_GRP_OVERRIDE_RESNAME_RE.test(resName)) {
+              throw new Error('invalid resName from manifest: ' + resName);
+            }
+          }
+
+          try {
+            Module.FS.mkdir('/grp_override');
+          } catch (e) {
+            // 既存なら無視
+          }
+
+          let doneCount = 0;
+          const total = sheets.length;
+          Module.setStatus('画像データを取得中... ' + doneCount + '/' + total);
+
+          const CONCURRENCY = 4;
+          let nextIndex = 0;
+          function runNext() {
+            if (nextIndex >= sheets.length) {
+              return Promise.resolve();
+            }
+            const resName = sheets[nextIndex].resName;
+            nextIndex++;
+            return sbop2FetchWithRetry('/assets/sprite/' + encodeURIComponent(resName), 3)
+              .then(function(response) { return response.arrayBuffer(); })
+              .then(function(buf) {
+                Module.FS.writeFile('/grp_override/' + resName + '.png', new Uint8Array(buf));
+                doneCount++;
+                Module.setStatus('画像データを取得中... ' + doneCount + '/' + total);
+              })
+              .then(runNext);
+          }
+
+          const workers = [];
+          for (let w = 0; w < Math.min(CONCURRENCY, sheets.length); w++) {
+            workers.push(runNext());
+          }
+          return Promise.all(workers);
+        });
+    }
+
     var Module = {
+      preRun: [function() {
+        Module.addRunDependency('sbop2-grp-override');
+        sbop2LoadGrpOverrides()
+          .then(function() { Module.removeRunDependency('sbop2-grp-override'); })
+          .catch(function(e) { sbop2ShowAssetError(e); });
+      }],
       // ビルドスクリプトが埋め込んだファイル別ハッシュを使い、.wasm/.data のURLにクエリを付与する
       // （通常のリロードだけで最新ファイルを取得させ、ハードリロードを不要にするため）
       locateFile: function(path, prefix) {

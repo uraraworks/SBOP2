@@ -166,6 +166,22 @@ static BOOL GetFileNameForResource(LPCSTR pszResName, TCHAR *pszDst, size_t nDst
 	return TRUE;
 }
 
+/// サーバー配信の上書き画像（/grp_override/<resName>.png、MEMFSにJSが書き込む）を試す
+/// ディレクトリ/ファイルが存在しない環境（ネイティブ版・従来のブラウザ版）では
+/// ReadBinaryFile が FALSE を返すだけで、既存の探索へそのまま進む
+/// @return 読み込めればTRUE
+static BOOL TryReadGrpOverride(LPCSTR pszResName, std::vector<unsigned char> &fileData)
+{
+	TCHAR szPath[MAX_PATH];
+	CString strName = AnsiToTString(pszResName);
+
+	_tcscpy_s(szPath, _countof(szPath), _T("/grp_override/"));
+	_tcscat_s(szPath, _countof(szPath), (LPCTSTR)strName);
+	_tcscat_s(szPath, _countof(szPath), _T(".png"));
+
+	return ReadBinaryFile(szPath, fileData);
+}
+
 
 CMgrGrpData::CMgrGrpData()
 {
@@ -2245,9 +2261,12 @@ BOOL CMgrGrpData::Read(LPCSTR pszName, PCImg32 *pDib, int nSize)
 	bRet		= FALSE;
 	pDibTmp		= NULL;
 
-	// ファイルベース読み込みを先行試行（リソースAPI不使用でも動作可能にする）
+	// サーバー配信の上書き画像を最優先で試行
 	std::vector<unsigned char> fileData;
-	{
+	TryReadGrpOverride(pszName, fileData);
+
+	// ファイルベース読み込みを先行試行（リソースAPI不使用でも動作可能にする）
+	if (fileData.empty()) {
 		TCHAR szBasePath[MAX_PATH];
 		TCHAR szFileName[MAX_PATH];
 		TCHAR szFilePath[MAX_PATH];
@@ -2342,9 +2361,12 @@ BOOL CMgrGrpData::Read256(LPCSTR pszName, PCImg32 *pDib, int nSize)
 	state.info_raw.colortype = LCT_PALETTE;
 	state.info_raw.bitdepth = 8;
 
-	// ファイルベース読み込みを先行試行（リソースAPI不使用でも動作可能にする）
+	// サーバー配信の上書き画像を最優先で試行
 	std::vector<unsigned char> fileData256;
-	{
+	TryReadGrpOverride(pszName, fileData256);
+
+	// ファイルベース読み込みを先行試行（リソースAPI不使用でも動作可能にする）
+	if (fileData256.empty()) {
 		TCHAR szBasePath[MAX_PATH];
 		TCHAR szFileName[MAX_PATH];
 		TCHAR szFilePath[MAX_PATH];
