@@ -27,6 +27,15 @@ struct SGrpSheetHistoryEntry
     size_t      nBytes;      // png のバイト数
 };
 
+// grp_sheet 1行分のメタ（png 本体は含めない。公開マニフェスト用）
+struct SGrpSheetSummary
+{
+    std::string strResName;
+    int         nRevision;
+    size_t      nBytes;
+    long long   nUpdatedAt;
+};
+
 class CGrpImageStore
 {
 public:
@@ -54,6 +63,10 @@ public:
 
     // 履歴を新しい順（revision 降順）で取得する。DB が無ければ空を返して true。
     bool GetHistory(const char *pszResName, std::vector<SGrpSheetHistoryEntry> &outEntries);
+
+    // grp_sheet の全行のメタを res_name 昇順で返す（png 本体は SELECT しない）。
+    // 認証不要の公開マニフェスト（/assets/manifest）用。DB が無ければ空を返して true。
+    bool GetAllSummaries(std::vector<SGrpSheetSummary> &outList);
 
     // 指定 revision の PNG バイト列を履歴から取得する。
     bool GetHistoryPng(const char *pszResName, int nRevision, std::vector<unsigned char> &outPng);

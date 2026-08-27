@@ -353,6 +353,38 @@ bool CGrpImageStore::GetHistory(const char *pszResName, std::vector<SGrpSheetHis
     return true;
 }
 
+bool CGrpImageStore::GetAllSummaries(std::vector<SGrpSheetSummary> &outList)
+{
+    outList.clear();
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!EnsureOpenLocked()) {
+        // DB が無ければ「配信対象なし」として空を返し、エラー扱いにはしない。
+        return true;
+    }
+
+    // png 本体は不要なうえ重いので length(png) だけ取る。
+    const char *pszSql =
+        "SELECT res_name, revision, length(png), updated_at "
+        "FROM grp_sheet ORDER BY res_name ASC;";
+    sqlite3_stmt *pStmt = NULL;
+    if (sqlite3_prepare_v2(m_pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+        return false;
+    }
+
+    while (sqlite3_step(pStmt) == SQLITE_ROW) {
+        SGrpSheetSummary summary;
+        const unsigned char *pResName = sqlite3_column_text(pStmt, 0);
+        summary.strResName = (pResName != NULL) ? reinterpret_cast<const char *>(pResName) : std::string();
+        summary.nRevision  = sqlite3_column_int(pStmt, 1);
+        summary.nBytes     = static_cast<size_t>(sqlite3_column_int64(pStmt, 2));
+        summary.nUpdatedAt = sqlite3_column_int64(pStmt, 3);
+        outList.push_back(summary);
+    }
+    sqlite3_finalize(pStmt);
+    return true;
+}
+
 bool CGrpImageStore::GetHistoryPng(const char *pszResName, int nRevision, std::vector<unsigned char> &outPng)
 {
     if (pszResName == NULL || pszResName[0] == '\0') {

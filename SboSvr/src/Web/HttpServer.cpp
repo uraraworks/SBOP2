@@ -24,6 +24,7 @@
 #include "Handlers/TalkEventHandler.h"
 #include "Handlers/MapPartsHandler.h"
 #include "Handlers/SpriteSheetHandler.h"
+#include "Handlers/PublicAssetHandler.h"
 #include "Handlers/MapShadowHandler.h"
 #include "Handlers/StaticFileHandler.h"
 #include "Handlers/SelectionHandler.h"
@@ -1343,6 +1344,19 @@ void CHttpServer::RegisterDefaultHandlers()
         std::unique_ptr<IApiHandler> spriteSheetDeleteHandler(
             new CSpriteSheetDeleteHandler("/api/assets/sprites/", m_pMgrData));
         m_router.RegisterPrefix("DELETE", "/api/assets/sprites/", std::move(spriteSheetDeleteHandler));
+
+        // ゲームクライアント向け「認証不要」な公開アセット配信エンドポイント。
+        //   GET /assets/manifest        - grp_sheet 全行のメタ一覧
+        //   GET /assets/sprite/{resName} - 画像ストア上書き分の PNG を生バイト列のまま配信
+        // /api/ の外なので HttpServer.cpp の認証ゲート（IsPathPrefix(path, "/api/")）を
+        // 通らない。PublicAssetHandler.h/.cpp 参照。管理用の SpriteSheetHandler とは
+        // 別クラスで、MakeTransparentPng は一切適用しない。
+        std::unique_ptr<IApiHandler> publicAssetManifestHandler(new CPublicAssetManifestHandler());
+        m_router.Register("GET", "/assets/manifest", std::move(publicAssetManifestHandler));
+
+        std::unique_ptr<IApiHandler> publicAssetSpriteHandler(
+            new CPublicAssetSpriteHandler("/assets/sprite/"));
+        m_router.RegisterPrefix("GET", "/assets/sprite/", std::move(publicAssetSpriteHandler));
 
         std::wstring webRoot;
         if (ResolveWebRootPath(webRoot)) {

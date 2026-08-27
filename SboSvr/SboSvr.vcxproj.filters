@@ -144,6 +144,9 @@
     <ClCompile Include="src\Web\Handlers\ImageCatalogHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Web\Handlers\PublicAssetHandler.cpp">
+      <Filter>Source Files\Web\Handlers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Web\Handlers\AuditLogHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
@@ -582,6 +585,9 @@
       <Filter>Header Files\Web\Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\Handlers\AuthSessionHandler.h">
+      <Filter>Header Files\Web\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\Handlers\PublicAssetHandler.h">
       <Filter>Header Files\Web\Handlers</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\AuditLog.h">
