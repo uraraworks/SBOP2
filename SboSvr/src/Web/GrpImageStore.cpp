@@ -279,3 +279,172 @@ bool CGrpImageStore::PutPng(const char *pszResName,
 
     return true;
 }
+
+bool CGrpImageStore::GetCurrentMeta(const char *pszResName, int &outRevision, int &outWidth, int &outHeight,
+                                     long long &outUpdatedAt, std::string &outUpdatedBy, size_t &outBytes)
+{
+    if (pszResName == NULL || pszResName[0] == '\0') {
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!EnsureOpenLocked()) {
+        return false;
+    }
+
+    const char *pszSql =
+        "SELECT revision, width, height, updated_at, updated_by, length(png) "
+        "FROM grp_sheet WHERE res_name = ?;";
+    sqlite3_stmt *pStmt = NULL;
+    if (sqlite3_prepare_v2(m_pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+        return false;
+    }
+
+    bool bFound = false;
+    sqlite3_bind_text(pStmt, 1, pszResName, -1, SQLITE_STATIC);
+    if (sqlite3_step(pStmt) == SQLITE_ROW) {
+        outRevision = sqlite3_column_int(pStmt, 0);
+        outWidth    = sqlite3_column_int(pStmt, 1);
+        outHeight   = sqlite3_column_int(pStmt, 2);
+        outUpdatedAt = sqlite3_column_int64(pStmt, 3);
+        const unsigned char *pUpdatedBy = sqlite3_column_text(pStmt, 4);
+        outUpdatedBy = (pUpdatedBy != NULL) ? reinterpret_cast<const char *>(pUpdatedBy) : std::string();
+        outBytes = static_cast<size_t>(sqlite3_column_int64(pStmt, 5));
+        bFound = true;
+    }
+    sqlite3_finalize(pStmt);
+    return bFound;
+}
+
+bool CGrpImageStore::GetHistory(const char *pszResName, std::vector<SGrpSheetHistoryEntry> &outEntries)
+{
+    outEntries.clear();
+    if (pszResName == NULL || pszResName[0] == '\0') {
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!EnsureOpenLocked()) {
+        // DB が無ければ「上書き履歴なし」として空を返し、エラー扱いにはしない。
+        return true;
+    }
+
+    // png 本体は一覧表示に不要なうえ重いので length(png) だけ取る。
+    const char *pszSql =
+        "SELECT id, revision, saved_at, saved_by, length(png) "
+        "FROM grp_sheet_history WHERE res_name = ? ORDER BY revision DESC, id DESC;";
+    sqlite3_stmt *pStmt = NULL;
+    if (sqlite3_prepare_v2(m_pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+        return false;
+    }
+
+    sqlite3_bind_text(pStmt, 1, pszResName, -1, SQLITE_STATIC);
+    while (sqlite3_step(pStmt) == SQLITE_ROW) {
+        SGrpSheetHistoryEntry entry;
+        entry.nId       = sqlite3_column_int64(pStmt, 0);
+        entry.nRevision = sqlite3_column_int(pStmt, 1);
+        entry.nSavedAt  = sqlite3_column_int64(pStmt, 2);
+        const unsigned char *pSavedBy = sqlite3_column_text(pStmt, 3);
+        entry.strSavedBy = (pSavedBy != NULL) ? reinterpret_cast<const char *>(pSavedBy) : std::string();
+        entry.nBytes    = static_cast<size_t>(sqlite3_column_int64(pStmt, 4));
+        outEntries.push_back(entry);
+    }
+    sqlite3_finalize(pStmt);
+    return true;
+}
+
+bool CGrpImageStore::GetHistoryPng(const char *pszResName, int nRevision, std::vector<unsigned char> &outPng)
+{
+    if (pszResName == NULL || pszResName[0] == '\0') {
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!EnsureOpenLocked()) {
+        return false;
+    }
+
+    const char *pszSql =
+        "SELECT png FROM grp_sheet_history WHERE res_name = ? AND revision = ? "
+        "ORDER BY id DESC LIMIT 1;";
+    sqlite3_stmt *pStmt = NULL;
+    if (sqlite3_prepare_v2(m_pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+        return false;
+    }
+
+    bool bFound = false;
+    sqlite3_bind_text(pStmt, 1, pszResName, -1, SQLITE_STATIC);
+    sqlite3_bind_int(pStmt, 2, nRevision);
+    if (sqlite3_step(pStmt) == SQLITE_ROW) {
+        const void *pBlob = sqlite3_column_blob(pStmt, 0);
+        int nBlobSize = sqlite3_column_bytes(pStmt, 0);
+        if (pBlob != NULL && nBlobSize > 0) {
+            outPng.assign(
+                static_cast<const unsigned char *>(pBlob),
+                static_cast<const unsigned char *>(pBlob) + nBlobSize);
+            bFound = true;
+        }
+    }
+    sqlite3_finalize(pStmt);
+    return bFound;
+}
+
+bool CGrpImageStore::ClearOverride(const char *pszResName, std::string &outError)
+{
+    outError.clear();
+    if (pszResName == NULL || pszResName[0] == '\0') {
+        outError = "invalid_argument";
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!EnsureOpenLocked()) {
+        // DB が無い = そもそも上書きが存在しない状態と同義なので成功扱い（冪等）。
+        return true;
+    }
+
+    if (sqlite3_exec(m_pDb, "BEGIN IMMEDIATE TRANSACTION;", NULL, NULL, NULL) != SQLITE_OK) {
+        outError = "begin_transaction_failed";
+        return false;
+    }
+
+    const char *pszDeleteHistorySql = "DELETE FROM grp_sheet_history WHERE res_name = ?;";
+    sqlite3_stmt *pDelHistStmt = NULL;
+    if (sqlite3_prepare_v2(m_pDb, pszDeleteHistorySql, -1, &pDelHistStmt, NULL) != SQLITE_OK) {
+        sqlite3_exec(m_pDb, "ROLLBACK;", NULL, NULL, NULL);
+        outError = "delete_history_prepare_failed";
+        return false;
+    }
+    sqlite3_bind_text(pDelHistStmt, 1, pszResName, -1, SQLITE_STATIC);
+    int nDelHistStep = sqlite3_step(pDelHistStmt);
+    sqlite3_finalize(pDelHistStmt);
+    if (nDelHistStep != SQLITE_DONE) {
+        sqlite3_exec(m_pDb, "ROLLBACK;", NULL, NULL, NULL);
+        outError = "delete_history_failed";
+        return false;
+    }
+
+    const char *pszDeleteCurrentSql = "DELETE FROM grp_sheet WHERE res_name = ?;";
+    sqlite3_stmt *pDelCurStmt = NULL;
+    if (sqlite3_prepare_v2(m_pDb, pszDeleteCurrentSql, -1, &pDelCurStmt, NULL) != SQLITE_OK) {
+        sqlite3_exec(m_pDb, "ROLLBACK;", NULL, NULL, NULL);
+        outError = "delete_current_prepare_failed";
+        return false;
+    }
+    sqlite3_bind_text(pDelCurStmt, 1, pszResName, -1, SQLITE_STATIC);
+    int nDelCurStep = sqlite3_step(pDelCurStmt);
+    sqlite3_finalize(pDelCurStmt);
+    if (nDelCurStep != SQLITE_DONE) {
+        sqlite3_exec(m_pDb, "ROLLBACK;", NULL, NULL, NULL);
+        outError = "delete_current_failed";
+        return false;
+    }
+
+    if (sqlite3_exec(m_pDb, "COMMIT;", NULL, NULL, NULL) != SQLITE_OK) {
+        sqlite3_exec(m_pDb, "ROLLBACK;", NULL, NULL, NULL);
+        outError = "commit_failed";
+        return false;
+    }
+
+    return true;
+}

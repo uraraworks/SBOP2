@@ -17,14 +17,31 @@
 namespace
 {
 
-// CSpriteSheetHandler / CSpriteSheetUploadHandler 共通のパス解析ロジック。
-// /api/assets/sprites/{categoryKey}/{sheetIndex}[.png]
-bool ParseSpriteSheetPath(
+// パス末尾のサフィックス種別。
+// /history (GET, 履歴一覧) と /revert (POST, 復元) の2種のみを認識する。
+enum ESpriteSheetPathSuffix
+{
+    SpriteSheetSuffixNone = 0,
+    SpriteSheetSuffixHistory,
+    SpriteSheetSuffixRevert,
+};
+
+// CSpriteSheetHandler / CSpriteSheetUploadHandler / CSpriteSheetHistoryHandler /
+// CSpriteSheetRevertHandler / CSpriteSheetDeleteHandler 共通のパス解析ロジック。
+// /api/assets/sprites/{categoryKey}/{sheetIndex}[.png][/history|/revert]
+//
+// 末尾に /history や /revert 以外の余計なセグメントが付いている場合や、
+// 未知のサフィックスが付いている場合は false を返す（誤って基本パスとして
+// 食われることを防ぐ）。
+bool ParseSpriteSheetPathEx(
     const std::string &pathPrefix,
     const std::string &path,
     std::string &outKey,
-    int &outIndex)
+    int &outIndex,
+    ESpriteSheetPathSuffix &outSuffix)
 {
+    outSuffix = SpriteSheetSuffixNone;
+
     std::string fullPath = path;
     size_t queryPos = fullPath.find('?');
     if (queryPos != std::string::npos) {
@@ -36,7 +53,7 @@ bool ParseSpriteSheetPath(
     }
 
     std::string rest = fullPath.substr(pathPrefix.size());
-    // rest = "{categoryKey}/{sheetIndex}[.png]"
+    // rest = "{categoryKey}/{sheetIndex}[.png][/history|/revert]"
 
     size_t slashPos = rest.find('/');
     if (slashPos == std::string::npos || slashPos == 0) {
@@ -44,9 +61,22 @@ bool ParseSpriteSheetPath(
     }
 
     outKey = rest.substr(0, slashPos);
-    std::string indexStr = rest.substr(slashPos + 1);
+    std::string remaining = rest.substr(slashPos + 1);
+    // remaining = "{sheetIndex}[.png][/history|/revert]"
 
-    // 末尾 .png を除去
+    std::string indexStr = remaining;
+    std::string suffixStr;
+    size_t nextSlash = remaining.find('/');
+    if (nextSlash != std::string::npos) {
+        indexStr = remaining.substr(0, nextSlash);
+        suffixStr = remaining.substr(nextSlash + 1);
+        // サフィックスの後ろにさらにスラッシュが続くパスは未知のものとして拒否する
+        if (suffixStr.find('/') != std::string::npos) {
+            return false;
+        }
+    }
+
+    // 末尾 .png を除去（サフィックス無しのときのみ意味を持つが、旧仕様のまま許容する）
     if (indexStr.size() > 4) {
         std::string ext = indexStr.substr(indexStr.size() - 4);
         for (size_t i = 0; i < ext.size(); ++i) {
@@ -55,12 +85,6 @@ bool ParseSpriteSheetPath(
         if (ext == ".png") {
             indexStr.erase(indexStr.size() - 4);
         }
-    }
-
-    // 末尾にさらにスラッシュがある場合は除去
-    size_t trailingSlash = indexStr.find('/');
-    if (trailingSlash != std::string::npos) {
-        indexStr = indexStr.substr(0, trailingSlash);
     }
 
     if (indexStr.empty()) {
@@ -76,7 +100,36 @@ bool ParseSpriteSheetPath(
         return false;
     }
     outIndex = static_cast<int>(value);
+
+    if (!suffixStr.empty()) {
+        if (suffixStr == "history") {
+            outSuffix = SpriteSheetSuffixHistory;
+        } else if (suffixStr == "revert") {
+            outSuffix = SpriteSheetSuffixRevert;
+        } else {
+            // 未知のサフィックスは 404 として扱う
+            return false;
+        }
+    }
+
     return true;
+}
+
+// サフィックス無しのみを許可する従来互換のラッパー。
+// CSpriteSheetHandler（サフィックス無し部分）/ CSpriteSheetUploadHandler /
+// CSpriteSheetDeleteHandler が使う。サフィックス付きパスは false（従来は
+// 誤って基本パスとして食われていたが、これを修正する）。
+bool ParseSpriteSheetPath(
+    const std::string &pathPrefix,
+    const std::string &path,
+    std::string &outKey,
+    int &outIndex)
+{
+    ESpriteSheetPathSuffix suffix = SpriteSheetSuffixNone;
+    if (!ParseSpriteSheetPathEx(pathPrefix, path, outKey, outIndex, suffix)) {
+        return false;
+    }
+    return suffix == SpriteSheetSuffixNone;
 }
 
 // char* (ASCII 前提) を wstring に変換する簡易ヘルパ。
@@ -92,6 +145,33 @@ std::wstring ToWString(const char *pszSrc)
         out.push_back(static_cast<wchar_t>(static_cast<unsigned char>(*p)));
     }
     return out;
+}
+
+// CSpriteSheetHistoryHandler / CSpriteSheetRevertHandler / CSpriteSheetDeleteHandler
+// 共通の認証チェック。CSpriteSheetUploadHandler と同じ作法（IMAGE_EDIT を要求）。
+bool AuthorizeImageEdit(
+    const HttpRequest &request,
+    CMgrData *pMgrData,
+    AuthProvider::AuthContext &outContext,
+    HttpResponse &response)
+{
+    AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, pMgrData, outContext);
+    if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+        response.statusLine = "HTTP/1.1 503 Service Unavailable";
+        response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+        return false;
+    }
+    if (authStatus != AuthProvider::AuthStatusOk) {
+        response.statusLine = "HTTP/1.1 401 Unauthorized";
+        response.SetJsonBody("{\"error\":\"unauthorized\"}");
+        return false;
+    }
+    if (!AuthProvider::HasRole(outContext, "IMAGE_EDIT")) {
+        response.statusLine = "HTTP/1.1 403 Forbidden";
+        response.SetJsonBody(AuthProvider::BuildForbiddenBody("IMAGE_EDIT"));
+        return false;
+    }
+    return true;
 }
 
 // ToWString の逆変換（ASCII 前提）。BuildResourceName が生成する wstring は
@@ -596,13 +676,29 @@ bool CGrpResourceProvider::MakeTransparentPng(
 // CSpriteSheetHandler
 // ---------------------------------------------------------------------------
 
-CSpriteSheetHandler::CSpriteSheetHandler(std::string pathPrefix)
-    : m_pathPrefix(std::move(pathPrefix))
+CSpriteSheetHandler::CSpriteSheetHandler(std::string pathPrefix, CMgrData *pMgrData)
+    : m_pathPrefix(pathPrefix)
+    , m_historyHandler(pathPrefix, pMgrData)
 {
 }
 
 void CSpriteSheetHandler::Handle(const HttpRequest &request, HttpResponse &response)
 {
+    // /history サフィックス付きパスはこのハンドラでは配信せず、履歴ハンドラへ委譲する。
+    // CApiRouter は同一プレフィックス長のルートを1つしか選ばないため、
+    // このハンドラ自身が両方のケースを内部で振り分ける（詳細はヘッダのコメント参照）。
+    {
+        std::string dummyKey;
+        int dummyIndex = -1;
+        ESpriteSheetPathSuffix suffix = SpriteSheetSuffixNone;
+        if (ParseSpriteSheetPathEx(m_pathPrefix, request.path, dummyKey, dummyIndex, suffix) &&
+            suffix == SpriteSheetSuffixHistory)
+        {
+            m_historyHandler.Handle(request, response);
+            return;
+        }
+    }
+
     std::string categoryKey;
     int sheetIndex = -1;
     if (!TryParsePath(request.path, categoryKey, sheetIndex)) {
@@ -842,6 +938,236 @@ void CSpriteSheetUploadHandler::Handle(const HttpRequest &request, HttpResponse 
         << "\"width\":" << imgW << ","
         << "\"height\":" << imgH << ","
         << "\"bytes\":" << nBodySize << "}";
+
+    response.statusLine = "HTTP/1.1 200 OK";
+    response.SetJsonBody(oss.str());
+}
+
+// ---------------------------------------------------------------------------
+// CSpriteSheetHistoryHandler
+// ---------------------------------------------------------------------------
+
+CSpriteSheetHistoryHandler::CSpriteSheetHistoryHandler(std::string pathPrefix, CMgrData *pMgrData)
+    : m_pathPrefix(std::move(pathPrefix))
+    , m_pMgrData(pMgrData)
+{
+}
+
+void CSpriteSheetHistoryHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+    AuthProvider::AuthContext authContext;
+    if (!AuthorizeImageEdit(request, m_pMgrData, authContext, response)) {
+        return;
+    }
+
+    std::string categoryKey;
+    int sheetIndex = -1;
+    ESpriteSheetPathSuffix suffix = SpriteSheetSuffixNone;
+    if (!ParseSpriteSheetPathEx(m_pathPrefix, request.path, categoryKey, sheetIndex, suffix) ||
+        suffix != SpriteSheetSuffixHistory)
+    {
+        response.statusLine = "HTTP/1.1 404 Not Found";
+        response.SetJsonBody("{\"error\":\"sprite_not_found\"}");
+        return;
+    }
+
+    std::string resName;
+    if (!CGrpResourceProvider::GetInstance().ResolveResourceName(categoryKey, sheetIndex, resName)) {
+        response.statusLine = "HTTP/1.1 404 Not Found";
+        response.SetJsonBody("{\"error\":\"sprite_not_found\"}");
+        return;
+    }
+
+    int nRevision = 0, nWidth = 0, nHeight = 0;
+    long long llUpdatedAt = 0;
+    std::string strUpdatedBy;
+    size_t nBytes = 0;
+    bool bHasCurrent = CGrpImageStore::GetInstance().GetCurrentMeta(
+        resName.c_str(), nRevision, nWidth, nHeight, llUpdatedAt, strUpdatedBy, nBytes);
+
+    std::vector<SGrpSheetHistoryEntry> history;
+    CGrpImageStore::GetInstance().GetHistory(resName.c_str(), history);
+
+    std::ostringstream oss;
+    oss << "{\"resName\":\"" << JsonUtils::Escape(resName) << "\","
+        << "\"overridden\":" << (bHasCurrent ? "true" : "false") << ",";
+    if (bHasCurrent) {
+        oss << "\"current\":{"
+            << "\"revision\":" << nRevision << ","
+            << "\"width\":" << nWidth << ","
+            << "\"height\":" << nHeight << ","
+            << "\"bytes\":" << nBytes << ","
+            << "\"updatedAt\":" << llUpdatedAt << ","
+            << "\"updatedBy\":\"" << JsonUtils::Escape(strUpdatedBy) << "\"},";
+    } else {
+        oss << "\"current\":null,";
+    }
+    oss << "\"history\":[";
+    for (size_t i = 0; i < history.size(); ++i) {
+        if (i > 0) {
+            oss << ",";
+        }
+        const SGrpSheetHistoryEntry &entry = history[i];
+        oss << "{\"revision\":" << entry.nRevision << ","
+            << "\"savedAt\":" << entry.nSavedAt << ","
+            << "\"savedBy\":\"" << JsonUtils::Escape(entry.strSavedBy) << "\","
+            << "\"bytes\":" << entry.nBytes << "}";
+    }
+    oss << "]}";
+
+    response.statusLine = "HTTP/1.1 200 OK";
+    response.SetJsonBody(oss.str());
+}
+
+// ---------------------------------------------------------------------------
+// CSpriteSheetRevertHandler
+// ---------------------------------------------------------------------------
+
+CSpriteSheetRevertHandler::CSpriteSheetRevertHandler(std::string pathPrefix, CMgrData *pMgrData)
+    : m_pathPrefix(std::move(pathPrefix))
+    , m_pMgrData(pMgrData)
+{
+}
+
+void CSpriteSheetRevertHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+    AuthProvider::AuthContext authContext;
+    if (!AuthorizeImageEdit(request, m_pMgrData, authContext, response)) {
+        return;
+    }
+
+    std::string categoryKey;
+    int sheetIndex = -1;
+    ESpriteSheetPathSuffix suffix = SpriteSheetSuffixNone;
+    if (!ParseSpriteSheetPathEx(m_pathPrefix, request.path, categoryKey, sheetIndex, suffix) ||
+        suffix != SpriteSheetSuffixRevert)
+    {
+        response.statusLine = "HTTP/1.1 404 Not Found";
+        response.SetJsonBody("{\"error\":\"sprite_not_found\"}");
+        return;
+    }
+
+    int nRequestedRevision = -1;
+    if (!JsonUtils::TryGetInt(request.body, "revision", nRequestedRevision) || nRequestedRevision <= 0) {
+        response.statusLine = "HTTP/1.1 400 Bad Request";
+        response.SetJsonBody("{\"error\":\"invalid_request\"}");
+        return;
+    }
+
+    std::string resName;
+    if (!CGrpResourceProvider::GetInstance().ResolveResourceName(categoryKey, sheetIndex, resName)) {
+        response.statusLine = "HTTP/1.1 404 Not Found";
+        response.SetJsonBody("{\"error\":\"sprite_not_found\"}");
+        return;
+    }
+
+    std::vector<unsigned char> historyPng;
+    if (!CGrpImageStore::GetInstance().GetHistoryPng(resName.c_str(), nRequestedRevision, historyPng)) {
+        response.statusLine = "HTTP/1.1 404 Not Found";
+        response.SetJsonBody("{\"error\":\"revision_not_found\"}");
+        return;
+    }
+
+    // 履歴に入っている PNG は過去に PutPng でフルデコード検証済みのため、
+    // ここでは寸法確認のためだけに inspect（ヘッダのみ）で十分。
+    unsigned int imgW = 0, imgH = 0;
+    lodepng::State inspectState;
+    unsigned int inspectErr = lodepng_inspect(&imgW, &imgH, &inspectState, historyPng.data(), historyPng.size());
+    if (inspectErr != 0) {
+        response.statusLine = "HTTP/1.1 500 Internal Server Error";
+        response.SetJsonBody("{\"error\":\"history_png_invalid\"}");
+        return;
+    }
+
+    // 履歴を巻き戻すのではなく、指定 revision の内容を新しい版として追記保存する。
+    // これで履歴が線形に保たれ、復元操作自体も後から取り消せる。
+    std::string putError;
+    if (!CGrpImageStore::GetInstance().PutPng(
+            resName.c_str(), historyPng.data(), historyPng.size(),
+            static_cast<int>(imgW), static_cast<int>(imgH),
+            authContext.loginId.c_str(), putError))
+    {
+        response.statusLine = "HTTP/1.1 500 Internal Server Error";
+        response.SetJsonBody("{\"error\":\"" + JsonUtils::Escape(putError) + "\"}");
+        return;
+    }
+
+    CGrpResourceProvider::GetInstance().InvalidateCache(resName.c_str());
+
+    std::string etag;
+    {
+        std::vector<unsigned char> reread;
+        CGrpImageStore::GetInstance().GetPng(resName.c_str(), reread, etag);
+    }
+
+    int nNewRevision = 0;
+    {
+        size_t nFirstDash = etag.find('-');
+        if (nFirstDash != std::string::npos) {
+            size_t nSecondDash = etag.find('-', nFirstDash + 1);
+            if (nSecondDash != std::string::npos) {
+                std::string revStr = etag.substr(nFirstDash + 1, nSecondDash - nFirstDash - 1);
+                nNewRevision = std::atoi(revStr.c_str());
+            }
+        }
+    }
+
+    std::ostringstream oss;
+    oss << "{\"resName\":\"" << JsonUtils::Escape(resName) << "\","
+        << "\"revision\":" << nNewRevision << ","
+        << "\"etag\":\"" << JsonUtils::Escape(etag) << "\","
+        << "\"width\":" << imgW << ","
+        << "\"height\":" << imgH << ","
+        << "\"bytes\":" << historyPng.size() << "}";
+
+    response.statusLine = "HTTP/1.1 200 OK";
+    response.SetJsonBody(oss.str());
+}
+
+// ---------------------------------------------------------------------------
+// CSpriteSheetDeleteHandler
+// ---------------------------------------------------------------------------
+
+CSpriteSheetDeleteHandler::CSpriteSheetDeleteHandler(std::string pathPrefix, CMgrData *pMgrData)
+    : m_pathPrefix(std::move(pathPrefix))
+    , m_pMgrData(pMgrData)
+{
+}
+
+void CSpriteSheetDeleteHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+    AuthProvider::AuthContext authContext;
+    if (!AuthorizeImageEdit(request, m_pMgrData, authContext, response)) {
+        return;
+    }
+
+    // DELETE はサフィックス無しの基本パスのみを受け付ける。
+    std::string categoryKey;
+    int sheetIndex = -1;
+    if (!ParseSpriteSheetPath(m_pathPrefix, request.path, categoryKey, sheetIndex)) {
+        response.statusLine = "HTTP/1.1 404 Not Found";
+        response.SetJsonBody("{\"error\":\"sprite_not_found\"}");
+        return;
+    }
+
+    std::string resName;
+    if (!CGrpResourceProvider::GetInstance().ResolveResourceName(categoryKey, sheetIndex, resName)) {
+        response.statusLine = "HTTP/1.1 404 Not Found";
+        response.SetJsonBody("{\"error\":\"sprite_not_found\"}");
+        return;
+    }
+
+    std::string clearError;
+    if (!CGrpImageStore::GetInstance().ClearOverride(resName.c_str(), clearError)) {
+        response.statusLine = "HTTP/1.1 500 Internal Server Error";
+        response.SetJsonBody("{\"error\":\"" + JsonUtils::Escape(clearError) + "\"}");
+        return;
+    }
+
+    CGrpResourceProvider::GetInstance().InvalidateCache(resName.c_str());
+
+    std::ostringstream oss;
+    oss << "{\"resName\":\"" << JsonUtils::Escape(resName) << "\",\"overridden\":false}";
 
     response.statusLine = "HTTP/1.1 200 OK";
     response.SetJsonBody(oss.str());

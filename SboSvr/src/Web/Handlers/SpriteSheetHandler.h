@@ -117,21 +117,86 @@ private:
 };
 
 // ---------------------------------------------------------------------------
+// CSpriteSheetHistoryHandler: GET /api/assets/sprites/{categoryKey}/{sheetIndex}/history
+// ---------------------------------------------------------------------------
+// 認証・ロールは CSpriteSheetUploadHandler と同じ（IMAGE_EDIT を要求）。
+//
+// ルーティング上の注意:
+// CApiRouter::RegisterPrefix は前方一致かつ「同じ長さのプレフィックスが複数
+// マッチした場合は先に登録した方が常に勝つ（後続にフォールスルーしない）」
+// という仕様のため、GET "/api/assets/sprites/" というまったく同じ文字列の
+// プレフィックスを本ハンドラと CSpriteSheetHandler の双方に登録しても、
+// サフィックスの有無でリクエストを振り分けることはできない。
+// そのため本クラスは HttpServer.cpp のルーターには登録せず、
+// CSpriteSheetHandler が自身の Handle() 内でパスの末尾が "/history" かどうかを
+// 判定し、本クラスのインスタンスへ委譲する（コンポジション）方式を取る。
+class CSpriteSheetHistoryHandler : public IApiHandler
+{
+public:
+    // pathPrefix 例: "/api/assets/sprites/"
+    CSpriteSheetHistoryHandler(std::string pathPrefix, class CMgrData *pMgrData);
+
+    void Handle(const HttpRequest &request, HttpResponse &response) override;
+
+private:
+    std::string m_pathPrefix;
+    class CMgrData *m_pMgrData;
+};
+
+// ---------------------------------------------------------------------------
+// CSpriteSheetRevertHandler: POST /api/assets/sprites/{categoryKey}/{sheetIndex}/revert
+// ---------------------------------------------------------------------------
+// 認証・ロールは同上。POST はこのプレフィックスで他に登録されていないため
+// ルーター上の衝突は無い。
+class CSpriteSheetRevertHandler : public IApiHandler
+{
+public:
+    // pathPrefix 例: "/api/assets/sprites/"
+    CSpriteSheetRevertHandler(std::string pathPrefix, class CMgrData *pMgrData);
+
+    void Handle(const HttpRequest &request, HttpResponse &response) override;
+
+private:
+    std::string m_pathPrefix;
+    class CMgrData *m_pMgrData;
+};
+
+// ---------------------------------------------------------------------------
+// CSpriteSheetDeleteHandler: DELETE /api/assets/sprites/{categoryKey}/{sheetIndex}
+// ---------------------------------------------------------------------------
+// 上書きを解除して出荷時イメージ配信に戻す。認証・ロールは同上。
+// DELETE はこのプレフィックスで他に登録されていないためルーター上の衝突は無い。
+class CSpriteSheetDeleteHandler : public IApiHandler
+{
+public:
+    // pathPrefix 例: "/api/assets/sprites/"
+    CSpriteSheetDeleteHandler(std::string pathPrefix, class CMgrData *pMgrData);
+
+    void Handle(const HttpRequest &request, HttpResponse &response) override;
+
+private:
+    std::string m_pathPrefix;
+    class CMgrData *m_pMgrData;
+};
+
+// ---------------------------------------------------------------------------
 // CSpriteSheetHandler: GET /api/assets/sprites/{categoryKey}/{sheetIndex}
 // ---------------------------------------------------------------------------
 class CSpriteSheetHandler : public IApiHandler
 {
 public:
     // pathPrefix 例: "/api/assets/sprites/"
-    explicit CSpriteSheetHandler(std::string pathPrefix);
+    // pMgrData は "/history" サフィックス委譲先の CSpriteSheetHistoryHandler にのみ使う。
+    CSpriteSheetHandler(std::string pathPrefix, class CMgrData *pMgrData);
 
     void Handle(const HttpRequest &request, HttpResponse &response) override;
 
 private:
-    // パスから (categoryKey, sheetIndex) を解析する
+    // パスから (categoryKey, sheetIndex) を解析する（サフィックス無しのみ許可）
     bool TryParsePath(const std::string &path, std::string &outKey, int &outIndex) const;
 
     std::string m_pathPrefix;
+    CSpriteSheetHistoryHandler m_historyHandler;
 };
 
 // ---------------------------------------------------------------------------

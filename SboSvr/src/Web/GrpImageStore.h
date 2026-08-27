@@ -17,6 +17,16 @@
 
 struct sqlite3;
 
+// 履歴の1件分（png 本体は含めない。一覧表示用のメタのみ）
+struct SGrpSheetHistoryEntry
+{
+    long long   nId;         // grp_sheet_history.id
+    int         nRevision;
+    long long   nSavedAt;    // Unix epoch 秒
+    std::string strSavedBy;
+    size_t      nBytes;      // png のバイト数
+};
+
 class CGrpImageStore
 {
 public:
@@ -37,6 +47,21 @@ public:
                 int nWidth, int nHeight,
                 const char *pszUpdatedBy,
                 std::string &outError);
+
+    // 現在の版のメタを取得する。DB に行が無ければ false（= res/ か DLL が配信されている状態）。
+    bool GetCurrentMeta(const char *pszResName, int &outRevision, int &outWidth, int &outHeight,
+                        long long &outUpdatedAt, std::string &outUpdatedBy, size_t &outBytes);
+
+    // 履歴を新しい順（revision 降順）で取得する。DB が無ければ空を返して true。
+    bool GetHistory(const char *pszResName, std::vector<SGrpSheetHistoryEntry> &outEntries);
+
+    // 指定 revision の PNG バイト列を履歴から取得する。
+    bool GetHistoryPng(const char *pszResName, int nRevision, std::vector<unsigned char> &outPng);
+
+    // 上書きを解除する（grp_sheet と grp_sheet_history から res_name の行を全削除）。
+    // 削除後は res/ か DLL の出荷時イメージが配信される状態に戻る。
+    // 行が無かった場合も true を返す（冪等）。
+    bool ClearOverride(const char *pszResName, std::string &outError);
 
 private:
     CGrpImageStore();

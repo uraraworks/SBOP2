@@ -1316,14 +1316,33 @@ void CHttpServer::RegisterDefaultHandlers()
         m_router.RegisterPrefix("GET", "/api/assets/map-parts/sheets/", std::move(mapSheetHandler));
 
         // 汎用スプライトシート配信 API
-        //   GET /api/assets/sprites/{categoryKey}/{sheetIndex}
+        //   GET    /api/assets/sprites/{categoryKey}/{sheetIndex}          画像配信
+        //   GET    /api/assets/sprites/{categoryKey}/{sheetIndex}/history  上書き履歴一覧（要 IMAGE_EDIT）
+        //   PUT    /api/assets/sprites/{categoryKey}/{sheetIndex}          差し替え（要 IMAGE_EDIT）
+        //   POST   /api/assets/sprites/{categoryKey}/{sheetIndex}/revert   履歴から復元（要 IMAGE_EDIT）
+        //   DELETE /api/assets/sprites/{categoryKey}/{sheetIndex}          上書き解除（要 IMAGE_EDIT）
         //   categoryKey は ImageCatalogHandler の key 文字列と共通
-        std::unique_ptr<IApiHandler> spriteSheetHandler(new CSpriteSheetHandler("/api/assets/sprites/"));
+        //
+        // 注意: CApiRouter は同一プレフィックス長の複数ルートが一致した場合、
+        // 先に登録した方が常に勝ち、後続へフォールスルーしない。そのため
+        // "/history" サフィックスの GET は個別ルートとして登録せず、
+        // CSpriteSheetHandler が自身の Handle() 内でパスを見て内部委譲する
+        // （SpriteSheetHandler.h/.cpp のコメント参照）。POST /revert・DELETE は
+        // このプレフィックスで他に登録が無いメソッドなので通常どおり登録できる。
+        std::unique_ptr<IApiHandler> spriteSheetHandler(new CSpriteSheetHandler("/api/assets/sprites/", m_pMgrData));
         m_router.RegisterPrefix("GET", "/api/assets/sprites/", std::move(spriteSheetHandler));
 
         std::unique_ptr<IApiHandler> spriteSheetUploadHandler(
             new CSpriteSheetUploadHandler("/api/assets/sprites/", m_pMgrData));
         m_router.RegisterPrefix("PUT", "/api/assets/sprites/", std::move(spriteSheetUploadHandler));
+
+        std::unique_ptr<IApiHandler> spriteSheetRevertHandler(
+            new CSpriteSheetRevertHandler("/api/assets/sprites/", m_pMgrData));
+        m_router.RegisterPrefix("POST", "/api/assets/sprites/", std::move(spriteSheetRevertHandler));
+
+        std::unique_ptr<IApiHandler> spriteSheetDeleteHandler(
+            new CSpriteSheetDeleteHandler("/api/assets/sprites/", m_pMgrData));
+        m_router.RegisterPrefix("DELETE", "/api/assets/sprites/", std::move(spriteSheetDeleteHandler));
 
         std::wstring webRoot;
         if (ResolveWebRootPath(webRoot)) {
