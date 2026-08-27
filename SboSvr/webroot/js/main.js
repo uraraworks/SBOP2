@@ -46,6 +46,7 @@ import { mount as mountAuditReports }    from "./views/audit-reports.js";
 import { mount as mountOperationHistory }from "./views/operation-history.js";
 import { mount as mountFailbackGuide }   from "./views/failback-guide.js";
 import { mount as mountMapGenPatterns }  from "./views/map-gen-patterns.js";
+import { mount as mountImageEditor }     from "./views/image-editor.js";
 
 registerRoute("map-parts",         mountMapPartsEdit);
 registerRoute("map-shadows",       mountMapShadowEdit);
@@ -75,6 +76,7 @@ registerRoute("audit-reports",     mountAuditReports);
 registerRoute("operation-history", mountOperationHistory);
 registerRoute("failback-guide",    mountFailbackGuide);
 registerRoute("map-gen-patterns",  mountMapGenPatterns);
+registerRoute("image-editor",      mountImageEditor);
 
 // ----------------------------------------------------------------
 // hash ルーティングフック

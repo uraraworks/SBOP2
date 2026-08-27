@@ -2032,3 +2032,119 @@ main {
     height: auto;
   }
 }
+
+/* ================================================================
+   画像エディタ (image-editor.js)
+   ================================================================ */
+
+.image-editor-shell {
+  height: 100%;
+}
+
+.image-editor-cat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.image-editor-cat-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-editor-sheet-select {
+  flex-shrink: 0;
+  max-width: 6rem;
+}
+
+.image-editor-overridden-mark {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: var(--color-warning-soft, rgba(250, 204, 21, 0.25));
+  color: var(--color-warning, #fde68a);
+  min-height: 1.2em;
+}
+
+.ie-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  overflow-y: auto;
+  min-width: 0;
+  flex: 1;
+  min-height: 0;
+}
+
+.ie-preview-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.ie-grid-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+}
+
+.ie-preview-stage {
+  overflow: auto;
+  max-height: 480px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.75rem;
+  background:
+    linear-gradient(45deg, #808080 25%, transparent 25%) 0 0 / 16px 16px,
+    linear-gradient(-45deg, #808080 25%, transparent 25%) 0 0 / 16px 16px,
+    linear-gradient(45deg, transparent 75%, #808080 75%) 0 0 / 16px 16px,
+    linear-gradient(-45deg, transparent 75%, #808080 75%) 0 0 / 16px 16px,
+    #c0c0c0;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+  background-size: 16px 16px;
+}
+
+.ie-preview-stage.is-drag-over {
+  outline: 2px dashed var(--color-accent, #60a5fa);
+  outline-offset: -2px;
+}
+
+.ie-preview-inner {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.ie-preview-img {
+  display: block;
+  image-rendering: pixelated;
+}
+
+.ie-grid-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255, 0, 128, 0.55) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 0, 128, 0.55) 1px, transparent 1px);
+}
+
+.ie-dim-info {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.ie-state-text {
+  margin: 0;
+  font-weight: 600;
+}
