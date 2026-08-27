@@ -10,10 +10,74 @@
 
 #include "lodepng.h"
 
+#include "Web/AuthProvider.h"
 #include "Web/GrpImageStore.h"
+#include "Web/JsonUtils.h"
 
 namespace
 {
+
+// CSpriteSheetHandler / CSpriteSheetUploadHandler 共通のパス解析ロジック。
+// /api/assets/sprites/{categoryKey}/{sheetIndex}[.png]
+bool ParseSpriteSheetPath(
+    const std::string &pathPrefix,
+    const std::string &path,
+    std::string &outKey,
+    int &outIndex)
+{
+    std::string fullPath = path;
+    size_t queryPos = fullPath.find('?');
+    if (queryPos != std::string::npos) {
+        fullPath = fullPath.substr(0, queryPos);
+    }
+
+    if (fullPath.size() <= pathPrefix.size()) {
+        return false;
+    }
+
+    std::string rest = fullPath.substr(pathPrefix.size());
+    // rest = "{categoryKey}/{sheetIndex}[.png]"
+
+    size_t slashPos = rest.find('/');
+    if (slashPos == std::string::npos || slashPos == 0) {
+        return false;
+    }
+
+    outKey = rest.substr(0, slashPos);
+    std::string indexStr = rest.substr(slashPos + 1);
+
+    // 末尾 .png を除去
+    if (indexStr.size() > 4) {
+        std::string ext = indexStr.substr(indexStr.size() - 4);
+        for (size_t i = 0; i < ext.size(); ++i) {
+            ext[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(ext[i])));
+        }
+        if (ext == ".png") {
+            indexStr.erase(indexStr.size() - 4);
+        }
+    }
+
+    // 末尾にさらにスラッシュがある場合は除去
+    size_t trailingSlash = indexStr.find('/');
+    if (trailingSlash != std::string::npos) {
+        indexStr = indexStr.substr(0, trailingSlash);
+    }
+
+    if (indexStr.empty()) {
+        return false;
+    }
+
+    char *pEnd = NULL;
+    long value = std::strtol(indexStr.c_str(), &pEnd, 10);
+    if ((pEnd == NULL) || (*pEnd != '\0')) {
+        return false;
+    }
+    if (value < 0 || value > 1000) {
+        return false;
+    }
+    outIndex = static_cast<int>(value);
+    return true;
+}
 
 // char* (ASCII 前提) を wstring に変換する簡易ヘルパ。
 // レイアウト定義テーブル (Common/GrpLayout.h) は char で持つが、
@@ -118,6 +182,7 @@ void CGrpResourceProvider::InvalidateCache(const char *pszResName)
     std::lock_guard<std::mutex> lock(m_mutex);
     if (pszResName == NULL || pszResName[0] == '\0') {
         m_sheetCache.clear();
+        m_sheetCountCache.clear();
         return;
     }
     std::string target(pszResName);
@@ -131,14 +196,26 @@ void CGrpResourceProvider::InvalidateCache(const char *pszResName)
             ++it;
         }
     }
+    // resName 単位ではどのカテゴリのシート数が変わったか安価に特定できないため、
+    // シート数キャッシュは全破棄する（次回 GetSheetCount で再プローブされるだけで、
+    // 画像ストア導入前の DLL プローブと比べてもコスト差は小さい）。
+    m_sheetCountCache.clear();
+}
+
+bool CGrpResourceProvider::SheetExistsLocked(const std::wstring &resourceName)
+{
+    // 読み取り側（LoadSheetLocked）と同じ判定順・同じ存在条件：
+    // 画像ストア(DB) → ファイル(res/) → DLL リソースのいずれかで見つかれば「存在する」。
+    std::vector<unsigned char> dummyData;
+    std::string dummyETag;
+    return TryLoadFromImageStoreLocked(resourceName, dummyData, dummyETag) ||
+           TryLoadFromFileLocked(resourceName, dummyData, dummyETag) ||
+           TryLoadFromDllLocked(resourceName, dummyData, dummyETag);
 }
 
 int CGrpResourceProvider::GetSheetCount(const std::string &categoryKey)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    if (!EnsureLibraryLocked()) {
-        return 0;
-    }
 
     const SGrpLayoutDef *pCat = FindCategory(categoryKey);
     if (pCat == NULL) {
@@ -150,39 +227,53 @@ int CGrpResourceProvider::GetSheetCount(const std::string &categoryKey)
         return it->second;
     }
 
-    // リソース存在プローブで遅延カウント
+    // 存在確認プローブで遅延カウント。BuildResourceName が固定名テーブル/番号パターンの
+    // 両方を sheetIndex から一意に導出できるため、経路を問わずインデックスを 0 から
+    // 順に走査し、見つからない番号が出た時点で打ち切る（連番カテゴリの挙動を維持）。
+    // 番号パターンのカテゴリでは BuildResourceName は常に成功するため、
+    // SheetExistsLocked が万一常に true を返す状況になると無限ループでサーバーが
+    // 停止する（単一スレッド設計のため全リクエストが止まる）。暴走時の保険として
+    // sanity cap を設ける。通常のカテゴリは数枚〜数十枚なので実運用でこの上限が
+    // 効くことはない。
+    static const int kMaxSheetProbe = 4096;
     int count = 0;
-    if (pCat->ppszFixedNames != NULL) {
-        // 固定名テーブル: NULL になるまで body/ear の組で走査
-        for (int i = 0; pCat->ppszFixedNames[i] != NULL; i += 2) {
-            std::wstring name = ToWString(pCat->ppszFixedNames[i]);
-            HRSRC hResInfo = FindResourceW(m_hModule, name.c_str(), L"PNG");
-            if (hResInfo == NULL) {
-                break;
-            }
-            ++count;
+    while (count < kMaxSheetProbe) {
+        std::wstring resourceName;
+        if (!BuildResourceName(*pCat, count, resourceName)) {
+            break;
         }
-    } else if (pCat->pszResPattern != NULL) {
-        // 単一固定名（パターンに %02d が含まれない場合は1枚）
-        std::wstring pattern = ToWString(pCat->pszResPattern);
-        if (pattern.find(L'%') == std::wstring::npos) {
-            HRSRC hResInfo = FindResourceW(m_hModule, pattern.c_str(), L"PNG");
-            count = (hResInfo != NULL) ? 1 : 0;
-        } else {
-            while (true) {
-                wchar_t szName[64] = {};
-                _snwprintf_s(szName, _countof(szName), _TRUNCATE, pattern.c_str(), count + 1);
-                HRSRC hResInfo = FindResourceW(m_hModule, szName, L"PNG");
-                if (hResInfo == NULL) {
-                    break;
-                }
-                ++count;
-            }
+        if (!SheetExistsLocked(resourceName)) {
+            break;
         }
+        ++count;
+    }
+    if (count >= kMaxSheetProbe) {
+        char szMsg[128];
+        _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
+            "CGrpResourceProvider::GetSheetCount: probe limit reached (category=%s)\n",
+            categoryKey.c_str());
+        OutputDebugStringA(szMsg);
     }
 
     m_sheetCountCache.insert(std::make_pair(categoryKey, count));
     return count;
+}
+
+bool CGrpResourceProvider::ResolveResourceName(
+    const std::string &categoryKey,
+    int sheetIndex,
+    std::string &outResName) const
+{
+    const SGrpLayoutDef *pCat = FindCategory(categoryKey);
+    if (pCat == NULL) {
+        return false;
+    }
+    std::wstring resourceName;
+    if (!BuildResourceName(*pCat, sheetIndex, resourceName)) {
+        return false;
+    }
+    outResName = ToStringA(resourceName);
+    return true;
 }
 
 bool CGrpResourceProvider::GetCategoryLayout(
@@ -558,57 +649,200 @@ bool CSpriteSheetHandler::TryParsePath(
     std::string &outKey,
     int &outIndex) const
 {
-    // /api/assets/sprites/{categoryKey}/{sheetIndex}[.png]
-    std::string fullPath = path;
-    size_t queryPos = fullPath.find('?');
-    if (queryPos != std::string::npos) {
-        fullPath = fullPath.substr(0, queryPos);
+    return ParseSpriteSheetPath(m_pathPrefix, path, outKey, outIndex);
+}
+
+// ---------------------------------------------------------------------------
+// CSpriteSheetUploadHandler
+// ---------------------------------------------------------------------------
+
+CSpriteSheetUploadHandler::CSpriteSheetUploadHandler(std::string pathPrefix, CMgrData *pMgrData)
+    : m_pathPrefix(std::move(pathPrefix))
+    , m_pMgrData(pMgrData)
+{
+}
+
+bool CSpriteSheetUploadHandler::TryParsePath(
+    const std::string &path,
+    std::string &outKey,
+    int &outIndex) const
+{
+    return ParseSpriteSheetPath(m_pathPrefix, path, outKey, outIndex);
+}
+
+void CSpriteSheetUploadHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+    AuthProvider::AuthContext authContext;
+    AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+    if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+        response.statusLine = "HTTP/1.1 503 Service Unavailable";
+        response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+        return;
+    }
+    if (authStatus != AuthProvider::AuthStatusOk) {
+        response.statusLine = "HTTP/1.1 401 Unauthorized";
+        response.SetJsonBody("{\"error\":\"unauthorized\"}");
+        return;
+    }
+    if (!AuthProvider::HasRole(authContext, "IMAGE_EDIT")) {
+        response.statusLine = "HTTP/1.1 403 Forbidden";
+        response.SetJsonBody(AuthProvider::BuildForbiddenBody("IMAGE_EDIT"));
+        return;
     }
 
-    if (fullPath.size() <= m_pathPrefix.size()) {
-        return false;
+    std::string categoryKey;
+    int sheetIndex = -1;
+    if (!TryParsePath(request.path, categoryKey, sheetIndex)) {
+        response.statusLine = "HTTP/1.1 404 Not Found";
+        response.SetJsonBody("{\"error\":\"sprite_not_found\"}");
+        return;
     }
 
-    std::string rest = fullPath.substr(m_pathPrefix.size());
-    // rest = "{categoryKey}/{sheetIndex}[.png]"
-
-    size_t slashPos = rest.find('/');
-    if (slashPos == std::string::npos || slashPos == 0) {
-        return false;
-    }
-
-    outKey = rest.substr(0, slashPos);
-    std::string indexStr = rest.substr(slashPos + 1);
-
-    // 末尾 .png を除去
-    if (indexStr.size() > 4) {
-        std::string ext = indexStr.substr(indexStr.size() - 4);
-        for (size_t i = 0; i < ext.size(); ++i) {
-            ext[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(ext[i])));
+    const char *pszContentType = request.FindHeader("Content-Type");
+    bool bIsPng = false;
+    if (pszContentType != NULL) {
+        std::string contentType(pszContentType);
+        // パラメータ（; charset=... 等）を無視して先頭一致で判定する
+        size_t semiPos = contentType.find(';');
+        if (semiPos != std::string::npos) {
+            contentType = contentType.substr(0, semiPos);
         }
-        if (ext == ".png") {
-            indexStr.erase(indexStr.size() - 4);
+        for (size_t i = 0; i < contentType.size(); ++i) {
+            contentType[i] = static_cast<char>(std::tolower(static_cast<unsigned char>(contentType[i])));
+        }
+        // 前後空白除去
+        size_t nStart = contentType.find_first_not_of(" \t");
+        size_t nEnd = contentType.find_last_not_of(" \t");
+        if (nStart != std::string::npos) {
+            contentType = contentType.substr(nStart, nEnd - nStart + 1);
+        }
+        bIsPng = (contentType == "image/png");
+    }
+    if (!bIsPng) {
+        response.statusLine = "HTTP/1.1 415 Unsupported Media Type";
+        response.SetJsonBody("{\"error\":\"unsupported_media_type\"}");
+        return;
+    }
+
+    if (request.body.empty()) {
+        response.statusLine = "HTTP/1.1 400 Bad Request";
+        response.SetJsonBody("{\"error\":\"empty_body\"}");
+        return;
+    }
+
+    // HttpServer.cpp 側で 2MB を超えるボディはこの時点までに 413 で弾かれているが、
+    // 念のためハンドラ側でも同じ上限を検証する。
+    const size_t kMaxSpriteUploadBodySize = 2 * 1024 * 1024;
+    if (request.body.size() > kMaxSpriteUploadBodySize) {
+        response.statusLine = "HTTP/1.1 413 Payload Too Large";
+        response.SetJsonBody("{\"error\":\"request_body_too_large\"}");
+        return;
+    }
+
+    const unsigned char *pBodyData = reinterpret_cast<const unsigned char *>(request.body.data());
+    size_t nBodySize = request.body.size();
+
+    // PNG として妥当か・寸法は何かを、フルデコードして確認する。
+    // inspect（ヘッダのみ）だと途中で切れた/壊れた PNG でもヘッダさえ正しければ
+    // 通ってしまい、保存後に配信側の MakeTransparentPng が失敗してスプライトが
+    // 404 で消える（アップロードは成功したのに絵が消える）最悪の失敗モードになるため、
+    // ここでは必ずフルデコードする。デコード結果の画素は寸法確認以外に使わず破棄し、
+    // 保存するのは受け取った生の PNG バイト列のまま（再エンコードしない）。
+    unsigned int imgW = 0, imgH = 0;
+    {
+        lodepng::State decodeState;
+        std::vector<unsigned char> decodedPixels;
+        unsigned int decodeErr = lodepng::decode(decodedPixels, imgW, imgH, decodeState, pBodyData, nBodySize);
+        if (decodeErr != 0) {
+            response.statusLine = "HTTP/1.1 400 Bad Request";
+            response.SetJsonBody("{\"error\":\"invalid_png\"}");
+            return;
         }
     }
 
-    // 末尾にさらにスラッシュがある場合は除去
-    size_t trailingSlash = indexStr.find('/');
-    if (trailingSlash != std::string::npos) {
-        indexStr = indexStr.substr(0, trailingSlash);
+    // S2 は既存シートの差し替えのみ対応する（新規追加は未対応）。
+    // 判定基準は「今配信されている画像と同じ寸法であること」。
+    // Common/GrpLayout.h の nCellSize*nCountX/Y は GetGrpPos() 用の論理値であり、
+    // カテゴリによっては物理サイズと一致しないため、寸法算出には使わない。
+    std::vector<unsigned char> currentPng;
+    std::string currentEtag;
+    if (!CGrpResourceProvider::GetInstance().GetSheetPng(categoryKey, sheetIndex, currentPng, currentEtag)) {
+        response.statusLine = "HTTP/1.1 409 Conflict";
+        response.SetJsonBody("{\"error\":\"sheet_not_found\",\"message\":\"新規シートの追加は未対応です\"}");
+        return;
     }
 
-    if (indexStr.empty()) {
-        return false;
+    unsigned int nExpectedWidth = 0, nExpectedHeight = 0;
+    lodepng::State currentInspectState;
+    unsigned int currentInspectErr = lodepng_inspect(
+        &nExpectedWidth, &nExpectedHeight, &currentInspectState,
+        currentPng.data(), currentPng.size());
+    if (currentInspectErr != 0) {
+        response.statusLine = "HTTP/1.1 500 Internal Server Error";
+        response.SetJsonBody("{\"error\":\"current_sheet_invalid\"}");
+        return;
     }
 
-    char *pEnd = NULL;
-    long value = std::strtol(indexStr.c_str(), &pEnd, 10);
-    if ((pEnd == NULL) || (*pEnd != '\0')) {
-        return false;
+    if (imgW != nExpectedWidth || imgH != nExpectedHeight) {
+        std::ostringstream oss;
+        oss << "{\"error\":\"size_mismatch\","
+            << "\"expected\":{\"width\":" << nExpectedWidth << ",\"height\":" << nExpectedHeight << "},"
+            << "\"actual\":{\"width\":" << imgW << ",\"height\":" << imgH << "}}";
+        response.statusLine = "HTTP/1.1 400 Bad Request";
+        response.SetJsonBody(oss.str());
+        return;
     }
-    if (value < 0 || value > 1000) {
-        return false;
+
+    std::string resName;
+    if (!CGrpResourceProvider::GetInstance().ResolveResourceName(categoryKey, sheetIndex, resName)) {
+        response.statusLine = "HTTP/1.1 404 Not Found";
+        response.SetJsonBody("{\"error\":\"sprite_not_found\"}");
+        return;
     }
-    outIndex = static_cast<int>(value);
-    return true;
+
+    std::string putError;
+    if (!CGrpImageStore::GetInstance().PutPng(
+            resName.c_str(), pBodyData, nBodySize,
+            static_cast<int>(imgW), static_cast<int>(imgH),
+            authContext.loginId.c_str(), putError))
+    {
+        response.statusLine = "HTTP/1.1 500 Internal Server Error";
+        response.SetJsonBody("{\"error\":\"" + JsonUtils::Escape(putError) + "\"}");
+        return;
+    }
+
+    CGrpResourceProvider::GetInstance().InvalidateCache(resName.c_str());
+
+    std::string etag;
+    {
+        std::vector<unsigned char> reread;
+        // PutPng 直後に画像ストアから読み直し、実配信と同じ ETag を返す
+        // （画像ストアの ETag 生成規則 "gs-<revision>-<size>" は GrpImageStore.cpp 内に閉じているため）
+        CGrpImageStore::GetInstance().GetPng(resName.c_str(), reread, etag);
+    }
+
+    // ETag "\"gs-<revision>-<size>\"" から revision を取り出す
+    // （PutPng は revision を outError 以外の形で返さないため、ここで再解析する）
+    int nRevision = 0;
+    {
+        size_t nFirstDash = etag.find('-');
+        if (nFirstDash != std::string::npos) {
+            size_t nSecondDash = etag.find('-', nFirstDash + 1);
+            if (nSecondDash != std::string::npos) {
+                std::string revStr = etag.substr(nFirstDash + 1, nSecondDash - nFirstDash - 1);
+                nRevision = std::atoi(revStr.c_str());
+            }
+        }
+    }
+
+    std::ostringstream oss;
+    oss << "{\"resName\":\"" << JsonUtils::Escape(resName) << "\","
+        << "\"revision\":" << nRevision << ","
+        << "\"etag\":\"" << JsonUtils::Escape(etag) << "\","
+        << "\"width\":" << imgW << ","
+        << "\"height\":" << imgH << ","
+        << "\"bytes\":" << nBodySize << "}";
+
+    response.statusLine = "HTTP/1.1 200 OK";
+    response.SetJsonBody(oss.str());
 }

@@ -50,6 +50,10 @@ public:
     // B2 フェーズで ImageCatalogHandler から参照できるようシングルトンを公開する。
     int GetSheetCount(const std::string &categoryKey);
 
+    // categoryKey + sheetIndex から res_name（画像ストア/GrpLayout 共通の ASCII キー）を返す。
+    // アップロードハンドラが CGrpImageStore::PutPng() のキーを組み立てるために使う。
+    bool ResolveResourceName(const std::string &categoryKey, int sheetIndex, std::string &outResName) const;
+
     // カテゴリキーに対応するレイアウト情報を返す。
     // Common/GrpLayout.h のテーブルに存在すれば true を返し、各出力引数に値を格納する。
     // 存在しなければ false を返す。
@@ -89,6 +93,10 @@ private:
     bool TryLoadFromDllLocked(const std::wstring &resourceName,
                               std::vector<unsigned char> &outRawPng, std::string &outETag);
 
+    // resourceName が 画像ストア/ファイル/DLL のいずれかに存在するかを判定する
+    // （GetSheetCount の存在確認プローブを読み取り側の3経路と揃えるため）
+    bool SheetExistsLocked(const std::wstring &resourceName);
+
     // パレット 0 を透過化して PNG を返す（MapPartsHandler と同じロジック）
     bool MakeTransparentPng(const unsigned char *pSrc, size_t nSrcSize, std::vector<unsigned char> &outData);
 
@@ -124,4 +132,26 @@ private:
     bool TryParsePath(const std::string &path, std::string &outKey, int &outIndex) const;
 
     std::string m_pathPrefix;
+};
+
+// ---------------------------------------------------------------------------
+// CSpriteSheetUploadHandler: PUT /api/assets/sprites/{categoryKey}/{sheetIndex}
+// ---------------------------------------------------------------------------
+// リクエストボディは生 PNG バイト列（Content-Type: image/png 必須）。
+// 認証・権限チェックは ServerInfoHandler と同じ流儀（ハンドラ内で
+// AuthProvider::Authenticate を呼び、503/401/403 を返す）。必要ロールは IMAGE_EDIT。
+class CSpriteSheetUploadHandler : public IApiHandler
+{
+public:
+    // pathPrefix 例: "/api/assets/sprites/"
+    CSpriteSheetUploadHandler(std::string pathPrefix, class CMgrData *pMgrData);
+
+    void Handle(const HttpRequest &request, HttpResponse &response) override;
+
+private:
+    // パス解析は CSpriteSheetHandler と同じロジックを流用する
+    bool TryParsePath(const std::string &path, std::string &outKey, int &outIndex) const;
+
+    std::string m_pathPrefix;
+    class CMgrData *m_pMgrData;
 };

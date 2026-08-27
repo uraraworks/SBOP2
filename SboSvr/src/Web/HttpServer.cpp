@@ -56,6 +56,56 @@ namespace
 {
 const size_t kMaxHeaderSize = 8192;
 const size_t kMaxBodySize = 65536;
+// スプライト画像アップロード（PUT /api/assets/sprites/...）専用の上限。
+// PNG は 64KB を超えうるため、このパスに限り緩和する。他の API の DoS 耐性は
+// 変えないよう、既定の kMaxBodySize はそのまま維持する。
+const size_t kMaxSpriteUploadBodySize = 2 * 1024 * 1024;
+const char *const kSpriteUploadPathPrefix = "/api/assets/sprites/";
+
+// リクエスト行（1行目）だけから安価にメソッドとパスを取り出す。
+// この時点ではヘッダ受信直後でボディ未受信のため ParseHttpRequest はまだ呼べない。
+// リクエスト行が壊れている/短すぎる場合は method/path とも空文字にする
+// （呼び出し側は既定上限を適用する）。
+struct SRequestLineForSizing
+{
+        std::string method;
+        std::string path;
+};
+
+SRequestLineForSizing ExtractRequestLineForSizing(const std::string &request)
+{
+        SRequestLineForSizing result;
+
+        size_t nLineEnd = request.find("\r\n");
+        std::string requestLine = (nLineEnd == std::string::npos) ? request : request.substr(0, nLineEnd);
+
+        size_t nFirstSpace = requestLine.find(' ');
+        if (nFirstSpace == std::string::npos) {
+                return result;
+        }
+        size_t nSecondSpace = requestLine.find(' ', nFirstSpace + 1);
+        if (nSecondSpace == std::string::npos || nSecondSpace <= nFirstSpace + 1) {
+                return result;
+        }
+        result.method = requestLine.substr(0, nFirstSpace);
+        result.path = requestLine.substr(nFirstSpace + 1, nSecondSpace - nFirstSpace - 1);
+        return result;
+}
+
+// リクエストのメソッド・パスに応じたボディ上限を返す（既定 kMaxBodySize、対象のみ緩和）。
+// このサイズ判定は認証より前に走るため、緩和対象は必要最小限にする：
+// スプライト画像アップロードは PUT だけが本文を伴うので、PUT 以外（GET 等の
+// 誤送/なりすまし）まで緩めると未認証の相手に 2MB のボディ送付を許してしまう。
+size_t ResolveMaxBodySize(const std::string &request)
+{
+        SRequestLineForSizing line = ExtractRequestLineForSizing(request);
+        if (!line.method.empty() && !line.path.empty()
+                && line.method == "PUT"
+                && line.path.compare(0, std::strlen(kSpriteUploadPathPrefix), kSpriteUploadPathPrefix) == 0) {
+                return kMaxSpriteUploadBodySize;
+        }
+        return kMaxBodySize;
+}
 
 std::string TrimCopy(const std::string &text)
 {
@@ -645,7 +695,8 @@ void CHttpServer::HandleClient(SOCKET hClient, bool &outTransferred)
                 return;
         }
 
-        if ((lengthResult == ContentLengthValid) && (nContentLength > kMaxBodySize)) {
+        const size_t nEffectiveMaxBodySize = ResolveMaxBodySize(request);
+        if ((lengthResult == ContentLengthValid) && (nContentLength > nEffectiveMaxBodySize)) {
                 HttpResponse tooLarge;
                 tooLarge.statusLine = "HTTP/1.1 413 Payload Too Large";
                 tooLarge.SetJsonBody("{\"error\":\"request_body_too_large\"}");
@@ -1269,6 +1320,10 @@ void CHttpServer::RegisterDefaultHandlers()
         //   categoryKey は ImageCatalogHandler の key 文字列と共通
         std::unique_ptr<IApiHandler> spriteSheetHandler(new CSpriteSheetHandler("/api/assets/sprites/"));
         m_router.RegisterPrefix("GET", "/api/assets/sprites/", std::move(spriteSheetHandler));
+
+        std::unique_ptr<IApiHandler> spriteSheetUploadHandler(
+            new CSpriteSheetUploadHandler("/api/assets/sprites/", m_pMgrData));
+        m_router.RegisterPrefix("PUT", "/api/assets/sprites/", std::move(spriteSheetUploadHandler));
 
         std::wstring webRoot;
         if (ResolveWebRootPath(webRoot)) {
