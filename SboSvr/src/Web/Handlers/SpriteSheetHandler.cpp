@@ -844,9 +844,17 @@ void CSpriteSheetUploadHandler::Handle(const HttpRequest &request, HttpResponse 
     // 404 で消える（アップロードは成功したのに絵が消える）最悪の失敗モードになるため、
     // ここでは必ずフルデコードする。デコード結果の画素は寸法確認以外に使わず破棄し、
     // 保存するのは受け取った生の PNG バイト列のまま（再エンコードしない）。
+    // フルデコードして PNG として妥当か・寸法・カラータイプを確認する。
+    // color_convert=0 でデコードすることで、MakeTransparentPng と同じ条件
+    // （8bit パレット PNG であること）をここで検証できる。
+    // 素材は全て 8bit パレット PNG（インデックス0=透過）が前提であり、
+    // 見た目が同じ RGBA PNG 等を受理してしまうと、管理画面では正常に見えるのに
+    // ゲームクライアント（Read256 が LCT_PALETTE 以外を拒否）だけが読めなくなる
+    // という不具合を踏む。ここで入口から弾く。
     unsigned int imgW = 0, imgH = 0;
     {
         lodepng::State decodeState;
+        decodeState.decoder.color_convert = 0;
         std::vector<unsigned char> decodedPixels;
         unsigned int decodeErr = lodepng::decode(decodedPixels, imgW, imgH, decodeState, pBodyData, nBodySize);
         if (decodeErr != 0) {
@@ -854,25 +862,47 @@ void CSpriteSheetUploadHandler::Handle(const HttpRequest &request, HttpResponse 
             response.SetJsonBody("{\"error\":\"invalid_png\"}");
             return;
         }
+        if (decodeState.info_png.color.colortype != LCT_PALETTE ||
+            decodeState.info_png.color.palettesize == 0 ||
+            decodeState.info_png.color.palettesize > 256)
+        {
+            response.statusLine = "HTTP/1.1 400 Bad Request";
+            response.SetJsonBody(
+                "{\"error\":\"not_palette_png\",\"message\":\""
+                "8bitパレットPNG(インデックスカラー)で保存してください。"
+                "インデックス0が透過色として扱われます。\"}");
+            return;
+        }
     }
 
-    // S2 は既存シートの差し替えのみ対応する（新規追加は未対応）。
-    // 判定基準は「今配信されている画像と同じ寸法であること」。
-    // Common/GrpLayout.h の nCellSize*nCountX/Y は GetGrpPos() 用の論理値であり、
-    // カテゴリによっては物理サイズと一致しないため、寸法算出には使わない。
+    // 既存シートの差し替え or 新規シートの追加を判定する。
+    // 現在配信中の画像が取得できればそれと同じ寸法を要求する（差し替え）。
+    // 取得できなければ新規シートとみなし、同カテゴリの sheetIndex=0 を基準寸法に使う。
+    bool bCreated = false;
     std::vector<unsigned char> currentPng;
     std::string currentEtag;
-    if (!CGrpResourceProvider::GetInstance().GetSheetPng(categoryKey, sheetIndex, currentPng, currentEtag)) {
-        response.statusLine = "HTTP/1.1 409 Conflict";
-        response.SetJsonBody("{\"error\":\"sheet_not_found\",\"message\":\"新規シートの追加は未対応です\"}");
-        return;
+    bool bHasCurrent =
+        CGrpResourceProvider::GetInstance().GetSheetPng(categoryKey, sheetIndex, currentPng, currentEtag);
+
+    std::vector<unsigned char> referencePng;
+    if (!bHasCurrent) {
+        bCreated = true;
+        std::string refEtag;
+        if (!CGrpResourceProvider::GetInstance().GetSheetPng(categoryKey, 0, referencePng, refEtag)) {
+            response.statusLine = "HTTP/1.1 400 Bad Request";
+            response.SetJsonBody(
+                "{\"error\":\"no_reference_sheet\",\"message\":\""
+                "このカテゴリには基準となる既存シートがありません\"}");
+            return;
+        }
     }
+    const std::vector<unsigned char> &basisPng = bHasCurrent ? currentPng : referencePng;
 
     unsigned int nExpectedWidth = 0, nExpectedHeight = 0;
     lodepng::State currentInspectState;
     unsigned int currentInspectErr = lodepng_inspect(
         &nExpectedWidth, &nExpectedHeight, &currentInspectState,
-        currentPng.data(), currentPng.size());
+        basisPng.data(), basisPng.size());
     if (currentInspectErr != 0) {
         response.statusLine = "HTTP/1.1 500 Internal Server Error";
         response.SetJsonBody("{\"error\":\"current_sheet_invalid\"}");
@@ -889,10 +919,34 @@ void CSpriteSheetUploadHandler::Handle(const HttpRequest &request, HttpResponse 
         return;
     }
 
+    if (bCreated) {
+        // 新規シートは連番が飛ばないことを要求する。
+        // GetSheetCount の存在確認プローブは欠番に当たった時点で走査を打ち切るため、
+        // 飛び番で追加すると以降のシートが二度と見えなくなってしまう。
+        int nSheetCount = CGrpResourceProvider::GetInstance().GetSheetCount(categoryKey);
+        if (sheetIndex < 0 || sheetIndex > nSheetCount) {
+            std::ostringstream oss;
+            oss << "{\"error\":\"index_out_of_range\","
+                << "\"message\":\"シート番号は連番である必要があります。次に追加できる番号は "
+                << nSheetCount << " です。\"}";
+            response.statusLine = "HTTP/1.1 400 Bad Request";
+            response.SetJsonBody(oss.str());
+            return;
+        }
+    }
+
     std::string resName;
     if (!CGrpResourceProvider::GetInstance().ResolveResourceName(categoryKey, sheetIndex, resName)) {
-        response.statusLine = "HTTP/1.1 404 Not Found";
-        response.SetJsonBody("{\"error\":\"sprite_not_found\"}");
+        if (bCreated) {
+            // 固定名テーブルのカテゴリ（char, char2x2 等）は配列長を超えると
+            // リソース名を生成できない。番号パターンのカテゴリは常に生成できるため
+            // ここに来るのは固定名カテゴリのみのはず。
+            response.statusLine = "HTTP/1.1 400 Bad Request";
+            response.SetJsonBody("{\"error\":\"cannot_add_sheet\"}");
+        } else {
+            response.statusLine = "HTTP/1.1 404 Not Found";
+            response.SetJsonBody("{\"error\":\"sprite_not_found\"}");
+        }
         return;
     }
 
@@ -937,7 +991,8 @@ void CSpriteSheetUploadHandler::Handle(const HttpRequest &request, HttpResponse 
         << "\"etag\":\"" << JsonUtils::Escape(etag) << "\","
         << "\"width\":" << imgW << ","
         << "\"height\":" << imgH << ","
-        << "\"bytes\":" << nBodySize << "}";
+        << "\"bytes\":" << nBodySize << ","
+        << "\"created\":" << (bCreated ? "true" : "false") << "}";
 
     response.statusLine = "HTTP/1.1 200 OK";
     response.SetJsonBody(oss.str());
