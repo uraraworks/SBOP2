@@ -2189,3 +2189,73 @@ main {
   display: block;
   image-rendering: pixelated;
 }
+
+/* --- ペイント (components/sprite-paint.js) --- */
+
+.sp-cell-info {
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.sp-stage {
+  display: inline-block;
+  max-height: none;
+}
+
+.sp-canvas {
+  display: block;
+  image-rendering: pixelated;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+/* 選択中のツールを目立たせる */
+.sp-section .button.is-selected {
+  outline: 2px solid var(--color-accent, #60a5fa);
+  outline-offset: -2px;
+}
+
+.sp-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 0.75rem;
+  max-height: 8.5rem;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.sp-swatch {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  cursor: pointer;
+  flex: none;
+}
+
+/* インデックス 0 (透過) は市松模様で示す */
+.sp-swatch.is-transparent {
+  background:
+    linear-gradient(45deg, #808080 25%, transparent 25%) 0 0 / 8px 8px,
+    linear-gradient(-45deg, #808080 25%, transparent 25%) 0 4px / 8px 8px,
+    linear-gradient(45deg, transparent 75%, #808080 75%) 4px -4px / 8px 8px,
+    linear-gradient(-45deg, transparent 75%, #808080 75%) -4px 0 / 8px 8px,
+    #c0c0c0;
+}
+
+.sp-swatch.is-selected {
+  outline: 2px solid var(--color-accent, #60a5fa);
+  outline-offset: 1px;
+}
+
+.sp-dirty {
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.sp-dirty.is-dirty {
+  color: var(--color-warning, #fde68a);
+  font-weight: 600;
+}

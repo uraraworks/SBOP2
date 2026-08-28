@@ -17,10 +17,10 @@
  *   - 目は向きが「上」(drawDirection == 0) の時は描かない
  */
 
-const CELL = 32;
+export const CELL = 32;
 
 // CInfoCharBase::GetDrawDirection の戻り値。0=上 1=下 2=左 3=右
-const DIRECTIONS = [
+export const DIRECTIONS = [
   { value: 1, label: "下" },
   { value: 0, label: "上" },
   { value: 2, label: "左" },
@@ -33,6 +33,25 @@ const EYE_LABELS = ["通常", "ダメージ", "気絶", "睡眠"];
 // 服スロットを置き換えるカテゴリ。
 // wGrpIDSP / wGrpIDTmpMain が立っている時は服の代わりにこれらが重なる。
 const CLOTH_SLOT_KEYS = new Set(["cloth2x2", "spCloth2x2", "spHair2x2"]);
+
+/**
+ * フレーム番号と性別からシート上のセル左上座標を求める。
+ * 目のような例外は opts で表現する（ペイント側の下敷き計算でも使うため公開する）。
+ *
+ * @param {number} frame  0 起点のフレーム番号（dir * 4 + コマ。行をまたぐと 16 以上）
+ * @param {number} sex    0=男 1=女
+ * @param {{offsetX?:number, applyFemaleOffset?:boolean}} [opts]
+ */
+export function frameCellOrigin(frame, sex, opts) {
+  const female = opts?.applyFemaleOffset === false ? 0 : (sex === 1 ? CELL * 4 : 0);
+  return {
+    sx: (frame % 16) * CELL + (opts?.offsetX ?? 0),
+    sy: Math.floor(frame / 16) * CELL + female,
+  };
+}
+
+// 目レイヤーの特殊ルール: x を 4 セル分戻し、女性オフセットを足さない
+export const EYE_ORIGIN_OPTS = { offsetX: -CELL * 4, applyFemaleOffset: false };
 
 // このコンポーネントを表示するカテゴリ
 export const COMPOSABLE_KEYS = new Set([
@@ -319,9 +338,7 @@ export function createCharComposer({ categories }) {
 
   // シート上のセル矩形を求める。範囲外なら null。
   function cellRect(img, frame, opts) {
-    const femaleOffset = opts?.applyFemaleOffset === false ? 0 : (_sex === 1 ? CELL * 4 : 0);
-    const sx = (frame % 16) * CELL + (opts?.offsetX ?? 0);
-    const sy = Math.floor(frame / 16) * CELL + femaleOffset;
+    const { sx, sy } = frameCellOrigin(frame, _sex, opts);
     if (sx < 0 || sy < 0) return null;
     if (sx + CELL > img.naturalWidth || sy + CELL > img.naturalHeight) return null;
     return { sx, sy };
@@ -346,7 +363,7 @@ export function createCharComposer({ categories }) {
           { slot: "body",  ref: slots.body,  label: "体" },
           { slot: "cloth", ref: slots.cloth, label: "服" },
           { slot: "hair",  ref: slots.hair,  label: "髪" },
-          { slot: "eye",   ref: slots.eye,   label: "目", offsetX: -CELL * 4, applyFemaleOffset: false },
+          { slot: "eye",   ref: slots.eye,   label: "目", ...EYE_ORIGIN_OPTS },
         ];
 
     for (const step of plan) {

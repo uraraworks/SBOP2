@@ -20,6 +20,7 @@
 
 import { fetchJson } from "../core/api.js";
 import { createCharComposer } from "../components/char-composer.js";
+import { createSpritePaint } from "../components/sprite-paint.js";
 
 const MAX_UPLOAD_BYTES = 2 * 1024 * 1024; // 2MB
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
@@ -366,6 +367,15 @@ function buildDetailPane({ onOverriddenChange, categories }) {
   const composer = createCharComposer({ categories });
   pane.appendChild(composer.el);
 
+  // --- ペイント(S4) ---
+  // パレット PNG として読めたシートだけ編集可能。読めない場合は自分で無効表示になる。
+  const paint = createSpritePaint({
+    categories,
+    onFeedback: (message, type) => showFeedback(feedback, message, type),
+    onSaved: () => { void reload(); },
+  });
+  pane.appendChild(paint.el);
+
   function applyImageTransform() {
     if (!_naturalWidth || !_naturalHeight) return;
     const w = _naturalWidth * _scale;
@@ -471,6 +481,7 @@ function buildDetailPane({ onOverriddenChange, categories }) {
         return;
       }
       showFeedback(feedback, "出荷時の画像に戻しました", "success");
+      paint.refresh();
       await reload();
     } catch (e) {
       showFeedback(feedback, "通信に失敗しました: " + String(e?.message ?? e), "error");
@@ -502,6 +513,7 @@ function buildDetailPane({ onOverriddenChange, categories }) {
         return;
       }
       showFeedback(feedback, "アップロードしました", "success");
+      paint.refresh();
       await reload();
     } catch (e) {
       showFeedback(feedback, "通信に失敗しました(接続がリセットされた場合はファイルサイズをご確認ください): " + String(e?.message ?? e), "error");
@@ -558,6 +570,7 @@ function buildDetailPane({ onOverriddenChange, categories }) {
             return;
           }
           showFeedback(feedback, `版 ${h.revision} に戻しました`, "success");
+          paint.refresh();
           await reload();
         } catch (e) {
           showFeedback(feedback, "通信に失敗しました: " + String(e?.message ?? e), "error");
@@ -628,6 +641,8 @@ function buildDetailPane({ onOverriddenChange, categories }) {
     _index = index;
     _naturalWidth = 0;
     _naturalHeight = 0;
+    // ペイントは未保存の変更があると切り替えを断ることがある（その時は自分で通知する）
+    paint.setTarget(cat, index);
     reload();
   }
 
