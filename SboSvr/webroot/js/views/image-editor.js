@@ -19,6 +19,7 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { createCharComposer } from "../components/char-composer.js";
 
 const MAX_UPLOAD_BYTES = 2 * 1024 * 1024; // 2MB
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
@@ -265,7 +266,7 @@ function buildCategoryList({ categories, onSelect }) {
 // 右ペイン: プレビュー + 詳細
 // ----------------------------------------------------------------
 
-function buildDetailPane({ onOverriddenChange }) {
+function buildDetailPane({ onOverriddenChange, categories }) {
   const pane = document.createElement("div");
   pane.className = "ie-right";
 
@@ -359,6 +360,11 @@ function buildDetailPane({ onOverriddenChange }) {
   previewSec.appendChild(dimInfo);
 
   pane.appendChild(previewSec);
+
+  // --- 合成プレビュー(S3b) ---
+  // 2x2 キャラ系カテゴリのときだけ表示される。setTarget が false を返すと自分で隠れる。
+  const composer = createCharComposer({ categories });
+  pane.appendChild(composer.el);
 
   function applyImageTransform() {
     if (!_naturalWidth || !_naturalHeight) return;
@@ -569,6 +575,10 @@ function buildDetailPane({ onOverriddenChange }) {
     if (!_cat) return;
     showFeedback(feedback, "", null);
 
+    // 差し替え/復元の直後も呼ばれるため、合成プレビューの画像キャッシュを捨ててから貼り直す
+    composer.invalidate({ redraw: false });
+    composer.setTarget(_cat, _index);
+
     // 画像本体
     const cacheBust = Date.now();
     previewImg.onload = () => {
@@ -623,7 +633,7 @@ function buildDetailPane({ onOverriddenChange }) {
 
   applyGridVisibility();
 
-  return { el: pane, setTarget };
+  return { el: pane, setTarget, destroy: () => composer.destroy() };
 }
 
 // ----------------------------------------------------------------
@@ -685,6 +695,7 @@ export function mount(container) {
             detailPane.innerHTML = "";
             detail = buildDetailPane({
               onOverriddenChange: (key, idx, overridden) => listUi.setOverriddenMark(key, idx, overridden),
+              categories,
             });
             detailPane.appendChild(detail.el);
           }
@@ -699,5 +710,10 @@ export function mount(container) {
 
   load();
 
-  _destroyFn = () => { container.innerHTML = ""; detail = null; };
+  // 画面を離れる時にアニメのタイマーを止める
+  _destroyFn = () => {
+    if (detail?.destroy) detail.destroy();
+    container.innerHTML = "";
+    detail = null;
+  };
 }

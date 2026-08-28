@@ -2148,3 +2148,44 @@ main {
   margin: 0;
   font-weight: 600;
 }
+
+/* --- 合成プレビュー (components/char-composer.js) --- */
+
+.cc-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.cc-field {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.cc-field > span {
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #94a3b8);
+  white-space: nowrap;
+}
+
+.cc-check {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cc-stage {
+  display: inline-block;
+  max-height: none;
+}
+
+.cc-canvas {
+  display: block;
+  image-rendering: pixelated;
+}
