@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$OutDir = "out/browser-preflight",
     [string[]]$Sources = @(
         "SboCli/src/BrowserMain.cpp",
@@ -265,9 +265,29 @@ foreach ($source in $Sources) {
             $failed += $source
         }
     } else {
+        # cl.exe は MSVC COFF 形式で .obj を書くため、em++ がリンク対象として
+        # 拾う $outPath 直下（<base>.o）に出させない。専用のサブディレクトリへ
+        # 拡張子も .obj にして退避し、em++ 側のリンクと絶対に混ざらないようにする。
+        $msvcSyntaxCheckDir = Join-Path $outPath "msvc-syntax-check"
+        New-Item -ItemType Directory -Force -Path $msvcSyntaxCheckDir | Out-Null
+        $msvcObjectPath = Join-Path $msvcSyntaxCheckDir ($baseName + ".obj")
+
+        # tools/msvc-stubs は emscripten/*.h の cl.exe 専用スタブ置き場。
+        # em++ 側（Get-IncludeArgs の共通リスト）には絶対に入れず、この
+        # cl.exe 分岐だけで先頭に足すことで、本物の Emscripten ヘッダを
+        # em++ から隠してしまわないようにする。
         $includeFlat = ($includeArgs | ForEach-Object {
             if ($_ -eq "-I") { $null } else { "/I`"$_`"" }
         }) -join " "
+        # SDL_ttf.h は em++ では -sUSE_SDL_TTF=2 が ports から供給するため
+        # 共通インクルードには入っていない。cl.exe 分岐だけローカル配置を足す。
+        $includeFlat = "/I`"$(Join-Path $repoRoot 'tools\msvc-stubs')`" /I`"$(Join-Path $repoRoot 'SDL2_ttf\include')`" " + $includeFlat
+
+        # cl.exe では _WIN32 が常に定義されるため、ソース側の
+        # #if defined(_WIN32) ... #else #include <emscripten/em_js.h> #endif
+        # を通っても em_js.h が読まれず EM_JS が未定義になる。
+        # cl.exe 分岐でだけスタブを強制インクルードして構文チェックを通す。
+        $emJsStub = Join-Path $repoRoot 'tools\msvc-stubs\emscripten\em_js.h'
 
         $cmdParts = @(
             "call `"$vsDevCmd`"",
@@ -276,9 +296,10 @@ foreach ($source in $Sources) {
             "cl.exe /nologo /utf-8 /c /TP /std:c++17 /D__EMSCRIPTEN__ /DUNICODE /D_UNICODE /DNO_DIRECTMUSIC /D_WFL_NONDMUSIC",
             "/FI`"$repoRoot\Common\rpcsal_fallback.h`"",
             "/FI`"$repoRoot\SboCli\StdAfx.h`"",
+            "/FI`"$emJsStub`"",
             $includeFlat,
             "`"$sourcePath`"",
-            "/Fo`"$objectPath`""
+            "/Fo`"$msvcObjectPath`""
         )
         $cmdLine = [string]::Join(" ", $cmdParts)
         cmd.exe /d /s /c $cmdLine
