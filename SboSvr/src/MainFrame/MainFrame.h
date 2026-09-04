@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <deque>
+
 class CPacketBase;
 class CMgrData;
 class CUraraSockTCPSBO;
@@ -32,6 +34,27 @@ class CLibInfoSkill;
 class CLibInfoTalkEvent;
 class CInfoCharBase;
 
+// ソケット通知の種別
+
+enum SOCKNOTIFY_TYPE {
+	SOCKNOTIFY_ADDCLIENT = 0,	// クライアントが接続した
+	SOCKNOTIFY_DECCLIENT,	// クライアントが切断した
+	SOCKNOTIFY_RECV,	// 受信
+	SOCKNOTIFY_DISCONNECT,	// こちらから切断する
+};
+
+// ソケット通知キューの要素
+//
+// 通信ライブラリは専用スレッドから通知してくるため、ここへ積んで
+// メインスレッド(TimerProc)でまとめて捌く。直接ハンドラを呼ぶと
+// ゲームロジックを別スレッドが触ることになるので厳禁。
+
+struct SOCKNOTIFYINFO {
+	SOCKNOTIFY_TYPE	Type;	// 種別
+	DWORD	dwSessionID;	// セッションID
+	PBYTE	pData;	// 受信データ(SOCKNOTIFY_RECV のみ有効。所有権はキューが持つ)
+};
+
 // クラス宣言
 
 class CMainFrame
@@ -48,6 +71,8 @@ public:
 	void	SendToAdminChar(CPacketBase *pPacket);	// 管理者権限を持っているキャラへ送信
 	void	SendToClient(DWORD dwSessionID, CPacketBase *pPacket);	// セッションIDが有効な場合のみ送信
 
+	void	RequestDisconnect(DWORD dwSessionID);	// 切断を予約する(即時ではなく次の TimerProc で処理)
+
 private:
 	static	LRESULT CALLBACK WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);	// メインウィンドウプロシージャ(エントリポイント)
 			LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);	// メインウィンドウプロシージャ
@@ -57,10 +82,16 @@ private:
 	void	OnPaint(HWND hWnd);	// メッセージハンドラ(WM_PAINT)
 	void	OnTimer(HWND hWnd, UINT id);	// メッセージハンドラ(WM_TIMER)
 	void	OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify);	// メッセージハンドラ(WM_COMMAND)
-	void	OnAddClient(DWORD dwSessionID);	// メッセージハンドラ(WM_URARASOCK_ADDCLIENT)
-	void	OnDecClient(DWORD dwSessionID);	// メッセージハンドラ(WM_URARASOCK_DECCLIENT)
-	void	OnRecv(PBYTE pData, DWORD dwSessionID);	// メッセージハンドラ(WM_URARASOCK_RECV)
-	void	OnDisconnect(DWORD dwSessionID);	// メッセージハンドラ(WM_DISCONNECT)
+	void	OnAddClient(DWORD dwSessionID);	// 通知ハンドラ(クライアント接続)
+	void	OnDecClient(DWORD dwSessionID);	// 通知ハンドラ(クライアント切断)
+	void	OnRecv(PBYTE pData, DWORD dwSessionID);	// 通知ハンドラ(受信)
+	void	OnDisconnect(DWORD dwSessionID);	// 通知ハンドラ(こちらから切断)
+
+	static	void	OnSocketNotifyThunk(void *pUserData, UINT uMsgOffset, WPARAM wParam, LPARAM lParam);	// ソケット通知コールバック(ソケットスレッドから呼ばれる)
+	void	PushSockNotify(const SOCKNOTIFYINFO &Info);	// ソケット通知をキューへ積む
+	void	ProcSockNotify(void);	// 溜まったソケット通知を捌く(メインスレッド)
+	void	ClearSockNotify(void);	// ソケット通知キューを破棄
+
 	void	TimerProc(void);	// 時間処理
 	void	TimerProcKeepalive(void);	// 時間処理(生存確認チェック)
 	void	MyTextOut(HDC hDC, int x, int y, LPCTSTR pStr);	// 文字列描画
@@ -209,6 +240,9 @@ private:
 						m_dwLastKeepaliveCheck;	// 最後に生存確認チェックした時間
 	HWND	m_hWnd;	// ウィンドウハンドル
 	HFONT	m_hFont;	// サーバー状態の描画に使うフォント
+
+	CmySection	m_SectSockNotify;	// ソケット通知キューの排他
+	std::deque<SOCKNOTIFYINFO>	m_deqSockNotify;	// ソケット通知キュー
 
 	CMgrData	*m_pMgrData;	// データ管理
 	CUraraSockTCPSBO	*m_pSock;	// 通信マネージャ

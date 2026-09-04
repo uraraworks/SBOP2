@@ -48,7 +48,7 @@ void CMainFrame::RecvProcMSGCMD_CHGFACE(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	if ((Packet.m_nType <= 0) || (Packet.m_nType > 18)) {
@@ -75,7 +75,7 @@ void CMainFrame::RecvProcMSGCMD_CHGHAIR(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	pInfoChar->m_wGrpIDHairType = (WORD)Packet.m_dwPara;
@@ -99,7 +99,7 @@ void CMainFrame::RecvProcMSGCMD_CHGCLOTH(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	if ((Packet.m_nType <= 0) || (Packet.m_nType > 32)) {
@@ -126,7 +126,7 @@ void CMainFrame::RecvProcMSGCMD_CHGACCE(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	if ((Packet.m_nType < 0) || (Packet.m_nType > 56)) {
@@ -154,7 +154,7 @@ void CMainFrame::RecvProcMSGCMD_CHGCOLOR(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	if ((Packet.m_nType < 0) || (Packet.m_nType > 6)) {
@@ -192,7 +192,7 @@ void CMainFrame::RecvProcMSGCMD_CHGARMS(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	pInfoChar->m_wGrpIDArmsMain = 0;
@@ -229,7 +229,7 @@ void CMainFrame::RecvProcMSGCMD_CHGSHIELD(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	pInfoChar->m_wGrpIDArmsLeftMain	= ITEMTYPEID_SHIELD;
@@ -295,7 +295,7 @@ void CMainFrame::RecvProcMSGCMD_BALLOON(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 

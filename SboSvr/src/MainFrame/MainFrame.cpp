@@ -82,6 +82,9 @@ CMainFrame::~CMainFrame()
 	if (m_pWebSocketBridge) {
 		m_pWebSocketBridge->Stop();
 	}
+	// m_pSock が生きているうちに未処理の受信データを解放する
+	ClearSockNotify();
+
 	SAFE_DELETE(m_pMgrData);
 	SAFE_DELETE(m_pSock);
 	SAFE_DELETE(m_pUpdateServerInfo);
@@ -306,32 +309,10 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	HANDLE_MSG(hWnd, WM_TIMER,	OnTimer);
 	HANDLE_MSG(hWnd, WM_COMMAND,	OnCommand);
 
-	case WM_DISCONNECT:	// 切断
-		OnDisconnect((DWORD)lParam);
-		break;
-
 	default:
-		if ((msg >= URARASOCK_MSGBASE) && (msg < URARASOCK_MSGBASE + WM_URARASOCK_MAX)) {
-			switch (msg - URARASOCK_MSGBASE) {
-			case WM_URARASOCK_HOST:	// 待ち受け開始
-				break;
-
-			case WM_URARASOCK_ADDCLIENT:	// クライアントが接続した
-				OnAddClient((DWORD)lParam);
-				break;
-
-			case WM_URARASOCK_DECCLIENT:	// クライアントが切断した
-				OnDecClient((DWORD)lParam);
-				break;
-
-			case WM_URARASOCK_RECV:	// 受信
-				OnRecv((PBYTE)wParam, (DWORD)lParam);
-				break;
-			}
-		} else {
-			// 修理しないメッセージはOSに返す
-			return DefWindowProc(hWnd, msg, wParam, lParam);
-		}
+		// 通信の通知は SetNotifySink() 経由でキューへ入るため、ここには来ない。
+		// 修理しないメッセージはOSに返す
+		return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
 	return 0;
 }
@@ -383,6 +364,10 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 
 	wPort = m_pMgrData->GetPort();
         wHttpPort = m_pMgrData->GetHttpPort();
+
+	// ソケット通知をウィンドウメッセージではなくコールバックで受け取る。
+	// Host() より前に登録しておく必要がある。
+	m_pSock->SetNotifySink(&CMainFrame::OnSocketNotifyThunk, this);
 	m_pSock->Host(hWnd, URARASOCK_MSGBASE, URARASOCK_PRECHECK, wPort, 100);
 
 	m_pLog	= m_pMgrData->GetLog();
@@ -483,7 +468,10 @@ void CMainFrame::OnClose(HWND hWnd)
                         m_pLog->Write("WebSocketブリッジを停止しました");
                 }
         }
+	// 通知を止めてから破棄する。停止後に積まれた分は捨てる。
+	m_pSock->SetNotifySink(NULL, NULL);
 	m_pSock->Destroy();
+	ClearSockNotify();
 
 	DestroyWindow(hWnd);
 }
@@ -664,8 +652,144 @@ void CMainFrame::OnDisconnect(DWORD dwSessionID)
 	m_pSock->DeleteClient(dwSessionID);
 }
 
+// ソケット通知コールバック
+//
+// 通信ライブラリの専用スレッドから呼ばれる。ここでゲームロジックを
+// 呼んではならない。キューへ積むだけにして、実処理は ProcSockNotify()
+// がメインスレッドで行う。
+
+void CMainFrame::OnSocketNotifyThunk(void *pUserData, UINT uMsgOffset, WPARAM wParam, LPARAM lParam)
+{
+	CMainFrame *pThis;
+	SOCKNOTIFYINFO Info;
+
+	pThis = (CMainFrame *)pUserData;
+	if (pThis == NULL) {
+		return;
+	}
+
+	Info.pData	= NULL;
+	Info.dwSessionID	= (DWORD)lParam;
+
+	switch (uMsgOffset) {
+	case WM_URARASOCK_ADDCLIENT:	// クライアントが接続した
+		Info.Type	= SOCKNOTIFY_ADDCLIENT;
+		break;
+
+	case WM_URARASOCK_DECCLIENT:	// クライアントが切断した
+		Info.Type	= SOCKNOTIFY_DECCLIENT;
+		break;
+
+	case WM_URARASOCK_RECV:	// 受信
+		Info.Type	= SOCKNOTIFY_RECV;
+		Info.pData	= (PBYTE)wParam;
+		break;
+
+	default:	// 待ち受け開始など、サーバーでは使わない通知
+		return;
+	}
+
+	pThis->PushSockNotify(Info);
+}
+
+// ソケット通知をキューへ積む
+
+void CMainFrame::PushSockNotify(const SOCKNOTIFYINFO &Info)
+{
+	m_SectSockNotify.Enter();
+	m_deqSockNotify.push_back(Info);
+	m_SectSockNotify.Leave();
+}
+
+// 溜まったソケット通知を捌く
+//
+// 捌いている最中に積まれた分は次回に回す。これは従来の PostMessage が
+// 「次のメッセージポンプで処理される」挙動だったのと合わせるため。
+// キューを直接舐めながら処理すると、切断要求などが同一周回で連鎖して
+// 順序と再入の前提が変わってしまう。
+
+void CMainFrame::ProcSockNotify(void)
+{
+	std::deque<SOCKNOTIFYINFO> deqProc;
+
+	m_SectSockNotify.Enter();
+	m_deqSockNotify.swap(deqProc);
+	m_SectSockNotify.Leave();
+
+	while (!deqProc.empty()) {
+		SOCKNOTIFYINFO Info = deqProc.front();
+		deqProc.pop_front();
+
+		switch (Info.Type) {
+		case SOCKNOTIFY_ADDCLIENT:
+			OnAddClient(Info.dwSessionID);
+			break;
+
+		case SOCKNOTIFY_DECCLIENT:
+			OnDecClient(Info.dwSessionID);
+			break;
+
+		case SOCKNOTIFY_RECV:
+			// pData の解放は OnRecv() が行う
+			OnRecv(Info.pData, Info.dwSessionID);
+			break;
+
+		case SOCKNOTIFY_DISCONNECT:
+			OnDisconnect(Info.dwSessionID);
+			break;
+		}
+	}
+}
+
+// ソケット通知キューを破棄
+//
+// 未処理の受信データが残っている場合があるので、m_pSock が生きている
+// うちに呼ぶこと。
+
+void CMainFrame::ClearSockNotify(void)
+{
+	std::deque<SOCKNOTIFYINFO> deqProc;
+
+	m_SectSockNotify.Enter();
+	m_deqSockNotify.swap(deqProc);
+	m_SectSockNotify.Leave();
+
+	while (!deqProc.empty()) {
+		SOCKNOTIFYINFO Info = deqProc.front();
+		deqProc.pop_front();
+
+		if (Info.pData == NULL) {
+			continue;
+		}
+		if (m_pSock) {
+			m_pSock->DeleteRecvData(Info.pData);
+		} else {
+			SAFE_DELETE_ARRAY(Info.pData);
+		}
+	}
+}
+
+// 切断を予約する
+//
+// 即時に切断するとパケット処理の途中でセッションが消えるため、
+// 従来は PostMessage(WM_DISCONNECT) で次のポンプに回していた。
+// その挙動をキューで再現する。
+
+void CMainFrame::RequestDisconnect(DWORD dwSessionID)
+{
+	SOCKNOTIFYINFO Info;
+
+	Info.Type	= SOCKNOTIFY_DISCONNECT;
+	Info.dwSessionID	= dwSessionID;
+	Info.pData	= NULL;
+
+	PushSockNotify(Info);
+}
+
 void CMainFrame::TimerProc(void)
 {
+	ProcSockNotify();
+
 	m_pLibInfoChar->	Proc();
 	m_pLibInfoDisable->	Proc();
 	TimerProcKeepalive();
@@ -704,7 +828,7 @@ void CMainFrame::TimerProcKeepalive(void)
 			continue;
 		}
 		// 1分以上生存確認通知を受けていないので切断する
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, pInfoChar->m_dwSessionID);
+		RequestDisconnect(pInfoChar->m_dwSessionID);
 		dwTmp = dwTimeTmp - pInfoAccount->m_dwTimeLastLogin;
 		m_pLog->Write("生存確認タイムアウト dwSessionID:%u [ACC:%s][CHAR:%s][時間:%ds]",
 				pInfoChar->m_dwSessionID,

@@ -44,7 +44,7 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	}
 	if (pInfoAccount->m_nAdminLevel == ADMINLEVEL_NONE) {
 		m_pLog->Write("■ 権限無しからの要求 dwSessionID:[%d] byCmdSub:[%d]", dwSessionID, byCmdSub);
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 

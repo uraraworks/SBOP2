@@ -221,7 +221,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		//	dwSessionID,
 		//	pszPacketName,
 		//	(LPCSTR)pInfoChar->m_strCharName);
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	if (pInfoChar->m_bStateFadeInOut) {
@@ -535,7 +535,7 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	nState = Packet.m_nState;
@@ -576,7 +576,7 @@ void CMainFrame::RecvProcCHAR_REQ_CHAT(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	TrimViewString(strChar, (LPCTSTR)Packet.m_strChat);
@@ -642,7 +642,7 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoChar->m_dwMapID);
@@ -803,7 +803,7 @@ void CMainFrame::RecvProcCHAR_REQ_TAIL(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	pInfoCharTarget = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwTargetCharID);
@@ -885,7 +885,7 @@ void CMainFrame::RecvProcCHAR_REQ_EQUIP(PBYTE pData, DWORD dwSessionID)
 	}
 	bResult = pInfoChar->CheckSessionID(dwSessionID);
 	if (bResult == FALSE) {
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 
