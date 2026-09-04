@@ -66,14 +66,17 @@
 ## 段階計画
 
 ```
-Step 1: SetNotifySink 化（+ 受信キュー）        ← 現在ここ
-Step 2: タイマー2本を TimerProc へ
-Step 3: ステータス表示を文字列生成に分離
+Step 1: SetNotifySink 化（+ 受信キュー）        ← 完了 (2c75fce)
+Step 2: タイマー2本を TimerProc へ              ← 完了 (e002d9f)
+Step 3: ステータス表示を文字列生成に分離        ← 次はここ
 Step 4: メニュー2項目の行き先を決める
 Step 5: WinMain → main、ウィンドウを起動オプション化   ← ヘッドレス達成
 ────────────────────────────────────────────
 S3:     WSAAsyncSelect → select/epoll          ← 本丸、ここで初めて非Windows
 ```
+
+Step 1・2 を終えた時点で、`WndProc` が扱うのは
+`WM_CREATE` / `WM_CLOSE` / `WM_DESTROY` / `WM_PAINT` / `WM_COMMAND` の5つだけになった。
 
 Step 1〜5 は**すべて Windows 上で完結**し、各段階で通常どおり動作確認できる。
 非 Windows へ踏み出すのは S3 から。
@@ -176,3 +179,50 @@ ATL `CString` を剥がす作業と master 側の UTF-8 まわりの修正がぶ
 
 - 実装の入り口を Step 1（`SetNotifySink` 化）に決定。
 - 本ドキュメントを作成。
+- **Step 1 完了**（`2c75fce`）。`WM_DISCONNECT` の `PostMessage` 17箇所も
+  `RequestDisconnect()` へ置き換え、同じキューに載せた。
+- **Step 2 完了**（`e002d9f`）。`SetTimer`/`WM_TIMER` を経過時間判定へ移行。
+
+#### Step 1 の検証方法
+
+`OnAddClient()` が空実装のため、単純な TCP 接続では何も観測できない。
+SDL クライアントへの `SendKeys` も届かなかった。最終的に以下で決定的に確認した。
+
+1. 通知サンクと `ProcSockNotify()` に `GetCurrentThreadId()` 付きの一時トレースを仕込む
+2. プリチェックハンドシェイクと VERSION チェック要求を送る簡易クライアントを PowerShell で書く
+3. 接続 / 受信 / 切断がソケットスレッド → メインスレッドへ渡ることをログで確認
+4. トレースを除去して再ビルド・再確認
+
+結果は notify がスレッド 5352、proc がスレッド 5104 で、狙いどおり分離されていた。
+応答は `VERSIONCHECKRES_OK`。notify から proc までの遅延は 1〜4ms。
+
+プロトコルの要点（簡易クライアントを再度書く場合の参考）:
+
+- フレームは `URARASOCK_PACKETINFO { DWORD dwSize; DWORD dwCRC; }` + 本体
+- 接続直後にサーバーが 4 バイトのチャレンジを送る。クライアントは
+  `(challenge & URARASOCK_PRECHECK) * URARASOCK_PRECHECK` を 32bit で返す
+- プリチェックのパケットだけは CRC が検証されない（サイズが 4 かどうかのみ）
+- 以降は CRC-32（RFC1952、初期値 0）が必要
+- VERSION チェック要求は `[main=1][sub=1][DWORD VERSIONVAL]` の 6 バイト
+
+#### 判明した副作用
+
+パケット処理に**最大 1ms の遅延**が入る。従来は `PostMessage` が `TimerProc` 末尾の
+`MsgWaitForMultipleObjects(..., 1, QS_ALLINPUT)` を即時起床させていたが、
+通知がウィンドウメッセージを経由しなくなったため毎回 1ms タイムアウトする。
+ゲームサーバーのティック粒度では無視できるが、気になるならイベント起床に変更できる。
+
+#### 新たに判明した落とし穴
+
+6. **`sed -i` をこのリポジトリのソースに使うと CRLF が LF に落ちる。**
+   `MainFrame.h` がこれで全行差分になった。`core.autocrlf=true` のため
+   `git add` でも復元されない。`git -c core.autocrlf=false add` で回避したが、
+   そもそも `sed -i` を避けるのが安全。BOM も含め、編集はエディタ側の機能を使うこと。
+
+7. **`SboSoundData` は現状ビルドできない。** `.rc` が参照する日本語ファイル名を
+   `rc.exe` が解決できず `RC2135` で失敗する（36 件が非 ASCII 名）。
+   worktree 固有ではなく元からの問題で、master は古い DLL を使い回しているだけ。
+   Step 1・2 とは無関係なので深追いせず、master の既存 DLL を流用した。
+
+8. **MSBuild の `/p:DefineConstants` は C++ には効かない**（C# 用）。
+   一時的なマクロはソースに `#define` を書くのが早い。
