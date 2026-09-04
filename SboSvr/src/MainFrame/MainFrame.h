@@ -55,6 +55,18 @@ struct SOCKNOTIFYINFO {
 	PBYTE	pData;	// 受信データ(SOCKNOTIFY_RECV のみ有効。所有権はキューが持つ)
 };
 
+// サーバー状態表示の項目
+//
+// 描画やウィンドウに依存しない形で状態を取り出すための入れ物。
+// OnPaint 以外(コンソール出力やログ)からも同じ内容を使えるようにする。
+
+struct SERVERSTATEITEM {
+	CmyString	strLabel;	// 項目名
+	CmyString	strValue;	// 値
+};
+
+#define SERVERSTATEITEM_MAX	(4)	// サーバー状態表示の項目数
+
 // クラス宣言
 
 class CMainFrame
@@ -95,6 +107,7 @@ private:
 	void	TimerProcKeepalive(void);	// 時間処理(生存確認チェック)
 	void	TimerProcClock(void);	// 時間処理(時報と状態表示の更新)
 	void	TimerProcSave(void);	// 時間処理(定期保存)
+	int	GetServerStateItem(SERVERSTATEITEM *paItem, int nMax);	// サーバー状態の表示項目を取得(描画に依存しない)
 	void	MyTextOut(HDC hDC, int x, int y, LPCTSTR pStr);	// 文字列描画
 	void	UpdateServerInfo(BOOL bSend = TRUE, BOOL bUpload = FALSE);	// サーバー情報を更新
 

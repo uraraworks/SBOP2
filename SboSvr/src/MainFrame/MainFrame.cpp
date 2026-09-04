@@ -482,42 +482,76 @@ void CMainFrame::OnDestroy(HWND hWnd)
 	PostQuitMessage(0);
 }
 
+// サーバー状態の表示項目を取得
+//
+// GDI にもウィンドウにも依存しない。ヘッドレス化した際は
+// この結果をコンソールやログへ出せばよい。
+//
+// 戻り値は格納した項目数。
+
+int CMainFrame::GetServerStateItem(
+	SERVERSTATEITEM *paItem,	// [out] 項目の格納先
+	int nMax)	// [in] 格納先の要素数
+{
+	int nCount;
+	DWORD dwTime;
+
+	if ((paItem == NULL) || (nMax <= 0)) {
+		return 0;
+	}
+
+	nCount	= 0;
+	dwTime	= timeGetTime() - m_dwServerStartTime;
+
+	if (nCount < nMax) {
+		paItem[nCount].strLabel	= _T("サーバー稼動時間");
+		paItem[nCount].strValue.Format(_T("%04d:%02d:%02d"),
+				 dwTime / 3600000,
+				 (dwTime % 3600000 - ((dwTime % 60000) / 1000)) / 60000,
+				 (dwTime % 60000) / 1000);
+		nCount ++;
+	}
+	if (nCount < nMax) {
+		paItem[nCount].strLabel	= _T("接続数");
+		paItem[nCount].strValue.Format(_T("%d"), m_pLibInfoChar->GetCountOnline());
+		nCount ++;
+	}
+	if (nCount < nMax) {
+		paItem[nCount].strLabel	= _T("処理キャラ数");
+		paItem[nCount].strValue.Format(_T("%d"), m_pLibInfoChar->GetCount());
+		nCount ++;
+	}
+	if (nCount < nMax) {
+		paItem[nCount].strLabel	= _T("処理マップ数");
+		paItem[nCount].strValue.Format(_T("%d"), m_pLibInfoMap->GetCount());
+		nCount ++;
+	}
+
+	return nCount;
+}
+
 void CMainFrame::OnPaint(HWND hWnd)
 {
-	CString strTmp;
-	DWORD dwTime;
+	int i, nCount;
 	HFONT hFontOld;
 	HDC hDC;
 	PAINTSTRUCT ps;
+	SERVERSTATEITEM aItem[SERVERSTATEITEM_MAX];
+
+	nCount	= GetServerStateItem(aItem, _countof(aItem));
 
 	hDC	= BeginPaint(hWnd, &ps);
-	dwTime	= timeGetTime() - m_dwServerStartTime;
 
 	SetBkMode(hDC, TRANSPARENT);
 	hFontOld = (HFONT)SelectObject(hDC, m_hFont);
 
-	SetTextColor(hDC, RGB(0, 255, 0));
-	MyTextOut(hDC, 0, 0, 	_T("サーバー稼動時間"));
-	MyTextOut(hDC, 0, 12 * 1, 	_T("接続数"));
-	MyTextOut(hDC, 0, 12 * 2, 	_T("処理キャラ数"));
-	MyTextOut(hDC, 0, 12 * 3, 	_T("処理マップ数"));
+	for (i = 0; i < nCount; i ++) {
+		SetTextColor(hDC, RGB(0, 255, 0));
+		MyTextOut(hDC, 0, 12 * i, aItem[i].strLabel);
 
-	SetTextColor(hDC, RGB(255, 255, 255));
-
-	strTmp.Format(_T("%04d:%02d:%02d"),
-			 dwTime / 3600000,
-			 (dwTime % 3600000 - ((dwTime % 60000) / 1000)) / 60000,
-			 (dwTime % 60000) / 1000);
-	MyTextOut(hDC, 120, 0, strTmp);
-
-	strTmp.Format(_T("%d"), m_pLibInfoChar->GetCountOnline());
-	MyTextOut(hDC, 120, 12 * 1, strTmp);
-
-	strTmp.Format(_T("%d"), m_pLibInfoChar->GetCount());
-	MyTextOut(hDC, 120, 12 * 2, strTmp);
-
-	strTmp.Format(_T("%d"), m_pLibInfoMap->GetCount());
-	MyTextOut(hDC, 120, 12 * 3, strTmp);
+		SetTextColor(hDC, RGB(255, 255, 255));
+		MyTextOut(hDC, 120, 12 * i, aItem[i].strValue);
+	}
 
 	SelectObject(hDC, hFontOld);
 
