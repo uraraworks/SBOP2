@@ -27,15 +27,15 @@
 // 定数定義
 
 #define CLNAME "SboSvr"	// 登録クラス名
-#define TIMERID_REDRAW	(100)	// 再描画タイマー
 #define TIMER_REDRAW	(1000)	// 再描画周期
-#define TIMERID_SAVE	(101)	// 保存タイマー
 #define TIMER_SAVE	(1000 * 60 * 30)	// 保存周期(30分)
 
 CMainFrame::CMainFrame()
 {
 	m_dwServerStartTime	= 0;
 	m_dwLastKeepaliveCheck	= 0;
+	m_dwLastClockTime	= 0;
+	m_dwLastSaveTime	= 0;
 	m_hWnd	= NULL;
 	m_pLibInfoAccount	= NULL;
 	m_pLibInfoChar	= NULL;
@@ -306,7 +306,6 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	HANDLE_MSG(hWnd, WM_CLOSE,	OnClose);
 	HANDLE_MSG(hWnd, WM_DESTROY,	OnDestroy);
 	HANDLE_MSG(hWnd, WM_PAINT,	OnPaint);
-	HANDLE_MSG(hWnd, WM_TIMER,	OnTimer);
 	HANDLE_MSG(hWnd, WM_COMMAND,	OnCommand);
 
 	default:
@@ -421,8 +420,8 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 			m_pMgrData->GetFtpServerAddr(),
 			m_pMgrData->GetFtpUploadPath());
 
-	SetTimer(hWnd, TIMERID_REDRAW,	TIMER_REDRAW,	NULL);
-	SetTimer(hWnd, TIMERID_SAVE,	TIMER_SAVE,	NULL);
+	m_dwLastClockTime	= timeGetTime();
+	m_dwLastSaveTime	= m_dwLastClockTime;
 
 	return TRUE;
 }
@@ -525,43 +524,64 @@ void CMainFrame::OnPaint(HWND hWnd)
 	EndPaint(hWnd, &ps);
 }
 
-void CMainFrame::OnTimer(HWND hWnd, UINT id)
+// 時間処理(時報と状態表示の更新)
+//
+// 従来は再描画タイマーの WM_TIMER で駆動していたが、
+// ウィンドウに依存しないよう経過時間の判定に置き換えた。
+
+void CMainFrame::TimerProcClock(void)
 {
-	switch (id) {
-	case TIMERID_REDRAW:	// 再描画タイマー
-		{
-			SYSTEMTIME sysTime;
-			GetLocalTime(&sysTime);
+	DWORD dwNow;
+	SYSTEMTIME sysTime;
 
-			if (sysTime.wMinute == 0) {
-				if (sysTime.wHour != m_pMgrData->GetLastSendClock()) {
-					CmyString strTmp;
-					CPacketMAP_SYSTEMMSG Packet;
+	dwNow = timeGetTime();
+	if (dwNow - m_dwLastClockTime < TIMER_REDRAW) {
+		return;
+	}
+	m_dwLastClockTime = dwNow;
 
-					m_pMgrData->SetLastSendClock((BYTE)sysTime.wHour);
+	GetLocalTime(&sysTime);
 
-					strTmp.Format(_T("SYSTEM:サーバーが%d時頃をお知らせします"), (BYTE)sysTime.wHour);
-					Packet.Make(strTmp);
-					m_pSock->SendTo(0, &Packet);
-				}
-			}
-			InvalidateRect(hWnd, NULL, TRUE);
-		}
-		break;
-
-	case TIMERID_SAVE:	// 保存タイマー
-		{
-			CPacketMAP_SYSTEMMSG Packet;
+	if (sysTime.wMinute == 0) {
+		if (sysTime.wHour != m_pMgrData->GetLastSendClock()) {
 			CmyString strTmp;
+			CPacketMAP_SYSTEMMSG Packet;
 
-			m_pMgrData->Save();
-			strTmp.Format(_T("SYSTEM:サーバー情報を保存しました"));
+			m_pMgrData->SetLastSendClock((BYTE)sysTime.wHour);
+
+			strTmp.Format(_T("SYSTEM:サーバーが%d時頃をお知らせします"), (BYTE)sysTime.wHour);
 			Packet.Make(strTmp);
 			m_pSock->SendTo(0, &Packet);
-			UpdateServerInfo(FALSE, TRUE);
 		}
-		break;
 	}
+
+	// 状態表示はウィンドウがある場合のみ更新する
+	if (m_hWnd) {
+		InvalidateRect(m_hWnd, NULL, TRUE);
+	}
+}
+
+// 時間処理(定期保存)
+//
+// 従来は保存タイマーの WM_TIMER で駆動していた。
+
+void CMainFrame::TimerProcSave(void)
+{
+	DWORD dwNow;
+	CPacketMAP_SYSTEMMSG Packet;
+	CmyString strTmp;
+
+	dwNow = timeGetTime();
+	if (dwNow - m_dwLastSaveTime < TIMER_SAVE) {
+		return;
+	}
+	m_dwLastSaveTime = dwNow;
+
+	m_pMgrData->Save();
+	strTmp.Format(_T("SYSTEM:サーバー情報を保存しました"));
+	Packet.Make(strTmp);
+	m_pSock->SendTo(0, &Packet);
+	UpdateServerInfo(FALSE, TRUE);
 }
 
 void CMainFrame::OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify)
@@ -793,6 +813,8 @@ void CMainFrame::TimerProc(void)
 	m_pLibInfoChar->	Proc();
 	m_pLibInfoDisable->	Proc();
 	TimerProcKeepalive();
+	TimerProcClock();
+	TimerProcSave();
 
 	MsgWaitForMultipleObjects(0, NULL, FALSE, 1, QS_ALLINPUT);
 }

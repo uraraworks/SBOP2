@@ -80,7 +80,6 @@ private:
 	void	OnClose(HWND hWnd);	// メッセージハンドラ(WM_CLOSE)
 	void	OnDestroy(HWND hWnd);	// メッセージハンドラ(WM_DESTROY)
 	void	OnPaint(HWND hWnd);	// メッセージハンドラ(WM_PAINT)
-	void	OnTimer(HWND hWnd, UINT id);	// メッセージハンドラ(WM_TIMER)
 	void	OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify);	// メッセージハンドラ(WM_COMMAND)
 	void	OnAddClient(DWORD dwSessionID);	// 通知ハンドラ(クライアント接続)
 	void	OnDecClient(DWORD dwSessionID);	// 通知ハンドラ(クライアント切断)
@@ -94,6 +93,8 @@ private:
 
 	void	TimerProc(void);	// 時間処理
 	void	TimerProcKeepalive(void);	// 時間処理(生存確認チェック)
+	void	TimerProcClock(void);	// 時間処理(時報と状態表示の更新)
+	void	TimerProcSave(void);	// 時間処理(定期保存)
 	void	MyTextOut(HDC hDC, int x, int y, LPCTSTR pStr);	// 文字列描画
 	void	UpdateServerInfo(BOOL bSend = TRUE, BOOL bUpload = FALSE);	// サーバー情報を更新
 
@@ -237,7 +238,9 @@ private:
 private:
 	BYTE	m_byLastSendClock;	// 最後にお知らせした時刻
 	DWORD	m_dwServerStartTime,	// サーバー起動時間
-						m_dwLastKeepaliveCheck;	// 最後に生存確認チェックした時間
+						m_dwLastKeepaliveCheck,	// 最後に生存確認チェックした時間
+						m_dwLastClockTime,	// 最後に時報処理を行った時間
+						m_dwLastSaveTime;	// 最後に定期保存を行った時間
 	HWND	m_hWnd;	// ウィンドウハンドル
 	HFONT	m_hFont;	// サーバー状態の描画に使うフォント
 
