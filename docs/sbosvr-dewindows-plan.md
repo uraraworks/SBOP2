@@ -67,9 +67,9 @@
 
 ```
 Step 1: SetNotifySink 化（+ 受信キュー）        ← 完了 (2c75fce)
-Step 2: タイマー2本を TimerProc へ              ← 完了 (e002d9f)
-Step 3: ステータス表示を文字列生成に分離        ← 次はここ
-Step 4: メニュー2項目の行き先を決める
+Step 2: タイマー2本を TimerProc へ              ← 完了 (e9f0286)
+Step 3: ステータス表示を文字列生成に分離        ← 完了
+Step 4: メニュー2項目の行き先を決める           ← 次はここ
 Step 5: WinMain → main、ウィンドウを起動オプション化   ← ヘッドレス達成
 ────────────────────────────────────────────
 S3:     WSAAsyncSelect → select/epoll          ← 本丸、ここで初めて非Windows
@@ -214,10 +214,30 @@ SDL クライアントへの `SendKeys` も届かなかった。最終的に以�
 
 #### 新たに判明した落とし穴
 
-6. **`sed -i` をこのリポジトリのソースに使うと CRLF が LF に落ちる。**
-   `MainFrame.h` がこれで全行差分になった。`core.autocrlf=true` のため
-   `git add` でも復元されない。`git -c core.autocrlf=false add` で回避したが、
-   そもそも `sed -i` を避けるのが安全。BOM も含め、編集はエディタ側の機能を使うこと。
+6. **改行コードの規約がファイルごとに違う。編集ツールが CR を落とすと全行差分になる。**
+
+   このリポジトリは `core.autocrlf=true` だが、**格納されている改行はファイルごとにバラバラ**。
+
+   | ファイル | リポジトリ内の格納 |
+   |---|---|
+   | `SboSvr/src/MainFrame/MainFrame.cpp` | **LF** |
+   | `SboSvr/src/MainFrame/MainFrame.h` | **CRLF** |
+
+   `sed -i` や一部の編集ツールは CR を落とすため、そのままコミットすると
+   全行が差分になる（実際 Step2・Step3 で各1回踏んだ）。master と異なる改行で
+   格納するとマージ時に大量の衝突を生むので、必ず元の形に合わせること。
+
+   確認は Git Bash では信用できない（リダイレクトで変換が入り誤った値が出る）。
+   PowerShell でバイト単位に数えること:
+
+   ```powershell
+   $b = [System.IO.File]::ReadAllBytes($path)
+   $lf = 0; $crlf = 0
+   for ($i=0; $i -lt $b.Length; $i++) { if ($b[$i] -eq 10) { $lf++; if ($i -gt 0 -and $b[$i-1] -eq 13) { $crlf++ } } }
+   ```
+
+   格納状態を変えずにコミットするには `git -c core.autocrlf=false add <file>` を使う。
+   コミット後は必ず `git show --stat HEAD` で差分行数が想定どおりか確認すること。
 
 7. **`SboSoundData` は現状ビルドできない。** `.rc` が参照する日本語ファイル名を
    `rc.exe` が解決できず `RC2135` で失敗する（36 件が非 ASCII 名）。
@@ -226,3 +246,18 @@ SDL クライアントへの `SendKeys` も届かなかった。最終的に以�
 
 8. **MSBuild の `/p:DefineConstants` は C++ には効かない**（C# 用）。
    一時的なマクロはソースに `#define` を書くのが早い。
+
+#### Step 3 の内容と検証
+
+`OnPaint` に直書きされていた4項目（稼動時間 / 接続数 / 処理キャラ数 / 処理マップ数）を
+`GetServerStateItem()` へ切り出した。GDI にもウィンドウにも依存しないので、
+ヘッドレス化後はこの結果をコンソールやログへ流せばよい。
+
+検証はサーバーウィンドウのキャプチャで行った。ただし `SetForegroundWindow` +
+`CopyFromScreen` では前面に出ず別ウィンドウが写るため、**`PrintWindow` を使うこと**。
+z オーダーに関係なくウィンドウ自身の内容が取れる。
+
+#### Step 5 で決めること
+
+`SboSvr.ini` の `[Pos]` にウィンドウ位置を保存する作りになっている（`OnClose`）。
+ヘッドレス時にどう扱うか（保存しない / 既定値を使う）を決める必要がある。
