@@ -212,8 +212,51 @@ ATL `CString` を剥がす作業と master 側の UTF-8 まわりの修正がぶ
 S3-1: 要件の洗い出しと設計          ← 完了(本節)
 S3-2: select 実装をサーバーモードで追加  ← 完了
 S3-3: 新旧両方で同じプロトコル検証を通す  ← 完了
-S3-4: 通信層の単体テストを書く      ← 次はここ。これが本来の目的
+S3-4: 通信層の単体テストを書く      ← 完了。当初の目的を達成
 ```
+
+### S3-4: 通信層の単体テスト（目的を達成）
+
+**これが脱Windows対応の本来の目的だった。** 既存の WSAAsyncSelect 実装は
+ウィンドウが無いと動かせずテストが書けなかったが、select 実装は
+ウィンドウに依存しないためテストプロセスから直接起動して検証できる。
+
+```powershell
+pwsh tools/invoke-msbuild.ps1 -ProjectOrSolution SboSvrTest\SboSvrTest.vcxproj -Configuration Debug -Platform Win32
+.\SboSvrTest\Debug\SboSvrTest.exe        # 引数でテスト名の部分一致フィルタ
+```
+
+構成:
+
+- `SboSockLib/SboSockTestClient` — SBO プロトコルを喋る同期クライアント。
+  フレーミングと CRC は**自前で組み立てる**（テスト対象と同じコードで検証しても
+  意味が無いため）。プレイヤーと同じようにサーバーへ繋ぐ用途にも使える。
+- `SboSvrTest` — 外部依存の無い小さな基盤（`TEST` / `CHECK` / `CHECK_EQ`）と
+  通信層のテスト13本。待ち受け開始、プリチェックの成否、送受信、zlib の両方向、
+  切断、複数接続を検証する。
+
+#### テストが本当に機能するかを故障注入で確認した
+
+`recv()==0` の切断検知を既存実装と同じ握り潰し方に変えると、
+切断系2本が落ちて終了コード1になることを確認済み。
+
+**その過程で当初のテストに穴があることが分かった。** テストクライアントの
+`Close()` は `SD_BOTH` のため相手に **RST** が届き、`recv()` はエラーを返すので
+別経路で検知されてしまう。`ShutdownSend()` で FIN だけ送るテストを足して
+`recv()==0` の経路を確実に通すようにした。
+
+最初の故障注入では 13/13 が通ってしまい、「テストが通ったから大丈夫」が
+成り立たない例になった。**新しいテストは必ず落ちることを確認すること。**
+
+#### ビルド設定の注意
+
+- `zlibD.lib` が `/MD` でビルドされているため、既定ライブラリ `MSVCRTD` の
+  除外（`IgnoreSpecificDefaultLibraries`）が必要。無いと
+  `__except_handler4_common` が未解決になる。
+- zlib 由来の **VC90 マニフェスト依存**で「サイド バイ サイド構成が正しくありません」
+  になるため、SboSvr と同じくリンク後に `mt.exe` でマニフェストを差し替える。
+- `Common/GlobalDefine.h` が `map` を前提にしているので、`StdAfx.h` に
+  `#include <map>` と `using namespace std;` が要る。
 
 ### S3-3 の比較結果
 
