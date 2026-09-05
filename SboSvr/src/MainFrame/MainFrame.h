@@ -93,7 +93,6 @@ public:
 
 	void	RequestDisconnect(DWORD dwSessionID);	// 切断を予約する(即時ではなく次の TimerProc で処理)
 
-	static	void	GetIniFileName(LPTSTR pszName, size_t nMax);	// 設定ファイルのパスを取得
 	static	void	MakeQuitEventName(LPTSTR pszName, size_t nMax, WORD wPort);	// 停止通知イベント名を作る
 	static	void	MakeRunMutexName(LPTSTR pszName, size_t nMax, WORD wPort);	// 稼働中ミューテックス名を作る
 	static	BOOL	RequestStopRunningServer(void);	// 稼働中のヘッドレスサーバーへ停止を要求する

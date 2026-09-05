@@ -164,8 +164,7 @@ int CMainFrame::MainLoopHeadless(void)
 	//
 	// 停止通知イベントが無いと強制終了しか手段が無くなり、
 	// DB の書き戻しが飛ぶため必須。
-	GetIniFileName(szIni, _countof(szIni));
-	wPort = (WORD)GetPrivateProfileInt(_T("Setting"), _T("Port"), 2006, szIni);
+	wPort = (WORD)SboPlatform::GetIniInt(SboPlatform::GetIniFilePath().c_str(), "Setting", "Port", 2006);
 
 	if (CreateQuitEvent(wPort) == FALSE) {
 		WriteConsoleMessage(_T("同じポート(%u)のサーバーが既に起動しています"), (unsigned int)wPort);
@@ -509,8 +508,7 @@ BOOL CMainFrame::RequestStopRunningServer(void)
 	HANDLE hEvent;
 	HANDLE hMutex;
 
-	GetIniFileName(szIni, _countof(szIni));
-	wPort = (WORD)GetPrivateProfileInt(_T("Setting"), _T("Port"), 2006, szIni);
+	wPort = (WORD)SboPlatform::GetIniInt(SboPlatform::GetIniFilePath().c_str(), "Setting", "Port", 2006);
 
 	AttachParentConsole();
 
@@ -604,37 +602,20 @@ BOOL CMainFrame::IsQuitEventSignaled(void)
 	return (WaitForSingleObject(m_hQuitEvent, 0) == WAIT_OBJECT_0) ? TRUE : FALSE;
 }
 
-// 設定ファイルのパスを取得
-
-void CMainFrame::GetIniFileName(LPTSTR pszName, size_t nMax)
-{
-	size_t nLen;
-
-	ZeroMemory(pszName, nMax * sizeof (TCHAR));
-	GetModuleFileName(NULL, pszName, (DWORD)nMax);
-	nLen = _tcslen(pszName);
-	if (nLen >= 3) {
-		_tcscpy_s(pszName + nLen - 3, nMax - (nLen - 3), _T("ini"));
-	} else {
-		_tcscat_s(pszName, nMax, _T(".ini"));
-	}
-}
-
 // ウィンドウ位置を復元
 //
 // ヘッドレス時は呼ばない。位置を持たないため読み込む意味が無い。
 
 void CMainFrame::LoadWindowPos(HWND hWnd)
 {
-	TCHAR szName[MAX_PATH];
 	RECT rc;
+	std::string strIni = SboPlatform::GetIniFilePath();
+	const char *pszIni = strIni.c_str();
 
-	GetIniFileName(szName, _countof(szName));
-
-	rc.left	= GetPrivateProfileInt(_T("Pos"), _T("MainLeft"),	-1, szName);
-	rc.top	= GetPrivateProfileInt(_T("Pos"), _T("MainTop"),	-1, szName);
-	rc.right	= GetPrivateProfileInt(_T("Pos"), _T("MainRight"),	-1, szName);
-	rc.bottom	= GetPrivateProfileInt(_T("Pos"), _T("MainBottom"),	-1, szName);
+	rc.left	= SboPlatform::GetIniInt(pszIni, "Pos", "MainLeft",	-1);
+	rc.top	= SboPlatform::GetIniInt(pszIni, "Pos", "MainTop",	-1);
+	rc.right	= SboPlatform::GetIniInt(pszIni, "Pos", "MainRight",	-1);
+	rc.bottom	= SboPlatform::GetIniInt(pszIni, "Pos", "MainBottom",	-1);
 	if (!((rc.left == -1) && (rc.top == -1))) {
 		SetWindowPos(hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER);
 	}
@@ -647,25 +628,25 @@ void CMainFrame::LoadWindowPos(HWND hWnd)
 
 void CMainFrame::SaveWindowPos(HWND hWnd)
 {
-	TCHAR szName[MAX_PATH];
 	RECT rc;
-	CmyString strTmp;
+	char szValue[32];
 
 	if ((IsIconic(hWnd) != FALSE) || (IsWindowVisible(hWnd) == FALSE)) {
 		return;
 	}
 
-	GetIniFileName(szName, _countof(szName));
+	std::string strIni = SboPlatform::GetIniFilePath();
+	const char *pszIni = strIni.c_str();
 	GetWindowRect(hWnd, &rc);
 
-	strTmp.Format(_T("%d"), rc.left);
-	WritePrivateProfileString(_T("Pos"), _T("MainLeft"), strTmp, szName);
-	strTmp.Format(_T("%d"), rc.top);
-	WritePrivateProfileString(_T("Pos"), _T("MainTop"), strTmp, szName);
-	strTmp.Format(_T("%d"), rc.right);
-	WritePrivateProfileString(_T("Pos"), _T("MainRight"), strTmp, szName);
-	strTmp.Format(_T("%d"), rc.bottom);
-	WritePrivateProfileString(_T("Pos"), _T("MainBottom"), strTmp, szName);
+	_snprintf_s(szValue, sizeof (szValue), _TRUNCATE, "%d", (int)rc.left);
+	SboPlatform::SetIniString(pszIni, "Pos", "MainLeft", szValue);
+	_snprintf_s(szValue, sizeof (szValue), _TRUNCATE, "%d", (int)rc.top);
+	SboPlatform::SetIniString(pszIni, "Pos", "MainTop", szValue);
+	_snprintf_s(szValue, sizeof (szValue), _TRUNCATE, "%d", (int)rc.right);
+	SboPlatform::SetIniString(pszIni, "Pos", "MainRight", szValue);
+	_snprintf_s(szValue, sizeof (szValue), _TRUNCATE, "%d", (int)rc.bottom);
+	SboPlatform::SetIniString(pszIni, "Pos", "MainBottom", szValue);
 }
 
 // サーバー初期化

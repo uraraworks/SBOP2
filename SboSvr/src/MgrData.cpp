@@ -432,50 +432,26 @@ void CMgrData::ReadHashList(void)
 
 void CMgrData::SetClientVersion(LPCSTR pszVersion)
 {
-        TCHAR szFileName[MAX_PATH];
-
-        ZeroMemory(szFileName, sizeof (szFileName));
-
-        GetModuleFileName(NULL, szFileName, _countof(szFileName));
-        size_t nLen = _tcslen(szFileName);
-        if (nLen >= 3) {
-                _tcscpy_s(szFileName + nLen - 3, _countof(szFileName) - (nLen - 3), _T("ini"));
-        } else {
-                _tcscat_s(szFileName, _T(".ini"));
-        }
-
         m_strClientVersion = pszVersion;
-        WritePrivateProfileString(_T("Info"), _T("ClientVersion"), m_strClientVersion, szFileName);
+        SboPlatform::SetIniString(SboPlatform::GetIniFilePath().c_str(),
+                "Info", "ClientVersion", m_strClientVersion.GetUtf8Pointer());
 }
 
 void CMgrData::ReadIniData(void)
 {
-        TCHAR szFileName[MAX_PATH];
-        TCHAR szTmp[128];
-
-        ZeroMemory(szFileName, sizeof (szFileName));
-        ZeroMemory(szTmp, sizeof (szTmp));
-
-        GetModuleFileName(NULL, szFileName, _countof(szFileName));
-        size_t nLen = _tcslen(szFileName);
-        if (nLen >= 3) {
-                _tcscpy_s(szFileName + nLen - 3, _countof(szFileName) - (nLen - 3), _T("ini"));
-        } else {
-                _tcscat_s(szFileName, _T(".ini"));
-        }
+        std::string strIni = SboPlatform::GetIniFilePath();
+        const char *pszIni = strIni.c_str();
 
         // 待ちうけポート
-        m_wPort = static_cast<WORD>(GetPrivateProfileInt(_T("Setting"), _T("Port"), 2006, szFileName));
+        m_wPort = static_cast<WORD>(SboPlatform::GetIniInt(pszIni, "Setting", "Port", 2006));
         // HTTP待ちうけポート
-        m_wHttpPort = static_cast<WORD>(GetPrivateProfileInt(_T("Setting"), _T("HttpPort"), 18080, szFileName));
+        m_wHttpPort = static_cast<WORD>(SboPlatform::GetIniInt(pszIni, "Setting", "HttpPort", 18080));
         // Cookieに Secure 属性を付けるか（本番はIISが443で受けるため1にする）
-        m_bCookieSecure = static_cast<BOOL>(GetPrivateProfileInt(_T("Setting"), _T("CookieSecure"), 0, szFileName));
+        m_bCookieSecure = static_cast<BOOL>(SboPlatform::GetIniInt(pszIni, "Setting", "CookieSecure", 0));
         // 管理者権限アカウント
-        GetPrivateProfileString(_T("Setting"), _T("AdminAccount"), _T("Admin"), szTmp, _countof(szTmp), szFileName);
-        m_strAdminAccount = szTmp;
+        m_strAdminAccount = SboPlatform::GetIniString(pszIni, "Setting", "AdminAccount", "Admin").c_str();
 
         // クライアントバージョン
-        GetPrivateProfileString(_T("Info"), _T("ClientVersion"), _T(""), szTmp, _countof(szTmp), szFileName);
-        m_strClientVersion = szTmp;
+        m_strClientVersion = SboPlatform::GetIniString(pszIni, "Info", "ClientVersion", "").c_str();
 
 }

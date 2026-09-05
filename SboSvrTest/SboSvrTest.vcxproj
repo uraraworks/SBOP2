@@ -97,6 +97,8 @@
     <ClCompile Include="TestMain.cpp" />
     <ClCompile Include="TestUraraSockTCPSelect.cpp" />
     <ClCompile Include="TestPasswordHash.cpp" />
+    <ClCompile Include="TestSvrPlatform.cpp" />
+    <ClCompile Include="..\SboSvr\src\Platform\SvrPlatform.cpp" />
     <ClCompile Include="..\SboSvr\src\PasswordHash.cpp" />
     <ClCompile Include="..\SboSockLib\UraraSockTCPSelect.cpp" />
     <ClCompile Include="..\SboSockLib\SboSockTestClient.cpp" />

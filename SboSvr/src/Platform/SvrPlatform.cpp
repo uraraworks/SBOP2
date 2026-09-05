@@ -11,6 +11,8 @@
 #include <cstdio>
 #include <ctime>
 #include <cstring>
+#include <cstdlib>
+#include <vector>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -164,6 +166,256 @@ namespace SboPlatform
 			strDir += pszFileName;
 		}
 		return strDir;
+	}
+
+	std::string	GetIniFilePath(void)
+	{
+		char szPath[1024];
+		std::string strRet;
+
+		std::memset(szPath, 0, sizeof(szPath));
+
+#ifdef _WIN32
+		if (GetModuleFileNameA(NULL, szPath, (DWORD)sizeof(szPath)) == 0) {
+			return std::string();
+		}
+#elif defined(__EMSCRIPTEN__)
+		return std::string();
+#else
+		{
+			ssize_t nLen = readlink("/proc/self/exe", szPath, sizeof(szPath) - 1);
+			if (nLen <= 0) {
+				return std::string();
+			}
+			szPath[nLen] = '\0';
+		}
+#endif
+
+		strRet = szPath;
+
+		// 拡張子を ini に差し替える
+		std::string::size_type nDot = strRet.find_last_of('.');
+		std::string::size_type nSep = strRet.find_last_of("\\/");
+		if ((nDot != std::string::npos) &&
+			((nSep == std::string::npos) || (nDot > nSep))) {
+			strRet = strRet.substr(0, nDot);
+		}
+		strRet += ".ini";
+
+		return strRet;
+	}
+
+	namespace
+	{
+		// 大文字小文字を区別せずに比較する(Windows の ini API と同じ扱い)
+		bool	EqualsNoCase(const std::string &a, const std::string &b)
+		{
+			if (a.size() != b.size()) {
+				return false;
+			}
+			for (std::string::size_type i = 0; i < a.size(); ++ i) {
+				char ca = a[i];
+				char cb = b[i];
+				if ((ca >= 'A') && (ca <= 'Z')) { ca = (char)(ca - 'A' + 'a'); }
+				if ((cb >= 'A') && (cb <= 'Z')) { cb = (char)(cb - 'A' + 'a'); }
+				if (ca != cb) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		std::string	Trim(const std::string &s)
+		{
+			std::string::size_type nStart = 0;
+			std::string::size_type nEnd = s.size();
+
+			while ((nStart < nEnd) &&
+				   ((s[nStart] == ' ') || (s[nStart] == '\t') ||
+					(s[nStart] == '\r') || (s[nStart] == '\n'))) {
+				nStart ++;
+			}
+			while ((nEnd > nStart) &&
+				   ((s[nEnd - 1] == ' ') || (s[nEnd - 1] == '\t') ||
+					(s[nEnd - 1] == '\r') || (s[nEnd - 1] == '\n'))) {
+				nEnd --;
+			}
+			return s.substr(nStart, nEnd - nStart);
+		}
+
+		// "[名前]" ならセクション名を返す。違えば空文字列。
+		std::string	ParseSection(const std::string &strLine)
+		{
+			std::string s = Trim(strLine);
+
+			if ((s.size() < 2) || (s[0] != '[') || (s[s.size() - 1] != ']')) {
+				return std::string();
+			}
+			return Trim(s.substr(1, s.size() - 2));
+		}
+
+		bool	ReadLines(const char *pszFile, std::vector<std::string> *pvecOut)
+		{
+			std::FILE *pFile = std::fopen(pszFile, "rb");
+			std::string strAll;
+			char szBuf[4096];
+			size_t nRead;
+
+			if (pFile == NULL) {
+				return false;
+			}
+			while ((nRead = std::fread(szBuf, 1, sizeof(szBuf), pFile)) > 0) {
+				strAll.append(szBuf, nRead);
+			}
+			std::fclose(pFile);
+
+			// 改行で分割する(CRLF/LF どちらでも。区切りは保持しない)
+			std::string strLine;
+			for (std::string::size_type i = 0; i < strAll.size(); ++ i) {
+				if (strAll[i] == '\n') {
+					pvecOut->push_back(strLine);
+					strLine.clear();
+				} else if (strAll[i] != '\r') {
+					strLine += strAll[i];
+				}
+			}
+			if (!strLine.empty()) {
+				pvecOut->push_back(strLine);
+			}
+			return true;
+		}
+	}
+
+	std::string	GetIniString(const char *pszFile, const char *pszSection,
+			const char *pszKey, const char *pszDefault)
+	{
+		std::vector<std::string> vecLine;
+		std::string strDefault = (pszDefault != NULL) ? pszDefault : "";
+		std::string strCurSection;
+		bool bInTarget = false;
+
+		if ((pszFile == NULL) || (pszSection == NULL) || (pszKey == NULL)) {
+			return strDefault;
+		}
+		if (!ReadLines(pszFile, &vecLine)) {
+			return strDefault;
+		}
+
+		for (size_t i = 0; i < vecLine.size(); ++ i) {
+			std::string strSection = ParseSection(vecLine[i]);
+			if (!strSection.empty()) {
+				strCurSection = strSection;
+				bInTarget = EqualsNoCase(strCurSection, pszSection);
+				continue;
+			}
+			if (!bInTarget) {
+				continue;
+			}
+
+			std::string strLine = Trim(vecLine[i]);
+			if (strLine.empty() || (strLine[0] == ';') || (strLine[0] == '#')) {
+				continue;
+			}
+			std::string::size_type nPos = strLine.find('=');
+			if (nPos == std::string::npos) {
+				continue;
+			}
+			if (EqualsNoCase(Trim(strLine.substr(0, nPos)), pszKey)) {
+				return Trim(strLine.substr(nPos + 1));
+			}
+		}
+		return strDefault;
+	}
+
+	int	GetIniInt(const char *pszFile, const char *pszSection, const char *pszKey, int nDefault)
+	{
+		std::string strValue = GetIniString(pszFile, pszSection, pszKey, "");
+
+		if (strValue.empty()) {
+			return nDefault;
+		}
+
+		// Windows の GetPrivateProfileInt は先頭の数字だけを読む
+		char *pszEnd = NULL;
+		long nValue = std::strtol(strValue.c_str(), &pszEnd, 10);
+		if (pszEnd == strValue.c_str()) {
+			return nDefault;
+		}
+		return (int)nValue;
+	}
+
+	bool	SetIniString(const char *pszFile, const char *pszSection,
+			const char *pszKey, const char *pszValue)
+	{
+		std::vector<std::string> vecLine;
+		std::string strCurSection;
+		std::string strEntry;
+		bool bWritten = false;
+		int nTargetSectionEnd = -1;
+
+		if ((pszFile == NULL) || (pszSection == NULL) || (pszKey == NULL)) {
+			return false;
+		}
+
+		strEntry = std::string(pszKey) + "=" + ((pszValue != NULL) ? pszValue : "");
+
+		// 既存の内容を読む(無ければ新規作成扱い)
+		ReadLines(pszFile, &vecLine);
+
+		for (size_t i = 0; i < vecLine.size(); ++ i) {
+			std::string strSection = ParseSection(vecLine[i]);
+			if (!strSection.empty()) {
+				if (EqualsNoCase(strCurSection, pszSection)) {
+					// 対象セクションが終わった位置を覚えておく
+					nTargetSectionEnd = (int)i;
+				}
+				strCurSection = strSection;
+				continue;
+			}
+			if (!EqualsNoCase(strCurSection, pszSection)) {
+				continue;
+			}
+
+			std::string strLine = Trim(vecLine[i]);
+			if (strLine.empty() || (strLine[0] == ';') || (strLine[0] == '#')) {
+				continue;
+			}
+			std::string::size_type nPos = strLine.find('=');
+			if (nPos == std::string::npos) {
+				continue;
+			}
+			if (EqualsNoCase(Trim(strLine.substr(0, nPos)), pszKey)) {
+				vecLine[i] = strEntry;
+				bWritten = true;
+				break;
+			}
+		}
+
+		if (!bWritten) {
+			if (EqualsNoCase(strCurSection, pszSection)) {
+				// 対象セクションがファイル末尾まで続いていた
+				vecLine.push_back(strEntry);
+			} else if (nTargetSectionEnd >= 0) {
+				// 対象セクションの末尾へ挿入する
+				vecLine.insert(vecLine.begin() + nTargetSectionEnd, strEntry);
+			} else {
+				// セクションごと追加する
+				vecLine.push_back(std::string("[") + pszSection + "]");
+				vecLine.push_back(strEntry);
+			}
+		}
+
+		std::FILE *pFile = std::fopen(pszFile, "wb");
+		if (pFile == NULL) {
+			return false;
+		}
+		for (size_t i = 0; i < vecLine.size(); ++ i) {
+			// 従来の ini と同じ CRLF で書く
+			std::fwrite(vecLine[i].c_str(), 1, vecLine[i].size(), pFile);
+			std::fwrite("\r\n", 1, 2, pFile);
+		}
+		std::fclose(pFile);
+		return true;
 	}
 
 	void	WriteDebugLine(const char *pszText)

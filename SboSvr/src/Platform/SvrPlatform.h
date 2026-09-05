@@ -70,6 +70,39 @@ namespace SboPlatform
 	/// @return 絶対パス。ディレクトリ作成に失敗しても組み立てたパスは返す。
 	std::string	MakeDataFilePath(const char *pszFileName);
 
+	/// 設定ファイル(ini)のパスを返す
+	///
+	/// 実行ファイルの拡張子を ini に置き換えたもの。
+	///
+	/// なお ini や DB のパスは従来から ANSI(CP932)前提で扱われている。
+	/// 実行ファイルのパスに CP932 で表せない文字が含まれる環境は
+	/// 元から想定外なので、その前提は変えていない。
+	std::string	GetIniFilePath(void);
+
+	/// 設定ファイル(ini)から整数を読む
+	///
+	/// GetPrivateProfileInt() の置き換え。ファイル形式は従来と同じ。
+	/// 見つからない・数字として読めない場合は nDefault を返す。
+	///
+	/// セクション名とキー名は大文字小文字を区別しない(Windows API と同じ)。
+	int	GetIniInt(const char *pszFile, const char *pszSection, const char *pszKey, int nDefault);
+
+	/// 設定ファイル(ini)から文字列を読む
+	///
+	/// GetPrivateProfileString() の置き換え。
+	std::string	GetIniString(const char *pszFile, const char *pszSection,
+			const char *pszKey, const char *pszDefault);
+
+	/// 設定ファイル(ini)へ文字列を書く
+	///
+	/// WritePrivateProfileString() の置き換え。
+	/// 既存のセクション・キーがあれば書き換え、無ければ追加する。
+	/// コメント行や順序は保つ。
+	///
+	/// @return 書き込めれば true
+	bool	SetIniString(const char *pszFile, const char *pszSection,
+			const char *pszKey, const char *pszValue);
+
 	/// デバッグ出力へ1行書く
 	///
 	/// OutputDebugStringA() の置き換え。
