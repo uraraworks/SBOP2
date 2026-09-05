@@ -41,6 +41,7 @@
 #include "InfoMapEventINITSTATUS.h"
 #include "SaveLoadInfoBase.h"
 #include "SaveLoadInfoMapEvent.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTable = "sys_map_event";
@@ -117,7 +118,7 @@ void CSaveLoadInfoMapEvent::SaveAllEvents(CLibInfoMapBase *pLibInfoMap)
 	sqlite3_stmt* pStmt = NULL;
 	int nRet = sqlite3_prepare_v2(CSaveLoadInfoBase::s_pDb, pszInsert, -1, &pStmt, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoMapEvent::SaveAllEvents: prepare failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapEvent::SaveAllEvents: prepare failed\n");
 		return;
 	}
 
@@ -210,7 +211,7 @@ void CSaveLoadInfoMapEvent::SaveAllEvents(CLibInfoMapBase *pLibInfoMap)
 	}
 
 	sqlite3_finalize(pStmt);
-	OutputDebugStringA("SaveLoadInfoMapEvent: sys_map_event に保存完了\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMapEvent: sys_map_event に保存完了\n");
 }
 
 // ============================================================
@@ -313,7 +314,7 @@ BOOL CSaveLoadInfoMapEvent::LoadAllEvents(CLibInfoMapBase *pLibInfoMap)
 	sqlite3_finalize(pStmt);
 
 	if (nRowCount > 0) {
-		OutputDebugStringA("SaveLoadInfoMapEvent: sys_map_event から読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapEvent: sys_map_event から読み込み成功\n");
 	}
 	return (nRowCount > 0) ? TRUE : FALSE;
 }
@@ -343,7 +344,7 @@ void CSaveLoadInfoMapEvent::MigrateFromMemory(CLibInfoMapBase *pLibInfoMap)
 
 	// メモリ → sys_map_event へ書き戻し
 	SaveAllEvents(pLibInfoMap);
-	OutputDebugStringA("SaveLoadInfoMapEvent: メモリ → sys_map_event へマイグレーション完了\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMapEvent: メモリ → sys_map_event へマイグレーション完了\n");
 }
 
 // ============================================================
@@ -378,6 +379,6 @@ void CSaveLoadInfoMapEvent::Load(CLibInfoMapBase *pLibInfoMap)
 	}
 
 	// 2. テーブルが空 → メモリ上のデータからマイグレーション
-	OutputDebugStringA("SaveLoadInfoMapEvent: sys_map_event が空 → メモリからマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMapEvent: sys_map_event が空 → メモリからマイグレーション\n");
 	MigrateFromMemory(pLibInfoMap);
 }

@@ -10,6 +10,7 @@
 #include "InfoSystem.h"
 #include "LibInfoSystem.h"
 #include "SaveLoadInfoSystem.h"
+#include "../Platform/SvrPlatform.h"
 
 // ============================================================
 // 正規化テーブル用スキーマ定義
@@ -132,7 +133,7 @@ void CSaveLoadInfoSystem::SaveToNormalTable(void)
 	sqlite3_stmt* pStmt = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, szSql, -1, &pStmt, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoSystem::SaveToNormalTable: prepare failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoSystem::SaveToNormalTable: prepare failed\n");
 		return;
 	}
 
@@ -236,7 +237,7 @@ BOOL CSaveLoadInfoSystem::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='System';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoSystem: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoSystem: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -273,11 +274,11 @@ void CSaveLoadInfoSystem::Load(PCLibInfoBase pDst)
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoSystem: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoSystem: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoSystem: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoSystem: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

@@ -38,7 +38,7 @@ bool CSaveLoadInfoMapGenPattern::OpenDb(sqlite3 **ppDb)
 
     int nRet = sqlite3_open(szDbPath, ppDb);
     if (nRet != SQLITE_OK) {
-        OutputDebugStringA("CSaveLoadInfoMapGenPattern::OpenDb: sqlite3_open failed\n");
+        SboPlatform::WriteDebugLine("CSaveLoadInfoMapGenPattern::OpenDb: sqlite3_open failed\n");
         *ppDb = NULL;
         return false;
     }

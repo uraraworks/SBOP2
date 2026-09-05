@@ -2790,7 +2790,7 @@ void CLibInfoCharSvr::PutNpc(CInfoCharSvr *pInfoChar)
 		rcPut.bottom,
 		ptPos.x,
 		ptPos.y);
-	OutputDebugStringA(szDebug);
+	SboPlatform::WriteDebugLine(szDebug);
 #endif
 
 	pInfoCharTmp = (PCInfoCharSvr)GetNew(pInfoChar->m_nPutMoveType);
@@ -2829,7 +2829,7 @@ void CLibInfoCharSvr::PutNpc(CInfoCharSvr *pInfoChar)
 			(unsigned long)pInfoChar->m_dwCharID,
 			ptPos.x,
 			ptPos.y);
-		OutputDebugStringA(szDebug);
+		SboPlatform::WriteDebugLine(szDebug);
 #endif
 		goto Exit;
 	}
@@ -2846,7 +2846,7 @@ void CLibInfoCharSvr::PutNpc(CInfoCharSvr *pInfoChar)
 		pInfoCharAdd->m_nMapX,
 		pInfoCharAdd->m_nMapY,
 		pInfoCharAdd->m_nDirection);
-	OutputDebugStringA(szDebug);
+	SboPlatform::WriteDebugLine(szDebug);
 #endif
 
 	pInfoChar->IncPutCount();

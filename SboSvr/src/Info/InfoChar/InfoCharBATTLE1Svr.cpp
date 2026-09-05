@@ -8,7 +8,7 @@
 #include "InfoMapBase.h"
 #include "InfoCharBATTLE1Svr.h"
 #include "LibInfoCharSvr.h"
-#include "../Platform/SvrPlatform.h"
+#include "../../Platform/SvrPlatform.h"
 
 CInfoCharBATTLE1Svr::CInfoCharBATTLE1Svr()
 {

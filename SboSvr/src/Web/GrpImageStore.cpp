@@ -8,6 +8,7 @@
 #include <ctime>
 
 #include <windows.h>
+#include "../Platform/SvrPlatform.h"
 
 namespace
 {
@@ -84,7 +85,7 @@ bool CGrpImageStore::EnsureOpenLocked()
     sqlite3 *pDb = NULL;
     int nRet = sqlite3_open(dbPath.c_str(), &pDb);
     if (nRet != SQLITE_OK) {
-        OutputDebugStringA("CGrpImageStore: sqlite3_open failed\n");
+        SboPlatform::WriteDebugLine("CGrpImageStore: sqlite3_open failed\n");
         if (pDb != NULL) {
             sqlite3_close(pDb);
         }
@@ -124,7 +125,7 @@ bool CGrpImageStore::EnsureOpenLocked()
     char *pszErr = NULL;
     nRet = sqlite3_exec(pDb, pszInit, NULL, NULL, &pszErr);
     if (nRet != SQLITE_OK) {
-        OutputDebugStringA("CGrpImageStore: schema init failed\n");
+        SboPlatform::WriteDebugLine("CGrpImageStore: schema init failed\n");
         if (pszErr != NULL) {
             sqlite3_free(pszErr);
         }

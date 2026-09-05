@@ -13,6 +13,7 @@
 #include "InfoSkillMOVEATACK.h"
 #include "LibInfoSkill.h"
 #include "SaveLoadInfoSkill.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableName         = "sys_skill";
@@ -133,16 +134,16 @@ void CSaveLoadInfoSkill::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtMoveAtk = NULL;
 
 	if (sqlite3_prepare_v2(s_pDb, pszInsertMain,    -1, &pStmtMain,    NULL) != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoSkill::SaveToNormalTable: prepare main failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoSkill::SaveToNormalTable: prepare main failed\n");
 		return;
 	}
 	if (sqlite3_prepare_v2(s_pDb, pszInsertHeal,    -1, &pStmtHeal,    NULL) != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoSkill::SaveToNormalTable: prepare heal failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoSkill::SaveToNormalTable: prepare heal failed\n");
 		sqlite3_finalize(pStmtMain);
 		return;
 	}
 	if (sqlite3_prepare_v2(s_pDb, pszInsertMoveAtk, -1, &pStmtMoveAtk, NULL) != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoSkill::SaveToNormalTable: prepare moveatack failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoSkill::SaveToNormalTable: prepare moveatack failed\n");
 		sqlite3_finalize(pStmtMain);
 		sqlite3_finalize(pStmtHeal);
 		return;
@@ -349,7 +350,7 @@ BOOL CSaveLoadInfoSkill::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='Skill';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoSkill: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoSkill: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -385,11 +386,11 @@ void CSaveLoadInfoSkill::Load(PCLibInfoBase pDst)
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoSkill: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoSkill: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoSkill: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoSkill: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

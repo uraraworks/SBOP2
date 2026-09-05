@@ -10,6 +10,7 @@
 #include "InfoMotionType.h"
 #include "LibInfoMotionType.h"
 #include "SaveLoadInfoMotionType.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableName = "sys_motion_type";
@@ -69,7 +70,7 @@ void CSaveLoadInfoMotionType::SaveToNormalTable(void)
 	sqlite3_stmt* pStmt = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsert, -1, &pStmt, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoMotionType::SaveToNormalTable: prepare failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMotionType::SaveToNormalTable: prepare failed\n");
 		return;
 	}
 
@@ -162,7 +163,7 @@ BOOL CSaveLoadInfoMotionType::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='MotionType';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoMotionType: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMotionType: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -198,11 +199,11 @@ void CSaveLoadInfoMotionType::Load(PCLibInfoBase pDst)
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoMotionType: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMotionType: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoMotionType: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMotionType: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

@@ -7,7 +7,7 @@
 #include "StdAfx.h"
 #include "InfoMapBase.h"
 #include "InfoCharMOVEATACKSvr.h"
-#include "../Platform/SvrPlatform.h"
+#include "../../Platform/SvrPlatform.h"
 
 CInfoCharMOVEATACKSvr::CInfoCharMOVEATACKSvr()
 {

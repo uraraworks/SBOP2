@@ -18,6 +18,7 @@
 #include "UraraSockTCPSBO.h"
 #include "Packet/MAP/PacketMAP_MAPPARTS.h"
 #include "Packet/MAP/PacketMAP_DELETEPARTS.h"
+#include "../../Platform/SvrPlatform.h"
 
 namespace
 {
@@ -217,7 +218,7 @@ bool CMapPartsResourceProvider::LoadSheetLocked(int sheetIndex, std::vector<unsi
                 char szMsg[256];
                 _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
                     "MapPartsHandler: lodepng decode failed (err=%u), using original PNG\n", decErr);
-                OutputDebugStringA(szMsg);
+                SboPlatform::WriteDebugLine(szMsg);
             }
             outData = std::move(rawPng);
             return true;
@@ -248,7 +249,7 @@ bool CMapPartsResourceProvider::LoadSheetLocked(int sheetIndex, std::vector<unsi
             char szMsg[256];
             _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
                 "MapPartsHandler: lodepng encode failed (err=%u), using original PNG\n", encErr);
-            OutputDebugStringA(szMsg);
+            SboPlatform::WriteDebugLine(szMsg);
             outData = std::move(rawPng);
             return true;
         }

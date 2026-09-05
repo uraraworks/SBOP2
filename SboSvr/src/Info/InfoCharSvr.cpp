@@ -7,7 +7,7 @@
 #include "StdAfx.h"
 #include "InfoMotion.h"
 #include "InfoCharSvr.h"
-#include "../../Platform/SvrPlatform.h"
+#include "../Platform/SvrPlatform.h"
 
 namespace {
 

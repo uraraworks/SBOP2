@@ -10,6 +10,7 @@
 #pragma comment(lib, "advapi32.lib")
 
 #include "crc.h" // CCRC: pre-check ハンドシェイクのCRC計算用
+#include "../Platform/SvrPlatform.h"
 
 // ============================================================
 //  WebSocket オペコード定数
@@ -299,10 +300,10 @@ void CWebSocketBridge::HandleAccept()
 {
     SOCKET hWsClient = accept(m_hListen, NULL, NULL);
     if (hWsClient == INVALID_SOCKET) {
-        OutputDebugStringA("[WebSocketBridge] HandleAccept: accept FAILED\n");
+        SboPlatform::WriteDebugLine("[WebSocketBridge] HandleAccept: accept FAILED\n");
         return;
     }
-    OutputDebugStringA("[WebSocketBridge] HandleAccept: accepted\n");
+    SboPlatform::WriteDebugLine("[WebSocketBridge] HandleAccept: accepted\n");
 
     // セッションスレッドに引数を渡す
     WebSocketSessionArgs *pArgs = new WebSocketSessionArgs();
@@ -342,7 +343,7 @@ unsigned __stdcall CWebSocketBridge::SessionThreadProc(void *lpParam)
 
 void CWebSocketBridge::HandleSession(SOCKET hWsClient)
 {
-    OutputDebugStringA("[WebSocketBridge] HandleSession: start\n");
+    SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: start\n");
 
     // ソケットのタイムアウトを設定
     DWORD dwTimeout = kSessionTimeoutMs;
@@ -353,16 +354,16 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
 
     // 1. WebSocketハンドシェイク
     if (!PerformHandshake(hWsClient)) {
-        OutputDebugStringA("[WebSocketBridge] HandleSession: handshake FAILED\n");
+        SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: handshake FAILED\n");
         closesocket(hWsClient);
         return;
     }
-    OutputDebugStringA("[WebSocketBridge] HandleSession: handshake OK\n");
+    SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: handshake OK\n");
 
     // 2. localhost の TCPゲームポートへ接続
     SOCKET hTcpSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (hTcpSock == INVALID_SOCKET) {
-        OutputDebugStringA("[WebSocketBridge] HandleSession: TCP socket create FAILED\n");
+        SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: TCP socket create FAILED\n");
         closesocket(hWsClient);
         return;
     }
@@ -376,20 +377,20 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
     {
         char szLog[128];
         wsprintfA(szLog, "[WebSocketBridge] TCP connect to 127.0.0.1:%d\n", (int)m_wTcpPort);
-        OutputDebugStringA(szLog);
+        SboPlatform::WriteDebugLine(szLog);
     }
 
     if (connect(hTcpSock, reinterpret_cast<const sockaddr *>(&tcpAddr),
                 sizeof(tcpAddr)) == SOCKET_ERROR) {
         char szLog[128];
         wsprintfA(szLog, "[WebSocketBridge] TCP connect FAILED: WSA=%d\n", WSAGetLastError());
-        OutputDebugStringA(szLog);
+        SboPlatform::WriteDebugLine(szLog);
         closesocket(hTcpSock);
         closesocket(hWsClient);
         return;
     }
 
-    OutputDebugStringA("[WebSocketBridge] HandleSession: TCP connected, starting bridge\n");
+    SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: TCP connected, starting bridge\n");
 
     // 4. TCP pre-check ハンドシェイク
     //    SboSockLib はクライアント接続直後に認証チャレンジを送ってくる。
@@ -398,7 +399,7 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
         // チャレンジ受信: [PACKETINFO(8)][dwChallenge(4)]
         unsigned char abyHeader[8];
         if (!RecvAll(hTcpSock, abyHeader, 8)) {
-            OutputDebugStringA("[WebSocketBridge] pre-check: header recv FAILED\n");
+            SboPlatform::WriteDebugLine("[WebSocketBridge] pre-check: header recv FAILED\n");
             closesocket(hTcpSock);
             closesocket(hWsClient);
             return;
@@ -406,14 +407,14 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
         DWORD dwPayloadSize = 0;
         memcpy(&dwPayloadSize, &abyHeader[0], sizeof(DWORD));
         if (dwPayloadSize != sizeof(DWORD)) {
-            OutputDebugStringA("[WebSocketBridge] pre-check: unexpected payload size\n");
+            SboPlatform::WriteDebugLine("[WebSocketBridge] pre-check: unexpected payload size\n");
             closesocket(hTcpSock);
             closesocket(hWsClient);
             return;
         }
         DWORD dwChallenge = 0;
         if (!RecvAll(hTcpSock, reinterpret_cast<unsigned char *>(&dwChallenge), sizeof(DWORD))) {
-            OutputDebugStringA("[WebSocketBridge] pre-check: challenge recv FAILED\n");
+            SboPlatform::WriteDebugLine("[WebSocketBridge] pre-check: challenge recv FAILED\n");
             closesocket(hTcpSock);
             closesocket(hWsClient);
             return;
@@ -433,13 +434,13 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
         memcpy(&abySend[4], &dwCRC, sizeof(DWORD));                // dwCRC
         memcpy(&abySend[8], &dwResponse, sizeof(DWORD));           // payload
         if (!SendAll(hTcpSock, reinterpret_cast<const char *>(abySend), sizeof(abySend))) {
-            OutputDebugStringA("[WebSocketBridge] pre-check: response send FAILED\n");
+            SboPlatform::WriteDebugLine("[WebSocketBridge] pre-check: response send FAILED\n");
             closesocket(hTcpSock);
             closesocket(hWsClient);
             return;
         }
 
-        OutputDebugStringA("[WebSocketBridge] pre-check: OK\n");
+        SboPlatform::WriteDebugLine("[WebSocketBridge] pre-check: OK\n");
     }
 
     // 3. 双方向ブリッジループ

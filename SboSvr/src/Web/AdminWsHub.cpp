@@ -6,6 +6,7 @@
 
 #include "WebSocketProtocol.h"
 #include "JsonUtils.h"
+#include "../Platform/SvrPlatform.h"
 
 // ============================================================
 //  CAdminWsHub 実装
@@ -61,7 +62,7 @@ void CAdminWsHub::AddConnection(SOCKET hSocket, const std::string &sessionId)
               static_cast<unsigned>(hSocket),
               sessionId.c_str(),
               static_cast<int>(m_connections.size()));
-    OutputDebugStringA(szLog);
+    SboPlatform::WriteDebugLine(szLog);
 }
 
 // ------------------------------------------------------------
@@ -92,7 +93,7 @@ void CAdminWsHub::RemoveConnection(SOCKET hSocket)
     char szLog[64];
     wsprintfA(szLog, "[AdminWsHub] RemoveConnection: socket=%u\n",
               static_cast<unsigned>(hSocket));
-    OutputDebugStringA(szLog);
+    SboPlatform::WriteDebugLine(szLog);
 }
 
 // ------------------------------------------------------------
@@ -204,7 +205,7 @@ void CAdminWsHub::Shutdown()
         m_connections.clear();
     }
 
-    OutputDebugStringA("[AdminWsHub] Shutdown complete\n");
+    SboPlatform::WriteDebugLine("[AdminWsHub] Shutdown complete\n");
 }
 
 // ------------------------------------------------------------
@@ -265,7 +266,7 @@ void CAdminWsHub::RunRecvLoop(SOCKET hSocket)
                    (nOpcode == WebSocketProtocol::kOpcodeBinary))
         {
             // クライアントからのメッセージは現時点では無視（警告ログのみ）
-            OutputDebugStringA("[AdminWsHub] RunRecvLoop: unexpected client message (ignored)\n");
+            SboPlatform::WriteDebugLine("[AdminWsHub] RunRecvLoop: unexpected client message (ignored)\n");
         }
         // その他のオペコードも無視
     }
@@ -275,5 +276,5 @@ void CAdminWsHub::RunRecvLoop(SOCKET hSocket)
     shutdown(hSocket, SD_BOTH);
     closesocket(hSocket);
 
-    OutputDebugStringA("[AdminWsHub] RunRecvLoop: exited\n");
+    SboPlatform::WriteDebugLine("[AdminWsHub] RunRecvLoop: exited\n");
 }

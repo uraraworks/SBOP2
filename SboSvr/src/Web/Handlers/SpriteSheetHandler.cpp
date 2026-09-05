@@ -13,6 +13,7 @@
 #include "Web/AuthProvider.h"
 #include "Web/GrpImageStore.h"
 #include "Web/JsonUtils.h"
+#include "../../Platform/SvrPlatform.h"
 
 namespace
 {
@@ -332,7 +333,7 @@ int CGrpResourceProvider::GetSheetCount(const std::string &categoryKey)
         _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
             "CGrpResourceProvider::GetSheetCount: probe limit reached (category=%s)\n",
             categoryKey.c_str());
-        OutputDebugStringA(szMsg);
+        SboPlatform::WriteDebugLine(szMsg);
     }
 
     m_sheetCountCache.insert(std::make_pair(categoryKey, count));
@@ -645,7 +646,7 @@ bool CGrpResourceProvider::MakeTransparentPng(
             char szMsg[256];
             _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
                 "SpriteSheetHandler: lodepng decode failed (err=%u), using original PNG\n", decErr);
-            OutputDebugStringA(szMsg);
+            SboPlatform::WriteDebugLine(szMsg);
         }
         outData = std::move(rawPng);
         return true;
@@ -663,7 +664,7 @@ bool CGrpResourceProvider::MakeTransparentPng(
         char szMsg[256];
         _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
             "SpriteSheetHandler: lodepng encode failed (err=%u), using original PNG\n", encErr);
-        OutputDebugStringA(szMsg);
+        SboPlatform::WriteDebugLine(szMsg);
         outData = std::move(rawPng);
         return true;
     }

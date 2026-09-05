@@ -19,6 +19,7 @@
 #include "InfoMotion.h"
 #include "LibInfoMotion.h"
 #include "SaveLoadInfoMotion.h"
+#include "../Platform/SvrPlatform.h"
 
 static BOOL HasTableColumn(sqlite3* pDb, const char* pszTable, const char* pszColumn)
 {
@@ -162,7 +163,7 @@ void CSaveLoadInfoMotion::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtMain = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsertMain, -1, &pStmtMain, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoMotion::SaveToNormalTable: prepare(main) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMotion::SaveToNormalTable: prepare(main) failed\n");
 		return;
 	}
 
@@ -173,7 +174,7 @@ void CSaveLoadInfoMotion::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtSub = NULL;
 	nRet = sqlite3_prepare_v2(s_pDb, pszInsertSub, -1, &pStmtSub, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoMotion::SaveToNormalTable: prepare(sub) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMotion::SaveToNormalTable: prepare(sub) failed\n");
 		sqlite3_finalize(pStmtMain);
 		return;
 	}
@@ -379,7 +380,7 @@ BOOL CSaveLoadInfoMotion::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='Motion';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoMotion: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMotion: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -465,18 +466,18 @@ void CSaveLoadInfoMotion::Load(PCLibInfoBase pDst)
 
 	// 旧移行で歩行モーションの複数コマが失われた DB を自動修復する
 	if (HasBrokenMotionRows()) {
-		OutputDebugStringA("SaveLoadInfoMotion: 破損した正規化モーション行を検出 → .dat から再マイグレーション\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMotion: 破損した正規化モーション行を検出 → .dat から再マイグレーション\n");
 		MigrateFromBlob(pDst);
 		return;
 	}
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoMotion: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMotion: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoMotion: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMotion: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

@@ -54,7 +54,7 @@ void CSaveLoadInfoBase::WriteData(void)
 			return;	// SQLite 書き込み成功 → .dat には書かない
 		}
 		// prepare 失敗時は .dat にフォールバック
-		OutputDebugStringA("SaveLoadInfoBase: SQLite prepare failed, fallback to .dat\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoBase: SQLite prepare failed, fallback to .dat\n");
 	}
 
 	// SQLite 未接続またはエラー時は従来の .dat ファイルへ書き込み

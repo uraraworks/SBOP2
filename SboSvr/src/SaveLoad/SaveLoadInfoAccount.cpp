@@ -12,6 +12,7 @@
 #include "InfoAccount.h"
 #include "LibInfoAccount.h"
 #include "SaveLoadInfoAccount.h"
+#include "../Platform/SvrPlatform.h"
 
 // ============================================================
 // コンストラクタ / デストラクタ
@@ -91,7 +92,7 @@ void CSaveLoadInfoAccount::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtMain = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsertMain, -1, &pStmtMain, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoAccount::SaveToNormalTable: prepare(main) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoAccount::SaveToNormalTable: prepare(main) failed\n");
 		return;
 	}
 
@@ -102,7 +103,7 @@ void CSaveLoadInfoAccount::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtSub = NULL;
 	nRet = sqlite3_prepare_v2(s_pDb, pszInsertSub, -1, &pStmtSub, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoAccount::SaveToNormalTable: prepare(sub) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoAccount::SaveToNormalTable: prepare(sub) failed\n");
 		sqlite3_finalize(pStmtMain);
 		return;
 	}
@@ -260,7 +261,7 @@ BOOL CSaveLoadInfoAccount::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='Account';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoAccount: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoAccount: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -296,11 +297,11 @@ void CSaveLoadInfoAccount::Load(PCLibInfoBase pDst)
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoAccount: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoAccount: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoAccount: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoAccount: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

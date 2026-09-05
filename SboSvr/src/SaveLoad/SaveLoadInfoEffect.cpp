@@ -12,6 +12,7 @@
 #include "InfoAnime.h"
 #include "LibInfoEffect.h"
 #include "SaveLoadInfoEffect.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableMain  = "sys_effect";
@@ -114,7 +115,7 @@ void CSaveLoadInfoEffect::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtMain = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsertMain, -1, &pStmtMain, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoEffect::SaveToNormalTable: prepare(main) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoEffect::SaveToNormalTable: prepare(main) failed\n");
 		return;
 	}
 
@@ -125,7 +126,7 @@ void CSaveLoadInfoEffect::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtAnime = NULL;
 	nRet = sqlite3_prepare_v2(s_pDb, pszInsertAnime, -1, &pStmtAnime, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoEffect::SaveToNormalTable: prepare(anime) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoEffect::SaveToNormalTable: prepare(anime) failed\n");
 		sqlite3_finalize(pStmtMain);
 		return;
 	}
@@ -284,7 +285,7 @@ BOOL CSaveLoadInfoEffect::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='Effect';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoEffect: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoEffect: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -351,18 +352,18 @@ void CSaveLoadInfoEffect::Load(PCLibInfoBase pDst)
 
 	// 旧 .dat からの移行時にアニメコマの grpID だけ欠落した DB を自動修復する
 	if (HasBrokenAnimeRows()) {
-		OutputDebugStringA("SaveLoadInfoEffect: 破損した正規化アニメ行を検出 → BLOB/.dat から再マイグレーション\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoEffect: 破損した正規化アニメ行を検出 → BLOB/.dat から再マイグレーション\n");
 		MigrateFromBlob(pDst);
 		return;
 	}
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoEffect: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoEffect: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoEffect: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoEffect: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

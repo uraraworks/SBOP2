@@ -172,7 +172,7 @@ static bool OpenSboDb(sqlite3 **ppDb)
 	// SQLite オープン
 	int nRet = sqlite3_open(szDbPath, ppDb);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("CMgrData: sqlite3_open failed\n");
+		SboPlatform::WriteDebugLine("CMgrData: sqlite3_open failed\n");
 		*ppDb = NULL;
 		return false;
 	}
@@ -316,7 +316,7 @@ void CMgrData::Load(void)
 			if (m_pLog != NULL) {
 				m_pLog->Write("アカウントのパスワードをハッシュ化します(%d件)。完了までしばらくかかります", nPlainCount);
 			} else {
-				OutputDebugStringA("CMgrData: password hash migration start\n");
+				SboPlatform::WriteDebugLine("CMgrData: password hash migration start\n");
 			}
 		}
 
@@ -333,7 +333,7 @@ void CMgrData::Load(void)
 				if (m_pLog != NULL) {
 					m_pLog->Write("警告: アカウントのパスワードハッシュ化に失敗したため平文のまま残します [AccountID:%u]", pInfoAccount->m_dwAccountID);
 				} else {
-					OutputDebugStringA("CMgrData: password hash failed, keep plain text\n");
+					SboPlatform::WriteDebugLine("CMgrData: password hash failed, keep plain text\n");
 				}
 				continue;
 			}
@@ -356,7 +356,7 @@ void CMgrData::Load(void)
 			if (m_pLog != NULL) {
 				m_pLog->Write("アカウントのパスワードを%d件ハッシュ化しました", nMigrated);
 			} else {
-				OutputDebugStringA("CMgrData: password hash migration done\n");
+				SboPlatform::WriteDebugLine("CMgrData: password hash migration done\n");
 			}
 		}
 	}

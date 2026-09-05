@@ -12,6 +12,7 @@
 #include "InfoItemWeapon.h"
 #include "LibInfoItemWeapon.h"
 #include "SaveLoadInfoItemWeapon.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableName    = "sys_item_weapon";
@@ -101,7 +102,7 @@ void CSaveLoadInfoItemWeapon::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtMain = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsertMain, -1, &pStmtMain, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoItemWeapon::SaveToNormalTable: prepare(main) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoItemWeapon::SaveToNormalTable: prepare(main) failed\n");
 		return;
 	}
 
@@ -112,7 +113,7 @@ void CSaveLoadInfoItemWeapon::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtAtk = NULL;
 	nRet = sqlite3_prepare_v2(s_pDb, pszInsertAtk, -1, &pStmtAtk, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoItemWeapon::SaveToNormalTable: prepare(atk) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoItemWeapon::SaveToNormalTable: prepare(atk) failed\n");
 		sqlite3_finalize(pStmtMain);
 		return;
 	}
@@ -124,7 +125,7 @@ void CSaveLoadInfoItemWeapon::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtCrit = NULL;
 	nRet = sqlite3_prepare_v2(s_pDb, pszInsertCrit, -1, &pStmtCrit, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoItemWeapon::SaveToNormalTable: prepare(crit) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoItemWeapon::SaveToNormalTable: prepare(crit) failed\n");
 		sqlite3_finalize(pStmtAtk);
 		sqlite3_finalize(pStmtMain);
 		return;
@@ -301,7 +302,7 @@ BOOL CSaveLoadInfoItemWeapon::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='ItemWeapon';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoItemWeapon: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoItemWeapon: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -337,11 +338,11 @@ void CSaveLoadInfoItemWeapon::Load(PCLibInfoBase pDst)
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoItemWeapon: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoItemWeapon: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoItemWeapon: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoItemWeapon: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

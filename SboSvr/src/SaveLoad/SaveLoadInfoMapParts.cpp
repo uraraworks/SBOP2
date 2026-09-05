@@ -12,6 +12,7 @@
 #include "InfoAnime.h"
 #include "LibInfoMapParts.h"
 #include "SaveLoadInfoMapParts.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableMain  = "sys_map_parts";
@@ -122,7 +123,7 @@ void CSaveLoadInfoMapParts::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtMain = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsertMain, -1, &pStmtMain, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoMapParts::SaveToNormalTable: prepare(main) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapParts::SaveToNormalTable: prepare(main) failed\n");
 		return;
 	}
 
@@ -134,7 +135,7 @@ void CSaveLoadInfoMapParts::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtAnime = NULL;
 	nRet = sqlite3_prepare_v2(s_pDb, pszInsertAnime, -1, &pStmtAnime, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoMapParts::SaveToNormalTable: prepare(anime) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapParts::SaveToNormalTable: prepare(anime) failed\n");
 		sqlite3_finalize(pStmtMain);
 		return;
 	}
@@ -295,7 +296,7 @@ BOOL CSaveLoadInfoMapParts::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='MapParts';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoMapParts: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapParts: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -362,18 +363,18 @@ void CSaveLoadInfoMapParts::Load(PCLibInfoBase pDst)
 
 	// 旧 .dat からの移行時にアニメコマの grpID だけ欠落した DB を自動修復する
 	if (HasBrokenAnimeRows()) {
-		OutputDebugStringA("SaveLoadInfoMapParts: 破損した正規化アニメ行を検出 → BLOB/.dat から再マイグレーション\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapParts: 破損した正規化アニメ行を検出 → BLOB/.dat から再マイグレーション\n");
 		MigrateFromBlob(pDst);
 		return;
 	}
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoMapParts: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapParts: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoMapParts: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMapParts: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

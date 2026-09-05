@@ -10,6 +10,7 @@
 #include "InfoItemTypeBase.h"
 #include "LibInfoItemType.h"
 #include "SaveLoadInfoItemType.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableName = "sys_item_type";
@@ -87,7 +88,7 @@ void CSaveLoadInfoItemType::SaveToNormalTable(void)
 	sqlite3_stmt* pStmt = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsert, -1, &pStmt, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoItemType::SaveToNormalTable: prepare failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoItemType::SaveToNormalTable: prepare failed\n");
 		return;
 	}
 
@@ -220,7 +221,7 @@ BOOL CSaveLoadInfoItemType::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='ItemType';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoItemType: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoItemType: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -256,11 +257,11 @@ void CSaveLoadInfoItemType::Load(PCLibInfoBase pDst)
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoItemType: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoItemType: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoItemType: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoItemType: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

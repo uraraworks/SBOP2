@@ -10,6 +10,7 @@
 #include "InfoEfcBalloon.h"
 #include "LibInfoEfcBalloon.h"
 #include "SaveLoadInfoEfcBalloon.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableName = "sys_efc_balloon";
@@ -74,7 +75,7 @@ void CSaveLoadInfoEfcBalloon::SaveToNormalTable(void)
 	sqlite3_stmt* pStmt = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsert, -1, &pStmt, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoEfcBalloon::SaveToNormalTable: prepare failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoEfcBalloon::SaveToNormalTable: prepare failed\n");
 		return;
 	}
 
@@ -177,7 +178,7 @@ BOOL CSaveLoadInfoEfcBalloon::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='EfcBalloon';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoEfcBalloon: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoEfcBalloon: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -213,11 +214,11 @@ void CSaveLoadInfoEfcBalloon::Load(PCLibInfoBase pDst)
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoEfcBalloon: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoEfcBalloon: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoEfcBalloon: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoEfcBalloon: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

@@ -52,6 +52,7 @@
 #include "MgrData.h"
 #include "TextOutput.h"
 #include "GlobalDefine.h"
+#include "../Platform/SvrPlatform.h"
 
 namespace
 {
@@ -1569,6 +1570,6 @@ bool CHttpServer::HandleAdminWsUpgrade(SOCKET hClient, const std::string &rawHea
         // ハンドシェイク成功 → Hub にソケットを移譲して recv ループを起動
         CAdminWsHub::Instance().AddConnection(hClient, authContext.sessionId);
 
-        OutputDebugStringA("[HttpServer] /ws/admin: WebSocket upgrade OK, transferred to Hub\n");
+        SboPlatform::WriteDebugLine("[HttpServer] /ws/admin: WebSocket upgrade OK, transferred to Hub\n");
         return true; // ソケット所有権を移譲済みなので呼び出し元は closesocket しない
 }
