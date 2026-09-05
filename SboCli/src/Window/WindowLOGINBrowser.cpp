@@ -126,7 +126,7 @@ static void GetWindowLOGINConnectRect(RECT *pRect)
 	SetRect(pRect, 16 * 15 - 54 - 16, 16 * 5 + 6, 16 * 15 - 16, 16 * 5 + 6 + 18);
 }
 
-static void NormalizeLoginText(CmyString &strDst, LPCSTR pszText, BOOL bLowercase)
+static void NormalizeLoginText(CmyString &strDst, LPCSTR pszText, BOOL bLowercase, BOOL bAsciiOnly = FALSE)
 {
 	CString strWide;
 	CString strFiltered;
@@ -146,6 +146,13 @@ static void NormalizeLoginText(CmyString &strDst, LPCSTR pszText, BOOL bLowercas
 		}
 		if (bLowercase && (ch >= _T('A')) && (ch <= _T('Z'))) {
 			ch = (TCHAR)(ch - _T('A') + _T('a'));
+		}
+		if (bAsciiOnly) {
+			// パスワードは ASCII の表示可能文字のみ。サーバー側の
+			// PasswordHash::IsAcceptable() と同じ条件。
+			if ((ch < _T('!')) || (ch > _T('~'))) {
+				continue;
+			}
 		}
 		strFiltered.AppendChar(ch);
 		if (strFiltered.GetLength() >= LOGIN_TEXT_MAX) {
@@ -328,7 +335,7 @@ void CWindowLOGINBrowser::SetAccountFromBrowser(LPCSTR pszText)
 
 void CWindowLOGINBrowser::SetPasswordFromBrowser(LPCSTR pszText)
 {
-	NormalizeLoginText(m_strPassword, pszText, FALSE);
+	NormalizeLoginText(m_strPassword, pszText, FALSE, TRUE);
 	Redraw();
 }
 

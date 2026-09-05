@@ -1104,6 +1104,14 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID
 
 	pInfoAccount->m_strAccount	= Packet.m_strAccount;
 	{
+		if (!PasswordHash::IsAcceptable(Packet.m_strPassword.GetUtf8Pointer())) {
+			m_pLog->Write("アカウント変更拒否(パスワードに使用できない文字) dwAccountID:%u", Packet.m_dwAccountID);
+			strTmp.Format(_T("パスワードに使用できない文字が含まれています(半角の記号と英数字のみ)"));
+			PacketMsg.Make(strTmp, RGB(255, 255, 255));
+			m_pSock->SendTo(dwSessionID, &PacketMsg);
+			return;
+		}
+
 		std::string strHashed = PasswordHash::Hash(Packet.m_strPassword.GetUtf8Pointer());
 		if (strHashed.empty()) {
 			// ハッシュ化失敗。パスワードは書き換えずアカウント名変更のみ反映する
@@ -1230,6 +1238,14 @@ void CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD(PBYTE pData, DWORD dwSessionID)
 		std::string strHashed;
 
 		TrimViewString(strNewPassword, (LPCTSTR)Packet.m_strPassword);
+
+		if (!PasswordHash::IsAcceptable(strNewPassword.GetUtf8Pointer())) {
+			strTmp = "パスワードに使用できない文字が含まれています(半角の記号と英数字のみ)";
+			PacketMAP_SYSTEMMSG.Make((LPCSTR)strTmp, RGB(255, 255, 255), TRUE, SYSTEMMSGTYPE_NOLOG);
+			m_pSock->SendTo(dwSessionID, &PacketMAP_SYSTEMMSG);
+			return;
+		}
+
 		strHashed = PasswordHash::Hash(strNewPassword.GetUtf8Pointer());
 		if (strHashed.empty()) {
 			// ハッシュ化失敗。アカウントは作らない

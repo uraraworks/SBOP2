@@ -233,6 +233,25 @@ namespace
 
 namespace PasswordHash
 {
+	bool	IsAcceptable(const char *pszPassword)
+	{
+		if (pszPassword == NULL) {
+			return false;
+		}
+		if (pszPassword[0] == '\0') {
+			return false;
+		}
+
+		for (const unsigned char *p = (const unsigned char *)pszPassword; *p != '\0'; ++ p) {
+			// ASCII の表示可能文字のみ。空白(0x20)と DEL(0x7F) も不可。
+			// 全角文字は UTF-8 で 0x80 以上のバイトになるためここで弾かれる。
+			if (*p < 0x21 || *p > 0x7E) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	std::string	Hash(const char *pszPassword)
 	{
 		if (pszPassword == NULL) {

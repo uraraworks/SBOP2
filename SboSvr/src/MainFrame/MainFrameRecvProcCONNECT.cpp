@@ -79,6 +79,17 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 			std::string strHashed;
 
 			TrimViewString(strNewPassword, (LPCTSTR)Packet.m_strPassword);
+
+			// 新規作成時のみ文字種を検証する。既存アカウントの照合には
+			// 掛けないこと(過去に全角で登録された分を締め出すため)。
+			if (!PasswordHash::IsAcceptable(strNewPassword.GetUtf8Pointer())) {
+				nResult = LOGINRES_NG_PASSWORD;
+				m_pLog->Write("新規アカウント作成拒否(パスワードに使用できない文字) dwSessionID:%u", dwSessionID);
+				PacketRes.Make(nResult, 0);
+				m_pSock->SendTo(dwSessionID, &PacketRes);
+				return;
+			}
+
 			strHashed = PasswordHash::Hash(strNewPassword.GetUtf8Pointer());
 			if (strHashed.empty()) {
 				// ハッシュ化失敗。アカウントは作らずログインを拒否する

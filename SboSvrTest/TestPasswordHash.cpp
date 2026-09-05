@@ -187,6 +187,58 @@ TEST(不正_壊れた保存値は拒否する)
     CHECK(PasswordHash::Verify("$s1$1$c2FsdA==$AAAA", "password") == false);
 }
 
+//////////////////////////////////////////////////////////////////////
+// 5. 使用できる文字の制限
+//
+// 全角文字は PasswordHash が生バイトを扱う都合上、呼び出し側の
+// エンコーディング次第で同じパスワードが別のハッシュになりうる。
+// そのため新規作成・変更時は ASCII 表示可能文字(0x21〜0x7E)のみ許可する。
+//
+// **既存アカウントの照合には掛けないこと。** 過去に全角で登録された
+// アカウントが在るかはハッシュからは判別できず、掛けると締め出しになる。
+//////////////////////////////////////////////////////////////////////
+
+TEST(文字種_半角英数字と記号は使える)
+{
+    CHECK(PasswordHash::IsAcceptable("abc123") != false);
+    CHECK(PasswordHash::IsAcceptable("Passw0rd!") != false);
+    CHECK(PasswordHash::IsAcceptable("!\"#$%&'()*+,-./") != false);
+    CHECK(PasswordHash::IsAcceptable(":;<=>?@[\\]^_`{|}~") != false);
+    CHECK(PasswordHash::IsAcceptable("a") != false);
+}
+
+TEST(文字種_全角は使えない)
+{
+    CHECK(PasswordHash::IsAcceptable("ぱすわーど") == false);
+    CHECK(PasswordHash::IsAcceptable("ＰＡＳＳ") == false);      // 全角英字
+    CHECK(PasswordHash::IsAcceptable("１２３４") == false);      // 全角数字
+    CHECK(PasswordHash::IsAcceptable("pass日本語") == false);    // 混在
+    CHECK(PasswordHash::IsAcceptable("パスワード") == false);    // 全角カナ
+}
+
+TEST(文字種_空白と制御文字は使えない)
+{
+    CHECK(PasswordHash::IsAcceptable("") == false);
+    CHECK(PasswordHash::IsAcceptable(" ") == false);
+    CHECK(PasswordHash::IsAcceptable("pass word") == false);    // 途中の空白
+    CHECK(PasswordHash::IsAcceptable("pass\tword") == false);
+    CHECK(PasswordHash::IsAcceptable("pass\nword") == false);
+    CHECK(PasswordHash::IsAcceptable("\x7F") == false);          // DEL
+    CHECK(PasswordHash::IsAcceptable(NULL) == false);
+}
+
+TEST(文字種_既存の照合には影響しない)
+{
+    // 全角パスワードで作られたハッシュでも Verify は通る。
+    // IsAcceptable() を Verify に掛けてしまうと既存ユーザーを締め出す。
+    const char *pszPassword = "ぱすわーど";
+    const char *pszStoredUtf8 =
+        "$s1$1000$c2FsdHNhbHRzYWx0c2FsdA==$Y88vion+oDahPbuB/ZqBjSxW5glOQQ5Ebif0KSyahCU=";
+
+    CHECK(PasswordHash::IsAcceptable(pszPassword) == false);
+    CHECK(PasswordHash::Verify(pszStoredUtf8, pszPassword) != false);
+}
+
 TEST(不正_NULLを渡しても落ちない)
 {
     CHECK(PasswordHash::Hash(NULL).empty() != false);

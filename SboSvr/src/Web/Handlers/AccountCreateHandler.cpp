@@ -300,6 +300,13 @@ bool CAccountCreateHandler::ValidatePassword(const std::string &password, Valida
                 outPolicyIssue.message = "password length must be between 12 and 64 characters.";
                 return false;
         }
+        // 文字種はゲーム側の入口と揃える(ASCII表示可能文字のみ)。
+        // 全角を許すとエンコーディング次第で同じパスワードが別のハッシュになる。
+        if (!PasswordHash::IsAcceptable(password.c_str())) {
+                outPolicyIssue.field = "password";
+                outPolicyIssue.message = "password must contain only printable ASCII characters (0x21-0x7E).";
+                return false;
+        }
         return true;
 }
 
