@@ -164,6 +164,57 @@ master 側の日常作業（画像エディタ、Web管理画面、`SboSvr/src/W
 ATL `CString` を剥がす作業と master 側の UTF-8 まわりの修正がぶつかりうるので、
 触る前に一声かけること。
 
+## S3: WSAAsyncSelect からの脱却（本丸）
+
+### 方針: 既存実装は残し、新実装を並べる
+
+`CUraraSockTCP` は純粋仮想の抽象クラスなので差し替え口が既にある。
+20年動いている現行実装は本番の生命線なので消さず、`select` ベースの新実装を
+別ファイルに追加し、切り替えて比較できるようにする。新実装が信頼できたら
+旧実装を引退させる。
+
+- 新規: `SboSockLib/UraraSockTCPSelect.cpp` に `CUraraSockTCPSelect`
+- 選択は `SboSvr.ini` の `[Setting] SockImpl`（既定は従来実装）
+- まずサーバーモード（`Host`）から。クライアント（`Connect`）は後回しでも SboSvr は動く
+
+### Windows メッセージが担っている役割（置き換え対象）
+
+| 現行 | 役割 | 新実装での扱い |
+|---|---|---|
+| `WSAAsyncSelect` | FD_ACCEPT/CONNECT/READ/WRITE/CLOSE の通知 | `select()` の readfds/writefds |
+| `SetTimer(KEEPALIVE)` 60秒 | 最終受信から60秒でクローズ | ループ内の経過時間判定 |
+| `SetTimer(KEEPALIVE_CLI)` 30秒 | クライアントが空パケット送出 | 同上 |
+| `WM_SOCKADDQUE` | 送信キュー投入をワーカースレッドへ渡す | ミューテックス保護のキュー |
+| `WM_SOCKCANCELQUE` | 送信キャンセル | 同上 |
+| `WM_SOCKPRECHECK` | プリチェック応答の処理 | 同スレッドなので直接呼び出し |
+| `WM_INTERNAL_RECV` | 受信完了 → zlib展開 → 通知 | 直接呼び出し |
+| `WM_INTERNAL_SEND` | 「キューに入れたので書き込め」の自己通知 | 次の `select` で writefds に入れる |
+| `WM_SOCKEVENT + id` | スロット単位のイベント多重化 | fd_set |
+
+**`PostMessage` の FIFO 順序に依存している点に注意。** AddQue → 実送信の順序が
+保たれる前提のコードがある。新実装でも順序を壊さないこと。
+
+### プロトコル（変えてはいけない）
+
+- フレーミング: `URARASOCK_PACKETINFO { DWORD dwSize; DWORD dwCRC; }` + 本体
+- プリチェック: 接続直後にサーバーが `GetTickCount()` の4バイトを送り、
+  クライアントは `(値 & key) * key` を32bitで返す。**この最初のパケットだけ
+  CRC を検証しない**（サイズが4かどうかのみ確認）
+- CRC-32（RFC1952、初期値0）
+- zlib: 128バイト以上で圧縮。先頭 `0xFF` + 元サイズ4バイト + 圧縮データ
+- 優先度キュー3本（High/Mid/Low）と `Combine()` による結合送信
+- スループット計測 / キュー数 / IPアドレス取得
+- 最大接続数 200、ID ベース 100000、受信バッファ 64KB、SO_SNDBUF/RCVBUF 64KB
+
+### 段階
+
+```
+S3-1: 要件の洗い出しと設計          ← 完了(本節)
+S3-2: select 実装をサーバーモードで追加
+S3-3: ini で切り替え、新旧両方で同じプロトコル検証を通す
+S3-4: 通信層の単体テストを書く      ← これが本来の目的
+```
+
 ## 作業ログ
 
 ### 2026-09-04
