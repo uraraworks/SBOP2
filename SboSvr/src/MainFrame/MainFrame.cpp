@@ -37,6 +37,10 @@ CMainFrame::CMainFrame()
 	m_dwLastClockTime	= 0;
 	m_dwLastSaveTime	= 0;
 	m_hWnd	= NULL;
+	m_bHeadless	= FALSE;
+	m_bQuit	= FALSE;
+	m_hQuitEvent	= NULL;
+	m_hRunMutex	= NULL;
 	m_pLibInfoAccount	= NULL;
 	m_pLibInfoChar	= NULL;
 	m_pLibInfoDisable	= NULL;
@@ -92,7 +96,127 @@ CMainFrame::~CMainFrame()
 	SAFE_DELETE(m_pWebSocketBridge);
 }
 
-int CMainFrame::MainLoop(HINSTANCE hInstance)
+CMainFrame *CMainFrame::s_pInstance = NULL;
+
+// コンソール終了シグナルの受け口
+//
+// ヘッドレス動作時に Ctrl+C 等で安全に停止させるために使う。
+// この関数は別スレッドで呼ばれるため、終了要求を立てるだけにする。
+// 停止処理(DB の書き戻しを含む)はメインスレッドが行う。
+
+BOOL WINAPI CMainFrame::ConsoleCtrlHandler(DWORD dwCtrlType)
+{
+	switch (dwCtrlType) {
+	case CTRL_C_EVENT:
+	case CTRL_BREAK_EVENT:
+	case CTRL_CLOSE_EVENT:
+	case CTRL_LOGOFF_EVENT:
+	case CTRL_SHUTDOWN_EVENT:
+		if (s_pInstance) {
+			s_pInstance->RequestQuit();
+			// メインスレッドが後始末を終えるまで待つ。ここで返すと
+			// OS にプロセスを落とされ、DB の書き戻しが行われない。
+			while (s_pInstance && (s_pInstance->m_bQuit != FALSE)) {
+				Sleep(50);
+			}
+		}
+		return TRUE;
+	}
+	return FALSE;
+}
+
+int CMainFrame::MainLoop(HINSTANCE hInstance, BOOL bHeadless)
+{
+	int nRet;
+
+	m_bHeadless	= bHeadless;
+	m_bQuit	= FALSE;
+	s_pInstance	= this;
+
+	if (bHeadless) {
+		nRet = MainLoopHeadless();
+	} else {
+		nRet = MainLoopWindow(hInstance);
+	}
+
+	s_pInstance	= NULL;
+	return nRet;
+}
+
+// メインループ(ヘッドレス)
+//
+// ウィンドウもメッセージポンプも作らない。通信の通知は
+// SetNotifySink() 経由でキューに入るため、ウィンドウは不要。
+//
+// 停止はコンソールシグナル(Ctrl+C など)で行う。親プロセスの
+// コンソールに接続できた場合のみ受け取れる点に注意。
+
+int CMainFrame::MainLoopHeadless(void)
+{
+	WORD wPort;
+	TCHAR szIni[MAX_PATH];
+	TIMECAPS tc;
+
+	// 親のコンソールに繋がれば Ctrl+C とメッセージ出力ができる
+	AttachParentConsole();
+
+	// 稼働中ミューテックスと停止通知イベントは、初期化より前に確保する。
+	// 後に回すと、二重起動したときに既存インスタンスと同じポートを
+	// 一時的に奪ってから競合に気づくことになる。
+	//
+	// 停止通知イベントが無いと強制終了しか手段が無くなり、
+	// DB の書き戻しが飛ぶため必須。
+	GetIniFileName(szIni, _countof(szIni));
+	wPort = (WORD)GetPrivateProfileInt(_T("Setting"), _T("Port"), 2006, szIni);
+
+	if (CreateQuitEvent(wPort) == FALSE) {
+		WriteConsoleMessage(_T("同じポート(%u)のサーバーが既に起動しています"), (unsigned int)wPort);
+		return SBOSVR_EXIT_ALREADY_RUNNING;
+	}
+
+	SetConsoleCtrlHandler(&CMainFrame::ConsoleCtrlHandler, TRUE);
+
+	if (InitServer() == FALSE) {
+		WriteConsoleMessage(_T("サーバーの初期化に失敗しました"));
+		SetConsoleCtrlHandler(&CMainFrame::ConsoleCtrlHandler, FALSE);
+		CloseQuitEvent();
+		return SBOSVR_EXIT_ERROR;
+	}
+
+	if (m_pLog) {
+		m_pLog->Write("ヘッドレスで起動しました。停止は --stop または Ctrl+C");
+	}
+	WriteConsoleMessage(_T("SboSvr をヘッドレスで起動しました (Port:%u)。停止は --stop または Ctrl+C"), (unsigned int)wPort);
+
+	timeGetDevCaps(&tc, sizeof (TIMECAPS));
+	timeBeginPeriod(tc.wPeriodMin);
+
+	while (m_bQuit == FALSE) {
+		if (IsQuitEventSignaled()) {
+			break;
+		}
+		TimerProc();
+	}
+
+	timeEndPeriod(tc.wPeriodMin);
+
+	if (m_pLog) {
+		m_pLog->Write("停止要求を受け付けました");
+	}
+
+	TermServer();
+	m_pMgrData->Save();
+	WriteConsoleMessage(_T("SboSvr を停止しました"));
+	CloseQuitEvent();
+
+	// ここで初めてシグナルハンドラの待ちを解く
+	m_bQuit	= FALSE;
+	SetConsoleCtrlHandler(&CMainFrame::ConsoleCtrlHandler, FALSE);
+
+	return SBOSVR_EXIT_OK;
+}
+
+int CMainFrame::MainLoopWindow(HINSTANCE hInstance)
 {
 	TCHAR szBuf[256];
 	MSG msg;
@@ -316,26 +440,198 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
+// 親のコンソールへ接続する
+//
+// SUBSYSTEM:WINDOWS のためコンソールを持たないが、コマンドラインから
+// 起動された場合は親のコンソールへ出力できる。接続できなくても
+// 動作に影響はない。
+
+void CMainFrame::AttachParentConsole(void)
 {
-        WORD wPort;
-        WORD wHttpPort;
-        TCHAR szName[MAX_PATH];
-        TCHAR szTmp[MAX_PATH];
-        LPTSTR pszTmp;
+	FILE *pFile;
+
+	if (AttachConsole(ATTACH_PARENT_PROCESS) == FALSE) {
+		return;
+	}
+	freopen_s(&pFile, "CONOUT$", "w", stdout);
+	freopen_s(&pFile, "CONOUT$", "w", stderr);
+}
+
+// 接続したコンソールへ出力する
+//
+// コンソールが無い場合は何も起きない。
+
+void CMainFrame::WriteConsoleMessage(LPCTSTR pszFormat, ...)
+{
+	va_list args;
+	TCHAR szBuf[1024];
+
+	va_start(args, pszFormat);
+	_vsntprintf_s(szBuf, _countof(szBuf), _TRUNCATE, pszFormat, args);
+	va_end(args);
+
+	_ftprintf(stdout, _T("%s\n"), szBuf);
+	fflush(stdout);
+}
+
+// 停止通知イベント名を作る
+//
+// ポートで区別するため、複数のサーバーを別ポートで動かしていても
+// 目的のインスタンスだけを止められる。
+
+void CMainFrame::MakeQuitEventName(LPTSTR pszName, size_t nMax, WORD wPort)
+{
+	_sntprintf_s(pszName, nMax, _TRUNCATE, _T("SboSvr_Quit_%u"), (unsigned int)wPort);
+}
+
+// 稼働中ミューテックス名を作る
+
+void CMainFrame::MakeRunMutexName(LPTSTR pszName, size_t nMax, WORD wPort)
+{
+	_sntprintf_s(pszName, nMax, _TRUNCATE, _T("SboSvr_Running_%u"), (unsigned int)wPort);
+}
+
+// 稼働中のヘッドレスサーバーへ停止を要求する
+//
+// 同じ ini を使うインスタンス(= 同じポート)を対象にする。
+// 停止通知を出したあと、相手が終了するまで待つ。
+//
+// 終了判定にはサーバーが稼働中だけ保持するミューテックスを使う。
+// イベントの存在有無で判定すると、監視ツール等が一時的にハンドルを
+// 開いているだけで終了を検知できなくなる。
+//
+// 戻り値は稼働中のサーバーを止められたか。
+
+BOOL CMainFrame::RequestStopRunningServer(void)
+{
+	DWORD dwWait;
+	WORD wPort;
+	TCHAR szIni[MAX_PATH];
+	TCHAR szName[MAX_PATH];
+	HANDLE hEvent;
+	HANDLE hMutex;
+
+	GetIniFileName(szIni, _countof(szIni));
+	wPort = (WORD)GetPrivateProfileInt(_T("Setting"), _T("Port"), 2006, szIni);
+
+	AttachParentConsole();
+
+	MakeQuitEventName(szName, _countof(szName), wPort);
+	hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, szName);
+	if (hEvent == NULL) {
+		// 稼働中のヘッドレスサーバーが見つからない
+		WriteConsoleMessage(_T("稼働中のヘッドレスサーバー(Port:%u)が見つかりません"), (unsigned int)wPort);
+		return FALSE;
+	}
+	WriteConsoleMessage(_T("停止を要求しました (Port:%u)。終了を待っています"), (unsigned int)wPort);
+
+	SetEvent(hEvent);
+	CloseHandle(hEvent);
+
+	// サーバーが手放すまで待つ。取得できた時点で相手は終了している。
+	MakeRunMutexName(szName, _countof(szName), wPort);
+	hMutex = OpenMutex(SYNCHRONIZE, FALSE, szName);
+	if (hMutex == NULL) {
+		// 既に終了している
+		WriteConsoleMessage(_T("停止しました"));
+		return TRUE;
+	}
+
+	dwWait = WaitForSingleObject(hMutex, 30000);
+	if ((dwWait == WAIT_OBJECT_0) || (dwWait == WAIT_ABANDONED)) {
+		ReleaseMutex(hMutex);
+		WriteConsoleMessage(_T("停止しました"));
+	} else {
+		WriteConsoleMessage(_T("30秒待っても終了しませんでした。停止要求は送られています"));
+	}
+	CloseHandle(hMutex);
+
+	return TRUE;
+}
+
+// 停止通知イベントを作る
+
+BOOL CMainFrame::CreateQuitEvent(WORD wPort)
+{
+	TCHAR szName[MAX_PATH];
+
+	// 稼働中を示すミューテックスを先に確保する。
+	// --stop 側はこれが取れるかどうかで終了を判定する。
+	MakeRunMutexName(szName, _countof(szName), wPort);
+	m_hRunMutex = CreateMutex(NULL, TRUE, szName);
+	if (m_hRunMutex == NULL) {
+		return FALSE;
+	}
+	if (GetLastError() == ERROR_ALREADY_EXISTS) {
+		// 同じポートのサーバーが既に動いている
+		CloseHandle(m_hRunMutex);
+		m_hRunMutex = NULL;
+		return FALSE;
+	}
+
+	MakeQuitEventName(szName, _countof(szName), wPort);
+	m_hQuitEvent = CreateEvent(NULL, TRUE, FALSE, szName);
+	if (m_hQuitEvent == NULL) {
+		ReleaseMutex(m_hRunMutex);
+		CloseHandle(m_hRunMutex);
+		m_hRunMutex = NULL;
+		return FALSE;
+	}
+	return TRUE;
+}
+
+// 停止通知イベントを閉じる
+
+void CMainFrame::CloseQuitEvent(void)
+{
+	if (m_hQuitEvent) {
+		CloseHandle(m_hQuitEvent);
+		m_hQuitEvent = NULL;
+	}
+	// ミューテックスは最後に手放す。ここで --stop 側の待ちが解ける。
+	if (m_hRunMutex) {
+		ReleaseMutex(m_hRunMutex);
+		CloseHandle(m_hRunMutex);
+		m_hRunMutex = NULL;
+	}
+}
+
+// 停止通知イベントが立っているか
+
+BOOL CMainFrame::IsQuitEventSignaled(void)
+{
+	if (m_hQuitEvent == NULL) {
+		return FALSE;
+	}
+	return (WaitForSingleObject(m_hQuitEvent, 0) == WAIT_OBJECT_0) ? TRUE : FALSE;
+}
+
+// 設定ファイルのパスを取得
+
+void CMainFrame::GetIniFileName(LPTSTR pszName, size_t nMax)
+{
+	size_t nLen;
+
+	ZeroMemory(pszName, nMax * sizeof (TCHAR));
+	GetModuleFileName(NULL, pszName, (DWORD)nMax);
+	nLen = _tcslen(pszName);
+	if (nLen >= 3) {
+		_tcscpy_s(pszName + nLen - 3, nMax - (nLen - 3), _T("ini"));
+	} else {
+		_tcscat_s(pszName, nMax, _T(".ini"));
+	}
+}
+
+// ウィンドウ位置を復元
+//
+// ヘッドレス時は呼ばない。位置を持たないため読み込む意味が無い。
+
+void CMainFrame::LoadWindowPos(HWND hWnd)
+{
+	TCHAR szName[MAX_PATH];
 	RECT rc;
 
-	sgenrand(GetTickCount());
-
-	ZeroMemory(szName, sizeof (szName));
-	ZeroMemory(szTmp, sizeof (szTmp));
-	GetModuleFileName(NULL, szName, _countof(szName));
-	size_t nLen = _tcslen(szName);
-	if (nLen >= 3) {
-		_tcscpy_s(szName + nLen - 3, _countof(szName) - (nLen - 3), _T("ini"));
-	} else {
-		_tcscat_s(szName, _T(".ini"));
-	}
+	GetIniFileName(szName, _countof(szName));
 
 	rc.left	= GetPrivateProfileInt(_T("Pos"), _T("MainLeft"),	-1, szName);
 	rc.top	= GetPrivateProfileInt(_T("Pos"), _T("MainTop"),	-1, szName);
@@ -344,6 +640,52 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 	if (!((rc.left == -1) && (rc.top == -1))) {
 		SetWindowPos(hWnd, NULL, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER);
 	}
+}
+
+// ウィンドウ位置を保存
+//
+// ヘッドレス時は呼ばない。位置が無いのに書き込むと、次に
+// ウィンドウ付きで起動したときの位置を壊してしまう。
+
+void CMainFrame::SaveWindowPos(HWND hWnd)
+{
+	TCHAR szName[MAX_PATH];
+	RECT rc;
+	CmyString strTmp;
+
+	if ((IsIconic(hWnd) != FALSE) || (IsWindowVisible(hWnd) == FALSE)) {
+		return;
+	}
+
+	GetIniFileName(szName, _countof(szName));
+	GetWindowRect(hWnd, &rc);
+
+	strTmp.Format(_T("%d"), rc.left);
+	WritePrivateProfileString(_T("Pos"), _T("MainLeft"), strTmp, szName);
+	strTmp.Format(_T("%d"), rc.top);
+	WritePrivateProfileString(_T("Pos"), _T("MainTop"), strTmp, szName);
+	strTmp.Format(_T("%d"), rc.right);
+	WritePrivateProfileString(_T("Pos"), _T("MainRight"), strTmp, szName);
+	strTmp.Format(_T("%d"), rc.bottom);
+	WritePrivateProfileString(_T("Pos"), _T("MainBottom"), strTmp, szName);
+}
+
+// サーバー初期化
+//
+// ウィンドウに依存しない。ヘッドレス時は m_hWnd が NULL のまま呼ばれる。
+
+BOOL CMainFrame::InitServer(void)
+{
+        WORD wPort;
+        WORD wHttpPort;
+        TCHAR szName[MAX_PATH];
+        TCHAR szTmp[MAX_PATH];
+        LPTSTR pszTmp;
+
+	sgenrand(GetTickCount());
+
+	ZeroMemory(szName, sizeof (szName));
+	ZeroMemory(szTmp, sizeof (szTmp));
 
 	// 作業用フォルダを作成
 	GetModuleFileName(NULL, szName, _countof(szName));
@@ -366,8 +708,9 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 
 	// ソケット通知をウィンドウメッセージではなくコールバックで受け取る。
 	// Host() より前に登録しておく必要がある。
+	// シンクを登録済みなら hWnd は NULL でよい(ヘッドレス時)。
 	m_pSock->SetNotifySink(&CMainFrame::OnSocketNotifyThunk, this);
-	m_pSock->Host(hWnd, URARASOCK_MSGBASE, URARASOCK_PRECHECK, wPort, 100);
+	m_pSock->Host(m_hWnd, URARASOCK_MSGBASE, URARASOCK_PRECHECK, wPort, 100);
 
 	m_pLog	= m_pMgrData->GetLog();
 	if (m_pHttpServer) {
@@ -426,35 +769,12 @@ BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
 	return TRUE;
 }
 
-void CMainFrame::OnClose(HWND hWnd)
+// サーバー終了処理
+//
+// ウィンドウに依存しない。DB の保存は呼び出し側で行う。
+
+void CMainFrame::TermServer(void)
 {
-        RECT rc;
-        TCHAR szFileName[MAX_PATH];
-        CmyString strTmp;
-
-        ZeroMemory(szFileName, sizeof (szFileName));
-
-        GetModuleFileName(NULL, szFileName, _countof(szFileName));
-        size_t nLen = _tcslen(szFileName);
-        if (nLen >= 3) {
-                _tcscpy_s(szFileName + nLen - 3, _countof(szFileName) - (nLen - 3), _T("ini"));
-        } else {
-                _tcscat_s(szFileName, _T(".ini"));
-        }
-
-	if ((IsIconic(hWnd) == FALSE) && (IsWindowVisible(hWnd))) {
-		GetWindowRect(hWnd, &rc);
-
-		// メインウィンドウ
-		strTmp.Format(_T("%d"), rc.left);
-                WritePrivateProfileString(_T("Pos"), _T("MainLeft"), strTmp, szFileName);
-                strTmp.Format(_T("%d"), rc.top);
-                WritePrivateProfileString(_T("Pos"), _T("MainTop"), strTmp, szFileName);
-                strTmp.Format(_T("%d"), rc.right);
-                WritePrivateProfileString(_T("Pos"), _T("MainRight"), strTmp, szFileName);
-                strTmp.Format(_T("%d"), rc.bottom);
-                WritePrivateProfileString(_T("Pos"), _T("MainBottom"), strTmp, szFileName);
-        }
         if (m_pHttpServer) {
                 m_pHttpServer->Stop();
                 if (m_pLog) {
@@ -471,6 +791,21 @@ void CMainFrame::OnClose(HWND hWnd)
 	m_pSock->SetNotifySink(NULL, NULL);
 	m_pSock->Destroy();
 	ClearSockNotify();
+}
+
+BOOL CMainFrame::OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct)
+{
+	m_hWnd	= hWnd;
+
+	LoadWindowPos(hWnd);
+
+	return InitServer();
+}
+
+void CMainFrame::OnClose(HWND hWnd)
+{
+	SaveWindowPos(hWnd);
+	TermServer();
 
 	DestroyWindow(hWnd);
 }
