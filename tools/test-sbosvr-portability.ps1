@@ -14,9 +14,16 @@ param([switch]$Verbose)
 $ErrorActionPreference = "Stop"
 $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 
-# 移植済みとして扱うファイル
+# 移植済みとして扱うファイル(.cpp)
 $PortableFiles = @(
     "SboSvr/src/Platform/SvrPlatform.cpp"
+)
+
+# 移植済みとして扱うヘッダ
+# 単体で include できること(依存を自前で取り込んでいること)も確認する
+$PortableHeaders = @(
+    "Common/Platform/PlatformDefs.h",
+    "Common/Platform/CStringCompat.h"
 )
 
 # em++ を探す
@@ -58,6 +65,29 @@ foreach ($rel in $PortableFiles) {
         $ng++
     }
     if ($Verbose -and $log) { $log | ForEach-Object { "         $_" } }
+}
+
+foreach ($rel in $PortableHeaders) {
+    $hdr = Join-Path $Root $rel
+    if (-not (Test-Path $hdr)) {
+        Write-Output "  NG   $rel (ファイルが無い)"
+        $ng++
+        continue
+    }
+
+    # ヘッダ単体を include するだけの一時ソースを作ってコンパイルする
+    $tmp = Join-Path $OutDir ((Split-Path $rel -Leaf) + ".probe.cpp")
+    Set-Content $tmp "#include `"$rel`"`nint main(){ return 0; }" -Encoding utf8
+    $obj = Join-Path $OutDir ((Split-Path $rel -Leaf) + ".o")
+    $log = & $EmPP -std=c++14 -c $tmp -o $obj -I $Root 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        Write-Output "  OK   $rel (単体include)"
+        $ok++
+    } else {
+        Write-Output "  NG   $rel (単体include)"
+        $log | Select-Object -First 6 | ForEach-Object { "         $_" }
+        $ng++
+    }
 }
 
 Write-Output "=== 成功 $ok / 失敗 $ng ==="

@@ -6,6 +6,12 @@
 
 #if !defined(_WIN32)
 
+// 共有ヘッダなので自前で依存を取り込む。
+// 以前は SboCli の BrowserCompat.h が先に include している前提だった。
+#include <cstdint>
+#include <cstddef>
+#include <cstring>
+
 // TCHAR = wchar_t として定義しているので _UNICODE / UNICODE を定義
 #if !defined(_UNICODE)
 #define _UNICODE
@@ -350,6 +356,10 @@ typedef struct tagNMHDR {
 	UINT_PTR idFrom;
 	UINT code;
 } NMHDR, *LPNMHDR;
+
+// SDL を取り込まずに済ませるための前方宣言。
+// 実体を触るのは SboCli の Win32ApiStubs.h だけ。
+struct SDL_mutex;
 
 typedef struct tagCRITICAL_SECTION {
 	SDL_mutex *pMutex;
