@@ -38,7 +38,7 @@ using namespace std;
 // CStringTCompat テンプレートクラス
 #include "../../../Common/Platform/CStringCompat.h"
 // TCHAR系文字列操作・MultiByteToWideChar 等
-#include "TCharCompat.h"
+#include "../../../Common/Platform/TCharCompat.h"
 // GDI描画関数スタブ（SdlFont 連携）
 #include "GdiStubs.h"
 // ウィンドウ/メッセージ関数スタブ

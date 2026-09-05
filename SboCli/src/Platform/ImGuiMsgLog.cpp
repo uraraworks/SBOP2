@@ -7,7 +7,7 @@
 #include "ImGuiMsgLog.h"
 #include "MgrData.h"
 #include "MainFrame.h"
-#include "SjisConvert.h"
+#include "../../../Common/Platform/SjisConvert.h"
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/em_js.h>
 #endif

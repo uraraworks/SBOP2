@@ -16,14 +16,17 @@ $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 
 # 移植済みとして扱うファイル(.cpp)
 $PortableFiles = @(
-    "SboSvr/src/Platform/SvrPlatform.cpp"
+    "SboSvr/src/Platform/SvrPlatform.cpp",
+    "Common/Platform/SjisConvert.cpp"
 )
 
 # 移植済みとして扱うヘッダ
 # 単体で include できること(依存を自前で取り込んでいること)も確認する
 $PortableHeaders = @(
     "Common/Platform/PlatformDefs.h",
-    "Common/Platform/CStringCompat.h"
+    "Common/Platform/CStringCompat.h",
+    "Common/Platform/TCharCompat.h",
+    "Common/Platform/SjisConvert.h"
 )
 
 # em++ を探す
