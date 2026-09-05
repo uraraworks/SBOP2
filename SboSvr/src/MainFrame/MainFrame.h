@@ -12,7 +12,6 @@ class CPacketBase;
 class CMgrData;
 class CUraraSockTCPSBO;
 class CTextOutput;
-class CUpdateServerInfo;
 class CHttpServer;
 class CWebSocketBridge;
 class CLibInfoAccount;
@@ -141,7 +140,7 @@ private:
 	void	TimerProcSave(void);	// 時間処理(定期保存)
 	int	GetServerStateItem(SERVERSTATEITEM *paItem, int nMax);	// サーバー状態の表示項目を取得(描画に依存しない)
 	void	MyTextOut(HDC hDC, int x, int y, LPCTSTR pStr);	// 文字列描画
-	void	UpdateServerInfo(BOOL bSend = TRUE, BOOL bUpload = FALSE);	// サーバー情報を更新
+	void	NotifyOnlineCount(void);	// オンライン数を全クライアントへ通知
 
 	void	OnCommandUPDATE_RENEW(void);	// メニューハンドラ(アップデートファイル更新)
 
@@ -300,7 +299,6 @@ private:
 	CMgrData	*m_pMgrData;	// データ管理
 	CUraraSockTCPSBO	*m_pSock;	// 通信マネージャ
 	CTextOutput	*m_pLog;	// ログファイル
-	CUpdateServerInfo	*m_pUpdateServerInfo;	// サーバー情報アップロード
         CHttpServer             *m_pHttpServer;         // 管理用HTTPサーバー
         CWebSocketBridge        *m_pWebSocketBridge;    // WebSocket→TCPブリッジサーバー
 

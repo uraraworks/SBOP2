@@ -19,7 +19,6 @@
 #include "TextOutput.h"
 #include "InfoCharSvr.h"
 #include "MgrData.h"
-#include "UpdateServerInfo.h"
 #include "MainFrame.h"
 #include "Web/HttpServer.h"
 #include "Web/WebSocketBridge.h"
@@ -64,7 +63,6 @@ CMainFrame::CMainFrame()
 
 	m_pSock	= new CUraraSockTCPSBO;
 	m_pMgrData	= new CMgrData;
-	m_pUpdateServerInfo	= new CUpdateServerInfo;
 	m_pHttpServer	= new CHttpServer;
 	m_pWebSocketBridge	= new CWebSocketBridge;
 
@@ -91,7 +89,6 @@ CMainFrame::~CMainFrame()
 
 	SAFE_DELETE(m_pMgrData);
 	SAFE_DELETE(m_pSock);
-	SAFE_DELETE(m_pUpdateServerInfo);
 	SAFE_DELETE(m_pHttpServer);
 	SAFE_DELETE(m_pWebSocketBridge);
 }
@@ -756,13 +753,6 @@ BOOL CMainFrame::InitServer(void)
 	m_pLibInfoSkill	= m_pMgrData->GetLibInfoSkill();
 	m_pLibInfoTalkEvent	= m_pMgrData->GetLibInfoTalkEvent();
 
-	UpdateServerInfo(FALSE);
-	m_pUpdateServerInfo->Create(
-			m_pMgrData->GetFtpAccount(),
-			m_pMgrData->GetFtpPassword(),
-			m_pMgrData->GetFtpServerAddr(),
-			m_pMgrData->GetFtpUploadPath());
-
 	m_dwLastClockTime	= timeGetTime();
 	m_dwLastSaveTime	= m_dwLastClockTime;
 
@@ -950,7 +940,6 @@ void CMainFrame::TimerProcSave(void)
 	strTmp.Format(_T("SYSTEM:サーバー情報を保存しました"));
 	Packet.Make(strTmp);
 	m_pSock->SendTo(0, &Packet);
-	UpdateServerInfo(FALSE, TRUE);
 }
 
 void CMainFrame::OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify)
@@ -1004,7 +993,7 @@ void CMainFrame::OnDecClient(DWORD dwSessionID)
 
 		m_pLibInfoChar->LogOut(pChar->m_dwCharID);
 	}
-	UpdateServerInfo();
+	NotifyOnlineCount();
 }
 
 void CMainFrame::OnRecv(PBYTE pData, DWORD dwSessionID)
@@ -1237,27 +1226,25 @@ void CMainFrame::MyTextOut(HDC hDC, int x, int y, LPCTSTR pStr)
 	::TextOut(hDC, x, y, pStr, nLen);
 }
 
-void CMainFrame::UpdateServerInfo(
-	BOOL bSend		/*=TRUE*/,		/* [in] TRUE:オンライン数を通知する */
-	BOOL bUpload	/*=FALSE*/)		/* [in] TRUE:すぐにアップロードする */
+// オンライン数を全クライアントへ通知する
+//
+// 以前は ServerInfo.csv の書き出しと FTP アップロードも兼ねていたが、
+// 管理用 HTTP の /api/server が同じ情報をライブデータで返すようになったため
+// そちらは廃止した。
+
+void CMainFrame::NotifyOnlineCount(void)
 {
 	int nCount;
-	CmyString strTmp;
 	CPacketMAP_ONLINE Packet;
 
-	if ((m_pLibInfoChar == NULL) || (m_pUpdateServerInfo == NULL)) {
+	if (m_pLibInfoChar == NULL) {
 		return;
 	}
 
 	nCount = m_pLibInfoChar->GetCountOnline();
-	m_pLibInfoChar->GetPlaceName(strTmp);
-	m_pUpdateServerInfo->Update(nCount, strTmp, bUpload);
 
-	if (bSend) {
-		// オンライン数を通知
-		Packet.Make(nCount);
-		m_pSock->SendTo(0, &Packet);
-	}
+	Packet.Make(nCount);
+	m_pSock->SendTo(0, &Packet);
 }
 
 void CMainFrame::OnCommandUPDATE_RENEW(void)

@@ -405,7 +405,6 @@ void CMainFrame::RecvProcADMIN_MAP_SETMAPNAME(PBYTE pData, DWORD dwSessionID)
 			pInfoMap->m_byLevel,
 			pInfoMap->m_strMapName);
 	SendToMapChar(pInfoMap->m_dwMapID, &PacketMAP_MAPNAME);
-	UpdateServerInfo(FALSE);
 }
 
 void CMainFrame::RecvProcADMIN_RENEWMAPSHADOW(PBYTE pData, DWORD dwSessionID)
@@ -614,7 +613,6 @@ void CMainFrame::RecvProcADMIN_SERVER_SAVEINFO(PBYTE pData, DWORD dwSessionID)
 	strTmp.Format(_T("サーバー情報を保存しました"));
 	Packet.Make(strTmp);
 	m_pSock->SendTo(0, &Packet);
-	UpdateServerInfo(FALSE, TRUE);
 }
 
 void CMainFrame::RecvProcADMIN_ITEM_ADD(PBYTE pData, DWORD dwSessionID)

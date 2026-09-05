@@ -287,7 +287,6 @@
     <ClCompile Include="src\SaveLoad\SaveLoadInfoSystem.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoTalkEvent.cpp" />
     <ClCompile Include="src\SboSvr.cpp" />
-    <ClCompile Include="src\UpdateServerInfo.cpp" />
     <ClCompile Include="src\Web\ApiRouter.cpp" />
     <ClCompile Include="src\Web\Handlers\HealthHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\ImageCatalogHandler.cpp" />
@@ -448,7 +447,6 @@
     <ClInclude Include="src\SaveLoad\SaveLoadInfoSystem.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoTalkEvent.h" />
     <ClInclude Include="src\SboSvr_priv.h" />
-    <ClInclude Include="src\UpdateServerInfo.h" />
     <ClInclude Include="src\Web\ApiHandler.h" />
     <ClInclude Include="src\Web\ApiRouter.h" />
     <ClInclude Include="src\Web\Handlers\HealthHandler.h" />

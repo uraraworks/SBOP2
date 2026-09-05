@@ -285,7 +285,7 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	SendToScreenChar(pInfoChar, &PacketCHAR_RES_CHARINFO);
 	m_pSock->SendTo(dwSessionID, &PacketCHAR_RES_CHARINFO);
 
-	UpdateServerInfo();
+	NotifyOnlineCount();
 
 	strTmp.Format(_T("SYSTEM:スクラップブックオンラインの世界へようこそ♪"));
 	PacketMAP_SYSTEMMSG.Make(strTmp);

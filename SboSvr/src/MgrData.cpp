@@ -492,16 +492,4 @@ void CMgrData::ReadIniData(void)
         GetPrivateProfileString(_T("Info"), _T("ClientVersion"), _T(""), szTmp, _countof(szTmp), szFileName);
         m_strClientVersion = szTmp;
 
-        // FTPアカウント
-        GetPrivateProfileString(_T("FTP"), _T("Account"), _T(""), szTmp, _countof(szTmp), szFileName);
-        m_strFtpAccount = szTmp;
-        // FTPパスワード
-        GetPrivateProfileString(_T("FTP"), _T("Password"), _T(""), szTmp, _countof(szTmp), szFileName);
-        m_strFtpPassword = szTmp;
-        // サーバーアドレス
-        GetPrivateProfileString(_T("FTP"), _T("ServerAddr"), _T(""), szTmp, _countof(szTmp), szFileName);
-        m_strFtpServerAddr = szTmp;
-        // アップロード先
-        GetPrivateProfileString(_T("FTP"), _T("UploadPath"), _T(""), szTmp, _countof(szTmp), szFileName);
-        m_strFtpUploadPath = szTmp;
 }
