@@ -29,7 +29,7 @@ protected:
 	LPSTR	m_pszFileName;	// ファイル名
 	BOOL	m_bHeader;	// ヘッダを書き込む
 	BOOL	m_bReturn;	// 改行コードを書き込む
-	CRITICAL_SECTION	m_csWrite;	// 書き込み排他用
+	std::mutex	m_csWrite;	// 書き込み排他用
 };
 
 #endif

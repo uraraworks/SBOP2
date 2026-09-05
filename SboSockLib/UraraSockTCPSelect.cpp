@@ -25,6 +25,7 @@
 #include "myZlib/myZlib.h"
 #include <vector>
 #include <deque>
+#include <mutex>
 
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p)       do { if ((p) != NULL) { delete (p);     (p) = NULL; } } while (0)
@@ -202,7 +203,7 @@ private:
     PFURARASOCKNOTIFY  m_pfNotify;
     void              *m_pNotifyUserData;
 
-    CRITICAL_SECTION   m_CritCmd;
+    std::mutex         m_CritCmd;
     std::deque<URARASOCKSEL_CMD *> m_deqCmd;
 
     CUraraSockTCPSelectSlot *m_pSlot;
@@ -549,7 +550,6 @@ CUraraSockTCPSelect::CUraraSockTCPSelect(void)
     , m_pSlot(NULL)
 {
     ZeroMemory(&m_addrWakeup, sizeof(m_addrWakeup));
-    InitializeCriticalSection(&m_CritCmd);
     m_pCrc = new CCRC;
 }
 
@@ -557,7 +557,6 @@ CUraraSockTCPSelect::~CUraraSockTCPSelect(void)
 {
     Destroy();
     SAFE_DELETE(m_pCrc);
-    DeleteCriticalSection(&m_CritCmd);
 }
 
 void CUraraSockTCPSelect::DeleteRecvData(PBYTE pData)
@@ -649,23 +648,23 @@ void CUraraSockTCPSelect::DrainWakeup(void)
 
 void CUraraSockTCPSelect::PushCommand(URARASOCKSEL_CMD *pCmd)
 {
-    EnterCriticalSection(&m_CritCmd);
+    m_CritCmd.lock();
     m_deqCmd.push_back(pCmd);
-    LeaveCriticalSection(&m_CritCmd);
+    m_CritCmd.unlock();
 
     Wakeup();
 }
 
 void CUraraSockTCPSelect::ClearCommands(void)
 {
-    EnterCriticalSection(&m_CritCmd);
+    m_CritCmd.lock();
     while (!m_deqCmd.empty()) {
         URARASOCKSEL_CMD *pCmd = m_deqCmd.front();
         m_deqCmd.pop_front();
         SAFE_DELETE_ARRAY(pCmd->pData);
         SAFE_DELETE(pCmd);
     }
-    LeaveCriticalSection(&m_CritCmd);
+    m_CritCmd.unlock();
 }
 
 // 溜まった指示を処理する
@@ -677,9 +676,9 @@ void CUraraSockTCPSelect::ProcCommands(void)
 {
     std::deque<URARASOCKSEL_CMD *> deqProc;
 
-    EnterCriticalSection(&m_CritCmd);
+    m_CritCmd.lock();
     m_deqCmd.swap(deqProc);
-    LeaveCriticalSection(&m_CritCmd);
+    m_CritCmd.unlock();
 
     while (!deqProc.empty()) {
         URARASOCKSEL_CMD *pCmd = deqProc.front();
