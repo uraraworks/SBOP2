@@ -22,6 +22,7 @@
 #include "MgrData.h"
 #include "TextOutput.h"
 #include "MainFrame.h"
+#include "../Platform/SvrPlatform.h"
 
 static LPCSTR GetMovePacketName(int nCmdSub)
 {
@@ -302,7 +303,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 
 	// 不正速度チェック（Phase 6: Dead Reckoning サーバー権威）
 	if (!((pInfoChar->m_nMapX == nNextPosX) && (pInfoChar->m_nMapY == nNextPosY))) {
-		dwNowTime = timeGetTime();
+		dwNowTime = SboPlatform::GetTickMs();
 		dwElapsed = 0;
 
 		if (bHasPacketTime && (dwPacketTime != 0) && (pInfoChar->m_dwLastRecvMovePacketTime != 0)) {

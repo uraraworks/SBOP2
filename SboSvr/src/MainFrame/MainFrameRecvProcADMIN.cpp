@@ -33,6 +33,7 @@
 #include "TextOutput.h"
 #include "MgrData.h"
 #include "MainFrame.h"
+#include "../Platform/SvrPlatform.h"
 
 void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
@@ -956,7 +957,7 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEWSTATUS(PBYTE pData, DWORD dwSessionID)
 	}
 	Packet.SetParam(pInfoChar);
 	if (Packet.m_dwLightTime != 0) {
-		pInfoChar->m_dwLightTime = timeGetTime() + Packet.m_dwLightTime;
+		pInfoChar->m_dwLightTime = SboPlatform::GetTickMs() + Packet.m_dwLightTime;
 	}
 
 	pInfoChar->m_bChgStatus = TRUE;

@@ -13,6 +13,7 @@
 #include "MainFrame.h"
 #include "MgrData.h"
 #include "LibInfoCharSvr.h"
+#include "../Platform/SvrPlatform.h"
 
 static int MapTileToPixelX(int x)
 {
@@ -518,7 +519,7 @@ BOOL CLibInfoCharSvr::MapEventProcLIGHT(CInfoCharSvr *pInfoChar, CInfoMapEventBa
 	if (pInfoMapEvent->m_bLightOn) {
 		pInfoChar->m_nLightLevel = 1;
 		if (pInfoMapEvent->m_dwTime != 0) {
-			pInfoChar->m_dwLightTime = timeGetTime() + pInfoMapEvent->m_dwTime;
+			pInfoChar->m_dwLightTime = SboPlatform::GetTickMs() + pInfoMapEvent->m_dwTime;
 		}
 	}
 	pInfoChar->m_bChgStatus = TRUE;

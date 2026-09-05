@@ -22,6 +22,7 @@
 #include "MainFrame.h"
 #include "Web/HttpServer.h"
 #include "Web/WebSocketBridge.h"
+#include "../Platform/SvrPlatform.h"
 
 // 定数定義
 
@@ -679,7 +680,7 @@ BOOL CMainFrame::InitServer(void)
         TCHAR szTmp[MAX_PATH];
         LPTSTR pszTmp;
 
-	sgenrand(GetTickCount());
+	sgenrand(SboPlatform::GetTickMs());
 
 	ZeroMemory(szName, sizeof (szName));
 	ZeroMemory(szTmp, sizeof (szTmp));
@@ -691,7 +692,7 @@ BOOL CMainFrame::InitServer(void)
 	_stprintf_s(szTmp, _T("%sSBODATA"), szName);
 	CreateDirectory(szTmp, NULL);
 
-	m_dwServerStartTime = timeGetTime();
+	m_dwServerStartTime = SboPlatform::GetTickMs();
 
         m_pMgrData->Create(this, m_pSock);
         m_pMgrData->Load();
@@ -753,7 +754,7 @@ BOOL CMainFrame::InitServer(void)
 	m_pLibInfoSkill	= m_pMgrData->GetLibInfoSkill();
 	m_pLibInfoTalkEvent	= m_pMgrData->GetLibInfoTalkEvent();
 
-	m_dwLastClockTime	= timeGetTime();
+	m_dwLastClockTime	= SboPlatform::GetTickMs();
 	m_dwLastSaveTime	= m_dwLastClockTime;
 
 	return TRUE;
@@ -826,7 +827,7 @@ int CMainFrame::GetServerStateItem(
 	}
 
 	nCount	= 0;
-	dwTime	= timeGetTime() - m_dwServerStartTime;
+	dwTime	= SboPlatform::GetTickMs() - m_dwServerStartTime;
 
 	if (nCount < nMax) {
 		paItem[nCount].strLabel	= _T("サーバー稼動時間");
@@ -891,24 +892,24 @@ void CMainFrame::OnPaint(HWND hWnd)
 void CMainFrame::TimerProcClock(void)
 {
 	DWORD dwNow;
-	SYSTEMTIME sysTime;
+	SboPlatform::LOCALTIME LocalTime;
 
-	dwNow = timeGetTime();
+	dwNow = SboPlatform::GetTickMs();
 	if (dwNow - m_dwLastClockTime < TIMER_REDRAW) {
 		return;
 	}
 	m_dwLastClockTime = dwNow;
 
-	GetLocalTime(&sysTime);
+	SboPlatform::GetLocalTime(&LocalTime);
 
-	if (sysTime.wMinute == 0) {
-		if (sysTime.wHour != m_pMgrData->GetLastSendClock()) {
+	if (LocalTime.nMinute == 0) {
+		if (LocalTime.nHour != m_pMgrData->GetLastSendClock()) {
 			CmyString strTmp;
 			CPacketMAP_SYSTEMMSG Packet;
 
-			m_pMgrData->SetLastSendClock((BYTE)sysTime.wHour);
+			m_pMgrData->SetLastSendClock((BYTE)LocalTime.nHour);
 
-			strTmp.Format(_T("SYSTEM:サーバーが%d時頃をお知らせします"), (BYTE)sysTime.wHour);
+			strTmp.Format(_T("SYSTEM:サーバーが%d時頃をお知らせします"), (BYTE)LocalTime.nHour);
 			Packet.Make(strTmp);
 			m_pSock->SendTo(0, &Packet);
 		}
@@ -930,7 +931,7 @@ void CMainFrame::TimerProcSave(void)
 	CPacketMAP_SYSTEMMSG Packet;
 	CmyString strTmp;
 
-	dwNow = timeGetTime();
+	dwNow = SboPlatform::GetTickMs();
 	if (dwNow - m_dwLastSaveTime < TIMER_SAVE) {
 		return;
 	}

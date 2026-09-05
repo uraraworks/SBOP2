@@ -29,6 +29,7 @@
 #include "MainFrame.h"
 #include "MgrData.h"
 #include "LibInfoCharSvr.h"
+#include "../Platform/SvrPlatform.h"
 
 namespace {
 
@@ -119,7 +120,7 @@ static void GetInterpolatedNPCPos(CInfoCharSvr *pInfoChar, int &nOutX, int &nOut
 		return;
 	}
 
-	dwNowTime = timeGetTime();
+	dwNowTime = SboPlatform::GetTickMs();
 	if (dwNowTime < pInfoChar->m_dwLastTimeMove) {
 		return;
 	}
@@ -194,7 +195,7 @@ BOOL CLibInfoCharSvr::Proc(void)
 		bResult |= ProcLocal(i);
 	}
 
-	dwNowTime = timeGetTime();
+	dwNowTime = SboPlatform::GetTickMs();
 	// 移動中PCの位置同期間隔。500msだとクライアントの予測先読み(最大320ms/下限160ms)で
 	// 埋めきれず「歩く・止まる」のカクつきが出るため、予測下限(160ms)を下回る150msへ短縮し
 	// 予測が毎周期を埋めて滑らかに見えるようにする（代償は移動中PCの位置パケット増加のみ）。
@@ -296,7 +297,7 @@ void CLibInfoCharSvr::LogIn(
 	pChar->m_strSpeak.Empty();
 	pChar->m_ptCharBack.x = pChar->m_nMapX;
 	pChar->m_ptCharBack.y = pChar->m_nMapY;
-	// クライアントの timeGetTime() はブラウザリロード等で 0 にリセットされるため、
+	// クライアントの SboPlatform::GetTickMs() はブラウザリロード等で 0 にリセットされるため、
 	// サーバー側に残った最終時刻と比較すると正当なパケットが「時刻逆行」と判定されてしまう。
 	// 新規ログイン時に時刻系フィールドをリセットする。
 	pChar->m_dwLastTimeMove = 0;
@@ -2026,7 +2027,7 @@ BOOL CLibInfoCharSvr::ProcLocal(int nNo)
 		goto Exit;
 	}
 
-	pInfoChar->TimerProc(timeGetTime());
+	pInfoChar->TimerProc(SboPlatform::GetTickMs());
 
 	bRet |= ProcLocalFlgCheck(pInfoChar);
 	bRet |= ProcLocalState(pInfoChar);
@@ -2142,7 +2143,7 @@ BOOL CLibInfoCharSvr::ProcLocalFlgCheck(CInfoCharSvr *pInfoChar)
 					pInfoChar->m_nMapY,
 					TRUE,
 					GetMoveSyncSpeedLevel(pInfoChar),
-					timeGetTime());
+					SboPlatform::GetTickMs());
 			m_pMainFrame->SendToScreenChar(pInfoChar, &PacketMoveStop);
 			pInfoChar->m_bMoveSyncActive = FALSE;
 			pInfoChar->m_nLastMoveSyncDirection = -1;
@@ -2379,7 +2380,7 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 	int nStartX, nStartY;
 	DWORD dwStartTime;
 
-	dwNowTime = timeGetTime();
+	dwNowTime = SboPlatform::GetTickMs();
 	nSpeedLevel = GetMoveSyncSpeedLevel(pInfoChar);
 	// MOVE_START 用: 連続換算位置ヘルパーで補間座標を取得する。
 	// 旧実装は m_ptCharBack を直接使っていたが、HALF_TILE ジャンプ直後に
@@ -2565,7 +2566,7 @@ void CLibInfoCharSvr::ProcChgPosRenew(CInfoCharSvr *pInfoChar)
 	ARRAYDWORD adwCharID;
 	DWORD dwNowTime;
 
-	dwNowTime = timeGetTime();
+	dwNowTime = SboPlatform::GetTickMs();
 	// 周りのキャラに座標を通知
 	Packet.Make(
 			pInfoChar->m_dwMapID,
@@ -3307,7 +3308,7 @@ int CLibInfoCharSvr::UseItemProcLIGHT(CInfoCharSvr *pInfoChar, DWORD dwItemID)
 	}
 
 	pInfoChar->m_nLightLevel = (int)pInfoItemType->m_dwValue;
-	pInfoChar->m_dwLightTime = timeGetTime() + pInfoItemType->m_dwValue2;
+	pInfoChar->m_dwLightTime = SboPlatform::GetTickMs() + pInfoItemType->m_dwValue2;
 	pInfoChar->m_bChgStatus = TRUE;
 
 	strMsg.Format(_T("%s を使いました"), (LPCTSTR)pInfoItem->m_strName);
