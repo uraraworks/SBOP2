@@ -621,9 +621,6 @@ void CMainFrame::TimerProcSave(void)
 void CMainFrame::OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify)
 {
 	switch (id) {
-	case IDM_ACCOUNT_DELETEALL:	// 全アカウントを削除
-		OnCommandACCOUNT_DELETEALL();
-		break;
 	case IDM_UPDATE_RENEW:	// アップデートファイル更新
 		OnCommandUPDATE_RENEW();
 		break;
@@ -926,40 +923,6 @@ void CMainFrame::UpdateServerInfo(
 		Packet.Make(nCount);
 		m_pSock->SendTo(0, &Packet);
 	}
-}
-
-// 全てのアカウントとキャラを削除する
-//
-// 確認ダイアログを含まない実処理。UI に依存しないので、メニュー以外
-// (起動引数や管理画面) からも呼べる。破壊的な操作なので、呼び出し側で
-// 必ず確認を取ること。
-
-void CMainFrame::DeleteAllAccount(void)
-{
-	int i, j, nCount, nCount2;
-	PCInfoAccount pInfoAccount;
-
-	nCount = m_pLibInfoAccount->GetCount();
-	for (i = 0; i < nCount; i ++) {
-		pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetPtr(i);
-		nCount2 = pInfoAccount->m_adwCharID.size();
-		for (j = 0; j < nCount2; j ++) {
-			m_pLibInfoChar->Delete(pInfoAccount->m_adwCharID[j]);
-		}
-	}
-	m_pLibInfoAccount->DeleteAll();
-}
-
-void CMainFrame::OnCommandACCOUNT_DELETEALL(void)
-{
-	int nResult;
-
-        nResult = MessageBox(m_hWnd, _T("全てのアカウントとキャラを削除しますか？"), _T("確認"), MB_YESNO | MB_ICONWARNING);
-	if (nResult != IDYES) {
-		return;
-	}
-
-	DeleteAllAccount();
 }
 
 void CMainFrame::OnCommandUPDATE_RENEW(void)

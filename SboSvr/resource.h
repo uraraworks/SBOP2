@@ -2,7 +2,6 @@
 // Microsoft Visual C++ generated include file.
 // Used by SboSvr.rc
 //
-#define IDM_ACCOUNT_DELETEALL           40001
 #define ID_40002                        40002
 #define IDM_UPDATE_RENEW                40003
 

@@ -111,9 +111,6 @@ private:
 	void	MyTextOut(HDC hDC, int x, int y, LPCTSTR pStr);	// 文字列描画
 	void	UpdateServerInfo(BOOL bSend = TRUE, BOOL bUpload = FALSE);	// サーバー情報を更新
 
-	void	DeleteAllAccount(void);	// 全てのアカウントとキャラを削除(確認ダイアログを含まない実処理)
-
-	void	OnCommandACCOUNT_DELETEALL(void);	// メニューハンドラ(全アカウントを削除)
 	void	OnCommandUPDATE_RENEW(void);	// メニューハンドラ(アップデートファイル更新)
 
 	// 受信処理(MainFrameRecvProcVERSION.cpp)
