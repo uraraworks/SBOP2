@@ -26,7 +26,8 @@ $PortableHeaders = @(
     "Common/Platform/PlatformDefs.h",
     "Common/Platform/CStringCompat.h",
     "Common/Platform/TCharCompat.h",
-    "Common/Platform/SjisConvert.h"
+    "Common/Platform/SjisConvert.h",
+    "SboSvr/StdAfx.h"
 )
 
 # em++ を探す
@@ -41,6 +42,15 @@ if (-not $EmPP) {
     exit 2
 }
 if (-not $env:EMSDK_ARCH) { $env:EMSDK_ARCH = "x86_64" }
+
+# コンパイル時のインクルードパス
+$IncArgs = @(
+    "-I", "$Root",
+    "-I", (Join-Path $Root "SboSvr"),
+    "-I", (Join-Path $Root "SboSvr/src"),
+    "-I", (Join-Path $Root "Common"),
+    "-I", (Join-Path $Root "Common/myLib")
+)
 
 $OutDir = Join-Path $Root "out\portability"
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force $OutDir | Out-Null }
@@ -58,7 +68,7 @@ foreach ($rel in $PortableFiles) {
     }
 
     $obj = Join-Path $OutDir ((Split-Path $rel -Leaf) + ".o")
-    $log = & $EmPP -std=c++14 -c $src -o $obj -I (Join-Path $Root "SboSvr/src") 2>&1
+    $log = & $EmPP -std=c++14 -c $src -o $obj @IncArgs 2>&1
     if ($LASTEXITCODE -eq 0) {
         Write-Output "  OK   $rel"
         $ok++
@@ -82,7 +92,7 @@ foreach ($rel in $PortableHeaders) {
     $tmp = Join-Path $OutDir ((Split-Path $rel -Leaf) + ".probe.cpp")
     Set-Content $tmp "#include `"$rel`"`nint main(){ return 0; }" -Encoding utf8
     $obj = Join-Path $OutDir ((Split-Path $rel -Leaf) + ".o")
-    $log = & $EmPP -std=c++14 -c $tmp -o $obj -I $Root 2>&1
+    $log = & $EmPP -std=c++14 -c $tmp -o $obj @IncArgs 2>&1
     if ($LASTEXITCODE -eq 0) {
         Write-Output "  OK   $rel (単体include)"
         $ok++
