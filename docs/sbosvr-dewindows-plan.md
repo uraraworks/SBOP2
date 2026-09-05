@@ -371,6 +371,73 @@ c=1 / 2 / 4096）との一致を確認済み。**これが通る限り、OpenSSL
 - **通信の中核** — `select` 実装の Win32 固有 API は 57行のみ
 - **SQLite** — アマルガメーションなので移植不要
 
+## 移植作業の進め方（2026-09-05〜06 で確立）
+
+### 検証は em++ で行う
+
+`C:\emsdk` の em++（clang / 非Windows ターゲット）でコンパイルが通れば、
+Windows 依存が無い証明になる。リンクはしない。
+
+```powershell
+pwsh tools/test-sbosvr-portability.ps1
+```
+
+移植が進むたびに `$PortableFiles` / `$PortableHeaders` へ足していく。
+
+**ヘッダは「単体 include」で検証すること。** Windows ビルドが通っても
+非Windows で通るとは限らない。実際、共有化した互換ヘッダはどれも自前の依存を
+include しておらず（`BrowserCompat.h` が先に `<vector>` 等を取り込む前提）、
+単体では通らなかった。
+
+### 各ステップは二重に検証する
+
+1. **Windows で回帰なし** — 3プロジェクトのビルド + テスト46本 + プロトコル検証
+2. **非Windows で通る** — 移植チェック
+
+### 完了したもの
+
+| 対象 | 置き換え先 |
+|---|---|
+| 時刻（31行） | `SboPlatform::GetTickMs` / `GetLocalTime` |
+| パス・ディレクトリ（22行） | `MakeExeRelativePath` / `MakeDataFilePath` |
+| `OutputDebugString`（139行） | `SboPlatform::WriteDebugLine` |
+| ini 読み書き（16箇所） | `GetIniInt` / `GetIniString` / `SetIniString` |
+| `CmySection` | `std::recursive_mutex` |
+| 残る `CRITICAL_SECTION` | `std::mutex`（TextOutput / select実装） |
+| 互換ヘッダの共有化 | `Common/Platform/` へ移動 |
+| **`SboSvr/StdAfx.h` の条件化** | `SboSvr/src/Platform/SvrCompat.h` |
+
+`StdAfx.h` が非Windows で通るようになったのが大きい。**これ以前はサーバーの
+ソースを1つも em++ でコンパイルできず、移植を検証する手段が無かった。**
+
+### 踏んだ落とし穴
+
+- **一括置換は自分自身も書き換える。** `OutputDebugStringA` の置換で
+  `SvrPlatform.cpp` の実装まで置き換わり、`WriteDebugLine` が自分を呼ぶ
+  無限再帰になった。
+- **`CmySection` は再帰可能でなければならない。** `CRITICAL_SECTION` は
+  同一スレッドから何度でも入れる仕様で、`CLibInfoBase` が継承している。
+  素の `std::mutex` にすると自己デッドロックする。
+- **`PlatformDefs.h` の `CRITICAL_SECTION` が `SDL_mutex` を参照していた。**
+  前方宣言で回避。実体を触るのは SboCli の `Win32ApiStubs.h` だけ。
+- **include の相対パスがずれていても vcxproj のインクルードディレクトリで
+  偶然通る。** 正しい相対パスに直すこと。
+
+### 残っているもの
+
+| 対象 | 規模 | 備考 |
+|---|---|---|
+| ATL `CString` / TCHAR | 212行 | 共有互換レイヤは用意済み。あとは使う側の対応 |
+| Web層のソケット・スレッド | `_beginthreadex` 7箇所ほか | `SvrCompat.h` にソケットの名前合わせは用意済み |
+| `Common/SBOGlobal` | `RECT` / `LPSECURITY_ATTRIBUTES` 等 | SboCli と共用のため要調整 |
+| `PasswordHash` | Windows CNG | 規格準拠は確認済み（テストあり）。置換先の選定のみ |
+| `Win32ApiStubs.h` の共有化 | 686行 | サーバーが必要とする部分だけ切り出す |
+
+### 次にやること
+
+サーバーのソースを1つずつ移植チェックへ加えていく。まずは依存の浅いものから。
+`StdAfx.h` が通るようになったので、次は実際の `.cpp` が通るかを試す段階。
+
 ## 作業ログ
 
 ### 2026-09-04
