@@ -210,10 +210,44 @@ ATL `CString` を剥がす作業と master 側の UTF-8 まわりの修正がぶ
 
 ```
 S3-1: 要件の洗い出しと設計          ← 完了(本節)
-S3-2: select 実装をサーバーモードで追加
-S3-3: ini で切り替え、新旧両方で同じプロトコル検証を通す
+S3-2: select 実装をサーバーモードで追加  ← 完了
+S3-3: 新旧両方で同じプロトコル検証を通す  ← 次はここ
 S3-4: 通信層の単体テストを書く      ← これが本来の目的
 ```
+
+### S3-2 の実装メモ
+
+`SboSockLib/UraraSockTCPSelect.cpp` に `CUraraSockTCPSelect` を追加した。
+切り替えは**環境変数** `SBO_SOCK_IMPL=select`（ini ではなく環境変数にしたのは、
+`CUraraSockTCPSBO` が SboCli と共有されており ini への依存を持ち込みたくないため）。
+
+```powershell
+$env:SBO_SOCK_IMPL = "select"
+SboSvr.exe --headless
+```
+
+設計:
+
+- メインスレッドからの `Send` / `DeleteClient` / `SendCancel` は **FIFO のコマンドキュー**へ積み、
+  select スレッドが毎周まとめて適用する。既存実装が `PostMessage` で行っていた
+  スレッド越えと順序保証をそのまま置き換えたもの。
+- 送信は優先度ごとにバイト列で保持し、High → Middle → Low の順に掃き出す。
+  送信途中で別の優先度へ切り替えるとフレームが壊れるため、途中のバッファを優先する。
+- `select` を即座に起こすため**自己宛 UDP ソケット**を使う。Windows の `select` は
+  ソケットしか待てないため。POSIX へ移す際は `socketpair` や `eventfd` に置き換えられる。
+
+**既存実装との差異（重要）:**
+
+`recv()` が 0 を返す正常クローズを、明示的に切断として扱っている。
+既存の WSAAsyncSelect 版は `FD_CLOSE` イベントで検知しており、`OnFD_READ` の中では
+`dwError != 0` の条件で握り潰していた（`recv()==0` はエラー0なので抜けるだけ）。
+select 版で同じことをすると「読める」と報告され続けて**空転する**。
+
+現時点ではサーバーモード（`Host`）のみ。`Connect()` は `FALSE` を返す。
+SboSvr はサーバーモードしか使わないので実害は無い。
+
+検証: `SBO_SOCK_IMPL=select` でヘッドレス起動し、プリチェックのチャレンジ応答から
+VERSION チェックの往復までを2回確認。`--stop` での停止も正常。
 
 ## 作業ログ
 
