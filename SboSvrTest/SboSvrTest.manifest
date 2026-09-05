@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  zlibD.lib が VC90 ランタイムへの依存をマニフェストに持ち込むため、
+  リンク後に mt.exe でこのマニフェストへ差し替える。
+  そのままだと「サイド バイ サイド構成が正しくありません」で起動できない。
+  SboSvr も同じ方法で回避している。
+-->
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <assemblyIdentity version="1.0.0.0" processorArchitecture="X86" name="UraraWorks.SBO.ServerTest" type="win32"/>
+  <description>SBO Server Test</description>
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker" uiAccess="false"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+</assembly>
