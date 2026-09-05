@@ -328,6 +328,49 @@ SboSvr はサーバーモードしか使わないので実害は無い。
 検証: `SBO_SOCK_IMPL=select` でヘッドレス起動し、プリチェックのチャレンジ応答から
 VERSION チェックの往復までを2回確認。`--stop` での停止も正常。
 
+## 残っている Windows 依存の棚卸し（2026-09-05 時点）
+
+Step1〜5 と S3 を終えた時点で、残りは以下。
+
+### 判断が要るもの
+
+| 項目 | 状況 |
+|---|---|
+| **パスワードハッシュ**（`PasswordHash.cpp` / Windows CNG） | **調査済み。互換性の心配はほぼ無い**（下記） |
+| ~~サーバー情報の FTP アップロード（WinINet）~~ | **廃止済み。`/api/server` が役目を引き継いだ** |
+
+#### パスワードハッシュは「総当たり」が要らないと分かった
+
+保存形式 `$s1$<反復回数>$<salt>$<hash>`（salt 16 / hash 32）に**必要なパラメータが全部入って
+おり**、中身は素の PBKDF2-HMAC-SHA256。CNG 固有の味付けは無い。
+したがって**規格に準拠した実装同士は定義上一致する**。
+
+`SboSvrTest/TestPasswordHash.cpp` で公開テストベクタ（P=password / S=salt / dkLen=32、
+c=1 / 2 / 4096）との一致を確認済み。**これが通る限り、OpenSSL でも mbedTLS でも
+自前実装でも自動的に互換になる。** ベクタは .NET の `Rfc2898DeriveBytes` で独立計算して裏取り済み。
+
+**より現実的なリスクは平文のバイト列。** `PasswordHash` は変換せず生バイトを渡すため、
+呼び出し側が `GetUtf8Pointer()` を使わず `(LPCSTR)` 素キャストすると CP932 が渡り、
+同じパスワードでも別のハッシュになる。UTF-8 と CP932 で結果が異なることもテストで固定した。
+
+### 機械的な作業（判断は不要）
+
+| 項目 | 規模 | 備考 |
+|---|---|---|
+| Web 層のソケット | `closesocket` 25 / `recv` 12 ほか | POSIX とほぼ同じ。**同期は既に `std::mutex`**（49箇所）で移植可能。Windows 固有はスレッド生成 `_beginthreadex` 7箇所のみ |
+| ATL `CString` / TCHAR | 212行 | SboCli の `CStringCompat.h` / `TCharCompat.h` が流用可能 |
+| `OutputDebugString` | 136行 | ログ出力に置換するだけ。最多だが最も簡単 |
+| ini 読み書き | 20行 | 自前パーサか設定形式の変更 |
+| パス/ディレクトリ | 22行 | `GetModuleFileName` / `CreateDirectory` |
+| 時刻 | 31行 | `std::chrono` で置換可 |
+
+### もう問題にならないもの
+
+- **ウィンドウ / GDI** — `--headless` で回避済み。`MainLoopWindow` と `OnPaint` に閉じ込め済みで、
+  非Windows ビルドではまるごと `#ifdef` で落とせる
+- **通信の中核** — `select` 実装の Win32 固有 API は 57行のみ
+- **SQLite** — アマルガメーションなので移植不要
+
 ## 作業ログ
 
 ### 2026-09-04
