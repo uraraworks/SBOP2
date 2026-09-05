@@ -9,6 +9,7 @@
 
 // SQLite3 を include（このファイルのみ）
 #include "../../third_party/sqlite/sqlite3.h"
+#include "../Platform/SvrPlatform.h"
 
 // 静的メンバの実体定義
 sqlite3 *CSaveLoadInfoBase::s_pDb = NULL;
@@ -344,16 +345,8 @@ void CSaveLoadInfoBase::ReadHeader(void)
 
 void CSaveLoadInfoBase::SetFileName(LPCSTR pszName)
 {
-	char szName[MAX_PATH];
-	LPSTR pszTmp;
-
-	// ファイル名の作成
-	GetModuleFileNameA(NULL, szName, MAX_PATH);
-	pszTmp = strrchr(szName, '\\');
-	pszTmp[1] = 0;
-	strcat(szName, pszName);
-
-	m_strFileName = szName;
+	// 実行ファイルの隣に置く
+	m_strFileName = SboPlatform::MakeExeRelativePath(pszName).c_str();
 }
 
 void CSaveLoadInfoBase::SetName(LPCSTR pszName)

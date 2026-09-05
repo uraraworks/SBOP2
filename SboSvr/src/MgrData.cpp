@@ -33,6 +33,7 @@
 #include "MgrData.h"
 #include "PasswordHash.h"
 #include <string>
+#include "Platform/SvrPlatform.h"
 
 CMgrData::CMgrData()
 {
@@ -164,24 +165,9 @@ void CMgrData::Destroy(void)
 // -------------------------------------------------------
 static bool OpenSboDb(sqlite3 **ppDb)
 {
-	char szDbPath[MAX_PATH];
-	char szDir[MAX_PATH];
-	LPSTR pszTmp;
-
-	// 実行ファイルのディレクトリを取得
-	GetModuleFileNameA(NULL, szDir, MAX_PATH);
-	pszTmp = strrchr(szDir, '\\');
-	if (pszTmp != NULL) {
-		pszTmp[1] = '\0';
-	}
-
-	// SBODATA ディレクトリが無ければ作成
-	strcpy_s(szDbPath, szDir);
-	strcat_s(szDbPath, "SBODATA");
-	CreateDirectoryA(szDbPath, NULL);
-
-	// DB ファイルパスを作成
-	strcat_s(szDbPath, "\\SboData.db");
+	// SBODATA ディレクトリを作り、その中の DB パスを組み立てる
+	std::string strDbPath = SboPlatform::MakeDataFilePath("SboData.db");
+	const char *szDbPath = strDbPath.c_str();
 
 	// SQLite オープン
 	int nRet = sqlite3_open(szDbPath, ppDb);

@@ -135,6 +135,37 @@ namespace SboPlatform
 #endif
 	}
 
+	std::string	MakeExeRelativePath(const char *pszRelative)
+	{
+		std::string strRet = GetExeDirectory();
+
+		if (pszRelative != NULL) {
+			strRet += pszRelative;
+		}
+
+		// 区切り文字をプラットフォームに合わせる
+		char chSep = GetPathSeparator();
+		for (std::string::size_type i = 0; i < strRet.size(); ++ i) {
+			if ((strRet[i] == '/') || (strRet[i] == '\\')) {
+				strRet[i] = chSep;
+			}
+		}
+		return strRet;
+	}
+
+	std::string	MakeDataFilePath(const char *pszFileName)
+	{
+		std::string strDir = MakeExeRelativePath("SBODATA");
+
+		MakeDirectory(strDir.c_str());
+
+		strDir += GetPathSeparator();
+		if (pszFileName != NULL) {
+			strDir += pszFileName;
+		}
+		return strDir;
+	}
+
 	void	WriteDebugLine(const char *pszText)
 	{
 		if (pszText == NULL) {

@@ -8,6 +8,7 @@
 #include "StdAfx.h"
 #include "../../third_party/sqlite/sqlite3.h"
 #include "SaveLoadInfoMapGenPattern.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableName = "sys_map_gen_pattern";
@@ -31,24 +32,9 @@ bool CSaveLoadInfoMapGenPattern::OpenDb(sqlite3 **ppDb)
 {
     if (ppDb == NULL) return false;
 
-    char szDbPath[MAX_PATH];
-    char szDir[MAX_PATH];
-    LPSTR pszTmp;
-
-    // 実行ファイルのディレクトリを取得
-    GetModuleFileNameA(NULL, szDir, MAX_PATH);
-    pszTmp = strrchr(szDir, '\\');
-    if (pszTmp != NULL) {
-        pszTmp[1] = '\0';
-    }
-
-    // SBODATA ディレクトリが無ければ作成
-    strcpy_s(szDbPath, szDir);
-    strcat_s(szDbPath, "SBODATA");
-    CreateDirectoryA(szDbPath, NULL);
-
-    // DB ファイルパス
-    strcat_s(szDbPath, "\\SboData.db");
+    // SBODATA ディレクトリを作り、その中の DB パスを組み立てる
+    std::string strDbPath = SboPlatform::MakeDataFilePath("SboData.db");
+    const char *szDbPath = strDbPath.c_str();
 
     int nRet = sqlite3_open(szDbPath, ppDb);
     if (nRet != SQLITE_OK) {

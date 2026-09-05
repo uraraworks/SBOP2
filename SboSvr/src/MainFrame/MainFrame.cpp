@@ -686,11 +686,7 @@ BOOL CMainFrame::InitServer(void)
 	ZeroMemory(szTmp, sizeof (szTmp));
 
 	// 作業用フォルダを作成
-	GetModuleFileName(NULL, szName, _countof(szName));
-	pszTmp	= _tcsrchr(szName, _T('\\'));
-	pszTmp[1]	= 0;
-	_stprintf_s(szTmp, _T("%sSBODATA"), szName);
-	CreateDirectory(szTmp, NULL);
+	SboPlatform::MakeDirectory(SboPlatform::MakeExeRelativePath("SBODATA").c_str());
 
 	m_dwServerStartTime = SboPlatform::GetTickMs();
 

@@ -54,6 +54,22 @@ namespace SboPlatform
 	/// @return 作成できた、または既に存在すれば true
 	bool	MakeDirectory(const char *pszPath);
 
+	/// 実行ファイルの隣にあるファイルのパスを組み立てる
+	///
+	/// @param pszRelative 実行ファイルからの相対パス。区切りは '/' で書くと
+	///                    プラットフォームに応じて変換される。
+	/// @return 絶対パス
+	std::string	MakeExeRelativePath(const char *pszRelative);
+
+	/// データ用ディレクトリ(SBODATA)を作り、その中のファイルのパスを返す
+	///
+	/// 実行ファイルの隣に SBODATA を作る。同じ手順が各所で重複していたため
+	/// ここへ集約した。
+	///
+	/// @param pszFileName SBODATA 内のファイル名
+	/// @return 絶対パス。ディレクトリ作成に失敗しても組み立てたパスは返す。
+	std::string	MakeDataFilePath(const char *pszFileName);
+
 	/// デバッグ出力へ1行書く
 	///
 	/// OutputDebugStringA() の置き換え。
