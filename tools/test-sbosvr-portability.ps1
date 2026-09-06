@@ -47,7 +47,8 @@ $PortableFiles = @(
     "SboSvr/src/Web/Handlers/ServerInfoHandler.cpp",
     "SboSvr/src/MainFrame/MainFrameRecvProcADMIN.cpp",
     "SboSvr/src/MainFrame/MainFrameRecvProcCONNECT.cpp",
-    "SboSvr/src/Web/SessionStore.cpp"
+    "SboSvr/src/Web/SessionStore.cpp",
+    "SboSvr/src/PasswordHash.cpp"
     # SessionStore.cpp: セッショントークン用の乱数生成(CryptAcquireContext/
     # CryptGenRandom)を SboPlatform::GenerateRandomBytes() へ切り出し、
     # wincrypt.h 依存を除去。
@@ -58,6 +59,8 @@ $PortableFiles = @(
     # MainFrameRecvProcADMIN.cpp / MainFrameRecvProcCONNECT.cpp: IN_ADDR.S_un
     # (Windows固有のメンバ名)をやめ、DWORD を ntohl() してビットシフトで
     # オクテットを取り出す形に置き換え。
+    # PasswordHash.cpp: PBKDF2-HMAC-SHA256 を Windows CNG (bcrypt.h) から
+    # RFC 6234/2104/8018 準拠の自前実装に置き換え、bcrypt.lib 依存を除去。
 )
 
 # 移植済みとして扱うヘッダ

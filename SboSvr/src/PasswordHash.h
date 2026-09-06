@@ -1,6 +1,7 @@
 ﻿/// @file PasswordHash.h
 /// @brief アカウントパスワードのハッシュ化ユーティリティ 定義ファイル
-/// @details PBKDF2-HMAC-SHA256 (Windows CNG / bcrypt.h) を用いる。
+/// @details PBKDF2-HMAC-SHA256 (RFC 8018 準拠の自前実装。外部ライブラリ・
+///          OS API 不使用)を用いる。
 ///          Common/ 配下からは利用しないこと(ブラウザ版ビルドが壊れるため)。
 
 #pragma once
@@ -41,4 +42,12 @@ namespace PasswordHash
 
 	/// 保存値が既にハッシュ形式(先頭が "$s1$")かどうかを判定する。
 	bool	IsHashed(const char *pszStored);
+
+	/// SHA-256 ダイジェストを16進文字列で返す(テスト用に公開)
+	std::string	Sha256Hex(const unsigned char *pData, size_t nLen);
+
+	/// HMAC-SHA256 ダイジェストを16進文字列で返す(テスト用に公開)
+	std::string	HmacSha256Hex(
+		const unsigned char *pKey, size_t nKeyLen,
+		const unsigned char *pData, size_t nDataLen);
 }
