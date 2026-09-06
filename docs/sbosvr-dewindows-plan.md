@@ -1,6 +1,6 @@
 # SboSvr 脱Windows 計画・作業メモ
 
-最終更新日: 2026-09-05
+最終更新日: 2026-09-06
 ブランチ: `feature/de-windows`
 
 ## 目的
@@ -423,20 +423,56 @@ include しておらず（`BrowserCompat.h` が先に `<vector>` 等を取り込
 - **include の相対パスがずれていても vcxproj のインクルードディレクトリで
   偶然通る。** 正しい相対パスに直すこと。
 
-### 残っているもの
+### 残っているもの（2026-09-06 時点）
 
-| 対象 | 規模 | 備考 |
-|---|---|---|
-| ATL `CString` / TCHAR | 212行 | 共有互換レイヤは用意済み。あとは使う側の対応 |
-| Web層のソケット・スレッド | `_beginthreadex` 7箇所ほか | `SvrCompat.h` にソケットの名前合わせは用意済み |
-| `Common/SBOGlobal` | `RECT` / `LPSECURITY_ATTRIBUTES` 等 | SboCli と共用のため要調整 |
-| `PasswordHash` | Windows CNG | 規格準拠は確認済み（テストあり）。置換先の選定のみ |
-| `Win32ApiStubs.h` の共有化 | 686行 | サーバーが必要とする部分だけ切り出す |
+全 .cpp 317本のうち **300本が em++ で通る**ようになった（`tools/scan-sbosvr-portability.ps1` による棚卸し）。
+残り17本は以下。
+
+| ファイル | 残っている依存 |
+|---|---|
+| `Common\Lib\LayoutHelper.cpp` | `GetClientRect`（GDI） |
+| `Common\Lib\mfc\LogViewCtrl.h` | MFC |
+| `Common\SBOGlobal.cpp` / `SboSvr\src\MgrData.cpp` | `GetModuleFileName` |
+| `SboSvr\src\MainFrame\MainFrameRecvProcADMIN.cpp` / `MainFrameRecvProcCONNECT.cpp` | `in_addr` の `S_un` |
+| `SboSvr\src\PasswordHash.cpp` | `bcrypt.h` |
+| `SboSvr\src\SboSvr.cpp` | `__argc` / `__argv` |
+| `SboSvr\src\Web\AdminWsHub.cpp` / `HttpServer.cpp` / `WebSocketBridge.cpp` | `process.h`（`_beginthreadex`） |
+| `SboSvr\src\Web\GrpImageStore.cpp` / `SessionStore.h` / `Handlers\MapPartsHandler.h` / `Handlers\SpriteSheetHandler.h` | `windows.h` |
+| `SboSvr\src\Web\HttpServer.h` | `WSADATA` |
+| `SboSvr\src\Web\Handlers\ServerInfoHandler.cpp` | `GetSystemTime` |
+
+### 移植方針の切り分け：「#ifdef を外す」ではなく「Windows専用APIの呼び出し箇所」を減らす
+
+ユーザーから「`#if !defined(_WIN32)` を外していく方がより脱Windowsではないか」という
+指摘があり、以下の整理で合意した。
+
+- **(A) 名前だけが Windows 方言のもの**（`ZeroMemory` / `closesocket` / `SetRect` /
+  `_vsnprintf` / `timeGetTime` など）は互換ヘッダで吸収してよい。中身は標準C++や
+  POSIXと同じで、置き換えても得られるのは見た目だけ。加えて `Common/` は SboCli と
+  共有で、ブラウザ版が既に同じ互換レイヤ（約5,370行）の上に乗っているため、
+  ここを剥がすと「サーバーの脱Windows」のはずがクライアント全体の大改修に化ける。
+- **(B) 設計ごと Windows に縛られているもの**（`WSAAsyncSelect` / `CreateFile` /
+  `_beginthreadex` / `bcrypt` / GDI）はシムで誤魔化さず本当に置き換える。誤魔化すと
+  「移植できたつもり」になるだけで、テスト可能性もサニタイザも手に入らない
+  ＝そもそもの目的（冒頭「目的」節参照）を失う。
+- **評価軸は「`#ifdef` の数」ではなく「Windows専用API の呼び出し箇所数」**とする。
+  `#ifdef _WIN32` 自体は害ではなく、両OSに実体のある分岐は残ってよい。
+- **`.cpp` には `#ifdef` を書かない**という規律は維持する。分岐が避けられない場合は
+  `SvrPlatform.cpp` の中だけに閉じ込める。
 
 ### 次にやること
 
-サーバーのソースを1つずつ移植チェックへ加えていく。まずは依存の浅いものから。
-`StdAfx.h` が通るようになったので、次は実際の `.cpp` が通るかを試す段階。
+本丸は Web層のスレッド（`_beginthreadex` 7箇所 + `HANDLE` のイベント）を
+`std::thread` / `std::condition_variable` へ置き換えること。ここだけは並行性の
+設計変更になるので慎重に扱う。残りの `windows.h` include はその副産物として
+外れる見込み。
+
+それ以外の小物（`__argc`、`S_un`、`GetSystemTime`、`GetModuleFileName`）は
+先に片付けてよい。機械的な置き換えで判断が要らない。
+
+`PasswordHash` は規格準拠のテストベクタがあるので（上記「パスワードハッシュは
+『総当たり』が要らないと分かった」節参照）、置換先（OpenSSL / mbedTLS / 自前実装）を
+選ぶだけ。
 
 ## 作業ログ
 
@@ -580,3 +616,23 @@ UI 依存が無いため、そのまま残している。ヘッドレス時は�
 
 なお Web 管理画面の既存 API を確認したが、**どちらの機能も存在しなかった**
 （`/api/accounts` は POST の作成のみ）。
+
+### 2026-09-06
+
+- **全 .cpp を一括プローブしたら 317本中 285本が既に通っていた。** 1ファイルずつ
+  `tools/test-sbosvr-portability.ps1` へ足していく想定だったが、着手前の想定より
+  遥かに進んでいたことが分かった。棚卸しを先にやる価値が大きかった。
+- 発見のきっかけは速度。em++ は1ファイルずつ起動すると約10秒かかり317本には
+  使えないが、`-fsyntax-only` に複数ファイルをまとめて渡すと劇的に速い
+  （3ファイルで2.9秒）。この発見が棚卸しを可能にした。棚卸し用スクリプトを
+  `tools/scan-sbosvr-portability.ps1` として追加した。
+- 実施した4コミット: 小物Win32補完（11ファイル） / ファイルIOのstdio化 /
+  WebSocketのSHA-1自前化 / StaticFileHandlerのFILETIME→time_t化。
+  **32→17ファイルに減った。**
+- **注意点:** StaticFileHandler の ETag は精度が 100ns から秒へ落ちたため値が
+  変わる。既にキャッシュを持っているクライアントは**初回だけ 45MB を再取得する**
+  （以降は従来どおり304）。実害は無いが、デプロイ後に転送量が跳ねても異常ではない。
+- テストは 46本 → 60本に増えた（SHA-1 8本、StaticFileHandler 6本）。いずれも
+  故障注入で赤くなることを確認済み。
+- ユーザーから方針の指摘（「`#ifdef` を外す方が脱Windowsでは」）を受け、
+  上記「移植方針の切り分け」節の整理で合意した。
