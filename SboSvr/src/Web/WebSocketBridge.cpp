@@ -4,8 +4,9 @@
 #include <string>
 #include <sstream>
 #include <cstring>
-#include <process.h>
 #include <cstdlib>
+#include <chrono>
+#include <system_error>
 #include <wincrypt.h>
 #pragma comment(lib, "advapi32.lib")
 
@@ -99,12 +100,9 @@ std::string Base64EncodeInternal(const unsigned char *pData, size_t nLength)
 
 CWebSocketBridge::CWebSocketBridge()
     : m_hListen(INVALID_SOCKET)
-    , m_hThread(NULL)
-    , m_hStopEvent(NULL)
-    , m_hStartedEvent(NULL)
+    , m_bStop(false)
     , m_wWsPort(0)
     , m_wTcpPort(0)
-    , m_bInitSucceeded(false)
 {
 }
 
@@ -115,41 +113,35 @@ CWebSocketBridge::~CWebSocketBridge()
 
 bool CWebSocketBridge::Start(unsigned short wWsPort, unsigned short wTcpPort)
 {
-    if (m_hThread != NULL) {
+    if (m_thread.joinable()) {
         return false;
     }
 
     m_wWsPort  = wWsPort;
     m_wTcpPort = wTcpPort;
+    m_bStop.store(false);
 
-    m_hStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-    if (m_hStopEvent == NULL) {
-        return false;
-    }
+    // 起動完了(成否)は promise/future で Start() 側へ伝える。
+    // スレッド終了通知(m_doneFuture)は Stop() のタイムアウト付き待機に使う。
+    std::promise<bool> startedPromise;
+    std::future<bool> startedFuture = startedPromise.get_future();
 
-    m_hStartedEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-    if (m_hStartedEvent == NULL) {
-        CloseHandle(m_hStopEvent);
-        m_hStopEvent = NULL;
-        return false;
-    }
+    std::promise<void> donePromise;
+    m_doneFuture = donePromise.get_future();
 
-    m_bInitSucceeded = false;
-
-    unsigned uThreadId = 0;
-    m_hThread = reinterpret_cast<HANDLE>(
-        _beginthreadex(NULL, 0, ThreadProc, this, 0, &uThreadId));
-    if (m_hThread == NULL) {
-        CloseHandle(m_hStartedEvent);
-        m_hStartedEvent = NULL;
-        CloseHandle(m_hStopEvent);
-        m_hStopEvent = NULL;
+    try {
+        m_thread = std::thread(
+            [this, promise = std::move(startedPromise), doneProm = std::move(donePromise)]() mutable {
+                Run(std::move(promise));
+                doneProm.set_value();
+            });
+    } catch (const std::system_error &) {
         return false;
     }
 
     // 起動完了を最大5秒待つ
-    DWORD dwWait = WaitForSingleObject(m_hStartedEvent, 5000);
-    if ((dwWait != WAIT_OBJECT_0) || !m_bInitSucceeded) {
+    std::future_status status = startedFuture.wait_for(std::chrono::milliseconds(5000));
+    if ((status != std::future_status::ready) || !startedFuture.get()) {
         Stop();
         return false;
     }
@@ -159,64 +151,53 @@ bool CWebSocketBridge::Start(unsigned short wWsPort, unsigned short wTcpPort)
 
 void CWebSocketBridge::Stop()
 {
-    if (m_hThread != NULL) {
-        if (m_hStopEvent != NULL) {
-            SetEvent(m_hStopEvent);
+    m_bStop.store(true);
+
+    if (m_thread.joinable()) {
+        // std::thread にはタイムアウト付き join が無いため、スレッド終了時に
+        // set_value() される m_doneFuture を wait_for でタイムアウト付き待機する
+        // 代用とする。間に合えば join、間に合わなければ従来の
+        // WaitForSingleObject タイムアウト後の挙動（スレッドを強制終了させず
+        // 追跡をやめるだけ）に合わせて detach する。
+        bool bFinished = m_doneFuture.valid() &&
+            (m_doneFuture.wait_for(std::chrono::milliseconds(5000)) ==
+             std::future_status::ready);
+
+        if (bFinished) {
+            m_thread.join();
+        } else {
+            m_thread.detach();
         }
-        WaitForSingleObject(m_hThread, 5000);
-        CloseHandle(m_hThread);
-        m_hThread = NULL;
-    }
-
-    if (m_hStopEvent != NULL) {
-        CloseHandle(m_hStopEvent);
-        m_hStopEvent = NULL;
-    }
-
-    if (m_hStartedEvent != NULL) {
-        CloseHandle(m_hStartedEvent);
-        m_hStartedEvent = NULL;
     }
 }
 
 // ------------------------------------------------------------
-// スレッドエントリポイント
+// メインスレッド本体
 // ------------------------------------------------------------
 
-unsigned __stdcall CWebSocketBridge::ThreadProc(void *lpParam)
+void CWebSocketBridge::Run(std::promise<bool> startedPromise)
 {
-    CWebSocketBridge *pBridge = reinterpret_cast<CWebSocketBridge *>(lpParam);
-    if (pBridge != NULL) {
-        pBridge->Run();
-    }
-    return 0;
-}
+    bool bSocketStarted = false;
 
-void CWebSocketBridge::Run()
-{
-    bool bWinsockStarted = false;
-    WSADATA wsaData;
-    ZeroMemory(&wsaData, sizeof(wsaData));
-
-    // WSAStartupは参照カウント方式なので複数回呼んでOK
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) == 0) {
-        bWinsockStarted = true;
+    // ソケットライブラリの初期化(Windowsでは参照カウント方式のWSAStartup相当。
+    // SboPlatform::SocketStartup/SocketCleanup 参照)。
+    if (SboPlatform::SocketStartup()) {
+        bSocketStarted = true;
 
         if (CreateListener()) {
-            m_bInitSucceeded = true;
-            SetEvent(m_hStartedEvent);
+            startedPromise.set_value(true);
             ProcessLoop();
         } else {
-            SetEvent(m_hStartedEvent);
+            startedPromise.set_value(false);
         }
     } else {
-        SetEvent(m_hStartedEvent);
+        startedPromise.set_value(false);
     }
 
     CloseListener();
 
-    if (bWinsockStarted) {
-        WSACleanup();
+    if (bSocketStarted) {
+        SboPlatform::SocketCleanup();
     }
 }
 
@@ -242,7 +223,7 @@ bool CWebSocketBridge::CreateListener()
     service.sin_addr.s_addr = htonl(INADDR_ANY);
     service.sin_port        = htons(m_wWsPort);
 
-    if (bind(m_hListen, reinterpret_cast<const sockaddr *>(&service),
+    if (::bind(m_hListen, reinterpret_cast<const sockaddr *>(&service),
              sizeof(service)) == SOCKET_ERROR) {
         closesocket(m_hListen);
         m_hListen = INVALID_SOCKET;
@@ -272,7 +253,7 @@ void CWebSocketBridge::CloseListener()
 
 void CWebSocketBridge::ProcessLoop()
 {
-    while (WaitForSingleObject(m_hStopEvent, 0) == WAIT_TIMEOUT) {
+    while (!m_bStop.load()) {
         fd_set readSet;
         FD_ZERO(&readSet);
         FD_SET(m_hListen, &readSet);
@@ -305,41 +286,19 @@ void CWebSocketBridge::HandleAccept()
     }
     SboPlatform::WriteDebugLine("[WebSocketBridge] HandleAccept: accepted\n");
 
-    // セッションスレッドに引数を渡す
-    WebSocketSessionArgs *pArgs = new WebSocketSessionArgs();
-    pArgs->pBridge   = this;
-    pArgs->hWsClient = hWsClient;
-
-    unsigned uThreadId = 0;
-    HANDLE hThread = reinterpret_cast<HANDLE>(
-        _beginthreadex(NULL, 0, SessionThreadProc, pArgs, 0, &uThreadId));
-
-    if (hThread == NULL) {
+    // セッションスレッドは自律実行で、このクラス側では追跡しない
+    // （従来の _beginthreadex + 直後の CloseHandle と同じ扱い）ので detach する。
+    try {
+        std::thread(&CWebSocketBridge::HandleSession, this, hWsClient).detach();
+    } catch (const std::system_error &) {
         // スレッド作成失敗時はここで後始末
         closesocket(hWsClient);
-        delete pArgs;
-        return;
     }
-
-    // スレッドハンドルは不要なのでクローズ（スレッドは自律実行）
-    CloseHandle(hThread);
 }
 
 // ------------------------------------------------------------
 // セッションスレッド
 // ------------------------------------------------------------
-
-unsigned __stdcall CWebSocketBridge::SessionThreadProc(void *lpParam)
-{
-    WebSocketSessionArgs *pArgs = reinterpret_cast<WebSocketSessionArgs *>(lpParam);
-    if (pArgs != NULL) {
-        if (pArgs->pBridge != NULL) {
-            pArgs->pBridge->HandleSession(pArgs->hWsClient);
-        }
-        delete pArgs;
-    }
-    return 0;
-}
 
 void CWebSocketBridge::HandleSession(SOCKET hWsClient)
 {
@@ -664,7 +623,7 @@ void CWebSocketBridge::BridgeLoop(SOCKET hWsClient, SOCKET hTcpSock)
     std::vector<unsigned char> tcpRecvBuf;
     tcpRecvBuf.reserve(4096);
 
-    while (WaitForSingleObject(m_hStopEvent, 0) == WAIT_TIMEOUT) {
+    while (!m_bStop.load()) {
         // WebSocketソケットとTCPソケットの両方を監視
         fd_set readSet;
         FD_ZERO(&readSet);

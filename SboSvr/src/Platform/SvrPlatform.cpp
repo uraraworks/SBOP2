@@ -15,6 +15,9 @@
 #include <vector>
 
 #ifdef _WIN32
+// SocketStartup/SocketCleanup が WSAStartup/WSACleanup を使うため、
+// windows.h より先に winsock2.h を読ませて winsock.h との衝突を避ける。
+#include <winsock2.h>
 #include <windows.h>
 #include <direct.h>
 #else
@@ -491,5 +494,27 @@ namespace SboPlatform
 		}
 		*pOut = t;
 		return true;
+	}
+
+	bool	SocketStartup(void)
+	{
+#ifdef _WIN32
+		// WSAStartup は呼び出し回数を内部で参照カウントする方式なので、
+		// Web層の複数箇所(WebSocketBridge / HttpServer 等)から重ねて呼んでも
+		// 安全(対応する WSACleanup も同数呼べばよい)。
+		WSADATA wsaData;
+		std::memset(&wsaData, 0, sizeof(wsaData));
+		return WSAStartup(MAKEWORD(2, 2), &wsaData) == 0;
+#else
+		// 非Windowsではソケットライブラリの初期化は不要
+		return true;
+#endif
+	}
+
+	void	SocketCleanup(void)
+	{
+#ifdef _WIN32
+		WSACleanup();
+#endif
 	}
 }

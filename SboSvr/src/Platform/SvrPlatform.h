@@ -135,4 +135,19 @@ namespace SboPlatform
 	///
 	/// @return 変換できれば true
 	bool	TimeGmUtc(const GMTIME &in, std::time_t *pOut);
+
+	/// ソケットライブラリを初期化する(WSAStartup() の置き換え)
+	///
+	/// Windows では WSAStartup() を呼ぶ。WSAStartup は呼び出し回数を内部で
+	/// 参照カウントする方式なので、Web層の複数箇所(WebSocketBridge /
+	/// HttpServer 等)から呼んでも重ねて安全(対応する SocketCleanup() も
+	/// 同数呼べばよい)。非Windowsでは初期化不要なので何もせず true を返す。
+	///
+	/// @return 初期化できれば true
+	bool	SocketStartup(void);
+
+	/// ソケットライブラリを終了する(WSACleanup() の置き換え)
+	///
+	/// SocketStartup() の呼び出しと対にして呼ぶこと。非Windowsでは何もしない。
+	void	SocketCleanup(void);
 }
