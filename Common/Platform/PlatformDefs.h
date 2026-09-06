@@ -72,6 +72,7 @@ typedef DWORD COLORREF;
 typedef unsigned long ULONG;
 typedef long long INT_PTR;
 typedef unsigned long long ULONG_PTR;
+typedef long long LONGLONG;
 typedef unsigned long long ULONGLONG;
 typedef std::uint64_t DWORDLONG;
 typedef void *HMENU;

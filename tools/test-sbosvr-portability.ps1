@@ -17,7 +17,18 @@ $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 # 移植済みとして扱うファイル(.cpp)
 $PortableFiles = @(
     "SboSvr/src/Platform/SvrPlatform.cpp",
-    "Common/Platform/SjisConvert.cpp"
+    "Common/Platform/SjisConvert.cpp",
+    "Common/Info/InfoCharBase.cpp",
+    "SboSvr/src/LibInfo/LibInfoCharSvrMapEvent.cpp",
+    "Common/Info/InfoTextEffect.cpp",
+    "Common/LibInfo/LibInfoDisable.cpp",
+    "Common/LibInfo/LibInfoEffect.cpp",
+    "Common/LibInfo/LibInfoMapParts.cpp",
+    "Common/LibInfo/LibInfoMapShadow.cpp",
+    "Common/Lib/TextInput.cpp",
+    "Common/LibInfo/LibInfoCharBase.cpp",
+    "Common/Lib/TextOutput.cpp",
+    "SboSvr/src/LibInfo/LibInfoCharSvr.cpp"
 )
 
 # 移植済みとして扱うヘッダ
@@ -48,8 +59,34 @@ $IncArgs = @(
     "-I", "$Root",
     "-I", (Join-Path $Root "SboSvr"),
     "-I", (Join-Path $Root "SboSvr/src"),
+    "-I", (Join-Path $Root "SboSvr/src/Info"),
+    "-I", (Join-Path $Root "SboSvr/src/Info/InfoChar"),
+    "-I", (Join-Path $Root "SboSvr/src/Lib"),
+    "-I", (Join-Path $Root "SboSvr/src/LibInfo"),
+    "-I", (Join-Path $Root "SboSvr/src/MainFrame"),
+    "-I", (Join-Path $Root "SboSvr/src/SaveLoad"),
+    "-I", (Join-Path $Root "SboSvr/third_party/sqlite"),
+    "-I", (Join-Path $Root "SboSvr/third_party/lodepng"),
     "-I", (Join-Path $Root "Common"),
-    "-I", (Join-Path $Root "Common/myLib")
+    "-I", (Join-Path $Root "Common/Lib"),
+    "-I", (Join-Path $Root "Common/Lib/md5"),
+    "-I", (Join-Path $Root "Common/Info"),
+    "-I", (Join-Path $Root "Common/Info/InfoMapEvent"),
+    "-I", (Join-Path $Root "Common/Info/InfoItemType"),
+    "-I", (Join-Path $Root "Common/Info/InfoSkill"),
+    "-I", (Join-Path $Root "Common/Info/InfoTalkEvent"),
+    "-I", (Join-Path $Root "Common/myLib"),
+    "-I", (Join-Path $Root "Common/LibInfo"),
+    "-I", (Join-Path $Root "Common/Packet"),
+    "-I", (Join-Path $Root "Common/Packet/ACCOUNT"),
+    "-I", (Join-Path $Root "Common/Packet/CHAR"),
+    "-I", (Join-Path $Root "Common/Packet/CONNECT"),
+    "-I", (Join-Path $Root "Common/Packet/ADMIN"),
+    "-I", (Join-Path $Root "Common/Packet/ITEM"),
+    "-I", (Join-Path $Root "Common/Packet/EFFECT"),
+    "-I", (Join-Path $Root "Common/Packet/MSGCMD"),
+    "-I", (Join-Path $Root "Common/Packet/SKILL"),
+    "-I", (Join-Path $Root "Common/myLib/myZLib")
 )
 
 $OutDir = Join-Path $Root "out\portability"
