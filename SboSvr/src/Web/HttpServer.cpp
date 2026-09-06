@@ -5,7 +5,8 @@
 #include <sstream>
 #include <exception>
 #include <cstring>
-#include <process.h>
+#include <chrono>
+#include <system_error>
 #include <cctype>
 #include <memory>
 #include <cstdlib>
@@ -302,16 +303,12 @@ void SetForbiddenAdminResponse(HttpResponse &response)
 
 CHttpServer::CHttpServer()
         : m_hListen(INVALID_SOCKET)
-        , m_hThread(NULL)
-        , m_hStopEvent(NULL)
+        , m_bStop(false)
         , m_wPort(0)
-        , m_hStartedEvent(NULL)
-        , m_bInitSucceeded(false)
         , m_bHandlersRegistered(false)
         , m_pMgrData(NULL)
         , m_pMainFrame(NULL)
 {
-        ZeroMemory(&m_wsaData, sizeof(m_wsaData));
 }
 
 CHttpServer::~CHttpServer()
@@ -321,7 +318,7 @@ CHttpServer::~CHttpServer()
 
 bool CHttpServer::Start(unsigned short wPort)
 {
-        if (m_hThread != NULL) {
+        if (m_thread.joinable()) {
                 return false;
         }
 
@@ -329,32 +326,29 @@ bool CHttpServer::Start(unsigned short wPort)
 
         RegisterDefaultHandlers();
 
-        m_hStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-        if (m_hStopEvent == NULL) {
+        m_bStop.store(false);
+
+        // 起動完了(成否)は promise/future で Start() 側へ伝える。
+        // スレッド終了通知(m_doneFuture)は Stop() のタイムアウト付き待機に使う。
+        std::promise<bool> startedPromise;
+        std::future<bool> startedFuture = startedPromise.get_future();
+
+        std::promise<void> donePromise;
+        m_doneFuture = donePromise.get_future();
+
+        try {
+                m_thread = std::thread(
+                    [this, promise = std::move(startedPromise), doneProm = std::move(donePromise)]() mutable {
+                            Run(std::move(promise));
+                            doneProm.set_value();
+                    });
+        } catch (const std::system_error &) {
                 return false;
         }
 
-        m_hStartedEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-        if (m_hStartedEvent == NULL) {
-                CloseHandle(m_hStopEvent);
-                m_hStopEvent = NULL;
-                return false;
-        }
-
-        m_bInitSucceeded = false;
-
-        unsigned uThreadId = 0;
-        m_hThread = reinterpret_cast<HANDLE>(_beginthreadex(NULL, 0, ThreadProc, this, 0, &uThreadId));
-        if (m_hThread == NULL) {
-                CloseHandle(m_hStartedEvent);
-                m_hStartedEvent = NULL;
-                CloseHandle(m_hStopEvent);
-                m_hStopEvent = NULL;
-                return false;
-        }
-
-        DWORD dwWait = WaitForSingleObject(m_hStartedEvent, 5000);
-        if ((dwWait != WAIT_OBJECT_0) || (m_bInitSucceeded == false)) {
+        // 起動完了を最大5秒待つ
+        std::future_status status = startedFuture.wait_for(std::chrono::milliseconds(5000));
+        if ((status != std::future_status::ready) || !startedFuture.get()) {
                 Stop();
                 return false;
         }
@@ -364,51 +358,66 @@ bool CHttpServer::Start(unsigned short wPort)
 
 void CHttpServer::Stop()
 {
-        if (m_hThread != NULL) {
-                if (m_hStopEvent != NULL) {
-                        SetEvent(m_hStopEvent);
+        m_bStop.store(true);
+
+        if (m_thread.joinable()) {
+                // std::thread にはタイムアウト付き join が無いため、スレッド終了時に
+                // set_value() される m_doneFuture を wait_for でタイムアウト付き待機する
+                // 代用とする。間に合えば join、間に合わなければ従来の
+                // WaitForSingleObject タイムアウト後の挙動（スレッドを強制終了させず
+                // 追跡をやめるだけ）に合わせて detach する。
+                bool bFinished = m_doneFuture.valid() &&
+                    (m_doneFuture.wait_for(std::chrono::milliseconds(5000)) ==
+                     std::future_status::ready);
+
+                if (bFinished) {
+                        m_thread.join();
+                } else {
+                        m_thread.detach();
                 }
-                WaitForSingleObject(m_hThread, 5000);
-                CloseHandle(m_hThread);
-                m_hThread = NULL;
-        }
-
-        if (m_hStopEvent != NULL) {
-                CloseHandle(m_hStopEvent);
-                m_hStopEvent = NULL;
-        }
-
-        if (m_hStartedEvent != NULL) {
-                CloseHandle(m_hStartedEvent);
-                m_hStartedEvent = NULL;
         }
 
         // 管理画面 WebSocket 接続を全て閉じる
         CAdminWsHub::Instance().Shutdown();
 
-        // クライアントスレッドが全て終了するのを待って CloseHandle
+        // クライアントスレッドが全て終了するのを待つ。
         {
-                std::vector<HANDLE> threads;
+                std::vector<ClientThreadEntry> threads;
                 {
                         std::lock_guard<std::mutex> lock(m_clientThreadsMutex);
                         threads.swap(m_clientThreads);
                 }
 
-                // MAXIMUM_WAIT_OBJECTS (64) 単位に分けて待機
-                const DWORD kWaitTimeout = 5000;
-                size_t i = 0;
-                while (i < threads.size()) {
-                        size_t chunkEnd = i + MAXIMUM_WAIT_OBJECTS;
-                        if (chunkEnd > threads.size()) {
-                                chunkEnd = threads.size();
+                // 従来の WaitForMultipleObjects は「まとめて待って合計 kWaitTimeout」だった。
+                // std::thread には複数本をまとめて待つ手段が無いので1本ずつ wait_for するしか
+                // ないが、単純にループすると「1本あたり kWaitTimeout」になり最悪
+                // (本数 × kWaitTimeout) までふくれてしまう。締切時刻を先に固定し、
+                // 各スレッドの待ちは「締切までの残り時間」を使うことで、全体の待ち時間が
+                // 従来と同程度（最大 kWaitTimeout 前後）に収まるようにする。
+                const std::chrono::milliseconds kWaitTimeout(5000);
+                std::chrono::steady_clock::time_point deadline =
+                    std::chrono::steady_clock::now() + kWaitTimeout;
+
+                for (size_t i = 0; i < threads.size(); ++i) {
+                        if (!threads[i].thread.joinable()) {
+                                continue;
                         }
-                        DWORD count = static_cast<DWORD>(chunkEnd - i);
-                        WaitForMultipleObjects(count, &threads[i], TRUE, kWaitTimeout);
-                        i = chunkEnd;
+
+                        std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+                        std::chrono::milliseconds remaining = (now < deadline)
+                            ? std::chrono::duration_cast<std::chrono::milliseconds>(deadline - now)
+                            : std::chrono::milliseconds(0);
+
+                        bool bFinished = threads[i].doneFuture.valid() &&
+                            (threads[i].doneFuture.wait_for(remaining) == std::future_status::ready);
+
+                        if (bFinished) {
+                                threads[i].thread.join();
+                        } else {
+                                threads[i].thread.detach();
+                        }
                 }
-                for (HANDLE h : threads) {
-                        CloseHandle(h);
-                }
+                // threads はここでスコープを抜けて破棄される（残りは全て join 済み or detach 済み）。
         }
 }
 
@@ -422,47 +431,30 @@ void CHttpServer::SetMainFrame(CMainFrame *pMainFrame)
         m_pMainFrame = pMainFrame;
 }
 
-unsigned __stdcall CHttpServer::ThreadProc(void *lpParam)
+void CHttpServer::Run(std::promise<bool> startedPromise)
 {
-        CHttpServer *pServer = reinterpret_cast<CHttpServer *>(lpParam);
-        if (pServer != NULL) {
-                pServer->Run();
-        }
-        return 0;
-}
+        bool bSocketStarted = false;
 
-void CHttpServer::Run()
-{
-        bool bWinsockStarted = false;
-
-        if (InitializeWinsock()) {
-                bWinsockStarted = true;
+        // ソケットライブラリの初期化(Windowsでは参照カウント方式のWSAStartup相当。
+        // SboPlatform::SocketStartup/SocketCleanup 参照)。
+        if (SboPlatform::SocketStartup()) {
+                bSocketStarted = true;
 
                 if (CreateListener()) {
-                        m_bInitSucceeded = true;
-                        SetEvent(m_hStartedEvent);
+                        startedPromise.set_value(true);
                         ProcessLoop();
                 } else {
-                        SetEvent(m_hStartedEvent);
+                        startedPromise.set_value(false);
                 }
         } else {
-                SetEvent(m_hStartedEvent);
+                startedPromise.set_value(false);
         }
 
         CloseListener();
 
-        if (bWinsockStarted) {
-                WSACleanup();
+        if (bSocketStarted) {
+                SboPlatform::SocketCleanup();
         }
-}
-
-bool CHttpServer::InitializeWinsock()
-{
-        int nResult = WSAStartup(MAKEWORD(2, 2), &m_wsaData);
-        if (nResult != 0) {
-                return false;
-        }
-        return true;
 }
 
 bool CHttpServer::CreateListener()
@@ -502,7 +494,7 @@ void CHttpServer::CloseListener()
 
 void CHttpServer::ProcessLoop()
 {
-        while (WaitForSingleObject(m_hStopEvent, 0) == WAIT_TIMEOUT) {
+        while (!m_bStop.load()) {
                 fd_set readSet;
                 FD_ZERO(&readSet);
                 FD_SET(m_hListen, &readSet);
@@ -528,31 +520,25 @@ void CHttpServer::ProcessLoop()
 
 void CHttpServer::PruneClientThreadsLocked()
 {
-        std::vector<HANDLE> alive;
+        // std::thread には非ブロッキングで「終了したか」を問う手段が無いため、
+        // 各エントリの doneFuture を wait_for(0秒) することで
+        // 従来の WaitForSingleObject(h, 0) == WAIT_OBJECT_0 相当の判定を行う。
+        std::vector<ClientThreadEntry> alive;
         alive.reserve(m_clientThreads.size());
-        for (HANDLE h : m_clientThreads) {
-                if (WaitForSingleObject(h, 0) == WAIT_OBJECT_0) {
-                        CloseHandle(h);
+        for (size_t i = 0; i < m_clientThreads.size(); ++i) {
+                bool bFinished = m_clientThreads[i].doneFuture.valid() &&
+                    (m_clientThreads[i].doneFuture.wait_for(std::chrono::seconds(0)) ==
+                     std::future_status::ready);
+
+                if (bFinished) {
+                        if (m_clientThreads[i].thread.joinable()) {
+                                m_clientThreads[i].thread.join();
+                        }
                 } else {
-                        alive.push_back(h);
+                        alive.push_back(std::move(m_clientThreads[i]));
                 }
         }
         m_clientThreads.swap(alive);
-}
-
-unsigned __stdcall CHttpServer::ClientThreadProc(void *lpParam)
-{
-        ClientThreadCtx *pCtx = reinterpret_cast<ClientThreadCtx *>(lpParam);
-        CHttpServer *pServer  = pCtx->pServer;
-        SOCKET       hClient  = pCtx->hClient;
-        delete pCtx;
-
-        bool bTransferred = false;
-        pServer->HandleClient(hClient, bTransferred);
-        if (!bTransferred) {
-                closesocket(hClient);
-        }
-        return 0;
 }
 
 void CHttpServer::HandleAccept()
@@ -573,19 +559,27 @@ void CHttpServer::HandleAccept()
                 PruneClientThreadsLocked();
 
                 if (static_cast<int>(m_clientThreads.size()) < kMaxClientThreads) {
-                        ClientThreadCtx *pCtx = new ClientThreadCtx();
-                        pCtx->pServer = this;
-                        pCtx->hClient = hClient;
+                        std::promise<void> donePromise;
+                        std::future<void> doneFuture = donePromise.get_future();
 
-                        unsigned int tid = 0;
-                        HANDLE hThread = reinterpret_cast<HANDLE>(
-                            _beginthreadex(NULL, 0, ClientThreadProc, pCtx, 0, &tid));
-                        if (hThread != NULL) {
-                                m_clientThreads.push_back(hThread);
+                        try {
+                                std::thread clientThread(
+                                    [this, hClient, promise = std::move(donePromise)]() mutable {
+                                            bool bTransferred = false;
+                                            HandleClient(hClient, bTransferred);
+                                            if (!bTransferred) {
+                                                    closesocket(hClient);
+                                            }
+                                            promise.set_value();
+                                    });
+
+                                ClientThreadEntry entry;
+                                entry.thread     = std::move(clientThread);
+                                entry.doneFuture = std::move(doneFuture);
+                                m_clientThreads.push_back(std::move(entry));
                                 bLaunched = true;
-                        } else {
-                                // _beginthreadex 失敗: ctx を解放してフォールバック
-                                delete pCtx;
+                        } catch (const std::system_error &) {
+                                // スレッド起動失敗: フォールバックへ
                         }
                 }
                 // 上限超過 or 起動失敗の場合はフォールバック(同期処理)

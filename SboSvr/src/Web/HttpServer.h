@@ -3,18 +3,14 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include <thread>
+#include <atomic>
+#include <future>
 
 #include "ApiRouter.h"
 
 class CMgrData;
 class CMainFrame;
-
-/// @brief クライアントスレッドに渡すコンテキスト
-struct ClientThreadCtx
-{
-        class CHttpServer *pServer;
-        SOCKET             hClient;
-};
 
 class CHttpServer
 {
@@ -28,11 +24,9 @@ public:
         void    SetMainFrame(CMainFrame *pMainFrame);
 
 private:
-        static unsigned __stdcall ThreadProc(void *lpParam);
-        static unsigned __stdcall ClientThreadProc(void *lpParam);
-
-        void    Run();
-        bool    InitializeWinsock();
+        /// @brief メインスレッド本体
+        /// @param startedPromise 起動完了(成否)を Start() 側へ伝える promise。スレッド内で必ず1回 set_value() する。
+        void    Run(std::promise<bool> startedPromise);
         bool    CreateListener();
         void    CloseListener();
         void    ProcessLoop();
@@ -56,18 +50,28 @@ private:
 
         static const int kMaxClientThreads = 32;
 
+        /// @brief クライアント接続を処理するスレッド1本分の情報
+        /// std::thread / std::future はコピー不可のため、この構造体自体もムーブ専用になる
+        /// （m_clientThreads への push_back / 除去はいずれもムーブで行う）。
+        /// std::thread には非ブロッキングで「終了したか」を問う手段が無いため、
+        /// スレッド末尾で set_value() される doneFuture を wait_for(0秒) で代用する
+        /// （PruneClientThreadsLocked が従来の WaitForSingleObject(h, 0) の代わりに使う）。
+        struct ClientThreadEntry
+        {
+                std::thread       thread;      ///< クライアント処理スレッド
+                std::future<void> doneFuture;  ///< スレッド終了通知
+        };
+
         SOCKET          m_hListen;
-        HANDLE          m_hThread;
-        HANDLE          m_hStopEvent;
-        HANDLE          m_hStartedEvent;
+        std::thread     m_thread;
+        std::future<void> m_doneFuture;  ///< メインスレッド終了通知（Stop のタイムアウト付き待機に使用）
+        std::atomic<bool> m_bStop;
         unsigned short  m_wPort;
-        WSADATA         m_wsaData;
-        bool            m_bInitSucceeded;
         CApiRouter      m_router;
         bool            m_bHandlersRegistered;
         CMgrData       *m_pMgrData;
         CMainFrame     *m_pMainFrame;
 
-        std::vector<HANDLE> m_clientThreads;
-        std::mutex          m_clientThreadsMutex;
+        std::vector<ClientThreadEntry> m_clientThreads;
+        std::mutex                     m_clientThreadsMutex;
 };
