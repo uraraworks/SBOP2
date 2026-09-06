@@ -16,8 +16,6 @@
 #include <utility>
 #include <vector>
 
-#include <windows.h>
-
 #include "GlobalDefine.h"
 #include "GrpLayout.h"
 
@@ -101,6 +99,9 @@ private:
     bool MakeTransparentPng(const unsigned char *pSrc, size_t nSrcSize, std::vector<unsigned char> &outData);
 
     std::mutex  m_mutex;
+    // HMODULE 自体はこのヘッダで独自に include していない。
+    // 実体は StdAfx.h(PCH) 経由(Windows は windows.h、非Windows は
+    // Common/Platform/PlatformDefs.h)で必ず先に取り込まれている前提。
     HMODULE     m_hModule;
 
     struct SSheetCacheEntry

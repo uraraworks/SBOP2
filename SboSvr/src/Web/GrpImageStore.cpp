@@ -7,7 +7,6 @@
 #include <cstdio>
 #include <ctime>
 
-#include <windows.h>
 #include "../Platform/SvrPlatform.h"
 
 namespace
@@ -47,22 +46,16 @@ CGrpImageStore::~CGrpImageStore()
 
 bool CGrpImageStore::ResolveDbPathLocked(std::string &outPath) const
 {
-    char szDir[MAX_PATH];
-    DWORD dwLength = GetModuleFileNameA(NULL, szDir, MAX_PATH);
-    if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
-        return false;
-    }
-    char *pszTmp = strrchr(szDir, '\\');
-    if (pszTmp != NULL) {
-        pszTmp[1] = '\0';
-    }
-
-    std::string dirPath = szDir;
+    // 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+    // (末尾は区切り文字で終わる)。取得に失敗しても "./" が返るだけで例外は無いため、
+    // ここで false を返すケースは実質無くなる。
+    std::string dirPath = SboPlatform::GetExeDirectory();
     dirPath.append("SBODATA");
-    CreateDirectoryA(dirPath.c_str(), NULL);
+    SboPlatform::MakeDirectory(dirPath.c_str());
 
     outPath = dirPath;
-    outPath.append("\\SboGrpData.db");
+    outPath.push_back(SboPlatform::GetPathSeparator());
+    outPath.append("SboGrpData.db");
     return true;
 }
 

@@ -32,10 +32,17 @@ $PortableFiles = @(
     "SboSvr/src/SaveLoad/SaveLoadInfoBase.cpp",
     "SboSvr/src/MainFrame/MainFrameRecvProcVERSION.cpp",
     "SboSvr/src/Web/WebSocketProtocol.cpp",
-    "SboSvr/src/Web/Handlers/StaticFileHandler.cpp"
+    "SboSvr/src/Web/Handlers/StaticFileHandler.cpp",
     # WebSocketProtocol.cpp: SHA-1 は自前実装化済みで依存ゼロ。
     # RecvAll/SendAll が使う WSAEINTR は SvrCompat.h に追加済み(WSAEWOULDBLOCK
     # の隣)なので、ここへ載せられるようになった。
+    "SboSvr/src/Web/GrpImageStore.cpp",
+    "SboSvr/src/Web/AdminWsHub.cpp",
+    "SboSvr/src/Web/WebSocketBridge.cpp"
+    # GrpImageStore.cpp: 実行ファイルディレクトリ取得を GetModuleFileNameA から
+    # SboPlatform::GetExeDirectory() へ置き換え、windows.h 依存を除去。
+    # AdminWsHub.cpp / WebSocketBridge.cpp: デバッグログの wsprintfA を
+    # snprintf へ置き換え、残っていた windows.h 専用 API 依存を除去。
 )
 
 # 移植済みとして扱うヘッダ
@@ -45,7 +52,8 @@ $PortableHeaders = @(
     "Common/Platform/CStringCompat.h",
     "Common/Platform/TCharCompat.h",
     "Common/Platform/SjisConvert.h",
-    "SboSvr/StdAfx.h"
+    "SboSvr/StdAfx.h",
+    "SboSvr/src/Web/SessionStore.h"
 )
 
 # em++ を探す

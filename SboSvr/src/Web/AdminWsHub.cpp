@@ -60,7 +60,7 @@ void CAdminWsHub::AddConnection(SOCKET hSocket, const std::string &sessionId)
     }
 
     char szLog[128];
-    wsprintfA(szLog, "[AdminWsHub] AddConnection: socket=%u session=%s total=%d\n",
+    snprintf(szLog, sizeof(szLog), "[AdminWsHub] AddConnection: socket=%u session=%s total=%d\n",
               static_cast<unsigned>(hSocket),
               sessionId.c_str(),
               static_cast<int>(m_connections.size()));
@@ -99,7 +99,7 @@ void CAdminWsHub::RemoveConnection(SOCKET hSocket)
     }
 
     char szLog[64];
-    wsprintfA(szLog, "[AdminWsHub] RemoveConnection: socket=%u\n",
+    snprintf(szLog, sizeof(szLog), "[AdminWsHub] RemoveConnection: socket=%u\n",
               static_cast<unsigned>(hSocket));
     SboPlatform::WriteDebugLine(szLog);
 }

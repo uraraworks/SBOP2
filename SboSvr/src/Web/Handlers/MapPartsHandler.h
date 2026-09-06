@@ -13,8 +13,6 @@
 #include <cstdlib>
 #include <cwchar>
 
-#include <windows.h>
-
 class CMgrData;
 class CLibInfoMapParts;
 class CLibInfoMapBase;
@@ -37,6 +35,9 @@ private:
         bool ResolveLibraryPath(std::wstring &outPath) const;
 
         std::mutex                                      m_mutex;
+        // HMODULE 自体はこのヘッダで独自に include していない。
+        // 実体は StdAfx.h(PCH) 経由(Windows は windows.h、非Windows は
+        // Common/Platform/PlatformDefs.h)で必ず先に取り込まれている前提。
         HMODULE                                         m_hModule;
         std::map<int, std::vector<unsigned char> >     m_sheetCache;
         int                                             m_sheetCount;

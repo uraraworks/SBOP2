@@ -93,7 +93,7 @@ AuthStatus Authenticate(const HttpRequest &request, CMgrData *pMgrData, AuthCont
         }
 
         pAccountLib->Enter();
-        PCInfoAccount pAccount = pAccountLib->GetPtr(sessionInfo.dwAccountID);
+        PCInfoAccount pAccount = pAccountLib->GetPtr(static_cast<DWORD>(sessionInfo.dwAccountID));
         if (pAccount == NULL) {
                 pAccountLib->Leave();
                 return AuthStatusAccountNotFound;

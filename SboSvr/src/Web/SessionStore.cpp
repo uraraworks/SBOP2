@@ -89,7 +89,7 @@ void EvictOldestIfFullLocked()
 
 namespace SessionStore
 {
-std::string Create(DWORD dwAccountID, const char *pszLoginId)
+std::string Create(unsigned int dwAccountID, const char *pszLoginId)
 {
         unsigned char randomBytes[32];
         if (!GenerateRandomBytes(randomBytes, sizeof(randomBytes))) {

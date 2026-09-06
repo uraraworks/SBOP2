@@ -273,14 +273,14 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
 
     {
         char szLog[128];
-        wsprintfA(szLog, "[WebSocketBridge] TCP connect to 127.0.0.1:%d\n", (int)m_wTcpPort);
+        snprintf(szLog, sizeof(szLog), "[WebSocketBridge] TCP connect to 127.0.0.1:%d\n", (int)m_wTcpPort);
         SboPlatform::WriteDebugLine(szLog);
     }
 
     if (connect(hTcpSock, reinterpret_cast<const sockaddr *>(&tcpAddr),
                 sizeof(tcpAddr)) == SOCKET_ERROR) {
         char szLog[128];
-        wsprintfA(szLog, "[WebSocketBridge] TCP connect FAILED: WSA=%d\n", WSAGetLastError());
+        snprintf(szLog, sizeof(szLog), "[WebSocketBridge] TCP connect FAILED: WSA=%d\n", WSAGetLastError());
         SboPlatform::WriteDebugLine(szLog);
         closesocket(hTcpSock);
         closesocket(hWsClient);
