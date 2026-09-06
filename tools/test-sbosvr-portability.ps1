@@ -28,7 +28,9 @@ $PortableFiles = @(
     "Common/Lib/TextInput.cpp",
     "Common/LibInfo/LibInfoCharBase.cpp",
     "Common/Lib/TextOutput.cpp",
-    "SboSvr/src/LibInfo/LibInfoCharSvr.cpp"
+    "SboSvr/src/LibInfo/LibInfoCharSvr.cpp",
+    "SboSvr/src/SaveLoad/SaveLoadInfoBase.cpp",
+    "SboSvr/src/MainFrame/MainFrameRecvProcVERSION.cpp"
 )
 
 # 移植済みとして扱うヘッダ

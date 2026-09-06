@@ -5,6 +5,10 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "StdAfx.h"
+
+// fopen 等の標準 C ファイル IO 用
+#include <cstdio>
+
 #include "SBOVersion.h"
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
@@ -85,7 +89,7 @@ void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)
         TCHAR szPath[MAX_PATH];
 	PBYTE pFileData;
 	LPCSTR pszTmp;
-	HANDLE hFile;
+	FILE *pFile;
 	DWORD dwResult;
 	CPacketVERSION_REQ_FILE Packet;
 	CPacketVERSION_RES_FILE PacketRes;
@@ -102,15 +106,15 @@ void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	hFile = CreateFile(strFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hFile == INVALID_HANDLE_VALUE) {
+	pFile = fopen(strFileName, "rb");
+	if (pFile == NULL) {
 		return;
 	}
 
-	SetFilePointer(hFile, Packet.m_dwOffset, NULL, FILE_BEGIN);
+	fseek(pFile, Packet.m_dwOffset, SEEK_SET);
 	pFileData	= ZeroNew(Packet.m_dwReqSize);
-	dwResult	= 0;
-	bReuslt	= ReadFile(hFile, pFileData, Packet.m_dwReqSize, &dwResult, NULL);
+	dwResult	= (DWORD)fread(pFileData, 1, Packet.m_dwReqSize, pFile);
+	bReuslt	= (ferror(pFile) == 0);
 	if (bReuslt == FALSE) {
 		goto Exit;
 	}
@@ -121,5 +125,5 @@ Exit:
 	if (pFileData) {
 		delete [] pFileData;
 	}
-	CloseHandle(hFile);
+	fclose(pFile);
 }
