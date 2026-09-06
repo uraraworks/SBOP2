@@ -31,6 +31,9 @@ $PortableFiles = @(
     "SboSvr/src/LibInfo/LibInfoCharSvr.cpp",
     "SboSvr/src/SaveLoad/SaveLoadInfoBase.cpp",
     "SboSvr/src/MainFrame/MainFrameRecvProcVERSION.cpp"
+    # WebSocketProtocol.cpp: SHA-1 は自前実装化済みで依存ゼロ。
+    # ただし RecvAll/SendAll が使う WSAEINTR が SvrCompat.h 未定義のため、
+    # ここに載せるのは見送り(詳細はコミットログ参照)。
 )
 
 # 移植済みとして扱うヘッダ

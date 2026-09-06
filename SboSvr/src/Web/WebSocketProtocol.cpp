@@ -3,8 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <wincrypt.h>
-#pragma comment(lib, "advapi32.lib")
+#include <string.h>
 
 namespace WebSocketProtocol
 {
@@ -19,27 +18,113 @@ const char *kWsGuid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 } // anonymous namespace
 
 // ============================================================
-//  SHA-1 (Windows CryptoAPI 利用)
+//  SHA-1 (RFC 3174 準拠の自前実装。外部ライブラリ・OS API 不使用)
+//
+//  Windows CryptoAPI (wincrypt.h) に依存していた旧実装を置き換えたもの。
+//  非Windows でもそのままビルドできるよう、依存ゼロで書く。
 // ============================================================
 
-static void Sha1(const unsigned char *pData, size_t nLength, unsigned char hash[20])
+namespace
 {
-    HCRYPTPROV hProv = 0;
-    HCRYPTHASH hHash = 0;
-    DWORD dwHashLen = 20;
 
-    ZeroMemory(hash, 20);
-    if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
-        return;
+inline unsigned int Sha1Rotl(unsigned int x, int n)
+{
+    return (x << n) | (x >> (32 - n));
+}
+
+/// @brief 1ブロック(64バイト)分の SHA-1 圧縮関数
+void Sha1ProcessBlock(unsigned int state[5], const unsigned char block[64])
+{
+    unsigned int w[80];
+    int i;
+
+    for (i = 0; i < 16; ++i) {
+        w[i] = (static_cast<unsigned int>(block[i * 4 + 0]) << 24)
+             | (static_cast<unsigned int>(block[i * 4 + 1]) << 16)
+             | (static_cast<unsigned int>(block[i * 4 + 2]) << 8)
+             |  static_cast<unsigned int>(block[i * 4 + 3]);
     }
-    if (!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash)) {
-        CryptReleaseContext(hProv, 0);
-        return;
+    for (i = 16; i < 80; ++i) {
+        w[i] = Sha1Rotl(w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16], 1);
     }
-    CryptHashData(hHash, pData, static_cast<DWORD>(nLength), 0);
-    CryptGetHashParam(hHash, HP_HASHVAL, hash, &dwHashLen, 0);
-    CryptDestroyHash(hHash);
-    CryptReleaseContext(hProv, 0);
+
+    unsigned int a = state[0];
+    unsigned int b = state[1];
+    unsigned int c = state[2];
+    unsigned int d = state[3];
+    unsigned int e = state[4];
+
+    for (i = 0; i < 80; ++i) {
+        unsigned int f;
+        unsigned int k;
+
+        if (i < 20) {
+            f = (b & c) | ((~b) & d);
+            k = 0x5A827999u;
+        } else if (i < 40) {
+            f = b ^ c ^ d;
+            k = 0x6ED9EBA1u;
+        } else if (i < 60) {
+            f = (b & c) | (b & d) | (c & d);
+            k = 0x8F1BBCDCu;
+        } else {
+            f = b ^ c ^ d;
+            k = 0xCA62C1D6u;
+        }
+
+        unsigned int temp = Sha1Rotl(a, 5) + f + e + k + w[i];
+        e = d;
+        d = c;
+        c = Sha1Rotl(b, 30);
+        b = a;
+        a = temp;
+    }
+
+    state[0] += a;
+    state[1] += b;
+    state[2] += c;
+    state[3] += d;
+    state[4] += e;
+}
+
+} // anonymous namespace
+
+/// @brief SHA-1 ダイジェスト(20バイト)を計算する
+void Sha1(const unsigned char *pData, size_t nLength, unsigned char hash[20])
+{
+    unsigned int state[5] = { 0x67452301u, 0xEFCDAB89u, 0x98BADCFEu, 0x10325476u, 0xC3D2E1F0u };
+    unsigned long long nBitLen = static_cast<unsigned long long>(nLength) * 8ULL;
+    size_t nFullBlocks = nLength / 64;
+    size_t i;
+
+    for (i = 0; i < nFullBlocks; ++i) {
+        Sha1ProcessBlock(state, pData + i * 64);
+    }
+
+    // 末尾の端数 + パディング(0x80 に続けて 0 埋め、末尾8バイトにビット長)
+    unsigned char tail[128];
+    size_t nRemain = nLength - nFullBlocks * 64;
+
+    memset(tail, 0, sizeof(tail));
+    memcpy(tail, pData + nFullBlocks * 64, nRemain);
+    tail[nRemain] = 0x80;
+
+    size_t nTailLen = (nRemain < 56) ? 64 : 128;
+    for (i = 0; i < 8; ++i) {
+        tail[nTailLen - 1 - i] = static_cast<unsigned char>((nBitLen >> (i * 8)) & 0xFF);
+    }
+
+    Sha1ProcessBlock(state, tail);
+    if (nTailLen == 128) {
+        Sha1ProcessBlock(state, tail + 64);
+    }
+
+    for (i = 0; i < 5; ++i) {
+        hash[i * 4 + 0] = static_cast<unsigned char>((state[i] >> 24) & 0xFF);
+        hash[i * 4 + 1] = static_cast<unsigned char>((state[i] >> 16) & 0xFF);
+        hash[i * 4 + 2] = static_cast<unsigned char>((state[i] >> 8) & 0xFF);
+        hash[i * 4 + 3] = static_cast<unsigned char>( state[i]       & 0xFF);
+    }
 }
 
 // ============================================================
@@ -80,6 +165,21 @@ std::string ComputeAcceptKey(const std::string &clientKey)
     unsigned char hash[20];
     Sha1(reinterpret_cast<const unsigned char *>(combined.c_str()), combined.size(), hash);
     return Base64Encode(hash, 20);
+}
+
+std::string Sha1Hex(const std::string &data)
+{
+    static const char kHex[] = "0123456789abcdef";
+    unsigned char hash[20];
+    std::string result;
+
+    Sha1(reinterpret_cast<const unsigned char *>(data.data()), data.size(), hash);
+    result.reserve(40);
+    for (int i = 0; i < 20; ++i) {
+        result += kHex[(hash[i] >> 4) & 0x0F];
+        result += kHex[ hash[i]       & 0x0F];
+    }
+    return result;
 }
 
 bool RecvAll(SOCKET hSocket, unsigned char *pBuf, size_t nLength)
