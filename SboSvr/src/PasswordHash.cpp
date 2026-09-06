@@ -4,6 +4,7 @@
 
 #include "StdAfx.h"
 #include "PasswordHash.h"
+#include "Platform/SvrPlatform.h"
 #include <bcrypt.h>
 #include <vector>
 #include <cstdio>
@@ -259,9 +260,7 @@ namespace PasswordHash
 		}
 
 		unsigned char pSalt[kSaltLen];
-		NTSTATUS status = BCryptGenRandom(
-			NULL, pSalt, kSaltLen, BCRYPT_USE_SYSTEM_PREFERRED_RNG);
-		if (!BCRYPT_SUCCESS(status)) {
+		if (!SboPlatform::GenerateRandomBytes(pSalt, kSaltLen)) {
 			// 乱数生成に失敗した場合は絶対にフォールバックしない
 			return std::string();
 		}

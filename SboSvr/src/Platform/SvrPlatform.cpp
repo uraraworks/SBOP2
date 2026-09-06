@@ -20,7 +20,11 @@
 #include <winsock2.h>
 #include <windows.h>
 #include <direct.h>
+#include <bcrypt.h>
+#pragma comment(lib, "bcrypt.lib")
 #else
+#include <cerrno>
+#include <cstdio>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -544,6 +548,48 @@ namespace SboPlatform
 	{
 #ifdef _WIN32
 		WSACleanup();
+#endif
+	}
+
+	bool	GenerateRandomBytes(void *pBuffer, size_t nLength)
+	{
+		if (pBuffer == NULL) {
+			return false;
+		}
+		if (nLength == 0) {
+			return true;
+		}
+
+#ifdef _WIN32
+		// PasswordHash.cpp の salt 生成で既に使われていたのと同じ CNG API。
+		NTSTATUS status = BCryptGenRandom(
+				NULL, (PUCHAR)pBuffer, (ULONG)nLength,
+				BCRYPT_USE_SYSTEM_PREFERRED_RNG);
+		return BCRYPT_SUCCESS(status) ? true : false;
+#else
+		// /dev/urandom を読む。read() は要求量より短く返ることがあるため
+		// 埋まるまでループする。
+		unsigned char *p = (unsigned char *)pBuffer;
+		size_t nRemain = nLength;
+
+		FILE *pFile = std::fopen("/dev/urandom", "rb");
+		if (pFile == NULL) {
+			return false;
+		}
+
+		while (nRemain > 0) {
+			size_t nRead = std::fread(p, 1, nRemain, pFile);
+			if (nRead == 0) {
+				// 読めなくなった(エラーまたは予期しない EOF)。安全のため失敗扱いにする。
+				std::fclose(pFile);
+				return false;
+			}
+			p += nRead;
+			nRemain -= nRead;
+		}
+
+		std::fclose(pFile);
+		return true;
 #endif
 	}
 }

@@ -46,7 +46,11 @@ $PortableFiles = @(
     "SboSvr/src/MgrData.cpp",
     "SboSvr/src/Web/Handlers/ServerInfoHandler.cpp",
     "SboSvr/src/MainFrame/MainFrameRecvProcADMIN.cpp",
-    "SboSvr/src/MainFrame/MainFrameRecvProcCONNECT.cpp"
+    "SboSvr/src/MainFrame/MainFrameRecvProcCONNECT.cpp",
+    "SboSvr/src/Web/SessionStore.cpp"
+    # SessionStore.cpp: セッショントークン用の乱数生成(CryptAcquireContext/
+    # CryptGenRandom)を SboPlatform::GenerateRandomBytes() へ切り出し、
+    # wincrypt.h 依存を除去。
     # MgrData.cpp: ログファイルパス組み立てを GetModuleFileName から
     # SboPlatform::GetExeDirectory() へ置き換え。
     # ServerInfoHandler.cpp: GetSystemTime(SYSTEMTIME) を

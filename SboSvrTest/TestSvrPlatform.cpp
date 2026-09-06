@@ -12,6 +12,7 @@
 #include "Platform/SvrPlatform.h"
 #include <string>
 #include <cstdio>
+#include <cstring>
 
 namespace
 {
@@ -218,6 +219,64 @@ TEST(時刻_現地時刻が妥当な範囲)
 	CHECK((t.nHour >= 0) && (t.nHour <= 23));
 	CHECK((t.nMinute >= 0) && (t.nMinute <= 59));
 	CHECK((t.nSecond >= 0) && (t.nSecond <= 60));
+}
+
+//////////////////////////////////////////////////////////////////////
+// 乱数生成 (セッショントークン / salt で使う暗号論的乱数)
+//////////////////////////////////////////////////////////////////////
+
+TEST(乱数_成功しバッファを埋める)
+{
+	// 前後に番兵バイトを置き、要求したバイト数ぴったりに書き込まれる
+	// ことを確認する(はみ出しの検出)。
+	unsigned char szBuf[3 + 16 + 3];
+	std::memset(szBuf, 0xCC, sizeof(szBuf));
+
+	bool bOk = SboPlatform::GenerateRandomBytes(szBuf + 3, 16);
+	CHECK(bOk != false);
+
+	// 番兵が壊れていないこと
+	CHECK(szBuf[0] == 0xCC);
+	CHECK(szBuf[1] == 0xCC);
+	CHECK(szBuf[2] == 0xCC);
+	CHECK(szBuf[3 + 16 + 0] == 0xCC);
+	CHECK(szBuf[3 + 16 + 1] == 0xCC);
+	CHECK(szBuf[3 + 16 + 2] == 0xCC);
+
+	// 「失敗したのに true」の検出: 全バイト0のままではないこと。
+	// (理論上は0埋めが出る確率もゼロではないが、16バイト全て0は
+	//  天文学的に低確率なので、実質的に失敗検知として機能する)
+	bool bAllZero = true;
+	for (int i = 0; i < 16; ++ i) {
+		if (szBuf[3 + i] != 0) {
+			bAllZero = false;
+			break;
+		}
+	}
+	CHECK(bAllZero == false);
+}
+
+TEST(乱数_2回呼ぶと異なる結果になる)
+{
+	unsigned char szA[32];
+	unsigned char szB[32];
+
+	CHECK(SboPlatform::GenerateRandomBytes(szA, sizeof(szA)) != false);
+	CHECK(SboPlatform::GenerateRandomBytes(szB, sizeof(szB)) != false);
+
+	// 同じ値が返る = 壊れている(固定値埋め等)ことの検知。
+	CHECK(std::memcmp(szA, szB, sizeof(szA)) != 0);
+}
+
+TEST(乱数_長さ0やNULLでも落ちない)
+{
+	unsigned char szBuf[8];
+
+	// 長さ0は「何もしない成功」として true を返す(既存APIの作法)。
+	CHECK(SboPlatform::GenerateRandomBytes(szBuf, 0) != false);
+
+	// NULLバッファは失敗として扱う(呼び出し側がフォールバックしないことが前提)。
+	CHECK(SboPlatform::GenerateRandomBytes(NULL, sizeof(szBuf)) == false);
 }
 
 TEST(パス_実行ファイルの隣を指す)

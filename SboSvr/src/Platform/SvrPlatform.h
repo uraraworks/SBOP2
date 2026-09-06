@@ -156,4 +156,19 @@ namespace SboPlatform
 	///
 	/// SocketStartup() の呼び出しと対にして呼ぶこと。非Windowsでは何もしない。
 	void	SocketCleanup(void);
+
+	/// 暗号論的に安全な乱数を生成する
+	///
+	/// SessionStore(セッショントークン) / PasswordHash(salt) 双方で使う
+	/// 「安全な乱数」をここへ集約する。Windows は BCryptGenRandom、
+	/// その他は /dev/urandom (または getrandom(2)) を使う(分岐はこの関数の
+	/// 実装内だけに閉じる)。
+	///
+	/// rand() / std::mt19937 等の非暗号論的な乱数源、および
+	/// std::random_device への安易な依存(実装によっては決定論的になりうる)
+	/// は使わない。
+	///
+	/// @return 成功すれば true。失敗した場合は false を返す。
+	///         **呼び出し側は失敗時に弱い乱数へフォールバックしないこと。**
+	bool	GenerateRandomBytes(void *pBuffer, size_t nLength);
 }

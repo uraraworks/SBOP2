@@ -1,10 +1,9 @@
 #include "StdAfx.h"
 #include "SessionStore.h"
+#include "Platform/SvrPlatform.h"
 
 #include <map>
 #include <mutex>
-#include <wincrypt.h>
-#pragma comment(lib, "advapi32.lib")
 
 namespace
 {
@@ -24,20 +23,6 @@ std::mutex &GetSessionMutex()
 {
         static std::mutex mtx;
         return mtx;
-}
-
-/// @brief 32バイトの暗号論的乱数を取得する。
-/// @return 成功時 true。CryptGenRandom が失敗した場合は false（呼び出し側は rand() 等へフォールバックしないこと）。
-bool GenerateRandomBytes(unsigned char *pBuffer, DWORD dwLength)
-{
-        HCRYPTPROV hProv = 0;
-        if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
-                return false;
-        }
-
-        BOOL bOk = CryptGenRandom(hProv, dwLength, pBuffer);
-        CryptReleaseContext(hProv, 0);
-        return bOk ? true : false;
 }
 
 /// @brief バイト列を小文字16進文字列に変換する。
@@ -92,7 +77,8 @@ namespace SessionStore
 std::string Create(unsigned int dwAccountID, const char *pszLoginId)
 {
         unsigned char randomBytes[32];
-        if (!GenerateRandomBytes(randomBytes, sizeof(randomBytes))) {
+        // 呼び出し側(ここ)は失敗時に rand() 等へフォールバックしないこと。
+        if (!SboPlatform::GenerateRandomBytes(randomBytes, sizeof(randomBytes))) {
                 return std::string();
         }
 
