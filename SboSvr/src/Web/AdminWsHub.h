@@ -5,6 +5,8 @@
 #include <string>
 #include <mutex>
 #include <functional>
+#include <thread>
+#include <future>
 
 // SelectionHandler.h で定義されている Selection 構造体を前方参照するため、
 // ここでは前方宣言のみ使用できないので直接インクルードする。
@@ -46,15 +48,15 @@ private:
     CAdminWsHub &operator=(const CAdminWsHub &);
 
     /// @brief 個々の WebSocket 接続情報
+    /// std::thread はコピー不可のため、この構造体自体もムーブ専用になる
+    /// （m_connections への push_back / erase はいずれもムーブで行う）。
     struct Connection
     {
-        SOCKET      hSocket;     ///< ソケット
-        std::string sessionId;   ///< 管理者セッション ID
-        HANDLE      hThread;     ///< recv ループスレッドハンドル
+        SOCKET            hSocket;     ///< ソケット
+        std::string       sessionId;   ///< 管理者セッション ID
+        std::thread       thread;      ///< recv ループスレッド
+        std::future<void> doneFuture;  ///< スレッド終了通知（Shutdown のタイムアウト付き待機に使用）
     };
-
-    /// @brief recv ループスレッドエントリポイント
-    static unsigned __stdcall RecvThreadProc(void *lpParam);
 
     /// @brief 1接続の recv ループ本体
     void RunRecvLoop(SOCKET hSocket);
@@ -65,11 +67,4 @@ private:
     mutable std::mutex              m_mutex;       ///< m_connections 保護用
     std::vector<Connection>         m_connections; ///< 接続リスト
     bool                            m_bShutdown;   ///< シャットダウン中フラグ
-};
-
-/// @brief RecvThreadProc への引数
-struct AdminWsRecvArgs
-{
-    CAdminWsHub *pHub;    ///< Hub オブジェクト
-    SOCKET       hSocket; ///< 担当ソケット
 };

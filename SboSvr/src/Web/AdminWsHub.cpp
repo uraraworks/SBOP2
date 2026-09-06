@@ -2,7 +2,9 @@
 #include "AdminWsHub.h"
 
 #include <sstream>
-#include <process.h>
+#include <chrono>
+#include <system_error>
+#include <utility>
 
 #include "WebSocketProtocol.h"
 #include "JsonUtils.h"
@@ -32,29 +34,29 @@ void CAdminWsHub::AddConnection(SOCKET hSocket, const std::string &sessionId)
     Connection conn;
     conn.hSocket   = hSocket;
     conn.sessionId = sessionId;
-    conn.hThread   = NULL;
 
-    // recv ループスレッドを起動
-    AdminWsRecvArgs *pArgs = new AdminWsRecvArgs();
-    pArgs->pHub    = this;
-    pArgs->hSocket = hSocket;
+    // recv ループスレッドを起動する。
+    // スレッド終了を Shutdown 側からタイムアウト付きで検知できるよう、
+    // スレッド側で set_value() する promise を渡し、対応する future を
+    // Connection に保持しておく。
+    std::promise<void> donePromise;
+    conn.doneFuture = donePromise.get_future();
 
-    unsigned uId = 0;
-    HANDLE hThread = reinterpret_cast<HANDLE>(
-        _beginthreadex(NULL, 0, RecvThreadProc, pArgs, 0, &uId));
-
-    if (hThread == NULL) {
+    try {
+        conn.thread = std::thread(
+            [this, hSocket, promise = std::move(donePromise)]() mutable {
+                RunRecvLoop(hSocket);
+                promise.set_value();
+            });
+    } catch (const std::system_error &) {
         // スレッド起動失敗 → ソケットを閉じて終了
-        delete pArgs;
         closesocket(hSocket);
         return;
     }
 
-    conn.hThread = hThread;
-
     {
         std::lock_guard<std::mutex> lock(m_mutex);
-        m_connections.push_back(conn);
+        m_connections.push_back(std::move(conn));
     }
 
     char szLog[128];
@@ -71,7 +73,8 @@ void CAdminWsHub::AddConnection(SOCKET hSocket, const std::string &sessionId)
 
 void CAdminWsHub::RemoveConnection(SOCKET hSocket)
 {
-    HANDLE hThread = NULL;
+    Connection removed;
+    bool bFound = false;
 
     {
         std::lock_guard<std::mutex> lock(m_mutex);
@@ -79,16 +82,21 @@ void CAdminWsHub::RemoveConnection(SOCKET hSocket)
              it != m_connections.end(); ++it)
         {
             if (it->hSocket == hSocket) {
-                hThread = it->hThread;
+                removed = std::move(*it);
                 m_connections.erase(it);
+                bFound = true;
                 break;
             }
         }
     }
 
-    // スレッドハンドルは Shutdown で join するため、ここではクローズだけ行う。
-    // hThread は AddConnection が所有しているので閉じない（Shutdown が行う）。
-    (void)hThread;
+    // RemoveConnection は recv ループスレッド自身の終了処理から呼ばれる。
+    // 自スレッドを join すると即デッドロックするため、ここでは join せず
+    // detach する（呼び出し元に戻った直後にスレッドは自然終了するのでリークしない）。
+    // Shutdown 実行時にまだ残っている接続は Shutdown 側で待機・join/detach する。
+    if (bFound && removed.thread.joinable()) {
+        removed.thread.detach();
+    }
 
     char szLog[64];
     wsprintfA(szLog, "[AdminWsHub] RemoveConnection: socket=%u\n",
@@ -178,11 +186,13 @@ void CAdminWsHub::Shutdown()
     }
 
     // 全接続に Close フレームを送信してソケットを閉じる
-    // スナップショットを取ってから操作する
+    // スナップショットを取ってから操作する。
+    // Connection は std::thread を持つためコピーできないので、ムーブで退避する
+    // （退避後 m_connections は空になる）。
     std::vector<Connection> snapshot;
     {
         std::lock_guard<std::mutex> lock(m_mutex);
-        snapshot = m_connections;
+        snapshot = std::move(m_connections);
     }
 
     for (size_t i = 0; i < snapshot.size(); ++i) {
@@ -191,19 +201,30 @@ void CAdminWsHub::Shutdown()
         closesocket(snapshot[i].hSocket);
     }
 
-    // 全スレッドが終了するまで待つ（最大 5 秒）
+    // 全スレッドが終了するまで待つ（最大 5 秒）。
+    // std::thread にはタイムアウト付き join が存在しないため、スレッド終了時に
+    // set_value() される doneFuture を wait_for でタイムアウト付き待機する代用とする。
+    // タイムアウト以内に終了を確認できれば join、間に合わなければ
+    // 従来の WaitForSingleObject タイムアウト後の挙動
+    // （＝スレッドを強制終了させず、待つのをやめてハンドルだけ閉じる＝もう追跡しない）
+    // に合わせて detach し、スレッドの終了は待たない。
     for (size_t i = 0; i < snapshot.size(); ++i) {
-        if (snapshot[i].hThread != NULL) {
-            WaitForSingleObject(snapshot[i].hThread, 5000);
-            CloseHandle(snapshot[i].hThread);
+        if (!snapshot[i].thread.joinable()) {
+            continue;
+        }
+
+        bool bFinished = snapshot[i].doneFuture.valid() &&
+            (snapshot[i].doneFuture.wait_for(std::chrono::milliseconds(5000)) ==
+             std::future_status::ready);
+
+        if (bFinished) {
+            snapshot[i].thread.join();
+        } else {
+            snapshot[i].thread.detach();
         }
     }
 
-    // 接続リストをクリア
-    {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        m_connections.clear();
-    }
+    // m_connections はスナップショット退避（ムーブ）時点で既に空になっている。
 
     SboPlatform::WriteDebugLine("[AdminWsHub] Shutdown complete\n");
 }
@@ -211,19 +232,6 @@ void CAdminWsHub::Shutdown()
 // ------------------------------------------------------------
 // recv ループスレッド
 // ------------------------------------------------------------
-
-// static
-unsigned __stdcall CAdminWsHub::RecvThreadProc(void *lpParam)
-{
-    AdminWsRecvArgs *pArgs = reinterpret_cast<AdminWsRecvArgs *>(lpParam);
-    if (pArgs != NULL) {
-        if (pArgs->pHub != NULL) {
-            pArgs->pHub->RunRecvLoop(pArgs->hSocket);
-        }
-        delete pArgs;
-    }
-    return 0;
-}
 
 void CAdminWsHub::RunRecvLoop(SOCKET hSocket)
 {
