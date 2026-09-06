@@ -11,6 +11,23 @@
 const _registry = new Map();
 
 /**
+ * ビューコンテナを探す起点。既定は document。
+ * 編集ペインを別ウィンドウへ移すと document 直下から辿れなくなるため、
+ * 要素参照を起点にできるようにしてある（要素参照なら所属 document が
+ * 変わっても querySelector は機能する）。
+ * @type {Document|Element}
+ */
+let _viewRoot = document;
+
+/**
+ * ビュー検索の起点を差し替える。
+ * @param {Document|Element} root
+ */
+export function setViewRoot(root) {
+  _viewRoot = root || document;
+}
+
+/**
  * 現在の hash からルート名を取得する。
  * @returns {string}
  */
@@ -45,8 +62,10 @@ export function isMigrated(route) {
 export function handleRoute(route) {
   const fn = _registry.get(route);
   if (fn) {
-    // ビューの mount(container) にはルートと同名の data-view コンテナを渡す
-    const container = document.querySelector('.view[data-view="' + route + '"]');
+    // ビューの mount(container) にはルートと同名の data-view コンテナを渡す。
+    // 検索の起点を document 固定にしないのは、編集ペインを別ウィンドウへ
+    // 移した時（workspace-layout.js のポップアップ）に見失わないため。
+    const container = _viewRoot.querySelector('.view[data-view="' + route + '"]');
     if (!container) {
       console.error("router: data-view container not found for route:", route);
       return false;

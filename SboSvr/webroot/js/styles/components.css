@@ -2259,3 +2259,98 @@ main {
   color: var(--color-warning, #fde68a);
   font-weight: 600;
 }
+
+/* ================================================================
+   ワークスペース表示切り替え (core/workspace-layout.js)
+   ================================================================ */
+
+/* .app-layout は「280px の nav | 本体」の 2 カラムグリッドで、
+   .workspace-body が grid-column: 2 を明示している。タブバーを素の子として
+   足すと自動配置で nav と同じ行に入り、行の高さが縦に長い nav に合わせて
+   伸びてしまう（＝本体の上に巨大な空白ができる）。
+   nav を全行にまたがせ、タブバーを本体と同じ 2 カラム目の 1 行目に置く。 */
+.app-layout > .main-nav {
+  grid-row: 1 / -1;
+}
+
+/* 行を明示しないと、2 行にまたがる nav の高さが 1 行目にも配分されて
+   タブバーの行が nav と同じ高さまで伸びる。2 行目を可変(1fr)にしておくと
+   またがる要素の余白はそちらへ吸われ、1 行目はタブバーの高さで収まる。 */
+.app-layout {
+  grid-template-rows: auto 1fr;
+}
+
+.workspace-tabs {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.5rem clamp(0.85rem, 1.6vw, 1.35rem) 0;
+}
+
+/* タブバーが 1 行分の高さを占めるので、その分だけ本体の高さを詰める。
+   詰めないと画面下がタブバーの高さぶんはみ出す。 */
+.workspace-body {
+  --workspace-tabs-h: 2.6rem;
+}
+
+.workspace-body main,
+.persistent-game-panel {
+  height: calc(100vh - 105px - var(--workspace-tabs-h, 0px));
+}
+
+.workspace-tab-group {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.workspace-tab.is-selected {
+  background: var(--color-accent, #60a5fa);
+  color: #0b1220;
+  font-weight: 600;
+}
+
+.workspace-popup-button.is-selected {
+  outline: 2px solid var(--color-accent, #60a5fa);
+  outline-offset: -2px;
+}
+
+/* ゲーム画面のみ / 編集のみ は 1 カラムにして相手側を隠す */
+.workspace-body.layout-game,
+.workspace-body.layout-editor {
+  grid-template-columns: 1fr;
+}
+
+.workspace-body.layout-game > main {
+  display: none;
+}
+
+.workspace-body.layout-editor > .persistent-game-panel {
+  display: none;
+}
+
+/* --- ポップアップした編集ウィンドウ側 --- */
+
+body.sbop2-popup-editor {
+  margin: 0;
+  padding: 0.75rem;
+  min-height: 100vh;
+}
+
+/* .workspace-body main の高さ計算はポップアップでは効かないので上書きする */
+body.sbop2-popup-editor #view-container {
+  height: calc(100vh - 1.5rem);
+  padding: 0;
+}
+
+/* 狭い幅では app-layout が flex 縦積みになり高さは auto。
+   上の高さ指定はこのファイルの後方にあるため、ここで打ち消す。 */
+@media (max-width: 940px) {
+  .workspace-body main,
+  .persistent-game-panel {
+    height: auto;
+  }
+}

@@ -14,6 +14,7 @@
  */
 
 import { registerRoute, isMigrated, handleRoute, currentRoute } from "./core/router.js";
+import { initWorkspaceLayout } from "./core/workspace-layout.js";
 
 // ----------------------------------------------------------------
 // 移行済みビューの登録(F2 フェーズ以降にここへ追加していく)
@@ -91,6 +92,10 @@ function onHashChange() {
 }
 
 window.addEventListener("hashchange", onHashChange);
+
+// ワークスペースの表示切り替え(ゲーム画面 / 並べて / 編集)とポップアップ。
+// ルーターの検索起点を差し替えるので、初回マウントより前に呼ぶ必要がある。
+initWorkspaceLayout();
 
 // 初回ロード時: すでに hash がある場合に対応
 // app.js の DOMContentLoaded 以降に実行されるため、レガシーの初期化と競合しない
