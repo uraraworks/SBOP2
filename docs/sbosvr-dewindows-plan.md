@@ -430,25 +430,26 @@ include しておらず（`BrowserCompat.h` が先に `<vector>` 等を取り込
 - **include の相対パスがずれていても vcxproj のインクルードディレクトリで
   偶然通る。** 正しい相対パスに直すこと。
 
-### 残っているもの（2026-09-06 時点・後半更新）
+### 残っているもの（2026-09-06 時点・続報反映）
 
-全 .cpp 317本のうち **308本が em++ で通る**ようになった（着手時は285本）。
-移植チェック `tools/test-sbosvr-portability.ps1` への登録は30件、
-テストは60本。残り9本は以下。
+全 .cpp 317本のうち **311本が em++ で通る**ようになった
+（着手時285本 → 前半308本 → 暗号2本＋エントリポイント1本を片付けて311本）。
+移植チェック `tools/test-sbosvr-portability.ps1` への登録は33件、
+テストは81本。残り6本は以下。
 
 | ファイル | 残っている依存 | 扱い |
 |---|---|---|
-| `Common\Lib\LayoutHelper.cpp` | `GetClientRect`（GDI） | 意図的に Windows 専用のまま。ウィンドウ表示用 |
+| `Common\Lib\LayoutHelper.cpp` | `GetClientRect`（GDI） | **意図的に Windows 専用のまま**。ウィンドウ表示用 |
 | `Common\Lib\mfc\LogViewCtrl.h` | MFC | 同上 |
 | `SboSvr\src\MainFrame\MainFrame.cpp` | `CreateFont` 等（GDI） | 同上。非Windows ビルドでは丸ごと `#ifdef` で落とす想定 |
-| `Common\SBOGlobal.cpp` | `GetModuleFileName` | SboCli と共有のファイルで `SboPlatform` を呼べない。別途方針が要る |
-| `SboSvr\src\PasswordHash.cpp` | `bcrypt.h`（CNG） | 規格準拠のテストベクタがあるので置換先を選ぶだけ |
-| `SboSvr\src\Web\SessionStore.cpp` | `wincrypt.h` | セッショントークンの乱数生成。暗号論的に安全な乱数が要るので慎重に |
-| `SboSvr\src\SboSvr.cpp` | `__argc` / `__argv` | エントリポイントの設計。`main()` 化とセット |
-| `SboSvr\src\Web\Handlers\MapPartsHandler.cpp` / `SpriteSheetHandler.cpp` | `LoadLibrary` / `FreeLibrary` | `SboGrpData.dll` からの画像リソース読み込み。設計判断が要る（画像の実体は res/ の PNG で DLL は実質フォールバック） |
+| `Common\SBOGlobal.cpp` | `GetModuleFileName` | SboCli と共有のファイルで `SboPlatform` を呼べない。**方針決めが要る** |
+| `SboSvr\src\Web\Handlers\MapPartsHandler.cpp` / `SpriteSheetHandler.cpp` | `LoadLibrary` / `FreeLibrary` | `SboGrpData.dll` からの画像リソース読み込み。**設計判断が要る**（画像の実体は res/ の PNG で DLL は実質フォールバック） |
 
-**これで当初の「本丸」だった Web 層のスレッド（`_beginthreadex` 7箇所 + `HANDLE` のイベント）は
-全て片付いた。** 確立したパターンは次項を参照。
+**残っているのは「意図的に残す3本」と「設計判断が要る3本」だけになった。
+機械的に片付く分は無くなった。**
+
+これで当初の「本丸」だった Web 層のスレッド（`_beginthreadex` 7箇所 + `HANDLE` のイベント）に加え、
+暗号論的乱数・PBKDF2・エントリポイントも片付いた。確立したパターンは次項を参照。
 
 ### スレッド移植で確立したパターン（2026-09-06 後半）
 
@@ -483,26 +484,22 @@ Web層の `_beginthreadex` / `HANDLE` を `std::thread` へ移す作業を通じ
 - **`.cpp` には `#ifdef` を書かない**という規律は維持する。分岐が避けられない場合は
   `SvrPlatform.cpp` の中だけに閉じ込める。
 
-### 次にやること（2026-09-06 後半更新）
+### 次にやること（2026-09-06 続報更新）
 
-Web層のスレッド移植が完了したので、残る9本は以下の優先順で片付ける。
+暗号2本とエントリポイントが片付き、機械的に片付く分は無くなった。
+残る3本は設計判断を先に決める必要がある。
 
-1. **暗号まわり2本**（`PasswordHash` の CNG と `SessionStore` の `CryptGenRandom`）。
-   性質が近いのでまとめて扱うのが自然。`PasswordHash` は上記「パスワードハッシュは
-   『総当たり』が要らないと分かった」節のとおり公開テストベクタで固定済みなので、
-   置換先（OpenSSL / mbedTLS / 自前実装）を選ぶだけ。`SessionStore` はセッション
-   トークンの生成に**暗号論的に安全な乱数**が要る点に注意（`std::random_device` は
-   実装によっては保証が無いので、プラットフォーム関数として `SvrPlatform` に
-   置くのが安全）。
-2. **`SboSvr.cpp` の `__argc` / `__argv`**。`WinMain` は既に `SboSvrMain()` へ薄く
-   委譲する形になっているので、`main()` からも呼べるようにするだけ。
-3. **画像ハンドラ2本の `LoadLibrary`**（`MapPartsHandler` / `SpriteSheetHandler`）。
-   DLL依存を残すか、res/ の PNG 直読みへ寄せるかの設計判断が先。
-4. **`Common/SBOGlobal.cpp`**。SboCli と共有のため、共有のプラットフォーム層を
-   どこに置くかの方針決めが要る。
-
-GDI/MFC 依存の3本（`LayoutHelper.cpp` / `LogViewCtrl.h` / `MainFrame.cpp`）は
-意図的に Windows 専用のまま残す。非Windows ビルドでは丸ごと `#ifdef` で落とす想定。
+1. **画像ハンドラ2本の `LoadLibrary`**（`MapPartsHandler` / `SpriteSheetHandler`）。
+   DLL依存を残すか res/ の PNG 直読みへ寄せるかの設計判断が先。画像の実体は
+   res/ の PNG で DLL は実質フォールバック、という既存の整理がある。
+2. **`Common/SBOGlobal.cpp`**。SboCli と共有のため、共有プラットフォーム層を
+   どこに置くかの方針決めが要る。SboCli 側には別の互換レイヤがあり、両者の
+   関係を整理する必要がある。
+3. 上記2つが片付けば、あとは Windows 専用として残す3本
+   （`LayoutHelper.cpp` / `LogViewCtrl.h` / `MainFrame.cpp`）を `#ifdef` で
+   括るだけで**非Windows ビルドの実際のリンクに挑戦できる段階**になる。
+   これまでは「コンパイルが通る」までしか確認していないので、
+   **次の山はリンクと実行**。
 
 ## 作業ログ
 
@@ -681,4 +678,60 @@ UI 依存が無いため、そのまま残している。ヘッドレス時は�
   `std::thread` 系へ移り、全 .cpp 317本中 **308本**が em++ で通るようになった
   （着手時は285本）。移植中に確立したスレッド移植パターンは上記「スレッド移植で
   確立したパターン」節にまとめた。残り9本と次の優先順は「残っているもの」
+  「次にやること」の両節を参照。
+
+- **続報: 暗号2本とエントリポイントも片付け、311本まで進んだ。** コミット順は以下。
+
+  | コミット | 内容 |
+  |---|---|
+  | `11a5f88` | 暗号論的に安全な乱数生成を `SboPlatform::GenerateRandomBytes()` に集約。`SessionStore` の `CryptGenRandom` と `PasswordHash` の salt 生成（`BCryptGenRandom`）を統合。非Windows は `/dev/urandom`（短く返る可能性に備えループ読み） |
+  | `4b651b7` | PBKDF2-HMAC-SHA256 を Windows CNG から自前実装へ置換。`bcrypt.h` / `bcrypt.lib` 依存が消滅 |
+  | `e2d46e4` | 非Windows 用の `main()` を追加。`__argc` / `__argv` 依存を解消 |
+
+  移植チェックへの登録は33件、テストは81本（着手時比+21本）に増えた。
+
+  #### パスワードハッシュ移植は後方互換が最優先だった
+
+  本番 DB に既存ハッシュが685件あるため、実装を差し替える前に手順を決めた。
+
+  1. 差し替える**前に** CNG 実装が生成した `$s1$...` 形式のハッシュを4件採取
+     （`password123` / 非ASCII / 空文字列 / 記号入り）
+  2. それをテストにハードコードし、新実装の `VerifyPassword()` が受理することを
+     テストにした
+  3. その上で実装を差し替えた
+
+  結果、4件とも新実装で受理。加えて**実際にサーバーを起動し、採取した値で
+  アカウントを作って HTTP ログインが通ることまで確認**した（テストだけで
+  済ませない）。誤パスワードは 401。
+
+  追加したテストベクタ:
+
+  - SHA-256 単体7本（空 / `"abc"` / **55, 56, 63, 64, 65 バイトの境界** / 長文）
+  - HMAC-SHA256 の RFC 4231 ベクタ5本（**鍵がブロック長より長いケース**を含む）
+  - CNG 後方互換ベクタ5本（上記の採取分）
+
+  故障注入（SHA-256 の初期定数を1ビット変更）で22本が落ちることを確認済み。
+
+  **性能**: `VerifyPassword` は Release / 反復10万回で
+  **CNG版 約166ms → 新実装 約73ms（約2.3倍高速）**。HMAC の鍵吸収を反復ごとに
+  繰り返さない標準的な最適化による。**出力は完全に同一**（テストベクタで
+  固定済み）。ただし**検証が速くなった＝総当たりの単価も同じだけ下がった**
+  ということでもある。保存形式に反復回数が入っているので、**新規ハッシュの
+  反復回数を引き上げるかは別途の判断**（既存ハッシュは各自の反復回数で検証
+  され続けるので、上げても互換は壊れない）。
+
+  #### エントリポイントの扱い
+
+  `SboSvrMain()` へ委譲する形が既にできていたので、非Windows 用の `main()` を
+  足すだけで済んだ。**エントリポイントの選択だけは `#ifdef` が避けられない**
+  （言語仕様の問題でプラットフォーム層に隠せない）ため、`SboSvr.cpp` のこの
+  1箇所に限って `#ifdef _WIN32` を認めた。`SboSvrMain()` の中身には持ち込んで
+  いない。`hInstance` はウィンドウ生成にしか使われていなかったので、
+  非Windows では NULL を流すだけで足りる。
+
+  起動4パターンの回帰も確認済み: `--headless` 稼働 / `--stop` 終了コード0 /
+  対象なし `--stop` は1 / 二重起動は2 / 引数なしはウィンドウ表示
+  （`PrintWindow` でキャプチャして表示内容まで確認）。
+
+  残る6本（意図的に残す3本 + 設計判断が要る3本）は「残っているもの」
   「次にやること」の両節を参照。
