@@ -12,6 +12,7 @@
 #include "Web/AuthProvider.h"
 #include "Web/JsonUtils.h"
 #include "MgrData.h"
+#include "../../Platform/SvrPlatform.h"
 
 CServerInfoHandler::CServerInfoHandler(CMgrData *pMgrData)
         : m_pMgrData(pMgrData)
@@ -79,16 +80,16 @@ std::string CServerInfoHandler::BuildResponseJson(bool includeMetrics, const std
 
 std::string CServerInfoHandler::GetTimestamp()
 {
-        SYSTEMTIME st;
-        GetSystemTime(&st);
+        SboPlatform::LOCALTIME st;
+        SboPlatform::GetSystemTime(&st);
         char szTimestamp[32];
         std::snprintf(szTimestamp, sizeof(szTimestamp), "%04d-%02d-%02dT%02d:%02d:%02dZ",
-                st.wYear,
-                st.wMonth,
-                st.wDay,
-                st.wHour,
-                st.wMinute,
-                st.wSecond);
+                st.nYear,
+                st.nMonth,
+                st.nDay,
+                st.nHour,
+                st.nMinute,
+                st.nSecond);
         return szTimestamp;
 }
 

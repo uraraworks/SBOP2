@@ -93,8 +93,6 @@ void CMgrData::Create(
 	CMainFrame	*pMainFrame,	// [in] メインフレーム
 	CUraraSockTCPSBO	*pSock)	// [in] 通信マネージャ
 {
-	TCHAR szName[MAX_PATH];
-	LPTSTR pszPath;
 	CmyString strTmp;
 
 	ReadIniData();
@@ -124,17 +122,13 @@ void CMgrData::Create(
 	m_pLibInfoItem->SetTypeInfo(m_pLibInfoItemType);
 	m_pLibInfoItem->SetWeaponInfo(m_pLibInfoItemWeapon);
 
-	GetModuleFileName(NULL, szName, _countof(szName));
-	pszPath	= _tcsrchr(szName, _T('\\'));
-	if (pszPath != NULL) {
-		pszPath[1]	= _T('\0');
-	} else {
-		szName[0]	= _T('\0');
-	}
+	// 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+	// (末尾は区切り文字で終わる)。GrpImageStore.cpp と同じ置き換え方針。
+	std::string strExeDir = SboPlatform::GetExeDirectory();
 
 	// ログファイルの作成
-	CString strBasePath(szName);
-	strTmp.Format(_T("%sSboSvrLog.txt"), (LPCTSTR)strBasePath);
+	strTmp = strExeDir.c_str();
+	strTmp += "SboSvrLog.txt";
 	m_pLog->Create(strTmp, TRUE, TRUE);
 }
 

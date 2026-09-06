@@ -94,6 +94,9 @@ inline int WSAGetLastError(void)
 #ifndef WSAEINTR
 #define WSAEINTR EINTR
 #endif
+#ifndef WSAETIMEDOUT
+#define WSAETIMEDOUT ETIMEDOUT
+#endif
 #ifndef SD_BOTH
 #define SD_BOTH SHUT_RDWR
 #endif

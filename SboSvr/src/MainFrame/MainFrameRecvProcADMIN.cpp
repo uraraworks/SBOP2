@@ -1059,7 +1059,7 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_ACCOUNT(PBYTE pData, DWORD dwSessionID)
 	PCInfoAccount pInfoAccount;
 	CPacketADMIN_CHAR_REQ_ACCOUNT Packet;
 	CPacketADMIN_CHAR_RES_ACCOUNT PacketADMIN_CHAR_RES_ACCOUNT;
-	IN_ADDR AddrTmp;
+	DWORD dwAddr;
 	CmyString strTmp;
 
 	Packet.Set(pData);
@@ -1069,8 +1069,9 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_ACCOUNT(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	AddrTmp.S_un.S_addr = m_pSock->GetIPAddress(pInfoAccount->m_dwSessionID);
-	PacketADMIN_CHAR_RES_ACCOUNT.Make(pInfoAccount, AddrTmp.S_un.S_addr, (LPCSTR)pInfoAccount->m_strLastMacAddr);
+	// IN_ADDR.S_un はWindows固有のメンバ名のため、生の DWORD(ネットワークバイトオーダー)で受け渡す
+	dwAddr = m_pSock->GetIPAddress(pInfoAccount->m_dwSessionID);
+	PacketADMIN_CHAR_RES_ACCOUNT.Make(pInfoAccount, dwAddr, (LPCSTR)pInfoAccount->m_strLastMacAddr);
 	m_pSock->SendTo(dwSessionID, &PacketADMIN_CHAR_RES_ACCOUNT);
 }
 

@@ -69,6 +69,35 @@ namespace SboPlatform
 		pOut->nMilli  = (int)(nMs % 1000);
 	}
 
+	void	GetSystemTime(LOCALTIME *pOut)
+	{
+		if (pOut == NULL) {
+			return;
+		}
+		std::memset(pOut, 0, sizeof(*pOut));
+
+		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+		std::time_t t = std::chrono::system_clock::to_time_t(now);
+
+		std::tm tmUtc;
+#ifdef _WIN32
+		gmtime_s(&tmUtc, &t);
+#else
+		gmtime_r(&t, &tmUtc);
+#endif
+
+		long long nMs = std::chrono::duration_cast<std::chrono::milliseconds>(
+				now.time_since_epoch()).count();
+
+		pOut->nYear   = tmUtc.tm_year + 1900;
+		pOut->nMonth  = tmUtc.tm_mon + 1;
+		pOut->nDay    = tmUtc.tm_mday;
+		pOut->nHour   = tmUtc.tm_hour;
+		pOut->nMinute = tmUtc.tm_min;
+		pOut->nSecond = tmUtc.tm_sec;
+		pOut->nMilli  = (int)(nMs % 1000);
+	}
+
 	char	GetPathSeparator(void)
 	{
 #ifdef _WIN32

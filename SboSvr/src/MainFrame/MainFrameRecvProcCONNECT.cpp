@@ -39,13 +39,16 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 	CPacketCHAR_MOTION PacketCHAR_MOTION;
 	CmyString strTmp, strLog;
 	CString strClientVer;
-	IN_ADDR AddrTmp;
+	DWORD dwAddr;			// IPアドレス(ネットワークバイトオーダー)
+	unsigned int nAddrHost;	// ↑をホストバイトオーダーへ直したもの(オクテット取り出し用)
 
 	Packet.Set(pData);
 
 	nResult	= LOGINRES_NG_PASSWORD;
 	pInfoAccount	= m_pLibInfoAccount->GetPtr(Packet.m_strAccount);
-	AddrTmp.S_un.S_addr = m_pSock->GetIPAddress(dwSessionID);
+	// IN_ADDR.S_un はWindows固有のメンバ名のため使わず、生の DWORD で扱う
+	dwAddr = m_pSock->GetIPAddress(dwSessionID);
+	nAddrHost = ntohl(dwAddr);
 
 	strTmp.Format(
 		"%02X-%02X-%02X-%02X-%02X-%02X",
@@ -57,7 +60,7 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 //		bDisable = TRUE;
 	}
 	// IPアドレスで拒否しているか判定
-	bDisable |= m_pLibInfoDisable->IsDisableIP(AddrTmp.S_un.S_addr);
+	bDisable |= m_pLibInfoDisable->IsDisableIP(dwAddr);
 
 	// 登録済み？
 	if (pInfoAccount) {
@@ -121,11 +124,11 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 			nResult = LOGINRES_NG_DISABLE;
 			m_pLog->Write("ログイン拒否 dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
 					dwSessionID,
-					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
+					(nAddrHost >> 24) & 0xFF, (nAddrHost >> 16) & 0xFF, (nAddrHost >> 8) & 0xFF, nAddrHost & 0xFF,
 					strTmp.GetUtf8Pointer(),
 					pInfoAccount->m_strAccount.GetUtf8Pointer());
 			// IPアドレスで拒否しておく
-			m_pLibInfoDisable->AddIP(AddrTmp.S_un.S_addr);
+			m_pLibInfoDisable->AddIP(dwAddr);
 		// 使用中？
 		} else if (pInfoAccount->m_dwSessionID != 0) {
 			nResult = LOGINRES_NG_LOGIN;
@@ -140,7 +143,7 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 
 			m_pLog->Write("ログイン dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
 					dwSessionID,
-					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
+					(nAddrHost >> 24) & 0xFF, (nAddrHost >> 16) & 0xFF, (nAddrHost >> 8) & 0xFF, nAddrHost & 0xFF,
 					strTmp.GetUtf8Pointer(),
 					pInfoAccount->m_strAccount.GetUtf8Pointer());
 		}

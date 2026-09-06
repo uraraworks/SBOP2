@@ -38,11 +38,22 @@ $PortableFiles = @(
     # の隣)なので、ここへ載せられるようになった。
     "SboSvr/src/Web/GrpImageStore.cpp",
     "SboSvr/src/Web/AdminWsHub.cpp",
-    "SboSvr/src/Web/WebSocketBridge.cpp"
+    "SboSvr/src/Web/WebSocketBridge.cpp",
     # GrpImageStore.cpp: 実行ファイルディレクトリ取得を GetModuleFileNameA から
     # SboPlatform::GetExeDirectory() へ置き換え、windows.h 依存を除去。
     # AdminWsHub.cpp / WebSocketBridge.cpp: デバッグログの wsprintfA を
     # snprintf へ置き換え、残っていた windows.h 専用 API 依存を除去。
+    "SboSvr/src/MgrData.cpp",
+    "SboSvr/src/Web/Handlers/ServerInfoHandler.cpp",
+    "SboSvr/src/MainFrame/MainFrameRecvProcADMIN.cpp",
+    "SboSvr/src/MainFrame/MainFrameRecvProcCONNECT.cpp"
+    # MgrData.cpp: ログファイルパス組み立てを GetModuleFileName から
+    # SboPlatform::GetExeDirectory() へ置き換え。
+    # ServerInfoHandler.cpp: GetSystemTime(SYSTEMTIME) を
+    # SboPlatform::GetSystemTime(LOCALTIME) へ置き換え(出力書式は不変)。
+    # MainFrameRecvProcADMIN.cpp / MainFrameRecvProcCONNECT.cpp: IN_ADDR.S_un
+    # (Windows固有のメンバ名)をやめ、DWORD を ntohl() してビットシフトで
+    # オクテットを取り出す形に置き換え。
 )
 
 # 移植済みとして扱うヘッダ

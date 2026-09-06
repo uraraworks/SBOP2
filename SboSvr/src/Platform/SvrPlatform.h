@@ -38,6 +38,12 @@ namespace SboPlatform
 	/// GetLocalTime() の置き換え。
 	void	GetLocalTime(LOCALTIME *pOut);
 
+	/// UTC時刻を取得する
+	///
+	/// GetSystemTime() の置き換え。LOCALTIME 構造体を流用するが、
+	/// 中身はタイムゾーン変換前の UTC 値になる。
+	void	GetSystemTime(LOCALTIME *pOut);
+
 	/// 実行ファイルが置かれているディレクトリを返す
 	///
 	/// GetModuleFileName() + パス切り出しの置き換え。
