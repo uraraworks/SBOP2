@@ -415,6 +415,13 @@ include しておらず（`BrowserCompat.h` が先に `<vector>` 等を取り込
 - **一括置換は自分自身も書き換える。** `OutputDebugStringA` の置換で
   `SvrPlatform.cpp` の実装まで置き換わり、`WriteDebugLine` が自分を呼ぶ
   無限再帰になった。
+- **重複実装は移植で初めて見つかることがある。** `WebSocketBridge.cpp` が
+  `WebSocketProtocol.cpp` と同じ SHA-1/Base64 を持っていた。片方だけ直すと
+  「移植したのに通らない」で混乱する。同じ Windows API が複数ファイルに
+  出てきたら、まず重複を疑うこと。
+- **エラーは1つ潰すと次が出てくる。** 棚卸しは `-ferror-limit=1` で「最初の
+  エラー」しか見ていないため、1件直すと同じファイルで別の依存が顔を出す。
+  残数の減り方が鈍っても異常ではない。
 - **`CmySection` は再帰可能でなければならない。** `CRITICAL_SECTION` は
   同一スレッドから何度でも入れる仕様で、`CLibInfoBase` が継承している。
   素の `std::mutex` にすると自己デッドロックする。
@@ -423,23 +430,39 @@ include しておらず（`BrowserCompat.h` が先に `<vector>` 等を取り込
 - **include の相対パスがずれていても vcxproj のインクルードディレクトリで
   偶然通る。** 正しい相対パスに直すこと。
 
-### 残っているもの（2026-09-06 時点）
+### 残っているもの（2026-09-06 時点・後半更新）
 
-全 .cpp 317本のうち **300本が em++ で通る**ようになった（`tools/scan-sbosvr-portability.ps1` による棚卸し）。
-残り17本は以下。
+全 .cpp 317本のうち **308本が em++ で通る**ようになった（着手時は285本）。
+移植チェック `tools/test-sbosvr-portability.ps1` への登録は30件、
+テストは60本。残り9本は以下。
 
-| ファイル | 残っている依存 |
-|---|---|
-| `Common\Lib\LayoutHelper.cpp` | `GetClientRect`（GDI） |
-| `Common\Lib\mfc\LogViewCtrl.h` | MFC |
-| `Common\SBOGlobal.cpp` / `SboSvr\src\MgrData.cpp` | `GetModuleFileName` |
-| `SboSvr\src\MainFrame\MainFrameRecvProcADMIN.cpp` / `MainFrameRecvProcCONNECT.cpp` | `in_addr` の `S_un` |
-| `SboSvr\src\PasswordHash.cpp` | `bcrypt.h` |
-| `SboSvr\src\SboSvr.cpp` | `__argc` / `__argv` |
-| `SboSvr\src\Web\AdminWsHub.cpp` / `HttpServer.cpp` / `WebSocketBridge.cpp` | `process.h`（`_beginthreadex`） |
-| `SboSvr\src\Web\GrpImageStore.cpp` / `SessionStore.h` / `Handlers\MapPartsHandler.h` / `Handlers\SpriteSheetHandler.h` | `windows.h` |
-| `SboSvr\src\Web\HttpServer.h` | `WSADATA` |
-| `SboSvr\src\Web\Handlers\ServerInfoHandler.cpp` | `GetSystemTime` |
+| ファイル | 残っている依存 | 扱い |
+|---|---|---|
+| `Common\Lib\LayoutHelper.cpp` | `GetClientRect`（GDI） | 意図的に Windows 専用のまま。ウィンドウ表示用 |
+| `Common\Lib\mfc\LogViewCtrl.h` | MFC | 同上 |
+| `SboSvr\src\MainFrame\MainFrame.cpp` | `CreateFont` 等（GDI） | 同上。非Windows ビルドでは丸ごと `#ifdef` で落とす想定 |
+| `Common\SBOGlobal.cpp` | `GetModuleFileName` | SboCli と共有のファイルで `SboPlatform` を呼べない。別途方針が要る |
+| `SboSvr\src\PasswordHash.cpp` | `bcrypt.h`（CNG） | 規格準拠のテストベクタがあるので置換先を選ぶだけ |
+| `SboSvr\src\Web\SessionStore.cpp` | `wincrypt.h` | セッショントークンの乱数生成。暗号論的に安全な乱数が要るので慎重に |
+| `SboSvr\src\SboSvr.cpp` | `__argc` / `__argv` | エントリポイントの設計。`main()` 化とセット |
+| `SboSvr\src\Web\Handlers\MapPartsHandler.cpp` / `SpriteSheetHandler.cpp` | `LoadLibrary` / `FreeLibrary` | `SboGrpData.dll` からの画像リソース読み込み。設計判断が要る（画像の実体は res/ の PNG で DLL は実質フォールバック） |
+
+**これで当初の「本丸」だった Web 層のスレッド（`_beginthreadex` 7箇所 + `HANDLE` のイベント）は
+全て片付いた。** 確立したパターンは次項を参照。
+
+### スレッド移植で確立したパターン（2026-09-06 後半）
+
+Web層の `_beginthreadex` / `HANDLE` を `std::thread` へ移す作業を通じて確立した対応表。
+次にスレッドを移植する人はここを見ればよい。
+
+| Windows API | 置き換え先 | 備考 |
+|---|---|---|
+| `HANDLE m_hStopEvent`（手動リセット） | `std::atomic<bool>` | 既存コードの `WaitForSingleObject(m_hStopEvent, 0) == WAIT_TIMEOUT` は0秒待ち＝単なるフラグ確認なので意味が完全に一致する。ここが素直に移せたのは幸運だった |
+| `HANDLE m_hStartedEvent` + `WaitForSingleObject(.., 5000)` | `std::promise<bool>` / `future.wait_for(5s)` | 起動完了通知 |
+| `WaitForSingleObject(h, 0) == WAIT_OBJECT_0`（非ブロッキングの完了判定） | `future.wait_for(0s) == ready` | `HttpServer::PruneClientThreadsLocked` で使用 |
+| `_beginthreadex` のスレッド + タイムアウト付き終了待ち | `std::thread` + `std::promise<void>` | **`std::thread` にはタイムアウト付き join が無い。唯一1:1対応できない箇所。** スレッド終了時に `set_value()` する `promise<void>` を持たせ、`future.wait_for(5000ms)` で待ち、間に合えば `join()`、タイムアウトなら `detach()`（従来の `WaitForSingleObject` タイムアウト後＝追跡放棄と同じ結末） |
+| `WaitForMultipleObjects(..., TRUE, timeout)` | 締切時刻ベースのループ | **素直にループへ直すと待ち時間が本数倍になる。** 締切時刻を先に決めて「締切までの残り時間」を各待ちに渡すこと。HttpServer は最大32本なので放置すると最悪32倍になっていた |
+| `WSAStartup` / `WSACleanup` | `SboPlatform::SocketStartup()` / `SocketCleanup()` | 参照カウント方式なので複数箇所から呼んでも安全 |
 
 ### 移植方針の切り分け：「#ifdef を外す」ではなく「Windows専用APIの呼び出し箇所」を減らす
 
@@ -460,19 +483,26 @@ include しておらず（`BrowserCompat.h` が先に `<vector>` 等を取り込
 - **`.cpp` には `#ifdef` を書かない**という規律は維持する。分岐が避けられない場合は
   `SvrPlatform.cpp` の中だけに閉じ込める。
 
-### 次にやること
+### 次にやること（2026-09-06 後半更新）
 
-本丸は Web層のスレッド（`_beginthreadex` 7箇所 + `HANDLE` のイベント）を
-`std::thread` / `std::condition_variable` へ置き換えること。ここだけは並行性の
-設計変更になるので慎重に扱う。残りの `windows.h` include はその副産物として
-外れる見込み。
+Web層のスレッド移植が完了したので、残る9本は以下の優先順で片付ける。
 
-それ以外の小物（`__argc`、`S_un`、`GetSystemTime`、`GetModuleFileName`）は
-先に片付けてよい。機械的な置き換えで判断が要らない。
+1. **暗号まわり2本**（`PasswordHash` の CNG と `SessionStore` の `CryptGenRandom`）。
+   性質が近いのでまとめて扱うのが自然。`PasswordHash` は上記「パスワードハッシュは
+   『総当たり』が要らないと分かった」節のとおり公開テストベクタで固定済みなので、
+   置換先（OpenSSL / mbedTLS / 自前実装）を選ぶだけ。`SessionStore` はセッション
+   トークンの生成に**暗号論的に安全な乱数**が要る点に注意（`std::random_device` は
+   実装によっては保証が無いので、プラットフォーム関数として `SvrPlatform` に
+   置くのが安全）。
+2. **`SboSvr.cpp` の `__argc` / `__argv`**。`WinMain` は既に `SboSvrMain()` へ薄く
+   委譲する形になっているので、`main()` からも呼べるようにするだけ。
+3. **画像ハンドラ2本の `LoadLibrary`**（`MapPartsHandler` / `SpriteSheetHandler`）。
+   DLL依存を残すか、res/ の PNG 直読みへ寄せるかの設計判断が先。
+4. **`Common/SBOGlobal.cpp`**。SboCli と共有のため、共有のプラットフォーム層を
+   どこに置くかの方針決めが要る。
 
-`PasswordHash` は規格準拠のテストベクタがあるので（上記「パスワードハッシュは
-『総当たり』が要らないと分かった」節参照）、置換先（OpenSSL / mbedTLS / 自前実装）を
-選ぶだけ。
+GDI/MFC 依存の3本（`LayoutHelper.cpp` / `LogViewCtrl.h` / `MainFrame.cpp`）は
+意図的に Windows 専用のまま残す。非Windows ビルドでは丸ごと `#ifdef` で落とす想定。
 
 ## 作業ログ
 
@@ -636,3 +666,19 @@ UI 依存が無いため、そのまま残している。ヘッドレス時は�
   故障注入で赤くなることを確認済み。
 - ユーザーから方針の指摘（「`#ifdef` を外す方が脱Windowsでは」）を受け、
   上記「移植方針の切り分け」節の整理で合意した。
+- **後半: 本丸だった Web層のスレッドを一気に片付けた。** コミット順は以下。
+
+  | コミット | 内容 |
+  |---|---|
+  | `78e68bd` | AdminWsHub の recv ループスレッドを `std::thread` へ |
+  | `d45ae87` | WebSocketBridge のメイン/セッションスレッドを `std::thread` へ。`SboPlatform::SocketStartup()/SocketCleanup()` を新設して `WSAStartup` を追い出した |
+  | `9591b5d` | WebSocketBridge に重複していた SHA-1/Base64/ComputeAcceptKey を削除し WebSocketProtocol へ統合（105行削除、`wincrypt.h` と `advapi32.lib` 依存も解消） |
+  | `b98cd47` | HttpServer のメイン/クライアントスレッドを `std::thread` へ |
+  | `26f7f86` | Web層の細かい依存を除去（`GetModuleFileNameA`→`GetExeDirectory`、`wsprintfA`→`snprintf`、型のためだけの `windows.h` 削除） |
+  | `80ab8fb` | `WSAETIMEDOUT` 補完、`GetSystemTime` の UTC 版を SvrPlatform へ新設、`in_addr.S_un` を `ntohl`+シフトへ、MgrData の `GetModuleFileName` を `GetExeDirectory` へ |
+
+  これで当初の「本丸」だった `_beginthreadex` 7箇所 + `HANDLE` のイベントは全て
+  `std::thread` 系へ移り、全 .cpp 317本中 **308本**が em++ で通るようになった
+  （着手時は285本）。移植中に確立したスレッド移植パターンは上記「スレッド移植で
+  確立したパターン」節にまとめた。残り9本と次の優先順は「残っているもの」
+  「次にやること」の両節を参照。
