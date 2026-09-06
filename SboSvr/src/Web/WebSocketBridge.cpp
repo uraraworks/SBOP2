@@ -7,11 +7,10 @@
 #include <cstdlib>
 #include <chrono>
 #include <system_error>
-#include <wincrypt.h>
-#pragma comment(lib, "advapi32.lib")
 
 #include "crc.h" // CCRC: pre-check ハンドシェイクのCRC計算用
 #include "../Platform/SvrPlatform.h"
+#include "WebSocketProtocol.h"
 
 // ============================================================
 //  WebSocket オペコード定数
@@ -25,72 +24,11 @@ const int WS_OPCODE_CLOSE        = 0x8; ///< 接続クローズ
 const int WS_OPCODE_PING         = 0x9; ///< Ping
 const int WS_OPCODE_PONG         = 0xA; ///< Pong
 
-/// WebSocketハンドシェイクで使うGUID（RFC 6455）
-const char *kWsGuid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-
 /// PACKETINFO ヘッダサイズ（dwSize 4byte + dwCRC 4byte）
 const DWORD kPacketInfoSize = 8;
 
 /// セッションスレッドの受信タイムアウト（ミリ秒）
 const DWORD kSessionTimeoutMs = 30000;
-
-// ============================================================
-//  SHA-1 自前実装（RFC 3174）
-// ============================================================
-
-/// @brief 32bit左回転
-inline unsigned int RotLeft32(unsigned int val, int bits)
-{
-    return (val << bits) | (val >> (32 - bits));
-}
-
-/// @brief SHA-1ハッシュを計算する
-void Sha1Internal(const unsigned char *pData, size_t nLength, unsigned char hash[20])
-{
-    HCRYPTPROV hProv = 0;
-    HCRYPTHASH hHash = 0;
-    DWORD dwHashLen = 20;
-
-    ZeroMemory(hash, 20);
-    if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
-        return;
-    }
-    if (!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash)) {
-        CryptReleaseContext(hProv, 0);
-        return;
-    }
-    CryptHashData(hHash, pData, (DWORD)nLength, 0);
-    CryptGetHashParam(hHash, HP_HASHVAL, hash, &dwHashLen, 0);
-    CryptDestroyHash(hHash);
-    CryptReleaseContext(hProv, 0);
-}
-
-// ============================================================
-//  Base64 自前実装
-// ============================================================
-
-std::string Base64EncodeInternal(const unsigned char *pData, size_t nLength)
-{
-    static const char kTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    std::string result;
-    result.reserve(((nLength + 2) / 3) * 4);
-
-    for (size_t i = 0; i < nLength; i += 3) {
-        unsigned int val = static_cast<unsigned int>(pData[i]) << 16;
-        if (i + 1 < nLength) {
-            val |= static_cast<unsigned int>(pData[i + 1]) << 8;
-        }
-        if (i + 2 < nLength) {
-            val |= static_cast<unsigned int>(pData[i + 2]);
-        }
-
-        result += kTable[(val >> 18) & 0x3F];
-        result += kTable[(val >> 12) & 0x3F];
-        result += (i + 1 < nLength) ? kTable[(val >> 6) & 0x3F] : '=';
-        result += (i + 2 < nLength) ? kTable[ val       & 0x3F] : '=';
-    }
-    return result;
-}
 
 } // anonymous namespace
 
@@ -468,8 +406,8 @@ bool CWebSocketBridge::PerformHandshake(SOCKET hClient)
         clientKey.resize(clientKey.size() - 1);
     }
 
-    // Sec-WebSocket-Accept キーを計算
-    std::string acceptKey = ComputeAcceptKey(clientKey);
+    // Sec-WebSocket-Accept キーを計算（WebSocketProtocol の共通実装を利用）
+    std::string acceptKey = WebSocketProtocol::ComputeAcceptKey(clientKey);
 
     // 101 Switching Protocols レスポンスを返す
     std::string response =
@@ -480,21 +418,6 @@ bool CWebSocketBridge::PerformHandshake(SOCKET hClient)
         "\r\n";
 
     return SendAll(hClient, response.c_str(), response.size());
-}
-
-std::string CWebSocketBridge::ComputeAcceptKey(const std::string &clientKey)
-{
-    // クライアントキー + GUID を連結してSHA-1ハッシュを計算
-    std::string combined = clientKey + kWsGuid;
-
-    unsigned char hash[20];
-    Sha1Internal(
-        reinterpret_cast<const unsigned char *>(combined.c_str()),
-        combined.size(),
-        hash);
-
-    // Base64エンコードして返す
-    return Base64EncodeInternal(hash, 20);
 }
 
 // ============================================================
@@ -772,18 +695,4 @@ bool CWebSocketBridge::RecvAll(SOCKET hSocket, unsigned char *pBuf, size_t nLeng
         nTotalRecv += static_cast<size_t>(nRecv);
     }
     return true;
-}
-
-// ============================================================
-//  CWebSocketBridge のラッパーメソッド（ヘッダとの対応）
-// ============================================================
-
-void CWebSocketBridge::Sha1(const unsigned char *pData, size_t nLength, unsigned char hash[20])
-{
-    Sha1Internal(pData, nLength, hash);
-}
-
-std::string CWebSocketBridge::Base64Encode(const unsigned char *pData, size_t nLength)
-{
-    return Base64EncodeInternal(pData, nLength);
 }

@@ -48,9 +48,6 @@ private:
     /// @brief WebSocketハンドシェイクを行う
     bool PerformHandshake(SOCKET hClient);
 
-    /// @brief Sec-WebSocket-AcceptキーをSHA-1+Base64で計算する
-    static std::string ComputeAcceptKey(const std::string &clientKey);
-
     // WebSocketフレーム処理 -------------------------------------------
 
     /// @brief WebSocketフレームを1フレーム読み込む
@@ -74,14 +71,6 @@ private:
 
     /// @brief 指定バイト数を確実に受信する
     static bool RecvAll(SOCKET hSocket, unsigned char *pBuf, size_t nLength);
-
-    // SHA-1・Base64 自前実装 -------------------------------------------
-
-    /// @brief SHA-1ハッシュを計算する（RFC 3174準拠）
-    static void Sha1(const unsigned char *pData, size_t nLength, unsigned char hash[20]);
-
-    /// @brief バイナリデータをBase64エンコードする
-    static std::string Base64Encode(const unsigned char *pData, size_t nLength);
 
 private:
     SOCKET             m_hListen;     ///< リッスンソケット
