@@ -436,4 +436,60 @@ namespace SboPlatform
 		}
 #endif
 	}
+
+	bool	GmTimeUtc(std::time_t t, GMTIME *pOut)
+	{
+		if (pOut == NULL) {
+			return false;
+		}
+		std::memset(pOut, 0, sizeof(*pOut));
+
+		std::tm tmUtc;
+		std::memset(&tmUtc, 0, sizeof(tmUtc));
+#ifdef _WIN32
+		if (gmtime_s(&tmUtc, &t) != 0) {
+			return false;
+		}
+#else
+		if (gmtime_r(&t, &tmUtc) == NULL) {
+			return false;
+		}
+#endif
+		pOut->nYear    = tmUtc.tm_year + 1900;
+		pOut->nMonth   = tmUtc.tm_mon + 1;
+		pOut->nDay     = tmUtc.tm_mday;
+		pOut->nHour    = tmUtc.tm_hour;
+		pOut->nMinute  = tmUtc.tm_min;
+		pOut->nSecond  = tmUtc.tm_sec;
+		pOut->nWeekDay = tmUtc.tm_wday;
+		return true;
+	}
+
+	bool	TimeGmUtc(const GMTIME &in, std::time_t *pOut)
+	{
+		if (pOut == NULL) {
+			return false;
+		}
+
+		std::tm tmUtc;
+		std::memset(&tmUtc, 0, sizeof(tmUtc));
+		tmUtc.tm_year  = in.nYear - 1900;
+		tmUtc.tm_mon   = in.nMonth - 1;
+		tmUtc.tm_mday  = in.nDay;
+		tmUtc.tm_hour  = in.nHour;
+		tmUtc.tm_min   = in.nMinute;
+		tmUtc.tm_sec   = in.nSecond;
+		tmUtc.tm_isdst = 0;
+
+#ifdef _WIN32
+		std::time_t t = _mkgmtime(&tmUtc);
+#else
+		std::time_t t = timegm(&tmUtc);
+#endif
+		if (t == (std::time_t)-1) {
+			return false;
+		}
+		*pOut = t;
+		return true;
+	}
 }

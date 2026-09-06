@@ -1,10 +1,7 @@
 #pragma once
 
+#include <ctime>
 #include <string>
-
-#if defined(_WIN32)
-#include <windows.h>
-#endif
 
 #include "Web/ApiHandler.h"
 
@@ -12,7 +9,7 @@
 struct FileMetaInfo
 {
         unsigned long long  fileSize;   // バイト数
-        FILETIME            mtime;      // 最終更新時刻（UTC）
+        std::time_t         mtime;      // 最終更新時刻（UTC、秒単位）
         bool                valid;      // 取得成功フラグ
 };
 
@@ -22,6 +19,12 @@ public:
         CStaticFileHandler(const std::wstring &rootDirectory, const std::wstring &defaultDocument, const std::string &mountPath);
 
         virtual void Handle(const HttpRequest &request, HttpResponse &response);
+
+        // ETag/Last-Modified の生成・パース。往復一致がキャッシュ(304判定)の
+        // 前提になるため、テスト(SboSvrTest)から直接検証できるよう公開する。
+        static std::string BuildETag(const FileMetaInfo &meta);
+        static std::string BuildLastModified(const FileMetaInfo &meta);
+        static bool     ParseHttpDate(const std::string &httpDate, std::time_t &outTime);
 
 private:
         bool            BuildFilePath(const std::string &requestPath, std::wstring &outPath, std::string &outRelativePath) const;
@@ -33,9 +36,6 @@ private:
         static std::string NormalizeRequestPath(const std::string &path);
         static bool     ContainsParentReference(const std::string &path);
         static std::string ToUtf8(const std::wstring &text);
-        static std::string BuildETag(const FileMetaInfo &meta);
-        static std::string BuildLastModified(const FileMetaInfo &meta);
-        static bool     ParseHttpDate(const std::string &httpDate, FILETIME &outFt);
 
         std::wstring    m_rootDirectory;
         std::wstring    m_defaultDocument;

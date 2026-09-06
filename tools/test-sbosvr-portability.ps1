@@ -30,10 +30,12 @@ $PortableFiles = @(
     "Common/Lib/TextOutput.cpp",
     "SboSvr/src/LibInfo/LibInfoCharSvr.cpp",
     "SboSvr/src/SaveLoad/SaveLoadInfoBase.cpp",
-    "SboSvr/src/MainFrame/MainFrameRecvProcVERSION.cpp"
+    "SboSvr/src/MainFrame/MainFrameRecvProcVERSION.cpp",
+    "SboSvr/src/Web/WebSocketProtocol.cpp",
+    "SboSvr/src/Web/Handlers/StaticFileHandler.cpp"
     # WebSocketProtocol.cpp: SHA-1 は自前実装化済みで依存ゼロ。
-    # ただし RecvAll/SendAll が使う WSAEINTR が SvrCompat.h 未定義のため、
-    # ここに載せるのは見送り(詳細はコミットログ参照)。
+    # RecvAll/SendAll が使う WSAEINTR は SvrCompat.h に追加済み(WSAEWOULDBLOCK
+    # の隣)なので、ここへ載せられるようになった。
 )
 
 # 移植済みとして扱うヘッダ

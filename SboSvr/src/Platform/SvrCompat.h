@@ -91,6 +91,9 @@ inline int WSAGetLastError(void)
 #ifndef WSAEWOULDBLOCK
 #define WSAEWOULDBLOCK EWOULDBLOCK
 #endif
+#ifndef WSAEINTR
+#define WSAEINTR EINTR
+#endif
 #ifndef SD_BOTH
 #define SD_BOTH SHUT_RDWR
 #endif

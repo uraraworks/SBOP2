@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <ctime>
 #include <string>
 
 namespace SboPlatform
@@ -108,4 +109,30 @@ namespace SboPlatform
 	/// OutputDebugStringA() の置き換え。
 	/// Windows ではデバッガへ、その他では stderr へ出す。
 	void	WriteDebugLine(const char *pszText);
+
+	/// UTC時刻の分解値
+	struct GMTIME {
+		int	nYear;		// 西暦
+		int	nMonth;		// 1〜12
+		int	nDay;		// 1〜31
+		int	nHour;		// 0〜23
+		int	nMinute;	// 0〜59
+		int	nSecond;	// 0〜59
+		int	nWeekDay;	// 0(日)〜6(土)
+	};
+
+	/// time_t(UTC) を分解値に変換する
+	///
+	/// gmtime() の置き換え(スレッド安全)。Windows は gmtime_s、
+	/// その他は gmtime_r を使う(分岐はこの関数の実装内だけに閉じる)。
+	///
+	/// @return 変換できれば true
+	bool	GmTimeUtc(std::time_t t, GMTIME *pOut);
+
+	/// UTC分解値を time_t へ変換する
+	///
+	/// timegm() の置き換え。Windows は timegm が無いため _mkgmtime を使う。
+	///
+	/// @return 変換できれば true
+	bool	TimeGmUtc(const GMTIME &in, std::time_t *pOut);
 }
