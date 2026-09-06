@@ -400,7 +400,6 @@ void CMgrData::ReadHashList(void)
 {
 	int i, nCount;
         char szFileName[MAX_PATH];
-        TCHAR szBasePath[MAX_PATH];
 	DWORD dwTmp;
 	CTextInput TextInput;
 	CParamUtil ParamUtil;
@@ -408,9 +407,10 @@ void CMgrData::ReadHashList(void)
 
 	m_pInfoFileList->DeleteAll();
 
-        GetModuleFilePath(szBasePath, _countof(szBasePath));
-        CStringA strBasePath = TStringToAnsi(szBasePath);
-        strcpy_s(szFileName, strBasePath);
+        // 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+        // (末尾に区切り文字を含む点は GetModuleFilePath と同じ)
+        std::string strBasePath = SboPlatform::GetExeDirectory();
+        strcpy_s(szFileName, strBasePath.c_str());
         strcat_s(szFileName, "Update\\SBOHashList.txt");
 
 	TextInput.Create(szFileName);

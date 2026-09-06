@@ -16,6 +16,7 @@
 #include "GetMD5File.h"
 #include "MgrData.h"
 #include "MainFrame.h"
+#include "Platform/SvrPlatform.h"
 
 void CMainFrame::RecvProcVERSION(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
@@ -47,7 +48,6 @@ void CMainFrame::RecvProcVERSION_REQ_VERSIONCHECK(PBYTE pData, DWORD dwSessionID
 void CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK(PBYTE pData, DWORD dwSessionID)
 {
         int nResult;
-        TCHAR szPath[MAX_PATH];
         char szHash[33];
 	CPacketVERSION_REQ_FILELISTCHECK Packet;
 	CPacketVERSION_RES_FILELISTCHECK PacketVERSION_RES_FILELISTCHECK;
@@ -57,8 +57,9 @@ void CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK(PBYTE pData, DWORD dwSessionI
 	Packet.Set(pData);
 
 	// ファイルリストのハッシュを取得
-        GetModuleFilePath(szPath, _countof(szPath));
-        CString strPath(szPath);
+	// 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+	// (末尾に区切り文字を含む点は GetModuleFilePath と同じ)
+        CString strPath = AnsiToTString(SboPlatform::GetExeDirectory().c_str());
         strTmp.Format(_T("%sSBOHashList.txt"), (LPCTSTR)strPath);
         GetMD5File.Init();
         GetMD5File.Update(strTmp);
@@ -86,7 +87,6 @@ void CMainFrame::RecvProcVERSION_REQ_FILELIST(PBYTE pData, DWORD dwSessionID)
 void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)
 {
 	BOOL bReuslt;
-        TCHAR szPath[MAX_PATH];
 	PBYTE pFileData;
 	LPCSTR pszTmp;
 	FILE *pFile;
@@ -98,8 +98,8 @@ void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)
 	pFileData = NULL;
 	Packet.Set(pData);
 
-        GetModuleFilePath(szPath, _countof(szPath));
-        CString strBasePath(szPath);
+        // 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+        CString strBasePath = AnsiToTString(SboPlatform::GetExeDirectory().c_str());
         strFileName.Format(_T("%sUpdate\\%s"), (LPCTSTR)strBasePath, (LPCTSTR)Packet.m_strFileName);
 	pszTmp = strstr((LPCSTR)strFileName, "..");
 	if (pszTmp) {
