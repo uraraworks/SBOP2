@@ -406,6 +406,7 @@ include しておらず（`BrowserCompat.h` が先に `<vector>` 等を取り込
 | 残る `CRITICAL_SECTION` | `std::mutex`（TextOutput / select実装） |
 | 互換ヘッダの共有化 | `Common/Platform/` へ移動 |
 | **`SboSvr/StdAfx.h` の条件化** | `SboSvr/src/Platform/SvrCompat.h` |
+| サーバーのパス取得3箇所 | `GetModuleFilePath()` → `SboPlatform::GetExeDirectory()`（`5ef24a0`） |
 
 `StdAfx.h` が非Windows で通るようになったのが大きい。**これ以前はサーバーの
 ソースを1つも em++ でコンパイルできず、移植を検証する手段が無かった。**
@@ -442,8 +443,8 @@ include しておらず（`BrowserCompat.h` が先に `<vector>` 等を取り込
 | `Common\Lib\LayoutHelper.cpp` | `GetClientRect`（GDI） | **意図的に Windows 専用のまま**。ウィンドウ表示用 |
 | `Common\Lib\mfc\LogViewCtrl.h` | MFC | 同上 |
 | `SboSvr\src\MainFrame\MainFrame.cpp` | `CreateFont` 等（GDI） | 同上。非Windows ビルドでは丸ごと `#ifdef` で落とす想定 |
-| `Common\SBOGlobal.cpp` | `GetModuleFileName` | SboCli と共有のファイルで `SboPlatform` を呼べない。**方針決めが要る** |
-| `SboSvr\src\Web\Handlers\MapPartsHandler.cpp` / `SpriteSheetHandler.cpp` | `LoadLibrary` / `FreeLibrary` | `SboGrpData.dll` からの画像リソース読み込み。**設計判断が要る**（画像の実体は res/ の PNG で DLL は実質フォールバック） |
+| `Common\SBOGlobal.cpp` | `GetModuleFileName` | サーバー側の利用者は `5ef24a0` でゼロになった。ファイル自体は SboCli とも共有のためまだ残る。**S2 で `Common/Platform/` へ移す方針決めが要る**（後述） |
+| `SboSvr\src\Web\Handlers\MapPartsHandler.cpp` / `SpriteSheetHandler.cpp` | `LoadLibrary` / `FreeLibrary` | `SboGrpData.dll` からの画像リソース読み込み。**master 側の画像エディタ対応が一段落するまで保留**（2026-09-06 判断、後述） |
 
 **残っているのは「意図的に残す3本」と「設計判断が要る3本」だけになった。
 機械的に片付く分は無くなった。**
@@ -484,17 +485,66 @@ Web層の `_beginthreadex` / `HANDLE` を `std::thread` へ移す作業を通じ
 - **`.cpp` には `#ifdef` を書かない**という規律は維持する。分岐が避けられない場合は
   `SvrPlatform.cpp` の中だけに閉じ込める。
 
+### サーバー側のパス取得を集約（2026-09-06 続報・`5ef24a0`）
+
+サーバー内でパス取得に `Common/SBOGlobal.cpp` の `GetModuleFilePath()` を
+呼んでいた3箇所を `SboPlatform::GetExeDirectory()` へ置き換えた。
+
+**これで `Common/SBOGlobal.cpp` のパス関数（`GetModuleFilePath()` /
+`GetModuleIniPath()`）を呼ぶサーバー側のコードはゼロになった。**
+残る呼び出しは SboCli 側の5箇所のみ。
+
+検証は実プロトコルで行った。PowerShell で SBO プロトコル（プリチェックの
+チャレンジ応答＋CRC32 フレーミング）を喋るクライアントを書き、以下3経路を確認した。
+
+- `REQ_FILELISTCHECK` … 空文字列の MD5 を送って NG が返る＝実ファイルを読めている
+- `REQ_FILE` … `SBOHashList.txt` の先頭40バイトを要求し、ディスク上の実ファイルと
+  バイト完全一致
+- `REQ_FILELIST` … zlib 展開後の件数19件が実ファイルの行数19件と一致
+
+**パスの組み立てを変える変更は「ログに出して目視」で済ませず、実際に
+ファイルの中身が返ることまで見ること。**
+
+### `Common/SBOGlobal.cpp` をどう扱うか（2026-09-06 続報）
+
+`GetModuleFilePath()` / `GetModuleIniPath()` は `GetModuleFileName` + shlwapi に
+依存していて非Windows で通らない。調べた結果、**SHA-1 のときと同じ「重複実装」の
+構図**だった。
+
+- `SboPlatform::GetExeDirectory()` / `GetIniFilePath()` が**まったく同じ仕事**を
+  しており、そちらは移植済み。
+- クライアントのブラウザ版では `GetModuleFileName` が**ダミーパス
+  （`./sbocli.html`）を返すスタブ**で満たされている。つまり Web 版では元々
+  戻り値が本物ではない。
+
+**厄介なのは `SBOGlobal.cpp` がサーバーのプロジェクトにも入っている点。**
+サーバーが2関数を使わなくなっても、ファイル自体はコンパイルされるので、
+非Windows ビルドに到達するには結局どこかで手を入れる必要がある。段階を分けた。
+
+- **S1（完了 `5ef24a0`）** … サーバー側の利用者を減らす。SboSvr 内で完結し
+  SboCli に触らないので安全。共有層へ移すときに **SboSvr 側の利用者がゼロ**に
+  なっていて移動が安全になる、という下準備でもある。
+- **S2（未着手）** … `Common/Platform/` に実体を1つ置き、SboSvr と SboCli の
+  両方を乗せ替える。互換ヘッダを共有化した `4b66d35` / `5bab3b8` と同じ流れ。
+  **SboCli のネイティブ＋ブラウザ両方のビルド検証が要る**ので、作業が SboSvr の
+  外へ広がる。ブラウザ版のダミーパス分岐も共有実装の中へ集約できる。
+
+### 画像ハンドラの `LoadLibrary` は保留（2026-09-06 判断）
+
+`MapPartsHandler.cpp` / `SpriteSheetHandler.cpp` の `LoadLibrary` /
+`FreeLibrary` は、**master 側で並行して進んでいる管理画面の画像エディタ対応と
+領域が重なるため、あちらが一段落するまで着手しない**。DLL 依存を残すか
+res/ の PNG 直読みへ寄せるかは、あちらの結論と揃えるのが自然。
+
 ### 次にやること（2026-09-06 続報更新）
 
-暗号2本とエントリポイントが片付き、機械的に片付く分は無くなった。
-残る3本は設計判断を先に決める必要がある。
+暗号2本・エントリポイント・サーバー側パス取得3箇所が片付き、機械的に
+片付く分は無くなった。残る2件は他作業の結論待ちで、その次にリンク検証が来る。
 
-1. **画像ハンドラ2本の `LoadLibrary`**（`MapPartsHandler` / `SpriteSheetHandler`）。
-   DLL依存を残すか res/ の PNG 直読みへ寄せるかの設計判断が先。画像の実体は
-   res/ の PNG で DLL は実質フォールバック、という既存の整理がある。
-2. **`Common/SBOGlobal.cpp`**。SboCli と共有のため、共有プラットフォーム層を
-   どこに置くかの方針決めが要る。SboCli 側には別の互換レイヤがあり、両者の
-   関係を整理する必要がある。
+1. **S2: `Common/Platform/` への共有**（`Common/SBOGlobal.cpp`）。SboCli を
+   巻き込むので、master 側の作業と足並みを見てから着手する。
+2. **画像ハンドラ2本の `LoadLibrary`**（`MapPartsHandler` / `SpriteSheetHandler`）。
+   master 側の画像エディタ対応の結論待ち。
 3. 上記2つが片付けば、あとは Windows 専用として残す3本
    （`LayoutHelper.cpp` / `LogViewCtrl.h` / `MainFrame.cpp`）を `#ifdef` で
    括るだけで**非Windows ビルドの実際のリンクに挑戦できる段階**になる。
@@ -735,3 +785,14 @@ UI 依存が無いため、そのまま残している。ヘッドレス時は�
 
   残る6本（意図的に残す3本 + 設計判断が要る3本）は「残っているもの」
   「次にやること」の両節を参照。
+
+- **続報2: サーバーのパス取得3箇所を `SboPlatform::GetExeDirectory()` へ集約**
+  （`5ef24a0`）。これでサーバー側で `Common/SBOGlobal.cpp` のパス関数を呼ぶ
+  コードはゼロになった（残るは SboCli 側の5箇所のみ）。実プロトコルクライアント
+  （PowerShell）で `REQ_FILELISTCHECK` / `REQ_FILE` / `REQ_FILELIST` の3経路を
+  叩き、実ファイルの中身が正しく返ることまで確認した。
+  `Common/SBOGlobal.cpp` 自体の扱いは S1（今回完了）/ S2（`Common/Platform/`
+  への共有、未着手）に段階分けした。画像ハンドラの `LoadLibrary` は master 側の
+  画像エディタ対応と領域が重なるため保留と判断。詳細は「サーバー側のパス取得を
+  集約」「`Common/SBOGlobal.cpp` をどう扱うか」「画像ハンドラの `LoadLibrary` は
+  保留」の各節を参照。
