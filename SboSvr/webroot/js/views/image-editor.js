@@ -172,6 +172,42 @@ async function validateUploadFile(file, expectedWidth, expectedHeight) {
 }
 
 // ----------------------------------------------------------------
+// 破壊的な操作の確認
+//
+// confirm() は使わない。編集ペインを別ウィンドウへポップアップしていると、
+// ダイアログはスクリプトの所属する「元のウィンドウ」に出るため、背後に隠れて
+// 見えず「押しても何も起きない」状態になる。
+// 代わりに 1 回目のクリックで文言を変えて確認し、2 回目で実行する。
+// ----------------------------------------------------------------
+
+function armConfirmButton(button, { armedLabel, timeoutMs = 4000, onConfirm }) {
+  const normalLabel = button.textContent;
+  let armed = false;
+  let timer = null;
+
+  const disarm = () => {
+    armed = false;
+    button.textContent = normalLabel;
+    button.classList.remove("is-armed");
+    if (timer) { clearTimeout(timer); timer = null; }
+  };
+
+  button.addEventListener("click", () => {
+    if (!armed) {
+      armed = true;
+      button.textContent = armedLabel;
+      button.classList.add("is-armed");
+      timer = setTimeout(disarm, timeoutMs);
+      return;
+    }
+    disarm();
+    onConfirm();
+  });
+
+  return { disarm };
+}
+
+// ----------------------------------------------------------------
 // 左ペイン: カテゴリ一覧
 // ----------------------------------------------------------------
 
@@ -260,14 +296,29 @@ function buildCategoryList({ categories, onSelect }) {
 
   render();
 
-  return { el: ul, setOverriddenMark };
+  // 途中セーブを開く時など、外から対象を指定して選択させる
+  function selectByKey(key, index) {
+    const cat = categories.find((c) => c.key === key);
+    if (!cat) return false;
+    _selectedKey = key;
+    _selectedIndex = Number(index) || 0;
+    const li = Array.from(ul.querySelectorAll(".ld-list-item")).find((el) => el._catKey === key);
+    if (li?._sheetSelect) {
+      li._sheetSelect.value = String(_selectedIndex);
+    }
+    highlight();
+    onSelect(cat, _selectedIndex);
+    return true;
+  }
+
+  return { el: ul, setOverriddenMark, selectByKey };
 }
 
 // ----------------------------------------------------------------
 // 右ペイン: プレビュー + 詳細
 // ----------------------------------------------------------------
 
-function buildDetailPane({ onOverriddenChange, categories }) {
+function buildDetailPane({ onOverriddenChange, categories, onRequestTarget }) {
   const pane = document.createElement("div");
   pane.className = "ie-right";
 
@@ -337,9 +388,26 @@ function buildDetailPane({ onOverriddenChange, categories }) {
   previewImg.className = "ie-preview-img";
   const gridOverlay = document.createElement("div");
   gridOverlay.className = "ie-grid-overlay";
-  previewInner.append(previewImg, gridOverlay);
+  // ペイント対象セルを示す枠。プレビューのクリックで移動する。
+  const cellMarker = document.createElement("div");
+  cellMarker.className = "ie-cell-marker";
+  cellMarker.hidden = true;
+  previewInner.append(previewImg, gridOverlay, cellMarker);
   previewStage.appendChild(previewInner);
   previewSec.appendChild(previewStage);
+
+  // プレビュー上のクリック位置からセルを求めてペイント対象にする
+  previewInner.addEventListener("click", (e) => {
+    if (!_cat || !_naturalWidth || !_naturalHeight) return;
+    const cellSize = _cat.cellSize || 32;
+    const rect = previewInner.getBoundingClientRect();
+    const col = Math.floor((e.clientX - rect.left) / (cellSize * _scale));
+    const row = Math.floor((e.clientY - rect.top) / (cellSize * _scale));
+    const cols = Math.max(1, Math.round(_naturalWidth / cellSize));
+    const rows = Math.max(1, Math.round(_naturalHeight / cellSize));
+    if (col < 0 || row < 0 || col >= cols || row >= rows) return;
+    paint.selectCell(col, row);
+  });
 
   // ドラッグ&ドロップ受付
   previewStage.addEventListener("dragover", (e) => {
@@ -373,8 +441,30 @@ function buildDetailPane({ onOverriddenChange, categories }) {
     categories,
     onFeedback: (message, type) => showFeedback(feedback, message, type),
     onSaved: () => { void reload(); },
+    onCellChange: (col, row) => updateCellMarker(col, row),
+    // 途中セーブを開く時に、カテゴリ一覧の選択ごと切り替える
+    onRequestTarget: (catKey, sheetIndex) => onRequestTarget?.(catKey, sheetIndex),
   });
   pane.appendChild(paint.el);
+
+  // ペイント対象セルの枠をプレビュー上に重ねる。
+  // col が負なら「このシートはペイントできない」ので枠を隠す。
+  let _markerCol = -1;
+  let _markerRow = 0;
+
+  function updateCellMarker(col, row) {
+    if (col != null) { _markerCol = col; _markerRow = row; }
+    if (_markerCol < 0 || !_cat || !_naturalWidth || !_naturalHeight) {
+      cellMarker.hidden = true;
+      return;
+    }
+    const cellSize = _cat.cellSize || 32;
+    cellMarker.hidden = false;
+    cellMarker.style.left   = `${_markerCol * cellSize * _scale}px`;
+    cellMarker.style.top    = `${_markerRow * cellSize * _scale}px`;
+    cellMarker.style.width  = `${cellSize * _scale}px`;
+    cellMarker.style.height = `${cellSize * _scale}px`;
+  }
 
   function applyImageTransform() {
     if (!_naturalWidth || !_naturalHeight) return;
@@ -385,6 +475,7 @@ function buildDetailPane({ onOverriddenChange, categories }) {
     previewImg.style.width = `${w}px`;
     previewImg.style.height = `${h}px`;
     gridOverlay.style.backgroundSize = `${(_cat?.cellSize || 32) * _scale}px ${(_cat?.cellSize || 32) * _scale}px`;
+    updateCellMarker();
   }
 
   function applyGridVisibility() {
@@ -468,9 +559,8 @@ function buildDetailPane({ onOverriddenChange, categories }) {
   revertSec.appendChild(revertBtn);
   pane.appendChild(revertSec);
 
-  revertBtn.addEventListener("click", async () => {
+  const doRevertToShipped = async () => {
     if (!_cat) return;
-    if (!confirm("上書きと履歴がすべて削除されます。よろしいですか?")) return;
     try {
       const { response, data } = await fetchJson(
         `/api/assets/sprites/${encodeURIComponent(_cat.key)}/${_index}`,
@@ -486,6 +576,11 @@ function buildDetailPane({ onOverriddenChange, categories }) {
     } catch (e) {
       showFeedback(feedback, "通信に失敗しました: " + String(e?.message ?? e), "error");
     }
+  };
+
+  armConfirmButton(revertBtn, {
+    armedLabel: "本当に戻す?（上書きと履歴を全削除）",
+    onConfirm: () => { void doRevertToShipped(); },
   });
 
   async function handleFileSelected(file) {
@@ -551,8 +646,7 @@ function buildDetailPane({ onOverriddenChange, categories }) {
       revertBtnRow.type = "button";
       revertBtnRow.className = "button small";
       revertBtnRow.textContent = "この版に戻す";
-      revertBtnRow.addEventListener("click", async () => {
-        if (!confirm(`版 ${h.revision} に戻しますか?`)) return;
+      const doRevertToRevision = async () => {
         try {
           const { response, data } = await fetchJson(
             `/api/assets/sprites/${encodeURIComponent(_cat.key)}/${_index}/revert`,
@@ -575,6 +669,11 @@ function buildDetailPane({ onOverriddenChange, categories }) {
         } catch (e) {
           showFeedback(feedback, "通信に失敗しました: " + String(e?.message ?? e), "error");
         }
+      };
+
+      armConfirmButton(revertBtnRow, {
+        armedLabel: `本当に版 ${h.revision} へ?`,
+        onConfirm: () => { void doRevertToRevision(); },
       });
       tdOp.appendChild(revertBtnRow);
       tr.append(tdRev, tdDate, tdUser, tdSize, tdOp);
@@ -586,7 +685,9 @@ function buildDetailPane({ onOverriddenChange, categories }) {
 
   async function reload() {
     if (!_cat) return;
-    showFeedback(feedback, "", null);
+    // ここではフィードバックを消さない。保存・復元の直後にも reload() が走るため、
+    // 消すと「保存しました」等の結果表示が出た直後に消えてしまう。
+    // 表示のクリアは対象を切り替える setTarget() 側で行う。
 
     // 差し替え/復元の直後も呼ばれるため、合成プレビューの画像キャッシュを捨ててから貼り直す
     composer.invalidate({ redraw: false });
@@ -641,6 +742,7 @@ function buildDetailPane({ onOverriddenChange, categories }) {
     _index = index;
     _naturalWidth = 0;
     _naturalHeight = 0;
+    showFeedback(feedback, "", null);
     // ペイントは未保存の変更があると切り替えを断ることがある（その時は自分で通知する）
     paint.setTarget(cat, index);
     reload();
@@ -648,7 +750,7 @@ function buildDetailPane({ onOverriddenChange, categories }) {
 
   applyGridVisibility();
 
-  return { el: pane, setTarget, destroy: () => composer.destroy() };
+  return { el: pane, setTarget, feedbackEl: feedback, destroy: () => composer.destroy() };
 }
 
 // ----------------------------------------------------------------
@@ -711,6 +813,12 @@ export function mount(container) {
             detail = buildDetailPane({
               onOverriddenChange: (key, idx, overridden) => listUi.setOverriddenMark(key, idx, overridden),
               categories,
+              // 途中セーブを開く時にカテゴリ一覧の選択ごと切り替える
+              onRequestTarget: (catKey, sheetIndex) => {
+                if (!listUi.selectByKey(catKey, sheetIndex)) {
+                  showFeedback(detail.feedbackEl, `カテゴリ ${catKey} が見つかりません`, "error");
+                }
+              },
             });
             detailPane.appendChild(detail.el);
           }

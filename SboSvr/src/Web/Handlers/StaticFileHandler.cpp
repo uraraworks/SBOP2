@@ -353,12 +353,19 @@ std::string CStaticFileHandler::DetermineCacheControl(const std::string &relativ
                 });
         }
 
-        // HTML は毎回 ETag 検証（即時反映）
-        if ((extension == ".html") || (extension == ".htm")) {
+        // HTML / スクリプト / スタイルは毎回 ETag 検証（即時反映）。
+        // 管理画面の JS・CSS は頻繁に直すので、max-age を効かせると
+        // 修正が最大 1 時間ブラウザに届かず「直したのに変わらない」を招く。
+        // no-cache でも中身が変わっていなければ 304 が返るだけなので実質無料。
+        // （ゲームクライアントの sbocli-title.js も 211KB 程度で、
+        //   45MB の本体は .data 側なのでキャッシュ効果は落ちない）
+        if ((extension == ".html") || (extension == ".htm") ||
+            (extension == ".js")   || (extension == ".mjs") ||
+            (extension == ".css")) {
                 return "no-cache";
         }
         // 大容量バイナリは 1 時間キャッシュ
-        if ((extension == ".wasm") || (extension == ".data") || (extension == ".js")) {
+        if ((extension == ".wasm") || (extension == ".data")) {
                 return "public, max-age=3600";
         }
         // その他も無難に 1 時間

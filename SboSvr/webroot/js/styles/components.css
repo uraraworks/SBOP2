@@ -2138,6 +2138,20 @@ main {
     linear-gradient(to bottom, rgba(255, 0, 128, 0.55) 1px, transparent 1px);
 }
 
+/* ペイント対象セルの枠。プレビュー上をクリックすると移動する */
+.ie-cell-marker {
+  position: absolute;
+  pointer-events: none;
+  box-sizing: border-box;
+  border: 2px solid var(--color-accent, #60a5fa);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6) inset, 0 0 6px rgba(96, 165, 250, 0.8);
+}
+
+/* クリックで選べることが分かるように */
+.ie-preview-inner {
+  cursor: pointer;
+}
+
 .ie-dim-info {
   margin: 0.6rem 0 0;
   font-size: 0.85rem;
@@ -2258,4 +2272,148 @@ main {
 .sp-dirty.is-dirty {
   color: var(--color-warning, #fde68a);
   font-weight: 600;
+}
+
+/* --- 途中セーブ --- */
+
+/* 2 段階クリックで確認中のボタン（confirm() の代わり） */
+.button.is-armed {
+  background: var(--color-danger, #dc2626);
+  color: #fff;
+  font-weight: 600;
+}
+
+.sp-draft-name {
+  min-width: 14rem;
+}
+
+/* 画面上部のフィードバックはスクロールすると見えないので、この節にも出す */
+.sp-draft-feedback {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  min-height: 1.2em;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.sp-draft-feedback.success {
+  color: var(--color-success, #86efac);
+}
+
+.sp-draft-feedback.error {
+  color: var(--color-danger, #fca5a5);
+}
+
+.sp-draft-current {
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.sp-draft-list {
+  margin-top: 0.5rem;
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
+.sp-draft-list tr.is-selected {
+  outline: 2px solid var(--color-accent, #60a5fa);
+  outline-offset: -2px;
+}
+
+.sp-draft-list td .button + .button {
+  margin-left: 0.35rem;
+}
+
+/* ================================================================
+   ワークスペース表示切り替え (core/workspace-layout.js)
+   ================================================================ */
+
+/* .app-layout は「280px の nav | 本体」の 2 カラムグリッドで、
+   .workspace-body が grid-column: 2 を明示している。タブバーを素の子として
+   足すと自動配置で nav と同じ行に入り、行の高さが縦に長い nav に合わせて
+   伸びてしまう（＝本体の上に巨大な空白ができる）。
+   nav を全行にまたがせ、タブバーを本体と同じ 2 カラム目の 1 行目に置く。 */
+.app-layout > .main-nav {
+  grid-row: 1 / -1;
+}
+
+/* 行を明示しないと、2 行にまたがる nav の高さが 1 行目にも配分されて
+   タブバーの行が nav と同じ高さまで伸びる。2 行目を可変(1fr)にしておくと
+   またがる要素の余白はそちらへ吸われ、1 行目はタブバーの高さで収まる。 */
+.app-layout {
+  grid-template-rows: auto 1fr;
+}
+
+.workspace-tabs {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.5rem clamp(0.85rem, 1.6vw, 1.35rem) 0;
+}
+
+/* タブバーが 1 行分の高さを占めるので、その分だけ本体の高さを詰める。
+   詰めないと画面下がタブバーの高さぶんはみ出す。 */
+.workspace-body {
+  --workspace-tabs-h: 2.6rem;
+}
+
+.workspace-body main,
+.persistent-game-panel {
+  height: calc(100vh - 105px - var(--workspace-tabs-h, 0px));
+}
+
+.workspace-tab-group {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.workspace-tab.is-selected {
+  background: var(--color-accent, #60a5fa);
+  color: #0b1220;
+  font-weight: 600;
+}
+
+.workspace-popup-button.is-selected {
+  outline: 2px solid var(--color-accent, #60a5fa);
+  outline-offset: -2px;
+}
+
+/* ゲーム画面のみ / 編集のみ は 1 カラムにして相手側を隠す */
+.workspace-body.layout-game,
+.workspace-body.layout-editor {
+  grid-template-columns: 1fr;
+}
+
+.workspace-body.layout-game > main {
+  display: none;
+}
+
+.workspace-body.layout-editor > .persistent-game-panel {
+  display: none;
+}
+
+/* --- ポップアップした編集ウィンドウ側 --- */
+
+body.sbop2-popup-editor {
+  margin: 0;
+  padding: 0.75rem;
+  min-height: 100vh;
+}
+
+/* .workspace-body main の高さ計算はポップアップでは効かないので上書きする */
+body.sbop2-popup-editor #view-container {
+  height: calc(100vh - 1.5rem);
+  padding: 0;
+}
+
+/* 狭い幅では app-layout が flex 縦積みになり高さは auto。
+   上の高さ指定はこのファイルの後方にあるため、ここで打ち消す。 */
+@media (max-width: 940px) {
+  .workspace-body main,
+  .persistent-game-panel {
+    height: auto;
+  }
 }

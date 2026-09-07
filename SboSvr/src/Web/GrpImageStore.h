@@ -36,6 +36,26 @@ struct SGrpSheetSummary
     long long   nUpdatedAt;
 };
 
+// 途中セーブ（ペイント 1 セル分の下書き）1件分。
+// png 本体は一覧には含めない（GetDraft で個別に取る）。
+//
+// 下書きはゲームに反映されない。grp_sheet（＝配信される上書き）とは
+// 別テーブルに置き、「この内容で保存」を押すまでゲームには出さない。
+struct SGrpDraftEntry
+{
+    long long   nId;
+    std::string strName;        // 利用者がつけた名前（UTF-8）
+    std::string strCatKey;      // "cloth2x2" 等
+    int         nSheetIndex;    // カテゴリ内のシート番号
+    int         nCol;           // 編集していたセル
+    int         nRow;
+    int         nWidth;         // セルの寸法（= cellSize）
+    int         nHeight;
+    long long   nUpdatedAt;     // Unix epoch 秒
+    std::string strUpdatedBy;
+    size_t      nBytes;         // png のバイト数
+};
+
 class CGrpImageStore
 {
 public:
@@ -75,6 +95,27 @@ public:
     // 削除後は res/ か DLL の出荷時イメージが配信される状態に戻る。
     // 行が無かった場合も true を返す（冪等）。
     bool ClearOverride(const char *pszResName, std::string &outError);
+
+    // ---- 途中セーブ（下書き）----------------------------------------------
+    // ゲームには一切反映されない作業中データ。更新日時の新しい順で返す。
+    // DB が無ければ空を返して true（画像ストア同様、不在はエラーにしない）。
+    bool ListDrafts(std::vector<SGrpDraftEntry> &outList);
+
+    // 1件取得。png 本体も返す。見つからなければ false。
+    bool GetDraft(long long nId, SGrpDraftEntry &outMeta, std::vector<unsigned char> &outPng);
+
+    // 新規作成。成功時 outId に採番された id を返す。
+    bool CreateDraft(const SGrpDraftEntry &meta,
+                     const unsigned char *pPng, size_t nPngSize,
+                     long long &outId, std::string &outError);
+
+    // 上書き。該当 id が無ければ false（outError = "draft_not_found"）。
+    bool UpdateDraft(long long nId, const SGrpDraftEntry &meta,
+                     const unsigned char *pPng, size_t nPngSize,
+                     std::string &outError);
+
+    // 削除。行が無かった場合も true（冪等）。
+    bool DeleteDraft(long long nId, std::string &outError);
 
 private:
     CGrpImageStore();
