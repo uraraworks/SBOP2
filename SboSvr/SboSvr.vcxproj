@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -306,7 +306,8 @@
     <ClCompile Include="src\Web\Handlers\MapEventHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\TalkEventHandler.cpp" />
   <ClCompile Include="src\Web\Handlers\MapPartsHandler.cpp" />
-  <ClCompile Include="src\Web\Handlers\SpriteSheetHandler.cpp" />
+  <ClCompile Include="src\Web\Handlers\GrpDraftHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\SpriteSheetHandler.cpp" />
   <ClCompile Include="src\Web\Handlers\PublicAssetHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\MapShadowHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\CharacterListHandler.cpp" />
@@ -466,7 +467,8 @@
     <ClInclude Include="src\Web\Handlers\MapEventHandler.h" />
     <ClInclude Include="src\Web\Handlers\TalkEventHandler.h" />
   <ClInclude Include="src\Web\Handlers\MapPartsHandler.h" />
-  <ClInclude Include="src\Web\Handlers\SpriteSheetHandler.h" />
+  <ClInclude Include="src\Web\Handlers\GrpDraftHandler.h" />
+    <ClInclude Include="src\Web\Handlers\SpriteSheetHandler.h" />
   <ClInclude Include="src\Web\Handlers\PublicAssetHandler.h" />
     <ClInclude Include="src\Web\Handlers\MapShadowHandler.h" />
     <ClInclude Include="src\Web\Handlers\CharacterListHandler.h" />

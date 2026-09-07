@@ -2138,6 +2138,20 @@ main {
     linear-gradient(to bottom, rgba(255, 0, 128, 0.55) 1px, transparent 1px);
 }
 
+/* ペイント対象セルの枠。プレビュー上をクリックすると移動する */
+.ie-cell-marker {
+  position: absolute;
+  pointer-events: none;
+  box-sizing: border-box;
+  border: 2px solid var(--color-accent, #60a5fa);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6) inset, 0 0 6px rgba(96, 165, 250, 0.8);
+}
+
+/* クリックで選べることが分かるように */
+.ie-preview-inner {
+  cursor: pointer;
+}
+
 .ie-dim-info {
   margin: 0.6rem 0 0;
   font-size: 0.85rem;
@@ -2258,6 +2272,48 @@ main {
 .sp-dirty.is-dirty {
   color: var(--color-warning, #fde68a);
   font-weight: 600;
+}
+
+/* --- 途中セーブ --- */
+
+.sp-draft-name {
+  min-width: 14rem;
+}
+
+/* 画面上部のフィードバックはスクロールすると見えないので、この節にも出す */
+.sp-draft-feedback {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  min-height: 1.2em;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.sp-draft-feedback.success {
+  color: var(--color-success, #86efac);
+}
+
+.sp-draft-feedback.error {
+  color: var(--color-danger, #fca5a5);
+}
+
+.sp-draft-current {
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.sp-draft-list {
+  margin-top: 0.5rem;
+  max-height: 16rem;
+  overflow-y: auto;
+}
+
+.sp-draft-list tr.is-selected {
+  outline: 2px solid var(--color-accent, #60a5fa);
+  outline-offset: -2px;
+}
+
+.sp-draft-list td .button + .button {
+  margin-left: 0.35rem;
 }
 
 /* ================================================================

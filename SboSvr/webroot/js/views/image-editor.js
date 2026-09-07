@@ -260,14 +260,29 @@ function buildCategoryList({ categories, onSelect }) {
 
   render();
 
-  return { el: ul, setOverriddenMark };
+  // 途中セーブを開く時など、外から対象を指定して選択させる
+  function selectByKey(key, index) {
+    const cat = categories.find((c) => c.key === key);
+    if (!cat) return false;
+    _selectedKey = key;
+    _selectedIndex = Number(index) || 0;
+    const li = Array.from(ul.querySelectorAll(".ld-list-item")).find((el) => el._catKey === key);
+    if (li?._sheetSelect) {
+      li._sheetSelect.value = String(_selectedIndex);
+    }
+    highlight();
+    onSelect(cat, _selectedIndex);
+    return true;
+  }
+
+  return { el: ul, setOverriddenMark, selectByKey };
 }
 
 // ----------------------------------------------------------------
 // 右ペイン: プレビュー + 詳細
 // ----------------------------------------------------------------
 
-function buildDetailPane({ onOverriddenChange, categories }) {
+function buildDetailPane({ onOverriddenChange, categories, onRequestTarget }) {
   const pane = document.createElement("div");
   pane.className = "ie-right";
 
@@ -337,9 +352,26 @@ function buildDetailPane({ onOverriddenChange, categories }) {
   previewImg.className = "ie-preview-img";
   const gridOverlay = document.createElement("div");
   gridOverlay.className = "ie-grid-overlay";
-  previewInner.append(previewImg, gridOverlay);
+  // ペイント対象セルを示す枠。プレビューのクリックで移動する。
+  const cellMarker = document.createElement("div");
+  cellMarker.className = "ie-cell-marker";
+  cellMarker.hidden = true;
+  previewInner.append(previewImg, gridOverlay, cellMarker);
   previewStage.appendChild(previewInner);
   previewSec.appendChild(previewStage);
+
+  // プレビュー上のクリック位置からセルを求めてペイント対象にする
+  previewInner.addEventListener("click", (e) => {
+    if (!_cat || !_naturalWidth || !_naturalHeight) return;
+    const cellSize = _cat.cellSize || 32;
+    const rect = previewInner.getBoundingClientRect();
+    const col = Math.floor((e.clientX - rect.left) / (cellSize * _scale));
+    const row = Math.floor((e.clientY - rect.top) / (cellSize * _scale));
+    const cols = Math.max(1, Math.round(_naturalWidth / cellSize));
+    const rows = Math.max(1, Math.round(_naturalHeight / cellSize));
+    if (col < 0 || row < 0 || col >= cols || row >= rows) return;
+    paint.selectCell(col, row);
+  });
 
   // ドラッグ&ドロップ受付
   previewStage.addEventListener("dragover", (e) => {
@@ -373,8 +405,30 @@ function buildDetailPane({ onOverriddenChange, categories }) {
     categories,
     onFeedback: (message, type) => showFeedback(feedback, message, type),
     onSaved: () => { void reload(); },
+    onCellChange: (col, row) => updateCellMarker(col, row),
+    // 途中セーブを開く時に、カテゴリ一覧の選択ごと切り替える
+    onRequestTarget: (catKey, sheetIndex) => onRequestTarget?.(catKey, sheetIndex),
   });
   pane.appendChild(paint.el);
+
+  // ペイント対象セルの枠をプレビュー上に重ねる。
+  // col が負なら「このシートはペイントできない」ので枠を隠す。
+  let _markerCol = -1;
+  let _markerRow = 0;
+
+  function updateCellMarker(col, row) {
+    if (col != null) { _markerCol = col; _markerRow = row; }
+    if (_markerCol < 0 || !_cat || !_naturalWidth || !_naturalHeight) {
+      cellMarker.hidden = true;
+      return;
+    }
+    const cellSize = _cat.cellSize || 32;
+    cellMarker.hidden = false;
+    cellMarker.style.left   = `${_markerCol * cellSize * _scale}px`;
+    cellMarker.style.top    = `${_markerRow * cellSize * _scale}px`;
+    cellMarker.style.width  = `${cellSize * _scale}px`;
+    cellMarker.style.height = `${cellSize * _scale}px`;
+  }
 
   function applyImageTransform() {
     if (!_naturalWidth || !_naturalHeight) return;
@@ -385,6 +439,7 @@ function buildDetailPane({ onOverriddenChange, categories }) {
     previewImg.style.width = `${w}px`;
     previewImg.style.height = `${h}px`;
     gridOverlay.style.backgroundSize = `${(_cat?.cellSize || 32) * _scale}px ${(_cat?.cellSize || 32) * _scale}px`;
+    updateCellMarker();
   }
 
   function applyGridVisibility() {
@@ -648,7 +703,7 @@ function buildDetailPane({ onOverriddenChange, categories }) {
 
   applyGridVisibility();
 
-  return { el: pane, setTarget, destroy: () => composer.destroy() };
+  return { el: pane, setTarget, feedbackEl: feedback, destroy: () => composer.destroy() };
 }
 
 // ----------------------------------------------------------------
@@ -711,6 +766,12 @@ export function mount(container) {
             detail = buildDetailPane({
               onOverriddenChange: (key, idx, overridden) => listUi.setOverriddenMark(key, idx, overridden),
               categories,
+              // 途中セーブを開く時にカテゴリ一覧の選択ごと切り替える
+              onRequestTarget: (catKey, sheetIndex) => {
+                if (!listUi.selectByKey(catKey, sheetIndex)) {
+                  showFeedback(detail.feedbackEl, `カテゴリ ${catKey} が見つかりません`, "error");
+                }
+              },
             });
             detailPane.appendChild(detail.el);
           }

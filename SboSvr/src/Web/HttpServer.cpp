@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "HttpServer.h"
 
 #include <string>
@@ -23,6 +23,7 @@
 #include "Handlers/MapEventHandler.h"
 #include "Handlers/TalkEventHandler.h"
 #include "Handlers/MapPartsHandler.h"
+#include "Handlers/GrpDraftHandler.h"
 #include "Handlers/SpriteSheetHandler.h"
 #include "Handlers/PublicAssetHandler.h"
 #include "Handlers/MapShadowHandler.h"
@@ -1344,6 +1345,28 @@ void CHttpServer::RegisterDefaultHandlers()
         std::unique_ptr<IApiHandler> spriteSheetDeleteHandler(
             new CSpriteSheetDeleteHandler("/api/assets/sprites/", m_pMgrData));
         m_router.RegisterPrefix("DELETE", "/api/assets/sprites/", std::move(spriteSheetDeleteHandler));
+
+        // 画像エディタの途中セーブ（下書き）API。要 IMAGE_EDIT。
+        //   GET    /api/assets/drafts        一覧
+        //   GET    /api/assets/drafts/{id}   1件取得（png は base64）
+        //   POST   /api/assets/drafts        新規保存
+        //   PUT    /api/assets/drafts/{id}   上書き保存
+        //   DELETE /api/assets/drafts/{id}   削除
+        //
+        // 下書きは grp_draft テーブルに入るだけで配信経路からは参照されない。
+        // つまり途中セーブしてもゲームには反映されない（反映は従来どおり
+        // PUT /api/assets/sprites/{cat}/{index} だけ）。
+        // メソッドごとに別インスタンスを登録するのは CApiRouter が
+        // メソッド+プレフィックスで引くため。1 つのクラスが内部で分岐する。
+        {
+            const char *const pszDraftPrefix = "/api/assets/drafts";
+            static const char *const apszDraftMethods[] = { "GET", "POST", "PUT", "DELETE", NULL };
+            for (int i = 0; apszDraftMethods[i] != NULL; ++i) {
+                std::unique_ptr<IApiHandler> draftHandler(
+                    new CGrpDraftHandler(pszDraftPrefix, m_pMgrData));
+                m_router.RegisterPrefix(apszDraftMethods[i], pszDraftPrefix, std::move(draftHandler));
+            }
+        }
 
         // ゲームクライアント向け「認証不要」な公開アセット配信エンドポイント。
         //   GET /assets/manifest        - grp_sheet 全行のメタ一覧

@@ -119,6 +119,22 @@ bool CGrpImageStore::EnsureOpenLocked()
         "  saved_by TEXT"
         ");"
         "CREATE INDEX IF NOT EXISTS idx_grp_sheet_history_res ON grp_sheet_history(res_name, revision DESC);"
+        // 途中セーブ（下書き）。grp_sheet とは別テーブルにして、
+        // ここに入っている間はゲームにも公開マニフェストにも一切出さない。
+        "CREATE TABLE IF NOT EXISTS grp_draft("
+        "  id          INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "  name        TEXT NOT NULL,"
+        "  cat_key     TEXT NOT NULL,"
+        "  sheet_index INTEGER NOT NULL,"
+        "  col         INTEGER NOT NULL,"
+        "  row         INTEGER NOT NULL,"
+        "  png         BLOB NOT NULL,"
+        "  width       INTEGER NOT NULL,"
+        "  height      INTEGER NOT NULL,"
+        "  updated_at  INTEGER NOT NULL,"
+        "  updated_by  TEXT"
+        ");"
+        "CREATE INDEX IF NOT EXISTS idx_grp_draft_updated ON grp_draft(updated_at DESC);"
         "INSERT OR IGNORE INTO grp_meta(key, value) VALUES('schema_version', '1');";
 
     char *pszErr = NULL;
@@ -478,5 +494,230 @@ bool CGrpImageStore::ClearOverride(const char *pszResName, std::string &outError
         return false;
     }
 
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// 途中セーブ（下書き）
+//
+// grp_sheet とは完全に別テーブル。ここに入っているデータは配信経路
+// （GetPng / GetAllSummaries）から一切参照されないので、下書きを保存しても
+// ゲームには反映されない。
+// ---------------------------------------------------------------------------
+
+namespace
+{
+// sqlite3_column_text は NULL を返しうるので、空文字に丸めて受け取る
+std::string ColumnTextOrEmpty(sqlite3_stmt *pStmt, int nColumn)
+{
+    const unsigned char *pszText = sqlite3_column_text(pStmt, nColumn);
+    if (pszText == NULL) {
+        return std::string();
+    }
+    return std::string(reinterpret_cast<const char *>(pszText));
+}
+} // namespace
+
+bool CGrpImageStore::ListDrafts(std::vector<SGrpDraftEntry> &outList)
+{
+    outList.clear();
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!EnsureOpenLocked()) {
+        // DB 不在は「下書きが無い」と同じ扱い（プロジェクトのデータ不在許容方針）
+        return true;
+    }
+
+    const char *pszSql =
+        "SELECT id, name, cat_key, sheet_index, col, row, width, height, "
+        "       updated_at, updated_by, length(png) "
+        "FROM grp_draft ORDER BY updated_at DESC, id DESC;";
+    sqlite3_stmt *pStmt = NULL;
+    if (sqlite3_prepare_v2(m_pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+        return false;
+    }
+
+    while (sqlite3_step(pStmt) == SQLITE_ROW) {
+        SGrpDraftEntry entry;
+        entry.nId          = sqlite3_column_int64(pStmt, 0);
+        entry.strName      = ColumnTextOrEmpty(pStmt, 1);
+        entry.strCatKey    = ColumnTextOrEmpty(pStmt, 2);
+        entry.nSheetIndex  = sqlite3_column_int(pStmt, 3);
+        entry.nCol         = sqlite3_column_int(pStmt, 4);
+        entry.nRow         = sqlite3_column_int(pStmt, 5);
+        entry.nWidth       = sqlite3_column_int(pStmt, 6);
+        entry.nHeight      = sqlite3_column_int(pStmt, 7);
+        entry.nUpdatedAt   = sqlite3_column_int64(pStmt, 8);
+        entry.strUpdatedBy = ColumnTextOrEmpty(pStmt, 9);
+        entry.nBytes       = static_cast<size_t>(sqlite3_column_int(pStmt, 10));
+        outList.push_back(entry);
+    }
+    sqlite3_finalize(pStmt);
+    return true;
+}
+
+bool CGrpImageStore::GetDraft(long long nId, SGrpDraftEntry &outMeta,
+                              std::vector<unsigned char> &outPng)
+{
+    outPng.clear();
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!EnsureOpenLocked()) {
+        return false;
+    }
+
+    const char *pszSql =
+        "SELECT id, name, cat_key, sheet_index, col, row, width, height, "
+        "       updated_at, updated_by, png "
+        "FROM grp_draft WHERE id = ?;";
+    sqlite3_stmt *pStmt = NULL;
+    if (sqlite3_prepare_v2(m_pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+        return false;
+    }
+    sqlite3_bind_int64(pStmt, 1, nId);
+
+    bool bFound = false;
+    if (sqlite3_step(pStmt) == SQLITE_ROW) {
+        outMeta.nId          = sqlite3_column_int64(pStmt, 0);
+        outMeta.strName      = ColumnTextOrEmpty(pStmt, 1);
+        outMeta.strCatKey    = ColumnTextOrEmpty(pStmt, 2);
+        outMeta.nSheetIndex  = sqlite3_column_int(pStmt, 3);
+        outMeta.nCol         = sqlite3_column_int(pStmt, 4);
+        outMeta.nRow         = sqlite3_column_int(pStmt, 5);
+        outMeta.nWidth       = sqlite3_column_int(pStmt, 6);
+        outMeta.nHeight      = sqlite3_column_int(pStmt, 7);
+        outMeta.nUpdatedAt   = sqlite3_column_int64(pStmt, 8);
+        outMeta.strUpdatedBy = ColumnTextOrEmpty(pStmt, 9);
+
+        const void *pBlob = sqlite3_column_blob(pStmt, 10);
+        int nBlobSize = sqlite3_column_bytes(pStmt, 10);
+        if (pBlob != NULL && nBlobSize > 0) {
+            const unsigned char *pBytes = static_cast<const unsigned char *>(pBlob);
+            outPng.assign(pBytes, pBytes + nBlobSize);
+        }
+        outMeta.nBytes = outPng.size();
+        bFound = true;
+    }
+    sqlite3_finalize(pStmt);
+    return bFound;
+}
+
+bool CGrpImageStore::CreateDraft(const SGrpDraftEntry &meta,
+                                 const unsigned char *pPng, size_t nPngSize,
+                                 long long &outId, std::string &outError)
+{
+    if (pPng == NULL || nPngSize == 0 || meta.strCatKey.empty()) {
+        outError = "invalid_argument";
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!EnsureOpenLocked()) {
+        outError = "db_unavailable";
+        return false;
+    }
+
+    const char *pszSql =
+        "INSERT INTO grp_draft(name, cat_key, sheet_index, col, row, png, width, height, updated_at, updated_by) "
+        "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    sqlite3_stmt *pStmt = NULL;
+    if (sqlite3_prepare_v2(m_pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+        outError = "prepare_failed";
+        return false;
+    }
+
+    sqlite3_bind_text(pStmt, 1, meta.strName.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(pStmt, 2, meta.strCatKey.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(pStmt, 3, meta.nSheetIndex);
+    sqlite3_bind_int(pStmt, 4, meta.nCol);
+    sqlite3_bind_int(pStmt, 5, meta.nRow);
+    sqlite3_bind_blob(pStmt, 6, pPng, static_cast<int>(nPngSize), SQLITE_STATIC);
+    sqlite3_bind_int(pStmt, 7, meta.nWidth);
+    sqlite3_bind_int(pStmt, 8, meta.nHeight);
+    sqlite3_bind_int64(pStmt, 9, static_cast<long long>(std::time(NULL)));
+    sqlite3_bind_text(pStmt, 10, meta.strUpdatedBy.c_str(), -1, SQLITE_TRANSIENT);
+
+    int nStep = sqlite3_step(pStmt);
+    sqlite3_finalize(pStmt);
+    if (nStep != SQLITE_DONE) {
+        outError = "insert_failed";
+        return false;
+    }
+
+    outId = sqlite3_last_insert_rowid(m_pDb);
+    return true;
+}
+
+bool CGrpImageStore::UpdateDraft(long long nId, const SGrpDraftEntry &meta,
+                                 const unsigned char *pPng, size_t nPngSize,
+                                 std::string &outError)
+{
+    if (pPng == NULL || nPngSize == 0) {
+        outError = "invalid_argument";
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!EnsureOpenLocked()) {
+        outError = "db_unavailable";
+        return false;
+    }
+
+    const char *pszSql =
+        "UPDATE grp_draft SET name = ?, cat_key = ?, sheet_index = ?, col = ?, row = ?, "
+        "  png = ?, width = ?, height = ?, updated_at = ?, updated_by = ? "
+        "WHERE id = ?;";
+    sqlite3_stmt *pStmt = NULL;
+    if (sqlite3_prepare_v2(m_pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+        outError = "prepare_failed";
+        return false;
+    }
+
+    sqlite3_bind_text(pStmt, 1, meta.strName.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(pStmt, 2, meta.strCatKey.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(pStmt, 3, meta.nSheetIndex);
+    sqlite3_bind_int(pStmt, 4, meta.nCol);
+    sqlite3_bind_int(pStmt, 5, meta.nRow);
+    sqlite3_bind_blob(pStmt, 6, pPng, static_cast<int>(nPngSize), SQLITE_STATIC);
+    sqlite3_bind_int(pStmt, 7, meta.nWidth);
+    sqlite3_bind_int(pStmt, 8, meta.nHeight);
+    sqlite3_bind_int64(pStmt, 9, static_cast<long long>(std::time(NULL)));
+    sqlite3_bind_text(pStmt, 10, meta.strUpdatedBy.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int64(pStmt, 11, nId);
+
+    int nStep = sqlite3_step(pStmt);
+    sqlite3_finalize(pStmt);
+    if (nStep != SQLITE_DONE) {
+        outError = "update_failed";
+        return false;
+    }
+    if (sqlite3_changes(m_pDb) == 0) {
+        outError = "draft_not_found";
+        return false;
+    }
+    return true;
+}
+
+bool CGrpImageStore::DeleteDraft(long long nId, std::string &outError)
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!EnsureOpenLocked()) {
+        outError = "db_unavailable";
+        return false;
+    }
+
+    const char *pszSql = "DELETE FROM grp_draft WHERE id = ?;";
+    sqlite3_stmt *pStmt = NULL;
+    if (sqlite3_prepare_v2(m_pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+        outError = "prepare_failed";
+        return false;
+    }
+    sqlite3_bind_int64(pStmt, 1, nId);
+    int nStep = sqlite3_step(pStmt);
+    sqlite3_finalize(pStmt);
+    if (nStep != SQLITE_DONE) {
+        outError = "delete_failed";
+        return false;
+    }
     return true;
 }

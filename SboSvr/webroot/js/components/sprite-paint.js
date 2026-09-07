@@ -16,6 +16,7 @@
  */
 
 import { decodeIndexedPng, encodeIndexedPng, indicesToImageData } from "../lib/indexed-png.js";
+import { fetchJson } from "../core/api.js";
 import { CELL, COMPOSABLE_KEYS, EYE_ORIGIN_OPTS, frameCellOrigin } from "./char-composer.js";
 
 const MAX_UPLOAD_BYTES = 2 * 1024 * 1024;
@@ -49,6 +50,28 @@ const SLOT_OF_KEY = {
 // ----------------------------------------------------------------
 // 小物
 // ----------------------------------------------------------------
+
+// Unix epoch 秒 → ローカル時刻。image-editor 側と同じ書式にそろえる
+function formatEpoch(sec) {
+  if (sec == null || !Number.isFinite(Number(sec))) return "-";
+  const d = new Date(Number(sec) * 1000);
+  if (Number.isNaN(d.getTime())) return "-";
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}/${pad(d.getMonth() + 1)}/${pad(d.getDate())} ` +
+    `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+// 環境によっては confirm() / prompt() が使えない（別ウィンドウや埋め込み表示など）。
+// 名前入力はインラインの入力欄に、削除は 2 段階クリックに置き換えてあるので、
+// ここで確認できないのは「未保存の変更を捨てるか」の確認だけ。
+// 使えない環境では操作を止めない（＝続行）方に倒す。
+function askConfirm(message) {
+  try {
+    return window.confirm(message);
+  } catch {
+    return true;
+  }
+}
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
@@ -88,8 +111,12 @@ function fillOptions(select, count, labeller) {
  * @param {Array}    opts.categories  /api/image-categories の categories
  * @param {Function} opts.onSaved     保存成功時に呼ばれる（親が履歴/プレビューを更新する）
  * @param {Function} opts.onFeedback  (message, type) 形式の通知
+ * @param {Function} [opts.onRequestTarget] (catKey, sheetIndex) 途中セーブを開く時に
+ *                                       親へカテゴリ切り替えを依頼する。
+ * @param {Function} [opts.onCellChange] (col, row) 編集セルが変わった時。
+ *                                       プレビュー側の選択枠を追従させるのに使う。
  */
-export function createSpritePaint({ categories, onSaved, onFeedback }) {
+export function createSpritePaint({ categories, onSaved, onFeedback, onCellChange, onRequestTarget }) {
   const catByKey = new Map((categories ?? []).map((c) => [c.key, c]));
   const sheetCountOf = (key) => Number(catByKey.get(key)?.sheetCount ?? 0);
 
@@ -109,13 +136,18 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
   const undoStack = [];
   const redoStack = [];
 
+  // 開こうとしている途中セーブ。シートの読み込み完了後に貼り込む。
+  let _pendingDraft = null;
+
   const underlayImages = new Map(); // "key/index" -> HTMLImageElement | null
 
   const section = el("section", "detail-section sp-section");
   section.appendChild(el("h3", null, "ペイント"));
 
-  const desc = el("p", "card-description",
-    "パレットの色だけで 1 セルずつ編集します。新しい色は作れません（ゲームがパレット PNG しか読めないため）。");
+  const DESC_TEXT =
+    "パレットの色だけで 1 セルずつ編集します（新しい色は作れません）。" +
+    "プレビューをクリックすると編集するセルを選べます。右クリックでその場の色を拾えます。";
+  const desc = el("p", "card-description", DESC_TEXT);
   section.appendChild(desc);
 
   // --- ツールバー: セル選択 ---
@@ -216,6 +248,47 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
   const dirtyMark = el("span", "sp-dirty");
   saveBar.append(saveBtn, discardBtn, dirtyMark);
   section.appendChild(saveBar);
+
+  // --- 途中セーブ ---
+  // ゲームに反映せずに作業中の 1 セルを保存しておく置き場。
+  // サーバー側では grp_draft テーブルに入り、配信経路からは参照されない。
+  const draftSec = el("section", "detail-section sp-draft-section");
+  draftSec.appendChild(el("h3", null, "途中セーブ"));
+  draftSec.appendChild(el("p", "card-description",
+    "ゲームには反映されません。作業中のセルを名前を付けて保存し、あとから選んで再開できます。"));
+
+  const draftBar = el("div", "cc-toolbar");
+
+  // 名前は prompt() ではなくインラインの入力欄で受ける。
+  // prompt() は別ウィンドウや埋め込み表示だとブロックされて例外になり、
+  // 「押しても何も起きない」状態になるため使わない。
+  const draftNameInput = document.createElement("input");
+  draftNameInput.type = "text";
+  draftNameInput.className = "sp-draft-name";
+  draftNameInput.placeholder = "途中セーブの名前";
+  draftBar.appendChild(labeled("名前", draftNameInput));
+
+  const draftNewBtn = el("button", "button small", "新規途中セーブ");
+  draftNewBtn.type = "button";
+  draftNewBtn.addEventListener("click", () => { void saveDraft({ asNew: true }); });
+
+  const draftOverwriteBtn = el("button", "button small", "上書き途中セーブ");
+  draftOverwriteBtn.type = "button";
+  draftOverwriteBtn.addEventListener("click", () => { void saveDraft({ asNew: false }); });
+
+  const draftCurrent = el("span", "sp-draft-current");
+  draftBar.append(draftNewBtn, draftOverwriteBtn, draftCurrent);
+  draftSec.appendChild(draftBar);
+
+  // 画面上部のフィードバックはスクロールしていると見えないので、この節にも出す
+  const draftFeedback = el("p", "sp-draft-feedback");
+  draftFeedback.setAttribute("role", "status");
+  draftFeedback.setAttribute("aria-live", "polite");
+  draftSec.appendChild(draftFeedback);
+
+  const draftListBody = el("div", "sp-draft-list");
+  draftSec.appendChild(draftListBody);
+  section.appendChild(draftSec);
 
   // ----------------------------------------------------------------
   // 表示
@@ -331,6 +404,14 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
   }
 
   function selectCell(col, row) {
+    // シート未読込（まだ load 中、またはパレット PNG でなく編集不可）の時は
+    // 値だけ覚えておく。load() 側で寸法に合わせてクランプされる。
+    if (!_sheet) {
+      _col = Math.max(0, col);
+      _row = Math.max(0, row);
+      onCellChange?.(_col, _row);
+      return;
+    }
     _col = Math.max(0, Math.min(_cols - 1, col));
     _row = Math.max(0, Math.min(_rows - 1, row));
     colSelect.value = String(_col);
@@ -338,6 +419,8 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
     // セルを跨いだ Undo は混乱のもとなので履歴はセル単位で捨てる
     undoStack.length = 0;
     redoStack.length = 0;
+    onCellChange?.(_col, _row);
+    updateDraftUi();  // 名前欄の既定値にセル位置が入るので追従させる
     render();
   }
 
@@ -433,14 +516,30 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
     return setPixel(px, py, _color);
   }
 
+  // 右クリックはツールに関わらずスポイト。ブラウザのメニューは出さない。
+  canvas.addEventListener("contextmenu", (e) => e.preventDefault());
+
   canvas.addEventListener("pointerdown", (e) => {
     if (!_sheet) return;
     const pos = toPixel(e);
     if (!pos) return;
+
+    // 右クリック: 色を拾うだけ。履歴も dirty も動かさない
+    if (e.button === 2) {
+      setColor(pixelAt(pos.px, pos.py));
+      return;
+    }
+    if (e.button !== 0) return;
+
     // スポイトは履歴を汚さない
     if (_tool !== "picker") pushUndo();
     _painting = _tool === "pen" || _tool === "eraser";
-    if (_painting) canvas.setPointerCapture(e.pointerId);
+    // setPointerCapture は pointerId が実在しないと例外を投げる。
+    // ここで throw すると以降の描画処理ごと中断してしまうので握りつぶす
+    // （キャプチャできなくてもドラッグ以外の描画は成立する）。
+    if (_painting) {
+      try { canvas.setPointerCapture(e.pointerId); } catch { /* 無視 */ }
+    }
     if (applyTool(pos.px, pos.py)) { _dirty = true; }
     render();
   });
@@ -514,6 +613,8 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
       fillOptions(rowSelect, _rows);
       colSelect.value = String(_col);
       rowSelect.value = String(_row);
+      // 読み込み後の寸法でクランプされた結果をプレビュー側の枠にも反映する
+      onCellChange?.(_col, _row);
 
       if (_color >= decoded.palette.length) _color = 1;
       applyCanvasSize();
@@ -521,6 +622,9 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
       render();
       setSectionEnabled(true);
       await reloadUnderlay();
+      await reloadDraftList();
+      await applyPendingDraft();
+      updateDraftUi();
     } catch (e) {
       if (seq !== _loadSeq) return;
       setSectionEnabled(false, e?.message);
@@ -528,6 +632,9 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
   }
 
   function setSectionEnabled(enabled, reason) {
+    // 編集できないシートでプレビューに選択枠だけ残ると紛らわしいので、
+    // col に負値を渡して枠を隠してもらう
+    if (!enabled) onCellChange?.(-1, 0);
     stage.style.display = enabled ? "" : "none";
     paletteWrap.style.display = enabled ? "" : "none";
     saveBar.style.display = enabled ? "" : "none";
@@ -537,7 +644,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
       enabled && _cat && COMPOSABLE_KEYS.has(_cat.key) && _cat.key !== "npc2x2" ? "" : "none";
     sexField.style.display = _cat?.key === "eye2x2" ? "" : "none";
     desc.textContent = enabled
-      ? "パレットの色だけで 1 セルずつ編集します。新しい色は作れません（ゲームがパレット PNG しか読めないため）。"
+      ? DESC_TEXT
       : `このシートはペイントできません（${reason || "パレット PNG ではありません"}）。差し替えは上のアップロードから行えます。`;
   }
 
@@ -582,7 +689,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
   function setTarget(cat, index) {
     // 断られた場合は編集中のシートを開いたままにする（作業を失わせない）。
     // 画面の他の部分は既に切り替わっているので、その旨を通知する。
-    if (_dirty && !confirm("未保存のペイント内容があります。破棄して切り替えますか?")) {
+    if (_dirty && !askConfirm("未保存のペイント内容があります。破棄して切り替えますか?")) {
       onFeedback?.(
         `ペイントは ${_cat?.label || _cat?.key} #${_index} を編集したままです。保存するか「編集を破棄」を押してください`,
         "warning"
@@ -592,6 +699,11 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
     _cat = cat;
     _index = index;
     _dirty = false;
+    // 途中セーブを開く途中でなければ、紐付けは切る（別の対象に上書きしないため）
+    if (!_pendingDraft) {
+      _draftId = null;
+      _draftName = "";
+    }
     setTool(_tool);
     void load({ force: true });
     return true;
@@ -608,5 +720,299 @@ export function createSpritePaint({ categories, onSaved, onFeedback }) {
 
   setTool("pen");
 
-  return { el: section, setTarget, refresh, hasUnsavedChanges };
+
+  // ----------------------------------------------------------------
+  // 途中セーブ
+  //
+  // 保存単位は「いま編集しているセル 1 個」。シート 1 枚ではなくセルにすると
+  // 32x32 のパレット PNG で 1KB 前後に収まり、既定のボディ上限 64KB の内側で
+  // 扱える（スプライト差し替えのように上限を緩める必要がない）。
+  // ----------------------------------------------------------------
+
+  let _draftId = null;      // 開いている / 上書き対象の途中セーブ id
+  let _draftName = "";
+  let _drafts = [];
+
+  function updateDraftUi() {
+    draftOverwriteBtn.disabled = _draftId == null || !_sheet;
+    draftNewBtn.disabled = !_sheet;
+    draftNameInput.disabled = !_sheet;
+    draftNameInput.placeholder = suggestedDraftName() || "途中セーブの名前";
+    draftCurrent.textContent = _draftId != null
+      ? `編集中の途中セーブ: ${_draftName}（#${_draftId}）`
+      : "途中セーブから開いていません";
+  }
+
+  // 現在のセルだけを切り出したパレット PNG を作る
+  async function encodeCurrentCellPng() {
+    const { x, y } = cellOrigin();
+    const cell = new Uint8Array(_cellSize * _cellSize);
+    for (let row = 0; row < _cellSize; row++) {
+      const src = (y + row) * _sheet.width + x;
+      cell.set(_sheet.indices.subarray(src, src + _cellSize), row * _cellSize);
+    }
+    return encodeIndexedPng({
+      width: _cellSize,
+      height: _cellSize,
+      indices: cell,
+      palette: _sheet.palette,
+    });
+  }
+
+  function bytesToBase64(bytes) {
+    let binary = "";
+    const CHUNK = 0x8000;  // apply の引数上限に触れないよう分割する
+    for (let i = 0; i < bytes.length; i += CHUNK) {
+      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
+    }
+    return btoa(binary);
+  }
+
+  function base64ToBytes(text) {
+    const binary = atob(text);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+
+  // 「保存先が無い」ときに黙って何も起きないと原因が分からないので必ず知らせる
+  function draftNotice(message, type) {
+    draftFeedback.textContent = message || "";
+    draftFeedback.className = "sp-draft-feedback" + (type ? " " + type : "");
+    onFeedback?.(message, type);
+  }
+
+  function suggestedDraftName() {
+    if (!_cat) return "";
+    return `${_cat.label || _cat.key} #${_index} (${_col},${_row})`;
+  }
+
+  async function saveDraft({ asNew }) {
+    if (!_sheet || !_cat) {
+      draftNotice("編集できるシートが読み込まれていません", "error");
+      return;
+    }
+
+    let name = _draftName;
+    if (asNew || _draftId == null) {
+      name = draftNameInput.value.trim() || suggestedDraftName();
+    }
+
+    try {
+      const png = await encodeCurrentCellPng();
+      const payload = {
+        name,
+        catKey: _cat.key,
+        sheetIndex: _index,
+        col: _col,
+        row: _row,
+        width: _cellSize,
+        height: _cellSize,
+        png: bytesToBase64(png),
+      };
+      const useUpdate = !asNew && _draftId != null;
+      const { response, data } = await fetchJson(
+        useUpdate ? `/api/assets/drafts/${_draftId}` : "/api/assets/drafts",
+        {
+          method: useUpdate ? "PUT" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+      if (!response.ok) {
+        draftNotice(`途中セーブに失敗しました: ${data?.error || `HTTP ${response.status}`}`, "error");
+        return;
+      }
+      _draftId = data?.id ?? _draftId;
+      _draftName = name;
+      draftNameInput.value = name;
+      draftNotice(useUpdate ? `途中セーブ「${name}」を上書きしました` : `途中セーブ「${name}」を作成しました`, "success");
+      await reloadDraftList();
+      updateDraftUi();
+    } catch (e) {
+      draftNotice("途中セーブに失敗しました: " + String(e?.message ?? e), "error");
+    }
+  }
+
+  async function reloadDraftList() {
+    try {
+      const { response, data } = await fetchJson("/api/assets/drafts");
+      if (!response.ok) {
+        draftListBody.innerHTML = "";
+        draftListBody.appendChild(el("p", "card-description", "途中セーブ一覧を取得できませんでした"));
+        return;
+      }
+      _drafts = data?.drafts ?? [];
+      renderDraftList();
+    } catch (e) {
+      draftListBody.innerHTML = "";
+      draftListBody.appendChild(el("p", "card-description",
+        "途中セーブ一覧の取得に失敗しました: " + String(e?.message ?? e)));
+    }
+  }
+
+  function renderDraftList() {
+    draftListBody.innerHTML = "";
+    if (!_drafts.length) {
+      draftListBody.appendChild(el("p", "card-description", "途中セーブはありません"));
+      return;
+    }
+
+    const table = document.createElement("table");
+    table.className = "data-table";
+    const thead = document.createElement("thead");
+    thead.innerHTML = "<tr><th>名前</th><th>対象</th><th>保存日時</th><th>保存者</th><th>操作</th></tr>";
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    _drafts.forEach((d) => {
+      const tr = document.createElement("tr");
+      if (d.id === _draftId) tr.classList.add("is-selected");
+
+      const label = catByKey.get(d.catKey)?.label || d.catKey;
+      tr.append(
+        el("td", null, d.name || "(名前なし)"),
+        el("td", null, `${label} #${d.sheetIndex} (${d.col},${d.row})`),
+        el("td", null, formatEpoch(d.updatedAt)),
+        el("td", null, d.updatedBy || "-")
+      );
+
+      const tdOp = document.createElement("td");
+      // 未保存の変更があるときは confirm() ではなく 2 回クリックで確認する。
+      // confirm() は環境によって自動的に打ち消され、「押しても何も起きない」
+      // 状態になってしまうため使わない。
+      const openBtn = el("button", "button small", "開く");
+      openBtn.type = "button";
+      let openArmed = false;
+      let openTimer = null;
+      openBtn.addEventListener("click", () => {
+        if (_dirty && !openArmed) {
+          openArmed = true;
+          openBtn.textContent = "変更を捨てて開く";
+          draftNotice("未保存のペイント内容があります。もう一度押すと破棄して開きます", "error");
+          openTimer = setTimeout(() => {
+            openArmed = false;
+            openBtn.textContent = "開く";
+          }, 5000);
+          return;
+        }
+        if (openTimer) clearTimeout(openTimer);
+        void openDraft(d);
+      });
+
+      // confirm() が使えない環境（別ウィンドウ等）でも確実に確認を挟めるよう、
+      // モーダルではなく 2 回クリックで消す方式にする
+      const delBtn = el("button", "button small danger", "削除");
+      delBtn.type = "button";
+      let armed = false;
+      let armTimer = null;
+      delBtn.addEventListener("click", () => {
+        if (!armed) {
+          armed = true;
+          delBtn.textContent = "本当に削除?";
+          armTimer = setTimeout(() => {
+            armed = false;
+            delBtn.textContent = "削除";
+          }, 4000);
+          return;
+        }
+        if (armTimer) clearTimeout(armTimer);
+        void deleteDraft(d);
+      });
+
+      tdOp.append(openBtn, delBtn);
+      tr.appendChild(tdOp);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    draftListBody.appendChild(table);
+  }
+
+  async function deleteDraft(d) {
+    try {
+      const { response, data } = await fetchJson(`/api/assets/drafts/${d.id}`, { method: "DELETE" });
+      if (!response.ok) {
+        draftNotice(`削除に失敗しました: ${data?.error || `HTTP ${response.status}`}`, "error");
+        return;
+      }
+      if (_draftId === d.id) { _draftId = null; _draftName = ""; }
+      draftNotice(`途中セーブ「${d.name}」を削除しました`, "success");
+      await reloadDraftList();
+      updateDraftUi();
+    } catch (e) {
+      draftNotice("削除に失敗しました: " + String(e?.message ?? e), "error");
+    }
+  }
+
+  // 未保存の確認は一覧側の 2 段階クリックで済ませてあるので、ここでは行わない
+  async function openDraft(d) {
+    try {
+      const { response, data } = await fetchJson(`/api/assets/drafts/${d.id}`);
+      if (!response.ok) {
+        onFeedback?.(`途中セーブを開けませんでした: ${data?.error || `HTTP ${response.status}`}`, "error");
+        return;
+      }
+      const draft = data?.draft;
+      if (!draft?.png) {
+        onFeedback?.("途中セーブの内容が空でした", "error");
+        return;
+      }
+      // シートの読み込み完了後に貼り込む（load() の最後で処理される）
+      _pendingDraft = {
+        id: draft.id,
+        name: draft.name,
+        col: draft.col,
+        row: draft.row,
+        bytes: base64ToBytes(draft.png),
+      };
+      _dirty = false;  // ここで破棄の確認は済んでいる
+
+      // カテゴリ/シートの切り替えは親に依頼する（プレビューや履歴も追従させるため）
+      if (onRequestTarget) {
+        onRequestTarget(draft.catKey, draft.sheetIndex);
+      } else {
+        await load({ force: true });
+      }
+    } catch (e) {
+      onFeedback?.("途中セーブを開けませんでした: " + String(e?.message ?? e), "error");
+    }
+  }
+
+  // load() の最後で呼ぶ。開こうとしている途中セーブがあればセルへ貼り込む。
+  async function applyPendingDraft() {
+    if (!_pendingDraft || !_sheet) return;
+    const pending = _pendingDraft;
+    _pendingDraft = null;
+
+    try {
+      const cell = await decodeIndexedPng(pending.bytes);
+      if (cell.width !== _cellSize || cell.height !== _cellSize) {
+        draftNotice(
+          `途中セーブのセル寸法が合いません（${cell.width}x${cell.height} / 現在 ${_cellSize}x${_cellSize}）`,
+          "error");
+        return;
+      }
+      selectCell(pending.col, pending.row);
+
+      const { x, y } = cellOrigin();
+      for (let row = 0; row < _cellSize; row++) {
+        _sheet.indices.set(cell.indices.subarray(row * _cellSize, (row + 1) * _cellSize),
+                            (y + row) * _sheet.width + x);
+      }
+      _draftId = pending.id;
+      _draftName = pending.name;
+      draftNameInput.value = pending.name;
+      _dirty = true;  // まだゲームには反映されていない
+      undoStack.length = 0;
+      redoStack.length = 0;
+      updateDraftUi();
+      renderDraftList();
+      render();
+      draftNotice(`途中セーブ「${pending.name}」を開きました。ゲームに反映するには「この内容で保存」を押してください`, "success");
+    } catch (e) {
+      draftNotice("途中セーブの読み込みに失敗しました: " + String(e?.message ?? e), "error");
+    }
+  }
+
+  return { el: section, setTarget, refresh, hasUnsavedChanges, selectCell };
 }
