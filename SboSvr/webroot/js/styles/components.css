@@ -2276,6 +2276,13 @@ main {
 
 /* --- 途中セーブ --- */
 
+/* 2 段階クリックで確認中のボタン（confirm() の代わり） */
+.button.is-armed {
+  background: var(--color-danger, #dc2626);
+  color: #fff;
+  font-weight: 600;
+}
+
 .sp-draft-name {
   min-width: 14rem;
 }

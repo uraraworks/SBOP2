@@ -172,6 +172,42 @@ async function validateUploadFile(file, expectedWidth, expectedHeight) {
 }
 
 // ----------------------------------------------------------------
+// 破壊的な操作の確認
+//
+// confirm() は使わない。編集ペインを別ウィンドウへポップアップしていると、
+// ダイアログはスクリプトの所属する「元のウィンドウ」に出るため、背後に隠れて
+// 見えず「押しても何も起きない」状態になる。
+// 代わりに 1 回目のクリックで文言を変えて確認し、2 回目で実行する。
+// ----------------------------------------------------------------
+
+function armConfirmButton(button, { armedLabel, timeoutMs = 4000, onConfirm }) {
+  const normalLabel = button.textContent;
+  let armed = false;
+  let timer = null;
+
+  const disarm = () => {
+    armed = false;
+    button.textContent = normalLabel;
+    button.classList.remove("is-armed");
+    if (timer) { clearTimeout(timer); timer = null; }
+  };
+
+  button.addEventListener("click", () => {
+    if (!armed) {
+      armed = true;
+      button.textContent = armedLabel;
+      button.classList.add("is-armed");
+      timer = setTimeout(disarm, timeoutMs);
+      return;
+    }
+    disarm();
+    onConfirm();
+  });
+
+  return { disarm };
+}
+
+// ----------------------------------------------------------------
 // 左ペイン: カテゴリ一覧
 // ----------------------------------------------------------------
 
@@ -523,9 +559,8 @@ function buildDetailPane({ onOverriddenChange, categories, onRequestTarget }) {
   revertSec.appendChild(revertBtn);
   pane.appendChild(revertSec);
 
-  revertBtn.addEventListener("click", async () => {
+  const doRevertToShipped = async () => {
     if (!_cat) return;
-    if (!confirm("上書きと履歴がすべて削除されます。よろしいですか?")) return;
     try {
       const { response, data } = await fetchJson(
         `/api/assets/sprites/${encodeURIComponent(_cat.key)}/${_index}`,
@@ -541,6 +576,11 @@ function buildDetailPane({ onOverriddenChange, categories, onRequestTarget }) {
     } catch (e) {
       showFeedback(feedback, "通信に失敗しました: " + String(e?.message ?? e), "error");
     }
+  };
+
+  armConfirmButton(revertBtn, {
+    armedLabel: "本当に戻す?（上書きと履歴を全削除）",
+    onConfirm: () => { void doRevertToShipped(); },
   });
 
   async function handleFileSelected(file) {
@@ -606,8 +646,7 @@ function buildDetailPane({ onOverriddenChange, categories, onRequestTarget }) {
       revertBtnRow.type = "button";
       revertBtnRow.className = "button small";
       revertBtnRow.textContent = "この版に戻す";
-      revertBtnRow.addEventListener("click", async () => {
-        if (!confirm(`版 ${h.revision} に戻しますか?`)) return;
+      const doRevertToRevision = async () => {
         try {
           const { response, data } = await fetchJson(
             `/api/assets/sprites/${encodeURIComponent(_cat.key)}/${_index}/revert`,
@@ -630,6 +669,11 @@ function buildDetailPane({ onOverriddenChange, categories, onRequestTarget }) {
         } catch (e) {
           showFeedback(feedback, "通信に失敗しました: " + String(e?.message ?? e), "error");
         }
+      };
+
+      armConfirmButton(revertBtnRow, {
+        armedLabel: `本当に版 ${h.revision} へ?`,
+        onConfirm: () => { void doRevertToRevision(); },
       });
       tdOp.appendChild(revertBtnRow);
       tr.append(tdRev, tdDate, tdUser, tdSize, tdOp);
@@ -641,7 +685,9 @@ function buildDetailPane({ onOverriddenChange, categories, onRequestTarget }) {
 
   async function reload() {
     if (!_cat) return;
-    showFeedback(feedback, "", null);
+    // ここではフィードバックを消さない。保存・復元の直後にも reload() が走るため、
+    // 消すと「保存しました」等の結果表示が出た直後に消えてしまう。
+    // 表示のクリアは対象を切り替える setTarget() 側で行う。
 
     // 差し替え/復元の直後も呼ばれるため、合成プレビューの画像キャッシュを捨ててから貼り直す
     composer.invalidate({ redraw: false });
@@ -696,6 +742,7 @@ function buildDetailPane({ onOverriddenChange, categories, onRequestTarget }) {
     _index = index;
     _naturalWidth = 0;
     _naturalHeight = 0;
+    showFeedback(feedback, "", null);
     // ペイントは未保存の変更があると切り替えを断ることがある（その時は自分で通知する）
     paint.setTarget(cat, index);
     reload();

@@ -81,6 +81,34 @@ function copyStyles(doc) {
   });
 }
 
+// ポップアップ中、confirm/alert/prompt は「元のウィンドウ」に出る。
+// スクリプトが所属する realm が元ウィンドウのままだからで、これは避けられない。
+// そのまま出すと別ウィンドウの背後に隠れて「押しても何も起きない」ように見えるので、
+// ダイアログを出す前に元ウィンドウを手前に持ってくる。
+//
+// 画像エディタの破壊的な操作は 2 段階クリックに置き換えてあるのでここを通らないが、
+// 他の画面（キャラ編集など）はまだ confirm/alert を使っているための保険。
+const _nativeDialogs = {};
+
+function installDialogFocusGuard() {
+  ["confirm", "alert", "prompt"].forEach((name) => {
+    if (_nativeDialogs[name]) return;
+    const original = window[name].bind(window);
+    _nativeDialogs[name] = original;
+    window[name] = (...args) => {
+      try { window.focus(); } catch { /* 無視 */ }
+      return original(...args);
+    };
+  });
+}
+
+function removeDialogFocusGuard() {
+  Object.keys(_nativeDialogs).forEach((name) => {
+    window[name] = _nativeDialogs[name];
+    delete _nativeDialogs[name];
+  });
+}
+
 function popOut() {
   if (isPoppedOut()) { _popup.focus(); return; }
 
@@ -102,6 +130,7 @@ function popOut() {
   // 手元にはゲーム画面しか残らないのでそちらを全面表示にする
   setMode("game");
   updatePopupButton();
+  installDialogFocusGuard();
 
   // 閉じられたら戻す。pagehide だけだと取りこぼす環境があるので併用する。
   popup.addEventListener("pagehide", popIn);
@@ -121,6 +150,7 @@ function popIn() {
   const popup = _popup;
   _popup = null;
   try { if (!popup.closed) popup.close(); } catch { /* 既に閉じている */ }
+  removeDialogFocusGuard();
 
   setMode("both");
   updatePopupButton();
