@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <ctime>
 
-#include <windows.h>
+#include "../Platform/SvrPlatform.h"
 
 namespace
 {
@@ -46,22 +46,16 @@ CGrpImageStore::~CGrpImageStore()
 
 bool CGrpImageStore::ResolveDbPathLocked(std::string &outPath) const
 {
-    char szDir[MAX_PATH];
-    DWORD dwLength = GetModuleFileNameA(NULL, szDir, MAX_PATH);
-    if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
-        return false;
-    }
-    char *pszTmp = strrchr(szDir, '\\');
-    if (pszTmp != NULL) {
-        pszTmp[1] = '\0';
-    }
-
-    std::string dirPath = szDir;
+    // 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+    // (末尾は区切り文字で終わる)。取得に失敗しても "./" が返るだけで例外は無いため、
+    // ここで false を返すケースは実質無くなる。
+    std::string dirPath = SboPlatform::GetExeDirectory();
     dirPath.append("SBODATA");
-    CreateDirectoryA(dirPath.c_str(), NULL);
+    SboPlatform::MakeDirectory(dirPath.c_str());
 
     outPath = dirPath;
-    outPath.append("\\SboGrpData.db");
+    outPath.push_back(SboPlatform::GetPathSeparator());
+    outPath.append("SboGrpData.db");
     return true;
 }
 
@@ -84,7 +78,7 @@ bool CGrpImageStore::EnsureOpenLocked()
     sqlite3 *pDb = NULL;
     int nRet = sqlite3_open(dbPath.c_str(), &pDb);
     if (nRet != SQLITE_OK) {
-        OutputDebugStringA("CGrpImageStore: sqlite3_open failed\n");
+        SboPlatform::WriteDebugLine("CGrpImageStore: sqlite3_open failed\n");
         if (pDb != NULL) {
             sqlite3_close(pDb);
         }
@@ -140,7 +134,7 @@ bool CGrpImageStore::EnsureOpenLocked()
     char *pszErr = NULL;
     nRet = sqlite3_exec(pDb, pszInit, NULL, NULL, &pszErr);
     if (nRet != SQLITE_OK) {
-        OutputDebugStringA("CGrpImageStore: schema init failed\n");
+        SboPlatform::WriteDebugLine("CGrpImageStore: schema init failed\n");
         if (pszErr != NULL) {
             sqlite3_free(pszErr);
         }

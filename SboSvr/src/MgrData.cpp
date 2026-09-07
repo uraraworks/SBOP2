@@ -33,6 +33,7 @@
 #include "MgrData.h"
 #include "PasswordHash.h"
 #include <string>
+#include "Platform/SvrPlatform.h"
 
 CMgrData::CMgrData()
 {
@@ -92,8 +93,6 @@ void CMgrData::Create(
 	CMainFrame	*pMainFrame,	// [in] メインフレーム
 	CUraraSockTCPSBO	*pSock)	// [in] 通信マネージャ
 {
-	TCHAR szName[MAX_PATH];
-	LPTSTR pszPath;
 	CmyString strTmp;
 
 	ReadIniData();
@@ -123,17 +122,13 @@ void CMgrData::Create(
 	m_pLibInfoItem->SetTypeInfo(m_pLibInfoItemType);
 	m_pLibInfoItem->SetWeaponInfo(m_pLibInfoItemWeapon);
 
-	GetModuleFileName(NULL, szName, _countof(szName));
-	pszPath	= _tcsrchr(szName, _T('\\'));
-	if (pszPath != NULL) {
-		pszPath[1]	= _T('\0');
-	} else {
-		szName[0]	= _T('\0');
-	}
+	// 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+	// (末尾は区切り文字で終わる)。GrpImageStore.cpp と同じ置き換え方針。
+	std::string strExeDir = SboPlatform::GetExeDirectory();
 
 	// ログファイルの作成
-	CString strBasePath(szName);
-	strTmp.Format(_T("%sSboSvrLog.txt"), (LPCTSTR)strBasePath);
+	strTmp = strExeDir.c_str();
+	strTmp += "SboSvrLog.txt";
 	m_pLog->Create(strTmp, TRUE, TRUE);
 }
 
@@ -164,29 +159,14 @@ void CMgrData::Destroy(void)
 // -------------------------------------------------------
 static bool OpenSboDb(sqlite3 **ppDb)
 {
-	char szDbPath[MAX_PATH];
-	char szDir[MAX_PATH];
-	LPSTR pszTmp;
-
-	// 実行ファイルのディレクトリを取得
-	GetModuleFileNameA(NULL, szDir, MAX_PATH);
-	pszTmp = strrchr(szDir, '\\');
-	if (pszTmp != NULL) {
-		pszTmp[1] = '\0';
-	}
-
-	// SBODATA ディレクトリが無ければ作成
-	strcpy_s(szDbPath, szDir);
-	strcat_s(szDbPath, "SBODATA");
-	CreateDirectoryA(szDbPath, NULL);
-
-	// DB ファイルパスを作成
-	strcat_s(szDbPath, "\\SboData.db");
+	// SBODATA ディレクトリを作り、その中の DB パスを組み立てる
+	std::string strDbPath = SboPlatform::MakeDataFilePath("SboData.db");
+	const char *szDbPath = strDbPath.c_str();
 
 	// SQLite オープン
 	int nRet = sqlite3_open(szDbPath, ppDb);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("CMgrData: sqlite3_open failed\n");
+		SboPlatform::WriteDebugLine("CMgrData: sqlite3_open failed\n");
 		*ppDb = NULL;
 		return false;
 	}
@@ -330,7 +310,7 @@ void CMgrData::Load(void)
 			if (m_pLog != NULL) {
 				m_pLog->Write("アカウントのパスワードをハッシュ化します(%d件)。完了までしばらくかかります", nPlainCount);
 			} else {
-				OutputDebugStringA("CMgrData: password hash migration start\n");
+				SboPlatform::WriteDebugLine("CMgrData: password hash migration start\n");
 			}
 		}
 
@@ -347,7 +327,7 @@ void CMgrData::Load(void)
 				if (m_pLog != NULL) {
 					m_pLog->Write("警告: アカウントのパスワードハッシュ化に失敗したため平文のまま残します [AccountID:%u]", pInfoAccount->m_dwAccountID);
 				} else {
-					OutputDebugStringA("CMgrData: password hash failed, keep plain text\n");
+					SboPlatform::WriteDebugLine("CMgrData: password hash failed, keep plain text\n");
 				}
 				continue;
 			}
@@ -370,7 +350,7 @@ void CMgrData::Load(void)
 			if (m_pLog != NULL) {
 				m_pLog->Write("アカウントのパスワードを%d件ハッシュ化しました", nMigrated);
 			} else {
-				OutputDebugStringA("CMgrData: password hash migration done\n");
+				SboPlatform::WriteDebugLine("CMgrData: password hash migration done\n");
 			}
 		}
 	}
@@ -420,7 +400,6 @@ void CMgrData::ReadHashList(void)
 {
 	int i, nCount;
         char szFileName[MAX_PATH];
-        TCHAR szBasePath[MAX_PATH];
 	DWORD dwTmp;
 	CTextInput TextInput;
 	CParamUtil ParamUtil;
@@ -428,9 +407,10 @@ void CMgrData::ReadHashList(void)
 
 	m_pInfoFileList->DeleteAll();
 
-        GetModuleFilePath(szBasePath, _countof(szBasePath));
-        CStringA strBasePath = TStringToAnsi(szBasePath);
-        strcpy_s(szFileName, strBasePath);
+        // 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+        // (末尾に区切り文字を含む点は GetModuleFilePath と同じ)
+        std::string strBasePath = SboPlatform::GetExeDirectory();
+        strcpy_s(szFileName, strBasePath.c_str());
         strcat_s(szFileName, "Update\\SBOHashList.txt");
 
 	TextInput.Create(szFileName);
@@ -446,62 +426,26 @@ void CMgrData::ReadHashList(void)
 
 void CMgrData::SetClientVersion(LPCSTR pszVersion)
 {
-        TCHAR szFileName[MAX_PATH];
-
-        ZeroMemory(szFileName, sizeof (szFileName));
-
-        GetModuleFileName(NULL, szFileName, _countof(szFileName));
-        size_t nLen = _tcslen(szFileName);
-        if (nLen >= 3) {
-                _tcscpy_s(szFileName + nLen - 3, _countof(szFileName) - (nLen - 3), _T("ini"));
-        } else {
-                _tcscat_s(szFileName, _T(".ini"));
-        }
-
         m_strClientVersion = pszVersion;
-        WritePrivateProfileString(_T("Info"), _T("ClientVersion"), m_strClientVersion, szFileName);
+        SboPlatform::SetIniString(SboPlatform::GetIniFilePath().c_str(),
+                "Info", "ClientVersion", m_strClientVersion.GetUtf8Pointer());
 }
 
 void CMgrData::ReadIniData(void)
 {
-        TCHAR szFileName[MAX_PATH];
-        TCHAR szTmp[128];
-
-        ZeroMemory(szFileName, sizeof (szFileName));
-        ZeroMemory(szTmp, sizeof (szTmp));
-
-        GetModuleFileName(NULL, szFileName, _countof(szFileName));
-        size_t nLen = _tcslen(szFileName);
-        if (nLen >= 3) {
-                _tcscpy_s(szFileName + nLen - 3, _countof(szFileName) - (nLen - 3), _T("ini"));
-        } else {
-                _tcscat_s(szFileName, _T(".ini"));
-        }
+        std::string strIni = SboPlatform::GetIniFilePath();
+        const char *pszIni = strIni.c_str();
 
         // 待ちうけポート
-        m_wPort = static_cast<WORD>(GetPrivateProfileInt(_T("Setting"), _T("Port"), 2006, szFileName));
+        m_wPort = static_cast<WORD>(SboPlatform::GetIniInt(pszIni, "Setting", "Port", 2006));
         // HTTP待ちうけポート
-        m_wHttpPort = static_cast<WORD>(GetPrivateProfileInt(_T("Setting"), _T("HttpPort"), 18080, szFileName));
+        m_wHttpPort = static_cast<WORD>(SboPlatform::GetIniInt(pszIni, "Setting", "HttpPort", 18080));
         // Cookieに Secure 属性を付けるか（本番はIISが443で受けるため1にする）
-        m_bCookieSecure = static_cast<BOOL>(GetPrivateProfileInt(_T("Setting"), _T("CookieSecure"), 0, szFileName));
+        m_bCookieSecure = static_cast<BOOL>(SboPlatform::GetIniInt(pszIni, "Setting", "CookieSecure", 0));
         // 管理者権限アカウント
-        GetPrivateProfileString(_T("Setting"), _T("AdminAccount"), _T("Admin"), szTmp, _countof(szTmp), szFileName);
-        m_strAdminAccount = szTmp;
+        m_strAdminAccount = SboPlatform::GetIniString(pszIni, "Setting", "AdminAccount", "Admin").c_str();
 
         // クライアントバージョン
-        GetPrivateProfileString(_T("Info"), _T("ClientVersion"), _T(""), szTmp, _countof(szTmp), szFileName);
-        m_strClientVersion = szTmp;
+        m_strClientVersion = SboPlatform::GetIniString(pszIni, "Info", "ClientVersion", "").c_str();
 
-        // FTPアカウント
-        GetPrivateProfileString(_T("FTP"), _T("Account"), _T(""), szTmp, _countof(szTmp), szFileName);
-        m_strFtpAccount = szTmp;
-        // FTPパスワード
-        GetPrivateProfileString(_T("FTP"), _T("Password"), _T(""), szTmp, _countof(szTmp), szFileName);
-        m_strFtpPassword = szTmp;
-        // サーバーアドレス
-        GetPrivateProfileString(_T("FTP"), _T("ServerAddr"), _T(""), szTmp, _countof(szTmp), szFileName);
-        m_strFtpServerAddr = szTmp;
-        // アップロード先
-        GetPrivateProfileString(_T("FTP"), _T("UploadPath"), _T(""), szTmp, _countof(szTmp), szFileName);
-        m_strFtpUploadPath = szTmp;
 }

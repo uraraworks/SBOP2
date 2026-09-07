@@ -18,6 +18,9 @@ const int kOpcodePong         = 0xA; ///< Pong
 /// @brief Sec-WebSocket-Accept キーを計算する（SHA-1 + Base64）
 std::string ComputeAcceptKey(const std::string &clientKey);
 
+/// @brief SHA-1 ダイジェストを16進文字列で返す（テスト用に公開）
+std::string Sha1Hex(const std::string &data);
+
 /// @brief WebSocket フレームを 1 フレーム読み込む（デマスク済みペイロードを返す）
 bool ReadFrame(SOCKET hSocket, std::vector<unsigned char> &outPayload, int &outOpcode);
 

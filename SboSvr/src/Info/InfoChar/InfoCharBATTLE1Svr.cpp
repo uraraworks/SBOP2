@@ -8,6 +8,7 @@
 #include "InfoMapBase.h"
 #include "InfoCharBATTLE1Svr.h"
 #include "LibInfoCharSvr.h"
+#include "../../Platform/SvrPlatform.h"
 
 CInfoCharBATTLE1Svr::CInfoCharBATTLE1Svr()
 {
@@ -34,10 +35,10 @@ void CInfoCharBATTLE1Svr::SetMoveState(int nMoveState)
 	switch (nMoveState) {
 	case CHARMOVESTATE_BATTLE:
 	case CHARMOVESTATE_BATTLEATACK:
-		m_dwLastTiemAtack = timeGetTime();
+		m_dwLastTiemAtack = SboPlatform::GetTickMs();
 		break;
 	default:
-		m_dwLastTimeMove = timeGetTime();
+		m_dwLastTimeMove = SboPlatform::GetTickMs();
 		m_dwLastTiemAtack = 0;
 		m_dwTargetCharID = 0;
 		break;
@@ -231,7 +232,7 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 
 	// 前回は移動？
 	if (m_dwLastTiemAtack == 0) {
-		dwTmp = timeGetTime() - m_dwLastTimeBattleMove;
+		dwTmp = SboPlatform::GetTickMs() - m_dwLastTimeBattleMove;
 		if ((m_dwLastTimeBattleMove != 0) && (dwTmp > 5000)) {
 			// 5秒以上移動していなかったらあきらめる
 			SetMoveState(CHARMOVESTATE_DELETE);
@@ -270,7 +271,7 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 			m_nDirection = nDirection;
 			m_bChgPosRenew = TRUE;
 		}
-		dwTmp = timeGetTime() - m_dwLastTiemAtack;
+		dwTmp = SboPlatform::GetTickMs() - m_dwLastTiemAtack;
 		if (m_dwLastTiemAtack != 0) {
 			if (dwTmp > 5000) {
 				SetMoveState(CHARMOVESTATE_DELETE);

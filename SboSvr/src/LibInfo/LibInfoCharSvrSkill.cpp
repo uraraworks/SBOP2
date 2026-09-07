@@ -18,6 +18,7 @@
 #include "MainFrame.h"
 #include "MgrData.h"
 #include "LibInfoCharSvr.h"
+#include "../Platform/SvrPlatform.h"
 
 BOOL CLibInfoCharSvr::UseSkill(CInfoCharSvr *pInfoChar, DWORD dwSkillID)
 {
@@ -252,7 +253,7 @@ BOOL CLibInfoCharSvr::UseSkillBATTLE_MOVEATACK(CInfoCharSvr *pInfoChar, CInfoSki
 		pInfoCharTmp->m_dwHitEffectID	= pInfoSkill->m_dwHitEffectID;
 		pInfoCharTmp->m_dwValue1	= pInfoSkill->m_dwValue1;
 		pInfoCharTmp->m_dwValue2	= pInfoSkill->m_dwValue2;
-		pInfoCharTmp->m_dwQuitTime	= timeGetTime() + pInfoSkill->m_dwAliveTime;
+		pInfoCharTmp->m_dwQuitTime	= SboPlatform::GetTickMs() + pInfoSkill->m_dwAliveTime;
 	}
 	PacketMsg.Make(
 			FORMATMSGID_USESKILL,

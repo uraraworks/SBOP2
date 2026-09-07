@@ -7,6 +7,7 @@
 #include "StdAfx.h"
 #include "InfoMotion.h"
 #include "InfoCharSvr.h"
+#include "../Platform/SvrPlatform.h"
 
 namespace {
 
@@ -134,7 +135,7 @@ void CInfoCharSvr::SetMoveState(int nMoveState)
 	switch (nMoveState) {
 	case CHARMOVESTATE_BATTLEATACK_WAIT:	// 戦闘攻撃後の待ち時間
 		m_dwChgWait = 1000;
-		m_dwLastTimeChg = timeGetTime();
+		m_dwLastTimeChg = SboPlatform::GetTickMs();
 		m_bChgMoveState = FALSE;
 		break;
 	case CHARMOVESTATE_BATTLE:
@@ -603,7 +604,7 @@ void CInfoCharSvr::AddProcInfo(
 
 	pInfo = new CHARPROCINFO;
 	pInfo->dwProcID	= dwProcID;	// 行動ID
-	pInfo->dwProcSetTime	= timeGetTime();	// 処理設定時間
+	pInfo->dwProcSetTime	= SboPlatform::GetTickMs();	// 処理設定時間
 	pInfo->dwProcStartTime	= dwStartTime;	// 処理開始時間
 	pInfo->dwPara	= dwPara;	// パラメータ
 

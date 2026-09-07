@@ -5,10 +5,15 @@
 /// @copyright Copyright(C)URARA-works 2005
 
 #include "StdAfx.h"
+
+// fopen 等の標準 C ファイル IO 用
+#include <cstdio>
+
 #include "SaveLoadInfoBase.h"
 
 // SQLite3 を include（このファイルのみ）
 #include "../../third_party/sqlite/sqlite3.h"
+#include "../Platform/SvrPlatform.h"
 
 // 静的メンバの実体定義
 sqlite3 *CSaveLoadInfoBase::s_pDb = NULL;
@@ -53,21 +58,19 @@ void CSaveLoadInfoBase::WriteData(void)
 			return;	// SQLite 書き込み成功 → .dat には書かない
 		}
 		// prepare 失敗時は .dat にフォールバック
-		OutputDebugStringA("SaveLoadInfoBase: SQLite prepare failed, fallback to .dat\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoBase: SQLite prepare failed, fallback to .dat\n");
 	}
 
 	// SQLite 未接続またはエラー時は従来の .dat ファイルへ書き込み
 	{
-		HANDLE hFile;
-		DWORD dwBytes;
+		FILE *pFile;
 
-		hFile = CreateFile(m_strFileName, GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-		if (hFile == INVALID_HANDLE_VALUE) {
+		pFile = fopen(m_strFileName, "wb");
+		if (pFile == NULL) {
 			return;
 		}
-		dwBytes = 0;
-		WriteFile(hFile, m_pData, dwTotalSize, &dwBytes, NULL);
-		CloseHandle(hFile);
+		fwrite(m_pData, 1, dwTotalSize, pFile);
+		fclose(pFile);
 	}
 }
 
@@ -106,31 +109,33 @@ BOOL CSaveLoadInfoBase::ReadData(void)
 
 	// SQLite に行がない場合は従来の .dat ファイルから読み込む
 	{
-		HANDLE hFile;
+		FILE *pFile;
 		DWORD dwBytes;
 		BOOL bRet;
 
 		bRet = FALSE;
-		hFile = CreateFile(m_strFileName, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-		if (hFile == INVALID_HANDLE_VALUE) {
+		pFile = fopen(m_strFileName, "rb");
+		if (pFile == NULL) {
 			goto Exit;
 		}
 
 		// ファイルサイズ取得
-		m_dwDataSize = GetFileSize(hFile, NULL);
+		fseek(pFile, 0, SEEK_END);
+		m_dwDataSize = (DWORD)ftell(pFile);
 		if ((int)m_dwDataSize == -1) {
 			goto Exit;
 		}
+		fseek(pFile, 0, SEEK_SET);
 
 		SAFE_DELETE_ARRAY(m_pData);
 		m_pData = new BYTE[m_dwDataSize];
 		// ファイル内容を全部読み込む
-		ReadFile(hFile, m_pData, m_dwDataSize, &dwBytes, NULL);
+		dwBytes = (DWORD)fread(m_pData, 1, m_dwDataSize, pFile);
 
 		bRet = TRUE;
 Exit:
-		if (hFile != INVALID_HANDLE_VALUE) {
-			CloseHandle(hFile);
+		if (pFile != NULL) {
+			fclose(pFile);
 		}
 		return bRet;
 	}
@@ -344,16 +349,8 @@ void CSaveLoadInfoBase::ReadHeader(void)
 
 void CSaveLoadInfoBase::SetFileName(LPCSTR pszName)
 {
-	char szName[MAX_PATH];
-	LPSTR pszTmp;
-
-	// ファイル名の作成
-	GetModuleFileNameA(NULL, szName, MAX_PATH);
-	pszTmp = strrchr(szName, '\\');
-	pszTmp[1] = 0;
-	strcat(szName, pszName);
-
-	m_strFileName = szName;
+	// 実行ファイルの隣に置く
+	m_strFileName = SboPlatform::MakeExeRelativePath(pszName).c_str();
 }
 
 void CSaveLoadInfoBase::SetName(LPCSTR pszName)

@@ -34,11 +34,11 @@
 using namespace std;
 
 // 型定義・構造体・定数・マクロ（依存関係の起点）
-#include "PlatformDefs.h"
+#include "../../../Common/Platform/PlatformDefs.h"
 // CStringTCompat テンプレートクラス
-#include "CStringCompat.h"
+#include "../../../Common/Platform/CStringCompat.h"
 // TCHAR系文字列操作・MultiByteToWideChar 等
-#include "TCharCompat.h"
+#include "../../../Common/Platform/TCharCompat.h"
 // GDI描画関数スタブ（SdlFont 連携）
 #include "GdiStubs.h"
 // ウィンドウ/メッセージ関数スタブ

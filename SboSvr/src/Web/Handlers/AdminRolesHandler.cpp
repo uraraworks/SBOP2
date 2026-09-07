@@ -14,6 +14,7 @@
 #include "GlobalDefine.h"
 #include "LibInfo/LibInfoAccount.h"
 #include "Info/InfoAccount.h"
+#include "../../Platform/SvrPlatform.h"
 
 namespace
 {
@@ -344,7 +345,7 @@ void CAdminRolesUpdateHandler::EmitAuditTrace(DWORD dwAccountId, const std::vect
                 oss << " actor=" << actorLoginId;
         }
 #if defined(_WIN32)
-        OutputDebugStringA(oss.str().c_str());
+        SboPlatform::WriteDebugLine(oss.str().c_str());
 #else
         std::fprintf(stderr, "%s\n", oss.str().c_str());
 #endif

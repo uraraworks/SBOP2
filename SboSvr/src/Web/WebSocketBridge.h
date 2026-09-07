@@ -2,6 +2,9 @@
 
 #include <vector>
 #include <string>
+#include <thread>
+#include <atomic>
+#include <future>
 
 /// @brief WebSocket→TCPブリッジサーバー
 /// WebSocket接続を受け付け、localhostのTCPゲームポートへ透過転送する
@@ -20,11 +23,10 @@ public:
     void Stop();
 
 private:
-    /// @brief スレッドエントリポイント（_beginthreadex用）
-    static unsigned __stdcall ThreadProc(void *lpParam);
-
     /// @brief メインスレッド処理
-    void Run();
+    /// @param startedPromise 起動完了(成否)を Start() 側へ伝える promise。
+    ///                       スレッド内で必ず1回 set_value() する。
+    void Run(std::promise<bool> startedPromise);
 
     /// @brief リッスンソケットを作成してbind/listen
     bool CreateListener();
@@ -38,9 +40,6 @@ private:
     /// @brief 新規接続を受け付けてセッションスレッドを起動
     void HandleAccept();
 
-    /// @brief 各セッション用スレッドエントリポイント
-    static unsigned __stdcall SessionThreadProc(void *lpParam);
-
     /// @brief WebSocketセッション処理（ハンドシェイク→TCP接続→ブリッジ）
     void HandleSession(SOCKET hWsClient);
 
@@ -48,9 +47,6 @@ private:
 
     /// @brief WebSocketハンドシェイクを行う
     bool PerformHandshake(SOCKET hClient);
-
-    /// @brief Sec-WebSocket-AcceptキーをSHA-1+Base64で計算する
-    static std::string ComputeAcceptKey(const std::string &clientKey);
 
     // WebSocketフレーム処理 -------------------------------------------
 
@@ -76,27 +72,11 @@ private:
     /// @brief 指定バイト数を確実に受信する
     static bool RecvAll(SOCKET hSocket, unsigned char *pBuf, size_t nLength);
 
-    // SHA-1・Base64 自前実装 -------------------------------------------
-
-    /// @brief SHA-1ハッシュを計算する（RFC 3174準拠）
-    static void Sha1(const unsigned char *pData, size_t nLength, unsigned char hash[20]);
-
-    /// @brief バイナリデータをBase64エンコードする
-    static std::string Base64Encode(const unsigned char *pData, size_t nLength);
-
 private:
-    SOCKET          m_hListen;       ///< リッスンソケット
-    HANDLE          m_hThread;       ///< メインスレッドハンドル
-    HANDLE          m_hStopEvent;    ///< 停止イベント
-    HANDLE          m_hStartedEvent; ///< 起動完了イベント
-    unsigned short  m_wWsPort;       ///< WebSocketリッスンポート
-    unsigned short  m_wTcpPort;      ///< 転送先TCPポート
-    bool            m_bInitSucceeded;///< 初期化成功フラグ
-};
-
-/// @brief HandleSession用スレッド引数
-struct WebSocketSessionArgs
-{
-    CWebSocketBridge *pBridge;   ///< ブリッジオブジェクト
-    SOCKET            hWsClient; ///< WebSocketクライアントソケット
+    SOCKET             m_hListen;     ///< リッスンソケット
+    std::thread        m_thread;      ///< メインスレッド（ProcessLoopを実行）
+    std::future<void>  m_doneFuture;  ///< メインスレッド終了通知（Stopのタイムアウト付き待機に使用）
+    std::atomic<bool>  m_bStop;       ///< 停止フラグ
+    unsigned short     m_wWsPort;     ///< WebSocketリッスンポート
+    unsigned short     m_wTcpPort;    ///< 転送先TCPポート
 };

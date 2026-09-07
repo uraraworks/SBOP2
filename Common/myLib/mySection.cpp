@@ -1,4 +1,4 @@
-﻿/// @file mySection.cpp
+/// @file mySection.cpp
 /// @brief クリティカルセクションクラス 実装ファイル
 /// @author 年がら年中春うらら(URARA-works)
 /// @date 2004/09/01
@@ -11,26 +11,24 @@
 
 CmySection::CmySection()
 {
-	InitializeCriticalSection(&m_Crit);
 }
 
 // デストラクタ
 
 CmySection::~CmySection()
 {
-	DeleteCriticalSection(&m_Crit);
 }
 
 // ロック
 
 void CmySection::Enter(void)
 {
-	EnterCriticalSection(&m_Crit);
+	m_Crit.lock();
 }
 
 // ロック解除
 
 void CmySection::Leave(void)
 {
-	LeaveCriticalSection(&m_Crit);
+	m_Crit.unlock();
 }

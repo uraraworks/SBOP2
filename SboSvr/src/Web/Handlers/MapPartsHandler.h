@@ -13,8 +13,6 @@
 #include <cstdlib>
 #include <cwchar>
 
-#include <windows.h>
-
 class CMgrData;
 class CLibInfoMapParts;
 class CLibInfoMapBase;
@@ -32,12 +30,9 @@ public:
         bool IsAvailable();
 
 private:
-        bool EnsureLibraryLocked();
         bool LoadSheetLocked(int sheetIndex, std::vector<unsigned char> &outData);
-        bool ResolveLibraryPath(std::wstring &outPath) const;
 
         std::mutex                                      m_mutex;
-        HMODULE                                         m_hModule;
         std::map<int, std::vector<unsigned char> >     m_sheetCache;
         int                                             m_sheetCount;
 };

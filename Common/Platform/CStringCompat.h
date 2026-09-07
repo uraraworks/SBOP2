@@ -4,6 +4,17 @@
 
 #pragma once
 
+// 共有ヘッダなので自前で依存を取り込む。
+// 以前は SboCli の BrowserCompat.h が先に include している前提だった。
+#include <vector>
+#include <string>
+#include <cstdarg>
+#include <cstdio>
+#include <cstring>
+#include <cctype>
+#include <cwctype>
+#include <cwchar>
+
 // -----------------------------------------------------------------------
 // 大文字小文字変換ヘルパー（char / wchar_t 特殊化）
 // -----------------------------------------------------------------------

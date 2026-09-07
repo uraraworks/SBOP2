@@ -4,6 +4,10 @@
 #include <algorithm>
 #include <cctype>
 #include <cstdio>
+#include <cstring>
+#include <sys/stat.h>
+
+#include "../../Platform/SvrPlatform.h"
 
 #if defined(_WIN32)
 #include <windows.h>
@@ -204,43 +208,31 @@ bool CStaticFileHandler::BuildFilePath(const std::string &requestPath, std::wstr
 // ---------------------------------------------------------------------------
 bool CStaticFileHandler::StatFile(const std::wstring &path, FileMetaInfo &outMeta) const
 {
-#if !defined(_WIN32)
-        (void)path;
-        (void)outMeta;
-        return false;
-#else
         outMeta.valid    = false;
         outMeta.fileSize = 0;
+        outMeta.mtime    = 0;
 
-        HANDLE hFile = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-        if (hFile == INVALID_HANDLE_VALUE) {
+#if !defined(_WIN32)
+        (void)path;
+        return false;
+#else
+        // サイズ・mtime のみが要る軽量経路。stat() 系に統一しておくことで
+        // FILETIME(100ns/Windows epoch)を触らずに済み、非Windows(stat()実装)
+        // と同じ型(time_t/秒)で扱える。
+        struct _stat64 st;
+        if (_wstat64(path.c_str(), &st) != 0) {
+                return false;
+        }
+        if (st.st_size < 0) {
+                return false;
+        }
+        if (static_cast<unsigned long long>(st.st_size) > kMaxStaticFileSize) {
                 return false;
         }
 
-        LARGE_INTEGER size;
-        if (!GetFileSizeEx(hFile, &size)) {
-                CloseHandle(hFile);
-                return false;
-        }
-        if (size.QuadPart < 0) {
-                CloseHandle(hFile);
-                return false;
-        }
-        if (static_cast<unsigned long long>(size.QuadPart) > kMaxStaticFileSize) {
-                CloseHandle(hFile);
-                return false;
-        }
-
-        outMeta.fileSize = static_cast<unsigned long long>(size.QuadPart);
-
-        // mtime 取得（失敗しても valid=false のまま → ETag なし・200 配信は続行）
-        FILETIME ftCreate, ftAccess, ftWrite;
-        if (GetFileTime(hFile, &ftCreate, &ftAccess, &ftWrite)) {
-                outMeta.mtime = ftWrite;
-                outMeta.valid = true;
-        }
-
-        CloseHandle(hFile);
+        outMeta.fileSize = static_cast<unsigned long long>(st.st_size);
+        outMeta.mtime    = st.st_mtime;
+        outMeta.valid    = true;
         return true;
 #endif
 }
@@ -381,21 +373,19 @@ std::string CStaticFileHandler::DetermineCacheControl(const std::string &relativ
 }
 
 // ---------------------------------------------------------------------------
-// BuildETag: nginx 風 "<hex_mtime_low>-<hex_size>" （ダブルクォート含む強い ETag）
+// BuildETag: nginx 風 "<hex_mtime>-<hex_size>" （ダブルクォート含む強い ETag）
 // ---------------------------------------------------------------------------
 /*static*/
 std::string CStaticFileHandler::BuildETag(const FileMetaInfo &meta)
 {
-        // FILETIME は 100ns 単位 ULARGE_INTEGER で 64bit。下位 32bit を hex 化（nginx 準拠）
-        ULARGE_INTEGER ul;
-        ul.LowPart  = meta.mtime.dwLowDateTime;
-        ul.HighPart = meta.mtime.dwHighDateTime;
-
+        // mtime(time_t、秒単位) と size を hex 化する（nginx 準拠）。
+        // 旧実装は FILETIME(100ns 単位)の下位 32bit を使っていたが、
+        // Last-Modified 側がそもそも秒精度までしか運べないため、
+        // ETag も秒精度で揃えて実害は無い(同一ファイルが1秒未満で
+        // 書き換わる想定は無い)。
         char buf[64];
-        // nginx は mtime (秒) と size を hex 化するが、ここでは 100ns 単位の下位 32bit を使用
-        // 同一ファイルへの書き込み粒度が 100ns のため十分に衝突しにくい
-        std::snprintf(buf, sizeof(buf), "\"%x-%llx\"",
-                      ul.LowPart,
+        std::snprintf(buf, sizeof(buf), "\"%llx-%llx\"",
+                      static_cast<unsigned long long>(meta.mtime),
                       static_cast<unsigned long long>(meta.fileSize));
         return std::string(buf);
 }
@@ -406,37 +396,76 @@ std::string CStaticFileHandler::BuildETag(const FileMetaInfo &meta)
 /*static*/
 std::string CStaticFileHandler::BuildLastModified(const FileMetaInfo &meta)
 {
-        SYSTEMTIME st;
-        if (!FileTimeToSystemTime(&meta.mtime, &st)) {
+        SboPlatform::GMTIME gt;
+        if (!SboPlatform::GmTimeUtc(meta.mtime, &gt)) {
                 return std::string();
         }
-        if (st.wDayOfWeek > 6 || st.wMonth < 1 || st.wMonth > 12) {
+        if ((gt.nWeekDay < 0) || (gt.nWeekDay > 6) || (gt.nMonth < 1) || (gt.nMonth > 12)) {
                 return std::string();
         }
 
         char buf[64];
         std::snprintf(buf, sizeof(buf),
                       "%s, %02d %s %04d %02d:%02d:%02d GMT",
-                      kDayNames[st.wDayOfWeek],
-                      static_cast<int>(st.wDay),
-                      kMonthNames[st.wMonth - 1],
-                      static_cast<int>(st.wYear),
-                      static_cast<int>(st.wHour),
-                      static_cast<int>(st.wMinute),
-                      static_cast<int>(st.wSecond));
+                      kDayNames[gt.nWeekDay],
+                      gt.nDay,
+                      kMonthNames[gt.nMonth - 1],
+                      gt.nYear,
+                      gt.nHour,
+                      gt.nMinute,
+                      gt.nSecond);
         return std::string(buf);
 }
 
 // ---------------------------------------------------------------------------
-// ParseHttpDate: 未使用（If-Modified-Since は文字列完全一致で比較するため）
-// 将来的に厳密なパースが必要な場合に備えてスタブとして残す。
+// ParseHttpDate: RFC 7231 IMF-fixdate ("Ddd, DD Mon YYYY HH:MM:SS GMT") を
+// time_t(UTC) へ変換する。If-Modified-Since は文字列完全一致で比較しており
+// 通常経路では呼ばれないが、往復一致(Build→Parse)をテストで保証するために
+// 実装を持つ。
 // ---------------------------------------------------------------------------
 /*static*/
-bool CStaticFileHandler::ParseHttpDate(const std::string &httpDate, FILETIME &outFt)
+bool CStaticFileHandler::ParseHttpDate(const std::string &httpDate, std::time_t &outTime)
 {
-        (void)httpDate;
-        (void)outFt;
-        return false;
+        // 例: "Wed, 21 Oct 2026 07:28:00 GMT"
+        char szDay[4] = {0};
+        char szMonth[4] = {0};
+        int nDay = 0, nYear = 0, nHour = 0, nMinute = 0, nSecond = 0;
+
+        if (std::sscanf(httpDate.c_str(), "%3[A-Za-z], %2d %3[A-Za-z] %4d %2d:%2d:%2d GMT",
+                         szDay, &nDay, szMonth, &nYear, &nHour, &nMinute, &nSecond) != 7) {
+                return false;
+        }
+
+        int nMonth = -1;
+        for (int i = 0; i < 12; ++i) {
+                if (std::strcmp(szMonth, kMonthNames[i]) == 0) {
+                        nMonth = i + 1;
+                        break;
+                }
+        }
+        if (nMonth < 0) {
+                return false;
+        }
+        if ((nDay < 1) || (nDay > 31) || (nHour < 0) || (nHour > 23) ||
+            (nMinute < 0) || (nMinute > 59) || (nSecond < 0) || (nSecond > 60)) {
+                return false;
+        }
+
+        SboPlatform::GMTIME gt;
+        std::memset(&gt, 0, sizeof(gt));
+        gt.nYear   = nYear;
+        gt.nMonth  = nMonth;
+        gt.nDay    = nDay;
+        gt.nHour   = nHour;
+        gt.nMinute = nMinute;
+        gt.nSecond = nSecond;
+
+        std::time_t t = 0;
+        if (!SboPlatform::TimeGmUtc(gt, &t)) {
+                return false;
+        }
+        outTime = t;
+        return true;
 }
 
 // ---------------------------------------------------------------------------

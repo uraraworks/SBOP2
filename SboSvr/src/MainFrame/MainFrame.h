@@ -6,11 +6,12 @@
 
 #pragma once
 
+#include <deque>
+
 class CPacketBase;
 class CMgrData;
 class CUraraSockTCPSBO;
 class CTextOutput;
-class CUpdateServerInfo;
 class CHttpServer;
 class CWebSocketBridge;
 class CLibInfoAccount;
@@ -32,6 +33,48 @@ class CLibInfoSkill;
 class CLibInfoTalkEvent;
 class CInfoCharBase;
 
+// ソケット通知の種別
+
+enum SOCKNOTIFY_TYPE {
+	SOCKNOTIFY_ADDCLIENT = 0,	// クライアントが接続した
+	SOCKNOTIFY_DECCLIENT,	// クライアントが切断した
+	SOCKNOTIFY_RECV,	// 受信
+	SOCKNOTIFY_DISCONNECT,	// こちらから切断する
+};
+
+// ソケット通知キューの要素
+//
+// 通信ライブラリは専用スレッドから通知してくるため、ここへ積んで
+// メインスレッド(TimerProc)でまとめて捌く。直接ハンドラを呼ぶと
+// ゲームロジックを別スレッドが触ることになるので厳禁。
+
+struct SOCKNOTIFYINFO {
+	SOCKNOTIFY_TYPE	Type;	// 種別
+	DWORD	dwSessionID;	// セッションID
+	PBYTE	pData;	// 受信データ(SOCKNOTIFY_RECV のみ有効。所有権はキューが持つ)
+};
+
+// プロセスの終了コード
+//
+// ヘッドレス運用では起動スクリプトが判定に使うため、
+// 0 = 正常、それ以外 = 異常とする。
+
+#define SBOSVR_EXIT_OK	(0)	// 正常終了
+#define SBOSVR_EXIT_ERROR	(1)	// 初期化失敗、または停止対象が見つからない
+#define SBOSVR_EXIT_ALREADY_RUNNING	(2)	// 同じポートのサーバーが既に起動している
+
+// サーバー状態表示の項目
+//
+// 描画やウィンドウに依存しない形で状態を取り出すための入れ物。
+// OnPaint 以外(コンソール出力やログ)からも同じ内容を使えるようにする。
+
+struct SERVERSTATEITEM {
+	CmyString	strLabel;	// 項目名
+	CmyString	strValue;	// 値
+};
+
+#define SERVERSTATEITEM_MAX	(4)	// サーバー状態表示の項目数
+
 // クラス宣言
 
 class CMainFrame
@@ -40,7 +83,7 @@ public:
 			CMainFrame();	// コンストラクタ
 	virtual ~CMainFrame();	// デストラクタ
 
-	int	MainLoop(HINSTANCE hInstance);	// メインループ
+	int	MainLoop(HINSTANCE hInstance, BOOL bHeadless = FALSE);	// メインループ
 
 	// 送信処理
 	void	SendToScreenChar(CInfoCharBase *pInfoChar, CPacketBase *pPacket, BOOL bExcludeSelf = FALSE);	// 指定キャラと同じ画面のキャラへ送信
@@ -48,25 +91,56 @@ public:
 	void	SendToAdminChar(CPacketBase *pPacket);	// 管理者権限を持っているキャラへ送信
 	void	SendToClient(DWORD dwSessionID, CPacketBase *pPacket);	// セッションIDが有効な場合のみ送信
 
+	void	RequestDisconnect(DWORD dwSessionID);	// 切断を予約する(即時ではなく次の TimerProc で処理)
+
+	static	void	MakeQuitEventName(LPTSTR pszName, size_t nMax, WORD wPort);	// 停止通知イベント名を作る
+	static	void	MakeRunMutexName(LPTSTR pszName, size_t nMax, WORD wPort);	// 稼働中ミューテックス名を作る
+	static	BOOL	RequestStopRunningServer(void);	// 稼働中のヘッドレスサーバーへ停止を要求する
+	static	void	AttachParentConsole(void);	// 親のコンソールへ接続する(あれば)
+	static	void	WriteConsoleMessage(LPCTSTR pszFormat, ...);	// 接続したコンソールへ出力する
+
 private:
+	int	MainLoopWindow(HINSTANCE hInstance);	// メインループ(ウィンドウあり)
+	int	MainLoopHeadless(void);	// メインループ(ヘッドレス)
+
+	BOOL	InitServer(void);	// サーバー初期化(ウィンドウに依存しない)
+	void	TermServer(void);	// サーバー終了処理(ウィンドウに依存しない)
+	void	RequestQuit(void)	{ m_bQuit = TRUE;	}	// 終了を要求する(別スレッドから呼ばれ得る)
+
+	static	BOOL WINAPI ConsoleCtrlHandler(DWORD dwCtrlType);	// コンソール終了シグナルの受け口
+
+	BOOL	CreateQuitEvent(WORD wPort);	// 停止通知イベントを作る
+	void	CloseQuitEvent(void);	// 停止通知イベントを閉じる
+	BOOL	IsQuitEventSignaled(void);	// 停止通知イベントが立っているか
+
+	void	LoadWindowPos(HWND hWnd);	// ウィンドウ位置を復元(ウィンドウありのみ)
+	void	SaveWindowPos(HWND hWnd);	// ウィンドウ位置を保存(ウィンドウありのみ)
+
 	static	LRESULT CALLBACK WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);	// メインウィンドウプロシージャ(エントリポイント)
 			LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);	// メインウィンドウプロシージャ
 	BOOL	OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct);	// メッセージハンドラ(WM_CREATE)
 	void	OnClose(HWND hWnd);	// メッセージハンドラ(WM_CLOSE)
 	void	OnDestroy(HWND hWnd);	// メッセージハンドラ(WM_DESTROY)
 	void	OnPaint(HWND hWnd);	// メッセージハンドラ(WM_PAINT)
-	void	OnTimer(HWND hWnd, UINT id);	// メッセージハンドラ(WM_TIMER)
 	void	OnCommand(HWND hWnd, int id, HWND hWndCtl, UINT codeNotify);	// メッセージハンドラ(WM_COMMAND)
-	void	OnAddClient(DWORD dwSessionID);	// メッセージハンドラ(WM_URARASOCK_ADDCLIENT)
-	void	OnDecClient(DWORD dwSessionID);	// メッセージハンドラ(WM_URARASOCK_DECCLIENT)
-	void	OnRecv(PBYTE pData, DWORD dwSessionID);	// メッセージハンドラ(WM_URARASOCK_RECV)
-	void	OnDisconnect(DWORD dwSessionID);	// メッセージハンドラ(WM_DISCONNECT)
+	void	OnAddClient(DWORD dwSessionID);	// 通知ハンドラ(クライアント接続)
+	void	OnDecClient(DWORD dwSessionID);	// 通知ハンドラ(クライアント切断)
+	void	OnRecv(PBYTE pData, DWORD dwSessionID);	// 通知ハンドラ(受信)
+	void	OnDisconnect(DWORD dwSessionID);	// 通知ハンドラ(こちらから切断)
+
+	static	void	OnSocketNotifyThunk(void *pUserData, UINT uMsgOffset, WPARAM wParam, LPARAM lParam);	// ソケット通知コールバック(ソケットスレッドから呼ばれる)
+	void	PushSockNotify(const SOCKNOTIFYINFO &Info);	// ソケット通知をキューへ積む
+	void	ProcSockNotify(void);	// 溜まったソケット通知を捌く(メインスレッド)
+	void	ClearSockNotify(void);	// ソケット通知キューを破棄
+
 	void	TimerProc(void);	// 時間処理
 	void	TimerProcKeepalive(void);	// 時間処理(生存確認チェック)
+	void	TimerProcClock(void);	// 時間処理(時報と状態表示の更新)
+	void	TimerProcSave(void);	// 時間処理(定期保存)
+	int	GetServerStateItem(SERVERSTATEITEM *paItem, int nMax);	// サーバー状態の表示項目を取得(描画に依存しない)
 	void	MyTextOut(HDC hDC, int x, int y, LPCTSTR pStr);	// 文字列描画
-	void	UpdateServerInfo(BOOL bSend = TRUE, BOOL bUpload = FALSE);	// サーバー情報を更新
+	void	NotifyOnlineCount(void);	// オンライン数を全クライアントへ通知
 
-	void	OnCommandACCOUNT_DELETEALL(void);	// メニューハンドラ(全アカウントを削除)
 	void	OnCommandUPDATE_RENEW(void);	// メニューハンドラ(アップデートファイル更新)
 
 	// 受信処理(MainFrameRecvProcVERSION.cpp)
@@ -206,14 +280,24 @@ private:
 private:
 	BYTE	m_byLastSendClock;	// 最後にお知らせした時刻
 	DWORD	m_dwServerStartTime,	// サーバー起動時間
-						m_dwLastKeepaliveCheck;	// 最後に生存確認チェックした時間
-	HWND	m_hWnd;	// ウィンドウハンドル
+						m_dwLastKeepaliveCheck,	// 最後に生存確認チェックした時間
+						m_dwLastClockTime,	// 最後に時報処理を行った時間
+						m_dwLastSaveTime;	// 最後に定期保存を行った時間
+	HWND	m_hWnd;	// ウィンドウハンドル(ヘッドレス時は NULL)
 	HFONT	m_hFont;	// サーバー状態の描画に使うフォント
+	BOOL	m_bHeadless;	// ヘッドレス動作か
+	volatile BOOL	m_bQuit;	// 終了要求(コンソールシグナルや停止通知から立てられる)
+	HANDLE	m_hQuitEvent;	// 停止通知イベント(ヘッドレス時のみ)
+	HANDLE	m_hRunMutex;	// 稼働中を示すミューテックス(ヘッドレス時のみ。終了判定に使う)
+
+	static	CMainFrame	*s_pInstance;	// コンソールシグナルから参照する自身
+
+	CmySection	m_SectSockNotify;	// ソケット通知キューの排他
+	std::deque<SOCKNOTIFYINFO>	m_deqSockNotify;	// ソケット通知キュー
 
 	CMgrData	*m_pMgrData;	// データ管理
 	CUraraSockTCPSBO	*m_pSock;	// 通信マネージャ
 	CTextOutput	*m_pLog;	// ログファイル
-	CUpdateServerInfo	*m_pUpdateServerInfo;	// サーバー情報アップロード
         CHttpServer             *m_pHttpServer;         // 管理用HTTPサーバー
         CWebSocketBridge        *m_pWebSocketBridge;    // WebSocket→TCPブリッジサーバー
 

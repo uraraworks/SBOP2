@@ -568,6 +568,13 @@ void CWindowLOGIN::AppendText(LPCSTR pszText)
 				ch = (TCHAR)(ch - _T('A') + _T('a'));
 			}
 		}
+		if (m_nFocusIndex == LOGINFOCUS_PASSWORD) {
+			// パスワードは ASCII の表示可能文字のみ。サーバー側の
+			// PasswordHash::IsAcceptable() と同じ条件で、入力段階から弾く。
+			if ((ch < _T('!')) || (ch > _T('~'))) {
+				continue;
+			}
+		}
 		strFiltered.AppendChar(ch);
 		if (strFiltered.GetLength() >= nAllow) {
 			break;

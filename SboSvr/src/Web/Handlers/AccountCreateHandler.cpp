@@ -295,9 +295,22 @@ bool CAccountCreateHandler::ValidateLoginId(const std::string &loginId, Validati
 
 bool CAccountCreateHandler::ValidatePassword(const std::string &password, ValidationIssue &outPolicyIssue) const
 {
-        if (password.size() < 12 || password.size() > 64) {
+        // 最小長は設けない。
+        //
+        // 以前は12文字以上を要求していたが、ゲーム側の入口には最小長が無く、
+        // 実在するアカウントにも12文字未満のものがある。Web管理画面だけが
+        // 厳しいと、既存アカウントと同じ条件のものを作れない。
+        // 空文字列は下の IsAcceptable() が弾く。
+        if (password.size() > 64) {
                 outPolicyIssue.field = "password";
-                outPolicyIssue.message = "password length must be between 12 and 64 characters.";
+                outPolicyIssue.message = "password length must be 64 characters or fewer.";
+                return false;
+        }
+        // 文字種はゲーム側の入口と揃える(ASCII表示可能文字のみ)。
+        // 全角を許すとエンコーディング次第で同じパスワードが別のハッシュになる。
+        if (!PasswordHash::IsAcceptable(password.c_str())) {
+                outPolicyIssue.field = "password";
+                outPolicyIssue.message = "password must contain only printable ASCII characters (0x21-0x7E).";
                 return false;
         }
         return true;

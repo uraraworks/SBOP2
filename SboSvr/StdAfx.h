@@ -6,6 +6,8 @@
 
 #pragma once
 
+#ifdef _WIN32
+
 #include "../Common/rpcsal_fallback.h"
 
 #define WIN32_LEAN_AND_MEAN
@@ -23,6 +25,14 @@
 #include <mmsystem.h>
 #include <shlwapi.h>
 #include <tchar.h>
+
+#else
+
+// 非Windows では共有の互換レイヤを読む
+#include "src/Platform/SvrCompat.h"
+
+#endif // _WIN32
+
 #include <map>
 using namespace std;
 

@@ -21,6 +21,7 @@
 #include "InfoTalkEventMENU.h"
 #include "LibInfoTalkEvent.h"
 #include "SaveLoadInfoTalkEvent.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableMain  = "sys_talk_event";
@@ -125,16 +126,16 @@ void CSaveLoadInfoTalkEvent::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtMenu  = NULL;
 
 	if (sqlite3_prepare_v2(s_pDb, pszInsertMain,  -1, &pStmtMain,  NULL) != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoTalkEvent::SaveToNormalTable: prepare(main) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoTalkEvent::SaveToNormalTable: prepare(main) failed\n");
 		return;
 	}
 	if (sqlite3_prepare_v2(s_pDb, pszInsertEvent, -1, &pStmtEvent, NULL) != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoTalkEvent::SaveToNormalTable: prepare(event) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoTalkEvent::SaveToNormalTable: prepare(event) failed\n");
 		sqlite3_finalize(pStmtMain);
 		return;
 	}
 	if (sqlite3_prepare_v2(s_pDb, pszInsertMenu,  -1, &pStmtMenu,  NULL) != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoTalkEvent::SaveToNormalTable: prepare(menu) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoTalkEvent::SaveToNormalTable: prepare(menu) failed\n");
 		sqlite3_finalize(pStmtMain);
 		sqlite3_finalize(pStmtEvent);
 		return;
@@ -356,7 +357,7 @@ BOOL CSaveLoadInfoTalkEvent::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='TalkEvent';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoTalkEvent: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoTalkEvent: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -392,11 +393,11 @@ void CSaveLoadInfoTalkEvent::Load(PCLibInfoBase pDst)
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoTalkEvent: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoTalkEvent: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoTalkEvent: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoTalkEvent: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

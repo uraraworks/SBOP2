@@ -3,16 +3,19 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstdio>
 #include <cstdlib>
 #include <cwchar>
 #include <iomanip>
 #include <sstream>
+#include <sys/stat.h>
 
 #include "lodepng.h"
 
 #include "Web/AuthProvider.h"
 #include "Web/GrpImageStore.h"
 #include "Web/JsonUtils.h"
+#include "../../Platform/SvrPlatform.h"
 
 namespace
 {
@@ -134,7 +137,9 @@ bool ParseSpriteSheetPath(
 
 // char* (ASCII 前提) を wstring に変換する簡易ヘルパ。
 // レイアウト定義テーブル (Common/GrpLayout.h) は char で持つが、
-// FindResourceW / _snwprintf_s は wchar_t を要求するためここで変換する。
+// リソース名まわり(BuildResourceName 等)は wstring で扱っているためここで変換する
+// （res/ からのファイル読み込み(TryLoadFromFileLocked)や DLL リソース読み出し
+// (SboPlatform::LoadEmbeddedPng)は char* をそのまま使うため ToStringA で戻して渡す）。
 std::wstring ToWString(const char *pszSrc)
 {
     std::wstring out;
@@ -193,17 +198,12 @@ std::string ToStringA(const std::wstring &src)
 // ---------------------------------------------------------------------------
 
 CGrpResourceProvider::CGrpResourceProvider()
-    : m_hModule(NULL)
 {
 }
 
 CGrpResourceProvider::~CGrpResourceProvider()
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    if (m_hModule != NULL) {
-        FreeLibrary(m_hModule);
-        m_hModule = NULL;
-    }
     m_sheetCache.clear();
     m_sheetCountCache.clear();
 }
@@ -332,7 +332,7 @@ int CGrpResourceProvider::GetSheetCount(const std::string &categoryKey)
         _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
             "CGrpResourceProvider::GetSheetCount: probe limit reached (category=%s)\n",
             categoryKey.c_str());
-        OutputDebugStringA(szMsg);
+        SboPlatform::WriteDebugLine(szMsg);
     }
 
     m_sheetCountCache.insert(std::make_pair(categoryKey, count));
@@ -369,45 +369,6 @@ bool CGrpResourceProvider::GetCategoryLayout(
     nCellSize = pCat->nCellSize;
     nCountX   = pCat->nCountX;
     nCountY   = pCat->nCountY;
-    return true;
-}
-
-bool CGrpResourceProvider::EnsureLibraryLocked()
-{
-    if (m_hModule != NULL) {
-        return true;
-    }
-    std::wstring modulePath;
-    if (!ResolveLibraryPath(modulePath)) {
-        return false;
-    }
-    HMODULE hLoaded = LoadLibraryW(modulePath.c_str());
-    if (hLoaded == NULL) {
-        return false;
-    }
-    m_hModule = hLoaded;
-    return true;
-}
-
-bool CGrpResourceProvider::ResolveLibraryPath(std::wstring &outPath) const
-{
-    wchar_t szModulePath[MAX_PATH];
-    DWORD dwLength = GetModuleFileNameW(NULL, szModulePath, MAX_PATH);
-    if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
-        return false;
-    }
-    wchar_t *pSlash = wcsrchr(szModulePath, L'\\');
-    if (pSlash != NULL) {
-        *(pSlash + 1) = L'\0';
-    }
-    std::wstring candidate = szModulePath;
-    candidate.append(L"SboGrpData.dll");
-    DWORD dwAttributes = GetFileAttributesW(candidate.c_str());
-    if (dwAttributes == INVALID_FILE_ATTRIBUTES) {
-        outPath.assign(L"SboGrpData.dll");
-        return true;
-    }
-    outPath = candidate;
     return true;
 }
 
@@ -457,8 +418,11 @@ bool CGrpResourceProvider::BuildResourceName(
         return true;
     }
     // 番号付き
+    // _snwprintf_s は MSVC 方言で em++ に無いため、Common/Platform/TCharCompat.h
+    // が非Windows 向けに用意している _stprintf_s(バッファサイズ付き) を使う
+    // (Windows では実体の MSVC 版が使われるので挙動は変わらない)。
     wchar_t szName[64] = {};
-    _snwprintf_s(szName, _countof(szName), _TRUNCATE, pattern.c_str(), sheetIndex + cat.nFirstResourceIndex);
+    _stprintf_s(szName, _countof(szName), pattern.c_str(), sheetIndex + cat.nFirstResourceIndex);
     outName = szName;
     return true;
 }
@@ -520,63 +484,65 @@ bool CGrpResourceProvider::TryLoadFromFileLocked(
 
     // 実行ファイルのディレクトリを基準に候補パスを走査する
     // （SboCli/src/MgrGrpData.cpp の FindSboGrpResBasePath と同じ流儀）
-    wchar_t szModulePath[MAX_PATH];
-    DWORD dwLength = GetModuleFileNameW(NULL, szModulePath, MAX_PATH);
-    if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
-        return false;
+    // 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+    // (末尾は区切り文字で終わる)
+    std::string strModulePath = SboPlatform::GetExeDirectory();
+
+    // kGrpResFileTable (Common/GrpLayout.cpp) は Windows 形式('\\'区切り)で
+    // ファイル名を持つため、非Windows でも fopen が解釈できるよう
+    // SboPlatform::GetPathSeparator() に合わせて変換する
+    // （SboCli/src/MgrGrpData.cpp の GetFileNameForResource と同じ流儀）。
+    std::string relFileName = pszRelFileName;
+    char chSep = SboPlatform::GetPathSeparator();
+    if (chSep != '\\') {
+        for (std::string::iterator it = relFileName.begin(); it != relFileName.end(); ++it) {
+            if (*it == '\\') {
+                *it = chSep;
+            }
+        }
     }
-    wchar_t *pSlash = wcsrchr(szModulePath, L'\\');
-    if (pSlash != NULL) {
-        *(pSlash + 1) = L'\0';
-    }
 
-    std::wstring relFileName = ToWString(pszRelFileName);
+    std::string strBaseCandidates[4];
+    strBaseCandidates[0] = std::string(".") + chSep + "SboGrpData" + chSep + "res" + chSep;
+    strBaseCandidates[1] = std::string("..") + chSep + "SboGrpData" + chSep + "res" + chSep;
+    strBaseCandidates[2] = std::string("..") + chSep + ".." + chSep + "SboGrpData" + chSep + "res" + chSep;
+    strBaseCandidates[3] = std::string("..") + chSep + ".." + chSep + ".." + chSep + "SboGrpData" + chSep + "res" + chSep;
 
-    static const wchar_t *const apszBaseCandidates[] = {
-        L".\\SboGrpData\\res\\",
-        L"..\\SboGrpData\\res\\",
-        L"..\\..\\SboGrpData\\res\\",
-        L"..\\..\\..\\SboGrpData\\res\\",
-        NULL
-    };
-
-    for (int i = 0; apszBaseCandidates[i] != NULL; ++i) {
-        std::wstring candidatePath = szModulePath;
-        candidatePath.append(apszBaseCandidates[i]);
+    for (size_t i = 0; i < _countof(strBaseCandidates); ++i) {
+        std::string candidatePath = strModulePath;
+        candidatePath.append(strBaseCandidates[i]);
         candidatePath.append(relFileName);
 
-        HANDLE hFile = CreateFileW(candidatePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL,
-                                    OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-        if (hFile == INVALID_HANDLE_VALUE) {
+        FILE *pFile = fopen(candidatePath.c_str(), "rb");
+        if (pFile == NULL) {
             continue;
         }
 
-        LARGE_INTEGER liSize = {};
-        FILETIME ftWrite = {};
-        BOOL bSizeOk = GetFileSizeEx(hFile, &liSize);
-        BOOL bTimeOk = GetFileTime(hFile, NULL, NULL, &ftWrite);
-        if (!bSizeOk || liSize.QuadPart <= 0) {
-            CloseHandle(hFile);
+        // 更新時刻・サイズを取得(StaticFileHandler.cpp の StatFile と同じ流儀。
+        // 同じファイルを2回開かないよう、開いたファイルディスクリプタに対して fstat する)
+        struct stat st;
+        if (fstat(_fileno(pFile), &st) != 0) {
+            fclose(pFile);
+            continue;
+        }
+        if (st.st_size <= 0) {
+            fclose(pFile);
             continue;
         }
 
-        std::vector<unsigned char> fileData(static_cast<size_t>(liSize.QuadPart));
-        DWORD dwRead = 0;
-        BOOL bReadOk = ReadFile(hFile, fileData.data(), static_cast<DWORD>(fileData.size()), &dwRead, NULL);
-        CloseHandle(hFile);
-        if (!bReadOk || dwRead != fileData.size()) {
+        std::vector<unsigned char> fileData(static_cast<size_t>(st.st_size));
+        size_t nRead = fread(fileData.data(), 1, fileData.size(), pFile);
+        fclose(pFile);
+        if (nRead != fileData.size()) {
             continue;
         }
 
         outRawPng = std::move(fileData);
 
         // ETag: "gf-<mtime の16進>-<サイズの16進>"
-        ULARGE_INTEGER ulTime;
-        ulTime.LowPart  = ftWrite.dwLowDateTime;
-        ulTime.HighPart = ftWrite.dwHighDateTime;
         char szEtag[64];
         _snprintf_s(szEtag, _countof(szEtag), _TRUNCATE, "\"gf-%llx-%llx\"",
-                    bTimeOk ? static_cast<unsigned long long>(ulTime.QuadPart) : 0ULL,
+                    static_cast<unsigned long long>(st.st_mtime),
                     static_cast<unsigned long long>(outRawPng.size()));
         outETag = szEtag;
         return true;
@@ -590,33 +556,18 @@ bool CGrpResourceProvider::TryLoadFromDllLocked(
     std::vector<unsigned char> &outRawPng,
     std::string &outETag)
 {
-    if (!EnsureLibraryLocked()) {
+    // DLL の探索・ロード・FindResourceW 等は Platform 層(SboPlatform::LoadEmbeddedPng)
+    // に集約されている。resourceName は ASCII 前提（BuildResourceName が char テーブル
+    // から作る）ため char へ戻して渡す。
+    std::string resNameA = ToStringA(resourceName);
+    if (!SboPlatform::LoadEmbeddedPng(resNameA.c_str(), outRawPng)) {
         return false;
     }
-
-    HRSRC hResInfo = FindResourceW(m_hModule, resourceName.c_str(), L"PNG");
-    if (hResInfo == NULL) {
-        return false;
-    }
-    HGLOBAL hRes = LoadResource(m_hModule, hResInfo);
-    if (hRes == NULL) {
-        return false;
-    }
-    DWORD dwResourceSize = SizeofResource(m_hModule, hResInfo);
-    if (dwResourceSize == 0) {
-        return false;
-    }
-    const BYTE *pResourceData = static_cast<const BYTE *>(LockResource(hRes));
-    if (pResourceData == NULL) {
-        return false;
-    }
-
-    outRawPng.assign(pResourceData, pResourceData + dwResourceSize);
 
     // ETag: "gr-<サイズの16進>"
     char szEtag[64];
     _snprintf_s(szEtag, _countof(szEtag), _TRUNCATE, "\"gr-%llx\"",
-                static_cast<unsigned long long>(dwResourceSize));
+                static_cast<unsigned long long>(outRawPng.size()));
     outETag = szEtag;
     return true;
 }
@@ -645,7 +596,7 @@ bool CGrpResourceProvider::MakeTransparentPng(
             char szMsg[256];
             _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
                 "SpriteSheetHandler: lodepng decode failed (err=%u), using original PNG\n", decErr);
-            OutputDebugStringA(szMsg);
+            SboPlatform::WriteDebugLine(szMsg);
         }
         outData = std::move(rawPng);
         return true;
@@ -663,7 +614,7 @@ bool CGrpResourceProvider::MakeTransparentPng(
         char szMsg[256];
         _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
             "SpriteSheetHandler: lodepng encode failed (err=%u), using original PNG\n", encErr);
-        OutputDebugStringA(szMsg);
+        SboPlatform::WriteDebugLine(szMsg);
         outData = std::move(rawPng);
         return true;
     }

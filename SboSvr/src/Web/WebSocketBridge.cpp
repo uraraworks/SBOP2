@@ -4,12 +4,13 @@
 #include <string>
 #include <sstream>
 #include <cstring>
-#include <process.h>
 #include <cstdlib>
-#include <wincrypt.h>
-#pragma comment(lib, "advapi32.lib")
+#include <chrono>
+#include <system_error>
 
 #include "crc.h" // CCRC: pre-check ハンドシェイクのCRC計算用
+#include "../Platform/SvrPlatform.h"
+#include "WebSocketProtocol.h"
 
 // ============================================================
 //  WebSocket オペコード定数
@@ -23,72 +24,11 @@ const int WS_OPCODE_CLOSE        = 0x8; ///< 接続クローズ
 const int WS_OPCODE_PING         = 0x9; ///< Ping
 const int WS_OPCODE_PONG         = 0xA; ///< Pong
 
-/// WebSocketハンドシェイクで使うGUID（RFC 6455）
-const char *kWsGuid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-
 /// PACKETINFO ヘッダサイズ（dwSize 4byte + dwCRC 4byte）
 const DWORD kPacketInfoSize = 8;
 
 /// セッションスレッドの受信タイムアウト（ミリ秒）
 const DWORD kSessionTimeoutMs = 30000;
-
-// ============================================================
-//  SHA-1 自前実装（RFC 3174）
-// ============================================================
-
-/// @brief 32bit左回転
-inline unsigned int RotLeft32(unsigned int val, int bits)
-{
-    return (val << bits) | (val >> (32 - bits));
-}
-
-/// @brief SHA-1ハッシュを計算する
-void Sha1Internal(const unsigned char *pData, size_t nLength, unsigned char hash[20])
-{
-    HCRYPTPROV hProv = 0;
-    HCRYPTHASH hHash = 0;
-    DWORD dwHashLen = 20;
-
-    ZeroMemory(hash, 20);
-    if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
-        return;
-    }
-    if (!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash)) {
-        CryptReleaseContext(hProv, 0);
-        return;
-    }
-    CryptHashData(hHash, pData, (DWORD)nLength, 0);
-    CryptGetHashParam(hHash, HP_HASHVAL, hash, &dwHashLen, 0);
-    CryptDestroyHash(hHash);
-    CryptReleaseContext(hProv, 0);
-}
-
-// ============================================================
-//  Base64 自前実装
-// ============================================================
-
-std::string Base64EncodeInternal(const unsigned char *pData, size_t nLength)
-{
-    static const char kTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    std::string result;
-    result.reserve(((nLength + 2) / 3) * 4);
-
-    for (size_t i = 0; i < nLength; i += 3) {
-        unsigned int val = static_cast<unsigned int>(pData[i]) << 16;
-        if (i + 1 < nLength) {
-            val |= static_cast<unsigned int>(pData[i + 1]) << 8;
-        }
-        if (i + 2 < nLength) {
-            val |= static_cast<unsigned int>(pData[i + 2]);
-        }
-
-        result += kTable[(val >> 18) & 0x3F];
-        result += kTable[(val >> 12) & 0x3F];
-        result += (i + 1 < nLength) ? kTable[(val >> 6) & 0x3F] : '=';
-        result += (i + 2 < nLength) ? kTable[ val       & 0x3F] : '=';
-    }
-    return result;
-}
 
 } // anonymous namespace
 
@@ -98,12 +38,9 @@ std::string Base64EncodeInternal(const unsigned char *pData, size_t nLength)
 
 CWebSocketBridge::CWebSocketBridge()
     : m_hListen(INVALID_SOCKET)
-    , m_hThread(NULL)
-    , m_hStopEvent(NULL)
-    , m_hStartedEvent(NULL)
+    , m_bStop(false)
     , m_wWsPort(0)
     , m_wTcpPort(0)
-    , m_bInitSucceeded(false)
 {
 }
 
@@ -114,41 +51,35 @@ CWebSocketBridge::~CWebSocketBridge()
 
 bool CWebSocketBridge::Start(unsigned short wWsPort, unsigned short wTcpPort)
 {
-    if (m_hThread != NULL) {
+    if (m_thread.joinable()) {
         return false;
     }
 
     m_wWsPort  = wWsPort;
     m_wTcpPort = wTcpPort;
+    m_bStop.store(false);
 
-    m_hStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-    if (m_hStopEvent == NULL) {
-        return false;
-    }
+    // 起動完了(成否)は promise/future で Start() 側へ伝える。
+    // スレッド終了通知(m_doneFuture)は Stop() のタイムアウト付き待機に使う。
+    std::promise<bool> startedPromise;
+    std::future<bool> startedFuture = startedPromise.get_future();
 
-    m_hStartedEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-    if (m_hStartedEvent == NULL) {
-        CloseHandle(m_hStopEvent);
-        m_hStopEvent = NULL;
-        return false;
-    }
+    std::promise<void> donePromise;
+    m_doneFuture = donePromise.get_future();
 
-    m_bInitSucceeded = false;
-
-    unsigned uThreadId = 0;
-    m_hThread = reinterpret_cast<HANDLE>(
-        _beginthreadex(NULL, 0, ThreadProc, this, 0, &uThreadId));
-    if (m_hThread == NULL) {
-        CloseHandle(m_hStartedEvent);
-        m_hStartedEvent = NULL;
-        CloseHandle(m_hStopEvent);
-        m_hStopEvent = NULL;
+    try {
+        m_thread = std::thread(
+            [this, promise = std::move(startedPromise), doneProm = std::move(donePromise)]() mutable {
+                Run(std::move(promise));
+                doneProm.set_value();
+            });
+    } catch (const std::system_error &) {
         return false;
     }
 
     // 起動完了を最大5秒待つ
-    DWORD dwWait = WaitForSingleObject(m_hStartedEvent, 5000);
-    if ((dwWait != WAIT_OBJECT_0) || !m_bInitSucceeded) {
+    std::future_status status = startedFuture.wait_for(std::chrono::milliseconds(5000));
+    if ((status != std::future_status::ready) || !startedFuture.get()) {
         Stop();
         return false;
     }
@@ -158,64 +89,53 @@ bool CWebSocketBridge::Start(unsigned short wWsPort, unsigned short wTcpPort)
 
 void CWebSocketBridge::Stop()
 {
-    if (m_hThread != NULL) {
-        if (m_hStopEvent != NULL) {
-            SetEvent(m_hStopEvent);
+    m_bStop.store(true);
+
+    if (m_thread.joinable()) {
+        // std::thread にはタイムアウト付き join が無いため、スレッド終了時に
+        // set_value() される m_doneFuture を wait_for でタイムアウト付き待機する
+        // 代用とする。間に合えば join、間に合わなければ従来の
+        // WaitForSingleObject タイムアウト後の挙動（スレッドを強制終了させず
+        // 追跡をやめるだけ）に合わせて detach する。
+        bool bFinished = m_doneFuture.valid() &&
+            (m_doneFuture.wait_for(std::chrono::milliseconds(5000)) ==
+             std::future_status::ready);
+
+        if (bFinished) {
+            m_thread.join();
+        } else {
+            m_thread.detach();
         }
-        WaitForSingleObject(m_hThread, 5000);
-        CloseHandle(m_hThread);
-        m_hThread = NULL;
-    }
-
-    if (m_hStopEvent != NULL) {
-        CloseHandle(m_hStopEvent);
-        m_hStopEvent = NULL;
-    }
-
-    if (m_hStartedEvent != NULL) {
-        CloseHandle(m_hStartedEvent);
-        m_hStartedEvent = NULL;
     }
 }
 
 // ------------------------------------------------------------
-// スレッドエントリポイント
+// メインスレッド本体
 // ------------------------------------------------------------
 
-unsigned __stdcall CWebSocketBridge::ThreadProc(void *lpParam)
+void CWebSocketBridge::Run(std::promise<bool> startedPromise)
 {
-    CWebSocketBridge *pBridge = reinterpret_cast<CWebSocketBridge *>(lpParam);
-    if (pBridge != NULL) {
-        pBridge->Run();
-    }
-    return 0;
-}
+    bool bSocketStarted = false;
 
-void CWebSocketBridge::Run()
-{
-    bool bWinsockStarted = false;
-    WSADATA wsaData;
-    ZeroMemory(&wsaData, sizeof(wsaData));
-
-    // WSAStartupは参照カウント方式なので複数回呼んでOK
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) == 0) {
-        bWinsockStarted = true;
+    // ソケットライブラリの初期化(Windowsでは参照カウント方式のWSAStartup相当。
+    // SboPlatform::SocketStartup/SocketCleanup 参照)。
+    if (SboPlatform::SocketStartup()) {
+        bSocketStarted = true;
 
         if (CreateListener()) {
-            m_bInitSucceeded = true;
-            SetEvent(m_hStartedEvent);
+            startedPromise.set_value(true);
             ProcessLoop();
         } else {
-            SetEvent(m_hStartedEvent);
+            startedPromise.set_value(false);
         }
     } else {
-        SetEvent(m_hStartedEvent);
+        startedPromise.set_value(false);
     }
 
     CloseListener();
 
-    if (bWinsockStarted) {
-        WSACleanup();
+    if (bSocketStarted) {
+        SboPlatform::SocketCleanup();
     }
 }
 
@@ -241,7 +161,7 @@ bool CWebSocketBridge::CreateListener()
     service.sin_addr.s_addr = htonl(INADDR_ANY);
     service.sin_port        = htons(m_wWsPort);
 
-    if (bind(m_hListen, reinterpret_cast<const sockaddr *>(&service),
+    if (::bind(m_hListen, reinterpret_cast<const sockaddr *>(&service),
              sizeof(service)) == SOCKET_ERROR) {
         closesocket(m_hListen);
         m_hListen = INVALID_SOCKET;
@@ -271,7 +191,7 @@ void CWebSocketBridge::CloseListener()
 
 void CWebSocketBridge::ProcessLoop()
 {
-    while (WaitForSingleObject(m_hStopEvent, 0) == WAIT_TIMEOUT) {
+    while (!m_bStop.load()) {
         fd_set readSet;
         FD_ZERO(&readSet);
         FD_SET(m_hListen, &readSet);
@@ -299,50 +219,28 @@ void CWebSocketBridge::HandleAccept()
 {
     SOCKET hWsClient = accept(m_hListen, NULL, NULL);
     if (hWsClient == INVALID_SOCKET) {
-        OutputDebugStringA("[WebSocketBridge] HandleAccept: accept FAILED\n");
+        SboPlatform::WriteDebugLine("[WebSocketBridge] HandleAccept: accept FAILED\n");
         return;
     }
-    OutputDebugStringA("[WebSocketBridge] HandleAccept: accepted\n");
+    SboPlatform::WriteDebugLine("[WebSocketBridge] HandleAccept: accepted\n");
 
-    // セッションスレッドに引数を渡す
-    WebSocketSessionArgs *pArgs = new WebSocketSessionArgs();
-    pArgs->pBridge   = this;
-    pArgs->hWsClient = hWsClient;
-
-    unsigned uThreadId = 0;
-    HANDLE hThread = reinterpret_cast<HANDLE>(
-        _beginthreadex(NULL, 0, SessionThreadProc, pArgs, 0, &uThreadId));
-
-    if (hThread == NULL) {
+    // セッションスレッドは自律実行で、このクラス側では追跡しない
+    // （従来の _beginthreadex + 直後の CloseHandle と同じ扱い）ので detach する。
+    try {
+        std::thread(&CWebSocketBridge::HandleSession, this, hWsClient).detach();
+    } catch (const std::system_error &) {
         // スレッド作成失敗時はここで後始末
         closesocket(hWsClient);
-        delete pArgs;
-        return;
     }
-
-    // スレッドハンドルは不要なのでクローズ（スレッドは自律実行）
-    CloseHandle(hThread);
 }
 
 // ------------------------------------------------------------
 // セッションスレッド
 // ------------------------------------------------------------
 
-unsigned __stdcall CWebSocketBridge::SessionThreadProc(void *lpParam)
-{
-    WebSocketSessionArgs *pArgs = reinterpret_cast<WebSocketSessionArgs *>(lpParam);
-    if (pArgs != NULL) {
-        if (pArgs->pBridge != NULL) {
-            pArgs->pBridge->HandleSession(pArgs->hWsClient);
-        }
-        delete pArgs;
-    }
-    return 0;
-}
-
 void CWebSocketBridge::HandleSession(SOCKET hWsClient)
 {
-    OutputDebugStringA("[WebSocketBridge] HandleSession: start\n");
+    SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: start\n");
 
     // ソケットのタイムアウトを設定
     DWORD dwTimeout = kSessionTimeoutMs;
@@ -353,16 +251,16 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
 
     // 1. WebSocketハンドシェイク
     if (!PerformHandshake(hWsClient)) {
-        OutputDebugStringA("[WebSocketBridge] HandleSession: handshake FAILED\n");
+        SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: handshake FAILED\n");
         closesocket(hWsClient);
         return;
     }
-    OutputDebugStringA("[WebSocketBridge] HandleSession: handshake OK\n");
+    SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: handshake OK\n");
 
     // 2. localhost の TCPゲームポートへ接続
     SOCKET hTcpSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (hTcpSock == INVALID_SOCKET) {
-        OutputDebugStringA("[WebSocketBridge] HandleSession: TCP socket create FAILED\n");
+        SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: TCP socket create FAILED\n");
         closesocket(hWsClient);
         return;
     }
@@ -375,21 +273,21 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
 
     {
         char szLog[128];
-        wsprintfA(szLog, "[WebSocketBridge] TCP connect to 127.0.0.1:%d\n", (int)m_wTcpPort);
-        OutputDebugStringA(szLog);
+        snprintf(szLog, sizeof(szLog), "[WebSocketBridge] TCP connect to 127.0.0.1:%d\n", (int)m_wTcpPort);
+        SboPlatform::WriteDebugLine(szLog);
     }
 
     if (connect(hTcpSock, reinterpret_cast<const sockaddr *>(&tcpAddr),
                 sizeof(tcpAddr)) == SOCKET_ERROR) {
         char szLog[128];
-        wsprintfA(szLog, "[WebSocketBridge] TCP connect FAILED: WSA=%d\n", WSAGetLastError());
-        OutputDebugStringA(szLog);
+        snprintf(szLog, sizeof(szLog), "[WebSocketBridge] TCP connect FAILED: WSA=%d\n", WSAGetLastError());
+        SboPlatform::WriteDebugLine(szLog);
         closesocket(hTcpSock);
         closesocket(hWsClient);
         return;
     }
 
-    OutputDebugStringA("[WebSocketBridge] HandleSession: TCP connected, starting bridge\n");
+    SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: TCP connected, starting bridge\n");
 
     // 4. TCP pre-check ハンドシェイク
     //    SboSockLib はクライアント接続直後に認証チャレンジを送ってくる。
@@ -398,7 +296,7 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
         // チャレンジ受信: [PACKETINFO(8)][dwChallenge(4)]
         unsigned char abyHeader[8];
         if (!RecvAll(hTcpSock, abyHeader, 8)) {
-            OutputDebugStringA("[WebSocketBridge] pre-check: header recv FAILED\n");
+            SboPlatform::WriteDebugLine("[WebSocketBridge] pre-check: header recv FAILED\n");
             closesocket(hTcpSock);
             closesocket(hWsClient);
             return;
@@ -406,14 +304,14 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
         DWORD dwPayloadSize = 0;
         memcpy(&dwPayloadSize, &abyHeader[0], sizeof(DWORD));
         if (dwPayloadSize != sizeof(DWORD)) {
-            OutputDebugStringA("[WebSocketBridge] pre-check: unexpected payload size\n");
+            SboPlatform::WriteDebugLine("[WebSocketBridge] pre-check: unexpected payload size\n");
             closesocket(hTcpSock);
             closesocket(hWsClient);
             return;
         }
         DWORD dwChallenge = 0;
         if (!RecvAll(hTcpSock, reinterpret_cast<unsigned char *>(&dwChallenge), sizeof(DWORD))) {
-            OutputDebugStringA("[WebSocketBridge] pre-check: challenge recv FAILED\n");
+            SboPlatform::WriteDebugLine("[WebSocketBridge] pre-check: challenge recv FAILED\n");
             closesocket(hTcpSock);
             closesocket(hWsClient);
             return;
@@ -433,13 +331,13 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
         memcpy(&abySend[4], &dwCRC, sizeof(DWORD));                // dwCRC
         memcpy(&abySend[8], &dwResponse, sizeof(DWORD));           // payload
         if (!SendAll(hTcpSock, reinterpret_cast<const char *>(abySend), sizeof(abySend))) {
-            OutputDebugStringA("[WebSocketBridge] pre-check: response send FAILED\n");
+            SboPlatform::WriteDebugLine("[WebSocketBridge] pre-check: response send FAILED\n");
             closesocket(hTcpSock);
             closesocket(hWsClient);
             return;
         }
 
-        OutputDebugStringA("[WebSocketBridge] pre-check: OK\n");
+        SboPlatform::WriteDebugLine("[WebSocketBridge] pre-check: OK\n");
     }
 
     // 3. 双方向ブリッジループ
@@ -508,8 +406,8 @@ bool CWebSocketBridge::PerformHandshake(SOCKET hClient)
         clientKey.resize(clientKey.size() - 1);
     }
 
-    // Sec-WebSocket-Accept キーを計算
-    std::string acceptKey = ComputeAcceptKey(clientKey);
+    // Sec-WebSocket-Accept キーを計算（WebSocketProtocol の共通実装を利用）
+    std::string acceptKey = WebSocketProtocol::ComputeAcceptKey(clientKey);
 
     // 101 Switching Protocols レスポンスを返す
     std::string response =
@@ -520,21 +418,6 @@ bool CWebSocketBridge::PerformHandshake(SOCKET hClient)
         "\r\n";
 
     return SendAll(hClient, response.c_str(), response.size());
-}
-
-std::string CWebSocketBridge::ComputeAcceptKey(const std::string &clientKey)
-{
-    // クライアントキー + GUID を連結してSHA-1ハッシュを計算
-    std::string combined = clientKey + kWsGuid;
-
-    unsigned char hash[20];
-    Sha1Internal(
-        reinterpret_cast<const unsigned char *>(combined.c_str()),
-        combined.size(),
-        hash);
-
-    // Base64エンコードして返す
-    return Base64EncodeInternal(hash, 20);
 }
 
 // ============================================================
@@ -663,7 +546,7 @@ void CWebSocketBridge::BridgeLoop(SOCKET hWsClient, SOCKET hTcpSock)
     std::vector<unsigned char> tcpRecvBuf;
     tcpRecvBuf.reserve(4096);
 
-    while (WaitForSingleObject(m_hStopEvent, 0) == WAIT_TIMEOUT) {
+    while (!m_bStop.load()) {
         // WebSocketソケットとTCPソケットの両方を監視
         fd_set readSet;
         FD_ZERO(&readSet);
@@ -812,18 +695,4 @@ bool CWebSocketBridge::RecvAll(SOCKET hSocket, unsigned char *pBuf, size_t nLeng
         nTotalRecv += static_cast<size_t>(nRecv);
     }
     return true;
-}
-
-// ============================================================
-//  CWebSocketBridge のラッパーメソッド（ヘッダとの対応）
-// ============================================================
-
-void CWebSocketBridge::Sha1(const unsigned char *pData, size_t nLength, unsigned char hash[20])
-{
-    Sha1Internal(pData, nLength, hash);
-}
-
-std::string CWebSocketBridge::Base64Encode(const unsigned char *pData, size_t nLength)
-{
-    return Base64EncodeInternal(pData, nLength);
 }

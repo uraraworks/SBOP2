@@ -7,6 +7,7 @@
 #include "StdAfx.h"
 #include "InfoMapBase.h"
 #include "InfoCharMOVEATACKSvr.h"
+#include "../../Platform/SvrPlatform.h"
 
 CInfoCharMOVEATACKSvr::CInfoCharMOVEATACKSvr()
 {
@@ -32,7 +33,7 @@ void CInfoCharMOVEATACKSvr::SetMoveState(int nMoveState)
 	if (m_nMoveState == nMoveState) {
 		return;
 	}
-	dwTime = timeGetTime();;
+	dwTime = SboPlatform::GetTickMs();;
 	if (nMoveState == CHARMOVESTATE_BATTLEATACK) {
 		m_dwLastAtackTime = dwTime;
 	}

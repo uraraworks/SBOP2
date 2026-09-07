@@ -35,6 +35,7 @@
 #include "InfoMapBase.h"
 #include "LibInfoMapBase.h"
 #include "SaveLoadInfoMap.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableMain = "sys_map";
@@ -105,7 +106,7 @@ void CSaveLoadInfoMap::SaveToNormalTable(void)
 	sqlite3_stmt* pStmt = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsert, -1, &pStmt, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoMap::SaveToNormalTable: prepare failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMap::SaveToNormalTable: prepare failed\n");
 		return;
 	}
 
@@ -273,7 +274,7 @@ BOOL CSaveLoadInfoMap::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='Map';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoMap: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMap: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -309,11 +310,11 @@ void CSaveLoadInfoMap::Load(PCLibInfoBase pDst)
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoMap: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMap: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoMap: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMap: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

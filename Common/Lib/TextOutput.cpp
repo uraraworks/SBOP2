@@ -21,14 +21,12 @@ CTextOutput::CTextOutput()
 	m_bReturn	= TRUE;
 
 	// クリティカルセクションオブジェクトを初期化
-	InitializeCriticalSection(&m_csWrite);
 }
 
 CTextOutput::~CTextOutput()
 {
 	Destroy();
 
-	DeleteCriticalSection(&m_csWrite);
 }
 
 BOOL CTextOutput::Create(
@@ -97,7 +95,7 @@ void CTextOutput::WriteProc(
 #endif
 
 	// 排他開始
-	EnterCriticalSection(&m_csWrite);
+	m_csWrite.lock();
 
 	if ((m_pszFileName == NULL) || (pszText == NULL)) {
 		goto Exit;
@@ -158,6 +156,6 @@ void CTextOutput::WriteProc(
 
 Exit:
 	// 排他終了
-	LeaveCriticalSection(&m_csWrite);
+	m_csWrite.unlock();
 }
 

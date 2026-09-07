@@ -53,10 +53,6 @@ public:
 	void	SetClientVersion(LPCSTR pszVersion);	// クライアントバージョンを設定
 	BYTE	GetLastSendClock(void)	{ return m_byLastSendClock; 	}	// 最後に送信した時刻を取得
 	void	SetLastSendClock(BYTE byLastSendClock)	{ m_byLastSendClock = byLastSendClock; };	// 最後に送信した時刻を設定
-	LPCSTR	GetFtpAccount(void)	{ return m_strFtpAccount;	}	// FTPアカウントを取得
-	LPCSTR	GetFtpPassword(void)	{ return m_strFtpPassword;	}	// FTPパスワードを取得
-	LPCSTR	GetFtpServerAddr(void)	{ return m_strFtpServerAddr;	}	// サーバーアドレスを取得
-	LPCSTR	GetFtpUploadPath(void)	{ return m_strFtpUploadPath;	}	// アップロード先を取得
 
 	CMainFrame	*GetMainFrame(void)	{ return m_pMainFrame;	}	// メインフレームを取得
 	CUraraSockTCPSBO	*GetSock(void)	{ return m_pSock;	}	// 通信マネージャを取得
@@ -91,11 +87,7 @@ private:
 	BYTE	m_byOnline,	// オンライン数
 						m_byLastSendClock;	// 最後に送信した時刻
 	CmyString	m_strAdminAccount,	// 管理者権限アカウント名
-						m_strClientVersion,	// クライアントバージョン
-						m_strFtpAccount,	// FTPアカウント
-						m_strFtpPassword,	// FTPパスワード
-						m_strFtpServerAddr,	// サーバーアドレス
-						m_strFtpUploadPath;	// アップロード先
+						m_strClientVersion;	// クライアントバージョン
 
 	CMainFrame	*m_pMainFrame;	// メインフレーム
 	CUraraSockTCPSBO	*m_pSock;	// 通信マネージャ

@@ -59,6 +59,7 @@
 #include "InfoCharSvr.h"
 #include "LibInfoCharBase.h"
 #include "SaveLoadInfoChar.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableChar      = "sys_char";
@@ -306,7 +307,7 @@ void CSaveLoadInfoChar::EnsureTable(void)
 		}
 
 		if (bHasLegacyBlob) {
-			OutputDebugStringA("SaveLoadInfoChar: 旧 BLOB スキーマ検出 → マイグレーション開始\n");
+			SboPlatform::WriteDebugLine("SaveLoadInfoChar: 旧 BLOB スキーマ検出 → マイグレーション開始\n");
 
 			// 旧スキーマで全行をメモリに復元する一時ライブラリを使う
 			// m_pLibInfoBase が設定済みであれば直接利用できる
@@ -317,7 +318,7 @@ void CSaveLoadInfoChar::EnsureTable(void)
 
 			// 旧テーブルを削除
 			sqlite3_exec(s_pDb, "DROP TABLE IF EXISTS sys_char;", NULL, NULL, NULL);
-			OutputDebugStringA("SaveLoadInfoChar: 旧 sys_char を DROP\n");
+			SboPlatform::WriteDebugLine("SaveLoadInfoChar: 旧 sys_char を DROP\n");
 		}
 	}
 
@@ -496,7 +497,7 @@ void CSaveLoadInfoChar::SaveToNormalTable(void)
 
 	sqlite3_stmt* pStmtChar = NULL;
 	if (sqlite3_prepare_v2(s_pDb, pszInsert, -1, &pStmtChar, NULL) != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoChar::SaveToNormalTable: sys_char prepare failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoChar::SaveToNormalTable: sys_char prepare failed\n");
 		return;
 	}
 
@@ -877,7 +878,7 @@ BOOL CSaveLoadInfoChar::MigrateFromBlob(PCLibInfoBase pDst)
 	// sbo_data から 'Char' 行を削除（あれば）
 	if (s_pDb != NULL) {
 		sqlite3_exec(s_pDb, "DELETE FROM sbo_data WHERE name='Char';", NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoChar: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoChar: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -913,11 +914,11 @@ void CSaveLoadInfoChar::Load(PCLibInfoBase pDst)
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoChar: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoChar: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoChar: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoChar: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

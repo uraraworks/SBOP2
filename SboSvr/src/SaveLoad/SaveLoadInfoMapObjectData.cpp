@@ -33,6 +33,7 @@
 #include "SaveLoadInfoBase.h"
 #include "SaveLoadInfoMap.h"
 #include "SaveLoadInfoMapObjectData.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableObj = "sys_map_objectdata";
@@ -89,7 +90,7 @@ void CSaveLoadInfoMapObjectData::SaveAllObjects(CLibInfoMapBase *pLibInfoMap)
 	sqlite3_stmt* pStmt = NULL;
 	int nRet = sqlite3_prepare_v2(CSaveLoadInfoBase::s_pDb, pszInsert, -1, &pStmt, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoMapObjectData::SaveAllObjects: prepare failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapObjectData::SaveAllObjects: prepare failed\n");
 		return;
 	}
 
@@ -118,7 +119,7 @@ void CSaveLoadInfoMapObjectData::SaveAllObjects(CLibInfoMapBase *pLibInfoMap)
 	}
 
 	sqlite3_finalize(pStmt);
-	OutputDebugStringA("SaveLoadInfoMapObjectData: sys_map_objectdata に保存完了\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMapObjectData: sys_map_objectdata に保存完了\n");
 }
 
 // ============================================================
@@ -168,7 +169,7 @@ BOOL CSaveLoadInfoMapObjectData::LoadAllObjects(CLibInfoMapBase *pLibInfoMap)
 	sqlite3_finalize(pStmt);
 
 	if (nRowCount > 0) {
-		OutputDebugStringA("SaveLoadInfoMapObjectData: sys_map_objectdata から読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapObjectData: sys_map_objectdata から読み込み成功\n");
 	}
 	return (nRowCount > 0) ? TRUE : FALSE;
 }
@@ -194,7 +195,7 @@ void CSaveLoadInfoMapObjectData::MigrateData(CLibInfoMapBase *pLibInfoMap)
 	if (nTotalObj > 0) {
 		// メモリ → sys_map_objectdata へ書き戻し（新規DB、.dat から配置込みで読込済みのケース）
 		SaveAllObjects(pLibInfoMap);
-		OutputDebugStringA("SaveLoadInfoMapObjectData: メモリ → sys_map_objectdata へマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapObjectData: メモリ → sys_map_objectdata へマイグレーション完了\n");
 		return;
 	}
 
@@ -202,7 +203,7 @@ void CSaveLoadInfoMapObjectData::MigrateData(CLibInfoMapBase *pLibInfoMap)
 	//   CSaveLoadInfoMap のコンストラクタが SetFileName/SetName 済みのため、
 	//   基底 CSaveLoadInfoBase::Load() を明示修飾で呼ぶと
 	//   sbo_data 'Map' → なければ SboDataMap.dat フォールバックで配置込みの全マップを読む。
-	OutputDebugStringA("SaveLoadInfoMapObjectData: .dat からレガシー復旧を試みます\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMapObjectData: .dat からレガシー復旧を試みます\n");
 
 	CLibInfoMapBase tempLib;
 	tempLib.Create(NULL);	// MapParts なしで作成（配置データ取得のみが目的）
@@ -213,7 +214,7 @@ void CSaveLoadInfoMapObjectData::MigrateData(CLibInfoMapBase *pLibInfoMap)
 
 	if (tempLib.GetCount() <= 0) {
 		// .dat も存在しない（またはマップ0件） → 現状維持（ログのみ）
-		OutputDebugStringA("SaveLoadInfoMapObjectData: .dat からのマップ読込なし、マイグレーションをスキップ\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapObjectData: .dat からのマップ読込なし、マイグレーションをスキップ\n");
 		tempLib.Destroy();
 		return;
 	}
@@ -235,7 +236,7 @@ void CSaveLoadInfoMapObjectData::MigrateData(CLibInfoMapBase *pLibInfoMap)
 
 	// 本番マップに取り込んだ配置データを永続化
 	SaveAllObjects(pLibInfoMap);
-	OutputDebugStringA("SaveLoadInfoMapObjectData: .dat → sys_map_objectdata へマイグレーション完了\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMapObjectData: .dat → sys_map_objectdata へマイグレーション完了\n");
 
 	tempLib.Destroy();
 }
@@ -272,6 +273,6 @@ void CSaveLoadInfoMapObjectData::Load(CLibInfoMapBase *pLibInfoMap)
 	}
 
 	// 2. テーブルが空 → メモリ上のデータまたは .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoMapObjectData: sys_map_objectdata が空 → メモリ/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMapObjectData: sys_map_objectdata が空 → メモリ/.dat からマイグレーション\n");
 	MigrateData(pLibInfoMap);
 }

@@ -39,13 +39,16 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 	CPacketCHAR_MOTION PacketCHAR_MOTION;
 	CmyString strTmp, strLog;
 	CString strClientVer;
-	IN_ADDR AddrTmp;
+	DWORD dwAddr;			// IPアドレス(ネットワークバイトオーダー)
+	unsigned int nAddrHost;	// ↑をホストバイトオーダーへ直したもの(オクテット取り出し用)
 
 	Packet.Set(pData);
 
 	nResult	= LOGINRES_NG_PASSWORD;
 	pInfoAccount	= m_pLibInfoAccount->GetPtr(Packet.m_strAccount);
-	AddrTmp.S_un.S_addr = m_pSock->GetIPAddress(dwSessionID);
+	// IN_ADDR.S_un はWindows固有のメンバ名のため使わず、生の DWORD で扱う
+	dwAddr = m_pSock->GetIPAddress(dwSessionID);
+	nAddrHost = ntohl(dwAddr);
 
 	strTmp.Format(
 		"%02X-%02X-%02X-%02X-%02X-%02X",
@@ -57,7 +60,7 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 //		bDisable = TRUE;
 	}
 	// IPアドレスで拒否しているか判定
-	bDisable |= m_pLibInfoDisable->IsDisableIP(AddrTmp.S_un.S_addr);
+	bDisable |= m_pLibInfoDisable->IsDisableIP(dwAddr);
 
 	// 登録済み？
 	if (pInfoAccount) {
@@ -79,6 +82,17 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 			std::string strHashed;
 
 			TrimViewString(strNewPassword, (LPCTSTR)Packet.m_strPassword);
+
+			// 新規作成時のみ文字種を検証する。既存アカウントの照合には
+			// 掛けないこと(過去に全角で登録された分を締め出すため)。
+			if (!PasswordHash::IsAcceptable(strNewPassword.GetUtf8Pointer())) {
+				nResult = LOGINRES_NG_PASSWORD;
+				m_pLog->Write("新規アカウント作成拒否(パスワードに使用できない文字) dwSessionID:%u", dwSessionID);
+				PacketRes.Make(nResult, 0);
+				m_pSock->SendTo(dwSessionID, &PacketRes);
+				return;
+			}
+
 			strHashed = PasswordHash::Hash(strNewPassword.GetUtf8Pointer());
 			if (strHashed.empty()) {
 				// ハッシュ化失敗。アカウントは作らずログインを拒否する
@@ -110,11 +124,11 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 			nResult = LOGINRES_NG_DISABLE;
 			m_pLog->Write("ログイン拒否 dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
 					dwSessionID,
-					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
+					(nAddrHost >> 24) & 0xFF, (nAddrHost >> 16) & 0xFF, (nAddrHost >> 8) & 0xFF, nAddrHost & 0xFF,
 					strTmp.GetUtf8Pointer(),
 					pInfoAccount->m_strAccount.GetUtf8Pointer());
 			// IPアドレスで拒否しておく
-			m_pLibInfoDisable->AddIP(AddrTmp.S_un.S_addr);
+			m_pLibInfoDisable->AddIP(dwAddr);
 		// 使用中？
 		} else if (pInfoAccount->m_dwSessionID != 0) {
 			nResult = LOGINRES_NG_LOGIN;
@@ -129,7 +143,7 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 
 			m_pLog->Write("ログイン dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
 					dwSessionID,
-					AddrTmp.S_un.S_un_b.s_b1, AddrTmp.S_un.S_un_b.s_b2, AddrTmp.S_un.S_un_b.s_b3, AddrTmp.S_un.S_un_b.s_b4,
+					(nAddrHost >> 24) & 0xFF, (nAddrHost >> 16) & 0xFF, (nAddrHost >> 8) & 0xFF, nAddrHost & 0xFF,
 					strTmp.GetUtf8Pointer(),
 					pInfoAccount->m_strAccount.GetUtf8Pointer());
 		}
@@ -285,7 +299,7 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	SendToScreenChar(pInfoChar, &PacketCHAR_RES_CHARINFO);
 	m_pSock->SendTo(dwSessionID, &PacketCHAR_RES_CHARINFO);
 
-	UpdateServerInfo();
+	NotifyOnlineCount();
 
 	strTmp.Format(_T("SYSTEM:スクラップブックオンラインの世界へようこそ♪"));
 	PacketMAP_SYSTEMMSG.Make(strTmp);

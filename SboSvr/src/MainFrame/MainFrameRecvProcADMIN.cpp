@@ -33,6 +33,7 @@
 #include "TextOutput.h"
 #include "MgrData.h"
 #include "MainFrame.h"
+#include "../Platform/SvrPlatform.h"
 
 void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
@@ -44,7 +45,7 @@ void CMainFrame::RecvProcADMIN(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 	}
 	if (pInfoAccount->m_nAdminLevel == ADMINLEVEL_NONE) {
 		m_pLog->Write("■ 権限無しからの要求 dwSessionID:[%d] byCmdSub:[%d]", dwSessionID, byCmdSub);
-		PostMessage(m_hWnd, WM_DISCONNECT, 0, dwSessionID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 
@@ -405,7 +406,6 @@ void CMainFrame::RecvProcADMIN_MAP_SETMAPNAME(PBYTE pData, DWORD dwSessionID)
 			pInfoMap->m_byLevel,
 			pInfoMap->m_strMapName);
 	SendToMapChar(pInfoMap->m_dwMapID, &PacketMAP_MAPNAME);
-	UpdateServerInfo(FALSE);
 }
 
 void CMainFrame::RecvProcADMIN_RENEWMAPSHADOW(PBYTE pData, DWORD dwSessionID)
@@ -614,7 +614,6 @@ void CMainFrame::RecvProcADMIN_SERVER_SAVEINFO(PBYTE pData, DWORD dwSessionID)
 	strTmp.Format(_T("サーバー情報を保存しました"));
 	Packet.Make(strTmp);
 	m_pSock->SendTo(0, &Packet);
-	UpdateServerInfo(FALSE, TRUE);
 }
 
 void CMainFrame::RecvProcADMIN_ITEM_ADD(PBYTE pData, DWORD dwSessionID)
@@ -958,7 +957,7 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEWSTATUS(PBYTE pData, DWORD dwSessionID)
 	}
 	Packet.SetParam(pInfoChar);
 	if (Packet.m_dwLightTime != 0) {
-		pInfoChar->m_dwLightTime = timeGetTime() + Packet.m_dwLightTime;
+		pInfoChar->m_dwLightTime = SboPlatform::GetTickMs() + Packet.m_dwLightTime;
 	}
 
 	pInfoChar->m_bChgStatus = TRUE;
@@ -1060,7 +1059,7 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_ACCOUNT(PBYTE pData, DWORD dwSessionID)
 	PCInfoAccount pInfoAccount;
 	CPacketADMIN_CHAR_REQ_ACCOUNT Packet;
 	CPacketADMIN_CHAR_RES_ACCOUNT PacketADMIN_CHAR_RES_ACCOUNT;
-	IN_ADDR AddrTmp;
+	DWORD dwAddr;
 	CmyString strTmp;
 
 	Packet.Set(pData);
@@ -1070,8 +1069,9 @@ void CMainFrame::RecvProcADMIN_CHAR_REQ_ACCOUNT(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	AddrTmp.S_un.S_addr = m_pSock->GetIPAddress(pInfoAccount->m_dwSessionID);
-	PacketADMIN_CHAR_RES_ACCOUNT.Make(pInfoAccount, AddrTmp.S_un.S_addr, (LPCSTR)pInfoAccount->m_strLastMacAddr);
+	// IN_ADDR.S_un はWindows固有のメンバ名のため、生の DWORD(ネットワークバイトオーダー)で受け渡す
+	dwAddr = m_pSock->GetIPAddress(pInfoAccount->m_dwSessionID);
+	PacketADMIN_CHAR_RES_ACCOUNT.Make(pInfoAccount, dwAddr, (LPCSTR)pInfoAccount->m_strLastMacAddr);
 	m_pSock->SendTo(dwSessionID, &PacketADMIN_CHAR_RES_ACCOUNT);
 }
 
@@ -1106,6 +1106,14 @@ void CMainFrame::RecvProcADMIN_CHAR_RENEW_ACCOUNT(PBYTE pData, DWORD dwSessionID
 
 	pInfoAccount->m_strAccount	= Packet.m_strAccount;
 	{
+		if (!PasswordHash::IsAcceptable(Packet.m_strPassword.GetUtf8Pointer())) {
+			m_pLog->Write("アカウント変更拒否(パスワードに使用できない文字) dwAccountID:%u", Packet.m_dwAccountID);
+			strTmp.Format(_T("パスワードに使用できない文字が含まれています(半角の記号と英数字のみ)"));
+			PacketMsg.Make(strTmp, RGB(255, 255, 255));
+			m_pSock->SendTo(dwSessionID, &PacketMsg);
+			return;
+		}
+
 		std::string strHashed = PasswordHash::Hash(Packet.m_strPassword.GetUtf8Pointer());
 		if (strHashed.empty()) {
 			// ハッシュ化失敗。パスワードは書き換えずアカウント名変更のみ反映する
@@ -1232,6 +1240,14 @@ void CMainFrame::RecvProcADMIN_ACCOUNT_REQ_ADD(PBYTE pData, DWORD dwSessionID)
 		std::string strHashed;
 
 		TrimViewString(strNewPassword, (LPCTSTR)Packet.m_strPassword);
+
+		if (!PasswordHash::IsAcceptable(strNewPassword.GetUtf8Pointer())) {
+			strTmp = "パスワードに使用できない文字が含まれています(半角の記号と英数字のみ)";
+			PacketMAP_SYSTEMMSG.Make((LPCSTR)strTmp, RGB(255, 255, 255), TRUE, SYSTEMMSGTYPE_NOLOG);
+			m_pSock->SendTo(dwSessionID, &PacketMAP_SYSTEMMSG);
+			return;
+		}
+
 		strHashed = PasswordHash::Hash(strNewPassword.GetUtf8Pointer());
 		if (strHashed.empty()) {
 			// ハッシュ化失敗。アカウントは作らない

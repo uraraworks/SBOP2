@@ -6,6 +6,9 @@
 #include "StdAfx.h"
 #include "Packet/PacketBase.h"
 #include "UraraSockTCPSBO.h"
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
+#include "../SboSockLib/UraraSockTCPSelect.h"
+#endif
 
 // コンストラクタ
 
@@ -13,8 +16,23 @@ CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 {
 	m_pSock = NULL;
 
+#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
+	{
+		// 環境変数 SBO_SOCK_IMPL=select で select ベースの実装を使う。
+		// 脱Windows 作業中の比較検証用で、既定は従来実装のまま。
+		// select 版はサーバーモード(Host)のみ対応なので注意。
+		char szImpl[32];
+		DWORD dwLen = GetEnvironmentVariableA("SBO_SOCK_IMPL", szImpl, sizeof (szImpl));
+		if ((dwLen > 0) && (dwLen < sizeof (szImpl)) && (_stricmp(szImpl, "select") == 0)) {
+			m_pSock = GetUraraSockTCPSelect();
+		}
+	}
+#endif
+
 	// SboSockLib は static lib として直接リンクするため GetUraraSockTCP() を直接呼ぶ
-	m_pSock = GetUraraSockTCP();
+	if (m_pSock == NULL) {
+		m_pSock = GetUraraSockTCP();
+	}
 }
 
 // デストラクタ

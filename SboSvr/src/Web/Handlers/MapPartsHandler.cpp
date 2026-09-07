@@ -18,6 +18,7 @@
 #include "UraraSockTCPSBO.h"
 #include "Packet/MAP/PacketMAP_MAPPARTS.h"
 #include "Packet/MAP/PacketMAP_DELETEPARTS.h"
+#include "../../Platform/SvrPlatform.h"
 
 namespace
 {
@@ -62,33 +63,28 @@ static void AppendAnimeFramesJson(std::ostringstream &oss, const CInfoMapParts *
 }
 
 CMapPartsResourceProvider::CMapPartsResourceProvider()
-        : m_hModule(NULL)
-        , m_sheetCount(-1)
+        : m_sheetCount(-1)
 {
 }
 
 CMapPartsResourceProvider::~CMapPartsResourceProvider()
 {
         std::lock_guard<std::mutex> lock(m_mutex);
-        if (m_hModule != NULL) {
-                FreeLibrary(m_hModule);
-                m_hModule = NULL;
-        }
         m_sheetCache.clear();
 }
 
 bool CMapPartsResourceProvider::IsAvailable()
 {
         std::lock_guard<std::mutex> lock(m_mutex);
-        return EnsureLibraryLocked();
+        // DLL 自体のロード可否は SboPlatform::LoadEmbeddedPng 内に集約されている。
+        // ここでは「1枚目のシートが取れるか」で代用する。
+        std::vector<unsigned char> dummy;
+        return SboPlatform::LoadEmbeddedPng("IDP_MAP_01", dummy);
 }
 
 bool CMapPartsResourceProvider::GetSheetPng(int sheetIndex, std::vector<unsigned char> &outData)
 {
         std::lock_guard<std::mutex> lock(m_mutex);
-        if (!EnsureLibraryLocked()) {
-                return false;
-        }
 
         std::map<int, std::vector<unsigned char> >::const_iterator it = m_sheetCache.find(sheetIndex);
         if (it != m_sheetCache.end()) {
@@ -106,21 +102,16 @@ bool CMapPartsResourceProvider::GetSheetPng(int sheetIndex, std::vector<unsigned
 int CMapPartsResourceProvider::GetSheetCount()
 {
         std::lock_guard<std::mutex> lock(m_mutex);
-        if (!EnsureLibraryLocked()) {
-                return 0;
-        }
         if (m_sheetCount >= 0) {
                 return m_sheetCount;
         }
 
         int count = 0;
         while (true) {
-                std::wstring resourceName;
-                wchar_t szName[32] = {};
-                _snwprintf_s(szName, _countof(szName), _TRUNCATE, L"IDP_MAP_%02d", count + 1);
-                resourceName.assign(szName);
-                HRSRC hResInfo = FindResourceW(m_hModule, resourceName.c_str(), L"PNG");
-                if (hResInfo == NULL) {
+                char szName[32] = {};
+                _snprintf_s(szName, _countof(szName), _TRUNCATE, "IDP_MAP_%02d", count + 1);
+                std::vector<unsigned char> dummy;
+                if (!SboPlatform::LoadEmbeddedPng(szName, dummy)) {
                         break;
                 }
                 ++count;
@@ -129,76 +120,20 @@ int CMapPartsResourceProvider::GetSheetCount()
         return m_sheetCount;
 }
 
-bool CMapPartsResourceProvider::EnsureLibraryLocked()
-{
-        if (m_hModule != NULL) {
-                return true;
-        }
-
-        std::wstring modulePath;
-        if (!ResolveLibraryPath(modulePath)) {
-                return false;
-        }
-        HMODULE hLoaded = LoadLibraryW(modulePath.c_str());
-        if (hLoaded == NULL) {
-                return false;
-        }
-        m_hModule = hLoaded;
-        return true;
-}
-
-bool CMapPartsResourceProvider::ResolveLibraryPath(std::wstring &outPath) const
-{
-        wchar_t szModulePath[MAX_PATH];
-        DWORD dwLength = GetModuleFileNameW(NULL, szModulePath, MAX_PATH);
-        if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
-                return false;
-        }
-
-        wchar_t *pSlash = wcsrchr(szModulePath, L'\\');
-        if (pSlash != NULL) {
-                *(pSlash + 1) = L'\0';
-        }
-
-        std::wstring candidate = szModulePath;
-        candidate.append(L"SboGrpData.dll");
-
-        DWORD dwAttributes = GetFileAttributesW(candidate.c_str());
-        if (dwAttributes == INVALID_FILE_ATTRIBUTES) {
-                outPath.assign(L"SboGrpData.dll");
-                return true;
-        }
-        outPath = candidate;
-        return true;
-}
-
 bool CMapPartsResourceProvider::LoadSheetLocked(int sheetIndex, std::vector<unsigned char> &outData)
 {
         if (sheetIndex < 0) {
                 return false;
         }
 
-        wchar_t szName[32] = {};
-        _snwprintf_s(szName, _countof(szName), _TRUNCATE, L"IDP_MAP_%02d", sheetIndex + 1);
-        HRSRC hResInfo = FindResourceW(m_hModule, szName, L"PNG");
-        if (hResInfo == NULL) {
-                return false;
-        }
-        HGLOBAL hRes = LoadResource(m_hModule, hResInfo);
-        if (hRes == NULL) {
-                return false;
-        }
-        DWORD dwResourceSize = SizeofResource(m_hModule, hResInfo);
-        if (dwResourceSize == 0) {
-                return false;
-        }
-        const BYTE *pResourceData = static_cast<const BYTE *>(LockResource(hRes));
-        if (pResourceData == NULL) {
+        char szName[32] = {};
+        _snprintf_s(szName, _countof(szName), _TRUNCATE, "IDP_MAP_%02d", sheetIndex + 1);
+        std::vector<unsigned char> rawPng;
+        if (!SboPlatform::LoadEmbeddedPng(szName, rawPng)) {
                 return false;
         }
 
         // --- パレットインデックス 0 を透過化して返す ---
-        std::vector<unsigned char> rawPng(pResourceData, pResourceData + dwResourceSize);
 
         // lodepng でパレット付き PNG としてデコード（元の色空間を維持）
         lodepng::State state;
@@ -217,7 +152,7 @@ bool CMapPartsResourceProvider::LoadSheetLocked(int sheetIndex, std::vector<unsi
                 char szMsg[256];
                 _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
                     "MapPartsHandler: lodepng decode failed (err=%u), using original PNG\n", decErr);
-                OutputDebugStringA(szMsg);
+                SboPlatform::WriteDebugLine(szMsg);
             }
             outData = std::move(rawPng);
             return true;
@@ -248,7 +183,7 @@ bool CMapPartsResourceProvider::LoadSheetLocked(int sheetIndex, std::vector<unsi
             char szMsg[256];
             _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
                 "MapPartsHandler: lodepng encode failed (err=%u), using original PNG\n", encErr);
-            OutputDebugStringA(szMsg);
+            SboPlatform::WriteDebugLine(szMsg);
             outData = std::move(rawPng);
             return true;
         }

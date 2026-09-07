@@ -6,9 +6,9 @@
 
 #include "SdlFont.h"
 #if !defined(_WIN32)
-#include "TCharCompat.h"
+#include "../../../Common/Platform/TCharCompat.h"
 #endif
-#include "SjisConvert.h"
+#include "../../../Common/Platform/SjisConvert.h"
 #include <cstdlib>
 #include <cstring>
 #include <cwchar>

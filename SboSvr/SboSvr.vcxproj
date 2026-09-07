@@ -265,6 +265,10 @@
     <ClCompile Include="src\MainFrame\MainFrameRecvProcVERSION.cpp" />
     <ClCompile Include="src\MgrData.cpp" />
     <ClCompile Include="src\PasswordHash.cpp" />
+    <ClCompile Include="src\Platform\SvrPlatform.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\SaveLoad\SaveLoadInfoAccount.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoBase.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoChar.cpp" />
@@ -287,7 +291,6 @@
     <ClCompile Include="src\SaveLoad\SaveLoadInfoSystem.cpp" />
     <ClCompile Include="src\SaveLoad\SaveLoadInfoTalkEvent.cpp" />
     <ClCompile Include="src\SboSvr.cpp" />
-    <ClCompile Include="src\UpdateServerInfo.cpp" />
     <ClCompile Include="src\Web\ApiRouter.cpp" />
     <ClCompile Include="src\Web\Handlers\HealthHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\ImageCatalogHandler.cpp" />
@@ -426,6 +429,7 @@
     <ClInclude Include="src\MainFrame\MainFrame.h" />
     <ClInclude Include="src\MgrData.h" />
     <ClInclude Include="src\PasswordHash.h" />
+    <ClInclude Include="src\Platform\SvrPlatform.h" />
     <ClInclude Include="src\SaveLoad\SaveLoad.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoAccount.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoBase.h" />
@@ -449,7 +453,6 @@
     <ClInclude Include="src\SaveLoad\SaveLoadInfoSystem.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoTalkEvent.h" />
     <ClInclude Include="src\SboSvr_priv.h" />
-    <ClInclude Include="src\UpdateServerInfo.h" />
     <ClInclude Include="src\Web\ApiHandler.h" />
     <ClInclude Include="src\Web\ApiRouter.h" />
     <ClInclude Include="src\Web\Handlers\HealthHandler.h" />

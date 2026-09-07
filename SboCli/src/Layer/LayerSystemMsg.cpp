@@ -12,7 +12,7 @@
 #include "Img32.h"
 #include "LayerSystemMsg.h"
 #include "myString.h"
-#include "Platform/SjisConvert.h"
+#include "../../../Common/Platform/SjisConvert.h"
 
 
 CLayerSystemMsg::CLayerSystemMsg()

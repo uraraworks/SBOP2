@@ -20,6 +20,7 @@
 #include "InfoAnime.h"
 #include "LibInfoMapShadow.h"
 #include "SaveLoadInfoMapShadow.h"
+#include "../Platform/SvrPlatform.h"
 
 // テーブル名
 static const char* s_pszTableMain = "sys_map_shadow";
@@ -126,7 +127,7 @@ void CSaveLoadInfoMapShadow::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtMain = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsertMain, -1, &pStmtMain, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoMapShadow::SaveToNormalTable: prepare(main) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapShadow::SaveToNormalTable: prepare(main) failed\n");
 		return;
 	}
 
@@ -138,7 +139,7 @@ void CSaveLoadInfoMapShadow::SaveToNormalTable(void)
 	sqlite3_stmt* pStmtAnime = NULL;
 	nRet = sqlite3_prepare_v2(s_pDb, pszInsertAnime, -1, &pStmtAnime, NULL);
 	if (nRet != SQLITE_OK) {
-		OutputDebugStringA("SaveLoadInfoMapShadow::SaveToNormalTable: prepare(anime) failed\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapShadow::SaveToNormalTable: prepare(anime) failed\n");
 		sqlite3_finalize(pStmtMain);
 		return;
 	}
@@ -293,7 +294,7 @@ BOOL CSaveLoadInfoMapShadow::MigrateFromBlob(PCLibInfoBase pDst)
 		const char* pszDelSql =
 			"DELETE FROM sbo_data WHERE name='MapShadow';";
 		sqlite3_exec(s_pDb, pszDelSql, NULL, NULL, NULL);
-		OutputDebugStringA("SaveLoadInfoMapShadow: BLOB → 正規化テーブルへマイグレーション完了\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapShadow: BLOB → 正規化テーブルへマイグレーション完了\n");
 	}
 
 	return TRUE;
@@ -360,18 +361,18 @@ void CSaveLoadInfoMapShadow::Load(PCLibInfoBase pDst)
 
 	// 旧 .dat からの移行時にアニメコマの grpID だけ欠落した DB を自動修復する
 	if (HasBrokenAnimeRows()) {
-		OutputDebugStringA("SaveLoadInfoMapShadow: 破損した正規化アニメ行を検出 → BLOB/.dat から再マイグレーション\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapShadow: 破損した正規化アニメ行を検出 → BLOB/.dat から再マイグレーション\n");
 		MigrateFromBlob(pDst);
 		return;
 	}
 
 	// 1. 正規化テーブルに行があれば読み込んで完了
 	if (LoadFromNormalTable(pDst)) {
-		OutputDebugStringA("SaveLoadInfoMapShadow: 正規化テーブルから読み込み成功\n");
+		SboPlatform::WriteDebugLine("SaveLoadInfoMapShadow: 正規化テーブルから読み込み成功\n");
 		return;
 	}
 
 	// 2. 行がなければ BLOB / .dat からマイグレーション
-	OutputDebugStringA("SaveLoadInfoMapShadow: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
+	SboPlatform::WriteDebugLine("SaveLoadInfoMapShadow: 正規化テーブルが空 → BLOB/.dat からマイグレーション\n");
 	MigrateFromBlob(pDst);
 }

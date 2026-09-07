@@ -54,10 +54,6 @@ END
 
 IDR_MENU MENU 
 BEGIN
-    POPUP "アカウント(&A)"
-    BEGIN
-        MENUITEM "全アカウントを削除(&A)",               IDM_ACCOUNT_DELETEALL
-    END
     POPUP "アップデート(&U)"
     BEGIN
         MENUITEM "アップデートファイル更新(&R)",            IDM_UPDATE_RENEW

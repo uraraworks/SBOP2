@@ -5,6 +5,10 @@
 /// @copyright Copyright(C)URARA-works 2006
 
 #include "StdAfx.h"
+
+// fopen 等の標準 C ファイル IO 用
+#include <cstdio>
+
 #include "SBOVersion.h"
 #include "UraraSockTCPSBO.h"
 #include "Command.h"
@@ -12,6 +16,7 @@
 #include "GetMD5File.h"
 #include "MgrData.h"
 #include "MainFrame.h"
+#include "Platform/SvrPlatform.h"
 
 void CMainFrame::RecvProcVERSION(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
@@ -43,7 +48,6 @@ void CMainFrame::RecvProcVERSION_REQ_VERSIONCHECK(PBYTE pData, DWORD dwSessionID
 void CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK(PBYTE pData, DWORD dwSessionID)
 {
         int nResult;
-        TCHAR szPath[MAX_PATH];
         char szHash[33];
 	CPacketVERSION_REQ_FILELISTCHECK Packet;
 	CPacketVERSION_RES_FILELISTCHECK PacketVERSION_RES_FILELISTCHECK;
@@ -53,8 +57,9 @@ void CMainFrame::RecvProcVERSION_REQ_FILELISTCHECK(PBYTE pData, DWORD dwSessionI
 	Packet.Set(pData);
 
 	// ファイルリストのハッシュを取得
-        GetModuleFilePath(szPath, _countof(szPath));
-        CString strPath(szPath);
+	// 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+	// (末尾に区切り文字を含む点は GetModuleFilePath と同じ)
+        CString strPath = AnsiToTString(SboPlatform::GetExeDirectory().c_str());
         strTmp.Format(_T("%sSBOHashList.txt"), (LPCTSTR)strPath);
         GetMD5File.Init();
         GetMD5File.Update(strTmp);
@@ -82,10 +87,9 @@ void CMainFrame::RecvProcVERSION_REQ_FILELIST(PBYTE pData, DWORD dwSessionID)
 void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)
 {
 	BOOL bReuslt;
-        TCHAR szPath[MAX_PATH];
 	PBYTE pFileData;
 	LPCSTR pszTmp;
-	HANDLE hFile;
+	FILE *pFile;
 	DWORD dwResult;
 	CPacketVERSION_REQ_FILE Packet;
 	CPacketVERSION_RES_FILE PacketRes;
@@ -94,23 +98,23 @@ void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)
 	pFileData = NULL;
 	Packet.Set(pData);
 
-        GetModuleFilePath(szPath, _countof(szPath));
-        CString strBasePath(szPath);
+        // 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+        CString strBasePath = AnsiToTString(SboPlatform::GetExeDirectory().c_str());
         strFileName.Format(_T("%sUpdate\\%s"), (LPCTSTR)strBasePath, (LPCTSTR)Packet.m_strFileName);
 	pszTmp = strstr((LPCSTR)strFileName, "..");
 	if (pszTmp) {
 		return;
 	}
 
-	hFile = CreateFile(strFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (hFile == INVALID_HANDLE_VALUE) {
+	pFile = fopen(strFileName, "rb");
+	if (pFile == NULL) {
 		return;
 	}
 
-	SetFilePointer(hFile, Packet.m_dwOffset, NULL, FILE_BEGIN);
+	fseek(pFile, Packet.m_dwOffset, SEEK_SET);
 	pFileData	= ZeroNew(Packet.m_dwReqSize);
-	dwResult	= 0;
-	bReuslt	= ReadFile(hFile, pFileData, Packet.m_dwReqSize, &dwResult, NULL);
+	dwResult	= (DWORD)fread(pFileData, 1, Packet.m_dwReqSize, pFile);
+	bReuslt	= (ferror(pFile) == 0);
 	if (bReuslt == FALSE) {
 		goto Exit;
 	}
@@ -121,5 +125,5 @@ Exit:
 	if (pFileData) {
 		delete [] pFileData;
 	}
-	CloseHandle(hFile);
+	fclose(pFile);
 }
