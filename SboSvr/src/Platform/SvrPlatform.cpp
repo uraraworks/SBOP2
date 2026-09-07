@@ -12,6 +12,7 @@
 #include <ctime>
 #include <cstring>
 #include <cstdlib>
+#include <mutex>
 #include <vector>
 
 #ifdef _WIN32
@@ -590,6 +591,123 @@ namespace SboPlatform
 
 		std::fclose(pFile);
 		return true;
+#endif
+	}
+
+#ifdef _WIN32
+	namespace
+	{
+		// SboGrpData.dll のハンドルをプロセス内で使い回す。
+		// HttpServer は複数のクライアントスレッドから同時に呼ぶため、
+		// このミューテックスで保護する(旧実装はハンドラのインスタンスごとに
+		// HMODULE を持っていたが、ここへ集約したのでプロセス内で1つになる)。
+		//
+		// SpriteSheetHandler / MapPartsHandler 双方の探索パス候補を突き合わせた
+		// 結果、どちらも「実行ファイルの隣の SboGrpData.dll」があればそれを、
+		// 無ければ LoadLibraryW 自身の既定探索(DLL 検索パス)に任せて
+		// "SboGrpData.dll" とだけ渡す、という同一のロジックだった
+		// (片方にしか無い候補パスは見つからなかった)。
+		std::mutex	g_grpDllMutex;
+		HMODULE		g_hGrpDll = NULL;
+
+		// 実行ファイルの隣にある SboGrpData.dll のパスを組み立てる。
+		// 見つからなければ LoadLibraryW の既定探索に任せるため素の名前を返す。
+		std::wstring	ResolveGrpDllPath()
+		{
+			wchar_t szModulePath[MAX_PATH];
+			DWORD dwLength = GetModuleFileNameW(NULL, szModulePath, MAX_PATH);
+			if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
+				return L"SboGrpData.dll";
+			}
+
+			wchar_t *pSlash = wcsrchr(szModulePath, L'\\');
+			if (pSlash != NULL) {
+				*(pSlash + 1) = L'\0';
+			}
+
+			std::wstring strCandidate = szModulePath;
+			strCandidate.append(L"SboGrpData.dll");
+
+			DWORD dwAttributes = GetFileAttributesW(strCandidate.c_str());
+			if (dwAttributes == INVALID_FILE_ATTRIBUTES) {
+				return L"SboGrpData.dll";
+			}
+			return strCandidate;
+		}
+
+		// g_grpDllMutex を保持した状態で呼ぶこと。
+		// 一度ロードしたら保持したままにする(プロセス終了時に OS が解放する。
+		// 旧実装はハンドラのデストラクタで FreeLibrary していたが、
+		// いずれもプロセス終了間際のシングルトン破棄でしか呼ばれていなかった
+		// ので挙動差は無い)。
+		bool	EnsureGrpDllLocked()
+		{
+			if (g_hGrpDll != NULL) {
+				return true;
+			}
+			std::wstring strPath = ResolveGrpDllPath();
+			HMODULE hLoaded = LoadLibraryW(strPath.c_str());
+			if (hLoaded == NULL) {
+				return false;
+			}
+			g_hGrpDll = hLoaded;
+			return true;
+		}
+
+		// char* (ASCII 前提) を wstring に変換する。
+		// FindResourceW が wchar_t を要求するためここで変換する
+		// (呼び出し側のリソース名は char テーブル由来、または printf パターン
+		// から組み立てたもので、いずれも ASCII の範囲に収まる)。
+		std::wstring	ToWideAscii(const char *pszSrc)
+		{
+			std::wstring strOut;
+			if (pszSrc == NULL) {
+				return strOut;
+			}
+			for (const char *p = pszSrc; *p != '\0'; ++ p) {
+				strOut.push_back((wchar_t)(unsigned char)*p);
+			}
+			return strOut;
+		}
+	}
+#endif
+
+	bool	LoadEmbeddedPng(const char *pszResourceName, std::vector<unsigned char> &outPng)
+	{
+		if ((pszResourceName == NULL) || (pszResourceName[0] == '\0')) {
+			return false;
+		}
+
+#ifdef _WIN32
+		std::lock_guard<std::mutex> lock(g_grpDllMutex);
+		if (!EnsureGrpDllLocked()) {
+			return false;
+		}
+
+		std::wstring strName = ToWideAscii(pszResourceName);
+		HRSRC hResInfo = FindResourceW(g_hGrpDll, strName.c_str(), L"PNG");
+		if (hResInfo == NULL) {
+			return false;
+		}
+		HGLOBAL hRes = LoadResource(g_hGrpDll, hResInfo);
+		if (hRes == NULL) {
+			return false;
+		}
+		DWORD dwResourceSize = SizeofResource(g_hGrpDll, hResInfo);
+		if (dwResourceSize == 0) {
+			return false;
+		}
+		const BYTE *pResourceData = static_cast<const BYTE *>(LockResource(hRes));
+		if (pResourceData == NULL) {
+			return false;
+		}
+
+		outPng.assign(pResourceData, pResourceData + dwResourceSize);
+		return true;
+#else
+		// PE のリソースという概念自体が非Windowsには無い。
+		// 呼び出し側は画像ストア(DB) / ファイル(res/) 等、前段のフォールバックで賄う。
+		return false;
 #endif
 	}
 }

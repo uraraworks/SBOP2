@@ -13,6 +13,7 @@
 
 #include <ctime>
 #include <string>
+#include <vector>
 
 namespace SboPlatform
 {
@@ -171,4 +172,24 @@ namespace SboPlatform
 	/// @return 成功すれば true。失敗した場合は false を返す。
 	///         **呼び出し側は失敗時に弱い乱数へフォールバックしないこと。**
 	bool	GenerateRandomBytes(void *pBuffer, size_t nLength);
+
+	/// 実行ファイルに同梱されたリソースから PNG を取り出す
+	///
+	/// SpriteSheetHandler / MapPartsHandler が SboGrpData.dll のリソースを
+	/// 読むために使っていた LoadLibraryW / FindResourceW / LockResource /
+	/// FreeLibrary をここへ集約する。PE のリソースという概念自体が
+	/// Windows 専有のものなので、非Windows は常に false を返す
+	/// (呼び出し側は画像ストア(DB) / ファイル(res/) 等、前段のフォールバックで
+	/// 賄う設計になっている)。
+	///
+	/// DLL ハンドルはプロセス内で使い回す(内部でスレッド安全にキャッシュする)。
+	/// HttpServer は複数のクライアントスレッドから同時に呼ぶため、
+	/// この関数自体もどのスレッドから呼んでも安全。
+	///
+	/// @param pszResourceName リソース名(ASCII 前提。ppszFixedNames 等の
+	///                        char テーブル由来、または "IDP_MAP_%02d" のような
+	///                        printf パターンから組み立てたもの)
+	/// @param outPng          取得できた PNG の生バイト列
+	/// @return 見つかって読み出せれば true
+	bool	LoadEmbeddedPng(const char *pszResourceName, std::vector<unsigned char> &outPng);
 }

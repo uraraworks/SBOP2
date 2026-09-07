@@ -64,10 +64,6 @@ public:
     static CGrpResourceProvider &GetInstance();
 
 private:
-    // DLL ロード保証（m_mutex 保持中に呼ぶこと）
-    bool EnsureLibraryLocked();
-    bool ResolveLibraryPath(std::wstring &outPath) const;
-
     // カテゴリ定義検索
     const SGrpLayoutDef *FindCategory(const std::string &key) const;
 
@@ -87,7 +83,9 @@ private:
     // SboGrpData/res/ 配下のファイルから取得を試みる
     bool TryLoadFromFileLocked(const std::wstring &resourceName,
                                std::vector<unsigned char> &outRawPng, std::string &outETag);
-    // SboGrpData.dll のリソースから取得を試みる（従来経路）
+    // SboGrpData.dll のリソースから取得を試みる（従来経路）。
+    // 実体は SboPlatform::LoadEmbeddedPng に委譲する（DLL 探索・ロード・
+    // FindResourceW 等は Platform 層に集約済み）。
     bool TryLoadFromDllLocked(const std::wstring &resourceName,
                               std::vector<unsigned char> &outRawPng, std::string &outETag);
 
@@ -99,10 +97,6 @@ private:
     bool MakeTransparentPng(const unsigned char *pSrc, size_t nSrcSize, std::vector<unsigned char> &outData);
 
     std::mutex  m_mutex;
-    // HMODULE 自体はこのヘッダで独自に include していない。
-    // 実体は StdAfx.h(PCH) 経由(Windows は windows.h、非Windows は
-    // Common/Platform/PlatformDefs.h)で必ず先に取り込まれている前提。
-    HMODULE     m_hModule;
 
     struct SSheetCacheEntry
     {

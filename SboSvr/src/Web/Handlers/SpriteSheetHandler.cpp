@@ -135,7 +135,10 @@ bool ParseSpriteSheetPath(
 
 // char* (ASCII 前提) を wstring に変換する簡易ヘルパ。
 // レイアウト定義テーブル (Common/GrpLayout.h) は char で持つが、
-// FindResourceW / _snwprintf_s は wchar_t を要求するためここで変換する。
+// _snwprintf_s や GetModuleFileNameW/GetFileAttributesW（TryLoadFromFileLocked の
+// res/ 探索）は wchar_t を要求するためここで変換する
+// （DLL リソース読み出しは SboPlatform::LoadEmbeddedPng へ移り、そちらは
+// ASCII の char* をそのまま受け取るため ToStringA で戻して渡す）。
 std::wstring ToWString(const char *pszSrc)
 {
     std::wstring out;
@@ -194,17 +197,12 @@ std::string ToStringA(const std::wstring &src)
 // ---------------------------------------------------------------------------
 
 CGrpResourceProvider::CGrpResourceProvider()
-    : m_hModule(NULL)
 {
 }
 
 CGrpResourceProvider::~CGrpResourceProvider()
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    if (m_hModule != NULL) {
-        FreeLibrary(m_hModule);
-        m_hModule = NULL;
-    }
     m_sheetCache.clear();
     m_sheetCountCache.clear();
 }
@@ -370,45 +368,6 @@ bool CGrpResourceProvider::GetCategoryLayout(
     nCellSize = pCat->nCellSize;
     nCountX   = pCat->nCountX;
     nCountY   = pCat->nCountY;
-    return true;
-}
-
-bool CGrpResourceProvider::EnsureLibraryLocked()
-{
-    if (m_hModule != NULL) {
-        return true;
-    }
-    std::wstring modulePath;
-    if (!ResolveLibraryPath(modulePath)) {
-        return false;
-    }
-    HMODULE hLoaded = LoadLibraryW(modulePath.c_str());
-    if (hLoaded == NULL) {
-        return false;
-    }
-    m_hModule = hLoaded;
-    return true;
-}
-
-bool CGrpResourceProvider::ResolveLibraryPath(std::wstring &outPath) const
-{
-    wchar_t szModulePath[MAX_PATH];
-    DWORD dwLength = GetModuleFileNameW(NULL, szModulePath, MAX_PATH);
-    if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
-        return false;
-    }
-    wchar_t *pSlash = wcsrchr(szModulePath, L'\\');
-    if (pSlash != NULL) {
-        *(pSlash + 1) = L'\0';
-    }
-    std::wstring candidate = szModulePath;
-    candidate.append(L"SboGrpData.dll");
-    DWORD dwAttributes = GetFileAttributesW(candidate.c_str());
-    if (dwAttributes == INVALID_FILE_ATTRIBUTES) {
-        outPath.assign(L"SboGrpData.dll");
-        return true;
-    }
-    outPath = candidate;
     return true;
 }
 
@@ -591,33 +550,18 @@ bool CGrpResourceProvider::TryLoadFromDllLocked(
     std::vector<unsigned char> &outRawPng,
     std::string &outETag)
 {
-    if (!EnsureLibraryLocked()) {
+    // DLL の探索・ロード・FindResourceW 等は Platform 層(SboPlatform::LoadEmbeddedPng)
+    // に集約されている。resourceName は ASCII 前提（BuildResourceName が char テーブル
+    // から作る）ため char へ戻して渡す。
+    std::string resNameA = ToStringA(resourceName);
+    if (!SboPlatform::LoadEmbeddedPng(resNameA.c_str(), outRawPng)) {
         return false;
     }
-
-    HRSRC hResInfo = FindResourceW(m_hModule, resourceName.c_str(), L"PNG");
-    if (hResInfo == NULL) {
-        return false;
-    }
-    HGLOBAL hRes = LoadResource(m_hModule, hResInfo);
-    if (hRes == NULL) {
-        return false;
-    }
-    DWORD dwResourceSize = SizeofResource(m_hModule, hResInfo);
-    if (dwResourceSize == 0) {
-        return false;
-    }
-    const BYTE *pResourceData = static_cast<const BYTE *>(LockResource(hRes));
-    if (pResourceData == NULL) {
-        return false;
-    }
-
-    outRawPng.assign(pResourceData, pResourceData + dwResourceSize);
 
     // ETag: "gr-<サイズの16進>"
     char szEtag[64];
     _snprintf_s(szEtag, _countof(szEtag), _TRUNCATE, "\"gr-%llx\"",
-                static_cast<unsigned long long>(dwResourceSize));
+                static_cast<unsigned long long>(outRawPng.size()));
     outETag = szEtag;
     return true;
 }
