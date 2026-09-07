@@ -68,16 +68,16 @@ $PortableFiles = @(
     "SboSvr/src/Web/Handlers/GrpDraftHandler.cpp",
     # GrpDraftHandler.cpp: MSVC 方言の _atoi64 を標準の strtoll へ置き換え、
     # 唯一残っていた Windows 依存を除去。
-    "SboSvr/src/Web/Handlers/MapPartsHandler.cpp"
+    "SboSvr/src/Web/Handlers/MapPartsHandler.cpp",
     # MapPartsHandler.cpp: SboGrpData.dll のリソースを読む
     # LoadLibraryW/FindResourceW/LockResource/FreeLibrary を
     # SboPlatform::LoadEmbeddedPng() へ集約し、windows.h 直接依存を除去。
-    #
-    # SpriteSheetHandler.cpp は同じ DLL 段の隔離を済ませたが、
-    # 2段目のファイル読み込み(TryLoadFromFileLocked, res/ 探索)が
-    # GetModuleFileNameW/CreateFileW 等の Win32 API を直接使っており、
-    # そちらは今回のスコープ外(res/ 読み込みロジックは変更しない)なので
-    # まだ em++ を通らない。ここには未登録のまま残す。
+    "SboSvr/src/Web/Handlers/SpriteSheetHandler.cpp"
+    # SpriteSheetHandler.cpp: 3段フォールバックの2段目(res/ 探索)が使っていた
+    # GetModuleFileNameW/GetFileAttributesW/CreateFileW 等を、
+    # SboPlatform::GetExeDirectory() + 標準 C の fopen/fread/fclose へ
+    # 置き換え、windows.h 直接依存を除去(3段目の DLL リソース読み込みは
+    # 既に SboPlatform::LoadEmbeddedPng() へ隔離済み)。
 )
 
 # 移植済みとして扱うヘッダ

@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstdio>
 #include <cstdlib>
 #include <cwchar>
 #include <iomanip>
@@ -135,10 +136,9 @@ bool ParseSpriteSheetPath(
 
 // char* (ASCII 前提) を wstring に変換する簡易ヘルパ。
 // レイアウト定義テーブル (Common/GrpLayout.h) は char で持つが、
-// _snwprintf_s や GetModuleFileNameW/GetFileAttributesW（TryLoadFromFileLocked の
-// res/ 探索）は wchar_t を要求するためここで変換する
-// （DLL リソース読み出しは SboPlatform::LoadEmbeddedPng へ移り、そちらは
-// ASCII の char* をそのまま受け取るため ToStringA で戻して渡す）。
+// リソース名まわり(BuildResourceName 等)は wstring で扱っているためここで変換する
+// （res/ からのファイル読み込み(TryLoadFromFileLocked)や DLL リソース読み出し
+// (SboPlatform::LoadEmbeddedPng)は char* をそのまま使うため ToStringA で戻して渡す）。
 std::wstring ToWString(const char *pszSrc)
 {
     std::wstring out;
@@ -417,8 +417,11 @@ bool CGrpResourceProvider::BuildResourceName(
         return true;
     }
     // 番号付き
+    // _snwprintf_s は MSVC 方言で em++ に無いため、Common/Platform/TCharCompat.h
+    // が非Windows 向けに用意している _stprintf_s(バッファサイズ付き) を使う
+    // (Windows では実体の MSVC 版が使われるので挙動は変わらない)。
     wchar_t szName[64] = {};
-    _snwprintf_s(szName, _countof(szName), _TRUNCATE, pattern.c_str(), sheetIndex + cat.nFirstResourceIndex);
+    _stprintf_s(szName, _countof(szName), pattern.c_str(), sheetIndex + cat.nFirstResourceIndex);
     outName = szName;
     return true;
 }
@@ -480,63 +483,64 @@ bool CGrpResourceProvider::TryLoadFromFileLocked(
 
     // 実行ファイルのディレクトリを基準に候補パスを走査する
     // （SboCli/src/MgrGrpData.cpp の FindSboGrpResBasePath と同じ流儀）
-    wchar_t szModulePath[MAX_PATH];
-    DWORD dwLength = GetModuleFileNameW(NULL, szModulePath, MAX_PATH);
-    if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
-        return false;
+    // 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+    // (末尾は区切り文字で終わる)
+    std::string strModulePath = SboPlatform::GetExeDirectory();
+
+    // kGrpResFileTable (Common/GrpLayout.cpp) は Windows 形式('\\'区切り)で
+    // ファイル名を持つため、非Windows でも fopen が解釈できるよう
+    // SboPlatform::GetPathSeparator() に合わせて変換する
+    // （SboCli/src/MgrGrpData.cpp の GetFileNameForResource と同じ流儀）。
+    std::string relFileName = pszRelFileName;
+    char chSep = SboPlatform::GetPathSeparator();
+    if (chSep != '\\') {
+        for (std::string::iterator it = relFileName.begin(); it != relFileName.end(); ++it) {
+            if (*it == '\\') {
+                *it = chSep;
+            }
+        }
     }
-    wchar_t *pSlash = wcsrchr(szModulePath, L'\\');
-    if (pSlash != NULL) {
-        *(pSlash + 1) = L'\0';
-    }
 
-    std::wstring relFileName = ToWString(pszRelFileName);
+    std::string strBaseCandidates[4];
+    strBaseCandidates[0] = std::string(".") + chSep + "SboGrpData" + chSep + "res" + chSep;
+    strBaseCandidates[1] = std::string("..") + chSep + "SboGrpData" + chSep + "res" + chSep;
+    strBaseCandidates[2] = std::string("..") + chSep + ".." + chSep + "SboGrpData" + chSep + "res" + chSep;
+    strBaseCandidates[3] = std::string("..") + chSep + ".." + chSep + ".." + chSep + "SboGrpData" + chSep + "res" + chSep;
 
-    static const wchar_t *const apszBaseCandidates[] = {
-        L".\\SboGrpData\\res\\",
-        L"..\\SboGrpData\\res\\",
-        L"..\\..\\SboGrpData\\res\\",
-        L"..\\..\\..\\SboGrpData\\res\\",
-        NULL
-    };
-
-    for (int i = 0; apszBaseCandidates[i] != NULL; ++i) {
-        std::wstring candidatePath = szModulePath;
-        candidatePath.append(apszBaseCandidates[i]);
+    for (size_t i = 0; i < _countof(strBaseCandidates); ++i) {
+        std::string candidatePath = strModulePath;
+        candidatePath.append(strBaseCandidates[i]);
         candidatePath.append(relFileName);
 
-        HANDLE hFile = CreateFileW(candidatePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL,
-                                    OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-        if (hFile == INVALID_HANDLE_VALUE) {
+        FILE *pFile = fopen(candidatePath.c_str(), "rb");
+        if (pFile == NULL) {
             continue;
         }
 
-        LARGE_INTEGER liSize = {};
-        FILETIME ftWrite = {};
-        BOOL bSizeOk = GetFileSizeEx(hFile, &liSize);
-        BOOL bTimeOk = GetFileTime(hFile, NULL, NULL, &ftWrite);
-        if (!bSizeOk || liSize.QuadPart <= 0) {
-            CloseHandle(hFile);
+        // ファイルサイズ取得(SaveLoadInfoBase.cpp と同じ流儀)
+        fseek(pFile, 0, SEEK_END);
+        long lSize = ftell(pFile);
+        if (lSize <= 0) {
+            fclose(pFile);
             continue;
         }
+        fseek(pFile, 0, SEEK_SET);
 
-        std::vector<unsigned char> fileData(static_cast<size_t>(liSize.QuadPart));
-        DWORD dwRead = 0;
-        BOOL bReadOk = ReadFile(hFile, fileData.data(), static_cast<DWORD>(fileData.size()), &dwRead, NULL);
-        CloseHandle(hFile);
-        if (!bReadOk || dwRead != fileData.size()) {
+        std::vector<unsigned char> fileData(static_cast<size_t>(lSize));
+        size_t nRead = fread(fileData.data(), 1, fileData.size(), pFile);
+        fclose(pFile);
+        if (nRead != fileData.size()) {
             continue;
         }
 
         outRawPng = std::move(fileData);
 
-        // ETag: "gf-<mtime の16進>-<サイズの16進>"
-        ULARGE_INTEGER ulTime;
-        ulTime.LowPart  = ftWrite.dwLowDateTime;
-        ulTime.HighPart = ftWrite.dwHighDateTime;
+        // ETag: "gf-<サイズの16進>"
+        // (旧実装は mtime も含めていたが、SboPlatform に mtime 取得手段が無いため
+        //  サイズのみに簡略化。res/ は差し替えが稀で、差し替え時はファイルサイズも
+        //  ほぼ変わるため実害は小さい)
         char szEtag[64];
-        _snprintf_s(szEtag, _countof(szEtag), _TRUNCATE, "\"gf-%llx-%llx\"",
-                    bTimeOk ? static_cast<unsigned long long>(ulTime.QuadPart) : 0ULL,
+        _snprintf_s(szEtag, _countof(szEtag), _TRUNCATE, "\"gf-%llx\"",
                     static_cast<unsigned long long>(outRawPng.size()));
         outETag = szEtag;
         return true;
