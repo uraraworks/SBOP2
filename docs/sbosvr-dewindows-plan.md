@@ -1,7 +1,14 @@
 # SboSvr 脱Windows 計画・作業メモ
 
-最終更新日: 2026-09-06
-ブランチ: `feature/de-windows`
+最終更新日: 2026-09-07
+ブランチ: `feature/de-windows`（2026-09-07 に master へ取り込み済み。マージコミット `422b798`、55コミット）
+
+## 現在の位置づけ（2026-09-07）
+
+**機械的な移植は完了。** 全 .cpp 318本中 **314本が em++ で通る**（テスト81本）。
+残る4本は「意図的に Windows 専用のまま残す3本」＋「S2 待ちの1本」だけで、
+判断が要る作業はもう無い。次の山は非Windows ビルドの**実リンクと実行**
+（詳細は「次にやること」節）。
 
 ## 目的
 
@@ -431,23 +438,24 @@ include しておらず（`BrowserCompat.h` が先に `<vector>` 等を取り込
 - **include の相対パスがずれていても vcxproj のインクルードディレクトリで
   偶然通る。** 正しい相対パスに直すこと。
 
-### 残っているもの（2026-09-06 時点・続報反映）
+### 残っているもの（2026-09-07 時点・最終）
 
-全 .cpp 317本のうち **311本が em++ で通る**ようになった
-（着手時285本 → 前半308本 → 暗号2本＋エントリポイント1本を片付けて311本）。
-移植チェック `tools/test-sbosvr-portability.ps1` への登録は33件、
-テストは81本。残り6本は以下。
+全 .cpp 318本のうち **314本が em++ で通る**ようになった
+（着手時285本 → 前半308本 → 暗号2本＋エントリポイント1本を片付けて311本 →
+`SboGrpData.dll` 読み込みの隔離（`d7b9755`）と画像ハンドラ2本の脱Windows対応
+（`591a2b3`）で314本）。テストは81本。**残り4本**は以下。
 
 | ファイル | 残っている依存 | 扱い |
 |---|---|---|
 | `Common\Lib\LayoutHelper.cpp` | `GetClientRect`（GDI） | **意図的に Windows 専用のまま**。ウィンドウ表示用 |
 | `Common\Lib\mfc\LogViewCtrl.h` | MFC | 同上 |
 | `SboSvr\src\MainFrame\MainFrame.cpp` | `CreateFont` 等（GDI） | 同上。非Windows ビルドでは丸ごと `#ifdef` で落とす想定 |
-| `Common\SBOGlobal.cpp` | `GetModuleFileName` | サーバー側の利用者は `5ef24a0` でゼロになった。ファイル自体は SboCli とも共有のためまだ残る。**S2 で `Common/Platform/` へ移す方針決めが要る**（後述） |
-| `SboSvr\src\Web\Handlers\MapPartsHandler.cpp` / `SpriteSheetHandler.cpp` | `LoadLibrary` / `FreeLibrary` | `SboGrpData.dll` からの画像リソース読み込み。**master 側の画像エディタ対応が一段落するまで保留**（2026-09-06 判断、後述） |
+| `Common\SBOGlobal.cpp` | `GetModuleFileName` | サーバー側と共有。SboCli とも共有のためまだ残る。**S2 で `Common/Platform/` へ移す方針決めが要る**（後述） |
 
-**残っているのは「意図的に残す3本」と「設計判断が要る3本」だけになった。
-機械的に片付く分は無くなった。**
+**画像ハンドラ2本の `LoadLibrary` は 2026-09-06 時点で保留していたが、
+`SboGrpData.dll` のリソース読み込みを `SboPlatform::LoadEmbeddedPng()` へ
+隔離したことで解消した（詳細は次節）。残っているのは「意図的に残す3本」と
+「S2 待ちの1本」だけになった。**
 
 これで当初の「本丸」だった Web 層のスレッド（`_beginthreadex` 7箇所 + `HANDLE` のイベント）に加え、
 暗号論的乱数・PBKDF2・エントリポイントも片付いた。確立したパターンは次項を参照。
@@ -529,27 +537,83 @@ Web層の `_beginthreadex` / `HANDLE` を `std::thread` へ移す作業を通じ
   **SboCli のネイティブ＋ブラウザ両方のビルド検証が要る**ので、作業が SboSvr の
   外へ広がる。ブラウザ版のダミーパス分岐も共有実装の中へ集約できる。
 
-### 画像ハンドラの `LoadLibrary` は保留（2026-09-06 判断）
+### 画像ハンドラの `LoadLibrary` は保留（2026-09-06 判断・09-07 解消）
 
 `MapPartsHandler.cpp` / `SpriteSheetHandler.cpp` の `LoadLibrary` /
-`FreeLibrary` は、**master 側で並行して進んでいる管理画面の画像エディタ対応と
-領域が重なるため、あちらが一段落するまで着手しない**。DLL 依存を残すか
-res/ の PNG 直読みへ寄せるかは、あちらの結論と揃えるのが自然。
+`FreeLibrary` は、当初「master 側で並行して進んでいる管理画面の画像エディタ
+対応と領域が重なるため、あちらが一段落するまで着手しない」として保留して
+いた。2026-09-07 に master をマージして画像エディタの下書き機能を取り込んだ
+うえで、以下の方針で解消した（詳細は次節）。
 
-### 次にやること（2026-09-06 続報更新）
+### DLL リソース読み込みを `SboPlatform` 層へ隔離（2026-09-07・`d7b9755` / `591a2b3`）
 
-暗号2本・エントリポイント・サーバー側パス取得3箇所が片付き、機械的に
-片付く分は無くなった。残る2件は他作業の結論待ちで、その次にリンク検証が来る。
+**PE のリソースは非Windows に存在しない概念**なので、この機能自体が
+Windows 専用でよい、というのが結論。ただし**廃止はせず、プラットフォーム層へ
+隔離**した（`SboPlatform::LoadEmbeddedPng()`）。Windows は従来どおり
+`SboGrpData.dll` から読み、非Windows は常に false を返す。ハンドラ側の
+**3段フォールバック（画像ストア(DB) → ファイル(res/) → DLL リソース）の
+順序と挙動は変えていない。**
 
-1. **S2: `Common/Platform/` への共有**（`Common/SBOGlobal.cpp`）。SboCli を
-   巻き込むので、master 側の作業と足並みを見てから着手する。
-2. **画像ハンドラ2本の `LoadLibrary`**（`MapPartsHandler` / `SpriteSheetHandler`）。
-   master 側の画像エディタ対応の結論待ち。
-3. 上記2つが片付けば、あとは Windows 専用として残す3本
-   （`LayoutHelper.cpp` / `LogViewCtrl.h` / `MainFrame.cpp`）を `#ifdef` で
-   括るだけで**非Windows ビルドの実際のリンクに挑戦できる段階**になる。
-   これまでは「コンパイルが通る」までしか確認していないので、
-   **次の山はリンクと実行**。
+作業の過程で、**DLL の探索とロードが `MapPartsHandler` / `SpriteSheetHandler`
+の2つのハンドラに重複実装されていた**ことが分かり、`SboPlatform` への集約で
+解消した。`HMODULE` のキャッシュは複数のクライアントスレッドから同時に
+触られるため `std::mutex` で保護している。
+
+検証は、旧実装相当と新実装で同じリソース（`IDP_MAP_01`）を取得してバイト列を
+比較し、**37,243 バイトが完全一致**することを確認した。
+
+**注意点: 3段フォールバックは、前段（画像ストアや `res/`）に画像があると
+後段（DLL リソース）が素通りされる。「画像が出た」だけでは DLL 経路の検証に
+ならない**ので、狙った段を強制的に踏ませて確認すること。
+
+### `res/` 段の ETag から mtime を落とした失敗（2026-09-07・重要な落とし穴）
+
+`591a2b3` で `SpriteSheetHandler` の `res/` 画像読み込みを脱Windows対応した
+際、ETag を `"gf-<mtime>-<size>"` から **`"gf-<size>"` に退化させてしまった**。
+`GetFileAttributesW` を捨てるときに mtime の取得手段が無いと早合点して
+省いたのが原因。
+
+**パレット差し替えはファイルサイズが変わらないため、サイズだけの ETag では
+差し替えてもクライアントが 304 のまま更新されない。** master 側で画像エディタ
+が実際に動いている今、机上の空論ではなく現実的なリスクだった。
+
+`da3603e` で `fstat(fileno(pFile))` を使って mtime を復元した（同じファイルを
+2回開かずに済む）。`StaticFileHandler.cpp` の `StatFile` に先行例があり、
+`struct stat` の `st_mtime` は Windows でも POSIX でも使える。
+
+**教訓: 移植で Windows API を置き換えるとき、キャッシュ鍵（ETag など）に
+入っていた情報を落としていないか必ず確認すること。** 単に「コンパイルが
+通った」「画像が表示された」では、この種の劣化には気づけない。
+
+なお `fileno` は MSVC で C4996 警告が出るため `_fileno` を使い、非Windows
+向けには `SvrCompat.h` で `fileno` へマッピングしている。
+
+### master 取り込みの衝突状況（2026-09-07・`422b798`）
+
+master への取り込みで**実際にテキスト衝突したのは `SboSvr/SboSvr.vcxproj` の
+1ファイルだけ**で、内容もファイル登録行の追加どうしという軽いものだった。
+
+`GrpImageStore.cpp` / `StaticFileHandler.cpp` / `HttpServer.cpp` は
+`feature/de-windows` 側と master 側の双方が触っていたが、いずれも自動マージ
+できた。ただし**テキストとして機械的に混ざっても意味まで壊れていないとは
+限らない**ので、目視での確認に加えて再検証（ビルド・81テストの実行・
+移植チェック・実起動）を行った。
+
+### 次にやること（2026-09-07 更新）
+
+master への取り込み・画像ハンドラ2本の解消・ETag の復元が片付き、
+機械的に片付く分・master 待ちの分は無くなった。残るのは以下の3点。
+
+1. **S2: `Common/Platform/` への共有**（`Common/SBOGlobal.cpp`）。
+   `Common/Platform/` に実体を1つ置き、SboSvr と SboCli の両方を乗せ替える。
+   S1（サーバー側の呼び出しを3→0にする下準備）は `5ef24a0` で完了済みなので、
+   移動そのものは安全なはず。ただし**SboCli のネイティブ＋ブラウザ両方の
+   ビルド検証が要る**ので、作業が SboSvr の外へ広がる。
+2. **Windows 専用として残す3本を `#ifdef` で括る**
+   （`LayoutHelper.cpp` / `LogViewCtrl.h` / `MainFrame.cpp`）。
+3. **非Windows ビルドの実際のリンクと実行。** これまでは「コンパイルが
+   通る」までしか確認していない。ここが次の山で、そこまで到達すれば
+   サニタイザや CI という当初の目的（冒頭「目的」節参照）に手が届く。
 
 ## 作業ログ
 
@@ -796,3 +860,26 @@ UI 依存が無いため、そのまま残している。ヘッドレス時は�
   画像エディタ対応と領域が重なるため保留と判断。詳細は「サーバー側のパス取得を
   集約」「`Common/SBOGlobal.cpp` をどう扱うか」「画像ハンドラの `LoadLibrary` は
   保留」の各節を参照。
+
+### 2026-09-07
+
+master へ取り込み、保留していた画像ハンドラの `LoadLibrary` を解消した。
+
+| コミット | 内容 |
+|---|---|
+| `4587a94` | master をマージして画像エディタの下書き機能を取り込む |
+| `63a02d5` | master が持ち込んだ `_atoi64` を `strtoll` へ |
+| `d7b9755` | `SboGrpData.dll` のリソース読み込みを `SboPlatform::LoadEmbeddedPng()` へ隔離 |
+| `591a2b3` | `SpriteSheetHandler` の `res/` ファイル読み込みを脱Windows対応 |
+| `da3603e` | `res/` 画像の ETag に mtime を復元 |
+| `422b798` | master へ取り込み |
+
+結果、全 .cpp 318本中 **314本が em++ で通る**（テスト81本）ようになり、
+機械的な移植は完了、残るは意図的に残す3本＋S2待ちの1本だけになった。
+
+master の取り込みは `SboSvr/SboSvr.vcxproj` の1ファイルのみが衝突（ファイル
+登録行の追加どうし）で、他は自動マージ。DLL リソース読み込みの隔離では
+旧実装とのバイト完全一致（37,243バイト）で検証し、ETag 退化に気づいて
+mtime を復元した。詳細は「画像ハンドラの `LoadLibrary` は保留」「DLL リソース
+読み込みを `SboPlatform` 層へ隔離」「`res/` 段の ETag から mtime を落とした
+失敗」「master 取り込みの衝突状況」の各節を参照。
