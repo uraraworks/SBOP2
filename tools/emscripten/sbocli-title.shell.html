@@ -2041,6 +2041,11 @@
         }
       } else if (ev.data.kind === "sbop2_admin_viewport") {
         applyAdminViewportHeight(ev.data.height);
+      } else if (ev.data.kind === "sbop2_chat_log_request") {
+        // チャットログ別ウィンドウからの過去ログ要求 → スナップショットを返す
+        if (window.parent !== window && typeof window.sbop2ChatLogGetSnapshot === 'function') {
+          window.parent.postMessage({ kind: 'sbop2_chat_log_snapshot', logs: window.sbop2ChatLogGetSnapshot() }, window.location.origin);
+        }
       }
     });
   </script>
@@ -2177,6 +2182,11 @@
         chatLogs.push({ text: text, color: color });
         while (chatLogs.length > CHAT_LOG_MAX) { chatLogs.shift(); }
 
+        // ---- 埋め込み時のみ: 親(管理画面)のチャットログ別ウィンドウへ配信 ----
+        if (window.parent !== window) {
+          window.parent.postMessage({ kind: 'sbop2_chat_log', text: text, color: color }, window.location.origin);
+        }
+
         // ---- PC パネル: 最初の到達で表示開始 ----
         if (!isTouch && chatPanel) {
           if (!chatPanel.classList.contains('chat-visible')) {
@@ -2193,6 +2203,14 @@
             appendSheetLine(text, color);
           }
         }
+      };
+
+      // ============================================================
+      // 親(管理画面)→JS インターフェース: チャットログのスナップショット取得
+      // 別ウィンドウを後から開いた際に、直近ログを復元するために使う。
+      // ============================================================
+      window.sbop2ChatLogGetSnapshot = function() {
+        return chatLogs.slice();
       };
 
       // ============================================================
