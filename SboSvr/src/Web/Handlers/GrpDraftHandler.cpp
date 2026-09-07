@@ -237,7 +237,9 @@ long long CGrpDraftHandler::ParseIdFromPath(const std::string &path) const
             return -1;
         }
     }
-    return _atoi64(rest.c_str());
+    // rest は上のループで数字のみと確認済みなので、strtoll の失敗系(errno/終端ポインタ)は
+    // 見なくてよい。_atoi64 と同じく素直に数値へ変換するだけ。
+    return strtoll(rest.c_str(), nullptr, 10);
 }
 
 void CGrpDraftHandler::Handle(const HttpRequest &request, HttpResponse &response)

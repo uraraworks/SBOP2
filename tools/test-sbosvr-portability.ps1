@@ -65,6 +65,9 @@ $PortableFiles = @(
     # SboSvr.cpp: 最後に残った Windows 依存だった __argc/__argv を、
     # 非Windows 側の main(argc, argv) から SboSvrMain() を直接呼ぶ形に
     # 置き換え、エントリポイント選択の #ifdef _WIN32 一箇所のみを残した。
+    "SboSvr/src/Web/Handlers/GrpDraftHandler.cpp"
+    # GrpDraftHandler.cpp: MSVC 方言の _atoi64 を標準の strtoll へ置き換え、
+    # 唯一残っていた Windows 依存を除去。
 )
 
 # 移植済みとして扱うヘッダ
