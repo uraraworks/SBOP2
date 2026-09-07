@@ -8,6 +8,7 @@
 #include <cwchar>
 #include <iomanip>
 #include <sstream>
+#include <sys/stat.h>
 
 #include "lodepng.h"
 
@@ -517,16 +518,19 @@ bool CGrpResourceProvider::TryLoadFromFileLocked(
             continue;
         }
 
-        // ファイルサイズ取得(SaveLoadInfoBase.cpp と同じ流儀)
-        fseek(pFile, 0, SEEK_END);
-        long lSize = ftell(pFile);
-        if (lSize <= 0) {
+        // 更新時刻・サイズを取得(StaticFileHandler.cpp の StatFile と同じ流儀。
+        // 同じファイルを2回開かないよう、開いたファイルディスクリプタに対して fstat する)
+        struct stat st;
+        if (fstat(_fileno(pFile), &st) != 0) {
             fclose(pFile);
             continue;
         }
-        fseek(pFile, 0, SEEK_SET);
+        if (st.st_size <= 0) {
+            fclose(pFile);
+            continue;
+        }
 
-        std::vector<unsigned char> fileData(static_cast<size_t>(lSize));
+        std::vector<unsigned char> fileData(static_cast<size_t>(st.st_size));
         size_t nRead = fread(fileData.data(), 1, fileData.size(), pFile);
         fclose(pFile);
         if (nRead != fileData.size()) {
@@ -535,12 +539,10 @@ bool CGrpResourceProvider::TryLoadFromFileLocked(
 
         outRawPng = std::move(fileData);
 
-        // ETag: "gf-<サイズの16進>"
-        // (旧実装は mtime も含めていたが、SboPlatform に mtime 取得手段が無いため
-        //  サイズのみに簡略化。res/ は差し替えが稀で、差し替え時はファイルサイズも
-        //  ほぼ変わるため実害は小さい)
+        // ETag: "gf-<mtime の16進>-<サイズの16進>"
         char szEtag[64];
-        _snprintf_s(szEtag, _countof(szEtag), _TRUNCATE, "\"gf-%llx\"",
+        _snprintf_s(szEtag, _countof(szEtag), _TRUNCATE, "\"gf-%llx-%llx\"",
+                    static_cast<unsigned long long>(st.st_mtime),
                     static_cast<unsigned long long>(outRawPng.size()));
         outETag = szEtag;
         return true;

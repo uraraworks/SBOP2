@@ -159,6 +159,11 @@ inline BOOL IsDBCSLeadByte(BYTE)
 #define _vsnprintf vsnprintf
 #endif
 
+/// _fileno: fileno にマッピング(SpriteSheetHandler.cpp の fstat 用)
+#ifndef _fileno
+#define _fileno fileno
+#endif
+
 /// _snprintf_s: ANSI(char)版の書式整形。第3引数(切り詰めサイズ指定)は
 /// 無視し、常に vsnprintf 相当(バッファサイズで切り詰め)で動く。
 inline int _snprintf_s(char *pszDst, size_t nDstCount, size_t /*nMaxCount*/, const char *pszFormat, ...)
