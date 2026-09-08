@@ -10,6 +10,8 @@
 #include <vector>
 
 class CInfoCharCli;
+class CInfoMapObject;
+class CInfoMapObjectData;
 class CLibInfoItem;
 class CLibInfoMapParts;
 class CLibInfoMapShadow;
@@ -55,6 +57,15 @@ private:
 	void GetDrawMovePos(POINT &ptMove, POINT &ptPos); // スクロール中の描画位置を所得
 	void DrawPartsPile(CImg32 *pDst, int nDrawY = -99); // 描画(重ね合わせ)
 	void DrawShadow(CImg32 *pDst, int nDrawY = -99); // 描画(マップ影)
+	// マップオブジェクトの描画に必要な情報を毎描画1回だけ引き直すための表。
+	// 定義の取得(GetPtr)がIDの線形探索なので、行ごとに引くと非常に重い。
+	struct STMapObjectDraw {
+		CInfoMapObjectData *pData;   // 配置データ
+		CInfoMapObject     *pInfo;   // 定義(見つからなければ NULL)
+		int                 nDrawY;  // 元コードの yTmp（描画基準のマップY）
+	};
+	std::vector<STMapObjectDraw> m_aMapObjectDraw; // 並び順はライブラリの順序そのまま
+	void PrepareMapObjectDraw(void); // 上表を作り直す
 	void DrawMapObject(CImg32 *pDst, int nDrawY = -99); // 描画(マップオブジェクト)
 	void DrawItem(CImg32 *pDst, int nType, int nDrawY = -99); // 描画(アイテム)
 	void GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY); // 描画位置を取得

@@ -1207,32 +1207,60 @@ void CImg32::BltStretchNearest(
 	dwLineSrc = BYTES_PER_LINE(pSrc->Width());
 	dwKey = pSrc->GetColorKey();
 
+	// 等倍→2倍拡大として全キャラ・全タイル・アイテム・吹き出しが毎フレーム通る
+	// 経路なので、ループ内から動かせるものはすべて外へ出す。
+	const int nDstWidth  = Width();
+	const int nDstHeight = Height();
+	const int nSrcWidth  = pSrc->Width();
+	const int nSrcHeight = pSrc->Height();
+
+	// 描画先に収まる x の範囲を先に求め、毎ピクセルの範囲判定をやめる。
+	int xBegin = 0;
+	int xEnd   = dcx;
+	if (dx < 0) {
+		xBegin = -dx;
+	}
+	if (dx + xEnd > nDstWidth) {
+		xEnd = nDstWidth - dx;
+	}
+	if (xBegin >= xEnd) {
+		return;
+	}
+
+	// x → 転送元 X の対応は行ごとに変わらないので一度だけ表にする。
+	// 想定外に広い転送のときだけ、従来どおり毎ピクセル計算に落とす。
+	static const int knMaxStretchWidth = 2048;
+	int aSrcX[knMaxStretchWidth];
+	const bool bUseTable = (xEnd <= knMaxStretchWidth);
+	if (bUseTable) {
+		for (x = xBegin; x < xEnd; x ++) {
+			aSrcX[x] = sx + (x * scx) / dcx;
+		}
+	}
+
 	for (y = 0; y < dcy; y ++) {
 		int dstY = dy + y;
-		if ((dstY < 0) || (dstY >= Height())) {
+		if ((dstY < 0) || (dstY >= nDstHeight)) {
 			continue;
 		}
 		srcY = sy + (y * scy) / dcy;
-		if ((srcY < 0) || (srcY >= pSrc->Height())) {
+		if ((srcY < 0) || (srcY >= nSrcHeight)) {
 			continue;
 		}
 
-		PDWORD dst = (PDWORD)(pBitsDst + (size_t)dwLineDst * (Height() - 1 - dstY) + (size_t)max(dx, 0) * BYTES_PER_PIXEL);
-		PDWORD srcLine = (PDWORD)(pBitsSrc + (size_t)dwLineSrc * (pSrc->Height() - 1 - srcY));
+		// 転送先の行頭。元コードは書き込みのたびに毎回これを計算し直していた。
+		PDWORD dstLine = (PDWORD)(pBitsDst + (size_t)dwLineDst * (nDstHeight - 1 - dstY));
+		PDWORD srcLine = (PDWORD)(pBitsSrc + (size_t)dwLineSrc * (nSrcHeight - 1 - srcY));
 
-		for (x = 0; x < dcx; x ++) {
-			int dstX = dx + x;
-			if ((dstX < 0) || (dstX >= Width())) {
-				continue;
-			}
-			srcX = sx + (x * scx) / dcx;
-			if ((srcX < 0) || (srcX >= pSrc->Width())) {
+		for (x = xBegin; x < xEnd; x ++) {
+			srcX = bUseTable ? aSrcX[x] : (sx + (x * scx) / dcx);
+			if ((srcX < 0) || (srcX >= nSrcWidth)) {
 				continue;
 			}
 
 			DWORD dwPixel = srcLine[srcX];
 			if ((!bColorKey) || (dwPixel != dwKey)) {
-				((PDWORD)(pBitsDst + (size_t)dwLineDst * (Height() - 1 - dstY)))[dstX] = dwPixel;
+				dstLine[dx + x] = dwPixel;
 			}
 		}
 	}

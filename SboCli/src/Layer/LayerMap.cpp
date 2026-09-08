@@ -171,6 +171,7 @@ void CLayerMap::Draw(PCImg32 pDst)
 	t = PerfNow(); DrawPartsBase(pDst);       dTile += PerfMs(t, PerfNow());
 	t = PerfNow(); DrawMapPile(pDst);          dTile += PerfMs(t, PerfNow());
 	t = PerfNow(); DrawItem(pDst, 0);          dTile += PerfMs(t, PerfNow());
+	t = PerfNow(); PrepareMapObjectDraw();    dTile += PerfMs(t, PerfNow());
 	t = PerfNow(); PrepareCharDrawRows();     dChar += PerfMs(t, PerfNow());
 	for (y = -1; y < DRAW_PARTS_Y + 2; y ++) {
 		t = PerfNow(); DrawMapObject(pDst, y); dTile += PerfMs(t, PerfNow());
@@ -1290,6 +1291,39 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 }
 
 
+void CLayerMap::PrepareMapObjectDraw(void)
+{
+	m_aMapObjectDraw.clear();
+
+	PCInfoMapBase pMap = m_pMgrData->GetMap();
+	if (pMap == NULL) {
+		return;
+	}
+	PCLibInfoMapObjectData pLibInfoMapObjectData = pMap->m_pLibInfoMapObjectData;
+	PCLibInfoMapObject     pLibInfoMapObject     = m_pMgrData->GetLibInfoMapObject();
+	if ((pLibInfoMapObjectData == NULL) || (pLibInfoMapObject == NULL)) {
+		return;
+	}
+
+	const int nCount = pLibInfoMapObjectData->GetCount();
+	m_aMapObjectDraw.reserve(nCount);
+	for (int i = 0; i < nCount; i ++) {
+		PCInfoMapObjectData pInfoData = (PCInfoMapObjectData)pLibInfoMapObjectData->GetPtr(i);
+		PCInfoMapObject     pInfo     = (PCInfoMapObject)pLibInfoMapObject->GetPtr(pInfoData->m_dwObjectID);
+
+		STMapObjectDraw stDraw;
+		stDraw.pData  = pInfoData;
+		stDraw.pInfo  = pInfo;
+		stDraw.nDrawY = pInfoData->m_ptPos.y;
+		// 元コードと同じ補正。定義が無い場合は描画側で弾かれるので触らない。
+		if ((pInfo != NULL) && (pInfo->m_nHideY != 0)) {
+			stDraw.nDrawY -= (pInfo->m_sizeGrp.cy - pInfo->m_nHideY);
+		}
+		m_aMapObjectDraw.push_back(stDraw);
+	}
+}
+
+
 void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 {
 	DWORD dwObjectID;
@@ -1320,18 +1354,20 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 		y = nDrawY;
 	}
 
-	nCount = pLibInfoMapObjectData->GetCount();
+	// 定義の取得は PrepareMapObjectDraw で毎描画1回だけ済ませてある。
+	// 万一ずれていたら（別経路から呼ばれた等）ここで作り直す。
+	if ((int)m_aMapObjectDraw.size() != pLibInfoMapObjectData->GetCount()) {
+		PrepareMapObjectDraw();
+	}
+	nCount = (int)m_aMapObjectDraw.size();
 	yy = nPosY + y;
 	for (i = 0; i < nCount; i ++) {
-		pInfoData = (PCInfoMapObjectData)pLibInfoMapObjectData->GetPtr(i);
-		pInfo = (PCInfoMapObject)pLibInfoMapObject->GetPtr(pInfoData->m_dwObjectID);
+		pInfoData = m_aMapObjectDraw[i].pData;
+		pInfo     = m_aMapObjectDraw[i].pInfo;
 		if (pInfo == NULL) {
 			continue;
 		}
-		yTmp = pInfoData->m_ptPos.y;
-		if (pInfo->m_nHideY != 0) {
-			yTmp -= (pInfo->m_sizeGrp.cy - pInfo->m_nHideY);
-		}
+		yTmp = m_aMapObjectDraw[i].nDrawY;
 		if (nDrawY != -99) {
 			if (yy != yTmp) {
 				if (y == DRAW_PARTS_Y + 1) {
@@ -1390,11 +1426,22 @@ void CLayerMap::DrawItem(PCImg32 pDst, int nType, int nDrawY/*-99*/)
 	// Phase 3: スクロールアニメーション廃止（xx/yy は常に 0）
 	xx = yy = 0;
 
+	// 画面外のアイテムは描かない。名前(nType != 0)は左右に広がるので余裕を持たせる。
+	const int nCullMargin = (nType == 0) ? MAPPARTSSIZE : (MAPPARTSSIZE * 4);
+	const int nCullLeft   = m_nViewX - nCullMargin;
+	const int nCullRight  = m_nViewX + SCRSIZEX + nCullMargin;
+	const int nCullTop    = m_nViewY - nCullMargin;
+	const int nCullBottom = m_nViewY + SCRSIZEY + nCullMargin;
+
 	nCount = m_pLibInfoItem->GetAreaCount();
 	m_pMgrDraw->LockDibTmp();
 	for (i = 0; i < nCount; i ++) {
 		pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtrArea(i);
 		if (pInfoItem->m_dwMapID != pPlayerChar->m_dwMapID) {
+			continue;
+		}
+		if ((pInfoItem->m_ptPos.x < nCullLeft) || (pInfoItem->m_ptPos.x > nCullRight)
+		 || (pInfoItem->m_ptPos.y < nCullTop)  || (pInfoItem->m_ptPos.y > nCullBottom)) {
 			continue;
 		}
 		if (nDrawY != -99) {
