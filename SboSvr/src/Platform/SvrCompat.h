@@ -41,6 +41,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <sys/ioctl.h>
+#include <sys/stat.h>
 
 // -----------------------------------------------------------------------
 // ソケットまわりの名前合わせ
@@ -143,6 +144,30 @@ inline BOOL SetRect(LPRECT pRect, int left, int top, int right, int bottom)
 inline DWORD timeGetTime(void)
 {
 	return (DWORD)SboPlatform::GetTickMs();
+}
+
+/// CreateDirectory: mkdir() へのマッピング。SBOGlobal.cpp の
+/// AllCreateDirectory() が使う。パスは UTF-8 として扱う
+/// (project_utf8_migration 参照。ini/DB パス以外は UTF-8 前提)。
+inline BOOL CreateDirectory(LPCTSTR lpPathName, LPSECURITY_ATTRIBUTES /*pSAtt*/)
+{
+	if ((lpPathName == NULL) || (lpPathName[0] == _T('\0'))) {
+		return FALSE;
+	}
+	std::string strPath = WstringToUtf8(lpPathName, _tcslen(lpPathName));
+	return (mkdir(strPath.c_str(), 0755) == 0) ? TRUE : FALSE;
+}
+
+/// GetLastError: errno を Win32 相当のエラーコードへ変換する。
+/// AllCreateDirectory() が CreateDirectory() 失敗直後に
+/// ERROR_ALREADY_EXISTS と比較する用途にだけ対応していれば足りるため、
+/// それ以外は errno をそのまま返す簡易実装にとどめる。
+inline DWORD GetLastError(void)
+{
+	if (errno == EEXIST) {
+		return ERROR_ALREADY_EXISTS;
+	}
+	return (DWORD)errno;
 }
 
 /// IsDBCSLeadByte: 非Windows環境では常に FALSE を返す。

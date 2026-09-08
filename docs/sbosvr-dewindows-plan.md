@@ -1,14 +1,16 @@
 # SboSvr 脱Windows 計画・作業メモ
 
-最終更新日: 2026-09-07
-ブランチ: `feature/de-windows`（2026-09-07 に master へ取り込み済み。マージコミット `422b798`、55コミット）
+最終更新日: 2026-09-09
+ブランチ: master（`feature/de-windows` は 2026-09-07 に取り込み済み。マージコミット `422b798`、55コミット）
 
-## 現在の位置づけ（2026-09-07）
+## 現在の位置づけ（2026-09-09）
 
-**機械的な移植は完了。** 全 .cpp 318本中 **314本が em++ で通る**（テスト81本）。
-残る4本は「意図的に Windows 専用のまま残す3本」＋「S2 待ちの1本」だけで、
-判断が要る作業はもう無い。次の山は非Windows ビルドの**実リンクと実行**
-（詳細は「次にやること」節）。
+**移植すべきものは移植し終えた。** 全 .cpp 318本中 **315本が em++ で通る**（テスト85本）。
+S2（`Common/SBOGlobal.cpp` のパス関数を `Common/Platform/PlatformPath.cpp` へ集約）が
+2026-09-09 に完了し、**残る3本は「意図的に Windows 専用のまま残す」ものだけ**になった。
+ただし `MainFrame.cpp` は GUI とサーバー中核が同居しており、丸ごと落とすことはできない
+（詳細は「次にやること」節）。次の山は非Windows ビルドの**実リンクと実行**で、
+そのためのツールチェーンがこの PC にまだ無い。
 
 ## 目的
 
@@ -599,21 +601,71 @@ master への取り込みで**実際にテキスト衝突したのは `SboSvr/Sb
 限らない**ので、目視での確認に加えて再検証（ビルド・81テストの実行・
 移植チェック・実起動）を行った。
 
-### 次にやること（2026-09-07 更新）
+### S2 完了: `Common/Platform/PlatformPath.cpp` へ集約（2026-09-09）
 
-master への取り込み・画像ハンドラ2本の解消・ETag の復元が片付き、
-機械的に片付く分・master 待ちの分は無くなった。残るのは以下の3点。
+`Common/SBOGlobal.cpp` の `GetModuleFilePath()` / `GetModuleIniPath()` と
+`SvrPlatform.cpp` の `GetExeDirectory()` / `GetIniFilePath()` は同じ仕事の
+重複実装だったので、実体を `Common/Platform/PlatformPath.h` / `.cpp` に1本化した。
 
-1. **S2: `Common/Platform/` への共有**（`Common/SBOGlobal.cpp`）。
-   `Common/Platform/` に実体を1つ置き、SboSvr と SboCli の両方を乗せ替える。
-   S1（サーバー側の呼び出しを3→0にする下準備）は `5ef24a0` で完了済みなので、
-   移動そのものは安全なはず。ただし**SboCli のネイティブ＋ブラウザ両方の
-   ビルド検証が要る**ので、作業が SboSvr の外へ広がる。
-2. **Windows 専用として残す3本を `#ifdef` で括る**
-   （`LayoutHelper.cpp` / `LogViewCtrl.h` / `MainFrame.cpp`）。
-3. **非Windows ビルドの実際のリンクと実行。** これまでは「コンパイルが
-   通る」までしか確認していない。ここが次の山で、そこまで到達すれば
-   サニタイザや CI という当初の目的（冒頭「目的」節参照）に手が届く。
+- 名前空間はあえて **`SboPlatform`** を使った。サーバー側の既存呼び出し元
+  （`SboPlatform::GetExeDirectory()` 等）を1行も変えずに乗せ替えられる。
+- 公開するのは `GetPathSeparator()` / `GetExeDirectory()` / `GetExeDirectoryW()` /
+  `GetIniFilePath()` / `GetIniFilePathW()` の5本。**ワイド版を用意したのは
+  `SBOGlobal.cpp` 側が `LPTSTR`（＝`wchar_t`、全プロジェクト `CharacterSet=Unicode`）
+  だから。** ナロー↔ワイドの変換を挟むとエンコーディング事故になるので、
+  実行ファイルパス取得だけ `GetModuleFileNameA` / `W` で分け、
+  ディレクトリ切り出しと拡張子差し替えのロジックは
+  `std::basic_string<Ch>` のテンプレート補助関数1本で共有した。
+- `#ifdef` が要るのは「実行ファイルの絶対パス取得」だけに絞れた。
+  Emscripten 分岐は `"./sbocli.html"` を返す。これは
+  `SboCli/src/Platform/Win32ApiStubs.h` の `GetModuleFileName` スタブが返していた
+  ダミー値と同じ。**ブラウザ版の ini パスを従来と揃えるための意図的な選択。**
+  （なお ini の拡張子差し替えが正しくなったため、ブラウザ版の ini パスは
+  `./sbocli.hini` → `./sbocli.ini` に変わる。IDBFS を使っておらず MEMFS 上の
+  ファイルはリロードで消えるため、保存内容の引き継ぎ問題は起きない。）
+- **想定外だった副作用**: `Common/SBOGlobal.cpp` を移植済みリストに載せた結果、
+  スコープ外だった `AllCreateDirectory()` が `CreateDirectory` / `GetLastError`
+  未定義で落ちた。ロジックは触らず `SvrCompat.h` に最小限の互換スタブ
+  （`mkdir` / `errno`）を足して解消した。方針(A)「名前だけが Windows 方言」に
+  該当するので互換ヘッダで吸収してよい範囲。
+- ビルド定義は7つの vcxproj（SboSvr / SboSvrTest / SboCli / SboSockLib /
+  SboCopy / SboLaunch / MakeFileList）と、`tools/build-sbocli-browser-title.ps1` の
+  ソース一覧、`tools/test-sbosvr-portability.ps1` の `$PortableFiles` に追加した。
+  **ブラウザ版のソース一覧は直書きなので、ここを忘れるとブラウザ版だけリンクで落ちる。**
+
+検証結果:
+
+| 対象 | 結果 |
+|---|---|
+| `tools/test-sbosvr-portability.ps1` | 成功 38 / 失敗 0（`SBOGlobal.cpp` / `PlatformPath.cpp` を含む） |
+| SboSvr の MSVC コンパイル | エラー 0（対象3ファイルを touch して再コンパイル確認） |
+| ブラウザ版ビルド | リンクまで成功 |
+| SboSvrTest | ビルド・実行とも成功。**85 / 85** |
+| SboCli ネイティブ | **検証できず。** `SDL2/` の実体がこの作業コピーに無く `SDL.h` が開けない（エラー312件すべてこれ）。今回の差分とは無関係な環境未整備 |
+
+**これで em++ を通らない .cpp は「意図的に Windows 専用として残す3本」だけになった。**
+
+### 次にやること（2026-09-09 更新）
+
+1. **Windows 専用として残す3本の切り分け。**
+   `Common/Lib/LayoutHelper.cpp`（306行）と `Common/Lib/mfc/LogViewCtrl.h`（152行）は
+   計画どおり丸ごと Windows 専用でよい。**問題は `SboSvr/src/MainFrame/MainFrame.cpp`
+   （1231行）で、「非Windows では丸ごと `#ifdef` で落とす」という当初の想定は成り立たない。**
+   このファイルにはサーバーの中核（`MainLoopHeadless()` / `InitServer()` / `TermServer()` /
+   `OnRecv()` / ソケット通知キュー / 各種タイマー）が GUI と同居しているため、
+   落とすとヘッドレス起動そのものが消える。実態は次の2つの作業になる。
+   - GUI 部（`MainLoopWindow` / `WndProc` / `OnPaint` / `MyTextOut` /
+     `LoadWindowPos` / `SaveWindowPos` / `OnCreate` / `OnClose` / `OnDestroy`）を
+     `MainFrameWindow.cpp` として切り出し、そちらを Windows 専用にする。
+   - **ヘッドレス経路にも Windows 依存が4種類残っている**（二重起動防止のミューテックス、
+     `--stop` 用の名前付きイベント、`SetConsoleCtrlHandler` による Ctrl+C、
+     `timeBeginPeriod`）。前2つは POSIX では pid ファイルやシグナルへの
+     置き換えになり、設計判断が要る。
+2. **非Windows ビルドの実際のリンクと実行。** ここが最後の山。
+   **この PC には Linux ツールチェーンが無い**（WSL はディストリ未導入、
+   clang / cmake / ninja / g++ も未インストール、CMakeLists の類も無い）。
+   em++ でリンクしても wasm ではサーバーのソケットが動かないので代用にならない。
+   着手には WSL2 か Docker の導入と、ビルド定義（CMake 等）の新規作成が先に要る。
 
 ## 作業ログ
 

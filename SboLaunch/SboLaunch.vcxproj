@@ -155,6 +155,7 @@
     <ClCompile Include="..\Common\Lib\md5\md5c.c" />
     <ClCompile Include="..\Common\mt19937int.cpp" />
     <ClCompile Include="..\Common\SBOGlobal.cpp" />
+    <ClCompile Include="..\Common\Platform\PlatformPath.cpp" />
     <ClCompile Include="src\SboLaunch.cpp" />
     <ClCompile Include="src\SboLaunchDlg.cpp" />
     <ClCompile Include="StdAfx.cpp">

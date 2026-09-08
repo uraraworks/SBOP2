@@ -275,6 +275,7 @@ xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul&#x0D;&#x0A;mt.exe -nologo -manife
     <ClCompile Include="..\common\mt19937int.cpp" />
     <ClCompile Include="..\Common\GrpLayout.cpp" />
     <ClCompile Include="..\Common\SBOGlobal.cpp" />
+    <ClCompile Include="..\Common\Platform\PlatformPath.cpp" />
     <ClCompile Include="..\Common\UraraSockTCPSBO.cpp" />
     <ClCompile Include="src\AdminApi\AdminUiLoader.cpp" />
     <ClCompile Include="src\Info\InfoCharCli.cpp" />

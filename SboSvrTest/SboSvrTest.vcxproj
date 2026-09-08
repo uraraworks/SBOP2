@@ -101,6 +101,7 @@
     <ClCompile Include="TestWebSocketProtocol.cpp" />
     <ClCompile Include="TestStaticFileHandler.cpp" />
     <ClCompile Include="..\SboSvr\src\Platform\SvrPlatform.cpp" />
+    <ClCompile Include="..\Common\Platform\PlatformPath.cpp" />
     <ClCompile Include="..\SboSvr\src\PasswordHash.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\WebSocketProtocol.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\HttpTypes.cpp" />

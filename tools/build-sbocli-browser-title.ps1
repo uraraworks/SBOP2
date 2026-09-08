@@ -198,6 +198,7 @@ $sources = @(
     "SboCli/src/Platform/SDLWindow.cpp",
     "SboCli/src/Platform/SdlFont.cpp",
     "Common/Platform/SjisConvert.cpp",
+    "Common/Platform/PlatformPath.cpp",
     "SboCli/src/Lib/DInputUtil.cpp",
     "SboCli/src/Lib/DXAudio.cpp",
     "SboCli/src/Lib/Img32.cpp",

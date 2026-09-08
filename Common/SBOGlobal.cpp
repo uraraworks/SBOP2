@@ -1,5 +1,7 @@
 ﻿#include "StdAfx.h"
 
+#include "Platform/PlatformPath.h"
+
 // 関数プロトタイプ宣言
 
 PBYTE	ZeroNew(DWORD dwSize);											// 指定サイズのメモリを確保して0クリア
@@ -62,39 +64,54 @@ void StoreRenew(CmyString &strDst, LPCSTR pszSrc, PBYTE &pPos)
 }
 
 // GetModuleFilePath
+//
+// 実体は SboPlatform::GetExeDirectoryW() (Common/Platform/PlatformPath.cpp)。
+// SboSvr/src/Platform/SvrPlatform.cpp の GetExeDirectory() と同じ仕事を
+// していた重複実装だったため、そちらへ寄せた薄いラッパにした。
+// (このプロジェクトは CharacterSet=Unicode なので TCHAR = wchar_t。)
 
 void GetModuleFilePath(
 	LPTSTR pszDst,		// [ou] パス格納先バッファ
-	DWORD dwSize)		// [in] パス格納先バッファサイズ
+	DWORD dwSize)		// [in] パス格納先バッファサイズ(TCHAR単位の要素数)
 {
 	if ((pszDst == NULL) || (dwSize == 0)) {
 		return;
 	}
 	ZeroMemory(pszDst, sizeof(TCHAR) * dwSize);
-	GetModuleFileName(NULL, pszDst, dwSize);	// モジュール名を取得
-	PathRemoveFileSpec(pszDst);					// ファイル名部分を消す
-	PathAddBackslash(pszDst);					// 「\\」を追加
+
+	std::wstring strDir = SboPlatform::GetExeDirectoryW();
+
+	// 終端 NUL 分を残してコピーする(従来通りバッファ長を超えない)。
+	size_t nCopyLen = strDir.size();
+	if (nCopyLen > (size_t)(dwSize - 1)) {
+		nCopyLen = (size_t)(dwSize - 1);
+	}
+	for (size_t i = 0; i < nCopyLen; ++ i) {
+		pszDst[i] = strDir[i];
+	}
+	pszDst[nCopyLen] = _T('\0');
 }
 
 void GetModuleIniPath(
 	LPTSTR pszDst,
 	DWORD dwSize)
 {
-	int nExtPos;
-
 	if ((pszDst == NULL) || (dwSize == 0)) {
 		return;
 	}
 
 	ZeroMemory(pszDst, sizeof(TCHAR) * dwSize);
-	GetModuleFileName(NULL, pszDst, dwSize);
 
-	nExtPos = static_cast<int>(_tcslen(pszDst)) - 3;
-	if (nExtPos >= 0) {
-		_tcscpy_s(&pszDst[nExtPos], dwSize - nExtPos, _T("ini"));
-	} else {
-		_tcscat_s(pszDst, dwSize, _T(".ini"));
+	std::wstring strIni = SboPlatform::GetIniFilePathW();
+
+	size_t nCopyLen = strIni.size();
+	if (nCopyLen > (size_t)(dwSize - 1)) {
+		nCopyLen = (size_t)(dwSize - 1);
 	}
+	for (size_t i = 0; i < nCopyLen; ++ i) {
+		pszDst[i] = strIni[i];
+	}
+	pszDst[nCopyLen] = _T('\0');
 }
 
 void BuildModuleRelativePath(

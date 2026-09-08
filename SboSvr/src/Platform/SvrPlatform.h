@@ -15,6 +15,12 @@
 #include <string>
 #include <vector>
 
+// GetPathSeparator / GetExeDirectory / GetIniFilePath は
+// Common/SBOGlobal.cpp (GetModuleFilePath/GetModuleIniPath) と実装が
+// 重複していたため、Common/Platform/PlatformPath.h へ集約した。
+// SboPlatform 名前空間はそのまま使えるので、既存の呼び出し元は無改造。
+#include "../../../Common/Platform/PlatformPath.h"
+
 namespace SboPlatform
 {
 	/// 起動からの経過ミリ秒を返す
@@ -45,16 +51,8 @@ namespace SboPlatform
 	/// 中身はタイムゾーン変換前の UTC 値になる。
 	void	GetSystemTime(LOCALTIME *pOut);
 
-	/// 実行ファイルが置かれているディレクトリを返す
-	///
-	/// GetModuleFileName() + パス切り出しの置き換え。
-	/// 末尾は区切り文字で終わる。取得できない場合は "./" を返す。
-	std::string	GetExeDirectory(void);
-
-	/// パスの区切り文字
-	///
-	/// Windows は '\\'、その他は '/'。
-	char	GetPathSeparator(void);
+	// GetExeDirectory() / GetPathSeparator() は
+	// Common/Platform/PlatformPath.h (上で include 済み) で宣言されている。
 
 	/// ディレクトリを作る(既にあれば何もしない)
 	///
@@ -78,14 +76,7 @@ namespace SboPlatform
 	/// @return 絶対パス。ディレクトリ作成に失敗しても組み立てたパスは返す。
 	std::string	MakeDataFilePath(const char *pszFileName);
 
-	/// 設定ファイル(ini)のパスを返す
-	///
-	/// 実行ファイルの拡張子を ini に置き換えたもの。
-	///
-	/// なお ini や DB のパスは従来から ANSI(CP932)前提で扱われている。
-	/// 実行ファイルのパスに CP932 で表せない文字が含まれる環境は
-	/// 元から想定外なので、その前提は変えていない。
-	std::string	GetIniFilePath(void);
+	// GetIniFilePath() も Common/Platform/PlatformPath.h で宣言されている。
 
 	/// 設定ファイル(ini)から整数を読む
 	///

@@ -242,6 +242,7 @@
     <ClCompile Include="..\Common\RouteSearch.cpp" />
     <ClCompile Include="..\Common\GrpLayout.cpp" />
     <ClCompile Include="..\Common\SBOGlobal.cpp" />
+    <ClCompile Include="..\Common\Platform\PlatformPath.cpp" />
     <ClCompile Include="..\Common\UraraSockTCPSBO.cpp" />
     <ClCompile Include="src\Info\InfoCharSvr.cpp" />
     <ClCompile Include="src\Info\InfoChar\InfoCharATACKANIMESvr.cpp" />

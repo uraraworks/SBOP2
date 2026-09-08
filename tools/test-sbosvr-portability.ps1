@@ -18,6 +18,8 @@ $Root = Resolve-Path (Join-Path $PSScriptRoot "..")
 $PortableFiles = @(
     "SboSvr/src/Platform/SvrPlatform.cpp",
     "Common/Platform/SjisConvert.cpp",
+    "Common/Platform/PlatformPath.cpp",
+    "Common/SBOGlobal.cpp",
     "Common/Info/InfoCharBase.cpp",
     "SboSvr/src/LibInfo/LibInfoCharSvrMapEvent.cpp",
     "Common/Info/InfoTextEffect.cpp",

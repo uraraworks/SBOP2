@@ -318,6 +318,7 @@
     <ClCompile Include="..\Common\LibInfo\LibInfoMotionType.cpp" />
     <ClCompile Include="..\Common\LibInfo\LibInfoSkill.cpp" />
     <ClCompile Include="..\Common\SBOGlobal.cpp" />
+    <ClCompile Include="..\Common\Platform\PlatformPath.cpp" />
     <ClCompile Include="CWinsockStart.cpp" />
     <ClCompile Include="UraraSockTCP.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

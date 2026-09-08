@@ -103,46 +103,9 @@ namespace SboPlatform
 		pOut->nMilli  = (int)(nMs % 1000);
 	}
 
-	char	GetPathSeparator(void)
-	{
-#ifdef _WIN32
-		return '\\';
-#else
-		return '/';
-#endif
-	}
-
-	std::string	GetExeDirectory(void)
-	{
-		char szPath[1024];
-		std::string strRet;
-
-		std::memset(szPath, 0, sizeof(szPath));
-
-#ifdef _WIN32
-		if (GetModuleFileNameA(NULL, szPath, (DWORD)sizeof(szPath)) == 0) {
-			return std::string("./");
-		}
-#elif defined(__EMSCRIPTEN__)
-		// ブラウザ上では実行ファイルの概念が無い
-		return std::string("./");
-#else
-		ssize_t nLen = readlink("/proc/self/exe", szPath, sizeof(szPath) - 1);
-		if (nLen <= 0) {
-			return std::string("./");
-		}
-		szPath[nLen] = '\0';
-#endif
-
-		strRet = szPath;
-
-		// 末尾のファイル名を落とす
-		std::string::size_type nPos = strRet.find_last_of("\\/");
-		if (nPos == std::string::npos) {
-			return std::string("./");
-		}
-		return strRet.substr(0, nPos + 1);
-	}
+	// GetPathSeparator() / GetExeDirectory() は Common/Platform/PlatformPath.cpp
+	// (Common/SBOGlobal.cpp の GetModuleFilePath() と実装が重複していたため
+	// そちらへ集約した)へ移動した。
 
 	bool	MakeDirectory(const char *pszPath)
 	{
@@ -205,42 +168,7 @@ namespace SboPlatform
 		return strDir;
 	}
 
-	std::string	GetIniFilePath(void)
-	{
-		char szPath[1024];
-		std::string strRet;
-
-		std::memset(szPath, 0, sizeof(szPath));
-
-#ifdef _WIN32
-		if (GetModuleFileNameA(NULL, szPath, (DWORD)sizeof(szPath)) == 0) {
-			return std::string();
-		}
-#elif defined(__EMSCRIPTEN__)
-		return std::string();
-#else
-		{
-			ssize_t nLen = readlink("/proc/self/exe", szPath, sizeof(szPath) - 1);
-			if (nLen <= 0) {
-				return std::string();
-			}
-			szPath[nLen] = '\0';
-		}
-#endif
-
-		strRet = szPath;
-
-		// 拡張子を ini に差し替える
-		std::string::size_type nDot = strRet.find_last_of('.');
-		std::string::size_type nSep = strRet.find_last_of("\\/");
-		if ((nDot != std::string::npos) &&
-			((nSep == std::string::npos) || (nDot > nSep))) {
-			strRet = strRet.substr(0, nDot);
-		}
-		strRet += ".ini";
-
-		return strRet;
-	}
+	// GetIniFilePath() も Common/Platform/PlatformPath.cpp へ移動した。
 
 	namespace
 	{
