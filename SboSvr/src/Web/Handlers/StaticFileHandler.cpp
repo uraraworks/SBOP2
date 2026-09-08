@@ -5,6 +5,7 @@
 #include <cctype>
 #include <cstdio>
 #include <cstring>
+#include <string>
 #include <sys/stat.h>
 
 #include "../../Platform/SvrPlatform.h"
@@ -25,6 +26,60 @@ static const char* const kMonthNames[12] = {
 };
 
 } // anonymous namespace
+
+// Accept-Encoding に指定トークンが有効な形で含まれるかを判定する。
+// "gzip, deflate, br" のような並びを , で分割し、q=0 指定は拒否として扱う。
+static bool AcceptsEncoding(const std::string &acceptEncoding, const char *pszToken)
+{
+        if (pszToken == NULL) {
+                return false;
+        }
+
+        std::string lower;
+        lower.reserve(acceptEncoding.size());
+        for (size_t i = 0; i < acceptEncoding.size(); ++i) {
+                lower.push_back(static_cast<char>(std::tolower(static_cast<unsigned char>(acceptEncoding[i]))));
+        }
+
+        const std::string token(pszToken);
+        size_t pos = 0;
+        while (true) {
+                const size_t comma = lower.find(',', pos);
+                std::string entry = (comma == std::string::npos)
+                        ? lower.substr(pos)
+                        : lower.substr(pos, comma - pos);
+
+                const size_t begin = entry.find_first_not_of(" \t");
+                if (begin != std::string::npos) {
+                        const size_t end = entry.find_last_not_of(" \t");
+                        entry = entry.substr(begin, end - begin + 1);
+
+                        const size_t semi = entry.find(';');
+                        std::string name = (semi == std::string::npos) ? entry : entry.substr(0, semi);
+                        const size_t nameEnd = name.find_last_not_of(" \t");
+                        if (nameEnd != std::string::npos) {
+                                name = name.substr(0, nameEnd + 1);
+                        }
+
+                        if (name == token) {
+                                // q=0 は「受け付けない」。q=0.5 等は受け付ける。
+                                if (semi != std::string::npos) {
+                                        const size_t q = entry.find("q=0", semi);
+                                        if ((q != std::string::npos) && (entry.compare(q, 4, "q=0.") != 0)) {
+                                                return false;
+                                        }
+                                }
+                                return true;
+                        }
+                }
+
+                if (comma == std::string::npos) {
+                        break;
+                }
+                pos = comma + 1;
+        }
+        return false;
+}
 
 // ---------------------------------------------------------------------------
 // コンストラクタ
@@ -68,6 +123,30 @@ void CStaticFileHandler::Handle(const HttpRequest &request, HttpResponse &respon
         const std::string cacheControl = DetermineCacheControl(relativePath);
         const std::string contentType  = DetermineContentType(relativePath);
 
+        // --- 事前圧縮ファイル(.br/.gz)があればそちらを配信する ---
+        // 圧縮はビルド時に済ませてあり、ここでは選ぶだけ（実行時圧縮はしない）。
+        // meta を差し替えるので ETag/Last-Modified も自然に圧縮版のものになる。
+        std::wstring servePath = filePath;
+        std::string  contentEncoding;
+        if (meta.valid) {
+                const char* pszAcceptEncoding = request.FindHeader("Accept-Encoding");
+                if (pszAcceptEncoding != NULL) {
+                        const std::string acceptEncoding(pszAcceptEncoding);
+                        FileMetaInfo encodedMeta = {};
+                        if (AcceptsEncoding(acceptEncoding, "br")
+                            && StatFile(filePath + L".br", encodedMeta)) {
+                                servePath       = filePath + L".br";
+                                contentEncoding = "br";
+                                meta            = encodedMeta;
+                        } else if (AcceptsEncoding(acceptEncoding, "gzip")
+                                   && StatFile(filePath + L".gz", encodedMeta)) {
+                                servePath       = filePath + L".gz";
+                                contentEncoding = "gzip";
+                                meta            = encodedMeta;
+                        }
+                }
+        }
+
         // ETag / Last-Modified を生成（meta が有効な場合のみ）
         std::string etag;
         std::string lastModified;
@@ -100,6 +179,11 @@ void CStaticFileHandler::Handle(const HttpRequest &request, HttpResponse &respon
         if (send304) {
                 response.statusLine = "HTTP/1.1 304 Not Modified";
                 response.SetHeader("Cache-Control", cacheControl);
+                // 表現ごとに ETag が異なるため、キャッシュに Accept-Encoding を見させる
+                response.SetHeader("Vary", "Accept-Encoding");
+                if (!contentEncoding.empty()) {
+                        response.SetHeader("Content-Encoding", contentEncoding);
+                }
                 if (!etag.empty())         { response.SetHeader("ETag",          etag); }
                 if (!lastModified.empty()) { response.SetHeader("Last-Modified",  lastModified); }
                 // 304 は body 無し。Content-Length=0 をセット。LoadFile は呼ばない。
@@ -109,7 +193,7 @@ void CStaticFileHandler::Handle(const HttpRequest &request, HttpResponse &respon
 
         // --- Phase 3: 200 確定後に初めてファイル本文を読む ---
         std::string content;
-        if (!LoadFile(filePath, content)) {
+        if (!LoadFile(servePath, content)) {
                 // StatFile 後にファイルが消えるレース等 → 404
                 response.statusLine = "HTTP/1.1 404 Not Found";
                 response.SetJsonBody("{\"error\":\"not_found\"}");
@@ -120,6 +204,11 @@ void CStaticFileHandler::Handle(const HttpRequest &request, HttpResponse &respon
         response.body.swap(content);
         response.SetHeader("Content-Type",  contentType);
         response.SetHeader("Cache-Control", cacheControl);
+        // Content-Type は元のパスから決めた値のまま（圧縮は転送層の話なので変えない）
+        response.SetHeader("Vary", "Accept-Encoding");
+        if (!contentEncoding.empty()) {
+                response.SetHeader("Content-Encoding", contentEncoding);
+        }
         if (!etag.empty())         { response.SetHeader("ETag",         etag); }
         if (!lastModified.empty()) { response.SetHeader("Last-Modified", lastModified); }
 }

@@ -24,6 +24,52 @@ $fontDir = Join-Path $repoRoot "SboCli\font"
 $bgmDir  = Join-Path $repoRoot "Release\BGM"
 $wavDir  = Join-Path $repoRoot "SboSoundData\res\WAVE"
 
+function Resolve-NodeExe {
+    # emsdk 同梱の node でよい。PATH に無ければ EMSDK 配下を探す。
+    $cmd = Get-Command node -ErrorAction SilentlyContinue
+    if ($cmd) {
+        return $cmd.Source
+    }
+    $emsdkRoot = if ($env:EMSDK) { $env:EMSDK } else { "C:\emsdk" }
+    $nodeDir = Join-Path $emsdkRoot "node"
+    if (Test-Path $nodeDir) {
+        $candidate = Get-ChildItem -Path $nodeDir -Filter "node.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($candidate) {
+            return $candidate.FullName
+        }
+    }
+    return $null
+}
+
+function New-PrecompressedAssets {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$SourceDir
+    )
+
+    $script = Join-Path $scriptDir "emscripten\precompress.mjs"
+    if (-not (Test-Path $script)) {
+        Write-Warning "[browser-precompress] precompress.mjs が見つかりません。スキップします。"
+        return
+    }
+    $nodeExe = Resolve-NodeExe
+    if (-not $nodeExe) {
+        Write-Warning "[browser-precompress] node が見つからないため事前圧縮をスキップします。"
+        return
+    }
+
+    # 既に圧縮済みの ogg/png が大半を占める .data も、フォント(otf)が効くので対象に含める
+    $targets = @("sbocli-title.wasm", "sbocli-title.js", "sbocli-title.html", "sbocli-title.data")
+    try {
+        & $nodeExe $script $SourceDir @targets
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "[browser-precompress] 事前圧縮に失敗しました (exit=$LASTEXITCODE)"
+        }
+    } catch {
+        Write-Warning "[browser-precompress] 事前圧縮に失敗しました: $_"
+    }
+}
+
 function Sync-BrowserTitleToAdminWebroot {
     param(
         [Parameter(Mandatory=$true)]
@@ -576,5 +622,6 @@ try {
     Write-Warning "[browser-cachebust] キャッシュバスター埋め込みに失敗しました: $_"
 }
 
+New-PrecompressedAssets -SourceDir $outPath
 Sync-BrowserTitleToAdminWebroot -SourceDir $outPath
 Write-Host "[browser-link] success"

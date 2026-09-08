@@ -13,6 +13,9 @@
 /// 3. Handle() が実ファイルに対して 200→ETag/Last-Modified発行→
 ///    If-None-Match/If-Modified-Since 付き再リクエストで 304 を返すこと
 ///    (3段構成: stat→304判定→本文読込 を壊していないことの確認)。
+/// 4. 事前圧縮ファイル(.br/.gz)がある場合、Accept-Encoding に応じて
+///    そちらを配信し Content-Encoding / Vary を返すこと。
+///    サーバーは実行時圧縮をしないため、ここが壊ると常に非圧縮配信に戻る。
 
 #include "StdAfx.h"
 #include "TestFramework.h"
@@ -53,6 +56,43 @@ namespace
     private:
         std::string m_strPath;
     };
+
+    // 事前圧縮ファイル(<元のパス>.br など)を作る。中身は圧縮済みバイト列を
+    // 模した任意のデータでよい(ハンドラは中身を解釈せずそのまま返すため)。
+    class CTempSidecar
+    {
+    public:
+        CTempSidecar(const std::string &strBasePath, const char *pszExt, const char *pszContent)
+        {
+            m_strPath = strBasePath + pszExt;
+
+            FILE *pFile = fopen(m_strPath.c_str(), "wb");
+            if (pFile) {
+                if (pszContent != NULL) {
+                    fwrite(pszContent, 1, strlen(pszContent), pFile);
+                }
+                fclose(pFile);
+            }
+        }
+        ~CTempSidecar(void)
+        {
+            DeleteFileA(m_strPath.c_str());
+        }
+
+    private:
+        std::string m_strPath;
+    };
+
+    // レスポンスヘッダを名前で引く(見つからなければ空文字)
+    std::string FindResponseHeader(const HttpResponse &res, const char *pszName)
+    {
+        for (size_t i = 0; i < res.headers.size(); ++i) {
+            if (res.headers[i].name == pszName) {
+                return res.headers[i].value;
+            }
+        }
+        return std::string();
+    }
 
     // "C:\...\sfhXXXX.tmp" → root="C:\...", mount="/", file="sfhXXXX.tmp"
     void SplitDirAndName(const std::string &strFullPath, std::wstring &outDir, std::string &outName)
@@ -226,4 +266,105 @@ TEST(静的配信_LastModified一致で304を返す)
 
     CHECK(res2.statusLine.find("304") != std::string::npos);
     CHECK(res2.body.empty());
+}
+
+TEST(静的配信_brを受け入れるなら事前圧縮ファイルを返す)
+{
+    CTempFile file("hello world");
+    CTempSidecar brFile(file.Path(), ".br", "BROTLI-BYTES");
+    std::wstring strDir;
+    std::string strName;
+    SplitDirAndName(file.Path(), strDir, strName);
+
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    HttpRequest req;
+    req.method = "GET";
+    req.path = "/" + strName;
+    HttpHeader header;
+    header.name = "Accept-Encoding";
+    header.value = "gzip, deflate, br";
+    req.headers.push_back(header);
+
+    HttpResponse res;
+    handler.Handle(req, res);
+
+    CHECK(res.statusLine.find("200") != std::string::npos);
+    CHECK(res.body == "BROTLI-BYTES");
+    CHECK(FindResponseHeader(res, "Content-Encoding") == "br");
+    CHECK(FindResponseHeader(res, "Vary") == "Accept-Encoding");
+    // Content-Type は元のパスから決めるので圧縮しても変わらない
+    CHECK(!FindResponseHeader(res, "Content-Type").empty());
+}
+
+TEST(静的配信_AcceptEncodingが無ければ非圧縮を返す)
+{
+    CTempFile file("hello world");
+    CTempSidecar brFile(file.Path(), ".br", "BROTLI-BYTES");
+    std::wstring strDir;
+    std::string strName;
+    SplitDirAndName(file.Path(), strDir, strName);
+
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    HttpRequest req;
+    req.method = "GET";
+    req.path = "/" + strName;
+
+    HttpResponse res;
+    handler.Handle(req, res);
+
+    CHECK(res.statusLine.find("200") != std::string::npos);
+    CHECK(res.body == "hello world");
+    CHECK(FindResponseHeader(res, "Content-Encoding").empty());
+}
+
+TEST(静的配信_brが無ければgzipにフォールバックする)
+{
+    CTempFile file("hello world");
+    CTempSidecar gzFile(file.Path(), ".gz", "GZIP-BYTES");
+    std::wstring strDir;
+    std::string strName;
+    SplitDirAndName(file.Path(), strDir, strName);
+
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    HttpRequest req;
+    req.method = "GET";
+    req.path = "/" + strName;
+    HttpHeader header;
+    header.name = "Accept-Encoding";
+    header.value = "gzip, deflate, br";
+    req.headers.push_back(header);
+
+    HttpResponse res;
+    handler.Handle(req, res);
+
+    CHECK(res.body == "GZIP-BYTES");
+    CHECK(FindResponseHeader(res, "Content-Encoding") == "gzip");
+}
+
+TEST(静的配信_q0で拒否された圧縮は使わない)
+{
+    CTempFile file("hello world");
+    CTempSidecar brFile(file.Path(), ".br", "BROTLI-BYTES");
+    std::wstring strDir;
+    std::string strName;
+    SplitDirAndName(file.Path(), strDir, strName);
+
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    HttpRequest req;
+    req.method = "GET";
+    req.path = "/" + strName;
+    HttpHeader header;
+    header.name = "Accept-Encoding";
+    header.value = "br;q=0";
+    req.headers.push_back(header);
+
+    HttpResponse res;
+    handler.Handle(req, res);
+
+    CHECK(res.body == "hello world");
+    CHECK(FindResponseHeader(res, "Content-Encoding").empty());
 }
