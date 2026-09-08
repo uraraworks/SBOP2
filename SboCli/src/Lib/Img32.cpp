@@ -591,6 +591,32 @@ void CImg32::SetLevel(CImg32 *pSrc)
 	}
 }
 
+// 加算ライトの乗算結果テーブル
+//   s = dGlowFloor + (1.0 - dGlowFloor) * (byLevel / 255.0)
+//   s_aLightMul[byLevel][v] = (BYTE)(int)(v * s)
+// SetLevelEx は全画面を走査するため、毎ピクセルの double 除算・乗算を
+// 事前計算に追い出す。dGlowFloor は実質定数なので表作成は初回1回で済む。
+static BYTE   s_aLightMul[256][256];
+static double s_dLightMulFloor = -1.0;
+
+static void BuildLightMulTable(double dGlowFloor)
+{
+	if (s_dLightMulFloor == dGlowFloor) {
+		return;
+	}
+	for (int nLevel = 0; nLevel < 256; nLevel ++) {
+		double s = dGlowFloor + (1.0 - dGlowFloor) * (nLevel / 255.0);
+		for (int v = 0; v < 256; v ++) {
+			int n = (int)(v * s);
+			if (n > 255) {
+				n = 255;
+			}
+			s_aLightMul[nLevel][v] = (BYTE)n;
+		}
+	}
+	s_dLightMulFloor = dGlowFloor;
+}
+
 void CImg32::SetLevelEx(CImg32 *pLevel, CImg32 *pLight, COLORREF clNight, double dGlowFloor)
 {
 	int i, j, x, y, cx, cy;
@@ -605,6 +631,7 @@ void CImg32::SetLevelEx(CImg32 *pLevel, CImg32 *pLight, COLORREF clNight, double
 	}
 
 	tTint.ARGB = ColorrefToDword(clNight);
+	BuildLightMulTable(dGlowFloor);
 
 	x = y = 0;
 	cx = Width();
@@ -635,13 +662,13 @@ void CImg32::SetLevelEx(CImg32 *pLevel, CImg32 *pLight, COLORREF clNight, double
 			g = tDst.G + ((int)(tTint.G - tDst.G) * (byLevel + 1) >> 8);
 			b = tDst.B + ((int)(tTint.B - tDst.B) * (byLevel + 1) >> 8);
 
-			// 加算ライト（暗さ連動スケール）
+			// 加算ライト（暗さ連動スケール）: スケール適用を表引きにする
 			tLight.ARGB = plight[i];
 			{
-				double s = dGlowFloor + (1.0 - dGlowFloor) * (byLevel / 255.0);
-				r = r + (int)(tLight.R * s); if (r > 255) r = 255;
-				g = g + (int)(tLight.G * s); if (g > 255) g = 255;
-				b = b + (int)(tLight.B * s); if (b > 255) b = 255;
+				const BYTE *pMul = s_aLightMul[byLevel];
+				r = r + pMul[tLight.R]; if (r > 255) r = 255;
+				g = g + pMul[tLight.G]; if (g > 255) g = 255;
+				b = b + pMul[tLight.B]; if (b > 255) b = 255;
 			}
 
 			ptDst->R = (BYTE)r;
@@ -1486,11 +1513,19 @@ DWORD CImg32::ColorrefToDword(COLORREF cl)
 
 BYTE CImg32::PercentToHex(BYTE byPercent)
 {
-	BYTE byRet;
+	// 毎ピクセル呼ばれる経路があるため、整数除算を初回1回の表作成に置き換える。
+	// byPercent > 100 のとき BYTE へ切り詰めて巻き戻る挙動も従来どおり。
+	static BYTE s_aHex[256];
+	static bool s_bInit = false;
 
-	byRet = 255 - (byPercent * 255 / 100);
+	if (!s_bInit) {
+		for (int i = 0; i < 256; i ++) {
+			s_aHex[i] = (BYTE)(255 - (i * 255 / 100));
+		}
+		s_bInit = true;
+	}
 
-	return byRet;
+	return s_aHex[byPercent];
 }
 
 void CImg32::ClipPos(

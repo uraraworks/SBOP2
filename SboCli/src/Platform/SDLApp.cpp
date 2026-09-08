@@ -27,16 +27,23 @@
 #if defined(__EMSCRIPTEN__)
 // DOM 上の FPS 表示を更新する（秒間呼出し回数・1秒内最大時間・レイヤー・Swizzle・Present の各区間 ms を含む）
 EM_JS(void, updateFpsDisplay,
-      (int fps, int mlps, int ofps, int maxRf, int maxDraw, int layerMs, int swizzleMs, int presentMs, int charCnt, int effectCnt), {
+      (int fps, int mlps, int ofps, int maxRf, int maxDraw, int layerMs, int swizzleMs, int presentMs, int charCnt, int effectCnt,
+       int tileMs100, int charMs100, int shadowMs100, int lightMs100), {
     var el = document.getElementById('fpsDisplay');
     if (el) {
+        // レイヤー合成(L)の内訳は 1/100ms 単位の整数で受け取り、小数2桁に戻して表示する
+        var fmt = function (v) { return (v / 100).toFixed(2); };
         el.textContent = 'FPS:' + fps +
             ' ML/s:' + mlps +
             ' OF/s:' + ofps +
             ' MaxRF:' + maxRf + 'ms' +
             ' MaxD:' + maxDraw + 'ms' +
             '(L:' + layerMs + ' S:' + swizzleMs + ' P:' + presentMs + ')' +
-            ' C:' + charCnt + ' E:' + effectCnt;
+            ' C:' + charCnt + ' E:' + effectCnt +
+            ' [tile:' + fmt(tileMs100) +
+            ' char:' + fmt(charMs100) +
+            ' shdw:' + fmt(shadowMs100) +
+            ' light:' + fmt(lightMs100) + ']';
     }
 });
 #endif
@@ -129,6 +136,13 @@ double g_dDrawTileMs   = 0.0;  // 背景タイル/マップパーツ描画
 double g_dDrawCharMs   = 0.0;  // キャラ描画
 double g_dDrawShadowMs = 0.0;  // 影描画
 double g_dDrawLightMs  = 0.0;  // SetLevelEx ライティング合成
+
+// レイヤー合成の内訳は毎フレーム上書きされるため、1秒間の最大値を別に持つ。
+// (直近1フレームだけを見ると値が暴れて、どこが重いのか読み取れない)
+static double s_dMaxTileMsThisSec   = 0.0;
+static double s_dMaxCharMsThisSec   = 0.0;
+static double s_dMaxShadowMsThisSec = 0.0;
+static double s_dMaxLightMsThisSec  = 0.0;
 
 CSDLApp::CSDLApp()
 {
@@ -711,6 +725,11 @@ void CSDLApp::RunFrame(void)
 				if (g_dwDrawTimeLast > m_dwMaxDrawThisSec) {
 					m_dwMaxDrawThisSec = g_dwDrawTimeLast;
 				}
+				// レイヤー合成の内訳を1秒間の最大値として拾う
+				if (g_dDrawTileMs   > s_dMaxTileMsThisSec)   { s_dMaxTileMsThisSec   = g_dDrawTileMs; }
+				if (g_dDrawCharMs   > s_dMaxCharMsThisSec)   { s_dMaxCharMsThisSec   = g_dDrawCharMs; }
+				if (g_dDrawShadowMs > s_dMaxShadowMsThisSec) { s_dMaxShadowMsThisSec = g_dDrawShadowMs; }
+				if (g_dDrawLightMs  > s_dMaxLightMsThisSec)  { s_dMaxLightMsThisSec  = g_dDrawLightMs; }
 			}
 #else
 			if (pRenderer != NULL) {
@@ -786,7 +805,15 @@ void CSDLApp::RunFrame(void)
 		                 (int)g_dwDrawSwizzleMs,
 		                 (int)g_dwDrawPresentMs,
 		                 (int)g_dwDiagCharCount,
-		                 (int)g_dwDiagEffectCount);
+		                 (int)g_dwDiagEffectCount,
+		                 (int)(s_dMaxTileMsThisSec   * 100.0),
+		                 (int)(s_dMaxCharMsThisSec   * 100.0),
+		                 (int)(s_dMaxShadowMsThisSec * 100.0),
+		                 (int)(s_dMaxLightMsThisSec  * 100.0));
+		s_dMaxTileMsThisSec   = 0.0;
+		s_dMaxCharMsThisSec   = 0.0;
+		s_dMaxShadowMsThisSec = 0.0;
+		s_dMaxLightMsThisSec  = 0.0;
 #endif
 		m_byFps = 0;
 		m_dwTimeStart = dwTimeTmp;
