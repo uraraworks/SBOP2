@@ -12,9 +12,72 @@
 #include "MgrSound.h"
 #ifdef __EMSCRIPTEN__
 #include "Platform/SoundDataTableBrowser.h"
+#include <emscripten.h>
+#include <cstring>
 #endif
 
 // Audiere dependency removed
+
+#ifdef __EMSCRIPTEN__
+// ブラウザ版の BGM は .data に同梱せず、起動後に個別取得する。
+// 8 本で 8.4MB あり、同梱すると初回ロードがその分そのまま遅くなるため。
+namespace {
+
+struct BrowserBgmFile {
+	int         id;
+	const char *pszFile;
+};
+
+const BrowserBgmFile s_aBrowserBgmFiles[] = {
+	{ BGMID_DAICHI_S,        "daichi_s.ogg"        },
+	{ BGMID_HISYOU,          "hisyou.ogg"          },
+	{ BGMID_SUISHA,          "suisha.ogg"          },
+	{ BGMID_FAIRYTALE,       "fairytale.ogg"       },
+	{ BGMID_TABLA_IMAGE,     "tabla_image.ogg"     },
+	{ BGMID_FLOWED_PIANO,    "flowed piano.ogg"    },
+	{ BGMID_HUYUNOMATI_FULL, "huyunomati_full.ogg" },
+	{ BGMID_OYAKODON_NAMI,   "oyakodon_nami.ogg"   },
+};
+
+// コールバックからインスタンスへ戻るための参照。CMgrSound は 1 個しか作られない。
+CMgrSound *s_pBrowserMgrSound = NULL;
+
+// URL に使えるようスペースだけ %20 に置き換える(ファイル名に空白を含むものがある)
+void BuildBgmUrl(char *pszDst, size_t nDstSize, const char *pszFile)
+{
+	size_t nPos = 0;
+	const char *pszPrefix = "BGM/";
+	for (const char *p = pszPrefix; (*p != '\0') && (nPos + 1 < nDstSize); ++p) {
+		pszDst[nPos++] = *p;
+	}
+	for (const char *p = pszFile; *p != '\0'; ++p) {
+		if (*p == ' ') {
+			if (nPos + 3 >= nDstSize) { break; }
+			pszDst[nPos++] = '%';
+			pszDst[nPos++] = '2';
+			pszDst[nPos++] = '0';
+		} else {
+			if (nPos + 1 >= nDstSize) { break; }
+			pszDst[nPos++] = *p;
+		}
+	}
+	pszDst[nPos] = '\0';
+}
+
+void BrowserBgmOnLoad(const char *pszFile)
+{
+	if (s_pBrowserMgrSound != NULL) {
+		s_pBrowserMgrSound->OnBrowserBgmLoaded(pszFile);
+	}
+}
+
+void BrowserBgmOnError(const char *pszFile)
+{
+	SDL_Log("BGM の取得に失敗しました: %s", (pszFile != NULL) ? pszFile : "(null)");
+}
+
+} // namespace
+#endif
 
 CMgrSound::CMgrSound()
 {
@@ -55,21 +118,19 @@ BOOL CMgrSound::Create(void)
 	// Web版: SboSoundData.dll は存在しないため、静的テーブルからWAVファイルを直接ロード
 	ReadSoundData();
 
-	// 全BGMを事前デコードしてキャッシュ（マップ切替時の無音を防ぐ）
-	static const struct { int id; const char* file; } s_bgmPreloadTable[] = {
-		{ BGMID_DAICHI_S,        "daichi_s.ogg"        },
-		{ BGMID_HISYOU,          "hisyou.ogg"          },
-		{ BGMID_SUISHA,          "suisha.ogg"           },
-		{ BGMID_FAIRYTALE,       "fairytale.ogg"        },
-		{ BGMID_TABLA_IMAGE,     "tabla_image.ogg"      },
-		{ BGMID_FLOWED_PIANO,    "flowed piano.ogg"     },
-		{ BGMID_HUYUNOMATI_FULL, "huyunomati_full.ogg"  },
-		{ BGMID_OYAKODON_NAMI,   "oyakodon_nami.ogg"    },
-	};
-	for (size_t i = 0; i < sizeof(s_bgmPreloadTable)/sizeof(s_bgmPreloadTable[0]); i++) {
+	// BGM は .data に同梱していないので、起動後に個別取得する。
+	// 取得できた順にデコードしてキャッシュへ入れ、鳴らすべきものなら再生を始める。
+	s_pBrowserMgrSound = this;
+	// emscripten_async_wget は書き込み先の親ディレクトリが無いと失敗する
+	EM_ASM({
+		try { FS.mkdirTree('/BGM'); } catch (e) {}
+	});
+	for (size_t i = 0; i < sizeof(s_aBrowserBgmFiles)/sizeof(s_aBrowserBgmFiles[0]); i++) {
+		char szUrl[256];
 		char szPath[256];
-		snprintf(szPath, sizeof(szPath), "/BGM/%s", s_bgmPreloadTable[i].file);
-		m_pDXAudio->PreloadBGM(s_bgmPreloadTable[i].id, szPath);
+		BuildBgmUrl(szUrl, sizeof(szUrl), s_aBrowserBgmFiles[i].pszFile);
+		snprintf(szPath, sizeof(szPath), "/BGM/%s", s_aBrowserBgmFiles[i].pszFile);
+		emscripten_async_wget(szUrl, szPath, BrowserBgmOnLoad, BrowserBgmOnError);
 	}
 #else
 	{
@@ -141,6 +202,42 @@ void CMgrSound::PlaySound(DWORD dwSoundID)
 	}
 	m_pDXAudio->PlaySecoundary(*pDMS);
 }
+
+
+#ifdef __EMSCRIPTEN__
+void CMgrSound::OnBrowserBgmLoaded(const char *pszMemfsPath)
+{
+	if (pszMemfsPath == NULL) {
+		return;
+	}
+
+	// "/BGM/xxx.ogg" の末尾のファイル名から BGMID を引く
+	const char *pszName = strrchr(pszMemfsPath, '/');
+	pszName = (pszName != NULL) ? (pszName + 1) : pszMemfsPath;
+
+	int nID = BGMID_NONE;
+	for (size_t i = 0; i < sizeof(s_aBrowserBgmFiles)/sizeof(s_aBrowserBgmFiles[0]); i++) {
+		if (strcmp(pszName, s_aBrowserBgmFiles[i].pszFile) == 0) {
+			nID = s_aBrowserBgmFiles[i].id;
+			break;
+		}
+	}
+	if (nID == BGMID_NONE) {
+		return;
+	}
+
+	if (!m_pDXAudio->PreloadBGM(nID, pszMemfsPath)) {
+		SDL_Log("BGM のデコードに失敗しました: %s", pszMemfsPath);
+		return;
+	}
+
+	// 取得を待っている間に再生要求が来ていた場合はここで鳴らし始める
+	if (m_dwSoundID == (DWORD)nID) {
+		m_pDXAudio->StopBGM();
+		m_pDXAudio->PlayBGMCached(nID, TRUE, m_fBGMVolume);
+	}
+}
+#endif
 
 
 void CMgrSound::PlayBGM(

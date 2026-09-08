@@ -44,6 +44,10 @@ public:
 	void	SetBGMVolume(int nVolume);				// BGM音量設定
 	void	SetSEVolume(int nVolume);				// 効果音量設定
 
+#ifdef __EMSCRIPTEN__
+	void	OnBrowserBgmLoaded(const char *pszMemfsPath);	// BGM取得完了(ブラウザ版)
+#endif
+
 
 protected:
 	void	ReadSoundData(void);					// 効果音を読み込み

@@ -46,6 +46,36 @@ function Resolve-NodeExe {
     return $null
 }
 
+function Copy-BgmAssets {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$SourceDir,
+        [Parameter(Mandatory=$true)]
+        [string]$OutputDir
+    )
+
+    # BGM は .data に含めず個別ファイルとして配信する。
+    if (-not (Test-Path $SourceDir)) {
+        Write-Warning "[browser-bgm] BGM ディレクトリが見つかりません: $SourceDir"
+        return
+    }
+    $targetDir = Join-Path $OutputDir "BGM"
+    if (-not (Test-Path $targetDir)) {
+        New-Item -ItemType Directory -Path $targetDir | Out-Null
+    }
+    $copied = 0
+    foreach ($file in (Get-ChildItem -Path $SourceDir -Filter "*.ogg" -File)) {
+        $dest = Join-Path $targetDir $file.Name
+        # 変わっていないものは触らない(タイムスタンプを動かさない)
+        if ((Test-Path $dest) -and ((Get-Item $dest).LastWriteTime -ge $file.LastWriteTime)) {
+            continue
+        }
+        Copy-Item -Path $file.FullName -Destination $dest -Force
+        $copied++
+    }
+    Write-Host "[browser-bgm] copied $copied ogg file(s) to $targetDir"
+}
+
 function New-PrecompressedAssets {
     param(
         [Parameter(Mandatory=$true)]
@@ -101,6 +131,13 @@ function Sync-BrowserTitleToAdminWebroot {
         }
 
         Copy-Item -Path (Join-Path $SourceDir "sbocli-title.*") -Destination $targetDir -Force
+
+        # BGM は個別ファイル配信なのでディレクトリごと運ぶ
+        $bgmSource = Join-Path $SourceDir "BGM"
+        if (Test-Path $bgmSource) {
+            Copy-Item -Path $bgmSource -Destination $targetDir -Recurse -Force
+        }
+
         Write-Host "[browser-deploy] copied browser client to $targetDir"
     }
 }
@@ -138,6 +175,7 @@ if (-not $Force) {
         }
         if ($newest -ne $null -and $newest -lt $outTime) {
             Write-Host "[browser-build] up-to-date, skipping (latest source: $newest, output: $outTime)"
+            Copy-BgmAssets -SourceDir $bgmDir -OutputDir $outPath
             Sync-BrowserTitleToAdminWebroot -SourceDir $outPath
             exit 0
         }
@@ -551,7 +589,8 @@ $linkArgs = @(
     "-Wl,--error-limit=0",
     "--preload-file", "$resDir@/SboGrpData/res",
     "--preload-file", "$fontDir@/font",
-    "--preload-file", "$bgmDir@/BGM",
+    # BGM は .data に同梱せず out/browser-title/BGM/ に個別配置し、
+    # 起動後に emscripten_async_wget で取得する(初回ロードを軽くするため)。
     "--preload-file", "$wavDir@/WAVE",
     "--shell-file", $shellFile,
     "--post-js", $eglSwapPost,
@@ -627,6 +666,7 @@ try {
     Write-Warning "[browser-cachebust] キャッシュバスター埋め込みに失敗しました: $_"
 }
 
+Copy-BgmAssets -SourceDir $bgmDir -OutputDir $outPath
 New-PrecompressedAssets -SourceDir $outPath
 Sync-BrowserTitleToAdminWebroot -SourceDir $outPath
 Write-Host "[browser-link] success"
