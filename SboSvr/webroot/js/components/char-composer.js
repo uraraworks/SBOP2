@@ -8,6 +8,10 @@
  * 体 → 服 → 髪 → 目 を canvas に合成し、向き・コマ・性別を切り替えて
  * 確認できるようにする。
  *
+ * 「どのキャラとして見るか」(性別/服/髪/目) は sprite-paint.js の下敷きと
+ * 見え方をそろえる必要があるため char-context.js に集約されている。
+ * このコンポーネントはそれを購読して読み取るだけで、自前のセレクトは持たない。
+ *
  * ゲーム側の合成規則（実データ検証済み）:
  *   - シートは 512x256 = 16列 x 8行 の 32px セル
  *   - フレーム番号 0-3=上 / 4-7=下 / 8-11=左 / 12-15=右
@@ -27,8 +31,8 @@ export const DIRECTIONS = [
   { value: 3, label: "右" },
 ];
 
-// nEyeID の意味（MgrDraw.cpp:445-454）
-const EYE_LABELS = ["通常", "ダメージ", "気絶", "睡眠"];
+// nEyeID の意味（MgrDraw.cpp:445-454）。char-context.js のセレクトでも使うため export する。
+export const EYE_LABELS = ["通常", "ダメージ", "気絶", "睡眠"];
 
 // 服スロットを置き換えるカテゴリ。
 // wGrpIDSP / wGrpIDTmpMain が立っている時は服の代わりにこれらが重なる。
@@ -113,20 +117,6 @@ function makeLabeled(labelText, control) {
   return label;
 }
 
-function fillSheetOptions(select, count, labeller) {
-  const prev = select.value;
-  select.innerHTML = "";
-  for (let i = 0; i < count; i++) {
-    const opt = document.createElement("option");
-    opt.value = String(i);
-    opt.textContent = labeller ? labeller(i) : `#${i}`;
-    select.appendChild(opt);
-  }
-  if (prev !== "" && Number(prev) < count) {
-    select.value = prev;
-  }
-}
-
 // ----------------------------------------------------------------
 // 本体
 // ----------------------------------------------------------------
@@ -134,14 +124,15 @@ function fillSheetOptions(select, count, labeller) {
 /**
  * @param {object} opts
  * @param {Array}  opts.categories /api/image-categories の categories 配列
+ * @param {object} opts.context    createCharContext() が返す共有ストア
+ *                                 (性別/服/髪/目 の指定はここから読む)
  */
-export function createCharComposer({ categories }) {
+export function createCharComposer({ categories, context }) {
   const catByKey = new Map((categories ?? []).map((c) => [c.key, c]));
   const sheetCountOf = (key) => Number(catByKey.get(key)?.sheetCount ?? 0);
 
   let _target = null;      // { key, index }
   let _generation = 1;     // 画像キャッシュの世代
-  let _sex = 0;            // 0=男 1=女
   let _dir = 1;            // drawDirection (既定は下)
   let _step = 0;           // アニメのコマ 0-3
   let _scale = 4;
@@ -160,24 +151,14 @@ export function createCharComposer({ categories }) {
   const hint = document.createElement("p");
   hint.className = "card-description";
   hint.textContent =
-    "ゲームと同じ手順（体 → 服 → 髪 → 目）で重ねた結果です。編集中のレイヤーは固定され、他は下のセレクトで差し替えられます。";
+    "ゲームと同じ手順（体 → 服 → 髪 → 目）で重ねた結果です。編集中のレイヤーは固定され、" +
+    "他は上部「合成の見え方」の指定に従います。";
   section.appendChild(hint);
 
-  // --- 操作列 1: 性別 / 向き / コマ / 拡大率 ---
+  // --- 操作列 1: 向き / コマ / アニメ再生 / 拡大率 ---
+  // 性別・服・髪・目は char-context.js（共有ストア）へ集約したのでここでは持たない。
   const toolbar1 = document.createElement("div");
   toolbar1.className = "cc-toolbar";
-
-  const sexSelect = makeSelect();
-  [["男", 0], ["女", 1]].forEach(([label, value]) => {
-    const opt = document.createElement("option");
-    opt.value = String(value);
-    opt.textContent = label;
-    sexSelect.appendChild(opt);
-  });
-  sexSelect.addEventListener("change", () => {
-    _sex = Number(sexSelect.value) || 0;
-    draw();
-  });
 
   const dirSelect = makeSelect();
   DIRECTIONS.forEach((d) => {
@@ -228,7 +209,6 @@ export function createCharComposer({ categories }) {
   });
 
   toolbar1.append(
-    makeLabeled("性別", sexSelect),
     makeLabeled("向き", dirSelect),
     makeLabeled("コマ", stepSelect),
     playLabel,
@@ -236,26 +216,7 @@ export function createCharComposer({ categories }) {
   );
   section.appendChild(toolbar1);
 
-  // --- 操作列 2: 参照レイヤーの差し替え ---
-  const toolbar2 = document.createElement("div");
-  toolbar2.className = "cc-toolbar";
-
-  const clothSelect = makeSelect();
-  clothSelect.addEventListener("change", draw);
-  const clothField = makeLabeled("服", clothSelect);
-
-  const hairSelect = makeSelect();
-  hairSelect.addEventListener("change", draw);
-  const hairField = makeLabeled("髪", hairSelect);
-
-  const eyeSelect = makeSelect();
-  eyeSelect.addEventListener("change", draw);
-  const eyeField = makeLabeled("目", eyeSelect);
-
-  toolbar2.append(clothField, hairField, eyeField);
-  section.appendChild(toolbar2);
-
-  // --- 操作列 3: レイヤー表示切替 ---
+  // --- 操作列 2: レイヤー表示切替 ---
   const toolbar3 = document.createElement("div");
   toolbar3.className = "cc-toolbar";
   const layerChecks = {};
@@ -321,24 +282,25 @@ export function createCharComposer({ categories }) {
       };
     }
 
+    const ctx = context.get();
     return {
       mode: "char",
       body: { key: "char2x2", index: 0 },
       cloth: CLOTH_SLOT_KEYS.has(_target.key)
         ? { key: _target.key, index: _target.index }
-        : { key: "cloth2x2", index: Number(clothSelect.value) || 0 },
+        : { key: "cloth2x2", index: ctx.cloth },
       hair: _target.key === "hair2x2"
         ? { key: "hair2x2", index: _target.index }
-        : { key: "hair2x2", index: Number(hairSelect.value) || 0 },
+        : { key: "hair2x2", index: ctx.hair },
       eye: _target.key === "eye2x2"
         ? { key: "eye2x2", index: _target.index }
-        : { key: "eye2x2", index: Number(eyeSelect.value) || 0 },
+        : { key: "eye2x2", index: ctx.eye },
     };
   }
 
   // シート上のセル矩形を求める。範囲外なら null。
   function cellRect(img, frame, opts) {
-    const { sx, sy } = frameCellOrigin(frame, _sex, opts);
+    const { sx, sy } = frameCellOrigin(frame, context.get().sex, opts);
     if (sx < 0 || sy < 0) return null;
     if (sx + CELL > img.naturalWidth || sy + CELL > img.naturalHeight) return null;
     return { sx, sy };
@@ -417,22 +379,14 @@ export function createCharComposer({ categories }) {
       dirSelect.value = String(_dir);
     }
 
-    // 参照レイヤーのセレクトは「編集中でないレイヤー」だけ有効にする
-    fillSheetOptions(clothSelect, sheetCountOf("cloth2x2"));
-    fillSheetOptions(hairSelect, sheetCountOf("hair2x2"));
-    fillSheetOptions(eyeSelect, sheetCountOf("eye2x2"), (i) => (EYE_LABELS[i] ? `#${i} ${EYE_LABELS[i]}` : `#${i}`));
-
-    clothField.style.display = isNpc || CLOTH_SLOT_KEYS.has(cat.key) ? "none" : "";
-    hairField.style.display = isNpc || cat.key === "hair2x2" ? "none" : "";
-    eyeField.style.display = isNpc || cat.key === "eye2x2" ? "none" : "";
-
     layerChecks.cloth.style.display = isNpc ? "none" : "";
     layerChecks.hair.style.display = isNpc ? "none" : "";
     layerChecks.eye.style.display = isNpc ? "none" : "";
 
     hint.textContent = isNpc
       ? "NPC は 1 枚のシートで完結するため、向き・コマ・性別だけを切り替えて確認できます。"
-      : "ゲームと同じ手順（体 → 服 → 髪 → 目）で重ねた結果です。編集中のレイヤーは固定され、他は下のセレクトで差し替えられます。";
+      : "ゲームと同じ手順（体 → 服 → 髪 → 目）で重ねた結果です。編集中のレイヤーは固定され、" +
+        "他は上部「合成の見え方」の指定に従います。";
 
     draw();
     return true;
@@ -446,8 +400,16 @@ export function createCharComposer({ categories }) {
     if (redraw) draw();
   }
 
+  // 共有設定（性別/服/髪/目）が変わったら再描画する。
+  // シート番号が変わっている可能性があるので、まずキャッシュを世代ごと捨てる。
+  const unsubscribe = context.subscribe(() => {
+    invalidate({ redraw: false });
+    draw();
+  });
+
   function destroy() {
     stopAnim();
+    unsubscribe();
   }
 
   return { el: section, setTarget, invalidate, destroy };

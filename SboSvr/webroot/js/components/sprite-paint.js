@@ -18,15 +18,18 @@
 import { decodeIndexedPng, encodeIndexedPng, indicesToImageData } from "../lib/indexed-png.js";
 import { fetchJson } from "../core/api.js";
 import { CELL, COMPOSABLE_KEYS, EYE_ORIGIN_OPTS, frameCellOrigin } from "./char-composer.js";
+import { icon } from "./icons.js";
+import { attachTip } from "./tooltip.js";
 
 const MAX_UPLOAD_BYTES = 2 * 1024 * 1024;
 const UNDO_LIMIT = 50;
 
+// key: デザインツール風のワンキーショートカット（handleShortcut() で解釈する）
 const TOOLS = [
-  { id: "pen",     label: "ペン" },
-  { id: "eraser",  label: "消しゴム" },
-  { id: "picker",  label: "スポイト" },
-  { id: "fill",    label: "塗りつぶし" },
+  { id: "pen",     label: "ペン",       iconName: "pen",    key: "B" },
+  { id: "eraser",  label: "消しゴム",   iconName: "eraser", key: "E" },
+  { id: "picker",  label: "スポイト",   iconName: "picker", key: "I" },
+  { id: "fill",    label: "塗りつぶし", iconName: "fill",   key: "G" },
 ];
 
 // 下敷きに使うレイヤー。描画順は char-composer と同じ（体→服→髪→目）。
@@ -90,6 +93,33 @@ function makeSelect() {
   return document.createElement("select");
 }
 
+// アイコンのみのボタン。文字ラベルは出さず、ツールチップと aria-label で補う。
+function iconOnlyButton(className, iconName, tipText) {
+  const btn = el("button", className);
+  btn.type = "button";
+  btn.classList.add("icon-only");
+  btn.appendChild(icon(iconName));
+  attachTip(btn, tipText);
+  return btn;
+}
+
+// アイコン + 文字ラベルの両方を持つボタン。
+function iconLabelButton(className, iconName, labelText) {
+  const btn = el("button", className);
+  btn.type = "button";
+  btn.appendChild(icon(iconName));
+  btn.appendChild(el("span", null, labelText));
+  return btn;
+}
+
+// セルサイズに応じた既定の拡大率。32px セルをそのまま 12x にすると中央カラムに
+// 収まりきらないため、セルが大きいほど控えめにする。
+function defaultZoomFor(cellSize) {
+  if (cellSize <= 16) return 16;
+  if (cellSize === 24) return 12;
+  return 8; // 32px 以上
+}
+
 function fillOptions(select, count, labeller) {
   const prev = select.value;
   select.innerHTML = "";
@@ -115,8 +145,10 @@ function fillOptions(select, count, labeller) {
  *                                       親へカテゴリ切り替えを依頼する。
  * @param {Function} [opts.onCellChange] (col, row) 編集セルが変わった時。
  *                                       プレビュー側の選択枠を追従させるのに使う。
+ * @param {object}   opts.context      createCharContext() が返す共有ストア。
+ *                                     下敷きの性別/服/髪/目 はここから読む。
  */
-export function createSpritePaint({ categories, onSaved, onFeedback, onCellChange, onRequestTarget }) {
+export function createSpritePaint({ categories, onSaved, onFeedback, onCellChange, onRequestTarget, context }) {
   const catByKey = new Map((categories ?? []).map((c) => [c.key, c]));
   const sheetCountOf = (key) => Number(catByKey.get(key)?.sheetCount ?? 0);
 
@@ -129,6 +161,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
   let _color = 1;           // 選択中のパレットインデックス
   let _tool = "pen";
   let _zoom = 12;
+  let _zoomUserSet = false; // 拡大率セレクトをユーザーが触ったら、以後は既定値で上書きしない
   let _dirty = false;
   let _painting = false;
   let _loadSeq = 0;
@@ -156,26 +189,24 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
   const rowSelect = makeSelect();
   colSelect.addEventListener("change", () => selectCell(Number(colSelect.value) || 0, _row));
   rowSelect.addEventListener("change", () => selectCell(_col, Number(rowSelect.value) || 0));
-  const cellInfo = el("span", "sp-cell-info");
-  cellBar.append(labeled("列", colSelect), labeled("行", rowSelect), cellInfo);
+  // セル位置の表示は中央ヘッダのパンくず(image-editor 側)に統合したので、
+  // ここでは持たない。代わりに onCellChange で寸法情報ごと親へ伝える。
+  cellBar.append(labeled("列", colSelect), labeled("行", rowSelect));
   section.appendChild(cellBar);
 
   // --- ツールバー: 描画ツール ---
   const toolBar = el("div", "cc-toolbar");
   const toolButtons = new Map();
   TOOLS.forEach((t) => {
-    const btn = el("button", "button small", t.label);
-    btn.type = "button";
+    const btn = iconOnlyButton("button small", t.iconName, `${t.label} (${t.key})`);
     btn.addEventListener("click", () => setTool(t.id));
     toolButtons.set(t.id, btn);
     toolBar.appendChild(btn);
   });
 
-  const undoBtn = el("button", "button small", "元に戻す");
-  undoBtn.type = "button";
+  const undoBtn = iconOnlyButton("button small", "undo", "元に戻す (Ctrl+Z)");
   undoBtn.addEventListener("click", undo);
-  const redoBtn = el("button", "button small", "やり直す");
-  redoBtn.type = "button";
+  const redoBtn = iconOnlyButton("button small", "redo", "やり直す (Ctrl+Shift+Z)");
   redoBtn.addEventListener("click", redo);
 
   const zoomSelect = makeSelect();
@@ -188,11 +219,15 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
   });
   zoomSelect.addEventListener("change", () => {
     _zoom = Number(zoomSelect.value) || 12;
+    _zoomUserSet = true;
     applyCanvasSize();
     render();
   });
 
-  toolBar.append(undoBtn, redoBtn, labeled("拡大率", zoomSelect));
+  const zoomField = el("label", "cc-field");
+  zoomField.append(icon("zoom"), el("span", null, "拡大率"), zoomSelect);
+
+  toolBar.append(undoBtn, redoBtn, zoomField);
   section.appendChild(toolBar);
 
   // --- ツールバー: 下敷き ---
@@ -202,7 +237,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
   underlayCb.checked = true;
   underlayCb.addEventListener("change", render);
   const underlayLabel = el("label", "cc-check");
-  underlayLabel.append(underlayCb, " 下敷き表示");
+  underlayLabel.append(underlayCb, icon("layers"), " 下敷き表示");
 
   const underlayAlpha = document.createElement("input");
   underlayAlpha.type = "range";
@@ -211,17 +246,9 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
   underlayAlpha.value = "45";
   underlayAlpha.addEventListener("input", render);
 
-  const sexSelect = makeSelect();
-  [["男", 0], ["女", 1]].forEach(([label, value]) => {
-    const opt = document.createElement("option");
-    opt.value = String(value);
-    opt.textContent = label;
-    sexSelect.appendChild(opt);
-  });
-  sexSelect.addEventListener("change", () => { void reloadUnderlay(); });
-  const sexField = labeled("性別", sexSelect);
-
-  underlayBar.append(underlayLabel, labeled("濃さ", underlayAlpha), sexField);
+  // 性別/服/髪/目 は char-context.js（共有ストア）へ集約したので、
+  // ここでは持たない。値の変更は context.subscribe() 経由で拾う。
+  underlayBar.append(underlayLabel, labeled("濃さ", underlayAlpha));
   section.appendChild(underlayBar);
 
   // --- キャンバス ---
@@ -234,16 +261,19 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
   // --- パレット ---
   const paletteWrap = el("div", "sp-palette");
   section.appendChild(paletteWrap);
+  // 選択中の色を大きめのスウォッチで示す(テキストだけでは分かりづらいため)
+  const colorRow = el("div", "sp-color-row");
+  const currentSwatch = el("span", "sp-current-color");
   const colorInfo = el("p", "ie-dim-info");
-  section.appendChild(colorInfo);
+  colorRow.append(currentSwatch, colorInfo);
+  section.appendChild(colorRow);
 
   // --- 保存 ---
   const saveBar = el("div", "cc-toolbar");
-  const saveBtn = el("button", "button primary", "この内容で保存");
-  saveBtn.type = "button";
+  const saveBtn = iconLabelButton("button primary", "save", "この内容で保存");
+  attachTip(saveBtn, "この内容で保存 (Ctrl+S)");
   saveBtn.addEventListener("click", () => { void save(); });
-  const discardBtn = el("button", "button small", "編集を破棄");
-  discardBtn.type = "button";
+  const discardBtn = iconLabelButton("button small", "revert", "編集を破棄");
   discardBtn.addEventListener("click", () => { void load({ force: true }); });
   const dirtyMark = el("span", "sp-dirty");
   saveBar.append(saveBtn, discardBtn, dirtyMark);
@@ -268,23 +298,15 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
   draftNameInput.placeholder = "途中セーブの名前";
   draftBar.appendChild(labeled("名前", draftNameInput));
 
-  const draftNewBtn = el("button", "button small", "新規途中セーブ");
-  draftNewBtn.type = "button";
+  const draftNewBtn = iconLabelButton("button small", "plus", "新規途中セーブ");
   draftNewBtn.addEventListener("click", () => { void saveDraft({ asNew: true }); });
 
-  const draftOverwriteBtn = el("button", "button small", "上書き途中セーブ");
-  draftOverwriteBtn.type = "button";
+  const draftOverwriteBtn = iconLabelButton("button small", "save", "上書き途中セーブ");
   draftOverwriteBtn.addEventListener("click", () => { void saveDraft({ asNew: false }); });
 
   const draftCurrent = el("span", "sp-draft-current");
   draftBar.append(draftNewBtn, draftOverwriteBtn, draftCurrent);
   draftSec.appendChild(draftBar);
-
-  // 画面上部のフィードバックはスクロールしていると見えないので、この節にも出す
-  const draftFeedback = el("p", "sp-draft-feedback");
-  draftFeedback.setAttribute("role", "status");
-  draftFeedback.setAttribute("aria-live", "polite");
-  draftSec.appendChild(draftFeedback);
 
   const draftListBody = el("div", "sp-draft-list");
   draftSec.appendChild(draftListBody);
@@ -305,14 +327,25 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     return { x: _col * _cellSize, y: _row * _cellSize };
   }
 
+  // 下敷きの各レイヤーが参照するシート番号。体(char2x2)は常に #0、
+  // 服/髪/目は共有ストア(char-context.js)の指定に従う。
+  function underlaySheetIndex(slot) {
+    const ctx = context.get();
+    if (slot === "cloth") return ctx.cloth;
+    if (slot === "hair") return ctx.hair;
+    if (slot === "eye") return ctx.eye;
+    return 0; // body
+  }
+
   // 編集セルから「フレーム番号と性別」を復元する。下敷きの座標計算に使う。
   function underlayContext() {
+    const sex = context.get().sex;
     if (_cat?.key === "eye2x2") {
       // 目シートは x が 4 セル分ずれているので frame を戻す。性別は判断材料が
-      // 無いため（目シートに男女の別が無い）ユーザーの指定を使う。
-      return { frame: _row * 16 + _col + 4, sex: Number(sexSelect.value) || 0 };
+      // 無いため（目シートに男女の別が無い）共有ストアの指定を使う。
+      return { frame: _row * 16 + _col + 4, sex };
     }
-    return { frame: (_row % 4) * 16 + _col, sex: _row >= 4 ? 1 : 0 };
+    return { frame: (_row % 4) * 16 + _col, sex };
   }
 
   function drawUnderlay(ctx) {
@@ -326,7 +359,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     ctx.globalAlpha = (Number(underlayAlpha.value) || 45) / 100;
     for (const layer of UNDERLAY_LAYERS) {
       if (layer.slot === editedSlot) continue;
-      const img = underlayImages.get(`${layer.key}/0`);
+      const img = underlayImages.get(`${layer.key}/${underlaySheetIndex(layer.slot)}`);
       if (!img) continue;
       const { sx, sy } = frameCellOrigin(frame, sex, layer.originOpts);
       if (sx < 0 || sy < 0) continue;
@@ -364,7 +397,13 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     dirtyMark.className = "sp-dirty" + (_dirty ? " is-dirty" : "");
     undoBtn.disabled = undoStack.length === 0;
     redoBtn.disabled = redoStack.length === 0;
-    cellInfo.textContent = `セル (${_col}, ${_row}) / シート ${_sheet.width}x${_sheet.height} = ${_cols}x${_rows} セル`;
+  }
+
+  // onCellChange の第3引数用。シート寸法とセル数を渡す（パンくず表示に使う）
+  function sheetInfoPayload() {
+    return _sheet
+      ? { sheetWidth: _sheet.width, sheetHeight: _sheet.height, cols: _cols, rows: _rows }
+      : { sheetWidth: 0, sheetHeight: 0, cols: 0, rows: 0 };
   }
 
   function renderPalette() {
@@ -389,11 +428,26 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     colorInfo.textContent = c
       ? `選択色: インデックス ${_color}` + (_color === 0 ? "（透過）" : ` rgb(${c.r}, ${c.g}, ${c.b})`)
       : "";
+
+    if (c && (c.a ?? 255) !== 0) {
+      currentSwatch.classList.remove("is-transparent");
+      currentSwatch.style.background = `rgb(${c.r}, ${c.g}, ${c.b})`;
+    } else {
+      currentSwatch.classList.add("is-transparent");
+      currentSwatch.style.background = "";
+    }
   }
 
   function setColor(i) {
     _color = i;
     renderPalette();
+  }
+
+  // パレットの選択色を前後へ循環させる（ショートカット [ / ] 用）
+  function cyclePalette(delta) {
+    if (!_sheet || !_sheet.palette.length) return;
+    const n = _sheet.palette.length;
+    setColor((_color + delta + n) % n);
   }
 
   function setTool(id) {
@@ -409,7 +463,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     if (!_sheet) {
       _col = Math.max(0, col);
       _row = Math.max(0, row);
-      onCellChange?.(_col, _row);
+      onCellChange?.(_col, _row, sheetInfoPayload());
       return;
     }
     _col = Math.max(0, Math.min(_cols - 1, col));
@@ -419,7 +473,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     // セルを跨いだ Undo は混乱のもとなので履歴はセル単位で捨てる
     undoStack.length = 0;
     redoStack.length = 0;
-    onCellChange?.(_col, _row);
+    onCellChange?.(_col, _row, sheetInfoPayload());
     updateDraftUi();  // 名前欄の既定値にセル位置が入るので追従させる
     render();
   }
@@ -576,8 +630,9 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     await Promise.all(UNDERLAY_LAYERS.map(async (layer) => {
       if (layer.slot === editedSlot) return;
       if (sheetCountOf(layer.key) <= 0) return;
-      const img = await loadImage(`/api/assets/sprites/${encodeURIComponent(layer.key)}/0?v=${stamp}`);
-      underlayImages.set(`${layer.key}/0`, img);
+      const index = underlaySheetIndex(layer.slot);
+      const img = await loadImage(`/api/assets/sprites/${encodeURIComponent(layer.key)}/${index}?v=${stamp}`);
+      underlayImages.set(`${layer.key}/${index}`, img);
     }));
     render();
   }
@@ -604,6 +659,11 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
 
       _sheet = decoded;
       _cellSize = Number(_cat.cellSize) || CELL;
+      // ユーザーが拡大率を触っていなければ、セルサイズに応じた既定値へ合わせる
+      if (!_zoomUserSet) {
+        _zoom = defaultZoomFor(_cellSize);
+        zoomSelect.value = String(_zoom);
+      }
       _cols = Math.max(1, Math.floor(decoded.width / _cellSize));
       _rows = Math.max(1, Math.floor(decoded.height / _cellSize));
       _col = Math.min(_col, _cols - 1);
@@ -614,7 +674,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
       colSelect.value = String(_col);
       rowSelect.value = String(_row);
       // 読み込み後の寸法でクランプされた結果をプレビュー側の枠にも反映する
-      onCellChange?.(_col, _row);
+      onCellChange?.(_col, _row, sheetInfoPayload());
 
       if (_color >= decoded.palette.length) _color = 1;
       applyCanvasSize();
@@ -634,7 +694,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
   function setSectionEnabled(enabled, reason) {
     // 編集できないシートでプレビューに選択枠だけ残ると紛らわしいので、
     // col に負値を渡して枠を隠してもらう
-    if (!enabled) onCellChange?.(-1, 0);
+    if (!enabled) onCellChange?.(-1, 0, sheetInfoPayload());
     stage.style.display = enabled ? "" : "none";
     paletteWrap.style.display = enabled ? "" : "none";
     saveBar.style.display = enabled ? "" : "none";
@@ -642,7 +702,6 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     cellBar.style.display = enabled ? "" : "none";
     underlayBar.style.display =
       enabled && _cat && COMPOSABLE_KEYS.has(_cat.key) && _cat.key !== "npc2x2" ? "" : "none";
-    sexField.style.display = _cat?.key === "eye2x2" ? "" : "none";
     desc.textContent = enabled
       ? DESC_TEXT
       : `このシートはペイントできません（${reason || "パレット PNG ではありません"}）。差し替えは上のアップロードから行えます。`;
@@ -699,6 +758,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     _cat = cat;
     _index = index;
     _dirty = false;
+    _zoomUserSet = false; // カテゴリを切り替えたら拡大率は既定へ戻す
     // 途中セーブを開く途中でなければ、紐付けは切る（別の対象に上書きしないため）
     if (!_pendingDraft) {
       _draftId = null;
@@ -717,6 +777,49 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
   function hasUnsavedChanges() {
     return _dirty;
   }
+
+  /**
+   * デザインツール風のキーボードショートカットを解釈する。
+   * 新しいロジックは持たず、既存の setTool/undo/redo/selectCell/save/
+   * cyclePalette を呼ぶだけにとどめる。呼び出し側(image-editor.js)は
+   * 入力欄へのフォーカス判定だけ行い、キー判定と実行はここへ集約する。
+   * 処理した場合は true を返す（呼び出し側で preventDefault() する）。
+   */
+  function handleShortcut(event) {
+    if (event.altKey || event.metaKey) return false;
+    const key = event.key;
+    const lower = typeof key === "string" ? key.toLowerCase() : key;
+
+    if (event.ctrlKey) {
+      if (lower === "s") { void save(); return true; }
+      if (lower === "z" && event.shiftKey) { redo(); return true; }
+      if (lower === "z") { undo(); return true; }
+      if (lower === "y") { redo(); return true; }
+      return false;
+    }
+
+    // ここから下はシートが読み込まれていないと意味を持たない操作
+    if (!_sheet) return false;
+
+    switch (lower) {
+      case "b": setTool("pen"); return true;
+      case "e": setTool("eraser"); return true;
+      case "i": setTool("picker"); return true;
+      case "g": setTool("fill"); return true;
+      case "[": cyclePalette(-1); return true;
+      case "]": cyclePalette(1); return true;
+    }
+    switch (key) {
+      case "ArrowLeft":  selectCell(_col - 1, _row); return true;
+      case "ArrowRight": selectCell(_col + 1, _row); return true;
+      case "ArrowUp":    selectCell(_col, _row - 1); return true;
+      case "ArrowDown":  selectCell(_col, _row + 1); return true;
+    }
+    return false;
+  }
+
+  // 共有ストア(性別/服/髪/目)が変わったら下敷きを読み直す
+  context.subscribe(() => { void reloadUnderlay(); });
 
   setTool("pen");
 
@@ -775,13 +878,6 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     return bytes;
   }
 
-  // 「保存先が無い」ときに黙って何も起きないと原因が分からないので必ず知らせる
-  function draftNotice(message, type) {
-    draftFeedback.textContent = message || "";
-    draftFeedback.className = "sp-draft-feedback" + (type ? " " + type : "");
-    onFeedback?.(message, type);
-  }
-
   function suggestedDraftName() {
     if (!_cat) return "";
     return `${_cat.label || _cat.key} #${_index} (${_col},${_row})`;
@@ -789,7 +885,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
 
   async function saveDraft({ asNew }) {
     if (!_sheet || !_cat) {
-      draftNotice("編集できるシートが読み込まれていません", "error");
+      onFeedback?.("編集できるシートが読み込まれていません", "error");
       return;
     }
 
@@ -820,17 +916,17 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
         }
       );
       if (!response.ok) {
-        draftNotice(`途中セーブに失敗しました: ${data?.error || `HTTP ${response.status}`}`, "error");
+        onFeedback?.(`途中セーブに失敗しました: ${data?.error || `HTTP ${response.status}`}`, "error");
         return;
       }
       _draftId = data?.id ?? _draftId;
       _draftName = name;
       draftNameInput.value = name;
-      draftNotice(useUpdate ? `途中セーブ「${name}」を上書きしました` : `途中セーブ「${name}」を作成しました`, "success");
+      onFeedback?.(useUpdate ? `途中セーブ「${name}」を上書きしました` : `途中セーブ「${name}」を作成しました`, "success");
       await reloadDraftList();
       updateDraftUi();
     } catch (e) {
-      draftNotice("途中セーブに失敗しました: " + String(e?.message ?? e), "error");
+      onFeedback?.("途中セーブに失敗しました: " + String(e?.message ?? e), "error");
     }
   }
 
@@ -881,18 +977,23 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
       // 未保存の変更があるときは confirm() ではなく 2 回クリックで確認する。
       // confirm() は環境によって自動的に打ち消され、「押しても何も起きない」
       // 状態になってしまうため使わない。
-      const openBtn = el("button", "button small", "開く");
+      // ラベルはアイコンと分離した span に入れる。textContent を丸ごと
+      // 差し替えるとアイコン(SVG子要素)まで消えてしまうため。
+      const openBtn = el("button", "button small");
       openBtn.type = "button";
+      openBtn.appendChild(icon("folderOpen"));
+      const openLabel = el("span", null, "開く");
+      openBtn.appendChild(openLabel);
       let openArmed = false;
       let openTimer = null;
       openBtn.addEventListener("click", () => {
         if (_dirty && !openArmed) {
           openArmed = true;
-          openBtn.textContent = "変更を捨てて開く";
-          draftNotice("未保存のペイント内容があります。もう一度押すと破棄して開きます", "error");
+          openLabel.textContent = "変更を捨てて開く";
+          onFeedback?.("未保存のペイント内容があります。もう一度押すと破棄して開きます", "error");
           openTimer = setTimeout(() => {
             openArmed = false;
-            openBtn.textContent = "開く";
+            openLabel.textContent = "開く";
           }, 5000);
           return;
         }
@@ -902,17 +1003,20 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
 
       // confirm() が使えない環境（別ウィンドウ等）でも確実に確認を挟めるよう、
       // モーダルではなく 2 回クリックで消す方式にする
-      const delBtn = el("button", "button small danger", "削除");
+      const delBtn = el("button", "button small danger");
       delBtn.type = "button";
+      delBtn.appendChild(icon("trash"));
+      const delLabel = el("span", null, "削除");
+      delBtn.appendChild(delLabel);
       let armed = false;
       let armTimer = null;
       delBtn.addEventListener("click", () => {
         if (!armed) {
           armed = true;
-          delBtn.textContent = "本当に削除?";
+          delLabel.textContent = "本当に削除?";
           armTimer = setTimeout(() => {
             armed = false;
-            delBtn.textContent = "削除";
+            delLabel.textContent = "削除";
           }, 4000);
           return;
         }
@@ -932,15 +1036,15 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     try {
       const { response, data } = await fetchJson(`/api/assets/drafts/${d.id}`, { method: "DELETE" });
       if (!response.ok) {
-        draftNotice(`削除に失敗しました: ${data?.error || `HTTP ${response.status}`}`, "error");
+        onFeedback?.(`削除に失敗しました: ${data?.error || `HTTP ${response.status}`}`, "error");
         return;
       }
       if (_draftId === d.id) { _draftId = null; _draftName = ""; }
-      draftNotice(`途中セーブ「${d.name}」を削除しました`, "success");
+      onFeedback?.(`途中セーブ「${d.name}」を削除しました`, "success");
       await reloadDraftList();
       updateDraftUi();
     } catch (e) {
-      draftNotice("削除に失敗しました: " + String(e?.message ?? e), "error");
+      onFeedback?.("削除に失敗しました: " + String(e?.message ?? e), "error");
     }
   }
 
@@ -987,7 +1091,7 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
     try {
       const cell = await decodeIndexedPng(pending.bytes);
       if (cell.width !== _cellSize || cell.height !== _cellSize) {
-        draftNotice(
+        onFeedback?.(
           `途中セーブのセル寸法が合いません（${cell.width}x${cell.height} / 現在 ${_cellSize}x${_cellSize}）`,
           "error");
         return;
@@ -1008,11 +1112,15 @@ export function createSpritePaint({ categories, onSaved, onFeedback, onCellChang
       updateDraftUi();
       renderDraftList();
       render();
-      draftNotice(`途中セーブ「${pending.name}」を開きました。ゲームに反映するには「この内容で保存」を押してください`, "success");
+      onFeedback?.(`途中セーブ「${pending.name}」を開きました。ゲームに反映するには「この内容で保存」を押してください`, "success");
     } catch (e) {
-      draftNotice("途中セーブの読み込みに失敗しました: " + String(e?.message ?? e), "error");
+      onFeedback?.("途中セーブの読み込みに失敗しました: " + String(e?.message ?? e), "error");
     }
   }
 
-  return { el: section, setTarget, refresh, hasUnsavedChanges, selectCell };
+  return {
+    el: section, // 後方互換用。image-editor 側は parts を個別に配置するので使わない
+    parts: { desc, cellBar, toolBar, underlayBar, stage, palette: paletteWrap, colorInfo, colorRow, saveBar, draftSec },
+    setTarget, refresh, hasUnsavedChanges, selectCell, handleShortcut,
+  };
 }

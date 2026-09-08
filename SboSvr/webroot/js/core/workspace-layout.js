@@ -112,7 +112,7 @@ function removeDialogFocusGuard() {
 function popOut() {
   if (isPoppedOut()) { _popup.focus(); return; }
 
-  const popup = window.open("", "sbop2-editor", "popup=yes,width=1180,height=900");
+  const popup = window.open("", "sbop2-editor", "popup=yes,width=1440,height=900");
   if (!popup) {
     alert("ポップアップがブロックされました。このサイトのポップアップを許可してください。");
     return;
