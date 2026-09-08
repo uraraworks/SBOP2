@@ -20,7 +20,12 @@ $preflightScript = Join-Path $scriptDir "test-sbocli-browser-preflight.ps1"
 $eglSwapPost = Join-Path $scriptDir "emscripten\egl_swapinterval_post.js"
 $shellFile = Join-Path $scriptDir "emscripten\sbocli-title.shell.html"
 $resDir = Join-Path $repoRoot "SboGrpData\res"
-$fontDir = Join-Path $repoRoot "SboCli\font"
+# ブラウザ版はサブセット版フォントを使う(全部入りは 1 本 16〜17MB あり
+# 初回ロードを大きく圧迫するため)。再生成は tools/make-font-subset.py。
+$fontDir = Join-Path $repoRoot "SboCli\font\subset"
+if (-not (Test-Path (Join-Path $fontDir "NotoSansCJKjp-Regular.otf"))) {
+    throw "サブセットフォントが見つかりません: $fontDir (tools/make-font-subset.py で生成してください)"
+}
 $bgmDir  = Join-Path $repoRoot "Release\BGM"
 $wavDir  = Join-Path $repoRoot "SboSoundData\res\WAVE"
 
