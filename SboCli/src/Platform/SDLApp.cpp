@@ -137,11 +137,10 @@ CSDLApp::CSDLApp()
 	m_byFps = 0;
 	m_byFpsLast = 0;
 	m_dwUpdateInterval = 0;
-	m_dwRenderInterval = 0;
 	m_dwAccumulated = 0;
 	m_ullUpdateAccumulated = 0;
 	m_dwTimeLast = 0;
-	m_dwLastRenderTime = 0;
+	m_ullRenderAccumulated = 1000;
 	m_dwTimeStart = 0;
 	m_bDrawPending = FALSE;
 	m_bQuit = FALSE;
@@ -346,17 +345,10 @@ int CSDLApp::Run(IGameLoopHost *pHost, const char *pszTitle, int nWidth, int nHe
 		m_dwUpdateInterval = 1;
 	}
 
-	m_dwRenderInterval = (g_nSboCliRenderFrameRate > 0)
-		? (DWORD)(1000 / g_nSboCliRenderFrameRate)
-		: m_dwUpdateInterval;
-	if (m_dwRenderInterval == 0) {
-		m_dwRenderInterval = 1;
-	}
-
 	m_dwAccumulated = 0;
 	m_ullUpdateAccumulated = 0;
 	m_dwTimeLast = SDL_GetTicks();
-	m_dwLastRenderTime = (m_dwTimeLast >= m_dwRenderInterval) ? (m_dwTimeLast - m_dwRenderInterval) : 0;
+	m_ullRenderAccumulated = 1000;
 	m_dwTimeStart = m_dwTimeLast;
 	m_byFps = 0;
 	// 起動直後のロゴを確実に1回描く。
@@ -660,6 +652,9 @@ void CSDLApp::RunFrame(void)
 	{
 		DWORD dwElapsed = dwTimeTmp - m_dwTimeLast;
 		m_dwTimeLast = dwTimeTmp;
+		const DWORD dwRenderFps = (g_nSboCliRenderFrameRate > 0)
+			? (DWORD)g_nSboCliRenderFrameRate : (1000 / m_dwUpdateInterval);
+		m_ullRenderAccumulated += (ULONGLONG)dwElapsed * dwRenderFps;
 		if (GAME_UPDATE_FPS > 0) {
 			m_ullUpdateAccumulated += (ULONGLONG)dwElapsed * (ULONGLONG)GAME_UPDATE_FPS;
 		} else {
@@ -696,14 +691,8 @@ void CSDLApp::RunFrame(void)
 		}
 	}
 
-	m_dwRenderInterval = (g_nSboCliRenderFrameRate > 0)
-		? (DWORD)(1000 / g_nSboCliRenderFrameRate)
-		: m_dwUpdateInterval;
-	if (m_dwRenderInterval == 0) {
-		m_dwRenderInterval = 1;
-	}
-
-	if (m_bDrawPending && ((dwTimeTmp - m_dwLastRenderTime) >= m_dwRenderInterval))
+	// ms * FPS で端数を保持し、rAF の周期に合わせても描画位相がずれ続けないようにする。
+	if (m_bDrawPending && m_ullRenderAccumulated >= 1000)
 	{
 		SDL_Renderer *pRenderer = m_Window.GetRenderer();
 		if ((pRenderer != NULL)
@@ -759,7 +748,12 @@ void CSDLApp::RunFrame(void)
 #endif
 			m_byFps++;
 		}
-		m_dwLastRenderTime = dwTimeTmp;
+		// 1回分を消費し、遅延後の繰り越しは最大1フレームに制限する。
+		// 剰余だけにすると、整数msの丸めで2周期分になった際に1回分を失う。
+		m_ullRenderAccumulated -= 1000;
+		if (m_ullRenderAccumulated > 1000) {
+			m_ullRenderAccumulated = 1000;
+		}
 		m_bDrawPending = FALSE;
 	}
 

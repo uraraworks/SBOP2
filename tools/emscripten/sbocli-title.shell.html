@@ -1493,7 +1493,6 @@
         if (needsFrames && stalledMs >= 120) {
           pumpSingleFrame();
         }
-        updateCanvasProbe();
       }, 33);
 
       window.setTimeout(() => {
@@ -1509,7 +1508,7 @@
     }
 
     function updateCanvasProbe() {
-      if (!probeElement) {
+      if (!probeElement || !document.body.classList.contains('debug-mode')) {
         return;
       }
       try {
@@ -1563,14 +1562,17 @@
         const stage = (Module && Module.sbop2Stage) || 'none';
         const lastStatus = (Module && Module.lastStatusText) || '';
         const lastDeps = (Module && Module.lastRunDependencyCount);
-        probeElement.textContent = 'canvas-probe: ' + samples + ' stage=' + stage + ' status=' + lastStatus + ' deps=' + lastDeps + ' init=' + initEndReached + ' grp=' + grpLoadResult + ' base=' + grpFoundBase + ' sysExists=' + grpSystemExists + ' sysRead=' + grpSystemRead + ' title=' + grpTitleExists + ' back=' + grpTitleBackExists + ' cloud=' + grpTitleCloudExists + ' cloudLoaded=' + cloudLoaded + ' cloudSz=' + cloudSize + ' fsSys=' + fsSystem + ' fsTitle=' + fsTitle + ' fsBack=' + fsTitleBack + ' fsCloud=' + fsTitleCloud + ' game=' + gameState + ' hasState=' + hasStateProc + ' chg=' + chgStateCount + ' logoDraw=' + logoDraw + ' logoTL=' + logoTopLeft + ' logoC=' + logoCenter + ' layer=' + layerSample + ' window=' + windowSample + ' cpp=' + cppRgbaHead + ' ptr=' + presentPtr + ' onDraw=' + onDrawCount + ' state=' + onDrawState + ' renderer=' + onDrawHasRenderer + ' nullMgrDraw=' + onDrawNullMgrDraw + ' pump=' + pumpActive + '/' + pumpTick + ' present=' + presentCount + ' size=' + presentSize + ' sample=' + presentSample + ' data=' + canvasElement.toDataURL().slice(0, 48);
+        probeElement.textContent = 'canvas-probe: ' + samples + ' stage=' + stage + ' status=' + lastStatus + ' deps=' + lastDeps + ' init=' + initEndReached + ' grp=' + grpLoadResult + ' base=' + grpFoundBase + ' sysExists=' + grpSystemExists + ' sysRead=' + grpSystemRead + ' title=' + grpTitleExists + ' back=' + grpTitleBackExists + ' cloud=' + grpTitleCloudExists + ' cloudLoaded=' + cloudLoaded + ' cloudSz=' + cloudSize + ' fsSys=' + fsSystem + ' fsTitle=' + fsTitle + ' fsBack=' + fsTitleBack + ' fsCloud=' + fsTitleCloud + ' game=' + gameState + ' hasState=' + hasStateProc + ' chg=' + chgStateCount + ' logoDraw=' + logoDraw + ' logoTL=' + logoTopLeft + ' logoC=' + logoCenter + ' layer=' + layerSample + ' window=' + windowSample + ' cpp=' + cppRgbaHead + ' ptr=' + presentPtr + ' onDraw=' + onDrawCount + ' state=' + onDrawState + ' renderer=' + onDrawHasRenderer + ' nullMgrDraw=' + onDrawNullMgrDraw + ' pump=' + pumpActive + '/' + pumpTick + ' present=' + presentCount + ' size=' + presentSize + ' sample=' + presentSample;
       } catch (error) {
         probeElement.textContent = 'canvas-probe-error: ' + String(error);
       }
     }
 
     updateCanvasProbe();
-    window.setInterval(updateCanvasProbe, 1000);
+    // 画素読み取りなどの診断処理はデバッグ時だけ、毎秒1回実行する。
+    if (document.body.classList.contains('debug-mode')) {
+      window.setInterval(updateCanvasProbe, 1000);
+    }
 
     // ログ欄リングバッファヘルパ: 最新 500 行に制限して O(n²) 肥大を防ぐ
     const LOG_LINE_LIMIT = 500;
