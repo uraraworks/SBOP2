@@ -14,6 +14,9 @@
 #include <cwchar>
 #include <codecvt>
 #include <locale>
+#include <map>
+#include <string>
+#include <utility>
 
 // フォントエントリ
 struct SdlFontEntry {
@@ -30,6 +33,74 @@ static std::map<void*, SdlFontEntry> s_fontMap;
 static std::map<void*, SdlDCContext> s_dcMap;
 static uintptr_t s_nextFontId = 1;
 static uintptr_t s_nextDCId = 1;
+
+// フォントキャッシュ: (セル高, 太字) が同じなら同じハンドルを使い回す。
+// CWindowBase はコンストラクタで 6 個フォントを作るため、キャッシュが無いと
+// ウィンドウを開くたびに 16〜17MB の CJK フォントを開き直すことになる。
+static std::map<std::pair<int, bool>, void*> s_fontKeyMap;
+
+// テキスト描画結果キャッシュ
+// 同一の (フォント, 色, 文字列) を毎フレーム再ラスタライズしないための表。
+// 縁取り描画(CWindowBase::TextOut2)は同じ文字列を 5 回描くため、これだけでも大きい。
+struct SdlTextCacheKey {
+    void*         hFont;
+    unsigned long color;
+    std::string   text;
+
+    bool operator<(const SdlTextCacheKey& other) const
+    {
+        if (hFont != other.hFont) return hFont < other.hFont;
+        if (color != other.color) return color < other.color;
+        return text < other.text;
+    }
+};
+static std::map<SdlTextCacheKey, SDL_Surface*> s_textCache;
+// 上限。超えたら丸ごと捨てる（LRU 管理のコストを避けるための単純な方式）
+static const size_t SDL_TEXT_CACHE_MAX = 256;
+
+static void SdlTextCacheClear()
+{
+    for (auto& pair : s_textCache) {
+        if (pair.second) {
+            SDL_FreeSurface(pair.second);
+        }
+    }
+    s_textCache.clear();
+}
+
+// キャッシュ済みのレンダリング結果を返す。返した SDL_Surface は
+// キャッシュが所有するので、呼び出し側で SDL_FreeSurface してはいけない。
+static SDL_Surface* SdlTextCacheGet(void* hFont, TTF_Font* pFont,
+                                    unsigned long color, const std::string& text)
+{
+    SdlTextCacheKey key;
+    key.hFont = hFont;
+    key.color = color;
+    key.text  = text;
+
+    auto it = s_textCache.find(key);
+    if (it != s_textCache.end()) {
+        return it->second;
+    }
+
+    SDL_Color sdlColor;
+    sdlColor.r = (unsigned char)(color & 0xFF);
+    sdlColor.g = (unsigned char)((color >> 8) & 0xFF);
+    sdlColor.b = (unsigned char)((color >> 16) & 0xFF);
+    sdlColor.a = 255;
+
+    SDL_Surface* pSurf = TTF_RenderUTF8_Blended(pFont, text.c_str(), sdlColor);
+    if (!pSurf) {
+        return nullptr;
+    }
+
+    // 挿入前に上限判定する（この時点で pSurf はまだ表に入っていない）
+    if (s_textCache.size() >= SDL_TEXT_CACHE_MAX) {
+        SdlTextCacheClear();
+    }
+    s_textCache[key] = pSurf;
+    return pSurf;
+}
 
 // ワイド文字列→UTF-8変換
 // Emscripten では wchar_t が 32bit (UTF-32) のため codecvt_utf8_utf16 は使えない。
@@ -63,6 +134,7 @@ bool SdlFontInit(const char* fontDir)
 // フォントシステム終了
 void SdlFontShutdown()
 {
+    SdlTextCacheClear();
     // 全フォントを閉じる
     for (auto& pair : s_fontMap) {
         if (pair.second.pFont) {
@@ -70,6 +142,7 @@ void SdlFontShutdown()
         }
     }
     s_fontMap.clear();
+    s_fontKeyMap.clear();
     s_dcMap.clear();
     if (s_bInitialized) {
         TTF_Quit();
@@ -81,6 +154,13 @@ void SdlFontShutdown()
 void* SdlFontCreate(int height, bool bold)
 {
     if (!s_bInitialized) return nullptr;
+
+    // 同じ (セル高, 太字) はハンドルを共有する
+    std::pair<int, bool> cacheKey(height, bold);
+    auto cached = s_fontKeyMap.find(cacheKey);
+    if (cached != s_fontKeyMap.end()) {
+        return cached->second;
+    }
 
     // フォントファイルパスを決定
     std::string path = s_fontDir;
@@ -112,6 +192,7 @@ void* SdlFontCreate(int height, bool bold)
     entry.yOffset = yOffset;
     entry.bold = bold;
     s_fontMap[id] = entry;
+    s_fontKeyMap[cacheKey] = id;
 
     return id;
 }
@@ -119,13 +200,10 @@ void* SdlFontCreate(int height, bool bold)
 // フォント破棄
 void SdlFontDestroy(void* hFont)
 {
-    auto it = s_fontMap.find(hFont);
-    if (it != s_fontMap.end()) {
-        if (it->second.pFont) {
-            TTF_CloseFont(it->second.pFont);
-        }
-        s_fontMap.erase(it);
-    }
+    // フォントは (セル高, 太字) 単位でキャッシュして共有するため、
+    // 個々の所有者が閉じてはいけない。実際の解放は SdlFontShutdown で行う。
+    // 使用されるセル高は 12/14/16/32 程度に限られるので、溜め込んでも問題ない。
+    (void)hFont;
 }
 
 // DCコンテキスト登録
@@ -253,22 +331,15 @@ bool SdlFontTextOut(void* hDC, int x, int y, const wchar_t* pStr, int nLen)
     std::string utf8 = WideToUtf8(pStr, nLen);
     if (utf8.empty()) return false;
 
-    // COLORREFからSDL_Colorに変換（COLORREF: 0x00BBGGRR）
-    SDL_Color color;
-    color.r = (unsigned char)(ctx->textColor & 0xFF);
-    color.g = (unsigned char)((ctx->textColor >> 8) & 0xFF);
-    color.b = (unsigned char)((ctx->textColor >> 16) & 0xFF);
-    color.a = 255;
-
-    // テキストをサーフェスにレンダリング
-    SDL_Surface* pSurf = TTF_RenderUTF8_Blended(pFont, utf8.c_str(), color);
+    // レンダリング結果はキャッシュから取得する（所有権はキャッシュ側）
+    SDL_Surface* pSurf = SdlTextCacheGet(ctx->currentFont, pFont, ctx->textColor, utf8);
     if (!pSurf) return false;
 
     // CImg32バッファに転送（yOffset でサーフェス底をセル底に合わせる）
     BlitSurfaceToBuffer(pSurf, ctx->pBits, ctx->stride,
                          ctx->width, ctx->height, x, y + entry->yOffset);
 
-    SDL_FreeSurface(pSurf);
+    // pSurf はキャッシュが所有するため解放しない
     return true;
 }
 
@@ -288,20 +359,15 @@ bool SdlFontTextOutA(void* hDC, int x, int y, const char* pStr, int nLen)
     if (srcLen == 0) return false;
     std::string text(pStr, srcLen);
 
-    SDL_Color color;
-    color.r = (unsigned char)(ctx->textColor & 0xFF);
-    color.g = (unsigned char)((ctx->textColor >> 8) & 0xFF);
-    color.b = (unsigned char)((ctx->textColor >> 16) & 0xFF);
-    color.a = 255;
-
-    SDL_Surface* pSurf = TTF_RenderUTF8_Blended(pFont, text.c_str(), color);
+    // レンダリング結果はキャッシュから取得する（所有権はキャッシュ側）
+    SDL_Surface* pSurf = SdlTextCacheGet(ctx->currentFont, pFont, ctx->textColor, text);
     if (!pSurf) return false;
 
     // CImg32バッファに転送（yOffset でサーフェス底をセル底に合わせる）
     BlitSurfaceToBuffer(pSurf, ctx->pBits, ctx->stride,
                          ctx->width, ctx->height, x, y + entry->yOffset);
 
-    SDL_FreeSurface(pSurf);
+    // pSurf はキャッシュが所有するため解放しない
     return true;
 }
 
