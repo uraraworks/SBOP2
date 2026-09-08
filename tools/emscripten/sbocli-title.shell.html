@@ -2,6 +2,8 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
+  <!-- ビルドスクリプトがこの meta をバージョン情報の script に置換する -->
+  <meta name="sbop2-build-inject">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content">
   <title>SBOP2 SboCli Title</title>
@@ -901,7 +903,6 @@
   </div>
 
   <script>
-    /*__SBOP2_BUILD_INJECT__*/
     // ビルドスクリプトが window.SBOP2_BUILD を埋め込んでいれば右下に控えめにバージョン表示する
     (function showVersionBadge() {
       try {
@@ -957,6 +958,10 @@
 
     const statusElement = document.getElementById('status');
     const canvasElement = document.getElementById('canvas');
+    // Wasm/SDL の起動前に 2D コンテキストを確保する。
+    // 診断表示に依存させると通常モードで SDL が WebGL を先に取得し、
+    // MgrDraw の putImageData 用コンテキストを取得できなくなる。
+    canvasElement.getContext('2d');
     const imeInputElement = document.getElementById('sbop2ImeInput');
 
     function applyAdminViewportHeight(height) {

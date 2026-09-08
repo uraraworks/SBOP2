@@ -559,9 +559,10 @@ try {
     # (2) プレースホルダをアセットハッシュ表＋表示バージョン情報の埋め込みJSに置換する
     $injectJs = 'window.__SBOP2_ASSET_HASHES__={"sbocli-title.wasm":"' + $wasmHash + '","sbocli-title.data":"' + $dataHash + '"};' +
         'window.SBOP2_BUILD={display:"' + $displayVersion + '",build:"' + $buildStamp + '"};'
-    $placeholder = [regex]::Escape('/*__SBOP2_BUILD_INJECT__*/')
+    # JSコメントはHTML圧縮時に消えるため、保持されるmeta要素を置換する。
+    $placeholder = '<meta\s+name\s*=\s*["'']?sbop2-build-inject["'']?\s*/?>'
     if ([regex]::IsMatch($htmlText, $placeholder)) {
-        $htmlText = [regex]::Replace($htmlText, $placeholder, { param($m) $injectJs })
+        $htmlText = [regex]::Replace($htmlText, $placeholder, { param($m) "<script>$injectJs</script>" })
     } else {
         throw "生成HTMLにキャッシュバスター埋め込み用プレースホルダが見つかりませんでした。"
     }

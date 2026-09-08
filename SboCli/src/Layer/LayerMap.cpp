@@ -171,6 +171,7 @@ void CLayerMap::Draw(PCImg32 pDst)
 	t = PerfNow(); DrawPartsBase(pDst);       dTile += PerfMs(t, PerfNow());
 	t = PerfNow(); DrawMapPile(pDst);          dTile += PerfMs(t, PerfNow());
 	t = PerfNow(); DrawItem(pDst, 0);          dTile += PerfMs(t, PerfNow());
+	t = PerfNow(); PrepareCharDrawRows();     dChar += PerfMs(t, PerfNow());
 	for (y = -1; y < DRAW_PARTS_Y + 2; y ++) {
 		t = PerfNow(); DrawMapObject(pDst, y); dTile += PerfMs(t, PerfNow());
 		t = PerfNow(); DrawChar(pDst, y);      dChar += PerfMs(t, PerfNow());
@@ -1441,22 +1442,37 @@ void CLayerMap::GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY)
 }
 
 
-void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY/*-99*/)
+void CLayerMap::PrepareCharDrawRows(void)
 {
-	int i, nCount, x, y;
-	PCInfoCharCli pChar;
-	POINT ptTmp;
-
-	nCount = m_pLibInfoChar->GetCount();
-	m_pMgrDraw->LockDibTmp();
-	for (i = 0; i < nCount; i ++) {
-		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(i);
-		if (nDrawY != -99) {
-			// Phase 3: m_nViewY/MAPPARTSSIZE でタイル行に変換して比較
-			if (m_nViewY / MAPPARTSSIZE + nDrawY != pChar->m_nMapY / MAPPARTSSIZE) {
-				continue;
-			}
+	// 行ごとの領域は再利用し、前フレームのポインタは必ず消去する。
+	m_aCharDrawRows.resize(DRAW_PARTS_Y + 3);
+	for (auto &aRow : m_aCharDrawRows) {
+		aRow.clear();
+	}
+	const int nViewRow = m_nViewY / MAPPARTSSIZE;
+	const int nCount = m_pLibInfoChar->GetCount();
+	for (int i = 0; i < nCount; ++i) {
+		PCInfoCharCli pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(i);
+		// 元の判定と同じく、座標を個別にタイル行へ変換してから差を取る。
+		const int nRow = pChar->m_nMapY / MAPPARTSSIZE - nViewRow + 1;
+		if (nRow >= 0 && nRow < (int)m_aCharDrawRows.size()) {
+			m_aCharDrawRows[nRow].push_back(pChar);
 		}
+	}
+}
+
+
+void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY)
+{
+	int x, y;
+	POINT ptTmp;
+	const auto &aRow = m_aCharDrawRows[nDrawY + 1];
+	if (aRow.empty()) {
+		return;
+	}
+
+	m_pMgrDraw->LockDibTmp();
+	for (PCInfoCharCli pChar : aRow) {
 		x = y = 32;
 
 		pChar->GetViewCharPos(ptTmp);

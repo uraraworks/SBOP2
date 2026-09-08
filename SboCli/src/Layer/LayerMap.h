@@ -7,6 +7,7 @@
 #pragma once
 
 #include "LayerCloud.h"
+#include <vector>
 
 class CInfoCharCli;
 class CLibInfoItem;
@@ -57,7 +58,9 @@ private:
 	void DrawMapObject(CImg32 *pDst, int nDrawY = -99); // 描画(マップオブジェクト)
 	void DrawItem(CImg32 *pDst, int nType, int nDrawY = -99); // 描画(アイテム)
 	void GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY); // 描画位置を取得
-	void DrawChar(CImg32 *pDst, int nDrawY = -99); // 描画(キャラ)
+	void PrepareCharDrawRows(void); // 描画行ごとのキャラを毎描画時に再構築
+	void DrawChar(CImg32 *pDst, int nDrawY); // 描画(キャラ)
+	std::vector<std::vector<CInfoCharCli *> > m_aCharDrawRows; // 行内はライブラリの順序を維持
 	void DrawCharText(CImg32 *pDst, int nDrawY = -99); // 描画(キャラ関連のテキスト)
 	void DrawSystemIcon(CImg32 *pDst); // 描画(システムアイコン)
 	void DrawGauge(CImg32 *pDst); // 描画(ゲージ類)
