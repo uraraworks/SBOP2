@@ -13,6 +13,7 @@
             SboSvr/        ... SboSvr.exe, SboGrpData.dll, SboSvr.ini, webroot/, SBODATA/seed
             WebSocketBridge/ ... server.js, package.json, README.txt
             README.txt     ... 起動手順
+            (webroot/game/sbocli-title.html は wss シム注入 → 事前圧縮版 (.br/.gz) 再生成の順で処理)
       4) publish/SBOP2_Server_yyyyMMdd_HHmmss.zip に圧縮
 
 .PARAMETER Configuration
@@ -78,6 +79,42 @@ function Resolve-MsBuild {
     }
 
     throw "msbuild.exe が見つかりません。Visual Studio Build Tools を導入するか PATH に追加してください。"
+}
+
+function Resolve-NodeExe {
+    # emsdk 同梱の node でよい。PATH に無ければ EMSDK 配下を探す。
+    $cmd = Get-Command node -ErrorAction SilentlyContinue
+    if ($cmd) { return $cmd.Source }
+    $emsdkRoot = if ($env:EMSDK) { $env:EMSDK } else { $EmsdkDir }
+    $nodeDir = Join-Path $emsdkRoot "node"
+    if (Test-Path $nodeDir) {
+        $candidate = Get-ChildItem -Path $nodeDir -Filter "node.exe" -Recurse -ErrorAction SilentlyContinue |
+            Select-Object -First 1
+        if ($candidate) { return $candidate.FullName }
+    }
+    return $null
+}
+
+function Test-CompressedContains {
+    param([string]$Path, [string]$Marker)
+    try {
+        $bytes = [System.IO.File]::ReadAllBytes($Path)
+        $in  = New-Object System.IO.MemoryStream(,$bytes)
+        $out = New-Object System.IO.MemoryStream
+        if ($Path.EndsWith(".br")) {
+            $stream = New-Object System.IO.Compression.BrotliStream($in, [System.IO.Compression.CompressionMode]::Decompress)
+        } else {
+            $stream = New-Object System.IO.Compression.GZipStream($in, [System.IO.Compression.CompressionMode]::Decompress)
+        }
+        $stream.CopyTo($out)
+        $stream.Dispose()
+        $text = [System.Text.Encoding]::UTF8.GetString($out.ToArray())
+        return $text.Contains($Marker)
+    } catch {
+        # PowerShell 5.1 では BrotliStream が無い等。検証できないだけなので通す。
+        Write-Warning "  圧縮版の検証をスキップ ($([System.IO.Path]::GetFileName($Path))): $_"
+        return $true
+    }
 }
 
 function Initialize-Emsdk {
@@ -235,6 +272,35 @@ if (Test-Path $gameHtml) {
         Write-Host "  wss 書換シムを注入: sbocli-title.html"
     } else {
         Write-Warning "sbocli-title.html に </title> が見つからずシム注入できませんでした"
+    }
+
+    # 【重要】シム注入後の HTML から事前圧縮版 (.br/.gz) を作り直す。
+    # ビルド時に作られた .br/.gz はシム注入前の内容で、SboSvr は圧縮版を
+    # 優先配信するため、放置すると本番のブラウザにシム無し HTML が届いて
+    # HTTPS で wss 接続できなくなる（2026-09-08 のデプロイで実際に発生）。
+    foreach ($ext in @(".br", ".gz")) {
+        $stale = $gameHtml + $ext
+        if (Test-Path $stale) { Remove-Item -Force $stale }
+    }
+    $precompressScript = Join-Path $scriptDir "emscripten\precompress.mjs"
+    $nodeExe = Resolve-NodeExe
+    if (-not (Test-Path $precompressScript)) {
+        Write-Warning "  precompress.mjs が見つからないため sbocli-title.html は非圧縮のみ同梱します"
+    } elseif (-not $nodeExe) {
+        Write-Warning "  node が見つからないため sbocli-title.html は非圧縮のみ同梱します"
+    } else {
+        & $nodeExe $precompressScript $stageGameDir "sbocli-title.html"
+        if ($LASTEXITCODE -ne 0) {
+            throw "シム注入後の事前圧縮に失敗しました (exit=$LASTEXITCODE)"
+        }
+        # 作り直した圧縮版に本当にシムが入っているか検証する
+        foreach ($ext in @(".br", ".gz")) {
+            $variant = $gameHtml + $ext
+            if ((Test-Path $variant) -and -not (Test-CompressedContains -Path $variant -Marker $shimMarker)) {
+                throw "事前圧縮版 sbocli-title.html$ext に wss シムが含まれていません"
+            }
+        }
+        Write-Host "  事前圧縮版 (.br/.gz) をシム入り HTML から再生成"
     }
 } else {
     Write-Warning "sbocli-title.html が見つかりません: $gameHtml"
