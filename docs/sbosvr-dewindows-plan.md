@@ -1,16 +1,15 @@
 # SboSvr 脱Windows 計画・作業メモ
 
-最終更新日: 2026-09-09
+最終更新日: 2026-09-11
 ブランチ: master（`feature/de-windows` は 2026-09-07 に取り込み済み。マージコミット `422b798`、55コミット）
 
-## 現在の位置づけ（2026-09-09）
+## 現在の位置づけ（2026-09-11）
 
-**移植すべきものは移植し終えた。** 全 .cpp 318本中 **315本が em++ で通る**（テスト85本）。
-S2（`Common/SBOGlobal.cpp` のパス関数を `Common/Platform/PlatformPath.cpp` へ集約）が
-2026-09-09 に完了し、**残る3本は「意図的に Windows 専用のまま残す」ものだけ**になった。
-ただし `MainFrame.cpp` は GUI とサーバー中核が同居しており、丸ごと落とすことはできない
-（詳細は「次にやること」節）。次の山は非Windows ビルドの**実リンクと実行**で、
-そのためのツールチェーンがこの PC にまだ無い。
+**移植作業は完了した。** 全 .cpp 318本のうち em++ を通らないのは
+ウィンドウ表示専用の3本（`MainFrameWindow.cpp` / `LayoutHelper.cpp` /
+`LogViewCtrl.h`）だけで、これらは意図して Windows 専用のまま残している。
+移植チェックは40本、テストは85本。次の山は非Windows ビルドの**実リンクと実行**で、
+そのためのツールチェーンがこの PC にまだ無い（詳細は「次にやること」節）。
 
 ## 目的
 
@@ -645,27 +644,90 @@ master への取り込みで**実際にテキスト衝突したのは `SboSvr/Sb
 
 **これで em++ を通らない .cpp は「意図的に Windows 専用として残す3本」だけになった。**
 
-### 次にやること（2026-09-09 更新）
+### S3 完了: サーバー制御の抽象化と GUI の切り出し（2026-09-11・`3c15f0f` / `b1f671d`）
 
-1. **Windows 専用として残す3本の切り分け。**
-   `Common/Lib/LayoutHelper.cpp`（306行）と `Common/Lib/mfc/LogViewCtrl.h`（152行）は
-   計画どおり丸ごと Windows 専用でよい。**問題は `SboSvr/src/MainFrame/MainFrame.cpp`
-   （1231行）で、「非Windows では丸ごと `#ifdef` で落とす」という当初の想定は成り立たない。**
-   このファイルにはサーバーの中核（`MainLoopHeadless()` / `InitServer()` / `TermServer()` /
-   `OnRecv()` / ソケット通知キュー / 各種タイマー）が GUI と同居しているため、
-   落とすとヘッドレス起動そのものが消える。実態は次の2つの作業になる。
-   - GUI 部（`MainLoopWindow` / `WndProc` / `OnPaint` / `MyTextOut` /
-     `LoadWindowPos` / `SaveWindowPos` / `OnCreate` / `OnClose` / `OnDestroy`）を
-     `MainFrameWindow.cpp` として切り出し、そちらを Windows 専用にする。
-   - **ヘッドレス経路にも Windows 依存が4種類残っている**（二重起動防止のミューテックス、
-     `--stop` 用の名前付きイベント、`SetConsoleCtrlHandler` による Ctrl+C、
-     `timeBeginPeriod`）。前2つは POSIX では pid ファイルやシグナルへの
-     置き換えになり、設計判断が要る。
-2. **非Windows ビルドの実際のリンクと実行。** ここが最後の山。
-   **この PC には Linux ツールチェーンが無い**（WSL はディストリ未導入、
-   clang / cmake / ninja / g++ も未インストール、CMakeLists の類も無い）。
-   em++ でリンクしても wasm ではサーバーのソケットが動かないので代用にならない。
-   着手には WSL2 か Docker の導入と、ビルド定義（CMake 等）の新規作成が先に要る。
+**S3-1（`3c15f0f`）: ヘッドレス経路に残っていた Windows 依存4種を役割単位で `SboPlatform` へ移した。**
+「Windows の概念をそのまま抽象化する」のではなく「役割で抽象化する」方を選んでいる。
+
+| Windows | POSIX | 意味 |
+|---|---|---|
+| `CreateMutex` が `ERROR_ALREADY_EXISTS` | `flock(LOCK_EX\|LOCK_NB)` が取れない | 同ポートで既に稼働中 |
+| `WaitForSingleObject(hMutex)` が返る | `flock` が取れた | 相手が終了した |
+| 名前付きイベントを `SetEvent` | `kill(pid, SIGTERM)` | 停止要求 |
+| `WaitForSingleObject(ev, 0)` | `sig_atomic_t` のフラグ確認 | 非ブロックの受信確認 |
+
+**稼働中ミューテックスが担っていた2つの役割（二重起動防止と `--stop` の終了待ち）が、
+pid ファイルへの `flock` の可否ひとつに過不足なく対応する。** これが見えたのが設計の要点。
+`--stop` 側は「ロックが取れてしまったら誰も稼働していない」と判定する。
+
+追加した API は `AcquireServerInstanceLock` / `ReleaseServerInstanceLock` /
+`OpenStopRequestChannel` / `CloseStopRequestChannel` / `IsStopRequested` /
+`SendStopRequest` / `WaitForServerExit` / `InstallStopSignalHandler` /
+`UninstallStopSignalHandler` / `AttachParentConsole` /
+`BeginHighResolutionTimer` / `EndHighResolutionTimer` / `SleepMs`。
+**Windows 実装は現行のミューテックス名・イベント名・手順をそのまま移しただけで、本番の挙動は変えていない。**
+
+落とし穴として記録しておくこと:
+
+- **pid ファイルは解放時に `unlink` しない。** 他プロセスが `AcquireServerInstanceLock` を
+  試みている最中に消すと、相手が新規作成した実体ではなく自分がロックしていた実体を
+  消す競合があり得る。残骸が残っても判定は `flock` の可否だけで行うので無害。
+- **Ctrl+C ハンドラが「後始末の完了を待つ」のは Windows 固有の事情。**
+  ハンドラから戻ると OS にプロセスを落とされ DB の書き戻しが飛ぶため待っている。
+  POSIX にその制約は無いので、`InstallStopSignalHandler` に渡す
+  `pfnIsQuitting` は POSIX 実装では使わない。
+
+**S3-2（`b1f671d`）: `MainFrame.cpp` から GUI を切り出した。**
+
+- **当初の想定「非Windows では `MainFrame.cpp` を丸ごと `#ifdef` で落とす」は成り立たなかった。**
+  このファイルには GUI とサーバー中核（`MainLoopHeadless` / `InitServer` / `TermServer` /
+  `OnRecv` / ソケット通知キュー / 各種タイマー）が同居している。
+- **`MainFrame.h` を `#ifdef` で括る必要も無かった。** `HWND` / `HDC` / `HFONT` は
+  `Common/Platform/PlatformDefs.h` で既に `void *` として定義済みで、詰まっていたのは
+  型ではなく GDI/USER32 の**関数呼び出し**11箇所だけだった。
+  **「非Windows で通らない」と言われたら、まず型か呼び出しかを切り分けること。**
+- 構成は `MainFrameWindow.cpp`（Windows 専用）と `MainFrameWindowNone.cpp`（非Windows 用の
+  何もしない版）の**対**。ビルド側で択一するので、どちらのファイルにも `#ifdef` は無い。
+  `.vcxproj` には None 側も `ExcludedFromBuild` で載せてある（IDE から見失わないため。
+  **構成ごとに指定が要る**）。
+- ヘッドレス側から GUI に触れていた継ぎ目は3つだけだった:
+  `CreateStateFont()` / `DestroyStateFont()`（コンストラクタ・デストラクタのフォント）と
+  `RefreshStateDisplay()`（`TimerProcClock` 末尾の `InvalidateRect`）。
+- `WndProc` / `OnPaint` などは非Windows 版を用意していない。ウィンドウ経路からしか
+  呼ばれず、非Windows では `MainLoopWindow` が起動を拒否するためリンク時に参照されない。
+- ついでに `TimerProc` の `MsgWaitForMultipleObjects(0, NULL, FALSE, 1, QS_ALLINPUT)` を
+  `SboPlatform::SleepMs(1)` へ置き換えた。戻り値を見ておらず、メッセージは次の周回の
+  `PeekMessage` が改めて拾うため、実質は CPU を使い切らないための一時停止だった。
+
+検証結果:
+
+| 対象 | 結果 |
+|---|---|
+| `tools/test-sbosvr-portability.ps1` | **成功 40 / 失敗 0**（`MainFrame.cpp` を含む） |
+| SboSvr のビルド（リンクまで） | `error C` / `error LNK` とも 0 |
+| SboSvrTest | **85 / 85** |
+| 実機（ヘッドレス） | `--headless` 起動 → 二重起動が exit 2 で拒否 → `--stop` で exit 0・プロセス消滅 |
+| 実機（ウィンドウ版） | 引数なし起動でウィンドウが出て、稼働時間・接続数・処理キャラ数・処理マップ数が描画されることをスクリーンショットで確認 |
+
+**`--stop` とウィンドウ描画は「コンパイルが通った」では何も保証できない箇所なので、
+必ず実際に起動して確認すること。**
+
+### 次にやること（2026-09-11 更新）
+
+**移植作業は完了した。** em++ を通らないのは `MainFrameWindow.cpp` と
+`Common/Lib/LayoutHelper.cpp` / `Common/Lib/mfc/LogViewCtrl.h` だけで、
+これらは意図してウィンドウ表示専用に残している。
+
+残るは**非Windows ビルドの実際のリンクと実行**。ここが最後の山で、到達すれば
+サニタイザ・CI・Docker 化という当初の目的（冒頭「目的」節）に手が届く。
+着手の前に環境の準備が要る。
+
+- **この PC には Linux ツールチェーンが無い。** WSL はディストリ未導入、
+  clang / cmake / ninja / g++ も未インストール。CMakeLists の類も無い。
+- **em++ でのリンクは代用にならない。** wasm ではサーバーのソケットが動かない。
+- したがって、まず WSL2 か Docker を入れ、ビルド定義（CMake 等）を新規に書く必要がある。
+  そのビルド定義では `MainFrameWindow.cpp` を除外し `MainFrameWindowNone.cpp` を
+  代わりに入れること（この対は今のところ `.vcxproj` 側にしか表現が無い）。
 
 ## 作業ログ
 
