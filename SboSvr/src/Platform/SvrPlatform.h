@@ -183,4 +183,78 @@ namespace SboPlatform
 	/// @param outPng          取得できた PNG の生バイト列
 	/// @return 見つかって読み出せれば true
 	bool	LoadEmbeddedPng(const char *pszResourceName, std::vector<unsigned char> &outPng);
+
+	// ここから下はヘッドレスサーバー(SboSvr --headless)の多重起動防止と
+	// 停止要求のやり取りに使う。サーバーは1プロセスにつき1インスタンスしか
+	// 動かさない前提なので、実装側(SvrPlatform.cpp)は状態を無名 namespace の
+	// file-static 変数で持ってよい。
+
+	/// サーバーの多重起動を防ぐロックを取得する
+	///
+	/// Windows は名前付きミューテックス(SboSvr_Running_%u)、非Windows は
+	/// pid ファイル(SBODATA/sbosvr-<port>.pid)への flock で実現する。
+	///
+	/// @return 取得できれば true。false なら同じポートのサーバーが既に稼働中。
+	bool	AcquireServerInstanceLock(unsigned short wPort);
+
+	/// AcquireServerInstanceLock() で取得したロックを解放する
+	void	ReleaseServerInstanceLock(void);
+
+	/// 停止要求の受け口を用意する(サーバー本体側で呼ぶ)
+	///
+	/// Windows は名前付きイベント(SboSvr_Quit_%u)を作る。非Windows は
+	/// SIGTERM のハンドラを張り、受信したらフラグを立てるだけにする。
+	bool	OpenStopRequestChannel(unsigned short wPort);
+
+	/// OpenStopRequestChannel() で用意した受け口を閉じる
+	void	CloseStopRequestChannel(void);
+
+	/// 停止要求が来ているかを非ブロックで確認する
+	bool	IsStopRequested(void);
+
+	/// 稼働中のサーバーへ停止を要求する(--stop 側で呼ぶ)
+	///
+	/// Windows は停止通知イベントへ SetEvent、非Windows は pid ファイルから
+	/// 読んだ pid へ SIGTERM を送る。
+	///
+	/// @return true なら要求を送れた。false なら稼働中のサーバーが見つからない。
+	bool	SendStopRequest(unsigned short wPort);
+
+	/// SendStopRequest() で要求した相手が終了するのを待つ(--stop 側で呼ぶ)
+	///
+	/// Windows は稼働中ミューテックスが取得できるまで、非Windows は
+	/// pid ファイルの flock が取得できるまで待つ(いずれも「相手が
+	/// ロックを手放した = 終了した」を意味し、対応関係は同じ)。
+	///
+	/// @return true なら終了を確認できた。false ならタイムアウト。
+	bool	WaitForServerExit(unsigned short wPort, unsigned int uTimeoutMs);
+
+	/// コンソール終了シグナルの受け口を設置する
+	///
+	/// Windows は SetConsoleCtrlHandler、非Windows は SIGINT の sigaction。
+	///
+	/// @param pfnRequestQuit 終了要求を立てる関数(別スレッド/シグナルコンテキストから呼ばれ得る)
+	/// @param pfnIsQuitting  終了処理が完了したか(まだ処理中なら false)を返す関数。
+	///                       Windows 実装はこれが true を返すまでハンドラ内で待つ
+	///                       (ここで返すと OS にプロセスを落とされ、DB の書き戻しが飛ぶため)。
+	///                       非Windows 実装はハンドラから戻ってもプロセスを落とされないため使わない。
+	void	InstallStopSignalHandler(void (*pfnRequestQuit)(void), bool (*pfnIsQuitting)(void));
+
+	/// InstallStopSignalHandler() で設置したハンドラを外す
+	void	UninstallStopSignalHandler(void);
+
+	/// 親プロセスのコンソールへ接続する(あれば)
+	///
+	/// Windows は AttachConsole(ATTACH_PARENT_PROCESS) + stdout/stderr の
+	/// 繋ぎ直し。非Windows は元から標準出力があるので何もしない。
+	void	AttachParentConsole(void);
+
+	/// 高分解能タイマーの利用を開始する
+	///
+	/// Windows は timeGetDevCaps + timeBeginPeriod でマルチメディアタイマーの
+	/// 精度を最大にする。非Windows の OS タイマーは元から高分解能なので何もしない。
+	void	BeginHighResolutionTimer(void);
+
+	/// BeginHighResolutionTimer() と対にして呼ぶ
+	void	EndHighResolutionTimer(void);
 }

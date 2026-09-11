@@ -93,10 +93,7 @@ public:
 
 	void	RequestDisconnect(DWORD dwSessionID);	// 切断を予約する(即時ではなく次の TimerProc で処理)
 
-	static	void	MakeQuitEventName(LPTSTR pszName, size_t nMax, WORD wPort);	// 停止通知イベント名を作る
-	static	void	MakeRunMutexName(LPTSTR pszName, size_t nMax, WORD wPort);	// 稼働中ミューテックス名を作る
 	static	BOOL	RequestStopRunningServer(void);	// 稼働中のヘッドレスサーバーへ停止を要求する
-	static	void	AttachParentConsole(void);	// 親のコンソールへ接続する(あれば)
 	static	void	WriteConsoleMessage(LPCTSTR pszFormat, ...);	// 接続したコンソールへ出力する
 
 private:
@@ -107,11 +104,8 @@ private:
 	void	TermServer(void);	// サーバー終了処理(ウィンドウに依存しない)
 	void	RequestQuit(void)	{ m_bQuit = TRUE;	}	// 終了を要求する(別スレッドから呼ばれ得る)
 
-	static	BOOL WINAPI ConsoleCtrlHandler(DWORD dwCtrlType);	// コンソール終了シグナルの受け口
-
-	BOOL	CreateQuitEvent(WORD wPort);	// 停止通知イベントを作る
-	void	CloseQuitEvent(void);	// 停止通知イベントを閉じる
-	BOOL	IsQuitEventSignaled(void);	// 停止通知イベントが立っているか
+	static	void	RequestQuitStatic(void);	// SboPlatform::InstallStopSignalHandler へ渡す: 終了要求を立てる
+	static	bool	IsQuittingDoneStatic(void);	// SboPlatform::InstallStopSignalHandler へ渡す: 終了処理が完了したか
 
 	void	LoadWindowPos(HWND hWnd);	// ウィンドウ位置を復元(ウィンドウありのみ)
 	void	SaveWindowPos(HWND hWnd);	// ウィンドウ位置を保存(ウィンドウありのみ)
@@ -287,8 +281,6 @@ private:
 	HFONT	m_hFont;	// サーバー状態の描画に使うフォント
 	BOOL	m_bHeadless;	// ヘッドレス動作か
 	volatile BOOL	m_bQuit;	// 終了要求(コンソールシグナルや停止通知から立てられる)
-	HANDLE	m_hQuitEvent;	// 停止通知イベント(ヘッドレス時のみ)
-	HANDLE	m_hRunMutex;	// 稼働中を示すミューテックス(ヘッドレス時のみ。終了判定に使う)
 
 	static	CMainFrame	*s_pInstance;	// コンソールシグナルから参照する自身
 

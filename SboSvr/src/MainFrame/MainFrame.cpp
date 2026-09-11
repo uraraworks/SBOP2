@@ -39,8 +39,6 @@ CMainFrame::CMainFrame()
 	m_hWnd	= NULL;
 	m_bHeadless	= FALSE;
 	m_bQuit	= FALSE;
-	m_hQuitEvent	= NULL;
-	m_hRunMutex	= NULL;
 	m_pLibInfoAccount	= NULL;
 	m_pLibInfoChar	= NULL;
 	m_pLibInfoDisable	= NULL;
@@ -96,31 +94,28 @@ CMainFrame::~CMainFrame()
 
 CMainFrame *CMainFrame::s_pInstance = NULL;
 
-// コンソール終了シグナルの受け口
+// SboPlatform::InstallStopSignalHandler() へ渡す: 終了要求を立てる
 //
-// ヘッドレス動作時に Ctrl+C 等で安全に停止させるために使う。
-// この関数は別スレッドで呼ばれるため、終了要求を立てるだけにする。
-// 停止処理(DB の書き戻しを含む)はメインスレッドが行う。
+// ヘッドレス動作時に Ctrl+C(またはそれに相当するシグナル)で安全に
+// 停止させるために使う。別スレッド/シグナルコンテキストから呼ばれるため、
+// 終了要求を立てるだけにする。停止処理(DB の書き戻しを含む)はメイン
+// スレッドが行う。
 
-BOOL WINAPI CMainFrame::ConsoleCtrlHandler(DWORD dwCtrlType)
+void CMainFrame::RequestQuitStatic(void)
 {
-	switch (dwCtrlType) {
-	case CTRL_C_EVENT:
-	case CTRL_BREAK_EVENT:
-	case CTRL_CLOSE_EVENT:
-	case CTRL_LOGOFF_EVENT:
-	case CTRL_SHUTDOWN_EVENT:
-		if (s_pInstance) {
-			s_pInstance->RequestQuit();
-			// メインスレッドが後始末を終えるまで待つ。ここで返すと
-			// OS にプロセスを落とされ、DB の書き戻しが行われない。
-			while (s_pInstance && (s_pInstance->m_bQuit != FALSE)) {
-				Sleep(50);
-			}
-		}
-		return TRUE;
+	if (s_pInstance) {
+		s_pInstance->RequestQuit();
 	}
-	return FALSE;
+}
+
+// SboPlatform::InstallStopSignalHandler() へ渡す: 終了処理が完了したか
+//
+// Windows 実装はこれが true を返すまでハンドラ内で待つ
+// (ここで返すと OS にプロセスを落とされ、DB の書き戻しが行われないため)。
+
+bool CMainFrame::IsQuittingDoneStatic(void)
+{
+	return !(s_pInstance && (s_pInstance->m_bQuit != FALSE));
 }
 
 int CMainFrame::MainLoop(HINSTANCE hInstance, BOOL bHeadless)
@@ -152,31 +147,37 @@ int CMainFrame::MainLoop(HINSTANCE hInstance, BOOL bHeadless)
 int CMainFrame::MainLoopHeadless(void)
 {
 	WORD wPort;
-	TCHAR szIni[MAX_PATH];
-	TIMECAPS tc;
 
 	// 親のコンソールに繋がれば Ctrl+C とメッセージ出力ができる
-	AttachParentConsole();
+	SboPlatform::AttachParentConsole();
 
-	// 稼働中ミューテックスと停止通知イベントは、初期化より前に確保する。
+	// 多重起動防止ロックと停止要求の受け口は、初期化より前に確保する。
 	// 後に回すと、二重起動したときに既存インスタンスと同じポートを
 	// 一時的に奪ってから競合に気づくことになる。
 	//
-	// 停止通知イベントが無いと強制終了しか手段が無くなり、
+	// 停止要求の受け口が無いと強制終了しか手段が無くなり、
 	// DB の書き戻しが飛ぶため必須。
 	wPort = (WORD)SboPlatform::GetIniInt(SboPlatform::GetIniFilePath().c_str(), "Setting", "Port", 2006);
 
-	if (CreateQuitEvent(wPort) == FALSE) {
+	if (SboPlatform::AcquireServerInstanceLock(wPort) == false) {
 		WriteConsoleMessage(_T("同じポート(%u)のサーバーが既に起動しています"), (unsigned int)wPort);
 		return SBOSVR_EXIT_ALREADY_RUNNING;
 	}
+	if (SboPlatform::OpenStopRequestChannel(wPort) == false) {
+		// 多重起動ではない(ロックは取れている)。受け口だけが作れなかった
+		// 状態で起動すると --stop も Ctrl+C も効かなくなるため、ここで諦める。
+		WriteConsoleMessage(_T("停止要求の受け口を用意できませんでした (Port:%u)"), (unsigned int)wPort);
+		SboPlatform::ReleaseServerInstanceLock();
+		return SBOSVR_EXIT_ERROR;
+	}
 
-	SetConsoleCtrlHandler(&CMainFrame::ConsoleCtrlHandler, TRUE);
+	SboPlatform::InstallStopSignalHandler(&CMainFrame::RequestQuitStatic, &CMainFrame::IsQuittingDoneStatic);
 
 	if (InitServer() == FALSE) {
 		WriteConsoleMessage(_T("サーバーの初期化に失敗しました"));
-		SetConsoleCtrlHandler(&CMainFrame::ConsoleCtrlHandler, FALSE);
-		CloseQuitEvent();
+		SboPlatform::UninstallStopSignalHandler();
+		SboPlatform::CloseStopRequestChannel();
+		SboPlatform::ReleaseServerInstanceLock();
 		return SBOSVR_EXIT_ERROR;
 	}
 
@@ -185,17 +186,16 @@ int CMainFrame::MainLoopHeadless(void)
 	}
 	WriteConsoleMessage(_T("SboSvr をヘッドレスで起動しました (Port:%u)。停止は --stop または Ctrl+C"), (unsigned int)wPort);
 
-	timeGetDevCaps(&tc, sizeof (TIMECAPS));
-	timeBeginPeriod(tc.wPeriodMin);
+	SboPlatform::BeginHighResolutionTimer();
 
 	while (m_bQuit == FALSE) {
-		if (IsQuitEventSignaled()) {
+		if (SboPlatform::IsStopRequested()) {
 			break;
 		}
 		TimerProc();
 	}
 
-	timeEndPeriod(tc.wPeriodMin);
+	SboPlatform::EndHighResolutionTimer();
 
 	if (m_pLog) {
 		m_pLog->Write("停止要求を受け付けました");
@@ -204,11 +204,12 @@ int CMainFrame::MainLoopHeadless(void)
 	TermServer();
 	m_pMgrData->Save();
 	WriteConsoleMessage(_T("SboSvr を停止しました"));
-	CloseQuitEvent();
+	SboPlatform::CloseStopRequestChannel();
+	SboPlatform::ReleaseServerInstanceLock();
 
 	// ここで初めてシグナルハンドラの待ちを解く
 	m_bQuit	= FALSE;
-	SetConsoleCtrlHandler(&CMainFrame::ConsoleCtrlHandler, FALSE);
+	SboPlatform::UninstallStopSignalHandler();
 
 	return SBOSVR_EXIT_OK;
 }
@@ -437,23 +438,6 @@ LRESULT CMainFrame::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-// 親のコンソールへ接続する
-//
-// SUBSYSTEM:WINDOWS のためコンソールを持たないが、コマンドラインから
-// 起動された場合は親のコンソールへ出力できる。接続できなくても
-// 動作に影響はない。
-
-void CMainFrame::AttachParentConsole(void)
-{
-	FILE *pFile;
-
-	if (AttachConsole(ATTACH_PARENT_PROCESS) == FALSE) {
-		return;
-	}
-	freopen_s(&pFile, "CONOUT$", "w", stdout);
-	freopen_s(&pFile, "CONOUT$", "w", stderr);
-}
-
 // 接続したコンソールへ出力する
 //
 // コンソールが無い場合は何も起きない。
@@ -471,135 +455,35 @@ void CMainFrame::WriteConsoleMessage(LPCTSTR pszFormat, ...)
 	fflush(stdout);
 }
 
-// 停止通知イベント名を作る
-//
-// ポートで区別するため、複数のサーバーを別ポートで動かしていても
-// 目的のインスタンスだけを止められる。
-
-void CMainFrame::MakeQuitEventName(LPTSTR pszName, size_t nMax, WORD wPort)
-{
-	_sntprintf_s(pszName, nMax, _TRUNCATE, _T("SboSvr_Quit_%u"), (unsigned int)wPort);
-}
-
-// 稼働中ミューテックス名を作る
-
-void CMainFrame::MakeRunMutexName(LPTSTR pszName, size_t nMax, WORD wPort)
-{
-	_sntprintf_s(pszName, nMax, _TRUNCATE, _T("SboSvr_Running_%u"), (unsigned int)wPort);
-}
-
 // 稼働中のヘッドレスサーバーへ停止を要求する
 //
 // 同じ ini を使うインスタンス(= 同じポート)を対象にする。
 // 停止通知を出したあと、相手が終了するまで待つ。
 //
-// 終了判定にはサーバーが稼働中だけ保持するミューテックスを使う。
-// イベントの存在有無で判定すると、監視ツール等が一時的にハンドルを
-// 開いているだけで終了を検知できなくなる。
-//
 // 戻り値は稼働中のサーバーを止められたか。
 
 BOOL CMainFrame::RequestStopRunningServer(void)
 {
-	DWORD dwWait;
 	WORD wPort;
-	TCHAR szIni[MAX_PATH];
-	TCHAR szName[MAX_PATH];
-	HANDLE hEvent;
-	HANDLE hMutex;
 
 	wPort = (WORD)SboPlatform::GetIniInt(SboPlatform::GetIniFilePath().c_str(), "Setting", "Port", 2006);
 
-	AttachParentConsole();
+	SboPlatform::AttachParentConsole();
 
-	MakeQuitEventName(szName, _countof(szName), wPort);
-	hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, szName);
-	if (hEvent == NULL) {
+	if (SboPlatform::SendStopRequest(wPort) == false) {
 		// 稼働中のヘッドレスサーバーが見つからない
 		WriteConsoleMessage(_T("稼働中のヘッドレスサーバー(Port:%u)が見つかりません"), (unsigned int)wPort);
 		return FALSE;
 	}
 	WriteConsoleMessage(_T("停止を要求しました (Port:%u)。終了を待っています"), (unsigned int)wPort);
 
-	SetEvent(hEvent);
-	CloseHandle(hEvent);
-
-	// サーバーが手放すまで待つ。取得できた時点で相手は終了している。
-	MakeRunMutexName(szName, _countof(szName), wPort);
-	hMutex = OpenMutex(SYNCHRONIZE, FALSE, szName);
-	if (hMutex == NULL) {
-		// 既に終了している
-		WriteConsoleMessage(_T("停止しました"));
-		return TRUE;
-	}
-
-	dwWait = WaitForSingleObject(hMutex, 30000);
-	if ((dwWait == WAIT_OBJECT_0) || (dwWait == WAIT_ABANDONED)) {
-		ReleaseMutex(hMutex);
+	if (SboPlatform::WaitForServerExit(wPort, 30000) == true) {
 		WriteConsoleMessage(_T("停止しました"));
 	} else {
 		WriteConsoleMessage(_T("30秒待っても終了しませんでした。停止要求は送られています"));
 	}
-	CloseHandle(hMutex);
 
 	return TRUE;
-}
-
-// 停止通知イベントを作る
-
-BOOL CMainFrame::CreateQuitEvent(WORD wPort)
-{
-	TCHAR szName[MAX_PATH];
-
-	// 稼働中を示すミューテックスを先に確保する。
-	// --stop 側はこれが取れるかどうかで終了を判定する。
-	MakeRunMutexName(szName, _countof(szName), wPort);
-	m_hRunMutex = CreateMutex(NULL, TRUE, szName);
-	if (m_hRunMutex == NULL) {
-		return FALSE;
-	}
-	if (GetLastError() == ERROR_ALREADY_EXISTS) {
-		// 同じポートのサーバーが既に動いている
-		CloseHandle(m_hRunMutex);
-		m_hRunMutex = NULL;
-		return FALSE;
-	}
-
-	MakeQuitEventName(szName, _countof(szName), wPort);
-	m_hQuitEvent = CreateEvent(NULL, TRUE, FALSE, szName);
-	if (m_hQuitEvent == NULL) {
-		ReleaseMutex(m_hRunMutex);
-		CloseHandle(m_hRunMutex);
-		m_hRunMutex = NULL;
-		return FALSE;
-	}
-	return TRUE;
-}
-
-// 停止通知イベントを閉じる
-
-void CMainFrame::CloseQuitEvent(void)
-{
-	if (m_hQuitEvent) {
-		CloseHandle(m_hQuitEvent);
-		m_hQuitEvent = NULL;
-	}
-	// ミューテックスは最後に手放す。ここで --stop 側の待ちが解ける。
-	if (m_hRunMutex) {
-		ReleaseMutex(m_hRunMutex);
-		CloseHandle(m_hRunMutex);
-		m_hRunMutex = NULL;
-	}
-}
-
-// 停止通知イベントが立っているか
-
-BOOL CMainFrame::IsQuitEventSignaled(void)
-{
-	if (m_hQuitEvent == NULL) {
-		return FALSE;
-	}
-	return (WaitForSingleObject(m_hQuitEvent, 0) == WAIT_OBJECT_0) ? TRUE : FALSE;
 }
 
 // ウィンドウ位置を復元

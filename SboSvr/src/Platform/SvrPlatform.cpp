@@ -22,10 +22,15 @@
 #include <windows.h>
 #include <direct.h>
 #include <bcrypt.h>
+#include <mmsystem.h>
 #pragma comment(lib, "bcrypt.lib")
+#pragma comment(lib, "winmm.lib")
 #else
 #include <cerrno>
+#include <csignal>
 #include <cstdio>
+#include <fcntl.h>
+#include <sys/file.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -636,6 +641,429 @@ namespace SboPlatform
 		// PE のリソースという概念自体が非Windowsには無い。
 		// 呼び出し側は画像ストア(DB) / ファイル(res/) 等、前段のフォールバックで賄う。
 		return false;
+#endif
+	}
+
+	// ここから下はヘッドレスサーバーの多重起動防止と停止要求のやり取り。
+	// サーバーは1プロセスにつき1インスタンスしか動かさない前提なので、
+	// 状態はここ(無名 namespace)に file-static で持つ。
+
+	namespace
+	{
+#ifdef _WIN32
+		// 稼働中を示すミューテックスと停止通知イベント。
+		// 旧 CMainFrame::m_hRunMutex / m_hQuitEvent をそのまま移した。
+		HANDLE	g_hRunMutex = NULL;
+		HANDLE	g_hQuitEvent = NULL;
+
+		// InstallStopSignalHandler() に渡された関数。
+		// ConsoleCtrlHandlerThunk は別スレッドから呼ばれるため、
+		// ここに置いた関数ポインタ経由で呼び出す。
+		void	(*g_pfnRequestQuit)(void) = NULL;
+		bool	(*g_pfnIsQuitting)(void) = NULL;
+
+		// 停止通知イベント名を作る(ポートで区別する)
+		void	MakeQuitEventName(char *pszName, size_t nMax, unsigned short wPort)
+		{
+			_snprintf_s(pszName, nMax, _TRUNCATE, "SboSvr_Quit_%u", (unsigned int)wPort);
+		}
+
+		// 稼働中ミューテックス名を作る
+		void	MakeRunMutexName(char *pszName, size_t nMax, unsigned short wPort)
+		{
+			_snprintf_s(pszName, nMax, _TRUNCATE, "SboSvr_Running_%u", (unsigned int)wPort);
+		}
+
+		// コンソール終了シグナルの受け口(旧 CMainFrame::ConsoleCtrlHandler)
+		//
+		// 別スレッドで呼ばれるため、終了要求を立てるだけにする。停止処理
+		// (DB の書き戻しを含む)はメインスレッドが行うので、ここでは
+		// g_pfnIsQuitting() が完了を返すまで待つ。ここで返すと OS に
+		// プロセスを落とされ、DB の書き戻しが行われない。
+		BOOL WINAPI	ConsoleCtrlHandlerThunk(DWORD dwCtrlType)
+		{
+			switch (dwCtrlType) {
+			case CTRL_C_EVENT:
+			case CTRL_BREAK_EVENT:
+			case CTRL_CLOSE_EVENT:
+			case CTRL_LOGOFF_EVENT:
+			case CTRL_SHUTDOWN_EVENT:
+				if (g_pfnRequestQuit != NULL) {
+					g_pfnRequestQuit();
+				}
+				while ((g_pfnIsQuitting != NULL) && !g_pfnIsQuitting()) {
+					Sleep(50);
+				}
+				return TRUE;
+			}
+			return FALSE;
+		}
+
+		// マルチメディアタイマーの精度(BeginHighResolutionTimer で取得し、
+		// EndHighResolutionTimer で対にして返す)。
+		UINT	g_uTimerPeriodMin = 0;
+#else
+		// 単一インスタンス保証と停止要求の待ち合わせは、pid ファイルへの
+		// flock(2) で表現する。ロックが取れる = 誰も稼働していない、
+		// という対応関係が Windows のミューテックスと同じになる。
+		int	g_nPidFileFd = -1;
+
+		// SIGTERM(停止要求) を受けたかどうかのフラグ。
+		// シグナルハンドラ内で触れるのはこの型の変数への代入だけ、という
+		// 制約があるため sig_atomic_t にする。
+		volatile sig_atomic_t	g_bStopRequested = 0;
+
+		// InstallStopSignalHandler() に渡された関数(SIGINT で呼ぶ)
+		void	(*g_pfnRequestQuit)(void) = NULL;
+
+		// 旧 SIGTERM/SIGINT ハンドラの復元用
+		struct sigaction	g_oldSigTerm;
+		struct sigaction	g_oldSigInt;
+		bool	g_bSigTermInstalled = false;
+		bool	g_bSigIntInstalled = false;
+
+		void	StopRequestSignalHandler(int)
+		{
+			g_bStopRequested = 1;
+		}
+
+		void	QuitSignalHandler(int)
+		{
+			// POSIX はハンドラから戻ってきても OS にプロセスを落とされない
+			// ため、Windows 版のように完了を待つ必要が無い。
+			// (待つ処理は呼び出し側の IsStopRequested() 相当のポーリングに任せる)
+			if (g_pfnRequestQuit != NULL) {
+				g_pfnRequestQuit();
+			}
+		}
+
+		// pid ファイルのパスを組み立てる(SBODATA/sbosvr-<port>.pid)
+		std::string	MakePidFilePath(unsigned short wPort)
+		{
+			char szFileName[64];
+			std::snprintf(szFileName, sizeof(szFileName), "sbosvr-%u.pid", (unsigned int)wPort);
+			return MakeDataFilePath(szFileName);
+		}
+#endif
+	}
+
+	// サーバーの多重起動を防ぐロックを取得する
+
+	bool	AcquireServerInstanceLock(unsigned short wPort)
+	{
+#ifdef _WIN32
+		char szName[64];
+
+		// 稼働中を示すミューテックスを確保する。--stop 側はこれが
+		// 取れるかどうかで終了を判定する(WaitForServerExit)。
+		MakeRunMutexName(szName, sizeof(szName), wPort);
+		g_hRunMutex = CreateMutexA(NULL, TRUE, szName);
+		if (g_hRunMutex == NULL) {
+			return false;
+		}
+		if (GetLastError() == ERROR_ALREADY_EXISTS) {
+			// 同じポートのサーバーが既に動いている
+			CloseHandle(g_hRunMutex);
+			g_hRunMutex = NULL;
+			return false;
+		}
+		return true;
+#else
+		std::string strPath = MakePidFilePath(wPort);
+
+		int fd = open(strPath.c_str(), O_CREAT | O_RDWR, 0644);
+		if (fd < 0) {
+			return false;
+		}
+		if (flock(fd, LOCK_EX | LOCK_NB) != 0) {
+			// 取れなかった = 同じポートのサーバーが既に動いている
+			close(fd);
+			return false;
+		}
+
+		// 自分の pid を書いておく(SendStopRequest がここから読む)。
+		// ftruncate してから書くことで、前回の残骸より短い内容でも
+		// 古い末尾が残らないようにする。
+		char szPid[32];
+		int nLen = std::snprintf(szPid, sizeof(szPid), "%ld", (long)getpid());
+		if (ftruncate(fd, 0) == 0) {
+			lseek(fd, 0, SEEK_SET);
+			(void)write(fd, szPid, (size_t)nLen);
+		}
+
+		g_nPidFileFd = fd;
+		return true;
+#endif
+	}
+
+	// AcquireServerInstanceLock() で取得したロックを解放する
+
+	void	ReleaseServerInstanceLock(void)
+	{
+#ifdef _WIN32
+		if (g_hRunMutex != NULL) {
+			ReleaseMutex(g_hRunMutex);
+			CloseHandle(g_hRunMutex);
+			g_hRunMutex = NULL;
+		}
+#else
+		if (g_nPidFileFd >= 0) {
+			// close で flock は自動的に外れる。pid ファイル自体は
+			// unlink しない(他プロセスが同時に AcquireServerInstanceLock
+			// を試みている最中に消すと、そちらが新規作成したファイルではなく
+			// 自分がロックを取っていた実体を消してしまう競合があり得るため)。
+			// 残骸が残っても次回の判定は flock の可否だけで行うので無害。
+			close(g_nPidFileFd);
+			g_nPidFileFd = -1;
+		}
+#endif
+	}
+
+	// 停止要求の受け口を用意する(サーバー本体側で呼ぶ)
+
+	bool	OpenStopRequestChannel(unsigned short wPort)
+	{
+#ifdef _WIN32
+		char szName[64];
+
+		MakeQuitEventName(szName, sizeof(szName), wPort);
+		g_hQuitEvent = CreateEventA(NULL, TRUE, FALSE, szName);
+		return (g_hQuitEvent != NULL);
+#else
+		(void)wPort;
+		g_bStopRequested = 0;
+
+		struct sigaction sa;
+		std::memset(&sa, 0, sizeof(sa));
+		sa.sa_handler = StopRequestSignalHandler;
+		sigemptyset(&sa.sa_mask);
+		sa.sa_flags = 0;
+		if (sigaction(SIGTERM, &sa, &g_oldSigTerm) != 0) {
+			return false;
+		}
+		g_bSigTermInstalled = true;
+		return true;
+#endif
+	}
+
+	// OpenStopRequestChannel() で用意した受け口を閉じる
+
+	void	CloseStopRequestChannel(void)
+	{
+#ifdef _WIN32
+		if (g_hQuitEvent != NULL) {
+			CloseHandle(g_hQuitEvent);
+			g_hQuitEvent = NULL;
+		}
+#else
+		if (g_bSigTermInstalled) {
+			sigaction(SIGTERM, &g_oldSigTerm, NULL);
+			g_bSigTermInstalled = false;
+		}
+#endif
+	}
+
+	// 停止要求が来ているかを非ブロックで確認する
+
+	bool	IsStopRequested(void)
+	{
+#ifdef _WIN32
+		if (g_hQuitEvent == NULL) {
+			return false;
+		}
+		return (WaitForSingleObject(g_hQuitEvent, 0) == WAIT_OBJECT_0);
+#else
+		return (g_bStopRequested != 0);
+#endif
+	}
+
+	// 稼働中のサーバーへ停止を要求する(--stop 側で呼ぶ)
+
+	bool	SendStopRequest(unsigned short wPort)
+	{
+#ifdef _WIN32
+		char szName[64];
+
+		MakeQuitEventName(szName, sizeof(szName), wPort);
+		HANDLE hEvent = OpenEventA(EVENT_MODIFY_STATE, FALSE, szName);
+		if (hEvent == NULL) {
+			// 稼働中のヘッドレスサーバーが見つからない
+			return false;
+		}
+		SetEvent(hEvent);
+		CloseHandle(hEvent);
+		return true;
+#else
+		std::string strPath = MakePidFilePath(wPort);
+
+		int fd = open(strPath.c_str(), O_RDWR);
+		if (fd < 0) {
+			// pid ファイルが無い = 稼働中のサーバーが見つからない
+			return false;
+		}
+		if (flock(fd, LOCK_EX | LOCK_NB) == 0) {
+			// ロックが取れてしまった = 誰も稼働していない
+			flock(fd, LOCK_UN);
+			close(fd);
+			return false;
+		}
+
+		// 稼働中。ファイルから pid を読んで SIGTERM を送る。
+		char szPid[32];
+		std::memset(szPid, 0, sizeof(szPid));
+		ssize_t nRead = read(fd, szPid, sizeof(szPid) - 1);
+		close(fd);
+		if (nRead <= 0) {
+			return false;
+		}
+
+		pid_t nPid = (pid_t)std::atol(szPid);
+		if (nPid <= 0) {
+			return false;
+		}
+		kill(nPid, SIGTERM);
+		return true;
+#endif
+	}
+
+	// SendStopRequest() で要求した相手が終了するのを待つ(--stop 側で呼ぶ)
+
+	bool	WaitForServerExit(unsigned short wPort, unsigned int uTimeoutMs)
+	{
+#ifdef _WIN32
+		char szName[64];
+
+		// サーバーが手放すまで待つ。取得できた時点で相手は終了している。
+		MakeRunMutexName(szName, sizeof(szName), wPort);
+		HANDLE hMutex = OpenMutexA(SYNCHRONIZE, FALSE, szName);
+		if (hMutex == NULL) {
+			// 既に終了している
+			return true;
+		}
+
+		DWORD dwWait = WaitForSingleObject(hMutex, uTimeoutMs);
+		bool bExited = ((dwWait == WAIT_OBJECT_0) || (dwWait == WAIT_ABANDONED));
+		if (bExited) {
+			ReleaseMutex(hMutex);
+		}
+		CloseHandle(hMutex);
+		return bExited;
+#else
+		std::string strPath = MakePidFilePath(wPort);
+		unsigned int uElapsedMs = 0;
+
+		// ミューテックス待ちと同じ意味: 相手が flock を手放した(= 終了した)
+		// 時点でこちらがロックを取得できるようになる。取れたら即座に
+		// 手放し、成功として返す。
+		for (;;) {
+			int fd = open(strPath.c_str(), O_RDWR);
+			if (fd < 0) {
+				// pid ファイルが無い = 既に終了している
+				return true;
+			}
+			if (flock(fd, LOCK_EX | LOCK_NB) == 0) {
+				flock(fd, LOCK_UN);
+				close(fd);
+				return true;
+			}
+			close(fd);
+
+			if (uElapsedMs >= uTimeoutMs) {
+				return false;
+			}
+			unsigned int uSleepMs = 50;
+			if (uElapsedMs + uSleepMs > uTimeoutMs) {
+				uSleepMs = uTimeoutMs - uElapsedMs;
+			}
+			struct timespec ts;
+			ts.tv_sec = uSleepMs / 1000;
+			ts.tv_nsec = (long)(uSleepMs % 1000) * 1000000L;
+			nanosleep(&ts, NULL);
+			uElapsedMs += uSleepMs;
+		}
+#endif
+	}
+
+	// コンソール終了シグナルの受け口を設置する
+
+	void	InstallStopSignalHandler(void (*pfnRequestQuit)(void), bool (*pfnIsQuitting)(void))
+	{
+#ifdef _WIN32
+		g_pfnRequestQuit = pfnRequestQuit;
+		g_pfnIsQuitting = pfnIsQuitting;
+		SetConsoleCtrlHandler(&ConsoleCtrlHandlerThunk, TRUE);
+#else
+		(void)pfnIsQuitting;
+		g_pfnRequestQuit = pfnRequestQuit;
+
+		struct sigaction sa;
+		std::memset(&sa, 0, sizeof(sa));
+		sa.sa_handler = QuitSignalHandler;
+		sigemptyset(&sa.sa_mask);
+		sa.sa_flags = 0;
+		if (sigaction(SIGINT, &sa, &g_oldSigInt) == 0) {
+			g_bSigIntInstalled = true;
+		}
+#endif
+	}
+
+	// InstallStopSignalHandler() で設置したハンドラを外す
+
+	void	UninstallStopSignalHandler(void)
+	{
+#ifdef _WIN32
+		SetConsoleCtrlHandler(&ConsoleCtrlHandlerThunk, FALSE);
+		g_pfnRequestQuit = NULL;
+		g_pfnIsQuitting = NULL;
+#else
+		if (g_bSigIntInstalled) {
+			sigaction(SIGINT, &g_oldSigInt, NULL);
+			g_bSigIntInstalled = false;
+		}
+		g_pfnRequestQuit = NULL;
+#endif
+	}
+
+	// 親プロセスのコンソールへ接続する(あれば)
+
+	void	AttachParentConsole(void)
+	{
+#ifdef _WIN32
+		FILE *pFile;
+
+		if (AttachConsole(ATTACH_PARENT_PROCESS) == FALSE) {
+			return;
+		}
+		freopen_s(&pFile, "CONOUT$", "w", stdout);
+		freopen_s(&pFile, "CONOUT$", "w", stderr);
+#else
+		// 非Windows では標準出力/エラー出力は最初から親から継承されている。
+#endif
+	}
+
+	// 高分解能タイマーの利用を開始する
+
+	void	BeginHighResolutionTimer(void)
+	{
+#ifdef _WIN32
+		TIMECAPS tc;
+
+		timeGetDevCaps(&tc, sizeof(TIMECAPS));
+		timeBeginPeriod(tc.wPeriodMin);
+		g_uTimerPeriodMin = tc.wPeriodMin;
+#else
+		// POSIX の OS タイマーは元から高分解能なので何もしない。
+#endif
+	}
+
+	// BeginHighResolutionTimer() と対にして呼ぶ
+
+	void	EndHighResolutionTimer(void)
+	{
+#ifdef _WIN32
+		timeEndPeriod(g_uTimerPeriodMin);
+#else
+		// 何もしない(BeginHighResolutionTimer 参照)。
 #endif
 	}
 }
