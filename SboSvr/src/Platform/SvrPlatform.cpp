@@ -1066,4 +1066,15 @@ namespace SboPlatform
 		// 何もしない(BeginHighResolutionTimer 参照)。
 #endif
 	}
+
+	// 短時間 CPU を手放す(TimerProc の周回ペース調整用)
+
+	void	SleepMs(unsigned int uMs)
+	{
+#ifdef _WIN32
+		Sleep(uMs);
+#else
+		usleep(uMs * 1000);
+#endif
+	}
 }

@@ -110,6 +110,10 @@ private:
 	void	LoadWindowPos(HWND hWnd);	// ウィンドウ位置を復元(ウィンドウありのみ)
 	void	SaveWindowPos(HWND hWnd);	// ウィンドウ位置を保存(ウィンドウありのみ)
 
+	void	CreateStateFont(void);	// 状態表示用フォントを作成(コンストラクタから呼ぶ。GUI 実装は MainFrameWindow.cpp / MainFrameWindowNone.cpp)
+	void	DestroyStateFont(void);	// 状態表示用フォントを破棄(デストラクタから呼ぶ)
+	void	RefreshStateDisplay(void);	// 状態表示の再描画を要求する(ウィンドウが無ければ何もしない)
+
 	static	LRESULT CALLBACK WndProcEntry(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);	// メインウィンドウプロシージャ(エントリポイント)
 			LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);	// メインウィンドウプロシージャ
 	BOOL	OnCreate(HWND hWnd, LPCREATESTRUCT lpCreateStruct);	// メッセージハンドラ(WM_CREATE)

@@ -74,12 +74,19 @@ $PortableFiles = @(
     # MapPartsHandler.cpp: SboGrpData.dll のリソースを読む
     # LoadLibraryW/FindResourceW/LockResource/FreeLibrary を
     # SboPlatform::LoadEmbeddedPng() へ集約し、windows.h 直接依存を除去。
-    "SboSvr/src/Web/Handlers/SpriteSheetHandler.cpp"
+    "SboSvr/src/Web/Handlers/SpriteSheetHandler.cpp",
     # SpriteSheetHandler.cpp: 3段フォールバックの2段目(res/ 探索)が使っていた
     # GetModuleFileNameW/GetFileAttributesW/CreateFileW 等を、
     # SboPlatform::GetExeDirectory() + 標準 C の fopen/fread/fclose へ
     # 置き換え、windows.h 直接依存を除去(3段目の DLL リソース読み込みは
     # 既に SboPlatform::LoadEmbeddedPng() へ隔離済み)。
+    "SboSvr/src/MainFrame/MainFrame.cpp",
+    "SboSvr/src/MainFrame/MainFrameWindowNone.cpp"
+    # MainFrame.cpp: GDI/USER32 の実装(ウィンドウ作成・メッセージポンプ・
+    # 状態表示の描画)を MainFrameWindow.cpp(Windows専用)/
+    # MainFrameWindowNone.cpp(非Windows用の何もしない版)へ切り出し、
+    # CreateStateFont()/DestroyStateFont()/RefreshStateDisplay() の3つの
+    # 継ぎ目経由で呼ぶ形にして windows.h 直接依存を除去。
 )
 
 # 移植済みとして扱うヘッダ

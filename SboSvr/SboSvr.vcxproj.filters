@@ -510,6 +510,12 @@
     <ClCompile Include="src\MainFrame\MainFrame.cpp">
       <Filter>Source Files\MainFrame</Filter>
     </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameWindow.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainFrame\MainFrameWindowNone.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
     <ClCompile Include="src\MainFrame\MainFrameRecvProcACCOUNT.cpp">
       <Filter>Source Files\MainFrame</Filter>
     </ClCompile>

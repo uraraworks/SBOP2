@@ -257,4 +257,15 @@ namespace SboPlatform
 
 	/// BeginHighResolutionTimer() と対にして呼ぶ
 	void	EndHighResolutionTimer(void);
+
+	/// 短時間 CPU を手放す(TimerProc の周回ペース調整用)
+	///
+	/// 従来は MsgWaitForMultipleObjects(0, NULL, FALSE, 1, QS_ALLINPUT) で
+	/// 「最大 uMs だけ待つ、ウィンドウメッセージが来れば早く戻る」という
+	/// 挙動にしていたが、ここは待ち行列を待つ意味は薄く(呼び出し側は
+	/// 戻り値を見ておらず、次の周回で PeekMessage が改めて拾う)、
+	/// 実質は CPU を使い切らないための一時停止だったため、単純な
+	/// スリープに置き換える。Windows は Sleep()、非Windows は
+	/// usleep()/nanosleep() 相当を使う。
+	void	SleepMs(unsigned int uMs);
 }

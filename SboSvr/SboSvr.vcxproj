@@ -254,6 +254,11 @@
     <ClCompile Include="src\LibInfo\LibInfoCharSvrMapEvent.cpp" />
     <ClCompile Include="src\LibInfo\LibInfoCharSvrSkill.cpp" />
     <ClCompile Include="src\MainFrame\MainFrame.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameWindow.cpp" />
+    <ClCompile Include="src\MainFrame\MainFrameWindowNone.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\MainFrame\MainFrameRecvProcACCOUNT.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcADMIN.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcBATTLE.cpp" />
