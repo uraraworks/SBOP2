@@ -6,10 +6,18 @@
 
 #pragma once
 
-#if defined(_WIN32)
+#if defined(_WIN32) && defined(_AFX)
+// MFC プロジェクト (SboLaunch / Tool/MakeFileList / SboCliAdminMfc) は
+// afxwin.h 経由で MFC 自前の CString を使うため、従来どおり ATL を使わせる。
+// これらは現在ビルド対象外 (docs/native-client-freeze.md) だが、
+// 「戻せる」ことを保証するためコード・依存関係は変更しない。
 #include <atlbase.h>
 #include <atlstr.h>
 #include <atlconv.h>
+#elif defined(_WIN32)
+// 非 MFC の Windows ビルド (SboSvr / SboSvrTest / myLib 等) は
+// 脱 ATL のため CStringCompat.h の CStringTCompat を CString/CStringA として使う。
+#include "../Platform/CStringCompat.h"
 #endif
 
 #include <string>

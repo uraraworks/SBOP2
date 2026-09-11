@@ -48,6 +48,8 @@ ID 対応の正本である。
 
 MFC の現役ユーザーが `SboLaunch` と `MakeFileList` だけだったため、**MFC 依存が消えた**。合わせて SDL2 / Audiere.lib / libpng.lib への依存も実質消える。脱ATL、さらには脱 Visual Studio が現実的な射程に入った。
 
+**脱ATL は同日に実施した**（詳細は `docs/sbosvr-dewindows-plan.md` の「脱ATL」節）。ビルド対象のプロジェクトはすべて ATL 非依存になった。MFC プロジェクトを戻す場合は、`myString.h` が `_AFX` を見て従来どおり ATL を読むので、そのままで動く。
+
 ## 戻し方
 
 1. `SBO.sln` に削除した `Build.0` 行を書き戻す。

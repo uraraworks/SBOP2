@@ -100,6 +100,7 @@
     <ClCompile Include="TestSvrPlatform.cpp" />
     <ClCompile Include="TestWebSocketProtocol.cpp" />
     <ClCompile Include="TestStaticFileHandler.cpp" />
+    <ClCompile Include="TestMyString.cpp" />
     <ClCompile Include="..\SboSvr\src\Platform\SvrPlatform.cpp" />
     <ClCompile Include="..\Common\Platform\PlatformPath.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>

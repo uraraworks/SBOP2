@@ -712,6 +712,58 @@ pid ファイルへの `flock` の可否ひとつに過不足なく対応する�
 **`--stop` とウィンドウ描画は「コンパイルが通った」では何も保証できない箇所なので、
 必ず実際に起動して確認すること。**
 
+### 脱ATL（2026-09-11）
+
+ネイティブ版クライアントと MFC を使うツールをビルド対象から外した
+（`docs/native-client-freeze.md`）ことで、ATL を置き換える障害が無くなった。
+
+**ATL への依存は驚くほど小さかった。** include しているのは `Common/myLib/myString.h` の
+1箇所だけで、使っているのは `CString` / `CStringA` のみ。変換マクロ（`CT2A` 等）や
+他の ATL 型、ATL 固有 API（`GetBufferSetLength` 等）は一切使っていなかった。
+置き換え先の `Common/Platform/CStringCompat.h`（`CStringTCompat`）は、非Windows と
+ブラウザ版で既に本番稼働しており、`_WIN32` 分岐まで内蔵していた。typedef が
+`#if !defined(_WIN32)` で囲まれていて Windows だけ使われていなかった、というのが実態。
+
+- `myString.h` は **MFC プロジェクト（`_AFX` 定義）だけ従来どおり ATL を include** し、
+  それ以外は `CStringCompat.h` を読む。MFC は `afxwin.h` 経由で自前の `CString` を持つためで、
+  ビルド対象外の MFC プロジェクトを「戻せる」状態に保つため。
+- `CStringCompat.h` の typedef のガードは `!defined(_WIN32)` → `!defined(_AFX)`。
+- `CStringTCompat` 同士の `operator==` / `!=` を追加した。暗黙変換だけだと MSVC で
+  オーバーロード解決が曖昧（C2666）になる。ATL の `CStringT` にもある演算子。
+
+**置き換えで「黙って壊れる」箇所が2つあった。** どちらもコンパイルは通るので要注意。
+
+1. **`CString` をキャストせずに可変長引数へ渡す書き方**（`Format(_T("%s"), str)`）。
+   ATL だけは内部構造の都合で偶然動くが、置き換え先ではゴミが出る。ただし **clang は
+   これをコンパイルエラーにする**ので、em++ で通っている .cpp は安全が証明済み。
+   MSVC だけがビルドする `MainFrameWindow.cpp` は目視で確認した（整数しか渡していない）。
+2. **`Format` の結果が 4096 文字を超えると空文字列になる。** 置き換え先の Windows 分岐が、
+   長さを測るのに 4096 文字の一時バッファ＋`_TRUNCATE` を使っていたため。ATL は無制限。
+   `_vscwprintf` で正確な長さを測るよう修正した。
+
+**手順はパスワードハッシュのときと同じく「テスト先行」にした。** 置き換える前に、今の ATL
+の挙動を `SboSvrTest/TestMyString.cpp`（15本）に固定し、ATL のまま全部通ることを確認してから
+置き換えた。日本語の UTF-8／CP932 変換、`Format`、5000文字の長い文字列などを含む。
+**上記2の修正を一時的に外すと、`Format_5000文字以上のワイド文字列` が
+「期待 5014 / 実際 0」で落ちる**ことも確認した（テストが実際に回帰を捕まえられる証明）。
+
+非Windows（musl/Emscripten）側の同じ 4096 文字制限は**残っている**。ブラウザ版の既存挙動で、
+今回は触っていない。
+
+検証結果:
+
+| 対象 | 結果 |
+|---|---|
+| SboSvrTest | **100 / 0**（既存85本＋新規15本） |
+| `SBO.sln` の Debug ビルド | exit 0・エラー 0（myLib / SboGrpData / SboSockLib / SboSvr） |
+| 移植チェック | 40 / 0 |
+| ブラウザ版ビルド | 成功（`CStringCompat.h` を触ったため全再コンパイル） |
+| 実機 | `--headless` 起動 → `--stop` で exit 0・プロセス消滅 |
+| ATL の include | `myString.h` の MFC 分岐の3行だけ |
+
+**これでビルド対象のプロジェクトはすべて ATL 非依存になった。** Windows で VS 無しに
+ビルドするための残りは、`zlib.lib`（MSVC ビルド済みバイナリ）と `*_s` 系関数、`.rc` の3点。
+
 ### 次にやること（2026-09-11 更新）
 
 **移植作業は完了した。** em++ を通らないのは `MainFrameWindow.cpp` と

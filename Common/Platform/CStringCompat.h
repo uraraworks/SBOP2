@@ -122,6 +122,19 @@ public:
 		return !(*this == pszSrc);
 	}
 
+	// CStringTCompat 同士の比較。operator const TChar*() 経由の暗黙変換だけだと
+	// オーバーロード解決が曖昧 (C2666) になるため明示的に用意する
+	// (ATL の CStringT も CStringT 同士の operator== を持つ)。
+	bool operator ==(const CStringTCompat &strSrc) const
+	{
+		return Compare(strSrc) == 0;
+	}
+
+	bool operator !=(const CStringTCompat &strSrc) const
+	{
+		return !(*this == strSrc);
+	}
+
 	operator const TChar *() const
 	{
 		return m_data.c_str();
@@ -376,9 +389,11 @@ private:
 		// MSVC では vswprintf の引数順が異なるため _vsnwprintf_s を使用
 		int nRet;
 		if (pszDst == NULL || nDstCount == 0) {
-			// サイズ計算用: 十分大きなバッファで試す
-			wchar_t tmp[4096];
-			nRet = _vsnwprintf_s(tmp, _countof(tmp), _TRUNCATE, pszFormat, argCopy);
+			// サイズ計算用: 固定長の一時バッファで測ると 4096文字を超える
+			// 結果は _TRUNCATE により -1 になり FormatV が空文字列にしてしまう
+			// (ATL の CString::Format は無制限長のため、ここは黙って壊れる)。
+			// _vscwprintf は実際に書き込む文字数を正確に返すのでこれを使う。
+			nRet = _vscwprintf(pszFormat, argCopy);
 		} else {
 			nRet = _vsnwprintf_s(pszDst, nDstCount, _TRUNCATE, pszFormat, argCopy);
 		}
@@ -405,8 +420,10 @@ private:
 };
 
 // CString は wchar_t 版、CStringA は char 版
-// Windows では ATL (atlstr.h) が CString/CStringA を提供するため typedef 不要
-#if !defined(_WIN32)
+// MFC プロジェクト (_AFX 定義) では afxwin.h 経由の MFC 自前 CString/CStringA を
+// 使うため typedef 不要。それ以外 (非Windows、および脱ATL後の Windows 非MFC
+// ビルド) はここで CStringTCompat を CString/CStringA として提供する。
+#if !defined(_AFX)
 typedef CStringTCompat<wchar_t> CString;
 typedef CStringTCompat<char> CStringA;
 #endif
