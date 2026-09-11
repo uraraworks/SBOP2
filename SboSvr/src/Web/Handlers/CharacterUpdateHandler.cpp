@@ -334,6 +334,21 @@ std::string BuildMovementJson(const CInfoCharBase *pChar)
         return oss.str();
 }
 
+// NPC発生設定 JSON を構築する
+std::string BuildNpcSpawnJson(const CInfoCharBase *pChar)
+{
+        std::ostringstream oss;
+        oss << '{';
+        oss << "\"putCycle\":"     << pChar->m_dwPutCycle   << ',';
+        oss << "\"putMoveType\":"  << pChar->m_nPutMoveType << ',';
+        oss << "\"maxPutCount\":"  << pChar->m_nMaxPutCount << ',';
+        oss << "\"putAverage\":"   << pChar->m_nPutAverage  << ',';
+        oss << "\"putAreaX\":"     << pChar->m_ptPutArea.x  << ',';
+        oss << "\"putAreaY\":"     << pChar->m_ptPutArea.y;
+        oss << '}';
+        return oss.str();
+}
+
 } // namespace
 
 // ---------------------------------------------------------------------------
@@ -381,6 +396,8 @@ void CCharacterUpdateHandler::Handle(const HttpRequest &request, HttpResponse &r
                 HandleGraphics(request, response, nCharId);
         } else if (subResource == "movement") {
                 HandleMovement(request, response, nCharId);
+        } else if (subResource == "npc-spawn") {
+                HandleNpcSpawn(request, response, nCharId);
         } else if (subResource == "account") {
                 HandleAccount(request, response, nCharId);
         } else if (subResource == "admin") {
@@ -797,6 +814,92 @@ void CCharacterUpdateHandler::HandleMovement(const HttpRequest &request, HttpRes
         }
 
         std::string json = BuildMovementJson(pChar);
+        pCharLib->Leave();
+
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(json);
+}
+
+// ---------------------------------------------------------------------------
+// NPC発生設定更新  PUT /api/characters/{charId}/npc-spawn
+// ---------------------------------------------------------------------------
+
+void CCharacterUpdateHandler::HandleNpcSpawn(const HttpRequest &request, HttpResponse &response, int nCharId)
+{
+        CLibInfoCharSvr *pCharLib = m_pMgrData->GetLibInfoChar();
+        if (pCharLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        // 事前バリデーション（負値・範囲外は 400）
+        int nCheck = 0;
+        if (JsonUtils::TryGetInt(request.body, "putCycle", nCheck) && nCheck < 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_putCycle\"}");
+                return;
+        }
+        if (JsonUtils::TryGetInt(request.body, "putMoveType", nCheck) &&
+            (nCheck < 0 || nCheck >= CHARMOVETYPE_MAX)) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_putMoveType\"}");
+                return;
+        }
+        if (JsonUtils::TryGetInt(request.body, "maxPutCount", nCheck) && nCheck < 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_maxPutCount\"}");
+                return;
+        }
+        if (JsonUtils::TryGetInt(request.body, "putAverage", nCheck) &&
+            (nCheck < 0 || nCheck > 100)) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_putAverage\"}");
+                return;
+        }
+        if (JsonUtils::TryGetInt(request.body, "putAreaX", nCheck) && nCheck < 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_putAreaX\"}");
+                return;
+        }
+        if (JsonUtils::TryGetInt(request.body, "putAreaY", nCheck) && nCheck < 0) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_putAreaY\"}");
+                return;
+        }
+
+        pCharLib->Enter();
+
+        CInfoCharBase *pChar = FindChar(pCharLib, nCharId);
+        if (pChar == NULL) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"not_found\"}");
+                return;
+        }
+
+        int nVal = 0;
+
+        if (JsonUtils::TryGetInt(request.body, "putCycle", nVal)) {
+                pChar->m_dwPutCycle = static_cast<DWORD>(nVal);
+        }
+        if (JsonUtils::TryGetInt(request.body, "putMoveType", nVal)) {
+                pChar->m_nPutMoveType = nVal;
+        }
+        if (JsonUtils::TryGetInt(request.body, "maxPutCount", nVal)) {
+                pChar->m_nMaxPutCount = nVal;
+        }
+        if (JsonUtils::TryGetInt(request.body, "putAverage", nVal)) {
+                pChar->m_nPutAverage = nVal;
+        }
+        if (JsonUtils::TryGetInt(request.body, "putAreaX", nVal)) {
+                pChar->m_ptPutArea.x = nVal;
+        }
+        if (JsonUtils::TryGetInt(request.body, "putAreaY", nVal)) {
+                pChar->m_ptPutArea.y = nVal;
+        }
+
+        std::string json = BuildNpcSpawnJson(pChar);
         pCharLib->Leave();
 
         response.statusLine = "HTTP/1.1 200 OK";

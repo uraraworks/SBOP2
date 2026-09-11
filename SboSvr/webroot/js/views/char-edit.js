@@ -9,6 +9,7 @@
  *   PUT  /api/characters/{charId}/equipment
  *   PUT  /api/characters/{charId}/graphics
  *   PUT  /api/characters/{charId}/movement
+ *   PUT  /api/characters/{charId}/npc-spawn
  *   GET/POST/DELETE /api/characters/{charId}/items[/{slot}]
  *   GET/POST/DELETE /api/characters/{charId}/skills[/{slot}]
  *   GET  /api/characters/{charId}/account
@@ -1002,7 +1003,7 @@ function buildMovementTab() {
 }
 
 // ----------------------------------------------------------------
-// タブパネル: NPC発生（読み取り専用）
+// タブパネル: NPC発生
 // ----------------------------------------------------------------
 
 function buildNpcSpawnTab() {
@@ -1010,25 +1011,36 @@ function buildNpcSpawnTab() {
   panel.id = "ce-tab-npcspawn";
   panel.style.display = "none";
 
-  var dl = mkEl("dl", "detail-list");
-  panel.appendChild(dl);
+  var fb = mkEl("p", "form-feedback");
+  fb.setAttribute("aria-live", "polite");
+  panel.appendChild(fb);
 
-  var spanMap = {};
+  var form = mkEl("form", "edit-form");
+  form.id = "ce-npcspawn-form";
+  panel.appendChild(form);
+
+  var grid = mkEl("div", "form-grid");
+  form.appendChild(grid);
+
+  var inputs = {};
   var spawnFields = [
     ["putCycle","発生周期"],["putMoveType","発生させる移動種別"],
     ["maxPutCount","同時発生数"],["putAverage","発生確率"],
     ["putAreaX","発生範囲X"],["putAreaY","発生範囲Y"],
   ];
   spawnFields.forEach(function (pair) {
-    var div = mkEl("div");
-    var dt = mkEl("dt", "", pair[1]);
-    var dd = mkEl("dd", "", "-");
-    div.append(dt, dd);
-    dl.appendChild(div);
-    spanMap[pair[0]] = dd;
+    var f = mkNumField(pair[1]);
+    grid.appendChild(f.wrap);
+    inputs[pair[0]] = f.inp;
   });
 
-  return { panel, spanMap };
+  var actions = mkEl("div", "form-actions");
+  var saveBtn = mkEl("button", "button primary", "保存");
+  saveBtn.type = "submit";
+  actions.appendChild(saveBtn);
+  form.appendChild(actions);
+
+  return { panel, fb, form, inputs, saveBtn };
 }
 
 // ----------------------------------------------------------------
@@ -1370,13 +1382,7 @@ export function mount(container) {
     // NPC発生
     if (d.npcSpawn) {
       var ns = d.npcSpawn;
-      var ss = npcSpawnTab.spanMap;
-      if (ss.putCycle)    { ss.putCycle.textContent = String(ns.putCycle ?? "-"); }
-      if (ss.putMoveType) { ss.putMoveType.textContent = String(ns.putMoveType ?? "-"); }
-      if (ss.maxPutCount) { ss.maxPutCount.textContent = String(ns.maxPutCount ?? "-"); }
-      if (ss.putAverage)  { ss.putAverage.textContent = String(ns.putAverage ?? "-"); }
-      if (ss.putAreaX)    { ss.putAreaX.textContent = String(ns.putAreaX ?? "-"); }
-      if (ss.putAreaY)    { ss.putAreaY.textContent = String(ns.putAreaY ?? "-"); }
+      Object.keys(npcSpawnTab.inputs).forEach(function (k) { setNumInp(npcSpawnTab.inputs[k], ns[k]); });
     }
   }
 
@@ -1529,6 +1535,40 @@ export function mount(container) {
     } catch (err) {
       console.error("char-edit movement save error", err);
       setFb(movementTab.fb, "通信エラーが発生しました", "error");
+    }
+  });
+
+  // ----------------------------------------------------------------
+  // NPC発生 保存
+  // ----------------------------------------------------------------
+  npcSpawnTab.form.addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    if (!currentCharId) { setFb(npcSpawnTab.fb, "先にキャラクターを表示してください", "error"); return; }
+    if (npcSpawnTab.saveBtn.disabled) { return; }
+
+    var body = {};
+    Object.keys(npcSpawnTab.inputs).forEach(function (k) {
+      var v = numVal(npcSpawnTab.inputs[k]);
+      if (v !== null) { body[k] = v; }
+    });
+
+    npcSpawnTab.saveBtn.disabled = true;
+    setFb(npcSpawnTab.fb, "保存中...", "");
+
+    try {
+      var { response, data } = await putJson("/api/characters/" + currentCharId + "/npc-spawn", body);
+      if (!response.ok) {
+        var msg = (data && data.error) ? data.error : "保存に失敗しました";
+        setFb(npcSpawnTab.fb, "エラー: " + msg, "error");
+        return;
+      }
+      setFb(npcSpawnTab.fb, "保存しました", "success");
+      await doFetchChar(currentCharId);
+    } catch (err) {
+      console.error("char-edit npc-spawn save error", err);
+      setFb(npcSpawnTab.fb, "通信エラーが発生しました", "error");
+    } finally {
+      npcSpawnTab.saveBtn.disabled = false;
     }
   });
 

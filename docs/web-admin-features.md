@@ -94,7 +94,7 @@ Web 管理画面は、SboSvr が提供する REST API（`/api/...`）をブラ�
 
 ### 2. 敵スポーナー/NPC 配置
 
-**結論: GUIで完結する。** スポーナーの設定はキャラ情報画面（char-edit.js）の「NPC発生」タブで編集・保存できる（実機確認済み）。
+**結論: 保存可（`PUT /api/characters/{id}/npc-spawn`、2026-09-11 実装）。** キャラ情報画面（char-edit.js）の「NPC発生」タブは数値入力フォームに変更し、`CharacterUpdateHandler.cpp` の `HandleNpcSpawn` が `m_dwPutCycle`/`m_nPutMoveType`/`m_nMaxPutCount`/`m_nPutAverage`/`m_ptPutArea` を更新する。これらは既存の SaveLoadInfoChar 経路（DB カラム `PutCycle` 等）でサーバー停止時に書き戻される。
 
 - **スポーナーのパラメータ**は `char-edit.js`「NPC発生」タブで設定: 発生周期(putCycle)・発生させる移動種別(putMoveType)・同時発生数(maxPutCount)・発生確率(putAverage)・発生範囲X/Y(putAreaX/Y)。`buildNpcSpawnTab()` 参照。サーバ側の `CHARMOVETYPE_PUTNPC` / `m_ptPutArea` 等に対応。
 - つまり「親キャラ＝スポーナー」をキャラ情報画面で作り、発生範囲・周期・湧き数・発生させる敵の移動種別を指定すれば、範囲湧きが成立する。
