@@ -149,7 +149,9 @@
     <ClCompile Include="..\Common\Lib\TextInput.cpp" />
     <ClCompile Include="..\Common\myLib\myString.cpp" />
     <ClCompile Include="..\Common\SBOGlobal.cpp" />
-    <ClCompile Include="..\Common\Platform\PlatformPath.cpp" />
+    <ClCompile Include="..\Common\Platform\PlatformPath.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="SboCopy.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
