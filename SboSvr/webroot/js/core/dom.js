@@ -66,3 +66,43 @@ export function qs(selector, root = document) {
 export function qsa(selector, root = document) {
   return Array.from(root.querySelectorAll(selector));
 }
+
+const BUSY_LABEL = new WeakMap();
+
+/**
+ * ボタンを押した非同期処理を実行中は disabled にし、文言を「保存中…」等に差し替える。
+ * 実行中の二重クリックは無視する(同じボタンで実行中なら何もしない)。
+ * @template T
+ * @param {HTMLButtonElement} button
+ * @param {() => Promise<T>} asyncFn
+ * @param {{ busyText?: string }} [options]  busyText 省略時は "保存中…"
+ * @returns {Promise<T|undefined>}  二重実行で無視した場合は undefined
+ */
+export async function withBusy(button, asyncFn, options = {}) {
+  if (!button) {
+    return asyncFn();
+  }
+  if (button.dataset.busy === "1") {
+    // 実行中の二重クリック防止
+    return undefined;
+  }
+  const busyText = options.busyText ?? "保存中…";
+  button.dataset.busy = "1";
+  const wasDisabled = button.disabled;
+  if (!BUSY_LABEL.has(button)) {
+    BUSY_LABEL.set(button, button.textContent);
+  }
+  button.disabled = true;
+  button.textContent = busyText;
+  try {
+    return await asyncFn();
+  } finally {
+    delete button.dataset.busy;
+    button.disabled = wasDisabled;
+    const originalText = BUSY_LABEL.get(button);
+    if (originalText != null) {
+      button.textContent = originalText;
+    }
+    BUSY_LABEL.delete(button);
+  }
+}

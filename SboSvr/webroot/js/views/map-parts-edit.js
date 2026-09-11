@@ -7,6 +7,8 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { withBusy } from "../core/dom.js";
+import { showSuccessToast, showErrorToast } from "../components/toast.js";
 import { fetchMapPartsData, invalidateMapPartsData } from "../data/map-parts-data.js";
 import { createSpriteField } from "../components/sprite-picker.js";
 import { createDragList } from "../components/drag-list.js";
@@ -632,45 +634,51 @@ function buildPartsUI(container, opts) {
     if (!_selectedItem) return;
     const detailEl = detailBody.querySelector(".map-parts-edit-detail");
     if (!detailEl?._collectData) { alert("フォームが見つかりません"); return; }
-    try {
-      await _onSave(_selectedItem, detailEl._collectData());
-      setDirty(false);
-      const savedId = _selectedItem.partsId;
-      await load();
-      const found = _allItems.find((i) => i.partsId === savedId) ?? null;
-      _selectedItem = found;
-      renderDetail(found);
-      renderPalette();
-    } catch (err) {
-      alert("保存に失敗しました: " + String(err?.message ?? err));
-    }
+    await withBusy(btnSave, async () => {
+      try {
+        await _onSave(_selectedItem, detailEl._collectData());
+        setDirty(false);
+        const savedId = _selectedItem.partsId;
+        await load();
+        const found = _allItems.find((i) => i.partsId === savedId) ?? null;
+        _selectedItem = found;
+        renderDetail(found);
+        renderPalette();
+      } catch (err) {
+        showErrorToast("保存に失敗しました", String(err?.message ?? err));
+      }
+    });
   });
 
   btnDelete.addEventListener("click", async () => {
     if (!_selectedItem || !confirm("この項目を削除しますか?")) return;
-    try {
-      await _onDelete(_selectedItem);
-      _selectedItem = null;
-      setDirty(false);
-      await load();
-      showListPane();
-    } catch (err) {
-      alert("削除に失敗しました: " + String(err?.message ?? err));
-    }
+    await withBusy(btnDelete, async () => {
+      try {
+        await _onDelete(_selectedItem);
+        _selectedItem = null;
+        setDirty(false);
+        await load();
+        showListPane();
+      } catch (err) {
+        showErrorToast("削除に失敗しました", String(err?.message ?? err));
+      }
+    });
   });
 
   btnNew.addEventListener("click", async () => {
     if (_dirty && !confirm("未保存の変更があります。破棄して新規作成しますか?")) return;
-    try {
-      const newId = await _onCreate();
-      await load();
-      if (newId != null) {
-        const found = _allItems.find((i) => i.partsId === newId) ?? _allItems[_allItems.length - 1];
-        if (found) selectItem(found);
+    await withBusy(btnNew, async () => {
+      try {
+        const newId = await _onCreate();
+        await load();
+        if (newId != null) {
+          const found = _allItems.find((i) => i.partsId === newId) ?? _allItems[_allItems.length - 1];
+          if (found) selectItem(found);
+        }
+      } catch (err) {
+        showErrorToast("新規作成に失敗しました", String(err?.message ?? err));
       }
-    } catch (err) {
-      alert("新規作成に失敗しました: " + String(err?.message ?? err));
-    }
+    });
   });
 
   // ---- データ読み込み ----
@@ -722,7 +730,7 @@ export function mount(container) {
         throw new Error(msg);
       }
       invalidateMapPartsData();
-      showFeedback(container, "保存しました", "success");
+      showSuccessToast("保存しました");
     },
 
     onCreate: async () => {
@@ -746,7 +754,7 @@ export function mount(container) {
         throw new Error(msg);
       }
       invalidateMapPartsData();
-      showFeedback(container, `パーツ ${data?.partsId ?? ""} を追加しました`, "success");
+      showSuccessToast(`パーツ ${data?.partsId ?? ""} を追加しました`);
       return data?.partsId ?? null;
     },
 
@@ -762,7 +770,7 @@ export function mount(container) {
         throw new Error(msg);
       }
       invalidateMapPartsData();
-      showFeedback(container, `パーツ ${part.partsId} を削除しました`, "success");
+      showSuccessToast(`パーツ ${part.partsId} を削除しました`);
     },
   });
 
@@ -857,18 +865,21 @@ export async function openPartsDetail(partsId, options) {
     });
 
     btnSave.addEventListener("click", async () => {
-      const payload = formEl._collectData();
-      const { response, data } = await fetchJson("/api/maps/parts", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+      await withBusy(btnSave, async () => {
+        const payload = formEl._collectData();
+        const { response, data } = await fetchJson("/api/maps/parts", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          showErrorToast("保存に失敗しました", data?.error ?? `HTTP ${response.status}`);
+          return;
+        }
+        invalidateMapPartsData();
+        showSuccessToast("保存しました");
+        close({ saved: true, partsId });
       });
-      if (!response.ok) {
-        alert("保存に失敗しました: " + (data?.error ?? `HTTP ${response.status}`));
-        return;
-      }
-      invalidateMapPartsData();
-      close({ saved: true, partsId });
     });
   });
 }

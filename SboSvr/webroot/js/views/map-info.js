@@ -9,6 +9,8 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { withBusy } from "../core/dom.js";
+import { showSuccessToast, showErrorToast } from "../components/toast.js";
 
 export function mount(container) {
   container.innerHTML = `
@@ -129,6 +131,7 @@ export function mount(container) {
   const detailSection       = container.querySelector("#map-info-detail-section");
   const backBtn             = container.querySelector("#map-info-back-btn");
   const cancelBtn           = container.querySelector("#map-info-cancel-btn");
+  const saveBtn             = container.querySelector("#map-info-save-btn");
 
   const state = {
     maps: [],
@@ -254,25 +257,29 @@ export function mount(container) {
     if (battleCheck)   { payload.battleEnabled   = battleCheck.checked; }
     if (recoveryCheck) { payload.recoveryEnabled = recoveryCheck.checked; }
 
-    setDetailFeedback("保存中...", null);
-    try {
-      const { response, data } = await fetchJson("/api/maps", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      if (!response.ok || !data || !data.id) {
-        throw new Error((data && data.error) ? data.error : `HTTP ${response.status}`);
+    setDetailFeedback("", null);
+    await withBusy(saveBtn, async () => {
+      try {
+        const { response, data } = await fetchJson("/api/maps", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!response.ok || !data || !data.id) {
+          throw new Error((data && data.error) ? data.error : `HTTP ${response.status}`);
+        }
+        const idx = state.maps.findIndex((m) => m.id === data.id);
+        if (idx >= 0) { state.maps[idx] = data; }
+        showSuccessToast("保存しました");
+        renderTable();
+        // 保存後に一覧に戻る
+        setTimeout(() => { showListSection(); }, 600);
+      } catch (err) {
+        const message = `保存に失敗しました: ${err.message}`;
+        setDetailFeedback(message, "error");
+        showErrorToast("保存に失敗しました", err.message);
       }
-      const idx = state.maps.findIndex((m) => m.id === data.id);
-      if (idx >= 0) { state.maps[idx] = data; }
-      setDetailFeedback("保存しました", "success");
-      renderTable();
-      // 保存後に一覧に戻る
-      setTimeout(() => { showListSection(); }, 600);
-    } catch (err) {
-      setDetailFeedback(`保存に失敗しました: ${err.message}`, "error");
-    }
+    });
   }
 
   function refreshCopySelect() {
@@ -292,26 +299,29 @@ export function mount(container) {
 
   async function createMap() {
     const copyFromMapId = copySelect ? parseInt(copySelect.value, 10) || 0 : 0;
-    setFeedback("作成中...", null);
-    try {
-      const { response, data } = await fetchJson("/api/maps", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ copyFromMapId })
-      });
-      if (!response.ok || !data || !data.id) {
-        throw new Error((data && data.error) ? data.error : `HTTP ${response.status}`);
+    setFeedback("", null);
+    await withBusy(addConfirmBtn, async () => {
+      try {
+        const { response, data } = await fetchJson("/api/maps", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ copyFromMapId })
+        });
+        if (!response.ok || !data || !data.id) {
+          throw new Error((data && data.error) ? data.error : `HTTP ${response.status}`);
+        }
+        state.maps = [];
+        state.loadError = null;
+        await loadData(true);
+        if (addArea) { addArea.style.display = "none"; }
+        showSuccessToast(`マップ ID[${data.id}] を作成しました`);
+        // 作成後、新しいマップの詳細を開く
+        showDetailSection(data.id);
+      } catch (err) {
+        setFeedback(`作成に失敗しました: ${err.message}`, "error");
+        showErrorToast("作成に失敗しました", err.message);
       }
-      state.maps = [];
-      state.loadError = null;
-      await loadData(true);
-      if (addArea) { addArea.style.display = "none"; }
-      setFeedback(`マップ ID[${data.id}] を作成しました`, "success");
-      // 作成後、新しいマップの詳細を開く
-      showDetailSection(data.id);
-    } catch (err) {
-      setFeedback(`作成に失敗しました: ${err.message}`, "error");
-    }
+    }, { busyText: "作成中…" });
   }
 
   // イベント登録

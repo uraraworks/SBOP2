@@ -8,6 +8,8 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { withBusy } from "../core/dom.js";
+import { showSuccessToast, showErrorToast } from "../components/toast.js";
 
 // ----------------------------------------------------------------
 // ロール UI 共通ヘルパ
@@ -141,6 +143,7 @@ export async function mount(container) {
   const resultEl = container.querySelector("#account-result");
   const rolesContainer = container.querySelector("#account-roles");
   const resetButton = container.querySelector("#account-reset");
+  const submitButton = container.querySelector('#account-form button[type="submit"]');
 
   let cachedRoles = [];
 
@@ -169,7 +172,7 @@ export async function mount(container) {
       }
       return "同じログインIDのアカウントが既に存在します";
     }
-    if (status === 401) { return "認証に失敗しました。再度ログインしてください"; }
+    // 401 は core/api.js の共通ハンドラ(setUnauthorizedHandler)がログイン画面へ戻す
     if (status === 403) { return "アカウント作成の権限がありません"; }
     return `アカウント作成に失敗しました (HTTP ${status})`;
   }
@@ -197,24 +200,30 @@ export async function mount(container) {
     const payload = { loginId, displayName, password, roles: selectedRoles };
     payload.email = emailRaw || null;
 
-    try {
-      const { response, data, text } = await fetchJson("/api/accounts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+    setResultMessage(resultEl, "", null);
+    await withBusy(submitButton, async () => {
+      try {
+        const { response, data, text } = await fetchJson("/api/accounts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
 
-      if (response.ok) {
-        form.reset();
-        refreshRoles();
-        const accountId = data && data.accountId ? data.accountId : "不明";
-        setResultMessage(resultEl, `アカウントを作成しました (ID: ${accountId})`, "success");
-        return;
+        if (response.ok) {
+          form.reset();
+          refreshRoles();
+          const accountId = data && data.accountId ? data.accountId : "不明";
+          showSuccessToast(`アカウントを作成しました (ID: ${accountId})`);
+          return;
+        }
+        const message = buildAccountErrorMessage(response.status, data, text);
+        setResultMessage(resultEl, message, "error");
+        showErrorToast("アカウント作成に失敗しました", message);
+      } catch (err) {
+        setResultMessage(resultEl, "アカウント作成中にエラーが発生しました", "error");
+        showErrorToast("アカウント作成中にエラーが発生しました", String(err && err.message ? err.message : err));
       }
-      setResultMessage(resultEl, buildAccountErrorMessage(response.status, data, text), "error");
-    } catch {
-      setResultMessage(resultEl, "アカウント作成中にエラーが発生しました", "error");
-    }
+    }, { busyText: "作成中…" });
   }
 
   if (form) { form.addEventListener("submit", handleSubmit); }

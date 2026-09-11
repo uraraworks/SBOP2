@@ -8,6 +8,8 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { withBusy } from "../core/dom.js";
+import { showSuccessToast, showErrorToast } from "../components/toast.js";
 
 // ----------------------------------------------------------------
 // ロール UI ヘルパ
@@ -129,6 +131,7 @@ export async function mount(container) {
   const resultEl = container.querySelector("#role-result");
   const checkboxContainer = container.querySelector("#role-checkboxes");
   const resetButton = container.querySelector("#role-reset");
+  const submitButton = container.querySelector('#role-form button[type="submit"]');
 
   let cachedRoles = [];
 
@@ -148,7 +151,7 @@ export async function mount(container) {
       }
       return "ロールの排他制約により更新できません";
     }
-    if (status === 401) { return "認証に失敗しました。再度ログインしてください"; }
+    // 401 は core/api.js の共通ハンドラ(setUnauthorizedHandler)がログイン画面へ戻す
     if (status === 403) { return "ロール更新の権限がありません"; }
     return `${text || "ロール更新に失敗しました"} (HTTP ${status})`;
   }
@@ -173,24 +176,30 @@ export async function mount(container) {
     const payload = { roles: selectedRoles };
     if (comment) { payload.comment = comment; }
 
-    try {
-      const { response, data, text } = await fetchJson(
-        `/api/admin/roles?accountId=${encodeURIComponent(accountId)}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        }
-      );
+    setResultMessage(resultEl, "", null);
+    await withBusy(submitButton, async () => {
+      try {
+        const { response, data, text } = await fetchJson(
+          `/api/admin/roles?accountId=${encodeURIComponent(accountId)}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          }
+        );
 
-      if (response.status === 204) {
-        setResultMessage(resultEl, "ロールを更新しました", "success");
-        return;
+        if (response.status === 204) {
+          showSuccessToast("ロールを更新しました");
+          return;
+        }
+        const message = buildRoleErrorMessage(response.status, data, text);
+        setResultMessage(resultEl, message, "error");
+        showErrorToast("ロール更新に失敗しました", message);
+      } catch (err) {
+        setResultMessage(resultEl, "ロール更新中にエラーが発生しました", "error");
+        showErrorToast("ロール更新中にエラーが発生しました", String(err && err.message ? err.message : err));
       }
-      setResultMessage(resultEl, buildRoleErrorMessage(response.status, data, text), "error");
-    } catch {
-      setResultMessage(resultEl, "ロール更新中にエラーが発生しました", "error");
-    }
+    }, { busyText: "更新中…" });
   }
 
   if (form) { form.addEventListener("submit", handleSubmit); }

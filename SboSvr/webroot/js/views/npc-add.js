@@ -10,6 +10,8 @@
 import { fetchJson } from "../core/api.js";
 import { createSpriteField } from "../components/sprite-picker.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
+import { withBusy } from "../core/dom.js";
+import { showSuccessToast, showErrorToast } from "../components/toast.js";
 
 // ----------------------------------------------------------------
 // 定数
@@ -266,31 +268,31 @@ export function mount(container) {
       push:         pushCb.checked  ? 1 : 0,
     };
 
-    showFeedback(feedbackEl, "追加中...", "");
+    showFeedback(feedbackEl, "", "");
 
-    try {
-      const { response, data } = await fetchJson("/api/characters/npc", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      if (!response.ok) {
-        const errMsg = (data && data.error) ? data.error : "追加に失敗しました (HTTP " + response.status + ")";
-        showFeedback(feedbackEl, "エラー: " + errMsg, "error");
-        return;
+    await withBusy(submitBtn, async () => {
+      try {
+        const { response, data } = await fetchJson("/api/characters/npc", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        if (!response.ok) {
+          const errMsg = (data && data.error) ? data.error : "追加に失敗しました (HTTP " + response.status + ")";
+          showFeedback(feedbackEl, "エラー: " + errMsg, "error");
+          showErrorToast("NPC 追加に失敗しました", errMsg);
+          return;
+        }
+        const charId = data && data.charId ? data.charId : "?";
+        const message = "NPC を追加しました (charId=" + charId + ", mapId=" + mapId + ", x=" + x + ", y=" + y + ")";
+        resetForm();
+        showSuccessToast(message);
+      } catch (err) {
+        console.error("npc-add submit error", err);
+        showFeedback(feedbackEl, "通信エラーが発生しました", "error");
+        showErrorToast("通信エラーが発生しました", String(err && err.message ? err.message : err));
       }
-      const charId = data && data.charId ? data.charId : "?";
-      showFeedback(feedbackEl,
-        "NPC を追加しました (charId=" + charId + ", mapId=" + mapId + ", x=" + x + ", y=" + y + ")",
-        "success");
-      resetForm();
-      showFeedback(feedbackEl,
-        "NPC を追加しました (charId=" + charId + ", mapId=" + mapId + ", x=" + x + ", y=" + y + ")",
-        "success");
-    } catch (err) {
-      console.error("npc-add submit error", err);
-      showFeedback(feedbackEl, "通信エラーが発生しました", "error");
-    }
+    }, { busyText: "追加中…" });
   });
 
   _destroyFn = function () {

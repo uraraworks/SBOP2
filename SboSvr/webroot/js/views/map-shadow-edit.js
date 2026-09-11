@@ -6,6 +6,8 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { withBusy } from "../core/dom.js";
+import { showSuccessToast, showErrorToast } from "../components/toast.js";
 import { createDragList } from "../components/drag-list.js";
 import { createAnimePreview } from "../components/anime-preview.js";
 import { createSpriteField } from "../components/sprite-picker.js";
@@ -459,45 +461,51 @@ function buildShadowUI(container, opts) {
     if (!_selectedItem) return;
     const detailEl = detailBody.querySelector(".map-shadow-edit-detail");
     if (!detailEl?._collectData) { alert("フォームが見つかりません"); return; }
-    try {
-      await _onSave(_selectedItem, detailEl._collectData());
-      setDirty(false);
-      const savedId = _selectedItem.id;
-      await load();
-      const found = _allItems.find((i) => i.id === savedId) ?? null;
-      _selectedItem = found;
-      renderDetail(found);
-      renderPalette();
-    } catch (err) {
-      alert("保存に失敗しました: " + String(err?.message ?? err));
-    }
+    await withBusy(btnSave, async () => {
+      try {
+        await _onSave(_selectedItem, detailEl._collectData());
+        setDirty(false);
+        const savedId = _selectedItem.id;
+        await load();
+        const found = _allItems.find((i) => i.id === savedId) ?? null;
+        _selectedItem = found;
+        renderDetail(found);
+        renderPalette();
+      } catch (err) {
+        showErrorToast("保存に失敗しました", String(err?.message ?? err));
+      }
+    });
   });
 
   btnDelete.addEventListener("click", async () => {
     if (!_selectedItem || !confirm("この項目を削除しますか?")) return;
-    try {
-      await _onDelete(_selectedItem);
-      _selectedItem = null;
-      setDirty(false);
-      await load();
-      showListPane();
-    } catch (err) {
-      alert("削除に失敗しました: " + String(err?.message ?? err));
-    }
+    await withBusy(btnDelete, async () => {
+      try {
+        await _onDelete(_selectedItem);
+        _selectedItem = null;
+        setDirty(false);
+        await load();
+        showListPane();
+      } catch (err) {
+        showErrorToast("削除に失敗しました", String(err?.message ?? err));
+      }
+    });
   });
 
   btnNew.addEventListener("click", async () => {
     if (_dirty && !confirm("未保存の変更があります。破棄して新規作成しますか?")) return;
-    try {
-      const newId = await _onCreate();
-      await load();
-      if (newId != null) {
-        const found = _allItems.find((i) => i.id === newId) ?? _allItems[_allItems.length - 1];
-        if (found) selectItem(found);
+    await withBusy(btnNew, async () => {
+      try {
+        const newId = await _onCreate();
+        await load();
+        if (newId != null) {
+          const found = _allItems.find((i) => i.id === newId) ?? _allItems[_allItems.length - 1];
+          if (found) selectItem(found);
+        }
+      } catch (err) {
+        showErrorToast("新規作成に失敗しました", String(err?.message ?? err));
       }
-    } catch (err) {
-      alert("新規作成に失敗しました: " + String(err?.message ?? err));
-    }
+    });
   });
 
   async function load() {
@@ -537,7 +545,7 @@ export function mount(container) {
         showFeedback(container, `保存に失敗しました: ${msg}`, "error");
         throw new Error(msg);
       }
-      showFeedback(container, "保存しました", "success");
+      showSuccessToast("保存しました");
     },
 
     onCreate: async () => {
@@ -557,7 +565,7 @@ export function mount(container) {
         showFeedback(container, `新規追加に失敗しました: ${msg}`, "error");
         throw new Error(msg);
       }
-      showFeedback(container, `影 ${data?.id ?? ""} を追加しました`, "success");
+      showSuccessToast(`影 ${data?.id ?? ""} を追加しました`);
       return data?.id ?? null;
     },
 
@@ -570,7 +578,7 @@ export function mount(container) {
         showFeedback(container, `削除に失敗しました: ${msg}`, "error");
         throw new Error(msg);
       }
-      showFeedback(container, `影 ${shadow.id} を削除しました`, "success");
+      showSuccessToast(`影 ${shadow.id} を削除しました`);
     },
   });
 

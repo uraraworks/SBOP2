@@ -11,6 +11,8 @@
 
 import { fetchJson } from "../core/api.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
+import { withBusy } from "../core/dom.js";
+import { showSuccessToast, showErrorToast } from "../components/toast.js";
 
 // ----------------------------------------------------------------
 // フィールド定義（キー, ラベル, min, max, 負値許可）
@@ -252,25 +254,29 @@ export function mount(container) {
       showFeedback(collected.error, "error");
       return;
     }
-    showFeedback("保存中...", "");
-    try {
-      var { response, data } = await fetchJson("/api/initial-status", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(collected.body),
-      });
-      if (!response.ok || !data) {
-        var reason = (data && data.error) ? data.error : "HTTP " + response.status;
-        showFeedback("保存に失敗しました: " + reason, "error");
-        return;
+    showFeedback("", "");
+    await withBusy(saveBtn, async () => {
+      try {
+        var { response, data } = await fetchJson("/api/initial-status", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(collected.body),
+        });
+        if (!response.ok || !data) {
+          var reason = (data && data.error) ? data.error : "HTTP " + response.status;
+          showFeedback("保存に失敗しました: " + reason, "error");
+          showErrorToast("保存に失敗しました", reason);
+          return;
+        }
+        _current = data;
+        applyToForm(data);
+        showSuccessToast("保存しました");
+      } catch (err) {
+        console.error("init-status save error", err);
+        showFeedback("通信エラーが発生しました", "error");
+        showErrorToast("通信エラーが発生しました", String(err && err.message ? err.message : err));
       }
-      _current = data;
-      applyToForm(data);
-      showFeedback("保存しました", "success");
-    } catch (err) {
-      console.error("init-status save error", err);
-      showFeedback("通信エラーが発生しました", "error");
-    }
+    });
   });
 
   // ---- ボタン ----

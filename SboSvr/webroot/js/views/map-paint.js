@@ -22,6 +22,9 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { withBusy } from "../core/dom.js";
+import { showSuccessToast, showErrorToast } from "../components/toast.js";
+import { registerDirty } from "../core/dirty-guard.js";
 
 // ----------------------------------------------------------------
 // スプライトシート URL 解決
@@ -607,6 +610,9 @@ export function createMapPaintEditor(options) {
   let selectedMapId = initialMapId || (maps.length ? maps[0].id : null);
   let isDirty = false;
 
+  // hashchange 等の共通離脱ガードに接続(この editor が現在の view の dirty 状態を代表する)
+  registerDirty(() => isDirty);
+
   // ---- ルートレイアウト ----
   const root = document.createElement("div");
   root.className = "mp-editor";
@@ -750,19 +756,22 @@ export function createMapPaintEditor(options) {
       return;
     }
     if (!onSave) return;
-    saveBtn.disabled = true;
-    setFeedback("保存中...", "");
-    try {
-      const { tilesBase, tilesPile } = gridEditor.getGrid();
-      await onSave(selectedMapId, tilesBase, tilesPile);
-      isDirty = false;
-      saveBtn.classList.remove("has-changes");
-      setFeedback("保存しました", "success");
-    } catch (err) {
-      setFeedback(`保存失敗: ${err.message || err}`, "error");
-    } finally {
-      saveBtn.disabled = false;
-    }
+    setFeedback("", "");
+    await withBusy(saveBtn, async () => {
+      try {
+        const { tilesBase, tilesPile } = gridEditor.getGrid();
+        await onSave(selectedMapId, tilesBase, tilesPile);
+        // 保存成功時のみ dirty を解消する。失敗時は isDirty を true のまま保ち、
+        // has-changes 表示も維持することで「保存されていない」ことがわかるようにする。
+        isDirty = false;
+        saveBtn.classList.remove("has-changes");
+        showSuccessToast("保存しました");
+      } catch (err) {
+        const message = err && err.message ? err.message : String(err);
+        setFeedback(`保存失敗: ${message}`, "error");
+        showErrorToast("保存に失敗しました", message);
+      }
+    }, { busyText: "保存中…" });
   });
 
   undoBtn.addEventListener("click", () => {

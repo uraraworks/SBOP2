@@ -137,6 +137,15 @@ function openCharacterDetailFromGame(charId) {
 }
 
 function handleAdminGamePick(message) {
+  // 未保存の変更があれば確認する(dirty-guard.js)。
+  // app.js は非 module のレガシースクリプトのため import できず、
+  // main.js 側で window.__dirtyGuard として公開したものを参照する
+  // (main.js は app.js より後に読み込まれるが、この関数はゲーム iframe からの
+  //  postMessage で非同期に呼ばれるため、実行時点では既に main.js の評価が
+  //  完了しており window.__dirtyGuard は利用可能)。
+  if (window.__dirtyGuard && window.__dirtyGuard.isDirty() && !window.__dirtyGuard.confirmDiscard()) {
+    return;
+  }
   const charId = Number(message.charId) || 0;
   const itemId = Number(message.itemId) || 0;
   const mapId = Number(message.mapId) || 0;
@@ -328,6 +337,32 @@ async function checkAdminAuthAndReveal() {
     return false;
   }
 }
+
+/**
+ * ES Module 側(core/api.js の fetchJson/postJson/putJson/deleteJson)が
+ * 401 を受けた時の共通処理。ログイン画面へ戻す。
+ * role-management.js / account-create.js / image-editor.js の個別 401 分岐は
+ * これに一本化したため削除済み(各画面はこの後 checkAdminAuthAndReveal 経由で
+ * auth-pending 表示に切り替わる)。
+ */
+function handleApiUnauthorized() {
+  document.body.classList.add("auth-pending");
+  document.body.classList.remove("admin-authorized");
+  adminWorkspaceInitialized = false;
+  showAdminLoginError("セッションが切れました。再度ログインしてください。");
+  if (adminLoginIdInput) {
+    adminLoginIdInput.focus();
+  }
+}
+
+// core/api.js は ES Module のため、非 module の app.js からは動的 import で登録する。
+import("./js/core/api.js")
+  .then(({ setUnauthorizedHandler }) => {
+    setUnauthorizedHandler(handleApiUnauthorized);
+  })
+  .catch((err) => {
+    console.error("[app] core/api.js の 401 ハンドラ登録に失敗:", err);
+  });
 
 async function clearAdminSession() {
   try {

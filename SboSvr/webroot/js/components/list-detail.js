@@ -4,7 +4,13 @@
  * 通常時は一覧のみ全幅表示。項目クリック/新規で詳細画面に切替。
  * 保存成功 or 「← 戻る」で一覧に復帰（保存後は再読み込み）。
  * dirty 管理・検索・新規作成・削除をサポート。
+ *
+ * dirty 状態は core/dirty-guard.js にも登録する。これにより
+ * ブラウザ戻る(hashchange)やゲーム画面クリックでの離脱時にも
+ * 未保存確認が効くようになる(list-detail 内部の切替確認とは別経路)。
  */
+
+import { registerDirty } from "../core/dirty-guard.js";
 
 /**
  * リスト＆詳細シェルを生成してコンテナに mount する。
@@ -114,6 +120,8 @@ export function createListDetail({
   shell.append(listPane, detailPane);
   container.appendChild(shell);
 
+  // dirty 状態になったタイミングで core/dirty-guard.js に登録する(_setDirty 参照)。
+
   // ----------------------------------------------------------------
   // 内部状態
   // ----------------------------------------------------------------
@@ -214,6 +222,10 @@ export function createListDetail({
   function _setDirty(flag) {
     _dirty = flag;
     dirtyBadge.style.display = flag ? "" : "none";
+    if (flag) {
+      // dirty になった時点でこのインスタンスを core/dirty-guard.js に登録する。
+      registerDirty(() => _dirty);
+    }
   }
 
   // ----------------------------------------------------------------

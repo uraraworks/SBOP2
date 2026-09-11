@@ -63,9 +63,7 @@ function formatBytes(bytes) {
 // ----------------------------------------------------------------
 
 function describeUploadError(response, data) {
-  if (response.status === 401) {
-    return "セッションが切れました。再度ログインしてください";
-  }
+  // 401 は core/api.js の共通ハンドラ(setUnauthorizedHandler)がログイン画面へ戻す
   if (response.status === 403) {
     return "権限がありません(IMAGE_EDIT ロールが必要です)";
   }

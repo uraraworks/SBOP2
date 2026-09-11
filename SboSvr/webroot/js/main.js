@@ -16,6 +16,7 @@
 import { registerRoute, isMigrated, handleRoute, currentRoute } from "./core/router.js";
 import { initWorkspaceLayout } from "./core/workspace-layout.js";
 import { initChatLogPopup } from "./core/chat-log-popup.js";
+import { guardHashChange } from "./core/dirty-guard.js";
 
 // ----------------------------------------------------------------
 // 移行済みビューの登録(F2 フェーズ以降にここへ追加していく)
@@ -84,7 +85,20 @@ registerRoute("image-editor",      mountImageEditor);
 // hash ルーティングフック
 // ----------------------------------------------------------------
 
-function onHashChange() {
+function onHashChange(event) {
+  // 未保存の変更があれば確認する(dirty-guard.js)。キャンセル時は hash を
+  // 直前の値へ戻すため、この関数の後段(このイベントに対する他リスナー、
+  // 特にレガシー app.js 側の hashchange リスナー)には「キャンセル前の新 hash」
+  // で処理させないよう伝播を止める。app.js 側の hashchange リスナーは
+  // DOMContentLoaded の async ハンドラ内で await の後に登録されるため、
+  // module である main.js のこのリスナーの方が先に登録され、
+  // stopImmediatePropagation() が効く。
+  if (!guardHashChange()) {
+    if (event && typeof event.stopImmediatePropagation === "function") {
+      event.stopImmediatePropagation();
+    }
+    return;
+  }
   const route = currentRoute();
   if (isMigrated(route)) {
     handleRoute(route);
