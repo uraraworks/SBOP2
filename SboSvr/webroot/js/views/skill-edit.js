@@ -15,6 +15,7 @@ import { fetchJson } from "../core/api.js";
 import { createSpriteField } from "../components/sprite-picker.js";
 import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
+import { createEntityField } from "../components/entity-picker.js";
 
 // ----------------------------------------------------------------
 // 定数
@@ -202,11 +203,28 @@ function buildDetailPane(feedbackEl) {
   }
 
   var targetTypeSpin = addSpinLbl(maGrid, "攻撃対象", 255);
-  var hitEffectIdSpin = addSpinLbl(maGrid, "ヒットエフェクトID");
-  var effectId0Spin = addSpinLbl(maGrid, "エフェクトID(下)");
-  var effectId1Spin = addSpinLbl(maGrid, "エフェクトID(左)");
-  var effectId2Spin = addSpinLbl(maGrid, "エフェクトID(右)");
-  var effectId3Spin = addSpinLbl(maGrid, "エフェクトID(上)");
+  var hitEffectField = createEntityField({ type: "effect", value: 0, label: "ヒットエフェクトID" });
+  maGrid.appendChild(hitEffectField.element);
+
+  var effectId0Field = createEntityField({ type: "effect", value: 0, label: "エフェクトID(下)" });
+  var effectId1Field = createEntityField({ type: "effect", value: 0, label: "エフェクトID(左)" });
+  var effectId2Field = createEntityField({ type: "effect", value: 0, label: "エフェクトID(右)" });
+  var effectId3Field = createEntityField({ type: "effect", value: 0, label: "エフェクトID(上)" });
+  maGrid.appendChild(effectId0Field.element);
+  maGrid.appendChild(effectId1Field.element);
+  maGrid.appendChild(effectId2Field.element);
+  maGrid.appendChild(effectId3Field.element);
+
+  var sameAsAboveBtn = mkEl("button", "button small", "↑ 上と同じにする（4方向）");
+  sameAsAboveBtn.type = "button";
+  sameAsAboveBtn.addEventListener("click", function () {
+    var v = effectId0Field.getValue();
+    effectId1Field.setValue(v);
+    effectId2Field.setValue(v);
+    effectId3Field.setValue(v);
+  });
+  maGrid.appendChild(sameAsAboveBtn);
+
   var putTypeSel = addSelectLbl(maGrid, "発射種別", [
     { value: 0, label: "0: 未設定" },
     { value: 1, label: "1: 前方" },
@@ -238,7 +256,8 @@ function buildDetailPane(feedbackEl) {
     { value: 1, label: "1: HP" },
     { value: 2, label: "2: SP" },
   ]);
-  var healHitEffSpin = addSpinLbl(healGrid, "ヒットエフェクトID");
+  var healHitEffField = createEntityField({ type: "effect", value: 0, label: "ヒットエフェクトID" });
+  healGrid.appendChild(healHitEffField.element);
   var healVal1Spin   = addSpinLbl(healGrid, "効果値1");
   var healVal2Spin   = addSpinLbl(healGrid, "効果値2");
   var healDistSpin   = addSpinLbl(healGrid, "射程距離");
@@ -304,11 +323,11 @@ function buildDetailPane(feedbackEl) {
 
     // MOVEATACK
     targetTypeSpin.setValue(sk ? (sk.targetType  || 0) : 0);
-    hitEffectIdSpin.setValue(sk ? (sk.hitEffectId || 0) : 0);
-    effectId0Spin.setValue(sk ? (sk.effectId0 || 0) : 0);
-    effectId1Spin.setValue(sk ? (sk.effectId1 || 0) : 0);
-    effectId2Spin.setValue(sk ? (sk.effectId2 || 0) : 0);
-    effectId3Spin.setValue(sk ? (sk.effectId3 || 0) : 0);
+    hitEffectField.setValue(sk ? (sk.hitEffectId || 0) : 0);
+    effectId0Field.setValue(sk ? (sk.effectId0 || 0) : 0);
+    effectId1Field.setValue(sk ? (sk.effectId1 || 0) : 0);
+    effectId2Field.setValue(sk ? (sk.effectId2 || 0) : 0);
+    effectId3Field.setValue(sk ? (sk.effectId3 || 0) : 0);
     putTypeSel.value = String(sk ? (sk.putType || 0) : 0);
     aliveTimeSpin.setValue(sk ? (sk.aliveTime || 0) : 0);
     waitTimeSpin.setValue(sk ? (sk.waitTime || 0) : 0);
@@ -321,7 +340,7 @@ function buildDetailPane(feedbackEl) {
     // HEAL
     healAreaSel.value  = String(sk ? (sk.area     || 0) : 0);
     healTypeSel.value  = String(sk ? (sk.healType || 0) : 0);
-    healHitEffSpin.setValue(sk ? (sk.hitEffectId || 0) : 0);
+    healHitEffField.setValue(sk ? (sk.hitEffectId || 0) : 0);
     healVal1Spin.setValue(sk ? (sk.value1 || 0) : 0);
     healVal2Spin.setValue(sk ? (sk.value2 || 0) : 0);
     healDistSpin.setValue(sk ? (sk.distance || 0) : 0);
@@ -343,11 +362,11 @@ function buildDetailPane(feedbackEl) {
 
     if (ct === SKILL_CLASS_MOVEATACK) {
       body.targetType     = targetTypeSpin.getValue();
-      body.hitEffectId    = hitEffectIdSpin.getValue();
-      body.effectId0      = effectId0Spin.getValue();
-      body.effectId1      = effectId1Spin.getValue();
-      body.effectId2      = effectId2Spin.getValue();
-      body.effectId3      = effectId3Spin.getValue();
+      body.hitEffectId    = hitEffectField.getValue();
+      body.effectId0      = effectId0Field.getValue();
+      body.effectId1      = effectId1Field.getValue();
+      body.effectId2      = effectId2Field.getValue();
+      body.effectId3      = effectId3Field.getValue();
       body.putType        = parseInt(putTypeSel.value, 10) || 0;
       body.aliveTime      = aliveTimeSpin.getValue();
       body.waitTime       = waitTimeSpin.getValue();
@@ -359,7 +378,7 @@ function buildDetailPane(feedbackEl) {
     } else if (ct === SKILL_CLASS_HEAL) {
       body.area        = parseInt(healAreaSel.value, 10) || 0;
       body.healType    = parseInt(healTypeSel.value, 10) || 0;
-      body.hitEffectId = healHitEffSpin.getValue();
+      body.hitEffectId = healHitEffField.getValue();
       body.value1      = healVal1Spin.getValue();
       body.value2      = healVal2Spin.getValue();
       body.distance    = healDistSpin.getValue();

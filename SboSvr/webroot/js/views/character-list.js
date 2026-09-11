@@ -11,6 +11,7 @@
 
 import { fetchJson } from "../core/api.js";
 import { createSpriteThumbLazy } from "../components/sprite-thumb.js";
+import { createEntityField } from "../components/entity-picker.js";
 
 const CHAR_LIST_LIMIT = 20;
 
@@ -40,9 +41,7 @@ export function mount(container) {
           <label>アカウントID:
             <input type="number" id="char-filter-account-id" placeholder="例: 1001" min="0" />
           </label>
-          <label>マップID:
-            <input type="number" id="char-filter-map-id" placeholder="例: 1" min="0" />
-          </label>
+          <span id="char-filter-map-id-wrap"></span>
           <label>種別:
             <select id="char-filter-is-npc">
               <option value="">全て</option>
@@ -80,8 +79,12 @@ export function mount(container) {
 
   const filterName    = container.querySelector("#char-filter-name");
   const filterAccId   = container.querySelector("#char-filter-account-id");
-  const filterMapId   = container.querySelector("#char-filter-map-id");
+  const filterMapIdWrap = container.querySelector("#char-filter-map-id-wrap");
   const filterIsNpc   = container.querySelector("#char-filter-is-npc");
+
+  // マップID フィルター（map picker。0 のままなら未指定扱い）
+  const filterMapIdField = createEntityField({ type: "map", value: 0, label: "マップID:" });
+  if (filterMapIdWrap) { filterMapIdWrap.replaceWith(filterMapIdField.element); }
   const searchBtn     = container.querySelector("#char-search-btn");
   const resetBtn      = container.querySelector("#char-reset-btn");
   const summaryEl     = container.querySelector("#char-list-summary");
@@ -198,7 +201,8 @@ export function mount(container) {
     const params = new URLSearchParams();
     if (filterName && filterName.value.trim()) { params.set("name", filterName.value.trim()); }
     if (filterAccId && filterAccId.value.trim()) { params.set("accountId", filterAccId.value.trim()); }
-    if (filterMapId && filterMapId.value.trim()) { params.set("mapId", filterMapId.value.trim()); }
+    const mapIdFilterValue = filterMapIdField.getValue();
+    if (mapIdFilterValue > 0) { params.set("mapId", String(mapIdFilterValue)); }
     if (filterIsNpc && filterIsNpc.value !== "") { params.set("isNpc", filterIsNpc.value); }
     params.set("limit", String(CHAR_LIST_LIMIT));
     params.set("offset", String(state.offset));
@@ -240,7 +244,7 @@ export function mount(container) {
     resetBtn.addEventListener("click", () => {
       if (filterName)  { filterName.value  = ""; }
       if (filterAccId) { filterAccId.value = ""; }
-      if (filterMapId) { filterMapId.value = ""; }
+      filterMapIdField.setValue(0);
       if (filterIsNpc) { filterIsNpc.value = ""; }
       state.offset = 0;
       state.total  = 0;

@@ -15,6 +15,7 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { openEntityPicker } from "../components/entity-picker.js";
 
 // ----------------------------------------------------------------
 // コマンド種別定数
@@ -327,11 +328,25 @@ function renderRowBody(body, row) {
   if (row.type === TALK_EVENT_TYPE_ADDSKILL) {
     const label = document.createElement("label");
     label.className = "form-field";
-    label.innerHTML = '<span>スキル ID</span><input type="number" data-talk-row-field="data" min="0">';
+    label.innerHTML =
+      '<span>スキル ID</span>' +
+      '<div style="display:flex;gap:0.35rem;align-items:center;">' +
+        '<input type="number" data-talk-row-field="data" min="0">' +
+        '<button type="button" class="btn btn-secondary btn-sm" data-role="pick-skill">選択…</button>' +
+      '</div>';
     body.appendChild(label);
     const inp = label.querySelector("input");
     inp.value = String(row.data || 0);
     inp.addEventListener("input", () => { row.data = parseInt(inp.value || "0", 10) || 0; });
+    const pickBtn = label.querySelector('[data-role="pick-skill"]');
+    pickBtn.addEventListener("click", () => {
+      openEntityPicker({
+        type: "skill",
+        initialValue: row.data,
+        ownerDocument: pickBtn.ownerDocument,
+        onSelect: (id) => { row.data = id; inp.value = String(id); },
+      });
+    });
     return;
   }
   if (row.type === TALK_EVENT_TYPE_PAGE) {
@@ -343,13 +358,41 @@ function renderRowBody(body, row) {
     body.innerHTML =
       `<label class="form-field"><span>切替条件</span><select data-talk-row-field="pageChgCondition">${condOptions}</select></label>` +
       `<label class="form-field"><span>ジャンプ先ページ</span><input type="number" data-talk-row-field="pageJump" value="${row.pageJump || 0}"></label>` +
-      `<label class="form-field"><span>条件用データ (アイテム ID 等)</span><input type="number" data-talk-row-field="data" value="${row.data || 0}"></label>`;
+      `<label class="form-field"><span>条件用データ（アイテム種別 ID。切替条件がアイテムあり/なしの時のみ使用）</span>` +
+        `<div style="display:flex;gap:0.35rem;align-items:center;">` +
+          `<input type="number" data-talk-row-field="data" value="${row.data || 0}">` +
+          `<button type="button" class="btn btn-secondary btn-sm" data-role="pick-itemtype">アイテム種別を選択…</button>` +
+        `</div>` +
+      `</label>`;
     const condSel = body.querySelector('[data-talk-row-field="pageChgCondition"]');
     const jumpInp = body.querySelector('[data-talk-row-field="pageJump"]');
     const dataInp = body.querySelector('[data-talk-row-field="data"]');
-    if (condSel) { condSel.addEventListener("change", () => { row.pageChgCondition = Number(condSel.value); }); }
+    const pickItemBtn = body.querySelector('[data-role="pick-itemtype"]');
+
+    function updateItemPickerVisibility() {
+      const needsItem = row.pageChgCondition === 1 || row.pageChgCondition === 2;
+      if (pickItemBtn) { pickItemBtn.style.display = needsItem ? "" : "none"; }
+    }
+    updateItemPickerVisibility();
+
+    if (condSel) {
+      condSel.addEventListener("change", () => {
+        row.pageChgCondition = Number(condSel.value);
+        updateItemPickerVisibility();
+      });
+    }
     if (jumpInp) { jumpInp.addEventListener("input", () => { row.pageJump = parseInt(jumpInp.value || "0", 10) || 0; }); }
     if (dataInp) { dataInp.addEventListener("input", () => { row.data = parseInt(dataInp.value || "0", 10) || 0; }); }
+    if (pickItemBtn) {
+      pickItemBtn.addEventListener("click", () => {
+        openEntityPicker({
+          type: "itemType",
+          initialValue: row.data,
+          ownerDocument: pickItemBtn.ownerDocument,
+          onSelect: (id) => { row.data = id; if (dataInp) { dataInp.value = String(id); } },
+        });
+      });
+    }
     return;
   }
   if (row.type === TALK_EVENT_TYPE_MENU) {

@@ -221,6 +221,174 @@
   font-size: 0.85rem;
 }
 
+/* ================================================================
+   entity-picker — item/effect/weapon/skill/motionType/map/character/
+   npcTemplate/mapPart/mapShadow 共通の選択モーダル・フィールド
+   ================================================================ */
+
+.entity-field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.entity-field-label {
+  font-size: 0.88rem;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+.entity-field-name {
+  font-size: 0.88rem;
+  opacity: 0.85;
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.entity-field input[type="number"] {
+  width: 5.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background-color: rgba(15, 23, 42, 0.6);
+  color: #f9fafb;
+  font-size: 0.9rem;
+}
+
+.entity-field .button.small {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.ep-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background-color: rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.ep-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(560px, 96vw);
+  max-height: 82vh;
+  background-color: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.ep-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  background-color: rgba(11, 18, 26, 0.7);
+  flex-shrink: 0;
+}
+
+.ep-title {
+  margin: 0;
+  font-size: 1rem;
+  flex: 1;
+}
+
+.ep-search {
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background-color: rgba(15, 23, 42, 0.6);
+  color: #f9fafb;
+  font-size: 0.9rem;
+  min-width: 10rem;
+}
+
+.ep-body {
+  flex: 1;
+  overflow: auto;
+  padding: 0.4rem;
+  background-color: rgba(10, 15, 25, 0.6);
+}
+
+.ep-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ep-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ep-row:hover {
+  background-color: rgba(148, 163, 184, 0.12);
+}
+
+.ep-row.is-selected {
+  background-color: rgba(96, 165, 250, 0.22);
+  outline: 1px solid rgba(96, 165, 250, 0.6);
+}
+
+.ep-row-id {
+  opacity: 0.65;
+  font-size: 0.85rem;
+  min-width: 3.5rem;
+}
+
+.ep-row-name {
+  font-size: 0.92rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ep-empty {
+  padding: 1rem;
+  text-align: center;
+  opacity: 0.6;
+  font-size: 0.9rem;
+}
+
+.ep-feedback {
+  padding: 0.3rem 1rem;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.ep-feedback.is-error {
+  color: #f87171;
+  opacity: 1;
+}
+
+.ep-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  padding: 0.65rem 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+  background-color: rgba(11, 18, 26, 0.7);
+  flex-shrink: 0;
+}
+
 /* role-assign-field — ロール割り当て(単一/縁取りセット切替)フィールド */
 .role-assign-field {
   display: flex;
@@ -1054,7 +1222,9 @@ body.auth-pending .persistent-game-panel {
 .picker-modal-toolbar,
 .picker-modal-footer,
 .sp-header,
-.sp-footer {
+.sp-footer,
+.ep-header,
+.ep-footer {
   background: var(--color-panel-muted);
   border-color: var(--color-border);
 }
@@ -1074,9 +1244,13 @@ body.auth-pending .persistent-game-panel {
 .card-description,
 .role-description,
 .sprite-field-label,
+.entity-field-label,
+.entity-field-name,
 .picker-modal-summary,
 .picker-modal-feedback,
 .picker-modal-selected,
+.ep-feedback,
+.ep-row-id,
 .audit-log-body-cell,
 .detail-list dt {
   color: var(--color-text-muted);
@@ -1102,6 +1276,8 @@ textarea,
 .sp-header select,
 .sp-id-row input[type="number"],
 .sprite-field input[type="number"],
+.entity-field input[type="number"],
+.ep-search,
 .picker-modal-toolbar select,
 .picker-modal-toolbar input[type="search"],
 .map-parts-edit-form .form-field select,
@@ -1360,11 +1536,13 @@ button:disabled {
 }
 
 .sp-backdrop,
+.ep-backdrop,
 .picker-modal-backdrop {
   background: rgba(15, 23, 42, 0.45);
 }
 
 .sp-dialog,
+.ep-dialog,
 .picker-modal-panel {
   background: var(--color-panel);
   color: var(--color-text);
@@ -1372,8 +1550,18 @@ button:disabled {
   box-shadow: var(--shadow-menu);
 }
 
-.sp-body {
+.sp-body,
+.ep-body {
   background: var(--color-panel-muted);
+}
+
+.ep-row:hover {
+  background-color: var(--color-panel-muted);
+}
+
+.ep-row.is-selected {
+  background-color: var(--color-accent-soft);
+  outline-color: var(--color-accent);
 }
 
 .sp-sheet-nav span,

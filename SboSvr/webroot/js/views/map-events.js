@@ -14,6 +14,7 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { createEntityField } from "../components/entity-picker.js";
 
 const MAP_EVENT_TYPE_LABELS = {
   0: "なし (NONE)",
@@ -44,7 +45,7 @@ function buildDetailFieldsHtml(type, detail) {
            `<label class="form-field"><span>移動先 Y</span><input type="number" name="detail.destY" value="${detail.destY || 0}"></label>` +
            `<label class="form-field"><span>向き</span><input type="number" name="detail.direction" value="${detail.direction || 0}"></label>`;
   case 2: // MAPMOVE
-    return `<label class="form-field"><span>移動先マップID</span><input type="number" name="detail.destMapId" value="${detail.destMapId || 0}"></label>` +
+    return `<div class="form-field" id="map-event-destmapid-wrap" data-detail-destmapid="${detail.destMapId || 0}"></div>` +
            `<label class="form-field"><span>移動先 X</span><input type="number" name="detail.destX" value="${detail.destX || 0}"></label>` +
            `<label class="form-field"><span>移動先 Y</span><input type="number" name="detail.destY" value="${detail.destY || 0}"></label>` +
            `<label class="form-field"><span>向き</span><input type="number" name="detail.direction" value="${detail.direction || 0}"></label>`;
@@ -62,6 +63,19 @@ function buildDetailFieldsHtml(type, detail) {
   default:
     return "";
   }
+}
+
+// buildDetailFieldsHtml が type=2 (MAPMOVE) 用に置いたプレースホルダに
+// マップ picker 付きの entity field を差し込む。FormData で拾えるよう
+// input に name="detail.destMapId" を付与する。
+function mountMapMoveDestField(container) {
+  if (!container) { return; }
+  const wrap = container.querySelector("#map-event-destmapid-wrap");
+  if (!wrap) { return; }
+  const initialValue = parseInt(wrap.dataset.detailDestmapid || "0", 10) || 0;
+  const field = createEntityField({ type: "map", value: initialValue, label: "移動先マップID" });
+  field.input.name = "detail.destMapId";
+  wrap.replaceWith(field.element);
 }
 
 function collectMapEventPayload(form, selectedMapId) {
@@ -306,9 +320,11 @@ export function mount(container) {
     // 種別変更
     const typeSelect = editArea.querySelector("#map-event-type-select-mod");
     const detailFieldsEl = editArea.querySelector("#map-event-detail-fields-mod");
+    mountMapMoveDestField(detailFieldsEl);
     if (typeSelect && detailFieldsEl) {
       typeSelect.addEventListener("change", () => {
         detailFieldsEl.innerHTML = buildDetailFieldsHtml(typeSelect.value, {});
+        mountMapMoveDestField(detailFieldsEl);
       });
     }
 

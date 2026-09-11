@@ -12,20 +12,9 @@ import { createSpriteField } from "../components/sprite-picker.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
 import { withBusy } from "../core/dom.js";
 import { showSuccessToast, showErrorToast } from "../components/toast.js";
-
-// ----------------------------------------------------------------
-// 定数
-// ----------------------------------------------------------------
-
-const MOVE_TYPE_OPTIONS = [
-  { value: 1,  label: "1: STAND（移動しない）" },
-  { value: 0,  label: "0: PC" },
-  { value: 5,  label: "5: ATACKANIME（攻撃アニメ）" },
-  { value: 6,  label: "6: MOVEATACK（移動して攻撃）" },
-  { value: 8,  label: "8: PUTNPC（NPC発生）" },
-  { value: 9,  label: "9: BATTLE1" },
-  { value: 10, label: "10: BATTLE2" },
-];
+import { MOVE_TYPE_OPTIONS } from "../data/move-types.js";
+import { FAMILY_TYPE_OPTIONS } from "../data/family-types.js";
+import { createEntityField, fetchCharacterDetail } from "../components/entity-picker.js";
 
 // ----------------------------------------------------------------
 // ユーティリティ
@@ -104,9 +93,29 @@ export function mount(container) {
   const charNameInput = makeTextInput("NPC名を入力", 32);
   reqGrid.appendChild(makeField("キャラ名", charNameInput));
 
-  // 種族ID
-  const familyIdInput = makeNumberInput(1, "1");
-  reqGrid.appendChild(makeField("種族ID", familyIdInput));
+  // 種族ID（FAMILYTYPE_* select。body.familyId として送信する）
+  const familyLbl = makeField("種族ID");
+  const familySelect = document.createElement("select");
+  familySelect.className = "form-input";
+  FAMILY_TYPE_OPTIONS.forEach(function (o) {
+    const opt = document.createElement("option");
+    opt.value = String(o.value);
+    opt.textContent = o.label;
+    familySelect.appendChild(opt);
+  });
+  familyLbl.appendChild(familySelect);
+  reqGrid.appendChild(familyLbl);
+
+  // テンプレート（既存NPC） picker。選ぶと画像ID・モーション種別・移動種別・
+  // sex/block/push に加え、テンプレの種族IDをフォームへ丸ごと反映する。
+  // この項目自体は送信しない（あくまでコピー元の指定）。
+  const templateField = createEntityField({
+    type: "npcTemplate",
+    value: 0,
+    label: "テンプレート（既存NPC）",
+    onChange: (id) => { applyTemplateCopy(id); },
+  });
+  reqGrid.appendChild(templateField.element);
 
   // マップID
   const mapIdInput = makeNumberInput(1, "1");
@@ -169,11 +178,31 @@ export function mount(container) {
   });
   optGrid.appendChild(sfGrpIdInitNpc.el);
 
-  // モーション種別ID
-  const motionTypeSpin = createNumberSpinner({ value: 0, min: 0, max: 9999, step: 1 });
-  const motionTypeLbl = makeField("モーション種別ID");
-  motionTypeLbl.appendChild(motionTypeSpin.el);
-  optGrid.appendChild(motionTypeLbl);
+  // モーション種別ID（motionType picker。NPC 画像ID に対応する組み合わせが
+  // /api/npc-motion-pairs から取れれば、それで絞り込む）
+  let _npcMotionPairs = null; // { fileCount, motionTypes: [{motionTypeId, targetGrpIdNpc, ...}] }
+  fetchJson("/api/npc-motion-pairs").then(({ response, data }) => {
+    if (response.ok && data) { _npcMotionPairs = data; }
+  }).catch(() => { /* 絞り込み無しにフォールバック */ });
+
+  function motionTypeFilter(row) {
+    if (!_npcMotionPairs || !Array.isArray(_npcMotionPairs.motionTypes)) return true;
+    const grpNpc = sfGrpIdNpc.getValue();
+    if (!grpNpc) return true;
+    const allowed = _npcMotionPairs.motionTypes
+      .filter((e) => Number(e.targetGrpIdNpc) === Number(grpNpc))
+      .map((e) => Number(e.motionTypeId));
+    if (allowed.length === 0) return true; // 対応情報が無ければ絞り込まない
+    return allowed.includes(Number(row.motionTypeId));
+  }
+
+  const motionTypeField = createEntityField({
+    type: "motionType",
+    value: 0,
+    label: "モーション種別ID",
+    filter: motionTypeFilter,
+  });
+  optGrid.appendChild(motionTypeField.element);
 
   // ブロック判定
   const blockLbl = document.createElement("label");
@@ -194,6 +223,38 @@ export function mount(container) {
   optSection.appendChild(optGrid);
   card.appendChild(optSection);
 
+  // テンプレート（npcTemplate）を選んだ時、そのキャラの種族ID・画像ID・
+  // モーション種別・移動種別をフォームへコピーする。一覧行には charId/charName
+  // しか無いため GET /api/characters/{id} で詳細を取得する。
+  async function applyTemplateCopy(id) {
+    if (!id) return;
+    try {
+      const detail = await fetchCharacterDetail(id);
+      if (!detail) return;
+      if (detail.familyId != null) {
+        familySelect.value = String(detail.familyId);
+      }
+      if (detail.graphics) {
+        if (detail.graphics.npc != null) { sfGrpIdNpc.setValue(detail.graphics.npc); }
+        if (detail.graphics.initNpc != null) { sfGrpIdInitNpc.setValue(detail.graphics.initNpc); }
+      }
+      if (detail.movement && detail.movement.motionTypeId != null) {
+        motionTypeField.setValue(detail.movement.motionTypeId);
+      }
+      if (detail.moveType != null) {
+        moveTypeSelect.value = String(detail.moveType);
+      }
+      if (detail.sex != null) {
+        sexSpin.setValue(detail.sex);
+      }
+      if (detail.block != null) { blockCb.checked = !!detail.block; }
+      if (detail.push != null) { pushCb.checked = !!detail.push; }
+    } catch (err) {
+      console.error("npc-add: テンプレコピー失敗", err);
+      showErrorToast("種族テンプレの取得に失敗しました", String(err && err.message ? err.message : err));
+    }
+  }
+
   // ---- アクションバー ----
   const actionBar = document.createElement("div");
   actionBar.className = "form-actions";
@@ -211,7 +272,8 @@ export function mount(container) {
   // ---- フォームリセット ----
   function resetForm() {
     charNameInput.value = "";
-    familyIdInput.value = "";
+    familySelect.value = "0";
+    templateField.setValue(0);
     mapIdInput.value = "";
     xInput.value = "";
     yInput.value = "";
@@ -219,7 +281,7 @@ export function mount(container) {
     sexSpin.setValue(0);
     sfGrpIdNpc.setValue(0);
     sfGrpIdInitNpc.setValue(0);
-    motionTypeSpin.setValue(0);
+    motionTypeField.setValue(0);
     blockCb.checked = false;
     pushCb.checked = false;
     showFeedback(feedbackEl, "", "");
@@ -230,7 +292,7 @@ export function mount(container) {
   // ---- 送信 ----
   submitBtn.addEventListener("click", async function () {
     const charName = charNameInput.value.trim();
-    const familyId = parseInt(familyIdInput.value, 10);
+    const familyId = parseInt(familySelect.value, 10);
     const mapId    = parseInt(mapIdInput.value, 10);
     const x        = parseInt(xInput.value, 10);
     const y        = parseInt(yInput.value, 10);
@@ -263,7 +325,7 @@ export function mount(container) {
       sex:          sexSpin.getValue(),
       grpIdNpc:     sfGrpIdNpc.getValue(),
       grpIdInitNpc: sfGrpIdInitNpc.getValue(),
-      motionTypeId: motionTypeSpin.getValue(),
+      motionTypeId: motionTypeField.getValue(),
       block:        blockCb.checked ? 1 : 0,
       push:         pushCb.checked  ? 1 : 0,
     };

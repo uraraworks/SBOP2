@@ -22,6 +22,7 @@ import { createSpriteField } from "../components/sprite-picker.js";
 import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { createSoundPicker } from "../components/sound-picker.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
+import { createEntityField, invalidateEntityCache } from "../components/entity-picker.js";
 
 // ----------------------------------------------------------------
 // 定数
@@ -202,11 +203,9 @@ function buildDetailPane({ feedbackEl }) {
   useSoundLbl.appendChild(useSoundPicker.el);
   soundGrid.appendChild(useSoundLbl);
 
-  // 使用エフェクト (数値入力 + effectId 表示)
-  const useEffectLbl = makeFormField("使用時エフェクトID");
-  const useEffectSpin = createNumberSpinner({ value: 0, min: 0, max: 9999, step: 1 });
-  useEffectLbl.appendChild(useEffectSpin.el);
-  soundGrid.appendChild(useEffectLbl);
+  // 使用エフェクト（effect picker）
+  const useEffectField = createEntityField({ type: "effect", value: 0, label: "使用時エフェクトID" });
+  soundGrid.appendChild(useEffectField.element);
 
   soundSec.appendChild(soundGrid);
   pane.appendChild(soundSec);
@@ -229,7 +228,8 @@ function buildDetailPane({ feedbackEl }) {
     return spin;
   }
 
-  const weaponInfoIdSpin = addSpinField("武器情報ID（持ち物）", 0, 9999);
+  const weaponInfoField = createEntityField({ type: "weapon", value: 0, label: "武器情報ID（持ち物）" });
+  detailGrid.appendChild(weaponInfoField.element);
   const valueSpin        = addSpinField("効果値(最小)/灯りレベル等", 0, 9999);
   const value2Spin       = addSpinField("効果値(最大)/持続時間等", 0, 9999);
   const moveWaitSpin     = addSpinField("速度（持ち物）", 0, 9999);
@@ -260,9 +260,9 @@ function buildDetailPane({ feedbackEl }) {
 
     dropSoundPicker.setValue(it ? (it.dropSoundId || 0) : 0);
     useSoundPicker.setValue(it ? (it.useSoundId || 0) : 0);
-    useEffectSpin.setValue(it ? (it.useEffectId || 0) : 0);
+    useEffectField.setValue(it ? (it.useEffectId || 0) : 0);
 
-    weaponInfoIdSpin.setValue(it ? (it.weaponInfoId || 0) : 0);
+    weaponInfoField.setValue(it ? (it.weaponInfoId || 0) : 0);
     valueSpin.setValue(it ? (it.value || 0) : 0);
     value2Spin.setValue(it ? (it.value2 || 0) : 0);
     moveWaitSpin.setValue(it ? (it.moveWait || 0) : 0);
@@ -283,8 +283,8 @@ function buildDetailPane({ feedbackEl }) {
       grpIdSub:     sfGrpIdSub.getValue(),
       dropSoundId:  dropSoundPicker.getValue(),
       useSoundId:   useSoundPicker.getValue(),
-      useEffectId:  useEffectSpin.getValue(),
-      weaponInfoId: weaponInfoIdSpin.getValue(),
+      useEffectId:  useEffectField.getValue(),
+      weaponInfoId: weaponInfoField.getValue(),
       value:        valueSpin.getValue(),
       value2:       value2Spin.getValue(),
       moveWait:     moveWaitSpin.getValue(),
@@ -456,6 +456,7 @@ export function mount(container) {
       if (isNew && data?.typeId) {
         detail.setCurrent({ ...payload, typeId: data.typeId });
       }
+      invalidateEntityCache("itemType");
       await leftApi.reload();
     } catch (e) {
       showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
@@ -496,6 +497,7 @@ export function mount(container) {
         if (detail.getCurrent()?.typeId === it.typeId) {
           detail.setItem(null);
         }
+        invalidateEntityCache("itemType");
         await leftApi.reload();
       } catch (e) {
         showFeedback(feedbackEl, "通信エラー: " + e.message, "error");

@@ -16,6 +16,7 @@
 
 import { fetchJson } from "../core/api.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
+import { openEntityPicker } from "../components/entity-picker.js";
 
 // ----------------------------------------------------------------
 // 定数
@@ -40,14 +41,25 @@ function formatMotionType(motionType) {
   return labels.length ? labels.join(",") : "-";
 }
 
-function parseIdListFromCsv(text) {
-  if (!text) { return []; }
-  const out = [];
-  String(text).split(",").forEach((s) => {
-    const n = parseInt(s.trim(), 10);
-    if (!isNaN(n) && n >= 0) { out.push(n); }
-  });
-  return out;
+// ----------------------------------------------------------------
+// エフェクト名解決（/api/effects を一度だけ取得して Map 化）
+// ----------------------------------------------------------------
+
+let _effectNameMapPromise = null;
+
+function loadEffectNameMap() {
+  if (!_effectNameMapPromise) {
+    _effectNameMapPromise = fetchJson("/api/effects")
+      .then(({ response, data }) => {
+        const map = new Map();
+        if (response.ok && Array.isArray(data?.items)) {
+          data.items.forEach((e) => { map.set(e.effectId, e.name); });
+        }
+        return map;
+      })
+      .catch(() => new Map());
+  }
+  return _effectNameMapPromise;
 }
 
 // ----------------------------------------------------------------
@@ -67,6 +79,82 @@ function makeFormField(labelText) {
   span.textContent = labelText;
   lbl.appendChild(span);
   return lbl;
+}
+
+// エフェクト ID の配列を「チップ（名前＋削除×）＋追加ボタン」で編集する部品。
+// カンマ区切り文字列入力の置き換え。内部表現は従来どおり配列のまま。
+function createEffectChipList() {
+  const wrap = document.createElement("div");
+  wrap.className = "form-field";
+
+  const chipWrap = document.createElement("div");
+  chipWrap.style.cssText = "display:flex;gap:0.45rem;flex-wrap:wrap;margin-bottom:0.35rem;min-height:2rem;";
+  wrap.appendChild(chipWrap);
+
+  const addBtn = document.createElement("button");
+  addBtn.type = "button";
+  addBtn.className = "button small";
+  addBtn.textContent = "+ エフェクトを追加";
+  wrap.appendChild(addBtn);
+
+  let _ids = [];
+  const _nameCache = new Map(); // id -> name（picker で選んだ時に上書き解決）
+
+  // 全エフェクト一覧から名前を解決し、届いたら再描画する。
+  loadEffectNameMap().then((map) => {
+    map.forEach((name, id) => { if (!_nameCache.has(id)) { _nameCache.set(id, name); } });
+    render();
+  });
+
+  function render() {
+    chipWrap.innerHTML = "";
+    if (_ids.length === 0) {
+      const empty = document.createElement("span");
+      empty.className = "muted";
+      empty.textContent = "（未設定）";
+      chipWrap.appendChild(empty);
+    }
+    _ids.forEach((id) => {
+      const chip = document.createElement("span");
+      chip.className = "me-frame-chip";
+      chip.style.cssText = "display:inline-flex;align-items:center;gap:0.35rem;cursor:default;";
+      const text = document.createElement("span");
+      const label = _nameCache.get(id);
+      text.textContent = label ? "#" + id + " " + label : "#" + id;
+      chip.appendChild(text);
+      const delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.textContent = "×";
+      delBtn.title = "削除";
+      delBtn.style.cssText = "border:none;background:transparent;cursor:pointer;font-weight:bold;line-height:1;padding:0;";
+      delBtn.addEventListener("click", () => {
+        _ids = _ids.filter((x) => x !== id);
+        render();
+      });
+      chip.appendChild(delBtn);
+      chipWrap.appendChild(chip);
+    });
+  }
+
+  addBtn.addEventListener("click", () => {
+    openEntityPicker({
+      type: "effect",
+      ownerDocument: addBtn.ownerDocument,
+      onSelect: (id, row) => {
+        if (row && row.name) { _nameCache.set(id, row.name); }
+        if (!_ids.includes(id)) { _ids.push(id); }
+        render();
+      },
+    });
+  });
+
+  render();
+
+  return {
+    element: wrap,
+    getValue: () => _ids.slice(),
+    setValue: (ids) => { _ids = Array.isArray(ids) ? ids.slice() : []; render(); },
+  };
 }
 
 // ----------------------------------------------------------------
@@ -161,20 +249,14 @@ function buildDetailPane({ feedbackEl }) {
   const effectGrid = document.createElement("div");
   effectGrid.className = "form-grid compact";
 
-  const atkLbl = makeFormField("通常攻撃時（カンマ区切り）");
-  const atkInput = document.createElement("input");
-  atkInput.type = "text";
-  atkInput.className = "form-input";
-  atkInput.placeholder = "例: 1,2,3";
-  atkLbl.appendChild(atkInput);
+  const atkLbl = makeFormField("通常攻撃時");
+  const atkChips = createEffectChipList();
+  atkLbl.appendChild(atkChips.element);
   effectGrid.appendChild(atkLbl);
 
-  const criLbl = makeFormField("クリティカル時（カンマ区切り）");
-  const criInput = document.createElement("input");
-  criInput.type = "text";
-  criInput.className = "form-input";
-  criInput.placeholder = "例: 10,11";
-  criLbl.appendChild(criInput);
+  const criLbl = makeFormField("クリティカル時");
+  const criChips = createEffectChipList();
+  criLbl.appendChild(criChips.element);
   effectGrid.appendChild(criLbl);
 
   effectSec.appendChild(effectGrid);
@@ -196,8 +278,8 @@ function buildDetailPane({ feedbackEl }) {
     standSpin.setValue(w ? (w.motionTypeStand || 0) : 0);
     walkSpin.setValue(w ? (w.motionTypeWalk || 0) : 0);
 
-    atkInput.value = w ? ((w.effectIdAtack || []).join(",")) : "";
-    criInput.value = w ? ((w.effectIdCritical || []).join(",")) : "";
+    atkChips.setValue(w ? (w.effectIdAtack || []) : []);
+    criChips.setValue(w ? (w.effectIdCritical || []) : []);
   }
 
   function collectData() {
@@ -208,8 +290,8 @@ function buildDetailPane({ feedbackEl }) {
       motionType:       motionType,
       motionTypeStand:  standSpin.getValue(),
       motionTypeWalk:   walkSpin.getValue(),
-      effectIdAtack:    parseIdListFromCsv(atkInput.value),
-      effectIdCritical: parseIdListFromCsv(criInput.value),
+      effectIdAtack:    atkChips.getValue(),
+      effectIdCritical: criChips.getValue(),
     };
   }
 

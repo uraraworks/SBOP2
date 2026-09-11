@@ -22,6 +22,7 @@ import { createSpriteField } from "../components/sprite-picker.js";
 import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { createSoundPicker } from "../components/sound-picker.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
+import { createEntityField } from "../components/entity-picker.js";
 
 // ----------------------------------------------------------------
 // ユーティリティ
@@ -75,18 +76,9 @@ function buildDetailPane({ feedbackEl }) {
   const basicGrid = document.createElement("div");
   basicGrid.className = "form-grid compact";
 
-  // アイテム種別ID
-  const typeIdLbl = makeFormField("アイテム種別ID");
-  const typeIdWrap = document.createElement("div");
-  typeIdWrap.style.display = "flex";
-  typeIdWrap.style.alignItems = "center";
-  typeIdWrap.style.gap = "0.5rem";
-  const typeIdSpin = createNumberSpinner({ value: 1, min: 0, max: 9999, step: 1 });
-  const typeNameSpan = document.createElement("span");
-  typeNameSpan.className = "muted";
-  typeIdWrap.append(typeIdSpin.el, typeNameSpan);
-  typeIdLbl.appendChild(typeIdWrap);
-  basicGrid.appendChild(typeIdLbl);
+  // アイテム種別ID（itemType picker）
+  const typeIdField = createEntityField({ type: "itemType", value: 1, label: "アイテム種別ID" });
+  basicGrid.appendChild(typeIdField.element);
 
   // 名前
   const nameLbl = makeFormField("アイテム名（省略時は種別名）");
@@ -165,11 +157,13 @@ function buildDetailPane({ feedbackEl }) {
     return spin;
   }
 
-  const mapIdSpin    = addSpinField("配置マップID（0=未配置）", 0, 9999);
+  const mapIdField = createEntityField({ type: "map", value: 0, label: "配置マップID（0=未配置）" });
+  placeGrid.appendChild(mapIdField.element);
   const posXSpin     = addSpinField("X座標", -9999, 9999);
   const posYSpin     = addSpinField("Y座標", -9999, 9999);
   const posZSpin     = addSpinField("Z座標（高さ）", -9999, 9999);
-  const charIdSpin   = addSpinField("所持キャラID（0=未所持）", 0, 9999);
+  const charIdField = createEntityField({ type: "character", value: 0, label: "所持キャラID（0=未所持）" });
+  placeGrid.appendChild(charIdField.element);
   const backPackXSpin = addSpinField("バックパックX", 0, 9999);
   const backPackYSpin = addSpinField("バックパックY", 0, 9999);
 
@@ -184,35 +178,34 @@ function buildDetailPane({ feedbackEl }) {
 
   function setItem(it) {
     _current = it || null;
-    typeIdSpin.setValue(it ? (it.itemTypeId || 1) : 1);
-    typeNameSpan.textContent = it?.itemTypeName ? ("（" + it.itemTypeName + "）") : "";
+    typeIdField.setValue(it ? (it.itemTypeId || 1) : 1);
     nameInput.value = it ? (it.name || "") : "";
     putOnCb.checked = it ? !!it.putOn : false;
     sfGrpId.setValue(it ? (it.grpId || 0) : 0);
     sfIconGrpId.setValue(it ? (it.iconGrpId || 0) : 0);
     dropSoundPicker.setValue(it ? (it.dropSoundId || 0) : 0);
-    mapIdSpin.setValue(it ? (it.mapId || 0) : 0);
+    mapIdField.setValue(it ? (it.mapId || 0) : 0);
     posXSpin.setValue(it ? (it.posX || 0) : 0);
     posYSpin.setValue(it ? (it.posY || 0) : 0);
     posZSpin.setValue(it ? (it.posZ || 0) : 0);
-    charIdSpin.setValue(it ? (it.charId || 0) : 0);
+    charIdField.setValue(it ? (it.charId || 0) : 0);
     backPackXSpin.setValue(it ? (it.backPackX || 0) : 0);
     backPackYSpin.setValue(it ? (it.backPackY || 0) : 0);
   }
 
   function collectData() {
     return {
-      itemTypeId:  typeIdSpin.getValue(),
+      itemTypeId:  typeIdField.getValue(),
       name:        nameInput.value,
       putOn:       putOnCb.checked,
       grpId:       sfGrpId.getValue(),
       iconGrpId:   sfIconGrpId.getValue(),
       dropSoundId: dropSoundPicker.getValue(),
-      mapId:       mapIdSpin.getValue(),
+      mapId:       mapIdField.getValue(),
       posX:        posXSpin.getValue(),
       posY:        posYSpin.getValue(),
       posZ:        posZSpin.getValue(),
-      charId:      charIdSpin.getValue(),
+      charId:      charIdField.getValue(),
       backPackX:   backPackXSpin.getValue(),
       backPackY:   backPackYSpin.getValue(),
     };
@@ -244,21 +237,12 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
   dropLbl.append(dropCb, " 落ちているもののみ");
   filterWrap.appendChild(dropLbl);
 
-  const charIdFilterLbl = makeFormField("所持キャラID");
-  const charIdFilterInput = document.createElement("input");
-  charIdFilterInput.type = "number";
-  charIdFilterInput.min = "0";
-  charIdFilterInput.style.width = "6rem";
-  charIdFilterLbl.appendChild(charIdFilterInput);
-  filterWrap.appendChild(charIdFilterLbl);
+  // 所持キャラID / マップID フィルター（entity field。0 のままなら未指定扱い）
+  const charIdFilterField = createEntityField({ type: "character", value: 0, label: "所持キャラID" });
+  filterWrap.appendChild(charIdFilterField.element);
 
-  const mapIdFilterLbl = makeFormField("マップID");
-  const mapIdFilterInput = document.createElement("input");
-  mapIdFilterInput.type = "number";
-  mapIdFilterInput.min = "0";
-  mapIdFilterInput.style.width = "6rem";
-  mapIdFilterLbl.appendChild(mapIdFilterInput);
-  filterWrap.appendChild(mapIdFilterLbl);
+  const mapIdFilterField = createEntityField({ type: "map", value: 0, label: "マップID" });
+  filterWrap.appendChild(mapIdFilterField.element);
 
   const filterBtnWrap = document.createElement("div");
   filterBtnWrap.style.display = "flex";
@@ -308,10 +292,10 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
   function buildQuery() {
     const params = [];
     if (dropCb.checked) { params.push("drop=1"); }
-    const cid = charIdFilterInput.value.trim();
-    if (cid !== "" && !isNaN(Number(cid))) { params.push("charId=" + cid); }
-    const mid = mapIdFilterInput.value.trim();
-    if (mid !== "" && !isNaN(Number(mid))) { params.push("mapId=" + mid); }
+    const cid = charIdFilterField.getValue();
+    if (cid > 0) { params.push("charId=" + cid); }
+    const mid = mapIdFilterField.getValue();
+    if (mid > 0) { params.push("mapId=" + mid); }
     return params.length ? ("?" + params.join("&")) : "";
   }
 
@@ -369,8 +353,8 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
   applyBtn.addEventListener("click", () => loadList());
   clearBtn.addEventListener("click", () => {
     dropCb.checked = true;
-    charIdFilterInput.value = "";
-    mapIdFilterInput.value = "";
+    charIdFilterField.setValue(0);
+    mapIdFilterField.setValue(0);
     loadList();
   });
   searchInput.addEventListener("input", renderList);

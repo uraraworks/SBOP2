@@ -233,3 +233,10 @@
 
 - 順1 完了: core/api.js（401 共通フック setUnauthorizedHandler、putJson/deleteJson、toast オプション）、components/toast.js 新設、dom.js withBusy、core/dirty-guard.js 新設（beforeunload / hashchange / ゲーム画面クリック前段、list-detail 接続）。適用画面: map-info, npc-add, account-create, role-management, map-parts-edit, map-shadow-edit, init-status, map-paint。未適用: char-edit のタブ単位 dirty・その他の画面（順次）。
 - 順2 完了: PUT /api/characters/{id}/npc-spawn 新設、char-edit NPC発生タブを form 化。実機で保存・400 バリデーション確認済み。発生させる移動種別はまだ数値入力（順3 の picker 化で対応）。
+
+### 進捗（2026-09-12）
+
+- 順3 完了: `js/components/entity-picker.js` 新設（openEntityPicker / createEntityField / invalidateEntityCache / fetchCharacterDetail。type: item/itemType/effect/weapon/skill/motionType/map/character/npcTemplate/mapPart/mapShadow）。モーダルは呼び出し元の ownerDocument に生成し別ウィンドウ対応。app.js の未使用レガシー picker と index.html の #picker-modal を削除。`js/data/move-types.js`（CHARMOVETYPE 全 11 値）・`js/data/family-types.js` 新設。適用: char-edit（種族 select・移動種別 select・モーション種別を移動タブに一本化・アイテム/スキル追加欄）、npc-add（種族 select＋テンプレート（既存NPC）から画像等をコピー）、item-types、item-list、character-list、weapon-list（エフェクトをチップ化）、skill-edit（4 方向「上と同じ」）、talk-events（ADDSKILL=skill、PAGE 条件=itemType）、map-events（移動先マップ）。
+- 計画の訂正: 「種族 ID → 種族（NPC テンプレ）picker」は誤り。familyId はキャラ ID ではなく FAMILYTYPE_* の列挙値（体・耳画像の切替用）。種族は select、テンプレートは別欄にした。
+- 残課題: エフェクトのサムネが effect32/64 判定の推測で半数空白（effect-edit の画像種別復元と同じ根本課題）、weapon-list の立ち/すり足モーション ID、char-edit のタブ単位 dirty ガード。
+- 運用メモ: 稼働中の SboSvr は SboSvr\Debug\webroot のコピーを配信する（PostBuildEvent でビルド時のみ更新）。webroot を直したら xcopy で同期してから実機確認。

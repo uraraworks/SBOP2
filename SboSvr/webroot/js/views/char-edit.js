@@ -21,6 +21,9 @@
 import { fetchJson } from "../core/api.js";
 import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { loadCatalog, calcSpriteCoord, loadSheetImage } from "../data/assets.js";
+import { createEntityField } from "../components/entity-picker.js";
+import { MOVE_TYPE_OPTIONS } from "../data/move-types.js";
+import { FAMILY_TYPE_OPTIONS } from "../data/family-types.js";
 
 // ----------------------------------------------------------------
 // アイテム情報マップキャッシュ (itemId → { name, iconGrpId })
@@ -90,6 +93,81 @@ function mkNumField(labelText) {
   lbl.appendChild(inp);
   wrap.appendChild(inp);
   return { wrap, inp };
+}
+
+// entity-picker の createEntityField() を form-grid の 1 フィールドとして包む
+function mkEntityField(labelText, type, initialValue, onChange, filter) {
+  var { wrap } = mkField(labelText);
+  var ef = createEntityField({ type: type, value: initialValue || 0, onChange: onChange, filter: filter });
+  wrap.appendChild(ef.element);
+  return { wrap: wrap, ef: ef };
+}
+
+// data/move-types.js の選択肢を使う <select> フィールド
+function mkSelectField(labelText) {
+  var { wrap, lbl } = mkField(labelText);
+  var sel = document.createElement("select");
+  sel.className = "form-input";
+  lbl.appendChild(sel);
+  wrap.appendChild(sel);
+  return { wrap, sel };
+}
+
+function populateMoveTypeSelect(sel) {
+  sel.innerHTML = "";
+  MOVE_TYPE_OPTIONS.forEach(function (opt) {
+    var o = document.createElement("option");
+    o.value = String(opt.value);
+    o.textContent = opt.label;
+    sel.appendChild(o);
+  });
+}
+
+// 未知の値が来た場合は「不明 (N)」の option を追加してから値を反映する（値を消さない）
+function setMoveTypeValue(sel, value) {
+  var v = (value === null || value === undefined) ? 0 : Number(value);
+  var has = Array.from(sel.options).some(function (o) { return Number(o.value) === v; });
+  if (!has) {
+    var o = document.createElement("option");
+    o.value = String(v);
+    o.textContent = "不明 (" + v + ")";
+    sel.appendChild(o);
+  }
+  sel.value = String(v);
+}
+
+function getMoveTypeValue(sel) {
+  var v = parseInt(sel.value, 10);
+  return Number.isFinite(v) ? v : 0;
+}
+
+// data/family-types.js の選択肢を使う <select> フィールド（種族ID）
+function populateFamilyTypeSelect(sel) {
+  sel.innerHTML = "";
+  FAMILY_TYPE_OPTIONS.forEach(function (opt) {
+    var o = document.createElement("option");
+    o.value = String(opt.value);
+    o.textContent = opt.label;
+    sel.appendChild(o);
+  });
+}
+
+// 未知の値が来た場合は「不明 (N)」の option を追加してから値を反映する（値を消さない）
+function setFamilyTypeValue(sel, value) {
+  var v = (value === null || value === undefined) ? 0 : Number(value);
+  var has = Array.from(sel.options).some(function (o) { return Number(o.value) === v; });
+  if (!has) {
+    var o = document.createElement("option");
+    o.value = String(v);
+    o.textContent = "不明 (" + v + ")";
+    sel.appendChild(o);
+  }
+  sel.value = String(v);
+}
+
+function getFamilyTypeValue(sel) {
+  var v = parseInt(sel.value, 10);
+  return Number.isFinite(v) ? v : 0;
 }
 
 function createNumberValueField(labelText, onChange) {
@@ -202,13 +280,17 @@ function buildBasicTab() {
   var x        = mkNumField("座標 X");
   var y        = mkNumField("座標 Y");
   var direction= mkNumField("向き");
-  var moveType = mkNumField("移動種別");
-  var motionTypeId = mkNumField("モーション種別ID");
-  var familyId = mkNumField("種族ID");
+  var moveType = mkSelectField("移動種別");
+  populateMoveTypeSelect(moveType.sel);
+  // 種族ID（FAMILYTYPE_* select）
+  var familyId = mkSelectField("種族ID");
+  populateFamilyTypeSelect(familyId.sel);
   var grpSize  = mkNumField("画像サイズ");
   var sex      = mkNumField("性別");
+  // モーション種別ID は移動タブ側に一本化（サーバーは PUT /basic, /movement 双方で
+  // motionTypeId を受け付けるが、UI 上の入力欄は移動タブの1箇所のみにする）
   grid.append(charName.wrap, mapId.wrap, x.wrap, y.wrap,
-    direction.wrap, moveType.wrap, motionTypeId.wrap,
+    direction.wrap, moveType.wrap,
     familyId.wrap, grpSize.wrap, sex.wrap);
 
   var block = mkCheckbox("ブロック");
@@ -232,9 +314,8 @@ function buildBasicTab() {
     xInp: x.inp,
     yInp: y.inp,
     directionInp: direction.inp,
-    moveTypeInp: moveType.inp,
-    motionTypeIdInp: motionTypeId.inp,
-    familyIdInp: familyId.inp,
+    moveTypeSel: moveType.sel,
+    familyIdSel: familyId.sel,
     grpSizeInp: grpSize.inp,
     sexInp: sex.inp,
     blockCb: block.cb,
@@ -985,7 +1066,6 @@ function buildMovementTab() {
     ["moveAverage","移動確率"],["moveAverageBattle","戦闘時移動確率"],
     ["moveWait","移動待ち(ms)"],["moveWaitBattle","戦闘時移動待ち(ms)"],
     ["searchDistanceCX","索敵範囲CX"],["searchDistanceCY","索敵範囲CY"],
-    ["motionTypeId","モーション種別ID"],
   ];
   mvFields.forEach(function (pair) {
     var f = mkNumField(pair[1]);
@@ -993,13 +1073,17 @@ function buildMovementTab() {
     inputs[pair[0]] = f.inp;
   });
 
+  // モーション種別ID: 基本タブと重複していたため、こちらに一本化（motionType entity field）
+  var motionTypeField = mkEntityField("モーション種別ID", "motionType", 0);
+  grid.appendChild(motionTypeField.wrap);
+
   var actions = mkEl("div", "form-actions");
   var saveBtn = mkEl("button", "button primary", "保存");
   saveBtn.type = "submit";
   actions.appendChild(saveBtn);
   form.appendChild(actions);
 
-  return { panel, fb, form, inputs };
+  return { panel, fb, form, inputs, motionTypeField };
 }
 
 // ----------------------------------------------------------------
@@ -1024,7 +1108,7 @@ function buildNpcSpawnTab() {
 
   var inputs = {};
   var spawnFields = [
-    ["putCycle","発生周期"],["putMoveType","発生させる移動種別"],
+    ["putCycle","発生周期"],
     ["maxPutCount","同時発生数"],["putAverage","発生確率"],
     ["putAreaX","発生範囲X"],["putAreaY","発生範囲Y"],
   ];
@@ -1034,13 +1118,18 @@ function buildNpcSpawnTab() {
     inputs[pair[0]] = f.inp;
   });
 
+  // 発生させる移動種別 → move-types.js の select
+  var putMoveType = mkSelectField("発生させる移動種別");
+  populateMoveTypeSelect(putMoveType.sel);
+  grid.appendChild(putMoveType.wrap);
+
   var actions = mkEl("div", "form-actions");
   var saveBtn = mkEl("button", "button primary", "保存");
   saveBtn.type = "submit";
   actions.appendChild(saveBtn);
   form.appendChild(actions);
 
-  return { panel, fb, form, inputs, saveBtn };
+  return { panel, fb, form, inputs, saveBtn, putMoveTypeSel: putMoveType.sel };
 }
 
 // ----------------------------------------------------------------
@@ -1057,12 +1146,10 @@ function buildItemsTab() {
   panel.appendChild(fb);
 
   var addRow = mkEl("div", "filter-row");
-  var itemIdInp = mkInput("number");
-  itemIdInp.placeholder = "例: 1001";
-  itemIdInp.min = "1";
+  var itemField = createEntityField({ type: "item", value: 0, label: "アイテムID: " });
   var addBtn = mkEl("button", "button primary", "追加");
   addBtn.type = "button";
-  addRow.append(mkEl("label", "", "アイテムID: "), itemIdInp, addBtn);
+  addRow.append(itemField.element, addBtn);
   panel.appendChild(addRow);
 
   var table = mkEl("table", "data-table");
@@ -1073,7 +1160,7 @@ function buildItemsTab() {
   table.append(thead, tbody);
   panel.appendChild(table);
 
-  return { panel, fb, itemIdInp, addBtn, tbody };
+  return { panel, fb, itemField, addBtn, tbody };
 }
 
 // ----------------------------------------------------------------
@@ -1090,12 +1177,10 @@ function buildSkillsTab() {
   panel.appendChild(fb);
 
   var addRow = mkEl("div", "filter-row");
-  var skillIdInp = mkInput("number");
-  skillIdInp.placeholder = "例: 101";
-  skillIdInp.min = "1";
+  var skillField = createEntityField({ type: "skill", value: 0, label: "スキルID: " });
   var addBtn = mkEl("button", "button primary", "追加");
   addBtn.type = "button";
-  addRow.append(mkEl("label", "", "スキルID: "), skillIdInp, addBtn);
+  addRow.append(skillField.element, addBtn);
   panel.appendChild(addRow);
 
   var table = mkEl("table", "data-table");
@@ -1106,7 +1191,7 @@ function buildSkillsTab() {
   table.append(thead, tbody);
   panel.appendChild(table);
 
-  return { panel, fb, skillIdInp, addBtn, tbody };
+  return { panel, fb, skillField, addBtn, tbody };
 }
 
 // ----------------------------------------------------------------
@@ -1266,9 +1351,10 @@ export function mount(container) {
   var statusTab     = buildStatusTab();
   var equipTab      = buildEquipTab();
   var graphicsTab   = buildGraphicsTab();
-  // NPC ピッカーで motionTypeId input を更新できるよう参照を渡す
-  graphicsTab.setMotionTypeIdRef(basicTab.motionTypeIdInp);
   var movementTab   = buildMovementTab();
+  // NPC ピッカーで motionTypeId input を更新できるよう参照を渡す
+  // （motionTypeId 入力欄は移動タブに一本化したのでそちらの entity field input を渡す）
+  graphicsTab.setMotionTypeIdRef(movementTab.motionTypeField.ef.input);
   var npcSpawnTab   = buildNpcSpawnTab();
   var itemsTab      = buildItemsTab();
   var skillsTab     = buildSkillsTab();
@@ -1343,9 +1429,8 @@ export function mount(container) {
     setNumInp(basicTab.xInp,          d.x);
     setNumInp(basicTab.yInp,          d.y);
     setNumInp(basicTab.directionInp,  d.direction);
-    setNumInp(basicTab.moveTypeInp,   d.moveType);
-    setNumInp(basicTab.motionTypeIdInp, d.motionTypeId);
-    setNumInp(basicTab.familyIdInp,   d.familyId);
+    setMoveTypeValue(basicTab.moveTypeSel, d.moveType);
+    setFamilyTypeValue(basicTab.familyIdSel, d.familyId);
     setNumInp(basicTab.grpSizeInp,    d.grpSize);
     setNumInp(basicTab.sexInp,        d.sex);
     setCbInp(basicTab.blockCb, d.block);
@@ -1377,12 +1462,14 @@ export function mount(container) {
     if (d.movement) {
       var mv = d.movement;
       Object.keys(movementTab.inputs).forEach(function (k) { setNumInp(movementTab.inputs[k], mv[k]); });
+      movementTab.motionTypeField.ef.setValue(mv.motionTypeId || 0);
     }
 
     // NPC発生
     if (d.npcSpawn) {
       var ns = d.npcSpawn;
       Object.keys(npcSpawnTab.inputs).forEach(function (k) { setNumInp(npcSpawnTab.inputs[k], ns[k]); });
+      setMoveTypeValue(npcSpawnTab.putMoveTypeSel, ns.putMoveType);
     }
   }
 
@@ -1400,9 +1487,10 @@ export function mount(container) {
     var x2 = numVal(basicTab.xInp);             if (x2 !== null) { body.x = x2; }
     var y2 = numVal(basicTab.yInp);             if (y2 !== null) { body.y = y2; }
     var dir = numVal(basicTab.directionInp);    if (dir !== null) { body.direction = dir; }
-    var mt = numVal(basicTab.moveTypeInp);      if (mt !== null) { body.moveType = mt; }
-    var moti = numVal(basicTab.motionTypeIdInp);if (moti !== null) { body.motionTypeId = moti; }
-    var fam = numVal(basicTab.familyIdInp);     if (fam !== null) { body.familyId = fam; }
+    body.moveType = getMoveTypeValue(basicTab.moveTypeSel);
+    // モーション種別ID は移動タブに一本化したのでここでは送らない（サーバーは
+    // /movement PUT でも motionTypeId を受け付ける）
+    body.familyId = getFamilyTypeValue(basicTab.familyIdSel);
     var gs = numVal(basicTab.grpSizeInp);       if (gs !== null) { body.grpSize = gs; }
     var sx = numVal(basicTab.sexInp);           if (sx !== null) { body.sex = sx; }
     body.block = basicTab.blockCb.checked;
@@ -1522,6 +1610,7 @@ export function mount(container) {
       var v = numVal(movementTab.inputs[k]);
       if (v !== null) { body[k] = v; }
     });
+    body.motionTypeId = movementTab.motionTypeField.ef.getValue();
 
     try {
       var { response, data } = await putJson("/api/characters/" + currentCharId + "/movement", body);
@@ -1551,6 +1640,7 @@ export function mount(container) {
       var v = numVal(npcSpawnTab.inputs[k]);
       if (v !== null) { body[k] = v; }
     });
+    body.putMoveType = getMoveTypeValue(npcSpawnTab.putMoveTypeSel);
 
     npcSpawnTab.saveBtn.disabled = true;
     setFb(npcSpawnTab.fb, "保存中...", "");
@@ -1650,7 +1740,7 @@ export function mount(container) {
 
   itemsTab.addBtn.addEventListener("click", async function () {
     if (!currentCharId) { alert("先にキャラクターを表示してください"); return; }
-    var val = parseInt(itemsTab.itemIdInp.value, 10);
+    var val = itemsTab.itemField.getValue();
     if (!val || val <= 0) { alert("有効なアイテムID（1以上）を入力してください"); return; }
     setFb(itemsTab.fb, "追加中...", "");
     try {
@@ -1735,7 +1825,7 @@ export function mount(container) {
 
   skillsTab.addBtn.addEventListener("click", async function () {
     if (!currentCharId) { alert("先にキャラクターを表示してください"); return; }
-    var val = parseInt(skillsTab.skillIdInp.value, 10);
+    var val = skillsTab.skillField.getValue();
     if (!val || val <= 0) { alert("有効なスキルID（1以上）を入力してください"); return; }
     setFb(skillsTab.fb, "追加中...", "");
     try {
