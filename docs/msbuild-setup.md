@@ -20,3 +20,4 @@ powershell -ExecutionPolicy Bypass -File tools/build-sbocli.ps1 -Configuration D
 ## 補足
 - 並列ビルドしたい場合は `tools/invoke-msbuild.ps1` に `-Parallel` を指定する。
 - 既存プロジェクトでは並列時に `C1041`（PDB競合）が出る場合があるため、既定はシリアルにしている。
+- `SBO.sln` にはビルド対象から外したプロジェクトがある。詳細は `docs/native-client-freeze.md` を参照。
