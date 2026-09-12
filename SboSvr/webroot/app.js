@@ -137,12 +137,18 @@ function openCharacterDetailFromGame(charId) {
 }
 
 function handleAdminGamePick(message) {
+  // ルート → ハンドラのレジストリ方式(core/game-pick.js)へまず振り分ける。
+  // 登録ハンドラが処理した場合(true)は、確認ダイアログも含めハンドラ側の
+  // 責務なのでここでは何もしない。false の時だけ以下の従来分岐にフォールバックする
+  // (main.js が app.js より後に読み込まれるが、この関数はゲーム iframe からの
+  //  postMessage で非同期に呼ばれるため、実行時点では既に main.js の評価が
+  //  完了しており window.__gamePick は利用可能)。
+  if (window.__gamePick && window.__gamePick.dispatchGamePick(message)) {
+    return;
+  }
   // 未保存の変更があれば確認する(dirty-guard.js)。
   // app.js は非 module のレガシースクリプトのため import できず、
-  // main.js 側で window.__dirtyGuard として公開したものを参照する
-  // (main.js は app.js より後に読み込まれるが、この関数はゲーム iframe からの
-  //  postMessage で非同期に呼ばれるため、実行時点では既に main.js の評価が
-  //  完了しており window.__dirtyGuard は利用可能)。
+  // main.js 側で window.__dirtyGuard として公開したものを参照する。
   if (window.__dirtyGuard && window.__dirtyGuard.isDirty() && !window.__dirtyGuard.confirmDiscard()) {
     return;
   }
@@ -161,52 +167,10 @@ function handleAdminGamePick(message) {
     }
   } else if (currentRoute === "character-list") {
     // キャラ一覧ビュー: charId があれば character-overview へ遷移して詳細を表示
+    // (core/game-pick.js の openCharacterEditor に統一。pendingCharId 経由なので
+    //  hashchange が非同期でも mount 後に確実に反映される)
     if (charId > 0) {
-      navigateTo("character-overview");
-      if (typeof window._charEditMount === "function") { window._charEditMount(charId); }
-      return;
-    }
-  } else if (currentRoute === "map-events") {
-    // マップイベント編集ビュー: map-events.js の window._ API 経由でセル選択を通知
-    if (mapId > 0) {
-      const state  = window._mapEventsState;
-      const reload = window._mapEventsReload;
-      const renderTable = window._mapEventsRenderTable;
-      const renderForm  = window._mapEventsRenderForm;
-      const feedback    = window._mapEventsFeedback;
-      if (!state) { return; }
-
-      const switchAndFind = function () {
-        const ev = state.events.find(function (e) {
-          if (e.hitType === 2) {
-            const x1 = Math.min(e.pos.x, e.pos2.x);
-            const x2 = Math.max(e.pos.x, e.pos2.x);
-            const y1 = Math.min(e.pos.y, e.pos2.y);
-            const y2 = Math.max(e.pos.y, e.pos2.y);
-            return cellX >= x1 && cellX <= x2 && cellY >= y1 && cellY <= y2;
-          }
-          return e.pos.x === cellX && e.pos.y === cellY;
-        });
-        if (ev) {
-          state.selectedEventId = ev.id;
-          if (typeof renderTable === "function") { renderTable(); }
-          if (typeof renderForm  === "function") { renderForm(ev); }
-          if (typeof feedback    === "function") { feedback("(" + cellX + "," + cellY + ") のイベントを選択しました", "success"); }
-        } else {
-          if (typeof feedback === "function") { feedback("(" + cellX + "," + cellY + ") にイベントはありません", ""); }
-        }
-      };
-
-      if (state.selectedMapId !== mapId) {
-        state.selectedMapId = mapId;
-        if (typeof reload === "function") {
-          reload().then(switchAndFind).catch(function () {
-            if (typeof feedback === "function") { feedback("イベント一覧の取得に失敗しました", "error"); }
-          });
-        }
-      } else {
-        switchAndFind();
-      }
+      if (window.__gamePick) { window.__gamePick.openCharacterEditor(charId); }
       return;
     }
   } else {

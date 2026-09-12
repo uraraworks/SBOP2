@@ -13,10 +13,12 @@
  *
  * ゲーム画面クリック連携:
  *   mount 時 / マップ選択変更時に sbop2_set_admin_mode (mode:0) を iframe へ送信。
- *   sbop2_admin_pick 受信 → フォームに座標反映 → 詳細ビューへ切替。
+ *   core/game-pick.js に registerPickHandler("map-objects", ...) で登録し、
+ *   pick 受信 → フォームに座標反映 → 詳細ビューへ切替。
  */
 
 import { fetchJson } from "../core/api.js";
+import { registerPickHandler, unregisterPickHandler } from "../core/game-pick.js";
 
 // ----------------------------------------------------------------
 // 定数
@@ -806,40 +808,32 @@ export function mount(container) {
   });
 
   // ================================================================
-  // iframe メッセージ連携 (sbop2_admin_pick)
+  // ゲーム画面クリック連携 (core/game-pick.js のレジストリ経由)
   // ================================================================
-  function onAdminMessage(ev) {
-    if (adminGameFrame && ev.source !== adminGameFrame.contentWindow) return;
-    const msg = ev.data;
-    if (!msg || typeof msg !== "object") return;
-    if (msg.kind === "sbop2_admin_pick") {
-      const mapId = Number(msg.mapId) || 0;
-      const cellX = Number(msg.cellX) || 0;
-      const cellY = Number(msg.cellY) || 0;
-      if (mapId > 0) {
-        if (String(state.selectedMapId) !== String(mapId)) {
-          state.selectedMapId = mapId;
-          mapSelect.value = String(mapId);
-          loadMapData(false).then(() => {
-            const map = getSelectedMap();
-            const occ = map
-              ? (new Map(map.objects.map((o) => [`${o.x},${o.y}`, o]))).get(`${cellX},${cellY}`) || null
-              : null;
-            handleCellClick(cellX, cellY, occ);
-            showDetail();
-          });
-        } else {
-          const map = getSelectedMap();
-          const occ = map
-            ? (new Map(map.objects.map((o) => [`${o.x},${o.y}`, o]))).get(`${cellX},${cellY}`) || null
-            : null;
-          handleCellClick(cellX, cellY, occ);
-          showDetail();
-        }
-      }
+  function handleGamePick(pick) {
+    if (!pick.mapId) { return false; }
+    if (String(state.selectedMapId) !== String(pick.mapId)) {
+      state.selectedMapId = pick.mapId;
+      mapSelect.value = String(pick.mapId);
+      loadMapData(false).then(() => {
+        const map = getSelectedMap();
+        const occ = map
+          ? (new Map(map.objects.map((o) => [`${o.x},${o.y}`, o]))).get(`${pick.cellX},${pick.cellY}`) || null
+          : null;
+        handleCellClick(pick.cellX, pick.cellY, occ);
+        showDetail();
+      });
+    } else {
+      const map = getSelectedMap();
+      const occ = map
+        ? (new Map(map.objects.map((o) => [`${o.x},${o.y}`, o]))).get(`${pick.cellX},${pick.cellY}`) || null
+        : null;
+      handleCellClick(pick.cellX, pick.cellY, occ);
+      showDetail();
     }
+    return true;
   }
-  window.addEventListener("message", onAdminMessage);
+  registerPickHandler("map-objects", handleGamePick);
 
   // ================================================================
   // 初期ロード
@@ -848,7 +842,7 @@ export function mount(container) {
   notifyAdminMode();
 
   _destroyFn = () => {
-    window.removeEventListener("message", onAdminMessage);
+    unregisterPickHandler("map-objects", handleGamePick);
     container.innerHTML = "";
   };
 }

@@ -14,6 +14,7 @@
 const CONTAINER_ID = "sbop2-toast-container";
 const DURATION_MS = 3000;
 const DURATION_MS_ERROR = 6000;
+const DURATION_MS_ACTION = 8000;
 const REMOVE_FALLBACK_MS = 400;
 
 /** @type {HTMLElement|null} */
@@ -39,7 +40,11 @@ function ensureContainer() {
  * トーストを表示する。
  * @param {string} message  表示文言
  * @param {"success"|"error"|"info"} [type="info"]
- * @param {{ detail?: string }} [options]  detail: error 時にクリックで展開する詳細文
+ * @param {{ detail?: string, action?: { label: string, onClick: () => void }, duration?: number }} [options]
+ *   detail: error 時にクリックで展開する詳細文。
+ *   action: ボタン付きトースト(例:「編集を開く」)。指定時は既定表示時間が 8 秒になる。
+ *   duration: 表示時間(ms)を明示指定する。0 以下を指定すると自動消去しない。
+ *     指定時は action や type による既定値より優先される。
  * @returns {{ dismiss: () => void }}
  */
 export function showToast(message, type = "info", options = {}) {
@@ -115,11 +120,37 @@ export function showToast(message, type = "info", options = {}) {
     item.appendChild(closeBtn);
   }
 
+  const action = options.action && typeof options.action.onClick === "function" ? options.action : null;
+  if (action) {
+    const actionRow = document.createElement("div");
+    actionRow.className = "toast-action-row";
+    const actionBtn = document.createElement("button");
+    actionBtn.type = "button";
+    actionBtn.className = "toast-action";
+    actionBtn.textContent = action.label || "実行";
+    actionBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      try {
+        action.onClick();
+      } finally {
+        dismiss();
+      }
+    });
+    actionRow.appendChild(actionBtn);
+    item.appendChild(actionRow);
+  }
+
   container.appendChild(item);
   // 追加直後は transition 前提のクラス無し状態から開始し、次フレームで is-visible を付与してフェードインさせる
   requestAnimationFrame(() => item.classList.add("is-visible"));
 
-  timer = setTimeout(dismiss, type === "error" ? DURATION_MS_ERROR : DURATION_MS);
+  const hasCustomDuration = typeof options.duration === "number" && !Number.isNaN(options.duration);
+  const duration = hasCustomDuration
+    ? options.duration
+    : (action ? DURATION_MS_ACTION : (type === "error" ? DURATION_MS_ERROR : DURATION_MS));
+  if (duration > 0) {
+    timer = setTimeout(dismiss, duration);
+  }
 
   return { dismiss };
 }
@@ -137,7 +168,10 @@ export function showErrorToast(message, detail) {
   return showToast(message, "error", { detail });
 }
 
-/** @param {string} message */
-export function showInfoToast(message) {
-  return showToast(message, "info");
+/**
+ * @param {string} message
+ * @param {{ detail?: string, action?: { label: string, onClick: () => void }, duration?: number }} [options]
+ */
+export function showInfoToast(message, options) {
+  return showToast(message, "info", options || {});
 }

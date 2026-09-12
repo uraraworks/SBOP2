@@ -240,3 +240,6 @@
 - 計画の訂正: 「種族 ID → 種族（NPC テンプレ）picker」は誤り。familyId はキャラ ID ではなく FAMILYTYPE_* の列挙値（体・耳画像の切替用）。種族は select、テンプレートは別欄にした。
 - 残課題: エフェクトのサムネが effect32/64 判定の推測で半数空白（effect-edit の画像種別復元と同じ根本課題）、weapon-list の立ち/すり足モーション ID、char-edit のタブ単位 dirty ガード。
 - 運用メモ: 稼働中の SboSvr は SboSvr\Debug\webroot のコピーを配信する（PostBuildEvent でビルド時のみ更新）。webroot を直したら xcopy で同期してから実機確認。
+- 順4 完了: `js/core/game-pick.js` 新設（1-5: registerPickHandler / requestNextPick（次の 1 回のクリックを横取り、案内トーストに中止ボタン、Esc・画面遷移で自動解除）/ openCharacterEditor）。app.js の map-events 分岐と window._mapEvents* を廃止し map-events.js へ移設、map-object-place.js の独自 message リスナーを撤去。toast.js に action ボタン・duration オプション。map-events: クリックしたセルにイベントが無ければ「ここに新規作成」、MAPMOVE の移動先をクリックで指定、保存後の自動遷移を廃止（新規保存後に採番 id を反映し二重 POST を防止）。npc-add: 座標をクリックで指定（セル×32 でピクセルへ。MAPPARTSSIZE=32、左上基準）、追加後トーストの「編集を開く」でキャラ詳細へ。
+- 座標単位メモ: ゲームからの pick はセル座標。マップイベントの pos と MAPMOVE 移動先はセル単位（変換不要）、キャラの x/y はピクセル単位（×32）。
+- 残課題（順4 関連）: 一覧行クリックでゲーム画面のセルをハイライト（sbop2_admin_focus_cell、ゲーム側改修が要る）、npc-add の通常クリック連動は見送り。

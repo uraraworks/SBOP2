@@ -17,6 +17,7 @@ import { registerRoute, isMigrated, handleRoute, currentRoute } from "./core/rou
 import { initWorkspaceLayout } from "./core/workspace-layout.js";
 import { initChatLogPopup } from "./core/chat-log-popup.js";
 import { guardHashChange } from "./core/dirty-guard.js";
+import "./core/game-pick.js";
 
 // ----------------------------------------------------------------
 // 移行済みビューの登録(F2 フェーズ以降にここへ追加していく)

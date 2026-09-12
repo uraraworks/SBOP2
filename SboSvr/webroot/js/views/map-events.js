@@ -9,12 +9,14 @@
  *   PUT  /api/maps/events                  → イベント更新
  *   DELETE /api/maps/events?mapId=N&id=N   → イベント削除
  *
- * ゲーム iframe 連携: app.js の handleAdminGamePick が map-events ルートで
- * このモジュールの state を参照する。window._mapEventsState で公開する。
+ * ゲーム iframe 連携: core/game-pick.js に registerPickHandler("map-events", ...)
+ * で登録し、セルクリックからイベントを検索・選択する。
  */
 
 import { fetchJson } from "../core/api.js";
 import { createEntityField } from "../components/entity-picker.js";
+import { registerPickHandler, unregisterPickHandler, requestNextPick } from "../core/game-pick.js";
+import { showSuccessToast } from "../components/toast.js";
 
 const MAP_EVENT_TYPE_LABELS = {
   0: "なし (NONE)",
@@ -48,7 +50,8 @@ function buildDetailFieldsHtml(type, detail) {
     return `<div class="form-field" id="map-event-destmapid-wrap" data-detail-destmapid="${detail.destMapId || 0}"></div>` +
            `<label class="form-field"><span>移動先 X</span><input type="number" name="detail.destX" value="${detail.destX || 0}"></label>` +
            `<label class="form-field"><span>移動先 Y</span><input type="number" name="detail.destY" value="${detail.destY || 0}"></label>` +
-           `<label class="form-field"><span>向き</span><input type="number" name="detail.direction" value="${detail.direction || 0}"></label>`;
+           `<label class="form-field"><span>向き</span><input type="number" name="detail.direction" value="${detail.direction || 0}"></label>` +
+           `<div class="form-actions"><button type="button" class="btn btn-secondary" id="map-event-mapmove-pick-btn">ゲーム画面でクリックして指定</button></div>`;
   case 3: // TRASHBOX
     return '<p class="field-note">固有フィールドなし</p>';
   case 4: // INITSTATUS
@@ -69,13 +72,34 @@ function buildDetailFieldsHtml(type, detail) {
 // マップ picker 付きの entity field を差し込む。FormData で拾えるよう
 // input に name="detail.destMapId" を付与する。
 function mountMapMoveDestField(container) {
-  if (!container) { return; }
+  if (!container) { return null; }
   const wrap = container.querySelector("#map-event-destmapid-wrap");
-  if (!wrap) { return; }
+  if (!wrap) { return null; }
   const initialValue = parseInt(wrap.dataset.detailDestmapid || "0", 10) || 0;
   const field = createEntityField({ type: "map", value: initialValue, label: "移動先マップID" });
   field.input.name = "detail.destMapId";
   wrap.replaceWith(field.element);
+  return field;
+}
+
+// 「ゲーム画面でクリックして指定」ボタン: 次の1回の pick を移動先マップID/X/Y へ
+// 反映する。編集中フォームへの値入力にすぎないため破棄確認(confirmDiscard)は呼ばない。
+function mountMapMoveDestPickButton(container, destMapField) {
+  if (!container) { return; }
+  const btn = container.querySelector("#map-event-mapmove-pick-btn");
+  if (!btn) { return; }
+  btn.addEventListener("click", () => {
+    requestNextPick({
+      message: "移動先にするセルをゲーム画面でクリックしてください(Esc で中止)",
+      onPick: (pick) => {
+        if (destMapField) { destMapField.setValue(pick.mapId); }
+        const destXInput = container.querySelector('[name="detail.destX"]');
+        const destYInput = container.querySelector('[name="detail.destY"]');
+        if (destXInput) { destXInput.value = String(pick.cellX); }
+        if (destYInput) { destYInput.value = String(pick.cellY); }
+      }
+    });
+  });
 }
 
 function collectMapEventPayload(form, selectedMapId) {
@@ -156,6 +180,9 @@ export function mount(container) {
           </div>
 
           <p id="map-event-feedback" class="form-feedback" aria-live="polite"></p>
+          <div class="form-actions" id="map-event-create-here-actions" style="display:none;">
+            <button type="button" class="btn btn-primary" id="map-event-create-here-btn">ここに新規作成</button>
+          </div>
         </div>
 
         <!-- 詳細ペイン（編集フォーム） -->
@@ -176,6 +203,8 @@ export function mount(container) {
   const listSection       = container.querySelector("#map-event-list-section");
   const detailSection     = container.querySelector("#map-event-detail-section");
   const backBtn           = container.querySelector("#map-event-back-btn");
+  const createHereActions = container.querySelector("#map-event-create-here-actions");
+  const createHereBtn     = container.querySelector("#map-event-create-here-btn");
 
   const state = {
     maps: [],
@@ -184,15 +213,18 @@ export function mount(container) {
     selectedEventId: null,
     isLoading: false,
     loadError: null,
+    pendingCreatePos: null, // { x, y } クリックしたセルにイベントが無かった時の「ここに新規作成」候補座標
   };
 
-  // app.js の handleAdminGamePick から参照できるように公開
-  window._mapEventsState = state;
-  // ゲーム連携: イベント一覧再ロードとフォーム表示のコールバック
-  window._mapEventsReload = loadEventList;
-  window._mapEventsRenderTable = renderTable;
-  window._mapEventsRenderForm = renderForm;
-  window._mapEventsFeedback = setFeedback;
+  function hideCreateHereButton() {
+    state.pendingCreatePos = null;
+    if (createHereActions) { createHereActions.style.display = "none"; }
+  }
+
+  function showCreateHereButton(x, y) {
+    state.pendingCreatePos = { x, y };
+    if (createHereActions) { createHereActions.style.display = ""; }
+  }
 
   function setSummary(msg) { if (summaryEl) { summaryEl.textContent = msg || ""; } }
   function setFeedback(msg, type) {
@@ -267,6 +299,7 @@ export function mount(container) {
     if (detailSection) { detailSection.style.display = "none"; }
     state.selectedEventId = null;
     if (editArea) { editArea.innerHTML = ""; }
+    hideCreateHereButton();
   }
 
   function showDetailSection() {
@@ -274,8 +307,9 @@ export function mount(container) {
     if (detailSection) { detailSection.style.display = ""; }
   }
 
-  function renderForm(ev) {
+  function renderForm(ev, presetPos) {
     if (!editArea) { return; }
+    hideCreateHereButton();
     showDetailSection();
     const isNew   = (ev === null || ev === undefined);
     const eventId = isNew ? 0 : ev.id;
@@ -293,7 +327,7 @@ export function mount(container) {
       const sel = (Number(k) === type) ? " selected" : "";
       typeOptions += `<option value="${k}"${sel}>${MAP_EVENT_TYPE_LABELS[k]}</option>`;
     });
-    const pos  = isNew ? { x: 0, y: 0 } : ev.pos;
+    const pos  = isNew ? (presetPos || { x: 0, y: 0 }) : ev.pos;
     const pos2 = isNew ? { x: 0, y: 0 } : ev.pos2;
 
     editArea.innerHTML =
@@ -320,11 +354,11 @@ export function mount(container) {
     // 種別変更
     const typeSelect = editArea.querySelector("#map-event-type-select-mod");
     const detailFieldsEl = editArea.querySelector("#map-event-detail-fields-mod");
-    mountMapMoveDestField(detailFieldsEl);
+    mountMapMoveDestPickButton(detailFieldsEl, mountMapMoveDestField(detailFieldsEl));
     if (typeSelect && detailFieldsEl) {
       typeSelect.addEventListener("change", () => {
         detailFieldsEl.innerHTML = buildDetailFieldsHtml(typeSelect.value, {});
-        mountMapMoveDestField(detailFieldsEl);
+        mountMapMoveDestPickButton(detailFieldsEl, mountMapMoveDestField(detailFieldsEl));
       });
     }
 
@@ -371,10 +405,14 @@ export function mount(container) {
       }
       state.selectedEventId = data.id;
       setSummary(`イベント ${state.events.length} 件`);
-      if (fbEl) { fbEl.textContent = "保存しました"; fbEl.className = "form-feedback form-feedback--success"; }
       renderTable();
-      // 保存後は一覧に戻る（少し遅延してメッセージを見せる）
-      setTimeout(() => { showListSection(); }, 600);
+      showSuccessToast("イベント " + data.id + " を保存しました");
+      // 保存後は一覧に自動遷移せず、その場（編集フォーム）に留まる。
+      // 新規作成直後はサーバー採番の id を hidden input へ反映する必要があるため
+      // フォームを最新データで再描画する（PUT/POST の取り違えと id=0 の重複作成を防ぐ）。
+      renderForm(data);
+      const newFbEl = getFormFeedbackEl();
+      if (newFbEl) { newFbEl.textContent = "保存しました"; newFbEl.className = "form-feedback form-feedback--success"; }
     } catch (err) {
       if (fbEl) { fbEl.textContent = "保存に失敗しました: " + err.message; fbEl.className = "form-feedback form-feedback--error"; }
     }
@@ -466,19 +504,64 @@ export function mount(container) {
       showListSection();
     });
   }
+  if (createHereBtn) {
+    createHereBtn.addEventListener("click", () => {
+      const pos = state.pendingCreatePos;
+      if (!pos) { return; }
+      hideCreateHereButton();
+      state.selectedEventId = null;
+      renderForm(null, pos);
+    });
+  }
 
   // data-talk-event 連携（会話イベント editor を開くボタン）は app.js の bindTalkEventEditor が担当
   // このビュー内でバインドは不要
+
+  // ゲーム画面クリック連携: セル座標から該当イベントを検索して選択する。
+  // 別マップをクリックした場合はそのマップへ切り替えてからイベント一覧を再取得する。
+  function handleGamePick(pick) {
+    if (!pick.mapId) { return false; }
+
+    const switchAndFind = function () {
+      const ev = state.events.find(function (e) {
+        if (e.hitType === 2) {
+          const x1 = Math.min(e.pos.x, e.pos2.x);
+          const x2 = Math.max(e.pos.x, e.pos2.x);
+          const y1 = Math.min(e.pos.y, e.pos2.y);
+          const y2 = Math.max(e.pos.y, e.pos2.y);
+          return pick.cellX >= x1 && pick.cellX <= x2 && pick.cellY >= y1 && pick.cellY <= y2;
+        }
+        return e.pos.x === pick.cellX && e.pos.y === pick.cellY;
+      });
+      if (ev) {
+        state.selectedEventId = ev.id;
+        renderTable();
+        renderForm(ev);
+        setFeedback("(" + pick.cellX + "," + pick.cellY + ") のイベントを選択しました", "success");
+      } else {
+        setFeedback("(" + pick.cellX + "," + pick.cellY + ") にイベントはありません", "");
+        showCreateHereButton(pick.cellX, pick.cellY);
+      }
+    };
+
+    if (state.selectedMapId !== pick.mapId) {
+      state.selectedMapId = pick.mapId;
+      loadEventList().then(switchAndFind).catch(function () {
+        setFeedback("イベント一覧の取得に失敗しました", "error");
+      });
+    } else {
+      switchAndFind();
+    }
+    return true;
+  }
+
+  registerPickHandler("map-events", handleGamePick);
 
   initView();
 
   return {
     unmount() {
-      delete window._mapEventsState;
-      delete window._mapEventsReload;
-      delete window._mapEventsRenderTable;
-      delete window._mapEventsRenderForm;
-      delete window._mapEventsFeedback;
+      unregisterPickHandler("map-events", handleGamePick);
     }
   };
 }

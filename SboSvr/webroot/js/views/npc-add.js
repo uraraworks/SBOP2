@@ -11,10 +11,16 @@ import { fetchJson } from "../core/api.js";
 import { createSpriteField } from "../components/sprite-picker.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
 import { withBusy } from "../core/dom.js";
-import { showSuccessToast, showErrorToast } from "../components/toast.js";
+import { showToast, showSuccessToast, showErrorToast } from "../components/toast.js";
 import { MOVE_TYPE_OPTIONS } from "../data/move-types.js";
 import { FAMILY_TYPE_OPTIONS } from "../data/family-types.js";
 import { createEntityField, fetchCharacterDetail } from "../components/entity-picker.js";
+import { requestNextPick, cancelPendingPick, openCharacterEditor } from "../core/game-pick.js";
+
+// 1セル = 32px（GlobalDefine.h の MAPPARTSSIZE）。
+// キャラ座標(x/y)はセル左上を原点とするpx単位で、center補正は無い
+// (Common/Info/InfoCharBase.cpp の GetMapPosRect が px÷MAPPARTSSIZE でセル座標化する式に合わせる)。
+const CELL_PX = 32;
 
 // ----------------------------------------------------------------
 // ユーティリティ
@@ -126,6 +132,32 @@ export function mount(container) {
   reqGrid.appendChild(makeField("座標 X", xInput));
   const yInput = makeNumberInput(0, "0");
   reqGrid.appendChild(makeField("座標 Y", yInput));
+
+  // ゲーム画面でクリックして座標指定
+  const pickWrap = document.createElement("div");
+  pickWrap.className = "form-field";
+  const pickBtn = document.createElement("button");
+  pickBtn.type = "button";
+  pickBtn.className = "button";
+  pickBtn.textContent = "ゲーム画面でクリックして指定";
+  pickWrap.appendChild(pickBtn);
+  reqGrid.appendChild(pickWrap);
+
+  pickBtn.addEventListener("click", function () {
+    withBusy(pickBtn, () => new Promise((resolve) => {
+      requestNextPick({
+        route: "npc-management",
+        message: "NPC を置きたい位置をゲーム画面でクリックしてください(Esc で中止)",
+        onPick: (pick) => {
+          mapIdInput.value = String(pick.mapId);
+          xInput.value = String(pick.cellX * CELL_PX);
+          yInput.value = String(pick.cellY * CELL_PX);
+          resolve();
+        },
+        onCancel: () => resolve(),
+      });
+    }), { busyText: "クリック待ち…" });
+  });
 
   reqSection.appendChild(reqGrid);
   card.appendChild(reqSection);
@@ -345,10 +377,19 @@ export function mount(container) {
           showErrorToast("NPC 追加に失敗しました", errMsg);
           return;
         }
-        const charId = data && data.charId ? data.charId : "?";
-        const message = "NPC を追加しました (charId=" + charId + ", mapId=" + mapId + ", x=" + x + ", y=" + y + ")";
+        const charId = data && data.charId ? data.charId : null;
+        const message = "NPC を追加しました (charId=" + (charId != null ? charId : "?") + ", mapId=" + mapId + ", x=" + x + ", y=" + y + ")";
         resetForm();
-        showSuccessToast(message);
+        if (charId != null) {
+          showToast(message, "success", {
+            action: {
+              label: "編集を開く",
+              onClick: () => { openCharacterEditor(charId); },
+            },
+          });
+        } else {
+          showSuccessToast(message);
+        }
       } catch (err) {
         console.error("npc-add submit error", err);
         showFeedback(feedbackEl, "通信エラーが発生しました", "error");
@@ -358,6 +399,7 @@ export function mount(container) {
   });
 
   _destroyFn = function () {
+    cancelPendingPick({ silent: true });
     container.innerHTML = "";
   };
 }
