@@ -104,6 +104,50 @@ namespace
         outDir.assign(strDir.begin(), strDir.end());
         outName = strName;
     }
+
+    // 任意のファイル名(空白・日本語等)でテスト用の一時ファイルを作る。
+    // BuildFilePath のパーセントデコード/UTF-8→wide 変換を Handle() 経由で
+    // 検証するために使う(BuildFilePath 自体は private のため)。
+    class CNamedTempFile
+    {
+    public:
+        CNamedTempFile(const std::wstring &strDir, const std::wstring &strName, const char *pszContent)
+        {
+            m_strDir = strDir;
+            if (!m_strDir.empty()) {
+                wchar_t last = m_strDir[m_strDir.size() - 1];
+                if ((last != L'\\') && (last != L'/')) {
+                    m_strDir.push_back(L'\\');
+                }
+            }
+            m_strPath = m_strDir + strName;
+
+            HANDLE hFile = CreateFileW(m_strPath.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+            if (hFile != INVALID_HANDLE_VALUE) {
+                if (pszContent != NULL) {
+                    DWORD dwWritten = 0;
+                    WriteFile(hFile, pszContent, static_cast<DWORD>(strlen(pszContent)), &dwWritten, NULL);
+                }
+                CloseHandle(hFile);
+            }
+        }
+        ~CNamedTempFile(void)
+        {
+            DeleteFileW(m_strPath.c_str());
+        }
+        const std::wstring &Dir(void) const { return m_strDir; }
+
+    private:
+        std::wstring m_strDir;
+        std::wstring m_strPath;
+    };
+
+    std::wstring GetTempDirW(void)
+    {
+        wchar_t szDir[MAX_PATH];
+        GetTempPathW(MAX_PATH, szDir);
+        return std::wstring(szDir);
+    }
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -367,4 +411,157 @@ TEST(静的配信_q0で拒否された圧縮は使わない)
 
     CHECK(res.body == "hello world");
     CHECK(FindResponseHeader(res, "Content-Encoding").empty());
+}
+
+//////////////////////////////////////////////////////////////////////
+// BuildFilePath のパーセントデコード(%XX)対応
+// 「/game/BGM/flowed%20piano.ogg」が404になっていた不具合の再現/修正確認。
+//////////////////////////////////////////////////////////////////////
+
+TEST(静的配信_パーセントエンコードされた空白を含むパスを配信できる)
+{
+    std::wstring strDir = GetTempDirW();
+    CNamedTempFile file(strDir, L"flowed piano.ogg", "OGG-BYTES");
+
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    HttpRequest req;
+    req.method = "GET";
+    req.path = "/flowed%20piano.ogg";
+
+    HttpResponse res;
+    handler.Handle(req, res);
+
+    CHECK(res.statusLine.find("200") != std::string::npos);
+    CHECK(res.body == "OGG-BYTES");
+}
+
+TEST(静的配信_パーセントエンコードされたUTF8日本語ファイル名を配信できる)
+{
+    // 「テスト.png」の UTF-8 パーセントエンコード
+    std::wstring strDir = GetTempDirW();
+    CNamedTempFile file(strDir, L"テスト.png", "PNG-BYTES");
+
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    HttpRequest req;
+    req.method = "GET";
+    req.path = "/%E3%83%86%E3%82%B9%E3%83%88.png";
+
+    HttpResponse res;
+    handler.Handle(req, res);
+
+    CHECK(res.statusLine.find("200") != std::string::npos);
+    CHECK(res.body == "PNG-BYTES");
+}
+
+TEST(静的配信_パーセントエンコードされた親参照は拒否する)
+{
+    std::wstring strDir = GetTempDirW();
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    const char *paths[] = {
+        "/%2e%2e/secret.txt",
+        "/%2E%2E%2Fsecret.txt",
+        "/..%2fsecret.txt",
+        "/a/%2e%2e/secret.txt",
+    };
+
+    for (size_t i = 0; i < sizeof(paths) / sizeof(paths[0]); ++i) {
+        HttpRequest req;
+        req.method = "GET";
+        req.path = paths[i];
+
+        HttpResponse res;
+        handler.Handle(req, res);
+
+        CHECK(res.statusLine.find("400") != std::string::npos);
+    }
+}
+
+TEST(静的配信_パーセントエンコードされたバックスラッシュは拒否する)
+{
+    std::wstring strDir = GetTempDirW();
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    HttpRequest req;
+    req.method = "GET";
+    req.path = "/foo%5cbar.txt";
+
+    HttpResponse res;
+    handler.Handle(req, res);
+
+    CHECK(res.statusLine.find("400") != std::string::npos);
+}
+
+TEST(静的配信_パーセントエンコードされたNUL文字は拒否する)
+{
+    std::wstring strDir = GetTempDirW();
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    HttpRequest req;
+    req.method = "GET";
+    req.path = "/foo%00.txt";
+
+    HttpResponse res;
+    handler.Handle(req, res);
+
+    CHECK(res.statusLine.find("400") != std::string::npos);
+}
+
+TEST(静的配信_不正なパーセントエンコーディングは拒否する)
+{
+    std::wstring strDir = GetTempDirW();
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    const char *paths[] = {
+        "/foo%zzbar.txt", // 16進2桁でない
+        "/foo%4",         // 末尾が1桁で切れている
+        "/foo%",          // % の直後が無い
+    };
+
+    for (size_t i = 0; i < sizeof(paths) / sizeof(paths[0]); ++i) {
+        HttpRequest req;
+        req.method = "GET";
+        req.path = paths[i];
+
+        HttpResponse res;
+        handler.Handle(req, res);
+
+        CHECK(res.statusLine.find("400") != std::string::npos);
+    }
+}
+
+TEST(静的配信_不正なUTF8のパーセントデコード結果は拒否する)
+{
+    std::wstring strDir = GetTempDirW();
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    HttpRequest req;
+    req.method = "GET";
+    // %FF は単独では不正なUTF-8バイト列
+    req.path = "/foo%FF.txt";
+
+    HttpResponse res;
+    handler.Handle(req, res);
+
+    CHECK(res.statusLine.find("400") != std::string::npos);
+}
+
+TEST(静的配信_プラス記号はパスでは空白に変換されない)
+{
+    std::wstring strDir = GetTempDirW();
+    CNamedTempFile file(strDir, L"a+b.txt", "PLUS-BYTES");
+
+    CStaticFileHandler handler(strDir, L"", "/");
+
+    HttpRequest req;
+    req.method = "GET";
+    req.path = "/a+b.txt";
+
+    HttpResponse res;
+    handler.Handle(req, res);
+
+    CHECK(res.statusLine.find("200") != std::string::npos);
+    CHECK(res.body == "PLUS-BYTES");
 }

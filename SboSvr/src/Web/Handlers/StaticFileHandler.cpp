@@ -218,7 +218,15 @@ void CStaticFileHandler::Handle(const HttpRequest &request, HttpResponse &respon
 // ---------------------------------------------------------------------------
 bool CStaticFileHandler::BuildFilePath(const std::string &requestPath, std::wstring &outPath, std::string &outRelativePath) const
 {
-        std::string normalized = NormalizeRequestPath(requestPath);
+        std::string queryStripped = NormalizeRequestPath(requestPath);
+
+        // '?' 除去の後、まずパーセントデコードする。".." 判定やバックスラッシュ
+        // 拒否は「デコード後」の値に対して行わないと、"%2e%2e" のような
+        // エンコードで webroot 外へ抜けられてしまう。
+        std::string normalized;
+        if (!PercentDecode(queryStripped, normalized)) {
+                return false;
+        }
         if (ContainsParentReference(normalized)) {
                 return false;
         }
@@ -265,18 +273,21 @@ bool CStaticFileHandler::BuildFilePath(const std::string &requestPath, std::wstr
                 relative.append(defaultDocUtf8);
         }
 
+        // バックスラッシュはデコード後の値に対して拒否する（"%5c" 対策）。
+        if (relative.find('\\') != std::string::npos) {
+                return false;
+        }
+
+        std::string relativeWithNativeSep = relative;
+        for (size_t i = 0; i < relativeWithNativeSep.size(); ++i) {
+                if (relativeWithNativeSep[i] == '/') {
+                        relativeWithNativeSep[i] = '\\';
+                }
+        }
+
         std::wstring wideRelative;
-        wideRelative.reserve(relative.size());
-        for (size_t i = 0; i < relative.size(); ++i) {
-                char ch = relative[i];
-                if (ch == '\\') {
-                        return false;
-                }
-                if (ch == '/') {
-                        wideRelative.push_back(L'\\');
-                } else {
-                        wideRelative.push_back(static_cast<unsigned char>(ch));
-                }
+        if (!Utf8ToWide(relativeWithNativeSep, wideRelative)) {
+                return false;
         }
 
         std::wstring base = m_rootDirectory;
@@ -595,6 +606,141 @@ bool CStaticFileHandler::ContainsParentReference(const std::string &path)
                 nPos = nDot + 2;
         }
         return false;
+}
+
+namespace
+{
+// 16進1桁を数値化する。不正な文字は -1。
+int HexDigitValue(char ch)
+{
+        if ((ch >= '0') && (ch <= '9')) { return ch - '0'; }
+        if ((ch >= 'a') && (ch <= 'f')) { return ch - 'a' + 10; }
+        if ((ch >= 'A') && (ch <= 'F')) { return ch - 'A' + 10; }
+        return -1;
+}
+} // anonymous namespace
+
+// ---------------------------------------------------------------------------
+// PercentDecode: URL パーセントエンコーディング(%XX)をデコードする。
+// クエリ文字列のデコード(AuditLogHandler等のUrlDecode)とは異なり、
+// パスでは '+' はスペースを意味しないためそのまま残す。
+// 16進2桁でない・末尾が途中で切れている・デコード結果が NUL(%00) の場合は
+// 不正なリクエストとして false を返す。
+// ---------------------------------------------------------------------------
+/*static*/
+bool CStaticFileHandler::PercentDecode(const std::string &path, std::string &outDecoded)
+{
+        outDecoded.clear();
+        outDecoded.reserve(path.size());
+
+        for (size_t i = 0; i < path.size(); ++i) {
+                char ch = path[i];
+                if (ch != '%') {
+                        outDecoded.push_back(ch);
+                        continue;
+                }
+
+                if (i + 3 > path.size()) {
+                        // "%" の後に 16進2桁分の文字が無い（末尾で切れている）
+                        return false;
+                }
+                int hi = HexDigitValue(path[i + 1]);
+                int lo = HexDigitValue(path[i + 2]);
+                if ((hi < 0) || (lo < 0)) {
+                        return false;
+                }
+
+                unsigned char decoded = static_cast<unsigned char>((hi << 4) | lo);
+                if (decoded == 0) {
+                        // %00 はパス途中の文字列打ち切り攻撃になり得るため拒否
+                        return false;
+                }
+
+                outDecoded.push_back(static_cast<char>(decoded));
+                i += 2;
+        }
+        return true;
+}
+
+// ---------------------------------------------------------------------------
+// Utf8ToWide: UTF-8 バイト列を wchar_t 列(UTF-16 または UTF-32)へ変換する。
+// Windows API(MultiByteToWideChar)に頼らず自前でデコードすることで、
+// SboSvr 脱Windows対応後もこのファイル本体(BuildFilePath)は非Windows環境で
+// そのままビルド・利用できる(StatFile/LoadFile はまだ Windows 専用実装)。
+// 不正な UTF-8(オーバーロング表現・サロゲート値・範囲外・バイト不足等)は
+// false を返す。
+// ---------------------------------------------------------------------------
+/*static*/
+bool CStaticFileHandler::Utf8ToWide(const std::string &utf8, std::wstring &outWide)
+{
+        outWide.clear();
+        outWide.reserve(utf8.size());
+
+        size_t i = 0;
+        while (i < utf8.size()) {
+                unsigned char c0 = static_cast<unsigned char>(utf8[i]);
+                unsigned long codepoint = 0;
+                size_t extraBytes = 0;
+
+                if (c0 < 0x80) {
+                        codepoint  = c0;
+                        extraBytes = 0;
+                } else if ((c0 & 0xE0) == 0xC0) {
+                        if (c0 < 0xC2) {
+                                // C0/C1 はオーバーロングの2バイト表現になるため不正
+                                return false;
+                        }
+                        codepoint  = c0 & 0x1F;
+                        extraBytes = 1;
+                } else if ((c0 & 0xF0) == 0xE0) {
+                        codepoint  = c0 & 0x0F;
+                        extraBytes = 2;
+                } else if ((c0 & 0xF8) == 0xF0) {
+                        if (c0 > 0xF4) {
+                                // U+10FFFF を超える先頭バイトは不正
+                                return false;
+                        }
+                        codepoint  = c0 & 0x07;
+                        extraBytes = 3;
+                } else {
+                        return false;
+                }
+
+                if (i + extraBytes + 1 > utf8.size()) {
+                        return false; // 継続バイトが足りない
+                }
+                for (size_t k = 1; k <= extraBytes; ++k) {
+                        unsigned char c = static_cast<unsigned char>(utf8[i + k]);
+                        if ((c & 0xC0) != 0x80) {
+                                return false; // 継続バイトの形式が不正
+                        }
+                        codepoint = (codepoint << 6) | static_cast<unsigned long>(c & 0x3F);
+                }
+
+                // オーバーロング表現の排除
+                if ((extraBytes == 1) && (codepoint < 0x80))    { return false; }
+                if ((extraBytes == 2) && (codepoint < 0x800))   { return false; }
+                if ((extraBytes == 3) && (codepoint < 0x10000)) { return false; }
+                // サロゲート値・範囲外の排除
+                if ((codepoint >= 0xD800) && (codepoint <= 0xDFFF)) { return false; }
+                if (codepoint > 0x10FFFF) { return false; }
+
+                if (codepoint <= 0xFFFF) {
+                        outWide.push_back(static_cast<wchar_t>(codepoint));
+                } else if (sizeof(wchar_t) >= 4) {
+                        outWide.push_back(static_cast<wchar_t>(codepoint));
+                } else {
+                        // wchar_t が16bit(Windows)の場合はサロゲートペアにする
+                        unsigned long v = codepoint - 0x10000;
+                        wchar_t highSurrogate = static_cast<wchar_t>(0xD800 + (v >> 10));
+                        wchar_t lowSurrogate  = static_cast<wchar_t>(0xDC00 + (v & 0x3FF));
+                        outWide.push_back(highSurrogate);
+                        outWide.push_back(lowSurrogate);
+                }
+
+                i += extraBytes + 1;
+        }
+        return true;
 }
 
 // ---------------------------------------------------------------------------

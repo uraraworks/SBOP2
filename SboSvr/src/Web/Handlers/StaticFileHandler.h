@@ -36,6 +36,13 @@ private:
         static std::string NormalizeRequestPath(const std::string &path);
         static bool     ContainsParentReference(const std::string &path);
         static std::string ToUtf8(const std::wstring &text);
+        // URL パーセントエンコーディング(%XX)をデコードする。'+' は空白に
+        // 変換しない(パスでは意味を持たないため)。不正なエンコーディング
+        // (16進2桁でない、%の直後が無い等)は false を返す。
+        static bool     PercentDecode(const std::string &path, std::string &outDecoded);
+        // UTF-8 バイト列を wchar_t(UTF-16) 列へ変換する。不正な UTF-8 は
+        // false を返す。
+        static bool     Utf8ToWide(const std::string &utf8, std::wstring &outWide);
 
         std::wstring    m_rootDirectory;
         std::wstring    m_defaultDocument;
