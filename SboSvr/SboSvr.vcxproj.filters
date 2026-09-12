@@ -171,6 +171,15 @@
     <ClCompile Include="src\Web\Handlers\ServerInfoHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Web\Handlers\ServerSessionsHandler.cpp">
+      <Filter>Source Files\Web\Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Web\ProcessMetrics.cpp">
+      <Filter>Source Files\Web</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Web\SessionsJsonBuilder.cpp">
+      <Filter>Source Files\Web</Filter>
+    </ClCompile>
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp">
       <Filter>Source Files\Web\Handlers</Filter>
     </ClCompile>
@@ -604,6 +613,15 @@
     </ClInclude>
     <ClInclude Include="src\Web\Handlers\ServerInfoHandler.h">
       <Filter>Header Files\Web\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\Handlers\ServerSessionsHandler.h">
+      <Filter>Header Files\Web\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\ProcessMetrics.h">
+      <Filter>Header Files\Web</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Web\SessionsJsonBuilder.h">
+      <Filter>Header Files\Web</Filter>
     </ClInclude>
     <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h">
       <Filter>Header Files\Web\Handlers</Filter>

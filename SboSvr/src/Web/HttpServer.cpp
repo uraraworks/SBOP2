@@ -17,6 +17,7 @@
 #include "AdminWsHub.h"
 #include "Handlers/HealthHandler.h"
 #include "Handlers/ServerInfoHandler.h"
+#include "Handlers/ServerSessionsHandler.h"
 #include "Handlers/AccountCreateHandler.h"
 #include "Handlers/AdminRolesHandler.h"
 #include "Handlers/MapInfoHandler.h"
@@ -961,6 +962,9 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> serverHandler(new CServerInfoHandler(m_pMgrData));
         m_router.Register("GET", "/api/server", std::move(serverHandler));
+
+        std::unique_ptr<IApiHandler> serverSessionsHandler(new CServerSessionsHandler(m_pMgrData));
+        m_router.Register("GET", "/api/server/sessions", std::move(serverSessionsHandler));
 
         std::unique_ptr<IApiHandler> authMeHandler(new CAuthMeHandler(m_pMgrData));
         m_router.Register("GET", "/api/auth/me", std::move(authMeHandler));

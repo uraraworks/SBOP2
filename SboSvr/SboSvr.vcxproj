@@ -307,6 +307,9 @@
     <ClCompile Include="src\Web\AuditLog.cpp" />
     <ClCompile Include="src\Web\GrpImageStore.cpp" />
     <ClCompile Include="src\Web\Handlers\ServerInfoHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\ServerSessionsHandler.cpp" />
+    <ClCompile Include="src\Web\ProcessMetrics.cpp" />
+    <ClCompile Include="src\Web\SessionsJsonBuilder.cpp" />
     <ClCompile Include="src\Web\AuthProvider.cpp" />
     <ClCompile Include="src\Web\SessionStore.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
@@ -470,6 +473,9 @@
     <ClInclude Include="src\Web\AuditLog.h" />
     <ClInclude Include="src\Web\GrpImageStore.h" />
     <ClInclude Include="src\Web\Handlers\ServerInfoHandler.h" />
+    <ClInclude Include="src\Web\Handlers\ServerSessionsHandler.h" />
+    <ClInclude Include="src\Web\ProcessMetrics.h" />
+    <ClInclude Include="src\Web\SessionsJsonBuilder.h" />
     <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h" />
     <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h" />
     <ClInclude Include="src\Web\Handlers\SelectionHandler.h" />

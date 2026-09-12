@@ -23,6 +23,7 @@
 #include <direct.h>
 #include <bcrypt.h>
 #include <mmsystem.h>
+#include <psapi.h>
 #pragma comment(lib, "bcrypt.lib")
 #pragma comment(lib, "winmm.lib")
 #else
@@ -31,6 +32,7 @@
 #include <cstdio>
 #include <fcntl.h>
 #include <sys/file.h>
+#include <sys/resource.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -1064,6 +1066,117 @@ namespace SboPlatform
 		timeEndPeriod(g_uTimerPeriodMin);
 #else
 		// 何もしない(BeginHighResolutionTimer 参照)。
+#endif
+	}
+
+	// 自プロセスの CPU 時間とメモリ使用量を取得する
+
+	bool	GetProcessMetrics(PROCESS_METRICS *pOut)
+	{
+		if (pOut == NULL) {
+			return false;
+		}
+
+#ifdef _WIN32
+		FILETIME ftCreate, ftExit, ftKernel, ftUser;
+		if (!GetProcessTimes(GetCurrentProcess(), &ftCreate, &ftExit, &ftKernel, &ftUser)) {
+			return false;
+		}
+
+		ULARGE_INTEGER uKernel, uUser;
+		uKernel.LowPart  = ftKernel.dwLowDateTime;
+		uKernel.HighPart = ftKernel.dwHighDateTime;
+		uUser.LowPart    = ftUser.dwLowDateTime;
+		uUser.HighPart   = ftUser.dwHighDateTime;
+
+		// FILETIME は100ns単位
+		unsigned long long nCpuTimeMs = (uKernel.QuadPart + uUser.QuadPart) / 10000ULL;
+
+		PROCESS_MEMORY_COUNTERS pmc;
+		std::memset(&pmc, 0, sizeof(pmc));
+		pmc.cb = sizeof(pmc);
+		// K32GetProcessMemoryInfo は kernel32.dll 直接エクスポート(Vista以降)なので
+		// psapi.lib のリンクは不要
+		if (!K32GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc))) {
+			return false;
+		}
+
+		pOut->nCpuTimeMs    = nCpuTimeMs;
+		pOut->nMemoryBytes  = (unsigned long long)pmc.WorkingSetSize;
+		return true;
+#else
+		struct rusage ru;
+		std::memset(&ru, 0, sizeof(ru));
+		if (getrusage(RUSAGE_SELF, &ru) != 0) {
+			return false;
+		}
+
+		unsigned long long nUserMs = (unsigned long long)ru.ru_utime.tv_sec * 1000ULL +
+				(unsigned long long)(ru.ru_utime.tv_usec / 1000);
+		unsigned long long nSysMs = (unsigned long long)ru.ru_stime.tv_sec * 1000ULL +
+				(unsigned long long)(ru.ru_stime.tv_usec / 1000);
+
+		pOut->nCpuTimeMs = nUserMs + nSysMs;
+		// ru_maxrss は Linux では KB 単位(macOS はバイト単位だが、このサーバーの
+		// 非Windowsビルドは Linux を主対象としているため KB として扱う)。
+		// また「現在の使用量」ではなく「ピーク値」である点は近似として許容する。
+		pOut->nMemoryBytes = (unsigned long long)ru.ru_maxrss * 1024ULL;
+		return true;
+#endif
+	}
+
+	// マシンの物理メモリ総量(バイト)を取得する
+
+	bool	GetSystemMemoryTotalBytes(unsigned long long *pOut)
+	{
+		if (pOut == NULL) {
+			return false;
+		}
+
+#ifdef _WIN32
+		MEMORYSTATUSEX statex;
+		std::memset(&statex, 0, sizeof(statex));
+		statex.dwLength = sizeof(statex);
+		if (!GlobalMemoryStatusEx(&statex)) {
+			return false;
+		}
+		*pOut = statex.ullTotalPhys;
+		return true;
+#else
+		long nPages = sysconf(_SC_PHYS_PAGES);
+		long nPageSize = sysconf(_SC_PAGE_SIZE);
+		if ((nPages <= 0) || (nPageSize <= 0)) {
+			return false;
+		}
+		*pOut = (unsigned long long)nPages * (unsigned long long)nPageSize;
+		return true;
+#endif
+	}
+
+	// 論理CPU数を取得する
+
+	bool	GetLogicalCpuCount(unsigned int *pOut)
+	{
+		if (pOut == NULL) {
+			return false;
+		}
+
+#ifdef _WIN32
+		SYSTEM_INFO si;
+		std::memset(&si, 0, sizeof(si));
+		GetSystemInfo(&si);
+		if (si.dwNumberOfProcessors == 0) {
+			return false;
+		}
+		*pOut = (unsigned int)si.dwNumberOfProcessors;
+		return true;
+#else
+		long nCount = sysconf(_SC_NPROCESSORS_ONLN);
+		if (nCount <= 0) {
+			return false;
+		}
+		*pOut = (unsigned int)nCount;
+		return true;
 #endif
 	}
 

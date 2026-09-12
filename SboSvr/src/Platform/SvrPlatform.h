@@ -258,6 +258,36 @@ namespace SboPlatform
 	/// BeginHighResolutionTimer() と対にして呼ぶ
 	void	EndHighResolutionTimer(void);
 
+	/// プロセスの資源使用量
+	struct PROCESS_METRICS
+	{
+		unsigned long long	nCpuTimeMs;	// プロセス開始からの累積CPU時間(ms、ユーザー+カーネル)
+		unsigned long long	nMemoryBytes;	// 現在のメモリ使用量(ワーキングセット/常駐サイズ、バイト)
+	};
+
+	/// 自プロセスの CPU 時間とメモリ使用量を取得する
+	///
+	/// Windows は GetProcessTimes() + K32GetProcessMemoryInfo()、
+	/// 非Windows は getrusage(RUSAGE_SELF) を使う(分岐はこの関数の実装内だけに閉じる)。
+	/// Web管理画面のサーバー情報ダッシュボード(/api/server?includeMetrics=true)向け。
+	///
+	/// @return 取得できれば true。false なら *pOut は変更しない。
+	bool	GetProcessMetrics(PROCESS_METRICS *pOut);
+
+	/// マシンの物理メモリ総量(バイト)を取得する
+	///
+	/// Windows は GlobalMemoryStatusEx()、非Windows は sysconf(_SC_PHYS_PAGES) 等を使う。
+	///
+	/// @return 取得できれば true。false なら *pOut は変更しない。
+	bool	GetSystemMemoryTotalBytes(unsigned long long *pOut);
+
+	/// 論理CPU数を取得する
+	///
+	/// Windows は GetSystemInfo()、非Windows は sysconf(_SC_NPROCESSORS_ONLN) を使う。
+	///
+	/// @return 取得できれば true。false なら *pOut は変更しない。
+	bool	GetLogicalCpuCount(unsigned int *pOut);
+
 	/// 短時間 CPU を手放す(TimerProc の周回ペース調整用)
 	///
 	/// 従来は MsgWaitForMultipleObjects(0, NULL, FALSE, 1, QS_ALLINPUT) で

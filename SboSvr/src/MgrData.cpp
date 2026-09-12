@@ -40,7 +40,6 @@ CMgrData::CMgrData()
 	m_wPort	= 2005;
 	m_wHttpPort	= 18080;
 	m_bCookieSecure	= FALSE;
-	m_byOnline	= 0;
 	m_byLastSendClock	= -1;
 	m_pMainFrame	= NULL;
 	m_pSock	= NULL;
@@ -422,6 +421,30 @@ void CMgrData::ReadHashList(void)
 		dwTmp = atoi(ParamUtil.GetParam(1));
 		m_pInfoFileList->Add(ParamUtil.GetParam(0), ParamUtil.GetParam(2), dwTmp);
 	}
+}
+
+unsigned int CMgrData::CountOnlineAccounts(void)
+{
+        // 接続中 = セッションIDが割り当たっているアカウント数。
+        // ServerInfoHandler(/api/server) と HealthHandler(/health) の両方から使う。
+        // 呼び出し元は別スレッド(HTTPハンドラ)であるため、必ずロックを取ってから走査する。
+        unsigned int nCount = 0;
+
+        if (m_pLibInfoAccount == NULL) {
+                return 0;
+        }
+
+        m_pLibInfoAccount->Enter();
+        int nTotal = m_pLibInfoAccount->GetCount();
+        for (int i = 0; i < nTotal; i ++) {
+                PCInfoAccount pAccount = (PCInfoAccount)m_pLibInfoAccount->GetPtr(i);
+                if ((pAccount != NULL) && (pAccount->m_dwSessionID != 0)) {
+                        nCount ++;
+                }
+        }
+        m_pLibInfoAccount->Leave();
+
+        return nCount;
 }
 
 void CMgrData::SetClientVersion(LPCSTR pszVersion)

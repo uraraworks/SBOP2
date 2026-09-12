@@ -9,7 +9,7 @@ CHealthHandler::CHealthHandler(CMgrData *pMgrData)
 
 void CHealthHandler::Handle(const HttpRequest & /*request*/, HttpResponse &response)
 {
-        const unsigned int nOnlinePlayers = m_pMgrData != NULL ? m_pMgrData->GetOnline() : 0;
+        const unsigned int nOnlinePlayers = m_pMgrData != NULL ? m_pMgrData->CountOnlineAccounts() : 0;
         CStringA body;
         body.Format("{\"status\":\"ok\",\"onlinePlayers\":%u}", nOnlinePlayers);
 
