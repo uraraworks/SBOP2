@@ -119,6 +119,158 @@ const navGroups = document.querySelectorAll(".main-nav details");
 let currentRoute = null;
 let adminWorkspaceInitialized = false;
 
+// ----------------------------------------------------------------
+// ナビゲーション: メニュー開閉状態の記憶 (1-8)
+// localStorage が使えない環境(プライベートモード等)でも既定=全展開で
+// 動くよう、失敗は try/catch で無視する。
+// ----------------------------------------------------------------
+
+const NAV_DETAILS_STORAGE_KEY = "sbop2.navOpenGroups";
+
+function navDetailsKey(details, index) {
+  const summary = details.querySelector("summary");
+  return summary ? summary.textContent.trim() : `group-${index}`;
+}
+
+function restoreNavDetailsState() {
+  let saved = null;
+  try {
+    saved = JSON.parse(localStorage.getItem(NAV_DETAILS_STORAGE_KEY) || "null");
+  } catch {
+    saved = null;
+  }
+  if (!saved || typeof saved !== "object") {
+    return; // 保存が無い/壊れている場合は index.html の既定(open)のまま
+  }
+  navGroups.forEach((details, index) => {
+    const key = navDetailsKey(details, index);
+    if (Object.prototype.hasOwnProperty.call(saved, key)) {
+      details.open = !!saved[key];
+    }
+  });
+}
+
+function persistNavDetailsState() {
+  const state = {};
+  navGroups.forEach((details, index) => {
+    state[navDetailsKey(details, index)] = details.open;
+  });
+  try {
+    localStorage.setItem(NAV_DETAILS_STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // プライベートモード等では無視
+  }
+}
+
+navGroups.forEach((details) => {
+  details.addEventListener("toggle", persistNavDetailsState);
+});
+restoreNavDetailsState();
+
+// ----------------------------------------------------------------
+// ナビゲーション: 最近使った画面 (1-8)
+// ルート遷移のたびに記録し、メニュー最上部に表示する。
+// DEFAULT_ROUTE とログイン画面(未認証状態)は記録しない。
+// ----------------------------------------------------------------
+
+const RECENT_ROUTES_STORAGE_KEY = "sbop2.recentRoutes";
+const RECENT_ROUTES_MAX = 5;
+const mainNavEl = document.querySelector(".main-nav");
+let recentRoutesSection = null;
+
+function getRouteLabel(route) {
+  const link = Array.from(navLinks).find((l) => l.dataset.route === route);
+  return link ? link.textContent.trim() : "";
+}
+
+function loadRecentRoutes() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(RECENT_ROUTES_STORAGE_KEY) || "[]");
+    return Array.isArray(raw) ? raw.filter((r) => typeof r === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveRecentRoutes(list) {
+  try {
+    localStorage.setItem(RECENT_ROUTES_STORAGE_KEY, JSON.stringify(list));
+  } catch {
+    // プライベートモード等では無視
+  }
+}
+
+function handleRecentRouteClick(event) {
+  event.preventDefault();
+  const link = event.currentTarget;
+  const targetRoute = link.dataset.route;
+  if (!targetRoute) {
+    return;
+  }
+  const currentHash = stripRouteQuery(window.location.hash.replace(/^#/, ""));
+  if (currentHash === targetRoute) {
+    activateRoute(targetRoute, { forceReload: true });
+  } else {
+    window.location.hash = `#${targetRoute}`;
+  }
+}
+
+function renderRecentRoutes() {
+  if (!mainNavEl) {
+    return;
+  }
+  if (!recentRoutesSection) {
+    recentRoutesSection = document.createElement("div");
+    recentRoutesSection.className = "main-nav-recent";
+    const header = mainNavEl.querySelector(".main-nav-header");
+    if (header) {
+      header.insertAdjacentElement("afterend", recentRoutesSection);
+    } else {
+      mainNavEl.insertBefore(recentRoutesSection, mainNavEl.firstChild);
+    }
+  }
+  const list = loadRecentRoutes()
+    .map((route) => ({ route, label: getRouteLabel(route) }))
+    .filter((entry) => entry.label);
+  if (!list.length) {
+    recentRoutesSection.innerHTML = "";
+    recentRoutesSection.hidden = true;
+    return;
+  }
+  recentRoutesSection.hidden = false;
+  recentRoutesSection.innerHTML = '<div class="main-nav-recent-title">最近使った画面</div><ul></ul>';
+  const ul = recentRoutesSection.querySelector("ul");
+  list.forEach(({ route, label }) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = `#${route}`;
+    a.dataset.route = route;
+    a.className = "nav-link";
+    a.textContent = label;
+    a.addEventListener("click", handleRecentRouteClick);
+    li.appendChild(a);
+    ul.appendChild(li);
+  });
+}
+
+function recordRecentRoute(route) {
+  if (!route || route === DEFAULT_ROUTE) {
+    return;
+  }
+  if (!document.body.classList.contains("admin-authorized")) {
+    return; // ログイン画面状態(未認証)では記録しない
+  }
+  if (!getRouteLabel(route)) {
+    return; // メニューに存在しないルートは対象外
+  }
+  const list = loadRecentRoutes().filter((r) => r !== route);
+  list.unshift(route);
+  saveRecentRoutes(list.slice(0, RECENT_ROUTES_MAX));
+  renderRecentRoutes();
+}
+
+renderRecentRoutes();
+
 function updateAdminGamePickInfo(message) {
   // pick 情報の常時表示は廃止。互換のため関数だけ残す（呼び出し元の no-op 化）
   void message;
@@ -249,7 +401,7 @@ function initializeAdminGameFrame() {
 
 function navigateTo(route, options = {}) {
   const normalized = getValidRoute(route);
-  const currentHash = window.location.hash.replace(/^#/, "");
+  const currentHash = stripRouteQuery(window.location.hash.replace(/^#/, ""));
   if (currentHash === normalized) {
     activateRoute(normalized, { forceReload: !!options.forceReload });
     return;
@@ -424,12 +576,24 @@ async function handleAdminLoginSubmit(event) {
 /* talk-events 全関数は talk-events.js に移行済み */
 /* operation-history (監査ログ) 全関数は operation-history.js に移行済み */
 
-function getValidRoute(route) {
+// hash は `#item-types?id=3` のようにクエリを伴うことがある。
+// ルート名の判定は必ずクエリを除いた部分で行う(付けたままだと
+// data-view のどれとも一致せず DEFAULT_ROUTE に落ちてしまう)。
+function stripRouteQuery(route) {
   if (!route) {
+    return route;
+  }
+  const qIndex = route.indexOf("?");
+  return qIndex === -1 ? route : route.slice(0, qIndex);
+}
+
+function getValidRoute(route) {
+  const name = stripRouteQuery(route);
+  if (!name) {
     return DEFAULT_ROUTE;
   }
-  const matchingView = Array.from(views).find((view) => view.dataset.view === route);
-  return matchingView ? route : DEFAULT_ROUTE;
+  const matchingView = Array.from(views).find((view) => view.dataset.view === name);
+  return matchingView ? name : DEFAULT_ROUTE;
 }
 
 function updateActiveNavGroup(route) {
@@ -482,6 +646,7 @@ function activateRoute(route, options = {}) {
   }
 
   currentRoute = normalized;
+  recordRecentRoute(normalized);
 }
 
 function initializeAdminWorkspace() {
@@ -539,7 +704,7 @@ window.addEventListener("load", async () => {
       if (!targetRoute) {
         return;
       }
-      const currentHash = window.location.hash.replace(/^#/, "");
+      const currentHash = stripRouteQuery(window.location.hash.replace(/^#/, ""));
       if (currentHash === targetRoute) {
         activateRoute(targetRoute, { forceReload: true });
       } else {

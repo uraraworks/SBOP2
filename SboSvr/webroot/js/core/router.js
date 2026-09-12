@@ -28,11 +28,63 @@ export function setViewRoot(root) {
 }
 
 /**
- * 現在の hash からルート名を取得する。
+ * hash 文字列を { route, params } に分解する。
+ * `#item-types?id=3` のようにクエリが付いていても、ルート名は
+ * クエリを含まない部分だけを返す(存在しないルートとして扱われるのを防ぐ)。
+ * @param {string} [hash]  省略時は window.location.hash
+ * @returns {{ route: string, params: URLSearchParams }}
+ */
+export function parseHash(hash) {
+  const raw = (hash === undefined ? window.location.hash : hash || "").replace(/^#/, "");
+  const qIndex = raw.indexOf("?");
+  const route = qIndex === -1 ? raw : raw.slice(0, qIndex);
+  const query = qIndex === -1 ? "" : raw.slice(qIndex + 1);
+  return { route, params: new URLSearchParams(query) };
+}
+
+/**
+ * 現在の hash からルート名を取得する(クエリ部分は除く)。
  * @returns {string}
  */
 export function currentRoute() {
-  return window.location.hash.replace(/^#/, "");
+  return parseHash().route;
+}
+
+/**
+ * 現在の hash のクエリ部分を取得する。
+ * @returns {URLSearchParams}
+ */
+export function getRouteParams() {
+  return parseHash().params;
+}
+
+/**
+ * 現在の hash のクエリ部分を書き換える(ルート名はそのまま)。
+ * history.replaceState で書き換えるため hashchange は発火しない
+ * (再 mount も dirty 確認も起きない)。値が null/undefined/空文字のキーは削除する。
+ * @param {Record<string, string|number|null|undefined>} params
+ * @param {{ replace?: boolean }} [options]  現状 replace 固定(将来の拡張用に残す)
+ */
+export function setRouteParams(params, options = {}) {
+  void options;
+  const { route, params: current } = parseHash();
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value === null || value === undefined || value === "") {
+      current.delete(key);
+    } else {
+      current.set(key, String(value));
+    }
+  });
+  const qs = current.toString();
+  const newHash = "#" + route + (qs ? "?" + qs : "");
+  if (window.location.hash === newHash) {
+    return;
+  }
+  const url = window.location.pathname + window.location.search + newHash;
+  window.history.replaceState(window.history.state, "", url);
+  window.dispatchEvent(
+    new CustomEvent("sbop2:routeparamschange", { detail: { hash: window.location.hash } })
+  );
 }
 
 /**

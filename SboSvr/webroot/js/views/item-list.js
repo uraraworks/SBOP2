@@ -24,6 +24,9 @@ import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { createSoundPicker } from "../components/sound-picker.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
 import { createEntityField, invalidateEntityCache } from "../components/entity-picker.js";
+import { createListToolbar } from "../components/list-toolbar.js";
+import { getRouteParams, setRouteParams } from "../core/router.js";
+import { registerSaveHandler } from "../core/save-shortcut.js";
 
 // ----------------------------------------------------------------
 // ユーティリティ
@@ -226,11 +229,18 @@ function buildDetailPane({ feedbackEl }) {
 // 左ペイン: 一覧 + フィルター
 // ----------------------------------------------------------------
 
-function buildLeftPane({ onSelect, onNew, onDelete }) {
+// アイテム一覧の並び替え（クライアント側 applyToRows で使用）
+const ITEM_SORTERS = {
+  id:   (a, b) => (a.itemId ?? 0) - (b.itemId ?? 0),
+  name: (a, b) => String(a.name ?? "").localeCompare(String(b.name ?? "")),
+  type: (a, b) => (a.itemTypeId ?? 0) - (b.itemTypeId ?? 0),
+};
+
+function buildLeftPane({ onSelect, onNew, onDelete, initialState, onStateChange }) {
   const pane = document.createElement("div");
   pane.className = "ee-left";
 
-  // フィルター
+  // フィルター（サーバー側クエリ: drop/charId/mapId）
   const filterWrap = document.createElement("div");
   filterWrap.className = "it-filter-wrap";
   filterWrap.style.cssText = "display:flex;flex-direction:column;gap:0.25rem;margin-bottom:0.5rem;";
@@ -238,15 +248,15 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
   const dropLbl = document.createElement("label");
   const dropCb = document.createElement("input");
   dropCb.type = "checkbox";
-  dropCb.checked = true;
+  dropCb.checked = initialState.drop !== false;
   dropLbl.append(dropCb, " 落ちているもののみ");
   filterWrap.appendChild(dropLbl);
 
   // 所持キャラID / マップID フィルター（entity field。0 のままなら未指定扱い）
-  const charIdFilterField = createEntityField({ type: "character", value: 0, label: "所持キャラID" });
+  const charIdFilterField = createEntityField({ type: "character", value: initialState.charId || 0, label: "所持キャラID" });
   filterWrap.appendChild(charIdFilterField.element);
 
-  const mapIdFilterField = createEntityField({ type: "map", value: 0, label: "マップID" });
+  const mapIdFilterField = createEntityField({ type: "map", value: initialState.mapId || 0, label: "マップID" });
   filterWrap.appendChild(mapIdFilterField.element);
 
   const filterBtnWrap = document.createElement("div");
@@ -265,23 +275,39 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
   pane.appendChild(filterWrap);
 
-  // 検索
-  const searchInput = document.createElement("input");
-  searchInput.type = "search";
-  searchInput.placeholder = "ID または 名前で検索…";
-  searchInput.className = "ld-search";
-  pane.appendChild(searchInput);
+  // 検索/並び替え/表示件数/ページ（クライアント側 applyToRows。名前・ID で検索、
+  // ID/名前/種別で並び替え）。状態は q/sort/size/page として URL に保持する。
+  const toolbar = createListToolbar({
+    placeholder: "ID または 名前で検索…",
+    sortOptions: [
+      { value: "id",   label: "ID順" },
+      { value: "name", label: "名前順" },
+      { value: "type", label: "種別順" },
+    ],
+    pageSizes: [20, 50, 100],
+    initial: {
+      q: initialState.q || "",
+      sort: initialState.sort || "id",
+      pageSize: initialState.size || 20,
+      page: initialState.page || 1,
+    },
+    onChange: (s) => {
+      onStateChange({ q: s.q, sort: s.sort, size: s.pageSize, page: s.page });
+      renderList();
+    },
+  });
+  pane.appendChild(toolbar.element);
 
-  // ツールバー
-  const toolbar = document.createElement("div");
-  toolbar.className = "me-list-toolbar";
+  // ツールバー（新規追加）
+  const actionsRow = document.createElement("div");
+  actionsRow.className = "me-list-toolbar";
   const newBtn = document.createElement("button");
   newBtn.type = "button";
   newBtn.className = "button small";
   newBtn.textContent = "+ 新規追加";
   newBtn.addEventListener("click", onNew);
-  toolbar.appendChild(newBtn);
-  pane.appendChild(toolbar);
+  actionsRow.appendChild(newBtn);
+  pane.appendChild(actionsRow);
 
   const listEl = document.createElement("ul");
   listEl.className = "ld-list";
@@ -292,7 +318,7 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
   pane.appendChild(summary);
 
   let _allItems = [];
-  let _selectedId = null;
+  let _selectedId = initialState.selectedId || null;
 
   function buildQuery() {
     const params = [];
@@ -302,6 +328,14 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
     const mid = mapIdFilterField.getValue();
     if (mid > 0) { params.push("mapId=" + mid); }
     return params.length ? ("?" + params.join("&")) : "";
+  }
+
+  function persistFilterState() {
+    onStateChange({
+      drop: dropCb.checked,
+      charId: charIdFilterField.getValue() || null,
+      mapId: mapIdFilterField.getValue() || null,
+    });
   }
 
   async function loadList() {
@@ -315,13 +349,12 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
   }
 
   function renderList() {
-    const q = searchInput.value.trim().toLowerCase();
-    const filtered = _allItems.filter((it) => {
-      if (!q) return true;
-      return String(it.itemId).includes(q) || (it.name || "").toLowerCase().includes(q);
+    const { pageRows } = toolbar.applyToRows(_allItems, {
+      searchFields: ["name", (it) => String(it.itemId)],
+      sorters: ITEM_SORTERS,
     });
     listEl.innerHTML = "";
-    filtered.forEach((it) => {
+    pageRows.forEach((it) => {
       const li = document.createElement("li");
       li.className = "ld-list-item" + (it.itemId === _selectedId ? " selected" : "");
 
@@ -339,6 +372,7 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
       li.addEventListener("click", () => {
         _selectedId = it.itemId;
+        onStateChange({ selectedId: it.itemId });
         renderList();
         onSelect(it);
       });
@@ -356,20 +390,31 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
       listEl.appendChild(li);
     });
-    summary.textContent = filtered.length + " 件";
+    summary.textContent = toolbar.getState().q || pageRows.length !== _allItems.length
+      ? `${pageRows.length} / ${_allItems.length} 件`
+      : `${_allItems.length} 件`;
   }
 
-  applyBtn.addEventListener("click", () => loadList());
+  applyBtn.addEventListener("click", () => { persistFilterState(); loadList(); });
   clearBtn.addEventListener("click", () => {
     dropCb.checked = true;
     charIdFilterField.setValue(0);
     mapIdFilterField.setValue(0);
+    persistFilterState();
     loadList();
   });
-  searchInput.addEventListener("input", renderList);
-  loadList();
 
-  return { el: pane, reload: loadList };
+  function setSelectedId(id) {
+    _selectedId = id;
+    onStateChange({ selectedId: id || null });
+    renderList();
+  }
+
+  function findById(id) {
+    return _allItems.find((it) => it.itemId === id) || null;
+  }
+
+  return { el: pane, reload: loadList, setSelectedId, findById };
 }
 
 // ----------------------------------------------------------------
@@ -378,6 +423,21 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
 let _destroyFn = null;
 
+// item-list ルートの現在の一覧状態。setRouteParams は「値が null/undefined/空文字なら
+// キーを削除」する仕様なので、デフォルト値と同じ場合は null を渡して URL を簡潔に保つ。
+function persistItemListState(partial) {
+  const mapped = {};
+  if ("q" in partial)      { mapped.q = partial.q || null; }
+  if ("sort" in partial)   { mapped.sort = (partial.sort && partial.sort !== "id") ? partial.sort : null; }
+  if ("size" in partial)   { mapped.size = (partial.size && partial.size !== 20) ? partial.size : null; }
+  if ("page" in partial)   { mapped.page = (partial.page && partial.page !== 1) ? partial.page : null; }
+  if ("drop" in partial)   { mapped.drop = partial.drop === false ? "0" : null; }
+  if ("charId" in partial) { mapped.charId = partial.charId || null; }
+  if ("mapId" in partial)  { mapped.mapId = partial.mapId || null; }
+  if ("selectedId" in partial) { mapped.id = partial.selectedId || null; }
+  setRouteParams(mapped);
+}
+
 export function mount(container) {
   if (_destroyFn) { _destroyFn(); _destroyFn = null; }
   container.innerHTML = "";
@@ -385,6 +445,20 @@ export function mount(container) {
   const shell = document.createElement("div");
   shell.className = "me-shell";
   container.appendChild(shell);
+
+  // URL クエリ(q/sort/size/page/drop/charId/mapId/id)から一覧状態を復元する。
+  // drop は既定 true(落下中のみ)なので "0" の時だけ false にする。
+  const routeParams = getRouteParams();
+  const initialState = {
+    q: routeParams.get("q") || "",
+    sort: routeParams.get("sort") || "id",
+    size: Number(routeParams.get("size")) || 20,
+    page: Number(routeParams.get("page")) || 1,
+    drop: routeParams.get("drop") !== "0",
+    charId: Number(routeParams.get("charId")) || 0,
+    mapId: Number(routeParams.get("mapId")) || 0,
+    selectedId: Number(routeParams.get("id")) || null,
+  };
 
   const feedbackEl = document.createElement("p");
   feedbackEl.className = "il-feedback result-message";
@@ -404,20 +478,25 @@ export function mount(container) {
   backBar.appendChild(backBtn);
   detail.el.insertBefore(backBar, detail.el.firstChild);
 
+  let _detailOpen = false;
+
   // 画面切替ヘルパー
   function showDetail() {
     leftApi.el.style.display = "none";
     detail.el.style.display = "";
+    _detailOpen = true;
   }
   function showList() {
     detail.el.style.display = "none";
     leftApi.el.style.display = "";
+    _detailOpen = false;
+    persistItemListState({ selectedId: null });
   }
 
   backBtn.addEventListener("click", showList);
 
-  // 保存
-  detail.saveBtn.addEventListener("click", async () => {
+  // 保存（Ctrl+S からも同じ処理を呼ぶ。withBusy が二重実行を防ぐ）
+  async function performSave() {
     const payload = detail.collectData();
     const current = detail.getCurrent();
     const isNew = !current?.itemId;
@@ -436,12 +515,23 @@ export function mount(container) {
       showFeedback(feedbackEl, isNew ? "追加しました" : "保存しました", "success");
       if (isNew && data?.itemId) {
         detail.setCurrent({ ...payload, itemId: data.itemId });
+        leftApi.setSelectedId(data.itemId);
       }
       invalidateEntityCache("item");
       await leftApi.reload();
     } catch (e) {
       showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
     }
+  }
+
+  detail.saveBtn.addEventListener("click", () => {
+    withBusy(detail.saveBtn, performSave);
+  });
+
+  // Ctrl+S: 詳細ペインを開いている時だけ保存ボタンと同じ処理を呼ぶ。
+  // performSave は withBusy(detail.saveBtn, ...) 経由なので二重実行防止は既存のまま効く。
+  registerSaveHandler("item-list", () => {
+    if (_detailOpen) { withBusy(detail.saveBtn, performSave); }
   });
 
   // 複製 → 表示中のフォーム内容(未保存の編集も含む)をコピーして別レコードとして保存
@@ -484,6 +574,7 @@ export function mount(container) {
         detail.setItem(created);
         invalidateEntityCache("item");
         await leftApi.reload();
+        leftApi.setSelectedId(data.itemId);
       } catch (e) {
         showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
       }
@@ -522,6 +613,7 @@ export function mount(container) {
         showFeedback(feedbackEl, "削除しました (ID=" + it.itemId + ")", "success");
         if (detail.getCurrent()?.itemId === it.itemId) {
           detail.setItem(null);
+          leftApi.setSelectedId(null);
         }
         invalidateEntityCache("item");
         await leftApi.reload();
@@ -529,6 +621,8 @@ export function mount(container) {
         showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
       }
     },
+    initialState,
+    onStateChange: persistItemListState,
   });
 
   // 初期状態: 一覧のみ表示
@@ -536,6 +630,21 @@ export function mount(container) {
 
   shell.appendChild(leftApi.el);
   shell.appendChild(detail.el);
+
+  // 初回ロード。URL に選択中アイテム ID (id) が残っていれば、取得後にその詳細を開く。
+  leftApi.reload().then(() => {
+    if (initialState.selectedId) {
+      const found = leftApi.findById(initialState.selectedId);
+      if (found) {
+        detail.setItem(found);
+        showFeedback(feedbackEl, "", "");
+        showDetail();
+      } else {
+        // 該当アイテムが見つからない(削除済み等)場合は URL から id を落とす
+        persistItemListState({ selectedId: null });
+      }
+    }
+  });
 
   _destroyFn = () => {
     container.innerHTML = "";

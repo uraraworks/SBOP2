@@ -4,16 +4,24 @@
  *
  * API: GET /api/characters?name=&accountId=&mapId=&isNpc=&limit=20&offset=N
  * レスポンス: { total, limit, offset, characters: [...] }
+ * (CharacterListHandler.cpp:279-305 — name/accountId/mapId/isNpc/limit/offset のみ対応。
+ *  sort パラメータはサーバー側に存在しない。並び替えは取得した 1 ページ分の
+ *  配列に対してクライアント側で行うに留める)
  *
  * F9 拡張: grpIdMain / grpIdSub から sprite-thumb サムネ列を追加。
  * character-overview へのジャンプは window._charEditMount 連携を維持。
+ *
+ * 一覧の検索/表示件数/ページ/並び替えは list-toolbar（サーバー側ページングモード。
+ * applyToRows は使わず setTotal のみで件数を反映）。状態は q/size/page/sort と
+ * 既存フィルタ(accountId/mapId/isNpc)を #character-list?... の URL クエリに保持し、
+ * mount 時に復元する。
  */
 
 import { fetchJson } from "../core/api.js";
 import { createSpriteThumbLazy } from "../components/sprite-thumb.js";
 import { createEntityField } from "../components/entity-picker.js";
-
-const CHAR_LIST_LIMIT = 20;
+import { currentRoute, getRouteParams, setRouteParams } from "../core/router.js";
+import { createListToolbar } from "../components/list-toolbar.js";
 
 // ----------------------------------------------------------------
 // escapeHtml
@@ -26,6 +34,14 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
+// クライアント側でのみ有効な並び替え（サーバー未対応のため取得ページ内のみ）
+const SORTERS = {
+  id:    (a, b) => (a.charId ?? 0) - (b.charId ?? 0),
+  name:  (a, b) => String(a.charName ?? "").localeCompare(String(b.charName ?? "")),
+  level: (a, b) => (a.level ?? 0) - (b.level ?? 0),
+  mapId: (a, b) => (a.mapId ?? 0) - (b.mapId ?? 0),
+};
+
 // ----------------------------------------------------------------
 // mount
 // ----------------------------------------------------------------
@@ -35,9 +51,6 @@ export function mount(container) {
         <h2>キャラクター一覧</h2>
         <!-- フィルター入力欄 -->
         <div class="filter-row">
-          <label>名前（部分一致）:
-            <input type="text" id="char-filter-name" placeholder="キャラ名を入力" />
-          </label>
           <label>アカウントID:
             <input type="number" id="char-filter-account-id" placeholder="例: 1001" min="0" />
           </label>
@@ -52,6 +65,7 @@ export function mount(container) {
           <button type="button" id="char-search-btn" class="button">検索</button>
           <button type="button" id="char-reset-btn" class="button secondary">リセット</button>
         </div>
+        <div id="char-list-toolbar"></div>
         <p id="char-list-summary" class="result-message"></p>
         <p id="char-list-feedback" class="form-feedback" aria-live="polite"></p>
         <!-- キャラクター一覧テーブル -->
@@ -69,31 +83,34 @@ export function mount(container) {
           </thead>
           <tbody id="char-list-table-body"></tbody>
         </table>
-        <!-- ページングコントロール -->
-        <div class="pagination-row" id="char-pagination">
-          <button type="button" id="char-prev-btn" class="button secondary" disabled>前へ</button>
-          <span id="char-page-info"></span>
-          <button type="button" id="char-next-btn" class="button secondary" disabled>次へ</button>
-        </div>
       </section>`;
 
-  const filterName    = container.querySelector("#char-filter-name");
   const filterAccId   = container.querySelector("#char-filter-account-id");
   const filterMapIdWrap = container.querySelector("#char-filter-map-id-wrap");
   const filterIsNpc   = container.querySelector("#char-filter-is-npc");
+  const toolbarHost   = container.querySelector("#char-list-toolbar");
+
+  // URL クエリから初期状態を復元
+  const routeParams = getRouteParams();
 
   // マップID フィルター（map picker。0 のままなら未指定扱い）
-  const filterMapIdField = createEntityField({ type: "map", value: 0, label: "マップID:" });
+  const filterMapIdField = createEntityField({
+    type: "map",
+    value: Number(routeParams.get("mapId")) || 0,
+    label: "マップID:",
+    onChange: () => { state.offset = computeOffset(); persistRouteParams(); load(); },
+  });
   if (filterMapIdWrap) { filterMapIdWrap.replaceWith(filterMapIdField.element); }
+
+  if (filterAccId) { filterAccId.value = routeParams.get("accountId") || ""; }
+  if (filterIsNpc) { filterIsNpc.value = routeParams.get("isNpc") || ""; }
+
   const searchBtn     = container.querySelector("#char-search-btn");
   const resetBtn      = container.querySelector("#char-reset-btn");
   const summaryEl     = container.querySelector("#char-list-summary");
   const feedbackEl    = container.querySelector("#char-list-feedback");
   const tableEl       = container.querySelector("#char-list-table");
   const tableBody     = container.querySelector("#char-list-table-body");
-  const prevBtn       = container.querySelector("#char-prev-btn");
-  const nextBtn       = container.querySelector("#char-next-btn");
-  const pageInfo      = container.querySelector("#char-page-info");
 
   // サムネ列をヘッダに追加
   if (tableEl) {
@@ -112,27 +129,56 @@ export function mount(container) {
     isLoading: false,
   };
 
+  function computeOffset() {
+    const s = toolbar.getState();
+    return (s.page - 1) * s.pageSize;
+  }
+
+  // 検索/表示件数/ページ/並び替え。サーバー側ページングのため applyToRows は使わず、
+  // onChange のたびに API を叩き直す (setTotal でサーバーの総件数を反映)。
+  const toolbar = createListToolbar({
+    placeholder: "名前で検索",
+    sortOptions: [
+      { value: "id",    label: "ID順" },
+      { value: "name",  label: "名前順" },
+      { value: "level", label: "レベル順" },
+      { value: "mapId", label: "マップID順" },
+    ],
+    pageSizes: [20, 50, 100],
+    initial: {
+      q: routeParams.get("q") || "",
+      sort: routeParams.get("sort") || "id",
+      pageSize: Number(routeParams.get("size")) || 20,
+      page: Number(routeParams.get("page")) || 1,
+    },
+    onChange: () => {
+      state.offset = computeOffset();
+      persistRouteParams();
+      load();
+    },
+  });
+  if (toolbarHost) { toolbarHost.appendChild(toolbar.element); }
+  state.offset = computeOffset();
+
+  function persistRouteParams() {
+    const s = toolbar.getState();
+    setRouteParams({
+      q: s.q || null,
+      sort: s.sort && s.sort !== "id" ? s.sort : null,
+      size: s.pageSize && s.pageSize !== 20 ? s.pageSize : null,
+      page: s.page && s.page !== 1 ? s.page : null,
+      accountId: (filterAccId && filterAccId.value.trim()) ? filterAccId.value.trim() : null,
+      mapId: filterMapIdField.getValue() > 0 ? filterMapIdField.getValue() : null,
+      isNpc: (filterIsNpc && filterIsNpc.value !== "") ? filterIsNpc.value : null,
+    });
+  }
+
   // 前回のサムネリストを保持（destroy 用）
   let _thumbs = [];
 
   function destroyThumbs() {
     _thumbs.forEach((t) => t.destroy());
     _thumbs = [];
-  }
-
-  function updatePagination() {
-    const { total, offset } = state;
-    if (prevBtn) { prevBtn.disabled = offset <= 0; }
-    if (nextBtn) { nextBtn.disabled = offset + CHAR_LIST_LIMIT >= total; }
-    if (pageInfo) {
-      if (total > 0) {
-        const page    = Math.floor(offset / CHAR_LIST_LIMIT) + 1;
-        const maxPage = Math.ceil(total / CHAR_LIST_LIMIT);
-        pageInfo.textContent = `${page} / ${maxPage} ページ`;
-      } else {
-        pageInfo.textContent = "";
-      }
-    }
   }
 
   function renderList(characters) {
@@ -178,7 +224,7 @@ export function mount(container) {
       tr.addEventListener("click", () => {
         // character-overview (char-edit.js) へ遷移
         // hashchange は非同期発火のため、先に pendingCharId をセットしてから hash を変更する
-        if (window.location.hash === "#character-overview") {
+        if (currentRoute() === "character-overview") {
           // 既に同じ hash の場合は hashchange が発火しないので直接呼び出す
           if (typeof window._charEditMount === "function") { window._charEditMount(c.charId); }
         } else {
@@ -196,15 +242,15 @@ export function mount(container) {
     state.isLoading = true;
     if (feedbackEl) { feedbackEl.textContent = "読み込み中..."; }
     if (tableBody) { tableBody.innerHTML = '<tr><td colspan="8">読み込み中...</td></tr>'; }
-    updatePagination();
 
+    const s = toolbar.getState();
     const params = new URLSearchParams();
-    if (filterName && filterName.value.trim()) { params.set("name", filterName.value.trim()); }
+    if (s.q && s.q.trim()) { params.set("name", s.q.trim()); }
     if (filterAccId && filterAccId.value.trim()) { params.set("accountId", filterAccId.value.trim()); }
     const mapIdFilterValue = filterMapIdField.getValue();
     if (mapIdFilterValue > 0) { params.set("mapId", String(mapIdFilterValue)); }
     if (filterIsNpc && filterIsNpc.value !== "") { params.set("isNpc", filterIsNpc.value); }
-    params.set("limit", String(CHAR_LIST_LIMIT));
+    params.set("limit", String(s.pageSize));
     params.set("offset", String(state.offset));
 
     try {
@@ -214,23 +260,27 @@ export function mount(container) {
         if (feedbackEl) { feedbackEl.textContent = msg; }
         if (tableBody) { tableBody.innerHTML = '<tr><td colspan="8">取得に失敗しました</td></tr>'; }
         state.total = 0;
-        updatePagination();
+        toolbar.setTotal(0);
         return;
       }
       state.total = typeof data.total === "number" ? data.total : 0;
+      toolbar.setTotal(state.total);
       if (feedbackEl) { feedbackEl.textContent = ""; }
       if (summaryEl) {
         summaryEl.textContent = state.total > 0
           ? `${state.total} 件中 ${state.offset + 1}〜${Math.min(state.offset + data.characters.length, state.total)} 件を表示`
           : "該当するキャラクターがありません";
       }
-      renderList(data.characters);
-      updatePagination();
+      // サーバーは sort 未対応のため、取得した 1 ページ分だけをクライアント側で並び替える
+      let characters = data.characters.slice();
+      const sorter = SORTERS[s.sort];
+      if (typeof sorter === "function") { characters.sort(sorter); }
+      renderList(characters);
     } catch {
       if (feedbackEl) { feedbackEl.textContent = "通信エラーが発生しました"; }
       if (tableBody) { tableBody.innerHTML = '<tr><td colspan="8">通信エラーが発生しました</td></tr>'; }
       state.total = 0;
-      updatePagination();
+      toolbar.setTotal(0);
     } finally {
       state.isLoading = false;
     }
@@ -238,36 +288,37 @@ export function mount(container) {
 
   // イベント登録
   if (searchBtn) {
-    searchBtn.addEventListener("click", () => { state.offset = 0; load(); });
+    searchBtn.addEventListener("click", () => {
+      toolbar.setState({ page: 1 });
+      state.offset = 0;
+      persistRouteParams();
+      load();
+    });
   }
   if (resetBtn) {
     resetBtn.addEventListener("click", () => {
-      if (filterName)  { filterName.value  = ""; }
       if (filterAccId) { filterAccId.value = ""; }
       filterMapIdField.setValue(0);
       if (filterIsNpc) { filterIsNpc.value = ""; }
+      toolbar.setState({ q: "", sort: "id", pageSize: 20, page: 1 });
       state.offset = 0;
       state.total  = 0;
       destroyThumbs();
       if (tableBody)  { tableBody.innerHTML  = ""; }
       if (summaryEl)  { summaryEl.textContent  = ""; }
       if (feedbackEl) { feedbackEl.textContent = ""; }
-      updatePagination();
-    });
-  }
-  if (prevBtn) {
-    prevBtn.addEventListener("click", () => {
-      if (state.offset <= 0) { return; }
-      state.offset = Math.max(0, state.offset - CHAR_LIST_LIMIT);
+      toolbar.setTotal(0);
+      persistRouteParams();
       load();
     });
   }
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
-      if (state.offset + CHAR_LIST_LIMIT >= state.total) { return; }
-      state.offset += CHAR_LIST_LIMIT;
-      load();
+  if (filterAccId) {
+    filterAccId.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter") { searchBtn && searchBtn.click(); }
     });
+  }
+  if (filterIsNpc) {
+    filterIsNpc.addEventListener("change", () => { searchBtn && searchBtn.click(); });
   }
 
   // 初回ロード

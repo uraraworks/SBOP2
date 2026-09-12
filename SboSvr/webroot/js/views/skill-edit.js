@@ -17,6 +17,9 @@ import { createSpriteField } from "../components/sprite-picker.js";
 import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
 import { createEntityField, invalidateEntityCache } from "../components/entity-picker.js";
+import { createListToolbar } from "../components/list-toolbar.js";
+import { getRouteParams, setRouteParams } from "../core/router.js";
+import { registerSaveHandler, unregisterSaveHandler } from "../core/save-shortcut.js";
 
 // ----------------------------------------------------------------
 // 定数
@@ -402,21 +405,39 @@ function buildDetailPane(feedbackEl) {
 // 左ペイン: 一覧
 // ----------------------------------------------------------------
 
-function buildLeftPane({ onSelect, onNew, onDelete }) {
+function buildLeftPane({ onSelect, onNew, onDelete, routeParams }) {
   var pane = mkEl("div", "ee-left");
 
-  var searchInp = document.createElement("input");
-  searchInp.type = "search";
-  searchInp.placeholder = "ID または 名前で検索…";
-  searchInp.className = "ld-search";
-  pane.appendChild(searchInp);
+  var toolbar = createListToolbar({
+    placeholder: "ID・名前で検索",
+    sortOptions: [
+      { value: "id", label: "ID順" },
+      { value: "name", label: "名前順" },
+      { value: "type", label: "種別順" },
+    ],
+    pageSizes: [20, 50, 100],
+    initial: {
+      q: routeParams.get("q") || "",
+      sort: routeParams.get("sort") || "id",
+      page: Number(routeParams.get("page")) || 1,
+    },
+    onChange: function (s) {
+      setRouteParams({
+        q: s.q || null,
+        sort: s.sort && s.sort !== "id" ? s.sort : null,
+        page: s.page && s.page !== 1 ? s.page : null,
+      });
+      renderList();
+    },
+  });
+  pane.appendChild(toolbar.element);
 
-  var toolbar = mkEl("div", "me-list-toolbar");
+  var actionsBar = mkEl("div", "me-list-toolbar");
   var newBtn = mkEl("button", "button small", "+ 新規追加");
   newBtn.type = "button";
   newBtn.addEventListener("click", onNew);
-  toolbar.appendChild(newBtn);
-  pane.appendChild(toolbar);
+  actionsBar.appendChild(newBtn);
+  pane.appendChild(actionsBar);
 
   var listEl = mkEl("ul", "ld-list");
   pane.appendChild(listEl);
@@ -438,14 +459,18 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
   }
 
   function renderList() {
-    var q = searchInp.value.trim().toLowerCase();
-    var filtered = _allItems.filter(function (sk) {
-      if (!q) { return true; }
-      return String(sk.skillId).includes(q) || (sk.name || "").toLowerCase().includes(q);
+    var result = toolbar.applyToRows(_allItems, {
+      searchFields: ["name", function (sk) { return String(sk.skillId); }],
+      sorters: {
+        id: function (a, b) { return a.skillId - b.skillId; },
+        name: function (a, b) { return String(a.name || "").localeCompare(String(b.name || "")); },
+        type: function (a, b) { return (a.typeMain || 0) - (b.typeMain || 0) || (a.typeSub || 0) - (b.typeSub || 0); },
+      },
     });
+    var pageRows = result.pageRows;
 
     listEl.innerHTML = "";
-    filtered.forEach(function (sk) {
+    pageRows.forEach(function (sk) {
       var li = mkEl("li", "ld-list-item" + (sk.skillId === _selectedId ? " selected" : ""));
 
       // アイコンサムネ
@@ -478,13 +503,25 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
       listEl.appendChild(li);
     });
-    summary.textContent = filtered.length + " 件";
+    summary.textContent = result.total + " 件";
   }
 
-  searchInp.addEventListener("input", renderList);
-  loadList();
+  var ready = loadList();
 
-  return { el: pane, reload: loadList };
+  return {
+    el: pane,
+    reload: loadList,
+    ready: ready,
+    selectById: function (id) {
+      var sk = _allItems.find(function (x) { return x.skillId === id; });
+      if (sk) {
+        _selectedId = id;
+        renderList();
+        onSelect(sk);
+      }
+      return sk || null;
+    },
+  };
 }
 
 // ----------------------------------------------------------------
@@ -493,9 +530,13 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
 let _destroyFn = null;
 
+const ROUTE = "skill-management";
+
 export function mount(container) {
   if (_destroyFn) { _destroyFn(); _destroyFn = null; }
   container.innerHTML = "";
+
+  var routeParams = getRouteParams();
 
   var shell = mkEl("div", "me-shell");
   container.appendChild(shell);
@@ -507,34 +548,43 @@ export function mount(container) {
 
   var detail = buildDetailPane(feedbackEl);
 
-  // 保存
-  detail.saveBtn.addEventListener("click", async function () {
+  // 保存（Ctrl+S からも呼べるよう名前付き関数にしてある）
+  async function saveSkill() {
     var payload = detail.collectData();
     var current = detail.getCurrent();
     var isNew = !current || !current.skillId;
     if (!isNew) { payload.skillId = current.skillId; }
 
     showFeedback(feedbackEl, isNew ? "追加中…" : "保存中…", "");
-    try {
-      var { response, data } = await fetchJson("/api/skills", {
-        method: isNew ? "POST" : "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        showFeedback(feedbackEl, "エラー: " + (data && data.error ? data.error : "HTTP " + response.status), "error");
-        return;
+    await withBusy(detail.saveBtn, async function () {
+      try {
+        var { response, data } = await fetchJson("/api/skills", {
+          method: isNew ? "POST" : "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          showFeedback(feedbackEl, "エラー: " + (data && data.error ? data.error : "HTTP " + response.status), "error");
+          return;
+        }
+        showFeedback(feedbackEl, isNew ? "追加しました" : "保存しました", "success");
+        if (isNew && data && data.skillId) {
+          detail.setCurrent(Object.assign({}, payload, { skillId: data.skillId }));
+          detail.setItem(Object.assign({}, payload, { skillId: data.skillId }));
+          setRouteParams({ id: data.skillId });
+        }
+        invalidateEntityCache("skill");
+        await leftApi.reload();
+      } catch (err) {
+        showFeedback(feedbackEl, "通信エラー: " + err.message, "error");
       }
-      showFeedback(feedbackEl, isNew ? "追加しました" : "保存しました", "success");
-      if (isNew && data && data.skillId) {
-        detail.setCurrent(Object.assign({}, payload, { skillId: data.skillId }));
-        detail.setItem(Object.assign({}, payload, { skillId: data.skillId }));
-      }
-      invalidateEntityCache("skill");
-      await leftApi.reload();
-    } catch (err) {
-      showFeedback(feedbackEl, "通信エラー: " + err.message, "error");
-    }
+    });
+  }
+  detail.saveBtn.addEventListener("click", saveSkill);
+
+  // Ctrl+S: 詳細ペインを開いている時だけ保存ボタンと同じ処理を呼ぶ
+  registerSaveHandler(ROUTE, function () {
+    if (detail.el.style.display !== "none") { saveSkill(); }
   });
 
   // 複製して新規 → 表示中のスキルをコピーして別レコードとして保存
@@ -565,6 +615,7 @@ export function mount(container) {
         var created = Object.assign({}, payload, { skillId: data.skillId });
         detail.setCurrent(created);
         detail.setItem(created);
+        setRouteParams({ id: data.skillId });
         invalidateEntityCache("skill");
         await leftApi.reload();
       } catch (err) {
@@ -581,15 +632,18 @@ export function mount(container) {
   });
 
   var leftApi = buildLeftPane({
+    routeParams: routeParams,
     onSelect: function (sk) {
       detail.setItem(sk);
       showFeedback(feedbackEl, "", "");
       showDetail();
+      setRouteParams({ id: sk.skillId });
     },
     onNew: function () {
       detail.setItem(null);
       showFeedback(feedbackEl, "", "");
       showDetail();
+      setRouteParams({ id: null });
     },
     onDelete: async function (sk) {
       // 削除確認は armConfirmButton（一覧の削除ボタン自体を二度押しで確定）で
@@ -608,6 +662,7 @@ export function mount(container) {
         var cur = detail.getCurrent();
         if (cur && cur.skillId === sk.skillId) {
           detail.setItem(null);
+          setRouteParams({ id: null });
         }
         invalidateEntityCache("skill");
         await leftApi.reload();
@@ -633,6 +688,7 @@ export function mount(container) {
   function showList() {
     detail.el.style.display = "none";
     leftApi.el.style.display = "";
+    setRouteParams({ id: null });
   }
 
   backBtn.addEventListener("click", showList);
@@ -643,7 +699,16 @@ export function mount(container) {
   shell.appendChild(leftApi.el);
   shell.appendChild(detail.el);
 
+  // URL の id パラメータから選択状態を復元（一覧読み込み完了後）
+  leftApi.ready.then(function () {
+    var idParam = parseInt(routeParams.get("id"), 10);
+    if (!isNaN(idParam)) {
+      leftApi.selectById(idParam);
+    }
+  });
+
   _destroyFn = function () {
+    unregisterSaveHandler(ROUTE);
     container.innerHTML = "";
   };
 }

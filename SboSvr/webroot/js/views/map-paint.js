@@ -55,12 +55,16 @@ function grpIdToCoord(grpId, sheetTileWidth) {
  * createPalette(options) → { el, getSelectedId, setSelectedId }
  *
  * options:
- *   parts          {Array}   normalizeMapPart() 済み一覧
+ *   parts          {Array}   normalizeMapPart() 済み一覧 (viewType を含めば種別フィルタが使える)
  *   sheetBaseUrl   {string}
  *   tileSize       {number}
  *   sheetTileWidth {number}
  *   sheetTileHeight {number}
  *   onSelect       {Function}  (partsId) => void
+ *   enableSearch   {boolean}   パーツID検索 input を出す(既定false。既存呼び出し元は変更なし)
+ *   enableViewTypeFilter {boolean} viewType 種別フィルタ select を出す(parts の viewType から動的に選択肢を作る)
+ *   recentStorageKey {string}  「最近使ったパーツ」を localStorage に保存するキー(省略時は非表示)
+ *   recentMax        {number}  最近使ったパーツの保持件数(既定10)
  */
 export function createPalette(options) {
   const {
@@ -70,6 +74,10 @@ export function createPalette(options) {
     sheetTileWidth,
     sheetTileHeight,
     onSelect,
+    enableSearch = false,
+    enableViewTypeFilter = false,
+    recentStorageKey = null,
+    recentMax = 10,
   } = options;
 
   let selectedId = null;
@@ -93,6 +101,128 @@ export function createPalette(options) {
   brushBar.appendChild(brushThumb);
   brushBar.appendChild(brushLabel);
   root.appendChild(brushBar);
+
+  // ---- 検索/種別フィルタ ----
+  let searchInput = null;
+  let filterSelect = null;
+  let searchQuery = "";
+  let filterViewType = "";
+  if (enableSearch || enableViewTypeFilter) {
+    const filterBar = document.createElement("div");
+    filterBar.className = "mp-palette-filter-bar";
+    filterBar.style.cssText = "display:flex;gap:6px;padding:4px 0;";
+
+    if (enableSearch) {
+      searchInput = document.createElement("input");
+      searchInput.type = "search";
+      searchInput.className = "form-input";
+      searchInput.placeholder = "パーツIDで検索";
+      searchInput.style.cssText = "flex:1;min-width:0;";
+      let debounceTimer = null;
+      searchInput.addEventListener("input", () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          searchQuery = searchInput.value.trim();
+          buildGallery();
+        }, 150);
+      });
+      filterBar.appendChild(searchInput);
+    }
+
+    if (enableViewTypeFilter) {
+      // parts が持つ viewType の実際の値だけを選択肢にする(意味付けが確認できないため
+      // ラベルは「種別 N」の数値表記に留める)。
+      const viewTypes = Array.from(
+        new Set(parts.filter((p) => typeof p.viewType === "number").map((p) => p.viewType))
+      ).sort((a, b) => a - b);
+      if (viewTypes.length > 1) {
+        filterSelect = document.createElement("select");
+        filterSelect.className = "form-select";
+        const allOpt = document.createElement("option");
+        allOpt.value = "";
+        allOpt.textContent = "すべての種別";
+        filterSelect.appendChild(allOpt);
+        viewTypes.forEach((vt) => {
+          const opt = document.createElement("option");
+          opt.value = String(vt);
+          opt.textContent = `種別 ${vt}`;
+          filterSelect.appendChild(opt);
+        });
+        filterSelect.addEventListener("change", () => {
+          filterViewType = filterSelect.value;
+          buildGallery();
+        });
+        filterBar.appendChild(filterSelect);
+      }
+    }
+
+    root.appendChild(filterBar);
+  }
+
+  // ---- 最近使ったパーツ ----
+  let recentGallery = null;
+  function loadRecentIds() {
+    if (!recentStorageKey) return [];
+    try {
+      const raw = window.localStorage.getItem(recentStorageKey);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr.filter((n) => typeof n === "number") : [];
+    } catch {
+      return [];
+    }
+  }
+  function saveRecentIds(ids) {
+    if (!recentStorageKey) return;
+    try {
+      window.localStorage.setItem(recentStorageKey, JSON.stringify(ids));
+    } catch {
+      // localStorage が使えない環境では何もしない
+    }
+  }
+  function pushRecentId(partsId) {
+    if (!recentStorageKey || !partsId) return;
+    let ids = loadRecentIds().filter((id) => id !== partsId);
+    ids.unshift(partsId);
+    if (ids.length > recentMax) ids = ids.slice(0, recentMax);
+    saveRecentIds(ids);
+    renderRecentGallery();
+  }
+  function renderRecentGallery() {
+    if (!recentStorageKey || !recentGallery) return;
+    const ids = loadRecentIds();
+    recentGallery.innerHTML = "";
+    if (!ids.length) {
+      recentGallery.style.display = "none";
+      return;
+    }
+    recentGallery.style.display = "";
+    const label = document.createElement("span");
+    label.textContent = "最近使用:";
+    label.style.cssText = "font-size:0.8em;opacity:0.7;align-self:center;margin-right:4px;";
+    recentGallery.appendChild(label);
+    ids.forEach((pid) => {
+      const part = parts.find((p) => p.partsId === pid);
+      if (!part) return;
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "mp-palette-item mp-palette-item--recent";
+      item.title = `パーツID: ${pid}`;
+      item.dataset.partsId = String(pid);
+      const canvas = document.createElement("canvas");
+      canvas.width = cellPx;
+      canvas.height = cellPx;
+      drawThumb(canvas, part);
+      item.appendChild(canvas);
+      item.addEventListener("click", () => selectPart(pid));
+      recentGallery.appendChild(item);
+    });
+  }
+  if (recentStorageKey) {
+    recentGallery = document.createElement("div");
+    recentGallery.className = "mp-palette-recent";
+    recentGallery.style.cssText = "display:flex;flex-wrap:wrap;gap:4px;padding:4px 0;border-bottom:1px solid var(--color-border,#333);";
+    root.appendChild(recentGallery);
+  }
 
   // ---- ギャラリー ----
   const gallery = document.createElement("div");
@@ -146,8 +276,8 @@ export function createPalette(options) {
   // ---- 選択 ----
   function selectPart(partsId) {
     selectedId = partsId;
-    // ハイライト更新
-    gallery.querySelectorAll(".mp-palette-item").forEach((el) => {
+    // ハイライト更新(ギャラリーと「最近使ったパーツ」の両方)
+    root.querySelectorAll(".mp-palette-item").forEach((el) => {
       el.classList.toggle("is-selected", Number(el.dataset.partsId) === partsId);
     });
     const part = parts.find((p) => p.partsId === partsId);
@@ -155,6 +285,8 @@ export function createPalette(options) {
       ? `ブラシ: パーツ ${partsId}`
       : "ブラシ: なし";
     drawActiveBrush();
+    // 「最近使ったパーツ」は選択のたびに記録する(配置クリック前の下見でも先頭に来る)
+    pushRecentId(partsId);
     if (onSelect) onSelect(partsId);
   }
 
@@ -201,8 +333,23 @@ export function createPalette(options) {
       gallery.appendChild(msg);
       return;
     }
+    let visibleParts = parts;
+    if (searchQuery) {
+      visibleParts = visibleParts.filter((p) => String(p.partsId).includes(searchQuery));
+    }
+    if (filterViewType !== "") {
+      const vt = Number(filterViewType);
+      visibleParts = visibleParts.filter((p) => p.viewType === vt);
+    }
+    if (!visibleParts.length) {
+      const msg = document.createElement("div");
+      msg.className = "mp-palette-empty";
+      msg.textContent = "該当するパーツがありません";
+      gallery.appendChild(msg);
+      return;
+    }
     const observer = createThumbObserver();
-    parts.forEach((part) => {
+    visibleParts.forEach((part) => {
       const item = document.createElement("button");
       item.type = "button";
       item.className = "mp-palette-item";
@@ -230,6 +377,7 @@ export function createPalette(options) {
   }
 
   buildGallery();
+  renderRecentGallery();
 
   return {
     el: root,

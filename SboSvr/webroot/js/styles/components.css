@@ -3180,3 +3180,79 @@ body.sbop2-popup-editor #view-container {
 .toast-action:hover {
   background: rgba(0, 0, 0, 0.06);
 }
+
+/* ================================================================
+   list-toolbar — 一覧の検索/ソート/ページング共通部品(components/list-toolbar.js)
+   ================================================================ */
+
+.list-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.list-toolbar-search {
+  flex: 1 1 220px;
+  min-width: 160px;
+}
+
+.list-toolbar-sort,
+.list-toolbar-pagesize {
+  flex: 0 0 auto;
+}
+
+.list-toolbar-pager {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.list-toolbar-page-info {
+  font-size: 0.85rem;
+  color: var(--muted-color, #666);
+}
+
+/* ================================================================
+   main-nav-recent — 「最近使った画面」(index.html の .main-nav 内、app.js が生成)
+   .main-nav は display:flex; flex-direction:row の横並びなので、
+   .main-nav details と同じ並びに収まる小さなチップ列として表示する。
+   ================================================================ */
+
+.main-nav-recent {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+}
+
+.main-nav-recent[hidden] {
+  display: none;
+}
+
+.main-nav-recent-title {
+  font-size: 0.75rem;
+  color: rgba(226, 232, 240, 0.6);
+  white-space: nowrap;
+}
+
+.main-nav-recent ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav-recent .nav-link {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.55rem;
+  background-color: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 6px;
+}

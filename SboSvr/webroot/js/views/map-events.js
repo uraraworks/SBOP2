@@ -17,6 +17,9 @@ import { fetchJson } from "../core/api.js";
 import { createEntityField } from "../components/entity-picker.js";
 import { registerPickHandler, unregisterPickHandler, requestNextPick } from "../core/game-pick.js";
 import { showSuccessToast } from "../components/toast.js";
+import { registerSaveHandler, unregisterSaveHandler } from "../core/save-shortcut.js";
+import { getRouteParams, setRouteParams } from "../core/router.js";
+import { createListToolbar } from "../components/list-toolbar.js";
 
 const MAP_EVENT_TYPE_LABELS = {
   0: "なし (NONE)",
@@ -164,6 +167,8 @@ export function mount(container) {
 
           <p id="map-event-summary" class="section-summary" aria-live="polite"></p>
 
+          <div id="map-event-toolbar"></div>
+
           <div class="table-wrapper">
             <table class="data-table">
               <thead>
@@ -205,6 +210,7 @@ export function mount(container) {
   const backBtn           = container.querySelector("#map-event-back-btn");
   const createHereActions = container.querySelector("#map-event-create-here-actions");
   const createHereBtn     = container.querySelector("#map-event-create-here-btn");
+  const toolbarHost       = container.querySelector("#map-event-toolbar");
 
   const state = {
     maps: [],
@@ -215,6 +221,35 @@ export function mount(container) {
     loadError: null,
     pendingCreatePos: null, // { x, y } クリックしたセルにイベントが無かった時の「ここに新規作成」候補座標
   };
+
+  // 一覧の検索/並び替え。選択中マップ/イベントIDと合わせて URL のクエリ(map/id/q/sort/page)に
+  // 反映し、リロード時に復元する(setRouteParams は history.replaceState のみで hashchange を
+  // 発火させないため、ここでの状態更新が再 mount を招くことはない)。
+  const routeParams = getRouteParams();
+  const initialMapParam = routeParams.get("map");
+  const initialEventIdParam = routeParams.get("id");
+  const toolbar = createListToolbar({
+    placeholder: "ID・種別・座標で検索",
+    sortOptions: [
+      { value: "id", label: "ID順" },
+      { value: "type", label: "種別順" },
+    ],
+    pageSizes: [20, 50, 100],
+    initial: {
+      q: routeParams.get("q") || "",
+      sort: routeParams.get("sort") || "id",
+      page: Number(routeParams.get("page")) || 1,
+    },
+    onChange: (s) => {
+      setRouteParams({
+        q: s.q || null,
+        sort: s.sort && s.sort !== "id" ? s.sort : null,
+        page: s.page && s.page !== 1 ? s.page : null,
+      });
+      renderTable();
+    },
+  });
+  if (toolbarHost) { toolbarHost.appendChild(toolbar.element); }
 
   function hideCreateHereButton() {
     state.pendingCreatePos = null;
@@ -270,7 +305,28 @@ export function mount(container) {
       tableBody.appendChild(tr);
       return;
     }
-    state.events.forEach((ev) => {
+    const { pageRows } = toolbar.applyToRows(state.events, {
+      searchFields: [
+        (e) => String(e.id),
+        (e) => e.typeLabel || String(e.type),
+        (e) => `${e.pos.x},${e.pos.y}`,
+      ],
+      sorters: {
+        id: (a, b) => a.id - b.id,
+        type: (a, b) => a.type - b.type || a.id - b.id,
+      },
+    });
+    if (!pageRows.length) {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 5;
+      td.textContent = "該当するイベントがありません";
+      td.style.textAlign = "center";
+      tr.appendChild(td);
+      tableBody.appendChild(tr);
+      return;
+    }
+    pageRows.forEach((ev) => {
       const tr = document.createElement("tr");
       if (ev.id === state.selectedEventId) { tr.classList.add("selected-row"); }
       function td(text) { const el = document.createElement("td"); el.textContent = text; return el; }
@@ -294,17 +350,28 @@ export function mount(container) {
     });
   }
 
+  // 選択中マップ/イベントIDをURLに反映する(map/id)。detailSection非表示時はid無し。
+  function syncRouteParams() {
+    setRouteParams({
+      map: state.selectedMapId != null ? state.selectedMapId : null,
+      id: (detailSection && detailSection.style.display !== "none" && state.selectedEventId)
+        ? state.selectedEventId : null,
+    });
+  }
+
   function showListSection() {
     if (listSection) { listSection.style.display = ""; }
     if (detailSection) { detailSection.style.display = "none"; }
     state.selectedEventId = null;
     if (editArea) { editArea.innerHTML = ""; }
     hideCreateHereButton();
+    syncRouteParams();
   }
 
   function showDetailSection() {
     if (listSection) { listSection.style.display = "none"; }
     if (detailSection) { detailSection.style.display = ""; }
+    syncRouteParams();
   }
 
   function renderForm(ev, presetPos) {
@@ -473,13 +540,32 @@ export function mount(container) {
       }
     } catch { /* ignore */ }
 
+    // URL の map= を優先して復元する(存在するマップIDの場合のみ)
+    if (initialMapParam !== null && state.maps.some((m) => String(m.id) === initialMapParam)) {
+      state.selectedMapId = parseInt(initialMapParam, 10);
+    }
+
     renderMapSelect();
 
     if (state.maps.length && !state.selectedMapId) {
       state.selectedMapId = state.maps[0].id;
+    }
+    if (mapEventMapSelect && state.selectedMapId) {
       mapEventMapSelect.value = String(state.selectedMapId);
     }
-    if (state.selectedMapId) { await loadEventList(); }
+    if (state.selectedMapId) {
+      await loadEventList();
+      // URL の id= を復元(一覧取得後でないと該当イベントを引けない)
+      if (initialEventIdParam !== null) {
+        const restoredId = parseInt(initialEventIdParam, 10);
+        const ev = state.events.find((e) => e.id === restoredId);
+        if (ev) {
+          state.selectedEventId = ev.id;
+          renderTable();
+          renderForm(ev);
+        }
+      }
+    }
   }
 
   // イベント登録
@@ -556,6 +642,15 @@ export function mount(container) {
   }
 
   registerPickHandler("map-events", handleGamePick);
+
+  // Ctrl+S: 詳細ペイン(編集フォーム)を開いている時だけ保存を呼ぶ。
+  // saveEvent は非同期だが多重クリック/多重送信対策は既存のまま(フォーム再描画で
+  // hidden id が最新化されるため PUT/POST の取り違えは起きない)。
+  registerSaveHandler("map-events", () => {
+    if (detailSection && detailSection.style.display !== "none") {
+      saveEvent();
+    }
+  });
 
   initView();
 

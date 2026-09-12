@@ -105,6 +105,15 @@ export function guardHashChange() {
 }
 
 if (typeof window !== "undefined") {
+  // setRouteParams (router.js) は history.replaceState で hash のクエリだけを
+  // 書き換えるため hashchange が発火しない。これを放置すると _previousHash が
+  // 更新されず、次に dirty で hashchange がキャンセルされた際に古いクエリへ
+  // 巻き戻ってしまう。router.js はこのモジュールを import しない
+  // (依存を増やさない) ため、CustomEvent 経由で受け取る。
+  window.addEventListener("sbop2:routeparamschange", () => {
+    _previousHash = window.location.hash;
+  });
+
   window.addEventListener("beforeunload", (event) => {
     if (!isDirty()) {
       return;

@@ -130,6 +130,23 @@ function createTemplatePanel({ onTemplatesChange }) {
   summaryEl.className = "muted";
   root.appendChild(summaryEl);
 
+  // 名前検索(テンプレート数が増えると探しにくいため)
+  let searchQuery = "";
+  const searchInput = document.createElement("input");
+  searchInput.type = "search";
+  searchInput.className = "form-input";
+  searchInput.placeholder = "名前・IDで検索";
+  searchInput.style.cssText = "max-width:240px;margin-bottom:0.5rem;";
+  let searchDebounce = null;
+  searchInput.addEventListener("input", () => {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+      searchQuery = searchInput.value.trim().toLowerCase();
+      renderTable();
+    }, 150);
+  });
+  root.appendChild(searchInput);
+
   // テーブル
   const tableWrap = document.createElement("div");
   tableWrap.className = "table-wrapper";
@@ -191,8 +208,25 @@ function createTemplatePanel({ onTemplatesChange }) {
       summaryEl.textContent = "テンプレートなし";
       return;
     }
-    summaryEl.textContent = `テンプレート数: ${templates.length}`;
-    templates.forEach((tmpl) => {
+    const filtered = searchQuery
+      ? templates.filter((t) =>
+          String(t.objectId).includes(searchQuery) ||
+          String(t.name || "").toLowerCase().includes(searchQuery))
+      : templates;
+    if (!filtered.length) {
+      const tr = document.createElement("tr");
+      const td = document.createElement("td");
+      td.colSpan = 6;
+      td.textContent = "該当するテンプレートがありません";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      summaryEl.textContent = `テンプレート数: ${templates.length}（検索結果 0 件）`;
+      return;
+    }
+    summaryEl.textContent = searchQuery
+      ? `テンプレート数: ${templates.length}（検索結果 ${filtered.length} 件）`
+      : `テンプレート数: ${templates.length}`;
+    filtered.forEach((tmpl) => {
       const tr = document.createElement("tr");
       if (tmpl.objectId === selectedId) tr.classList.add("is-selected-row");
       tr.style.cursor = "pointer";

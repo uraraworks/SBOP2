@@ -31,6 +31,9 @@ function normalizeMapPart(raw) {
 
   return {
     partsId,
+    // /api/maps/parts の viewType (表示種別)。意味付けは未確認のため数値のまま
+    // パレットの種別フィルタに使う (map-paint.js createPalette の enableViewTypeFilter)。
+    viewType: typeof raw.viewType === "number" ? raw.viewType : Number(raw.viewType ?? 0),
     sprites: {
       base:    normSprite(raw?.sprites?.base),
       overlay: normSprite(raw?.sprites?.overlay),
@@ -156,6 +159,10 @@ export function mount(container) {
         tileSize: ts,
         sheetTileWidth: stw,
         sheetTileHeight: sth,
+        enableSearch: true,
+        enableViewTypeFilter: true,
+        recentStorageKey: "sbop2_map_parts_place_recent",
+        recentMax: 10,
         onSelect(id) {
           editBtn.disabled = false;
           editBtn.title = "";

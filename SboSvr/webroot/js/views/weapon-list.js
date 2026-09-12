@@ -19,6 +19,9 @@ import { withBusy, armConfirmButton } from "../core/dom.js";
 import { openEntityPicker, createEntityField, invalidateEntityCache } from "../components/entity-picker.js";
 import { createAnimePreview } from "../components/anime-preview.js";
 import { loadCatalog } from "../data/assets.js";
+import { createListToolbar } from "../components/list-toolbar.js";
+import { getRouteParams, setRouteParams } from "../core/router.js";
+import { registerSaveHandler, unregisterSaveHandler } from "../core/save-shortcut.js";
 
 // ----------------------------------------------------------------
 // 定数
@@ -554,25 +557,43 @@ function buildDetailPane({ feedbackEl }) {
 // 左ペイン: 一覧
 // ----------------------------------------------------------------
 
-function buildLeftPane({ onSelect, onNew, onDelete }) {
+function buildLeftPane({ onSelect, onNew, onDelete, routeParams }) {
   const pane = document.createElement("div");
   pane.className = "ee-left";
 
-  const searchInput = document.createElement("input");
-  searchInput.type = "search";
-  searchInput.placeholder = "ID または 名前で検索…";
-  searchInput.className = "ld-search";
-  pane.appendChild(searchInput);
+  const toolbar = createListToolbar({
+    placeholder: "ID・名前で検索",
+    sortOptions: [
+      { value: "id", label: "ID順" },
+      { value: "name", label: "名前順" },
+      { value: "motion", label: "攻撃モーション順" },
+    ],
+    pageSizes: [20, 50, 100],
+    initial: {
+      q: routeParams.get("q") || "",
+      sort: routeParams.get("sort") || "id",
+      page: Number(routeParams.get("page")) || 1,
+    },
+    onChange: (s) => {
+      setRouteParams({
+        q: s.q || null,
+        sort: s.sort && s.sort !== "id" ? s.sort : null,
+        page: s.page && s.page !== 1 ? s.page : null,
+      });
+      renderList();
+    },
+  });
+  pane.appendChild(toolbar.element);
 
-  const toolbar = document.createElement("div");
-  toolbar.className = "me-list-toolbar";
+  const actionsBar = document.createElement("div");
+  actionsBar.className = "me-list-toolbar";
   const newBtn = document.createElement("button");
   newBtn.type = "button";
   newBtn.className = "button small";
   newBtn.textContent = "+ 新規追加";
   newBtn.addEventListener("click", onNew);
-  toolbar.appendChild(newBtn);
-  pane.appendChild(toolbar);
+  actionsBar.appendChild(newBtn);
+  pane.appendChild(actionsBar);
 
   const listEl = document.createElement("ul");
   listEl.className = "ld-list";
@@ -613,13 +634,16 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
   }
 
   function renderList() {
-    const q = searchInput.value.trim().toLowerCase();
-    const filtered = _allItems.filter((w) => {
-      if (!q) return true;
-      return String(w.weaponInfoId).includes(q) || (w.name || "").toLowerCase().includes(q);
+    const { pageRows, total } = toolbar.applyToRows(_allItems, {
+      searchFields: ["name", (w) => String(w.weaponInfoId)],
+      sorters: {
+        id: (a, b) => a.weaponInfoId - b.weaponInfoId,
+        name: (a, b) => String(a.name || "").localeCompare(String(b.name || "")),
+        motion: (a, b) => (a.motionType || 0) - (b.motionType || 0),
+      },
     });
     listEl.innerHTML = "";
-    filtered.forEach((w) => {
+    pageRows.forEach((w) => {
       const li = document.createElement("li");
       li.className = "ld-list-item" + (w.weaponInfoId === _selectedId ? " selected" : "");
 
@@ -649,13 +673,25 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
       listEl.appendChild(li);
     });
-    summary.textContent = filtered.length + " 件";
+    summary.textContent = total + " 件";
   }
 
-  searchInput.addEventListener("input", renderList);
-  loadList();
+  const ready = loadList();
 
-  return { el: pane, reload: loadList };
+  return {
+    el: pane,
+    reload: loadList,
+    ready,
+    selectById(id) {
+      const w = _allItems.find((x) => x.weaponInfoId === id);
+      if (w) {
+        _selectedId = id;
+        renderList();
+        onSelect(w);
+      }
+      return w || null;
+    },
+  };
 }
 
 // ----------------------------------------------------------------
@@ -664,9 +700,13 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
 let _destroyFn = null;
 
+const ROUTE = "weapon-list";
+
 export function mount(container) {
   if (_destroyFn) { _destroyFn(); _destroyFn = null; }
   container.innerHTML = "";
+
+  const routeParams = getRouteParams();
 
   const shell = document.createElement("div");
   shell.className = "me-shell";
@@ -698,36 +738,46 @@ export function mount(container) {
   function showList() {
     detail.el.style.display = "none";
     leftApi.el.style.display = "";
+    setRouteParams({ id: null });
   }
 
   backBtn.addEventListener("click", showList);
 
-  // 保存
-  detail.saveBtn.addEventListener("click", async () => {
+  // 保存（Ctrl+S からも呼べるよう名前付き関数にしてある）
+  async function saveWeapon() {
     const payload = detail.collectData();
     const current = detail.getCurrent();
     const isNew = !current?.weaponInfoId;
     if (!isNew) { payload.weaponInfoId = current.weaponInfoId; }
     showFeedback(feedbackEl, isNew ? "追加中…" : "保存中…", "");
-    try {
-      const { response, data } = await fetchJson("/api/weapons", {
-        method: isNew ? "POST" : "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        showFeedback(feedbackEl, "エラー: " + (data?.error ?? "HTTP " + response.status), "error");
-        return;
+    await withBusy(detail.saveBtn, async () => {
+      try {
+        const { response, data } = await fetchJson("/api/weapons", {
+          method: isNew ? "POST" : "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          showFeedback(feedbackEl, "エラー: " + (data?.error ?? "HTTP " + response.status), "error");
+          return;
+        }
+        showFeedback(feedbackEl, isNew ? "追加しました" : "保存しました", "success");
+        if (isNew && data?.weaponInfoId) {
+          detail.setCurrent({ ...payload, weaponInfoId: data.weaponInfoId });
+          setRouteParams({ id: data.weaponInfoId });
+        }
+        invalidateEntityCache("weapon");
+        await leftApi.reload();
+      } catch (e) {
+        showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
       }
-      showFeedback(feedbackEl, isNew ? "追加しました" : "保存しました", "success");
-      if (isNew && data?.weaponInfoId) {
-        detail.setCurrent({ ...payload, weaponInfoId: data.weaponInfoId });
-      }
-      invalidateEntityCache("weapon");
-      await leftApi.reload();
-    } catch (e) {
-      showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
-    }
+    });
+  }
+  detail.saveBtn.addEventListener("click", saveWeapon);
+
+  // Ctrl+S: 詳細ペインを開いている時だけ保存ボタンと同じ処理を呼ぶ
+  registerSaveHandler(ROUTE, () => {
+    if (detail.el.style.display !== "none") { saveWeapon(); }
   });
 
   // 複製して新規 → 表示中のレコードをコピーして別レコードとして保存
@@ -757,6 +807,7 @@ export function mount(container) {
         const created = { ...payload, weaponInfoId: data.weaponInfoId };
         detail.setCurrent(created);
         detail.setWeapon(created);
+        setRouteParams({ id: data.weaponInfoId });
         invalidateEntityCache("weapon");
         await leftApi.reload();
       } catch (e) {
@@ -773,15 +824,18 @@ export function mount(container) {
   });
 
   const leftApi = buildLeftPane({
+    routeParams,
     onSelect: (w) => {
       detail.setWeapon(w);
       showFeedback(feedbackEl, "", "");
       showDetail();
+      setRouteParams({ id: w.weaponInfoId });
     },
     onNew: () => {
       detail.setWeapon(null);
       showFeedback(feedbackEl, "", "");
       showDetail();
+      setRouteParams({ id: null });
     },
     onDelete: async (w) => {
       // 削除確認は armConfirmButton（一覧の削除ボタン自体を二度押しで確定）で
@@ -799,6 +853,7 @@ export function mount(container) {
         showFeedback(feedbackEl, "削除しました (ID=" + w.weaponInfoId + ")", "success");
         if (detail.getCurrent()?.weaponInfoId === w.weaponInfoId) {
           detail.setWeapon(null);
+          setRouteParams({ id: null });
         }
         invalidateEntityCache("weapon");
         await leftApi.reload();
@@ -814,7 +869,16 @@ export function mount(container) {
   shell.appendChild(leftApi.el);
   shell.appendChild(detail.el);
 
+  // URL の id パラメータから選択状態を復元（一覧読み込み完了後）
+  leftApi.ready.then(() => {
+    const idParam = parseInt(routeParams.get("id"), 10);
+    if (!isNaN(idParam)) {
+      leftApi.selectById(idParam);
+    }
+  });
+
   _destroyFn = () => {
+    unregisterSaveHandler(ROUTE);
     container.innerHTML = "";
   };
 }

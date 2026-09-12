@@ -35,6 +35,32 @@ let _popupWatch = null;
 let _modeButtons = new Map();
 let _popupButton = null;
 
+// ポップアップの開閉を他モジュールへ通知するフック。
+// 例: save-shortcut.js は編集ペインがポップアップへ移った先の document にも
+// Ctrl+S の keydown リスナーを張るため、ポップアップの window を購読する。
+const _popupListeners = new Set();
+
+/**
+ * ポップアップの開閉時に呼ばれるコールバックを登録する。
+ * 開いた時は popup の Window を、閉じた時は null を渡す。
+ * @param {(win: Window|null) => void} fn
+ */
+export function onPopupWindowChange(fn) {
+  if (typeof fn === "function") {
+    _popupListeners.add(fn);
+  }
+}
+
+function notifyPopupWindowChange(win) {
+  _popupListeners.forEach((fn) => {
+    try {
+      fn(win);
+    } catch (err) {
+      console.error("[workspace-layout] popup listener failed:", err);
+    }
+  });
+}
+
 // ----------------------------------------------------------------
 // モード切り替え
 // ----------------------------------------------------------------
@@ -131,6 +157,7 @@ function popOut() {
   setMode("game");
   updatePopupButton();
   installDialogFocusGuard();
+  notifyPopupWindowChange(popup);
 
   // 閉じられたら戻す。pagehide だけだと取りこぼす環境があるので併用する。
   popup.addEventListener("pagehide", popIn);
@@ -151,6 +178,7 @@ function popIn() {
   _popup = null;
   try { if (!popup.closed) popup.close(); } catch { /* 既に閉じている */ }
   removeDialogFocusGuard();
+  notifyPopupWindowChange(null);
 
   setMode("both");
   updatePopupButton();

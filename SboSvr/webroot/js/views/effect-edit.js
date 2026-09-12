@@ -25,6 +25,9 @@ import { createDragList } from "../components/drag-list.js";
 import { createAnimePreview } from "../components/anime-preview.js";
 import { createSoundPicker } from "../components/sound-picker.js";
 import { invalidateEntityCache } from "../components/entity-picker.js";
+import { createListToolbar } from "../components/list-toolbar.js";
+import { getRouteParams, setRouteParams } from "../core/router.js";
+import { registerSaveHandler, unregisterSaveHandler } from "../core/save-shortcut.js";
 
 // ----------------------------------------------------------------
 // 定数
@@ -406,27 +409,45 @@ function buildDetailPane({ feedbackEl }) {
 // 左ペイン: 一覧
 // ----------------------------------------------------------------
 
-function buildLeftPane({ onSelect, onNew, onDelete }) {
+function buildLeftPane({ onSelect, onNew, onDelete, routeParams }) {
   const pane = document.createElement("div");
   pane.className = "ee-left";
 
-  // 検索
-  const searchInput = document.createElement("input");
-  searchInput.type = "search";
-  searchInput.placeholder = "ID または 名前で検索…";
-  searchInput.className = "ld-search";
-  pane.appendChild(searchInput);
+  // 検索・ソート・ページング
+  const toolbar = createListToolbar({
+    placeholder: "ID・名前で検索",
+    sortOptions: [
+      { value: "id", label: "ID順" },
+      { value: "name", label: "名前順" },
+      { value: "frames", label: "コマ数順" },
+    ],
+    pageSizes: [20, 50, 100],
+    initial: {
+      q: routeParams.get("q") || "",
+      sort: routeParams.get("sort") || "id",
+      page: Number(routeParams.get("page")) || 1,
+    },
+    onChange: (s) => {
+      setRouteParams({
+        q: s.q || null,
+        sort: s.sort && s.sort !== "id" ? s.sort : null,
+        page: s.page && s.page !== 1 ? s.page : null,
+      });
+      renderList();
+    },
+  });
+  pane.appendChild(toolbar.element);
 
   // ツールバー
-  const toolbar = document.createElement("div");
-  toolbar.className = "me-list-toolbar";
+  const actionsBar = document.createElement("div");
+  actionsBar.className = "me-list-toolbar";
   const newBtn = document.createElement("button");
   newBtn.type = "button";
   newBtn.className = "button small";
   newBtn.textContent = "+ 新規追加";
   newBtn.addEventListener("click", onNew);
-  toolbar.appendChild(newBtn);
-  pane.appendChild(toolbar);
+  actionsBar.appendChild(newBtn);
+  pane.appendChild(actionsBar);
 
   // リスト
   const listEl = document.createElement("ul");
@@ -451,13 +472,16 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
   }
 
   function renderList() {
-    const q = searchInput.value.trim().toLowerCase();
-    const filtered = _allItems.filter((e) => {
-      if (!q) return true;
-      return String(e.effectId).includes(q) || (e.name || "").toLowerCase().includes(q);
+    const { pageRows, total } = toolbar.applyToRows(_allItems, {
+      searchFields: ["name", (e) => String(e.effectId)],
+      sorters: {
+        id: (a, b) => a.effectId - b.effectId,
+        name: (a, b) => String(a.name || "").localeCompare(String(b.name || "")),
+        frames: (a, b) => (a.animes?.length || 0) - (b.animes?.length || 0),
+      },
     });
     listEl.innerHTML = "";
-    filtered.forEach((e) => {
+    pageRows.forEach((e) => {
       const li = document.createElement("li");
       li.className = "ld-list-item" + (e.effectId === _selectedId ? " selected" : "");
 
@@ -493,13 +517,25 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
       listEl.appendChild(li);
     });
-    summary.textContent = filtered.length + " 件";
+    summary.textContent = total + " 件";
   }
 
-  searchInput.addEventListener("input", renderList);
-  loadList();
+  const ready = loadList();
 
-  return { el: pane, reload: loadList };
+  return {
+    el: pane,
+    reload: loadList,
+    ready,
+    selectById(id) {
+      const e = _allItems.find((x) => x.effectId === id);
+      if (e) {
+        _selectedId = id;
+        renderList();
+        onSelect(e);
+      }
+      return e || null;
+    },
+  };
 }
 
 // ----------------------------------------------------------------
@@ -508,9 +544,13 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
 let _destroyFn = null;
 
+const ROUTE = "effect-library";
+
 export function mount(container) {
   if (_destroyFn) { _destroyFn(); _destroyFn = null; }
   container.innerHTML = "";
+
+  const routeParams = getRouteParams();
 
   const shell = document.createElement("div");
   shell.className = "me-shell";
@@ -542,36 +582,46 @@ export function mount(container) {
   function showList() {
     detail.el.style.display = "none";
     leftApi.el.style.display = "";
+    setRouteParams({ id: null });
   }
 
   backBtn.addEventListener("click", showList);
 
-  // 保存
-  detail.saveBtn.addEventListener("click", async () => {
+  // 保存（Ctrl+S からも呼べるよう名前付き関数にしてある）
+  async function saveEffect() {
     const payload = detail.collectData();
     const current = detail.getCurrentEffect();
     const isNew = !current?.effectId;
     if (!isNew) { payload.effectId = current.effectId; }
     showFeedback(feedbackEl, isNew ? "追加中…" : "保存中…", "");
-    try {
-      const { response, data } = await fetchJson("/api/effects", {
-        method: isNew ? "POST" : "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        showFeedback(feedbackEl, "エラー: " + (data?.error ?? "HTTP " + response.status), "error");
-        return;
+    await withBusy(detail.saveBtn, async () => {
+      try {
+        const { response, data } = await fetchJson("/api/effects", {
+          method: isNew ? "POST" : "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          showFeedback(feedbackEl, "エラー: " + (data?.error ?? "HTTP " + response.status), "error");
+          return;
+        }
+        showFeedback(feedbackEl, isNew ? "追加しました" : "保存しました", "success");
+        if (isNew && data?.effectId) {
+          detail.setCurrentEffect({ ...payload, effectId: data.effectId });
+          setRouteParams({ id: data.effectId });
+        }
+        invalidateEntityCache("effect");
+        await leftApi.reload();
+      } catch (e) {
+        showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
       }
-      showFeedback(feedbackEl, isNew ? "追加しました" : "保存しました", "success");
-      if (isNew && data?.effectId) {
-        detail.setCurrentEffect({ ...payload, effectId: data.effectId });
-      }
-      invalidateEntityCache("effect");
-      await leftApi.reload();
-    } catch (e) {
-      showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
-    }
+    });
+  }
+  detail.saveBtn.addEventListener("click", saveEffect);
+
+  // Ctrl+S: 詳細ペインを開いている時だけ保存ボタンと同じ処理を呼ぶ
+  registerSaveHandler(ROUTE, () => {
+    if (detail.el.style.display !== "none") { saveEffect(); }
   });
 
   // 複製して新規 → 表示中のエフェクトをコピーして別レコードとして保存
@@ -604,6 +654,7 @@ export function mount(container) {
         const created = { ...payload, effectId: data.effectId };
         detail.setCurrentEffect(created);
         detail.setEffect(created);
+        setRouteParams({ id: data.effectId });
         invalidateEntityCache("effect");
         await leftApi.reload();
       } catch (e) {
@@ -620,15 +671,18 @@ export function mount(container) {
   });
 
   const leftApi = buildLeftPane({
+    routeParams,
     onSelect: (eff) => {
       detail.setEffect(eff);
       showFeedback(feedbackEl, "", "");
       showDetail();
+      setRouteParams({ id: eff.effectId });
     },
     onNew: () => {
       detail.setEffect(null);
       showFeedback(feedbackEl, "", "");
       showDetail();
+      setRouteParams({ id: null });
     },
     onDelete: async (eff) => {
       // 削除確認は一覧の削除ボタン自体を二度押しで確定する
@@ -646,6 +700,7 @@ export function mount(container) {
         showFeedback(feedbackEl, "削除しました (ID=" + eff.effectId + ")", "success");
         if (detail.getCurrentEffect()?.effectId === eff.effectId) {
           detail.setEffect(null);
+          setRouteParams({ id: null });
         }
         invalidateEntityCache("effect");
         await leftApi.reload();
@@ -661,7 +716,16 @@ export function mount(container) {
   shell.appendChild(leftApi.el);
   shell.appendChild(detail.el);
 
+  // URL の id パラメータから選択状態を復元（一覧読み込み完了後）
+  leftApi.ready.then(() => {
+    const idParam = parseInt(routeParams.get("id"), 10);
+    if (!isNaN(idParam)) {
+      leftApi.selectById(idParam);
+    }
+  });
+
   _destroyFn = () => {
+    unregisterSaveHandler(ROUTE);
     detail.destroy();
     container.innerHTML = "";
   };

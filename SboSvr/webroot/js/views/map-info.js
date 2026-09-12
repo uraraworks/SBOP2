@@ -11,6 +11,9 @@
 import { fetchJson } from "../core/api.js";
 import { withBusy } from "../core/dom.js";
 import { showSuccessToast, showErrorToast } from "../components/toast.js";
+import { registerSaveHandler } from "../core/save-shortcut.js";
+import { getRouteParams, setRouteParams } from "../core/router.js";
+import { createListToolbar } from "../components/list-toolbar.js";
 
 export function mount(container) {
   container.innerHTML = `
@@ -42,6 +45,8 @@ export function mount(container) {
           </div>
 
           <p id="map-info-summary" class="map-parts-summary" aria-live="polite"></p>
+
+          <div id="map-info-toolbar"></div>
 
           <div class="table-wrapper" id="map-info-table-wrapper">
             <table class="data-table">
@@ -132,6 +137,7 @@ export function mount(container) {
   const backBtn             = container.querySelector("#map-info-back-btn");
   const cancelBtn           = container.querySelector("#map-info-cancel-btn");
   const saveBtn             = container.querySelector("#map-info-save-btn");
+  const toolbarHost         = container.querySelector("#map-info-toolbar");
 
   const state = {
     maps: [],
@@ -139,6 +145,33 @@ export function mount(container) {
     isLoading: false,
     loadError: null,
   };
+
+  // 一覧の検索/ソート/ページング。状態は URL のクエリ(q/sort/page)に反映し、
+  // リロード時に復元する(setRouteParams は history.replaceState のみで
+  // hashchange を発火させないため、ここでの状態更新が再 mount を招くことはない)。
+  const routeParams = getRouteParams();
+  const toolbar = createListToolbar({
+    placeholder: "ID・マップ名で検索",
+    sortOptions: [
+      { value: "id", label: "ID順" },
+      { value: "name", label: "名前順" },
+    ],
+    pageSizes: [20, 50, 100],
+    initial: {
+      q: routeParams.get("q") || "",
+      sort: routeParams.get("sort") || "id",
+      page: Number(routeParams.get("page")) || 1,
+    },
+    onChange: (s) => {
+      setRouteParams({
+        q: s.q || null,
+        sort: s.sort && s.sort !== "id" ? s.sort : null,
+        page: s.page && s.page !== 1 ? s.page : null,
+      });
+      renderTable();
+    },
+  });
+  if (toolbarHost) { toolbarHost.appendChild(toolbar.element); }
 
   function setSummary(msg) {
     if (summaryEl) { summaryEl.textContent = msg || ""; }
@@ -186,7 +219,20 @@ export function mount(container) {
       tableBody.appendChild(tr);
       return;
     }
-    state.maps.forEach((map) => {
+    const { pageRows } = toolbar.applyToRows(state.maps, {
+      searchFields: ["name", (m) => String(m.id)],
+      sorters: {
+        id: (a, b) => a.id - b.id,
+        name: (a, b) => String(a.name || "").localeCompare(String(b.name || "")),
+      },
+    });
+    if (!pageRows.length) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = '<td colspan="5" style="text-align:center">該当するマップがありません</td>';
+      tableBody.appendChild(tr);
+      return;
+    }
+    pageRows.forEach((map) => {
       const tr = document.createElement("tr");
       const weatherLabel = WEATHER_LABELS[map.weatherType] || String(map.weatherType || 0);
       tr.innerHTML =
@@ -353,6 +399,14 @@ export function mount(container) {
   if (addCancelBtn) {
     addCancelBtn.addEventListener("click", () => { if (addArea) { addArea.style.display = "none"; } });
   }
+
+  // Ctrl+S: 詳細ペインを開いている時だけ保存ボタンと同じ処理を呼ぶ。
+  // saveMapInfo は withBusy(saveBtn, ...) 経由なので二重実行防止は既存のまま効く。
+  registerSaveHandler("map-info", () => {
+    if (detailSection && detailSection.style.display !== "none") {
+      saveMapInfo();
+    }
+  });
 
   // 初回ロード
   loadData(false);
