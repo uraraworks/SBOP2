@@ -18,11 +18,12 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { withBusy, armConfirmButton } from "../core/dom.js";
 import { createSpriteField } from "../components/sprite-picker.js";
 import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { createSoundPicker } from "../components/sound-picker.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
-import { createEntityField } from "../components/entity-picker.js";
+import { createEntityField, invalidateEntityCache } from "../components/entity-picker.js";
 
 // ----------------------------------------------------------------
 // ユーティリティ
@@ -63,7 +64,11 @@ function buildDetailPane({ feedbackEl }) {
   cancelBtn.type = "button";
   cancelBtn.className = "button";
   cancelBtn.textContent = "キャンセル / 新規";
-  actionBar.append(saveBtn, cancelBtn);
+  const dupBtn = document.createElement("button");
+  dupBtn.type = "button";
+  dupBtn.className = "button small";
+  dupBtn.textContent = "複製";
+  actionBar.append(saveBtn, dupBtn, cancelBtn);
   pane.appendChild(actionBar);
 
   // --- 基本情報 ---
@@ -214,7 +219,7 @@ function buildDetailPane({ feedbackEl }) {
   function getCurrent() { return _current; }
   function setCurrent(it) { _current = it; }
 
-  return { el: pane, saveBtn, cancelBtn, setItem, collectData, getCurrent, setCurrent };
+  return { el: pane, saveBtn, dupBtn, cancelBtn, setItem, collectData, getCurrent, setCurrent };
 }
 
 // ----------------------------------------------------------------
@@ -342,7 +347,11 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
       delBtn.type = "button";
       delBtn.className = "ld-item-del button small";
       delBtn.textContent = "削除";
-      delBtn.addEventListener("click", (ev) => { ev.stopPropagation(); onDelete(it); });
+      delBtn.addEventListener("click", (ev) => { ev.stopPropagation(); });
+      armConfirmButton(delBtn, {
+        armedLabel: "本当に削除？",
+        onConfirm: () => onDelete(it),
+      });
       li.appendChild(delBtn);
 
       listEl.appendChild(li);
@@ -428,10 +437,57 @@ export function mount(container) {
       if (isNew && data?.itemId) {
         detail.setCurrent({ ...payload, itemId: data.itemId });
       }
+      invalidateEntityCache("item");
       await leftApi.reload();
     } catch (e) {
       showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
     }
+  });
+
+  // 複製 → 表示中のフォーム内容(未保存の編集も含む)をコピーして別レコードとして保存
+  // (ItemHandler.cpp の CItemCreateHandler::Handle は POST 時に必ず m_dwItemID=0 にしてから
+  //  Add するため、既存レコードを上書きする心配は無い。
+  //  ただし座標・マップID・所持キャラIDをそのまま複製すると同じマスや同じキャラの
+  //  所持欄に重複して現れてしまうため、複製したアイテムは未配置(mapId=0)・所有者なし
+  //  (charId=0)・座標ゼロで作成する。地面には出ないが item-list からいつでも配置し直せる。
+  //  MakeItem(mapID=0)が地面に出ない挙動と同じ扱い)
+  detail.dupBtn.addEventListener("click", () => {
+    withBusy(detail.dupBtn, async () => {
+      const current = detail.getCurrent();
+      if (!current) {
+        showFeedback(feedbackEl, "複製元のアイテムを選択してください", "error");
+        return;
+      }
+      const payload = detail.collectData();
+      payload.name = (payload.name || "") + "のコピー";
+      payload.mapId = 0;
+      payload.charId = 0;
+      payload.posX = 0;
+      payload.posY = 0;
+      payload.posZ = 0;
+      payload.backPackX = 0;
+      payload.backPackY = 0;
+      showFeedback(feedbackEl, "複製中…", "");
+      try {
+        const { response, data } = await fetchJson("/api/items", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          showFeedback(feedbackEl, "エラー: " + (data?.error ?? "HTTP " + response.status), "error");
+          return;
+        }
+        showFeedback(feedbackEl, "複製しました (ID=" + data.itemId + ")。未配置・所有者なしで作成しました", "success");
+        const created = { ...payload, itemId: data.itemId };
+        detail.setCurrent(created);
+        detail.setItem(created);
+        invalidateEntityCache("item");
+        await leftApi.reload();
+      } catch (e) {
+        showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
+      }
+    }, { busyText: "複製中…" });
   });
 
   // キャンセル/新規 → フォームクリア + 一覧に戻る
@@ -453,7 +509,6 @@ export function mount(container) {
       showDetail();
     },
     onDelete: async (it) => {
-      if (!confirm("アイテム [" + (it.name || "") + "] (ID=" + it.itemId + ") を削除しますか？")) return;
       try {
         const { response, data } = await fetchJson("/api/items", {
           method: "DELETE",
@@ -468,6 +523,7 @@ export function mount(container) {
         if (detail.getCurrent()?.itemId === it.itemId) {
           detail.setItem(null);
         }
+        invalidateEntityCache("item");
         await leftApi.reload();
       } catch (e) {
         showFeedback(feedbackEl, "通信エラー: " + e.message, "error");

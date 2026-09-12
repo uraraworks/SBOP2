@@ -6,8 +6,9 @@
  */
 
 import { fetchJson } from "../core/api.js";
-import { withBusy } from "../core/dom.js";
+import { withBusy, armConfirmButton } from "../core/dom.js";
 import { showSuccessToast, showErrorToast } from "../components/toast.js";
+import { invalidateEntityCache } from "../components/entity-picker.js";
 import { createDragList } from "../components/drag-list.js";
 import { createAnimePreview } from "../components/anime-preview.js";
 import { createSpriteField } from "../components/sprite-picker.js";
@@ -182,7 +183,7 @@ function buildDetailForm(shadow) {
 
   let _frames = Array.isArray(shadow.animeFrames) ? shadow.animeFrames.slice() : [];
 
-  function makeFrameRow(frame) {
+  function makeFrameRow(frame, index) {
     const row = document.createElement("div");
     row.className = "anime-frame-fields";
     row.style.cssText = "display:flex;gap:8px;align-items:center;";
@@ -206,6 +207,21 @@ function buildDetailForm(shadow) {
       lbl.append(span, inp);
       row.appendChild(lbl);
     });
+
+    // このコマを直後に複製する（DOM 上の未保存の編集値を先に反映してから複製する）
+    const dupBtn = document.createElement("button");
+    dupBtn.type = "button";
+    dupBtn.className = "button small";
+    dupBtn.textContent = "複製";
+    dupBtn.title = "このコマを複製して直後に挿入";
+    dupBtn.addEventListener("click", () => {
+      _frames = collectFrames();
+      const copy = { ..._frames[index] };
+      _frames.splice(index + 1, 0, copy);
+      buildDragList();
+    });
+    row.appendChild(dupBtn);
+
     return row;
   }
 
@@ -215,7 +231,7 @@ function buildDetailForm(shadow) {
     if (_dragList) { _dragList.el.remove(); _dragList = null; }
     _dragList = createDragList({
       items: _frames,
-      renderItem: (frame) => makeFrameRow(frame),
+      renderItem: (frame, index) => makeFrameRow(frame, index),
       onReorder: (newItems) => { _frames = newItems; },
     });
     animeSection.insertBefore(_dragList.el, addFrameBtn);
@@ -330,7 +346,13 @@ function showFeedback(container, message, type) {
 // ----------------------------------------------------------------
 
 function buildShadowUI(container, opts) {
-  const { fetchList: _fetchList, onSave: _onSave, onCreate: _onCreate, onDelete: _onDelete } = opts;
+  const {
+    fetchList: _fetchList,
+    onSave: _onSave,
+    onCreate: _onCreate,
+    onDuplicate: _onDuplicate,
+    onDelete: _onDelete,
+  } = opts;
 
   container.innerHTML = "";
 
@@ -378,13 +400,15 @@ function buildShadowUI(container, opts) {
   btnBack.type = "button"; btnBack.className = "button"; btnBack.textContent = "← 戻る";
   const btnSave = document.createElement("button");
   btnSave.type = "button"; btnSave.className = "button primary"; btnSave.textContent = "保存";
+  const btnDuplicate = document.createElement("button");
+  btnDuplicate.type = "button"; btnDuplicate.className = "button small"; btnDuplicate.textContent = "複製して新規";
   const btnDelete = document.createElement("button");
   btnDelete.type = "button"; btnDelete.className = "button danger"; btnDelete.textContent = "削除";
   const dirtyBadge = document.createElement("span");
   dirtyBadge.className = "ld-dirty-badge"; dirtyBadge.textContent = "未保存";
   dirtyBadge.style.display = "none";
 
-  detailToolbar.append(btnBack, btnSave, btnDelete, dirtyBadge);
+  detailToolbar.append(btnBack, btnSave, btnDuplicate, btnDelete, dirtyBadge);
 
   const detailBody = document.createElement("div");
   detailBody.className = "ld-detail-body";
@@ -477,19 +501,45 @@ function buildShadowUI(container, opts) {
     });
   });
 
-  btnDelete.addEventListener("click", async () => {
-    if (!_selectedItem || !confirm("この項目を削除しますか?")) return;
-    await withBusy(btnDelete, async () => {
+  armConfirmButton(btnDelete, {
+    armedLabel: "本当に削除？（もう一度押す）",
+    onConfirm: async () => {
+      if (!_selectedItem) return;
+      await withBusy(btnDelete, async () => {
+        try {
+          await _onDelete(_selectedItem);
+          _selectedItem = null;
+          setDirty(false);
+          await load();
+          showListPane();
+        } catch (err) {
+          showErrorToast("削除に失敗しました", String(err?.message ?? err));
+        }
+      });
+    },
+  });
+
+  // 複製して新規 → 表示中のフォーム内容(未保存の編集も含む)をコピーして別レコードとして保存
+  // (POST は id を一切参照せずサーバー側で新規採番するため、既存レコードを
+  //  上書きする心配は無い。MapShadowHandler.cpp の CMapShadowCreateHandler::Handle 参照)
+  btnDuplicate.addEventListener("click", async () => {
+    if (!_selectedItem) return;
+    const detailEl = detailBody.querySelector(".map-shadow-edit-detail");
+    if (!detailEl?._collectData) { alert("フォームが見つかりません"); return; }
+    await withBusy(btnDuplicate, async () => {
       try {
-        await _onDelete(_selectedItem);
-        _selectedItem = null;
-        setDirty(false);
+        const payload = detailEl._collectData();
+        delete payload.id;
+        const newId = await _onDuplicate(payload);
         await load();
-        showListPane();
+        if (newId != null) {
+          const found = _allItems.find((i) => i.id === newId) ?? null;
+          if (found) selectItem(found);
+        }
       } catch (err) {
-        showErrorToast("削除に失敗しました", String(err?.message ?? err));
+        showErrorToast("複製に失敗しました", String(err?.message ?? err));
       }
-    });
+    }, { busyText: "複製中…" });
   });
 
   btnNew.addEventListener("click", async () => {
@@ -545,7 +595,24 @@ export function mount(container) {
         showFeedback(container, `保存に失敗しました: ${msg}`, "error");
         throw new Error(msg);
       }
+      invalidateEntityCache("mapShadow");
       showSuccessToast("保存しました");
+    },
+
+    onDuplicate: async (payload) => {
+      const { response, data } = await fetchJson("/api/maps/shadows", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        const msg = data?.error ?? `HTTP ${response.status}`;
+        showFeedback(container, `複製に失敗しました: ${msg}`, "error");
+        throw new Error(msg);
+      }
+      invalidateEntityCache("mapShadow");
+      showSuccessToast(`影 ${data?.id ?? ""} を複製しました`);
+      return data?.id ?? null;
     },
 
     onCreate: async () => {
@@ -565,6 +632,7 @@ export function mount(container) {
         showFeedback(container, `新規追加に失敗しました: ${msg}`, "error");
         throw new Error(msg);
       }
+      invalidateEntityCache("mapShadow");
       showSuccessToast(`影 ${data?.id ?? ""} を追加しました`);
       return data?.id ?? null;
     },
@@ -578,6 +646,7 @@ export function mount(container) {
         showFeedback(container, `削除に失敗しました: ${msg}`, "error");
         throw new Error(msg);
       }
+      invalidateEntityCache("mapShadow");
       showSuccessToast(`影 ${shadow.id} を削除しました`);
     },
   });

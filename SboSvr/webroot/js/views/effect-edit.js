@@ -17,12 +17,14 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { withBusy, armConfirmButton } from "../core/dom.js";
 import { createSpriteField } from "../components/sprite-picker.js";
 import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
 import { createDragList } from "../components/drag-list.js";
 import { createAnimePreview } from "../components/anime-preview.js";
 import { createSoundPicker } from "../components/sound-picker.js";
+import { invalidateEntityCache } from "../components/entity-picker.js";
 
 // ----------------------------------------------------------------
 // 定数
@@ -44,6 +46,54 @@ function showFeedback(el, message, type) {
 // ----------------------------------------------------------------
 // ユーティリティ
 // ----------------------------------------------------------------
+
+// ----------------------------------------------------------------
+// 削除前の参照件数集計
+//
+// エフェクトを参照し得るのは weapon(effectIdAtack[]/effectIdCritical[]) /
+// skill(hitEffectId, effectId0-3) / itemType(useEffectId) の3種。
+// 古い件数を出さないよう、削除ボタンを押すたびに /api/weapons・/api/skills・
+// /api/item-types を並列取得して数え直す（キャッシュしない）。
+// ----------------------------------------------------------------
+
+async function countEffectReferences(effectId) {
+  const [weaponsResult, skillsResult, itemTypesResult] = await Promise.all([
+    fetchJson("/api/weapons"),
+    fetchJson("/api/skills"),
+    fetchJson("/api/item-types"),
+  ]);
+
+  let weaponCount = 0;
+  if (weaponsResult.response.ok && Array.isArray(weaponsResult.data?.items)) {
+    weaponCount = weaponsResult.data.items.filter((w) => {
+      const atk = Array.isArray(w.effectIdAtack) ? w.effectIdAtack : [];
+      const cri = Array.isArray(w.effectIdCritical) ? w.effectIdCritical : [];
+      return atk.includes(effectId) || cri.includes(effectId);
+    }).length;
+  }
+
+  let skillCount = 0;
+  if (skillsResult.response.ok && Array.isArray(skillsResult.data?.skills)) {
+    skillCount = skillsResult.data.skills.filter((sk) => (
+      sk.hitEffectId === effectId ||
+      sk.effectId0 === effectId ||
+      sk.effectId1 === effectId ||
+      sk.effectId2 === effectId ||
+      sk.effectId3 === effectId
+    )).length;
+  }
+
+  let itemTypeCount = 0;
+  if (itemTypesResult.response.ok && Array.isArray(itemTypesResult.data?.items)) {
+    itemTypeCount = itemTypesResult.data.items.filter((it) => it.useEffectId === effectId).length;
+  }
+
+  const parts = [];
+  if (weaponCount > 0) { parts.push("武器 " + weaponCount + " 件"); }
+  if (skillCount > 0) { parts.push("スキル " + skillCount + " 件"); }
+  if (itemTypeCount > 0) { parts.push("アイテム種別 " + itemTypeCount + " 件"); }
+  return parts.length ? parts.join("・") + "が参照しています" : "";
+}
 
 function makeFormField(labelText) {
   const lbl = document.createElement("label");
@@ -194,7 +244,11 @@ function buildDetailPane({ feedbackEl }) {
   cancelBtn.type = "button";
   cancelBtn.className = "button";
   cancelBtn.textContent = "キャンセル / 新規";
-  actionBar.append(saveBtn, cancelBtn);
+  const dupBtn = document.createElement("button");
+  dupBtn.type = "button";
+  dupBtn.className = "button small";
+  dupBtn.textContent = "複製して新規";
+  actionBar.append(saveBtn, dupBtn, cancelBtn);
   pane.appendChild(actionBar);
 
   // --- 基本情報 ---
@@ -338,6 +392,7 @@ function buildDetailPane({ feedbackEl }) {
   return {
     el: pane,
     saveBtn,
+    dupBtn,
     cancelBtn,
     setEffect,
     collectData,
@@ -428,7 +483,12 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
       delBtn.type = "button";
       delBtn.className = "ld-item-del button small";
       delBtn.textContent = "削除";
-      delBtn.addEventListener("click", (ev) => { ev.stopPropagation(); onDelete(e); });
+      delBtn.addEventListener("click", (ev) => { ev.stopPropagation(); });
+      armConfirmButton(delBtn, {
+        armedLabel: "本当に削除？",
+        message: () => countEffectReferences(e.effectId),
+        onConfirm: () => onDelete(e),
+      });
       li.appendChild(delBtn);
 
       listEl.appendChild(li);
@@ -507,10 +567,49 @@ export function mount(container) {
       if (isNew && data?.effectId) {
         detail.setCurrentEffect({ ...payload, effectId: data.effectId });
       }
+      invalidateEntityCache("effect");
       await leftApi.reload();
     } catch (e) {
       showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
     }
+  });
+
+  // 複製して新規 → 表示中のエフェクトをコピーして別レコードとして保存
+  // (POST は常にサーバー側で新規 effectId を採番する。EfcHandler.cpp:449 で
+  //  Add() 直前に m_dwEffectID = 0 に強制しているため、body に effectId を
+  //  含めても既存レコードを上書きする心配は無い。animes(コマ)は
+  //  collectData() が frameTable.getFrames() で毎回配列を複写して返すため
+  //  複製先にも正しくコピーされる)
+  detail.dupBtn.addEventListener("click", () => {
+    withBusy(detail.dupBtn, async () => {
+      const current = detail.getCurrentEffect();
+      if (!current) {
+        showFeedback(feedbackEl, "複製元のエフェクトを選択してください", "error");
+        return;
+      }
+      const payload = detail.collectData();
+      payload.name = (payload.name || "") + "のコピー";
+      showFeedback(feedbackEl, "複製中…", "");
+      try {
+        const { response, data } = await fetchJson("/api/effects", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          showFeedback(feedbackEl, "エラー: " + (data?.error ?? "HTTP " + response.status), "error");
+          return;
+        }
+        showFeedback(feedbackEl, "複製しました (ID=" + data.effectId + ")", "success");
+        const created = { ...payload, effectId: data.effectId };
+        detail.setCurrentEffect(created);
+        detail.setEffect(created);
+        invalidateEntityCache("effect");
+        await leftApi.reload();
+      } catch (e) {
+        showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
+      }
+    }, { busyText: "複製中…" });
   });
 
   // キャンセル/新規 → フォームクリア + 一覧に戻る
@@ -532,7 +631,8 @@ export function mount(container) {
       showDetail();
     },
     onDelete: async (eff) => {
-      if (!confirm("エフェクト [" + (eff.name || "") + "] (ID=" + eff.effectId + ") を削除しますか？")) return;
+      // 削除確認は一覧の削除ボタン自体を二度押しで確定する
+      // armConfirmButton で済んでいるため、ここでは confirm() を使わない。
       try {
         const { response, data } = await fetchJson("/api/effects", {
           method: "DELETE",
@@ -547,6 +647,7 @@ export function mount(container) {
         if (detail.getCurrentEffect()?.effectId === eff.effectId) {
           detail.setEffect(null);
         }
+        invalidateEntityCache("effect");
         await leftApi.reload();
       } catch (e) {
         showFeedback(feedbackEl, "通信エラー: " + e.message, "error");

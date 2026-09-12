@@ -12,10 +12,11 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { withBusy, armConfirmButton } from "../core/dom.js";
 import { createSpriteField } from "../components/sprite-picker.js";
 import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { createNumberSpinner } from "../components/number-spinner.js";
-import { createEntityField } from "../components/entity-picker.js";
+import { createEntityField, invalidateEntityCache } from "../components/entity-picker.js";
 
 // ----------------------------------------------------------------
 // 定数
@@ -106,7 +107,9 @@ function buildDetailPane(feedbackEl) {
   saveBtn.type = "button";
   var cancelBtn = mkEl("button", "button", "キャンセル / 新規");
   cancelBtn.type = "button";
-  actionBar.append(saveBtn, cancelBtn);
+  var dupBtn = mkEl("button", "button small", "複製して新規");
+  dupBtn.type = "button";
+  actionBar.append(saveBtn, dupBtn, cancelBtn);
   pane.appendChild(actionBar);
 
   // ---- 基本情報 ----
@@ -388,7 +391,7 @@ function buildDetailPane(feedbackEl) {
   }
 
   return {
-    el: pane, saveBtn, cancelBtn,
+    el: pane, saveBtn, dupBtn, cancelBtn,
     setItem, collectData,
     getCurrent: function () { return _current; },
     setCurrent: function (sk) { _current = sk; },
@@ -464,7 +467,13 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
       var delBtn = mkEl("button", "ld-item-del button small", "削除");
       delBtn.type = "button";
-      delBtn.addEventListener("click", function (ev) { ev.stopPropagation(); onDelete(sk); });
+      delBtn.addEventListener("click", function (ev) { ev.stopPropagation(); });
+      // 参照件数はキャラクター単位（/api/characters/:id/skills）でしか
+      // 取得できず一覧APIが無いため全件集計は不可能。二度押し確認のみ行う。
+      armConfirmButton(delBtn, {
+        armedLabel: "本当に削除？",
+        onConfirm: function () { onDelete(sk); },
+      });
       li.appendChild(delBtn);
 
       listEl.appendChild(li);
@@ -517,14 +526,51 @@ export function mount(container) {
         return;
       }
       showFeedback(feedbackEl, isNew ? "追加しました" : "保存しました", "success");
-      await leftApi.reload();
       if (isNew && data && data.skillId) {
         detail.setCurrent(Object.assign({}, payload, { skillId: data.skillId }));
         detail.setItem(Object.assign({}, payload, { skillId: data.skillId }));
       }
+      invalidateEntityCache("skill");
+      await leftApi.reload();
     } catch (err) {
       showFeedback(feedbackEl, "通信エラー: " + err.message, "error");
     }
+  });
+
+  // 複製して新規 → 表示中のスキルをコピーして別レコードとして保存
+  // (POST は常にサーバー側で新規 skillId を採番する。SkillHandler.cpp:386
+  //  で Add() 直前に m_dwSkillID = 0 に強制しているため、body に skillId を
+  //  含めても既存レコードを上書きする心配は無い)
+  detail.dupBtn.addEventListener("click", function () {
+    withBusy(detail.dupBtn, async function () {
+      var current = detail.getCurrent();
+      if (!current) {
+        showFeedback(feedbackEl, "複製元のスキルを選択してください", "error");
+        return;
+      }
+      var payload = detail.collectData();
+      payload.name = (payload.name || "") + "のコピー";
+      showFeedback(feedbackEl, "複製中…", "");
+      try {
+        var { response, data } = await fetchJson("/api/skills", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          showFeedback(feedbackEl, "エラー: " + (data && data.error ? data.error : "HTTP " + response.status), "error");
+          return;
+        }
+        showFeedback(feedbackEl, "複製しました (ID=" + data.skillId + ")", "success");
+        var created = Object.assign({}, payload, { skillId: data.skillId });
+        detail.setCurrent(created);
+        detail.setItem(created);
+        invalidateEntityCache("skill");
+        await leftApi.reload();
+      } catch (err) {
+        showFeedback(feedbackEl, "通信エラー: " + err.message, "error");
+      }
+    }, { busyText: "複製中…" });
   });
 
   // キャンセル/新規 → フォームクリア + 一覧に戻る
@@ -546,7 +592,8 @@ export function mount(container) {
       showDetail();
     },
     onDelete: async function (sk) {
-      if (!confirm("スキル [" + (sk.name || "") + "] (ID=" + sk.skillId + ") を削除しますか？")) { return; }
+      // 削除確認は armConfirmButton（一覧の削除ボタン自体を二度押しで確定）で
+      // 済んでいるため、ここでは confirm() を使わない。
       try {
         var { response, data } = await fetchJson("/api/skills", {
           method: "DELETE",
@@ -562,6 +609,7 @@ export function mount(container) {
         if (cur && cur.skillId === sk.skillId) {
           detail.setItem(null);
         }
+        invalidateEntityCache("skill");
         await leftApi.reload();
       } catch (err) {
         showFeedback(feedbackEl, "通信エラー: " + err.message, "error");

@@ -18,6 +18,7 @@
  */
 
 import { fetchJson } from "../core/api.js";
+import { withBusy, armConfirmButton } from "../core/dom.js";
 import { createSpriteField } from "../components/sprite-picker.js";
 import { createSpriteThumb } from "../components/sprite-thumb.js";
 import { createSoundPicker } from "../components/sound-picker.js";
@@ -81,7 +82,11 @@ function buildDetailPane({ feedbackEl }) {
   cancelBtn.type = "button";
   cancelBtn.className = "button";
   cancelBtn.textContent = "キャンセル / 新規";
-  actionBar.append(saveBtn, cancelBtn);
+  const dupBtn = document.createElement("button");
+  dupBtn.type = "button";
+  dupBtn.className = "button small";
+  dupBtn.textContent = "複製して新規";
+  actionBar.append(saveBtn, dupBtn, cancelBtn);
   pane.appendChild(actionBar);
 
   // --- 基本情報 ---
@@ -297,7 +302,7 @@ function buildDetailPane({ feedbackEl }) {
   function getCurrent() { return _current; }
   function setCurrent(it) { _current = it; }
 
-  return { el: pane, saveBtn, cancelBtn, setItem, collectData, getCurrent, setCurrent };
+  return { el: pane, saveBtn, dupBtn, cancelBtn, setItem, collectData, getCurrent, setCurrent };
 }
 
 // ----------------------------------------------------------------
@@ -334,14 +339,29 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
   let _allItems = [];
   let _selectedId = null;
+  // typeId(種別ID) -> それを参照している /api/items の件数。削除前警告に使う。
+  let _refCounts = new Map();
 
   async function loadList() {
-    const { response, data } = await fetchJson("/api/item-types");
+    const [typesResult, itemsResult] = await Promise.all([
+      fetchJson("/api/item-types"),
+      fetchJson("/api/items"),
+    ]);
+    const { response, data } = typesResult;
     if (!response.ok || !Array.isArray(data?.items)) {
       console.error("item-types load error");
       return;
     }
     _allItems = data.items;
+
+    _refCounts = new Map();
+    if (itemsResult.response.ok && Array.isArray(itemsResult.data?.items)) {
+      itemsResult.data.items.forEach((item) => {
+        const tid = item.itemTypeId;
+        _refCounts.set(tid, (_refCounts.get(tid) || 0) + 1);
+      });
+    }
+
     renderList();
   }
 
@@ -377,7 +397,13 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
       delBtn.type = "button";
       delBtn.className = "ld-item-del button small";
       delBtn.textContent = "削除";
-      delBtn.addEventListener("click", (ev) => { ev.stopPropagation(); onDelete(it); });
+      delBtn.addEventListener("click", (ev) => { ev.stopPropagation(); });
+      const refCount = _refCounts.get(it.typeId) || 0;
+      armConfirmButton(delBtn, {
+        armedLabel: "本当に削除？",
+        message: refCount > 0 ? refCount + " 件のアイテムがこの種別を参照しています" : undefined,
+        onConfirm: () => onDelete(it),
+      });
       li.appendChild(delBtn);
 
       listEl.appendChild(li);
@@ -463,6 +489,41 @@ export function mount(container) {
     }
   });
 
+  // 複製して新規 → 表示中のレコードをコピーして別レコードとして保存
+  // (POST は常にサーバー側で新規 typeId を採番するため、typeId を送らなければ
+  //  既存レコードを上書きする心配は無い。ItemTypeHandler.cpp:336 参照)
+  detail.dupBtn.addEventListener("click", () => {
+    withBusy(detail.dupBtn, async () => {
+      const current = detail.getCurrent();
+      if (!current) {
+        showFeedback(feedbackEl, "複製元の種別を選択してください", "error");
+        return;
+      }
+      const payload = detail.collectData();
+      payload.name = (payload.name || "") + "のコピー";
+      showFeedback(feedbackEl, "複製中…", "");
+      try {
+        const { response, data } = await fetchJson("/api/item-types", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          showFeedback(feedbackEl, "エラー: " + (data?.error ?? "HTTP " + response.status), "error");
+          return;
+        }
+        showFeedback(feedbackEl, "複製しました (ID=" + data.typeId + ")", "success");
+        const created = { ...payload, typeId: data.typeId };
+        detail.setCurrent(created);
+        detail.setItem(created);
+        invalidateEntityCache("itemType");
+        await leftApi.reload();
+      } catch (e) {
+        showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
+      }
+    }, { busyText: "複製中…" });
+  });
+
   // キャンセル/新規 → フォームクリア + 一覧に戻る
   detail.cancelBtn.addEventListener("click", () => {
     detail.setItem(null);
@@ -482,7 +543,8 @@ export function mount(container) {
       showDetail();
     },
     onDelete: async (it) => {
-      if (!confirm("アイテム種別 [" + (it.name || "") + "] (ID=" + it.typeId + ") を削除しますか？")) return;
+      // 削除確認は armConfirmButton（一覧の削除ボタン自体を二度押しで確定）で
+      // 済んでいるため、ここでは confirm() を使わない。
       try {
         const { response, data } = await fetchJson("/api/item-types", {
           method: "DELETE",

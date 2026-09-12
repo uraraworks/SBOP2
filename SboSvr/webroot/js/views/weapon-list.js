@@ -15,7 +15,8 @@
  */
 
 import { fetchJson } from "../core/api.js";
-import { openEntityPicker, createEntityField } from "../components/entity-picker.js";
+import { withBusy, armConfirmButton } from "../core/dom.js";
+import { openEntityPicker, createEntityField, invalidateEntityCache } from "../components/entity-picker.js";
 import { createAnimePreview } from "../components/anime-preview.js";
 import { loadCatalog } from "../data/assets.js";
 
@@ -320,7 +321,11 @@ function buildDetailPane({ feedbackEl }) {
   cancelBtn.type = "button";
   cancelBtn.className = "button";
   cancelBtn.textContent = "キャンセル / 新規";
-  actionBar.append(saveBtn, cancelBtn);
+  const dupBtn = document.createElement("button");
+  dupBtn.type = "button";
+  dupBtn.className = "button small";
+  dupBtn.textContent = "複製して新規";
+  actionBar.append(saveBtn, dupBtn, cancelBtn);
   pane.appendChild(actionBar);
 
   // --- 基本情報 ---
@@ -542,7 +547,7 @@ function buildDetailPane({ feedbackEl }) {
   function getCurrent() { return _current; }
   function setCurrent(w) { _current = w; }
 
-  return { el: pane, saveBtn, cancelBtn, setWeapon, collectData, getCurrent, setCurrent };
+  return { el: pane, saveBtn, dupBtn, cancelBtn, setWeapon, collectData, getCurrent, setCurrent };
 }
 
 // ----------------------------------------------------------------
@@ -579,14 +584,31 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
 
   let _allItems = [];
   let _selectedId = null;
+  // weaponInfoId -> それを参照している /api/item-types の件数。削除前警告に使う。
+  let _refCounts = new Map();
 
   async function loadList() {
-    const { response, data } = await fetchJson("/api/weapons");
+    const [weaponsResult, itemTypesResult] = await Promise.all([
+      fetchJson("/api/weapons"),
+      fetchJson("/api/item-types"),
+    ]);
+    const { response, data } = weaponsResult;
     if (!response.ok || !Array.isArray(data?.items)) {
       console.error("weapons load error");
       return;
     }
     _allItems = data.items;
+
+    _refCounts = new Map();
+    if (itemTypesResult.response.ok && Array.isArray(itemTypesResult.data?.items)) {
+      itemTypesResult.data.items.forEach((it) => {
+        const wid = it.weaponInfoId;
+        if (wid) {
+          _refCounts.set(wid, (_refCounts.get(wid) || 0) + 1);
+        }
+      });
+    }
+
     renderList();
   }
 
@@ -616,7 +638,13 @@ function buildLeftPane({ onSelect, onNew, onDelete }) {
       delBtn.type = "button";
       delBtn.className = "ld-item-del button small";
       delBtn.textContent = "削除";
-      delBtn.addEventListener("click", (ev) => { ev.stopPropagation(); onDelete(w); });
+      delBtn.addEventListener("click", (ev) => { ev.stopPropagation(); });
+      const refCount = _refCounts.get(w.weaponInfoId) || 0;
+      armConfirmButton(delBtn, {
+        armedLabel: "本当に削除？",
+        message: refCount > 0 ? refCount + " 件のアイテム種別がこの武器情報を参照しています" : undefined,
+        onConfirm: () => onDelete(w),
+      });
       li.appendChild(delBtn);
 
       listEl.appendChild(li);
@@ -695,10 +723,46 @@ export function mount(container) {
       if (isNew && data?.weaponInfoId) {
         detail.setCurrent({ ...payload, weaponInfoId: data.weaponInfoId });
       }
+      invalidateEntityCache("weapon");
       await leftApi.reload();
     } catch (e) {
       showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
     }
+  });
+
+  // 複製して新規 → 表示中のレコードをコピーして別レコードとして保存
+  // (POST は weaponInfoId を受け付けず、Add 時に常に新規採番されるため
+  //  既存レコードを上書きする心配は無い。WeaponHandler.cpp:328 参照)
+  detail.dupBtn.addEventListener("click", () => {
+    withBusy(detail.dupBtn, async () => {
+      const current = detail.getCurrent();
+      if (!current) {
+        showFeedback(feedbackEl, "複製元の武器情報を選択してください", "error");
+        return;
+      }
+      const payload = detail.collectData();
+      payload.name = (payload.name || "") + "のコピー";
+      showFeedback(feedbackEl, "複製中…", "");
+      try {
+        const { response, data } = await fetchJson("/api/weapons", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+          showFeedback(feedbackEl, "エラー: " + (data?.error ?? "HTTP " + response.status), "error");
+          return;
+        }
+        showFeedback(feedbackEl, "複製しました (ID=" + data.weaponInfoId + ")", "success");
+        const created = { ...payload, weaponInfoId: data.weaponInfoId };
+        detail.setCurrent(created);
+        detail.setWeapon(created);
+        invalidateEntityCache("weapon");
+        await leftApi.reload();
+      } catch (e) {
+        showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
+      }
+    }, { busyText: "複製中…" });
   });
 
   // キャンセル/新規 → フォームクリア + 一覧に戻る
@@ -720,7 +784,8 @@ export function mount(container) {
       showDetail();
     },
     onDelete: async (w) => {
-      if (!confirm("武器情報 [" + (w.name || "") + "] (ID=" + w.weaponInfoId + ") を削除しますか？")) return;
+      // 削除確認は armConfirmButton（一覧の削除ボタン自体を二度押しで確定）で
+      // 済んでいるため、ここでは confirm() を使わない。
       try {
         const { response, data } = await fetchJson("/api/weapons", {
           method: "DELETE",
@@ -735,6 +800,7 @@ export function mount(container) {
         if (detail.getCurrent()?.weaponInfoId === w.weaponInfoId) {
           detail.setWeapon(null);
         }
+        invalidateEntityCache("weapon");
         await leftApi.reload();
       } catch (e) {
         showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
