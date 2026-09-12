@@ -47,6 +47,21 @@ BOOL CSboSockTestClient::IsConnected(void) const
     return (m_socket != INVALID_SOCKET) ? TRUE : FALSE;
 }
 
+WORD CSboSockTestClient::GetLocalPort(void) const
+{
+    SOCKADDR_IN addr;
+    int nLen = sizeof(addr);
+
+    if (m_socket == INVALID_SOCKET) {
+        return 0;
+    }
+    ZeroMemory(&addr, sizeof(addr));
+    if (getsockname(m_socket, reinterpret_cast<sockaddr *>(&addr), &nLen) == SOCKET_ERROR) {
+        return 0;
+    }
+    return ntohs(addr.sin_port);
+}
+
 void CSboSockTestClient::Close(void)
 {
     if (m_socket != INVALID_SOCKET) {

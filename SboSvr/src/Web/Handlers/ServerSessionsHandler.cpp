@@ -101,8 +101,8 @@ std::vector<SboSessionRow> CServerSessionsHandler::CollectSessions() const
                 row.nX = 0;
                 row.nY = 0;
 
-                // m_dwIP はサーバー側では設定されていない(常に0)ため、値がある時だけ出す。
-                // 将来 MainFrame 側で埋めるようになれば自動的に反映される。
+                // m_dwIP はログイン時に MainFrameRecvProcCONNECT.cpp で設定される
+                // (ホストバイトオーダー)。未ログインなど値が無い時だけ出さない。
                 row.bHasIp = (pAcc->m_dwIP != 0);
                 if (row.bHasIp) {
                         DWORD dwIp = pAcc->m_dwIP;

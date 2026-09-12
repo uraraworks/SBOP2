@@ -41,12 +41,16 @@ private:
     void HandleAccept();
 
     /// @brief WebSocketセッション処理（ハンドシェイク→TCP接続→ブリッジ）
-    void HandleSession(SOCKET hWsClient);
+    /// @param hWsClient WebSocket側ソケット
+    /// @param dwPeerIpNet accept()で得た直接の接続元IPアドレス(ネットワークバイトオーダー)
+    void HandleSession(SOCKET hWsClient, DWORD dwPeerIpNet);
 
     // WebSocketハンドシェイク -------------------------------------------
 
     /// @brief WebSocketハンドシェイクを行う
-    bool PerformHandshake(SOCKET hClient);
+    /// @param hClient クライアントソケット
+    /// @param outRequest ハンドシェイクで受信した生のHTTPリクエスト文字列(ヘッダ解析用)
+    bool PerformHandshake(SOCKET hClient, std::string &outRequest);
 
     // WebSocketフレーム処理 -------------------------------------------
 

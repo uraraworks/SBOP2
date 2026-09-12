@@ -33,6 +33,7 @@ public:
 	DWORD	GetThrowghPutRecv(DWORD dwID);										// リンク・スループット量を取得
 	DWORD	GetQueCount(DWORD dwID);											// キュー数を取得
 	DWORD	GetIPAddress(DWORD dwID);											// IPアドレスを取得
+	DWORD	GetPeerPort(DWORD dwID);											// 相手ポート番号を取得(ホストバイトオーダー)
 
 
 protected:

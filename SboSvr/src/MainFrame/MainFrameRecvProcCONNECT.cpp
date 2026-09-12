@@ -19,6 +19,7 @@
 #include "MgrData.h"
 #include "MainFrame.h"
 #include "PasswordHash.h"
+#include "../Web/ProxyIpRegistry.h"
 
 void CMainFrame::RecvProcCONNECT(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
@@ -48,6 +49,21 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 	pInfoAccount	= m_pLibInfoAccount->GetPtr(Packet.m_strAccount);
 	// IN_ADDR.S_un はWindows固有のメンバ名のため使わず、生の DWORD で扱う
 	dwAddr = m_pSock->GetIPAddress(dwSessionID);
+
+	// ブラウザ版はWebSocketBridgeが同一プロセス内で127.0.0.1として繋ぎ直すため、
+	// ここで見えるIPは常にloopbackになってしまう。loopbackの場合に限り、
+	// ブリッジが登録した「接続元ポート→実IP」対応表を引いて実IPに差し替える。
+	// (対応表はブリッジ側でgetsockname()したローカルポートをキーにしており、
+	//  それがそのままこちら側から見た相手ポートになる)
+	if (ProxyIpRegistry::IsLoopbackIPv4(dwAddr)) {
+		DWORD dwPeerPort = m_pSock->GetPeerPort(dwSessionID);
+		unsigned long dwRealIp = 0;
+		if ((dwPeerPort != 0) &&
+		    ProxyIpRegistry::Lookup(static_cast<unsigned short>(dwPeerPort), dwRealIp)) {
+			dwAddr = dwRealIp;
+		}
+	}
+
 	nAddrHost = ntohl(dwAddr);
 
 	strTmp.Format(
@@ -140,6 +156,9 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 			time(&timeTmp);
 			pInfoAccount->m_dwTimeLastLogin = (DWORD)timeTmp;
 			pInfoAccount->m_strLastMacAddr	= strTmp;
+			// m_dwIPはホストバイトオーダーで保持する(ServerSessionsHandler/
+			// CharacterItemHandlerの表示ロジックがホストバイトオーダー前提のため)
+			pInfoAccount->m_dwIP = nAddrHost;
 
 			m_pLog->Write("ログイン dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
 					dwSessionID,

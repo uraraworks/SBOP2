@@ -181,3 +181,14 @@ DWORD CUraraSockTCPSBO::GetIPAddress(DWORD dwID)
 
 	return m_pSock->GetIPAddress(dwID);
 }
+
+// 相手ポート番号を取得(ホストバイトオーダー)
+
+DWORD CUraraSockTCPSBO::GetPeerPort(DWORD dwID)
+{
+	if (m_pSock == NULL) {
+		return 0;
+	}
+
+	return m_pSock->GetPeerPort(dwID);
+}

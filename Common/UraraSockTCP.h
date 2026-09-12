@@ -63,6 +63,7 @@ public:
 	virtual DWORD	GetThrowghPutRecv(DWORD dwID)											= 0;	// Get recv throughput
 	virtual DWORD	GetQueCount(DWORD dwID)													= 0;	// Get queue count
 	virtual DWORD	GetIPAddress(DWORD dwID)												= 0;	// Get IP address
+	virtual DWORD	GetPeerPort(DWORD dwID)												= 0;	// Get peer port (host byte order, 0 if not connected)
 };
 
 #ifdef _WIN32
@@ -92,6 +93,7 @@ public:
 	virtual DWORD	GetThrowghPutRecv(DWORD) override { return 0; }
 	virtual DWORD	GetQueCount(DWORD) override { return 0; }
 	virtual DWORD	GetIPAddress(DWORD) override { return 0; }
+	virtual DWORD	GetPeerPort(DWORD) override { return 0; }
 };
 inline CUraraSockTCP *GetUraraSockTCP(void) { return new CUraraSockTCPStub(); }
 #endif // !__EMSCRIPTEN__

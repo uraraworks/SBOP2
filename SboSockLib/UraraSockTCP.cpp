@@ -83,7 +83,7 @@ public:
     CUraraSockTCPImplSlot(void);
     virtual ~CUraraSockTCPImplSlot(void);
 
-    BOOL Create(SOCKET socket, DWORD dwAddr, HWND hWndParent, DWORD dwID);
+    BOOL Create(SOCKET socket, DWORD dwAddr, WORD wPeerPort, HWND hWndParent, DWORD dwID);
     void AddQue(PURARASOCK_ADDQUEINFO pQueAdd);
     void Combine(std::vector<PURARASOCK_QUEINFO> *pQue);
     void CancelQue(void);
@@ -92,6 +92,7 @@ public:
     DWORD GetThrowghPutRecv(void);
     DWORD GetQueCount(void);
     DWORD GetIPAddress(void);
+    DWORD GetPeerPort(void);
 
     void OnFD_WRITE(void);
     void OnFD_READ(void);
@@ -110,6 +111,7 @@ private:
     CCRC                                        *m_pCrc;
     SOCKADDR_IN                                  m_sockAddr;
     WORD                                         m_wPort;
+    WORD                                         m_wPeerPort;    // 相手ポート番号(ホストバイトオーダー)
     DWORD                                        m_dwTimeConnect;
     DWORD                                        m_dwSendSize;
     DWORD                                        m_dwRecvSize;
@@ -148,6 +150,7 @@ public:
     DWORD GetThrowghPutRecv(DWORD dwID) override;
     DWORD GetQueCount(DWORD dwID) override;
     DWORD GetIPAddress(DWORD dwID) override;
+    DWORD GetPeerPort(DWORD dwID) override;
 
 private:
     static void __cdecl ThreadEntry(void *pParam);
@@ -200,6 +203,7 @@ CUraraSockTCPImplSlot::CUraraSockTCPImplSlot(void)
     , m_bPreCheck(FALSE)
     , m_pCrc(new CCRC)
     , m_wPort(0)
+    , m_wPeerPort(0)
     , m_dwTimeConnect(0)
     , m_dwSendSize(0)
     , m_dwRecvSize(0)
@@ -224,7 +228,7 @@ CUraraSockTCPImplSlot::~CUraraSockTCPImplSlot(void)
     SAFE_DELETE(m_pCrc);
 }
 
-BOOL CUraraSockTCPImplSlot::Create(SOCKET socket, DWORD dwAddr, HWND hWndParent, DWORD dwID)
+BOOL CUraraSockTCPImplSlot::Create(SOCKET socket, DWORD dwAddr, WORD wPeerPort, HWND hWndParent, DWORD dwID)
 {
     if (m_socket != INVALID_SOCKET) {
         return FALSE;
@@ -237,6 +241,7 @@ BOOL CUraraSockTCPImplSlot::Create(SOCKET socket, DWORD dwAddr, HWND hWndParent,
     m_dwSockID = dwID;
     m_hWndParent = hWndParent;
     m_sockAddr.sin_addr.s_addr = dwAddr;
+    m_wPeerPort = wPeerPort;
     m_dwTimeLastRecv = m_dwTimeConnect = GetTickCount();
     m_pRecvBuffer = new BYTE[URARASOCK_RECVBUFSIZE];
 
@@ -424,6 +429,11 @@ DWORD CUraraSockTCPImplSlot::GetQueCount(void)
 DWORD CUraraSockTCPImplSlot::GetIPAddress(void)
 {
     return m_sockAddr.sin_addr.S_un.S_addr;
+}
+
+DWORD CUraraSockTCPImplSlot::GetPeerPort(void)
+{
+    return static_cast<DWORD>(m_wPeerPort);
 }
 
 void CUraraSockTCPImplSlot::OnFD_WRITE(void)
@@ -813,6 +823,18 @@ DWORD CUraraSockTCPImpl::GetIPAddress(DWORD dwID)
     return m_pSlot[dwIndex].GetIPAddress();
 }
 
+DWORD CUraraSockTCPImpl::GetPeerPort(DWORD dwID)
+{
+    if ((dwID < URARASOCK_IDBASE) || (m_pSlot == NULL)) {
+        return 0;
+    }
+    DWORD dwIndex = dwID - URARASOCK_IDBASE;
+    if (dwIndex >= m_dwMaxConnectCount) {
+        return 0;
+    }
+    return m_pSlot[dwIndex].GetPeerPort();
+}
+
 void __cdecl CUraraSockTCPImpl::ThreadEntry(void *pParam)
 {
     CUraraSockTCPImpl *pThis = reinterpret_cast<CUraraSockTCPImpl *>(pParam);
@@ -1134,7 +1156,7 @@ void CUraraSockTCPImpl::OnSockACCEPT(void)
         return;
     }
 
-    if (!m_pSlot[nIndex].Create(hSocket, addr.sin_addr.s_addr, m_hWnd, nIndex)) {
+    if (!m_pSlot[nIndex].Create(hSocket, addr.sin_addr.s_addr, ntohs(addr.sin_port), m_hWnd, nIndex)) {
         closesocket(hSocket);
         return;
     }
@@ -1149,7 +1171,7 @@ void CUraraSockTCPImpl::OnConnect(void)
     if (m_pSlot == NULL) {
         return;
     }
-    if (!m_pSlot->Create(m_socket, m_sockAddr.sin_addr.s_addr, m_hWnd, 0)) {
+    if (!m_pSlot->Create(m_socket, m_sockAddr.sin_addr.s_addr, m_wPort, m_hWnd, 0)) {
         return;
     }
     ++m_dwConnectCount;

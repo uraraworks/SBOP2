@@ -83,7 +83,7 @@ public:
     CUraraSockTCPSelectSlot(void);
     ~CUraraSockTCPSelectSlot(void);
 
-    BOOL Create(SOCKET socket, DWORD dwAddr, DWORD dwID);
+    BOOL Create(SOCKET socket, DWORD dwAddr, WORD wPeerPort, DWORD dwID);
     void Destroy(void);
     BOOL IsValid(void) const { return m_socket != INVALID_SOCKET; }
     BOOL HasSendData(void) const;
@@ -99,6 +99,7 @@ public:
     DWORD GetThrowghPutRecv(void) const { return m_dwThrowghPutRecv; }
     DWORD GetQueCount(void) const;
     DWORD GetIPAddress(void) const { return m_dwAddr; }
+    DWORD GetPeerPort(void) const { return static_cast<DWORD>(m_wPeerPort); }
 
 public:
     SOCKET m_socket;
@@ -113,6 +114,7 @@ private:
 private:
     CCRC  *m_pCrc;
     DWORD  m_dwAddr;
+    WORD   m_wPeerPort;    // 相手ポート番号(ホストバイトオーダー)
 
     // 受信の途中状態
     PBYTE  m_pRecvBuffer;
@@ -157,6 +159,7 @@ public:
     DWORD GetThrowghPutRecv(DWORD dwID) override;
     DWORD GetQueCount(DWORD dwID) override;
     DWORD GetIPAddress(DWORD dwID) override;
+    DWORD GetPeerPort(DWORD dwID) override;
 
     // スロットから呼ばれる
     void  OnRecvPacket(DWORD dwIndex, PBYTE pData, DWORD dwSize);
@@ -221,6 +224,7 @@ CUraraSockTCPSelectSlot::CUraraSockTCPSelectSlot(void)
     , m_bPreCheck(FALSE)
     , m_pCrc(NULL)
     , m_dwAddr(0)
+    , m_wPeerPort(0)
     , m_pRecvBuffer(NULL)
     , m_pRecvTmp(NULL)
     , m_dwRecvSize(0)
@@ -243,7 +247,7 @@ CUraraSockTCPSelectSlot::~CUraraSockTCPSelectSlot(void)
     SAFE_DELETE(m_pCrc);
 }
 
-BOOL CUraraSockTCPSelectSlot::Create(SOCKET socket, DWORD dwAddr, DWORD dwID)
+BOOL CUraraSockTCPSelectSlot::Create(SOCKET socket, DWORD dwAddr, WORD wPeerPort, DWORD dwID)
 {
     u_long ulNonBlock = 1;
 
@@ -257,6 +261,7 @@ BOOL CUraraSockTCPSelectSlot::Create(SOCKET socket, DWORD dwAddr, DWORD dwID)
 
     m_socket           = socket;
     m_dwAddr           = dwAddr;
+    m_wPeerPort        = wPeerPort;
     m_dwSockID         = dwID;
     m_dwTimeLastRecv   = GetTickCount();
     m_bPreCheck        = FALSE;
@@ -1011,7 +1016,7 @@ void CUraraSockTCPSelect::OnAccept(void)
         return;
     }
 
-    if (m_pSlot[nIndex].Create(hSocket, addr.sin_addr.s_addr, static_cast<DWORD>(nIndex)) == FALSE) {
+    if (m_pSlot[nIndex].Create(hSocket, addr.sin_addr.s_addr, ntohs(addr.sin_port), static_cast<DWORD>(nIndex)) == FALSE) {
         closesocket(hSocket);
         return;
     }
@@ -1224,6 +1229,20 @@ DWORD CUraraSockTCPSelect::GetIPAddress(DWORD dwID)
             return 0;
         }
         return m_pSlot[dwIndex].GetIPAddress();
+    }
+}
+
+DWORD CUraraSockTCPSelect::GetPeerPort(DWORD dwID)
+{
+    if ((m_pSlot == NULL) || (dwID < URARASOCKSEL_IDBASE)) {
+        return 0;
+    }
+    {
+        DWORD dwIndex = dwID - URARASOCKSEL_IDBASE;
+        if (dwIndex >= m_dwMaxConnectCount) {
+            return 0;
+        }
+        return m_pSlot[dwIndex].GetPeerPort();
     }
 }
 

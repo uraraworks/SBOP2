@@ -191,6 +191,7 @@ DWORD CUraraSockTCPWebSocket::GetThrowghPutSend(DWORD) { return 0; }
 DWORD CUraraSockTCPWebSocket::GetThrowghPutRecv(DWORD) { return 0; }
 DWORD CUraraSockTCPWebSocket::GetQueCount(DWORD) { return 0; }
 DWORD CUraraSockTCPWebSocket::GetIPAddress(DWORD) { return 0; }
+DWORD CUraraSockTCPWebSocket::GetPeerPort(DWORD) { return 0; }
 
 // 通知コールバックを設定
 

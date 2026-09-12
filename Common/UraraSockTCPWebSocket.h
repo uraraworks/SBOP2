@@ -32,6 +32,7 @@ public:
     virtual DWORD   GetThrowghPutRecv(DWORD dwID) override;
     virtual DWORD   GetQueCount(DWORD dwID) override;
     virtual DWORD   GetIPAddress(DWORD dwID) override;
+    virtual DWORD   GetPeerPort(DWORD dwID) override;
 
     // コールバック設定（CUraraSockTCPSBOから呼ばれる）
     void SetNotifySink(PFURARASOCKNOTIFY pfNotify, void* pUserData);

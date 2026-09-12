@@ -410,6 +410,46 @@ TEST(複数接続_それぞれに個別へ送れる)
     delete pSock;
 }
 
+TEST(GetPeerPort_接続元ポート番号を取得できる)
+{
+    // WebSocketBridge がゲームTCPへ接続した際のローカルポートを、ゲーム側の
+    // accept() から見た相手ポートとして引けることを検証する
+    // (ProxyIpRegistryはこのポート番号をキーに実IPを対応付ける)。
+    CUraraSockTCP *pSock = GetUraraSockTCPSelect();
+    CNotifyRecorder Rec;
+    CSboSockTestClient Client;
+    CNotifyRecorder::EVENT Event;
+    WORD wPort = NextPort();
+
+    pSock->SetNotifySink(&CNotifyRecorder::Thunk, &Rec);
+    CHECK(pSock->Host(NULL, 0, URARASOCK_PRECHECK, wPort, 10) != FALSE);
+    CHECK(Client.Connect("127.0.0.1", wPort, URARASOCK_PRECHECK) != FALSE);
+    CHECK(Rec.Wait(WM_URARASOCK_ADDCLIENT, 3000, &Event) != FALSE);
+
+    WORD wExpectedPeerPort = Client.GetLocalPort();
+    CHECK(wExpectedPeerPort != 0);
+    CHECK_EQ((long long)wExpectedPeerPort, (long long)pSock->GetPeerPort(Event.dwSessionID));
+
+    Client.Close();
+    pSock->Destroy();
+    delete pSock;
+}
+
+TEST(GetPeerPort_未接続のIDは0を返す)
+{
+    CUraraSockTCP *pSock = GetUraraSockTCPSelect();
+    WORD wPort = NextPort();
+
+    CNotifyRecorder Rec;
+    pSock->SetNotifySink(&CNotifyRecorder::Thunk, &Rec);
+    CHECK(pSock->Host(NULL, 0, URARASOCK_PRECHECK, wPort, 10) != FALSE);
+
+    CHECK_EQ(0, (int)pSock->GetPeerPort(URARASOCK_SENDALL + 999999));
+
+    pSock->Destroy();
+    delete pSock;
+}
+
 TEST(複数接続_全員宛の送信が全員に届く)
 {
     CUraraSockTCP *pSock = GetUraraSockTCPSelect();

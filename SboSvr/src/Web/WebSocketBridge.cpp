@@ -11,6 +11,8 @@
 #include "crc.h" // CCRC: pre-check ハンドシェイクのCRC計算用
 #include "../Platform/SvrPlatform.h"
 #include "WebSocketProtocol.h"
+#include "ProxyIpRegistry.h"
+#include "ProxyHeaderParser.h"
 
 // ============================================================
 //  WebSocket オペコード定数
@@ -29,6 +31,35 @@ const DWORD kPacketInfoSize = 8;
 
 /// セッションスレッドの受信タイムアウト（ミリ秒）
 const DWORD kSessionTimeoutMs = 30000;
+
+/// @brief ProxyIpRegistry への登録をスコープに応じて確実に解除するためのRAIIガード。
+/// HandleSession() には複数の早期returnがあるため、破棄時に自動でUnregisterする。
+class CProxyIpRegistrationGuard
+{
+public:
+    CProxyIpRegistrationGuard() : m_wPort(0), m_bRegistered(false) {}
+    ~CProxyIpRegistrationGuard() { Release(); }
+
+    void RegisterPort(unsigned short wPort, unsigned long dwRealIpNet)
+    {
+        Release();
+        ProxyIpRegistry::Register(wPort, dwRealIpNet);
+        m_wPort = wPort;
+        m_bRegistered = true;
+    }
+
+    void Release()
+    {
+        if (m_bRegistered) {
+            ProxyIpRegistry::Unregister(m_wPort);
+            m_bRegistered = false;
+        }
+    }
+
+private:
+    unsigned short m_wPort;
+    bool           m_bRegistered;
+};
 
 } // anonymous namespace
 
@@ -217,17 +248,27 @@ void CWebSocketBridge::ProcessLoop()
 
 void CWebSocketBridge::HandleAccept()
 {
-    SOCKET hWsClient = accept(m_hListen, NULL, NULL);
+    // 相手アドレスを取得する。ここで得られる相手IPは、ブラウザ版クライアントが
+    // 直接このWebSocketブリッジへ繋いだ場合のみ実IPになる。リバースプロキシ経由
+    // の場合は直接の接続元(プロキシ自身。多くの場合 loopback)になるため、
+    // HandleSession() 側で loopback の時だけ X-Forwarded-For 等のヘッダを見る。
+    sockaddr_in peerAddr;
+    ZeroMemory(&peerAddr, sizeof(peerAddr));
+    int nAddrLen = sizeof(peerAddr);
+
+    SOCKET hWsClient = accept(m_hListen, reinterpret_cast<sockaddr *>(&peerAddr), &nAddrLen);
     if (hWsClient == INVALID_SOCKET) {
         SboPlatform::WriteDebugLine("[WebSocketBridge] HandleAccept: accept FAILED\n");
         return;
     }
     SboPlatform::WriteDebugLine("[WebSocketBridge] HandleAccept: accepted\n");
 
+    DWORD dwPeerIpNet = peerAddr.sin_addr.s_addr;
+
     // セッションスレッドは自律実行で、このクラス側では追跡しない
     // （従来の _beginthreadex + 直後の CloseHandle と同じ扱い）ので detach する。
     try {
-        std::thread(&CWebSocketBridge::HandleSession, this, hWsClient).detach();
+        std::thread(&CWebSocketBridge::HandleSession, this, hWsClient, dwPeerIpNet).detach();
     } catch (const std::system_error &) {
         // スレッド作成失敗時はここで後始末
         closesocket(hWsClient);
@@ -238,7 +279,7 @@ void CWebSocketBridge::HandleAccept()
 // セッションスレッド
 // ------------------------------------------------------------
 
-void CWebSocketBridge::HandleSession(SOCKET hWsClient)
+void CWebSocketBridge::HandleSession(SOCKET hWsClient, DWORD dwPeerIpNet)
 {
     SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: start\n");
 
@@ -250,12 +291,24 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
                reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
 
     // 1. WebSocketハンドシェイク
-    if (!PerformHandshake(hWsClient)) {
+    std::string strHandshakeRequest;
+    if (!PerformHandshake(hWsClient, strHandshakeRequest)) {
         SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: handshake FAILED\n");
         closesocket(hWsClient);
         return;
     }
     SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: handshake OK\n");
+
+    // 実クライアントIPを決定する。
+    // 直接の接続元が loopback の場合に限り、プロキシが付与したヘッダを信用する
+    // (loopback でない場合、直接来た接続はヘッダを自由に偽装できるため無視する)。
+    DWORD dwRealIpNet = dwPeerIpNet;
+    if (ProxyIpRegistry::IsLoopbackIPv4(dwPeerIpNet)) {
+        unsigned long dwParsedIp = 0;
+        if (ProxyHeaderParser::ExtractClientIp(strHandshakeRequest, dwParsedIp)) {
+            dwRealIpNet = dwParsedIp;
+        }
+    }
 
     // 2. localhost の TCPゲームポートへ接続
     SOCKET hTcpSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -288,6 +341,24 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
     }
 
     SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: TCP connected, starting bridge\n");
+
+    // ゲームTCPへの接続に使ったローカルポートを実IPアドレスに対応付けて登録する。
+    // ゲーム側 accept() から見える相手ポート(=このソケットのローカルポート)を
+    // キーに、MainFrame 側が実IPを引けるようにする。中継を始める前、かつ以降の
+    // 早期returnすべてで確実に解除されるよう、ガードはこの関数のスコープ終了
+    // (または以降のreturn)まで生存させる。
+    CProxyIpRegistrationGuard ipRegistrationGuard;
+    {
+        sockaddr_in localAddr;
+        ZeroMemory(&localAddr, sizeof(localAddr));
+        int nLocalAddrLen = sizeof(localAddr);
+        if (getsockname(hTcpSock, reinterpret_cast<sockaddr *>(&localAddr), &nLocalAddrLen) == 0) {
+            unsigned short wLocalPort = ntohs(localAddr.sin_port);
+            ipRegistrationGuard.RegisterPort(wLocalPort, dwRealIpNet);
+        } else {
+            SboPlatform::WriteDebugLine("[WebSocketBridge] getsockname FAILED (real IP not registered)\n");
+        }
+    }
 
     // 4. TCP pre-check ハンドシェイク
     //    SboSockLib はクライアント接続直後に認証チャレンジを送ってくる。
@@ -353,10 +424,11 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient)
 //  WebSocketハンドシェイク
 // ============================================================
 
-bool CWebSocketBridge::PerformHandshake(SOCKET hClient)
+bool CWebSocketBridge::PerformHandshake(SOCKET hClient, std::string &outRequest)
 {
     // HTTPリクエストヘッダを "\r\n\r\n" まで受信
-    std::string request;
+    std::string &request = outRequest;
+    request.clear();
     request.reserve(1024);
 
     char szBuf[512];

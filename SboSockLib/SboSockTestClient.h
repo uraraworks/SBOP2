@@ -42,6 +42,10 @@ public:
 
     BOOL IsConnected(void) const;
 
+    /// 接続時に使ったローカルポート番号を取得する(ホストバイトオーダー)
+    /// サーバー側 GetPeerPort() の検証用。未接続時は 0。
+    WORD GetLocalPort(void) const;
+
     /// パケットを送る(必要なら zlib 圧縮し、フレーム化して送出)
     BOOL SendPacket(const BYTE *pData, DWORD dwSize);
 
