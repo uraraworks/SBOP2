@@ -15,8 +15,9 @@
  */
 
 import { fetchJson } from "../core/api.js";
-import { createNumberSpinner } from "../components/number-spinner.js";
-import { openEntityPicker } from "../components/entity-picker.js";
+import { openEntityPicker, createEntityField } from "../components/entity-picker.js";
+import { createAnimePreview } from "../components/anime-preview.js";
+import { loadCatalog } from "../data/assets.js";
 
 // ----------------------------------------------------------------
 // 定数
@@ -39,6 +40,148 @@ const MOTION_FLAGS = [
 function formatMotionType(motionType) {
   const labels = MOTION_FLAGS.filter((f) => motionType & f.bit).map((f) => f.label);
   return labels.length ? labels.join(",") : "-";
+}
+
+// ----------------------------------------------------------------
+// 立ち/すり足モーションID の実体（CHARMOTIONLISTID、Common/Info/InfoMotion.h）
+//
+// SboCliAdminMfc/src/Migrated/Dialog/DlgAdminItemWeaponNew.cpp の
+// OnInitDialog() が m_ctlStandMotion / m_ctlWalkMotion に積んでいる選択肢と
+// 完全に同じ固定リスト（"モーション種別ID" でも自由な "モーションID" でも
+// なく、CHARMOTIONLISTID enum の固定値＝モーションリストIDの一種）。
+// 実際の描画は LibInfoCharCli.cpp が
+//   pLibInfoItem->GetMotionIDBattleStand()/GetMotionIDBattleWalk() で
+//   この値を取得し、キャラ自身の motionTypeId と組み合わせて
+//   pLibInfoMotion->GetMotionInfo(motionTypeId, dwListID + 方向) を引く。
+// つまり「武器を戦闘モードで構えた時、どの動作系統（素手/弓/打撃/釣り）の
+// 立ち・すり足を使うか」を選ぶフィールドであり、キャラ本体の見た目
+// （motionTypeId）とは独立。
+// ----------------------------------------------------------------
+
+// CHARMOTIONLISTID_* の値（Common/Info/InfoMotion.h の enum 順で採番）
+const STAND_MOTION_OPTIONS = [
+  { value: 13, label: "戦闘立ち(上)" },        // CHARMOTIONLISTID_BATTLESTAND_UP
+  { value: 57, label: "弓用戦闘立ち(上)" },     // CHARMOTIONLISTID_BOWBATTLESTAND_UP
+  { value: 61, label: "打撃用戦闘立ち(上)" },   // CHARMOTIONLISTID_GLOVEBATTLESTAND_UP
+  { value: 65, label: "釣り用戦闘立ち(上)" },   // CHARMOTIONLISTID_FISHINGBATTLESTAND_UP
+];
+
+const WALK_MOTION_OPTIONS = [
+  { value: 1,  label: "立ち(上)" },             // CHARMOTIONLISTID_STAND_UP
+  { value: 17, label: "すり足(上)" },           // CHARMOTIONLISTID_BATTLEWALK_UP
+  { value: 29, label: "弓用すり足(上)" },       // CHARMOTIONLISTID_BOWWALK_UP
+  { value: 37, label: "打撃用すり足(上)" },     // CHARMOTIONLISTID_GLOVEWALK_UP
+  { value: 45, label: "釣り用すり足(上)" },     // CHARMOTIONLISTID_FISHINGWALK_UP
+];
+
+// プレビューでは正面向き（下方向 = UP値 + 1）を表示する
+const MOTION_LIST_DOWN_OFFSET = 1;
+
+function motionOptionLabel(options, value) {
+  const found = options.find((o) => o.value === Number(value));
+  return found ? found.label : "#" + value;
+}
+
+// 固定選択肢の <select>。保存済みデータが選択肢に無い値（旧データや手動編集分）
+// の場合は「不明な値」として選択肢に追加し、無断で別の値に書き換えないようにする。
+function createMotionListSelect(options) {
+  const select = document.createElement("select");
+  select.className = "form-input";
+
+  let _unknownOpt = null;
+
+  function rebuildOptions(current) {
+    select.innerHTML = "";
+    options.forEach((o) => {
+      const opt = document.createElement("option");
+      opt.value = String(o.value);
+      opt.textContent = o.label + "（#" + o.value + "）";
+      select.appendChild(opt);
+    });
+    _unknownOpt = null;
+    const known = options.some((o) => o.value === Number(current));
+    if (!known) {
+      _unknownOpt = document.createElement("option");
+      _unknownOpt.value = String(current ?? 0);
+      _unknownOpt.textContent = "#" + (current ?? 0) + "（不明な値）";
+      select.appendChild(_unknownOpt);
+    }
+    select.value = String(current ?? options[0].value);
+  }
+
+  rebuildOptions(options[0].value);
+
+  return {
+    el: select,
+    getValue: () => parseInt(select.value, 10) || 0,
+    setValue: (v) => rebuildOptions(v),
+  };
+}
+
+// ----------------------------------------------------------------
+// モーションプレビュー用データ取得・合成（motion-edit.js と同じ考え方を
+// 武器プレビュー向けに最小限で再実装したもの）
+// ----------------------------------------------------------------
+
+const PREVIEW_LAYERS = [
+  { mainField: "grpIdMainBase",  subField: "grpIdSubBase",  dpx: "drawPosPile0x", dpy: "drawPosPile0y", levelField: null,     fallbackKey: "char" },
+  { mainField: "grpIdMainPile1", subField: "grpIdSubPile1", dpx: "drawPosPile1x", dpy: "drawPosPile1y", levelField: "level1", fallbackKey: "weapon" },
+  { mainField: "grpIdMainPile2", subField: "grpIdSubPile2", dpx: "drawPosPile2x", dpy: "drawPosPile2y", levelField: "level2", fallbackKey: "weapon" },
+  { mainField: "grpIdMainPile3", subField: "grpIdSubPile3", dpx: "drawPosPile3x", dpy: "drawPosPile3y", levelField: "level3", fallbackKey: "weapon" },
+];
+
+const MOTION_TYPE_SHEET_CATEGORY_KEYS = new Set(["npc", "npc2x2"]);
+
+function mainIdToCategory(catalog, idMain, fallbackKey) {
+  return catalog.find((c) => Number(c.idMain) === Number(idMain))
+    ?? catalog.find((c) => c.key === fallbackKey)
+    ?? catalog[0];
+}
+
+function cellsPerSheet(cat) {
+  return Math.max(1, Number(cat?.countX ?? 1) * Number(cat?.countY ?? 1));
+}
+
+function storedSubToContextSub(value, cat, motionType) {
+  const cell = Math.max(0, (Number(value) || 0) - 1);
+  if (!MOTION_TYPE_SHEET_CATEGORY_KEYS.has(cat?.key)) return cell;
+  const sheetIndex = Math.max(0, Number(motionType?.grpIdSub ?? 0) || 0);
+  return sheetIndex * cellsPerSheet(cat) + (cell % cellsPerSheet(cat));
+}
+
+// CInfoMotion(1フレーム分) → createAnimePreview 用レイヤー配列
+function motionFrameToPreviewLayers(frame, catalog, motionType) {
+  const drawList = Array.isArray(frame.drawList) && frame.drawList.length ? frame.drawList : [0, 1, 2, 3];
+  return drawList.map((idx) => {
+    const layer = PREVIEW_LAYERS[idx];
+    if (!layer) return null;
+    const sub = Number(frame[layer.subField] ?? 0);
+    if (sub <= 0) return null;
+    const cat = mainIdToCategory(catalog, frame[layer.mainField], layer.fallbackKey);
+    const alpha = layer.levelField ? (Number(frame[layer.levelField] ?? 255) / 255) : 1;
+    return {
+      categoryKey: cat.key,
+      sub: storedSubToContextSub(sub, cat, motionType),
+      offsetX: Math.round(Number(frame[layer.dpx] ?? 0) / 2),
+      offsetY: Math.round(Number(frame[layer.dpy] ?? 0) / 2),
+      alpha,
+    };
+  }).filter(Boolean);
+}
+
+const _motionsByTypeCache = new Map();
+
+function loadMotionsForType(motionTypeId) {
+  if (!motionTypeId) return Promise.resolve([]);
+  if (_motionsByTypeCache.has(motionTypeId)) return _motionsByTypeCache.get(motionTypeId);
+  const promise = fetchJson("/api/motions?motionTypeId=" + motionTypeId)
+    .then(({ response, data }) => {
+      if (!response.ok || !Array.isArray(data?.motions)) return [];
+      return data.motions;
+    })
+    .catch(() => []);
+  _motionsByTypeCache.set(motionTypeId, promise);
+  return promise;
 }
 
 // ----------------------------------------------------------------
@@ -221,23 +364,122 @@ function buildDetailPane({ feedbackEl }) {
   });
   motionSec.appendChild(motionFlagWrap);
 
-  // モーションID(スピナー)
+  // 立ち/すり足モーションID（実体は CHARMOTIONLISTID の固定値。上部の解説コメント参照）
   const motionGrid = document.createElement("div");
   motionGrid.className = "form-grid compact";
   motionGrid.style.marginTop = "0.5rem";
 
-  const standLbl = makeFormField("立ちモーションID");
-  const standSpin = createNumberSpinner({ value: 0, min: 0, max: 9999, step: 1 });
-  standLbl.appendChild(standSpin.el);
+  const standLbl = makeFormField("立ちモーションID（戦闘モード時）");
+  const standSelect = createMotionListSelect(STAND_MOTION_OPTIONS);
+  standLbl.appendChild(standSelect.el);
   motionGrid.appendChild(standLbl);
 
-  const walkLbl = makeFormField("すり足モーションID");
-  const walkSpin = createNumberSpinner({ value: 0, min: 0, max: 9999, step: 1 });
-  walkLbl.appendChild(walkSpin.el);
+  const walkLbl = makeFormField("すり足モーションID（戦闘モード時）");
+  const walkSelect = createMotionListSelect(WALK_MOTION_OPTIONS);
+  walkLbl.appendChild(walkSelect.el);
   motionGrid.appendChild(walkLbl);
 
   motionSec.appendChild(motionGrid);
   pane.appendChild(motionSec);
+
+  // --- モーションプレビュー ---
+  const previewSec = document.createElement("section");
+  previewSec.className = "detail-section me-preview-section";
+  const previewH3 = document.createElement("h3");
+  previewH3.textContent = "モーションプレビュー";
+  previewSec.appendChild(previewH3);
+
+  const previewNote = document.createElement("p");
+  previewNote.className = "muted";
+  previewNote.textContent = "立ち/すり足モーションIDは「戦闘モード中にどの動作系統を使うか」の指定で、実際の見た目はキャラクター自身のモーション種別と組み合わさって決まります。下でプレビュー用のモーション種別（キャラ見た目）を選ぶと、正面向きの動きを確認できます。";
+  previewSec.appendChild(previewNote);
+
+  const previewMotionTypeField = createEntityField({
+    type: "motionType",
+    label: "プレビュー用モーション種別",
+    value: 0,
+    onChange: () => updatePreview(),
+  });
+  previewSec.appendChild(previewMotionTypeField.element);
+
+  const previewToggleWrap = document.createElement("div");
+  previewToggleWrap.style.cssText = "display:flex;gap:0.5rem;margin:0.5rem 0;";
+  const standToggleBtn = document.createElement("button");
+  standToggleBtn.type = "button";
+  standToggleBtn.className = "button small primary";
+  standToggleBtn.textContent = "立ちを再生";
+  const walkToggleBtn = document.createElement("button");
+  walkToggleBtn.type = "button";
+  walkToggleBtn.className = "button small";
+  walkToggleBtn.textContent = "すり足を再生";
+  previewToggleWrap.append(standToggleBtn, walkToggleBtn);
+  previewSec.appendChild(previewToggleWrap);
+
+  const previewAnime = createAnimePreview({ width: 64, height: 64, scale: 2 });
+  previewSec.appendChild(previewAnime.el);
+
+  const previewStatus = document.createElement("p");
+  previewStatus.className = "muted";
+  previewStatus.style.marginTop = "0.35rem";
+  previewSec.appendChild(previewStatus);
+
+  pane.appendChild(previewSec);
+
+  let _catalog = null;
+  loadCatalog().then((c) => { _catalog = c; updatePreview(); }).catch(() => {});
+
+  let _previewWhich = "stand"; // "stand" | "walk"
+
+  function setPreviewWhich(which) {
+    _previewWhich = which;
+    standToggleBtn.classList.toggle("primary", which === "stand");
+    walkToggleBtn.classList.toggle("primary", which === "walk");
+    updatePreview();
+  }
+  standToggleBtn.addEventListener("click", () => setPreviewWhich("stand"));
+  walkToggleBtn.addEventListener("click", () => setPreviewWhich("walk"));
+
+  let _updateSeq = 0;
+
+  async function updatePreview() {
+    const seq = ++_updateSeq;
+    const motionTypeId = previewMotionTypeField.getValue();
+    const listId = _previewWhich === "stand" ? standSelect.getValue() : walkSelect.getValue();
+
+    if (!_catalog || !motionTypeId || !listId) {
+      previewAnime.setFrames([]);
+      previewStatus.textContent = motionTypeId ? "" : "プレビュー用モーション種別を選択してください。";
+      return;
+    }
+
+    previewStatus.textContent = "読み込み中…";
+    const motions = await loadMotionsForType(motionTypeId);
+    if (seq !== _updateSeq) return; // 途中で別の選択に切り替わった
+
+    const motionType = { motionTypeId }; // grpIdSub 等は一覧APIに含まれないため未指定（char系では未使用）
+    const targetListId = listId + MOTION_LIST_DOWN_OFFSET; // 正面向き（下）
+    const frames = motions
+      .filter((m) => Number(m.motionListId) === targetListId)
+      .sort((a, b) => a.motionId - b.motionId);
+
+    if (frames.length === 0) {
+      previewAnime.setFrames([]);
+      previewStatus.textContent =
+        "選択中のモーション種別には「" + motionOptionLabel(
+          _previewWhich === "stand" ? STAND_MOTION_OPTIONS : WALK_MOTION_OPTIONS, listId
+        ) + "」に対応するモーション（正面向き）が未設定です。";
+      return;
+    }
+
+    previewAnime.setFrames(frames.map((f) => ({
+      wait: Number(f.wait ?? 10),
+      layers: motionFrameToPreviewLayers(f, _catalog, motionType),
+    })));
+    previewStatus.textContent = frames.length + " フレーム";
+  }
+
+  standSelect.el.addEventListener("change", updatePreview);
+  walkSelect.el.addEventListener("change", updatePreview);
 
   // --- エフェクトID ---
   const effectSec = document.createElement("section");
@@ -275,11 +517,13 @@ function buildDetailPane({ feedbackEl }) {
     const mt = w ? (w.motionType || 0) : 0;
     motionCbs.forEach(({ bit, cb }) => { cb.checked = !!(mt & bit); });
 
-    standSpin.setValue(w ? (w.motionTypeStand || 0) : 0);
-    walkSpin.setValue(w ? (w.motionTypeWalk || 0) : 0);
+    standSelect.setValue(w ? (w.motionTypeStand || 0) : STAND_MOTION_OPTIONS[0].value);
+    walkSelect.setValue(w ? (w.motionTypeWalk || 0) : WALK_MOTION_OPTIONS[0].value);
 
     atkChips.setValue(w ? (w.effectIdAtack || []) : []);
     criChips.setValue(w ? (w.effectIdCritical || []) : []);
+
+    updatePreview();
   }
 
   function collectData() {
@@ -288,8 +532,8 @@ function buildDetailPane({ feedbackEl }) {
     return {
       name:             nameInput.value,
       motionType:       motionType,
-      motionTypeStand:  standSpin.getValue(),
-      motionTypeWalk:   walkSpin.getValue(),
+      motionTypeStand:  standSelect.getValue(),
+      motionTypeWalk:   walkSelect.getValue(),
       effectIdAtack:    atkChips.getValue(),
       effectIdCritical: criChips.getValue(),
     };

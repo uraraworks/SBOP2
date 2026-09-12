@@ -881,6 +881,12 @@
    sound-picker
    ================================================================ */
 
+.sound-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .sound-picker select {
   padding: 0.5rem 0.7rem;
   border-radius: 8px;
@@ -889,6 +895,22 @@
   color: #f9fafb;
   font-size: 0.92rem;
   width: 100%;
+}
+
+.sound-picker-play {
+  flex: 0 0 auto;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background-color: rgba(15, 23, 42, 0.6);
+  color: #f9fafb;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.sound-picker-play:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* ================================================================

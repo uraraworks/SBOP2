@@ -2046,6 +2046,10 @@
         if (Module && Module.ccall) {
           Module.ccall("SBOP2_SetWebAdminSelectedPartsID", null, ["number"], [Number(ev.data.partsId) || 0]);
         }
+      } else if (ev.data.kind === "sbop2_admin_play_sound") {
+        if (Module && Module.ccall) {
+          Module.ccall("SBOP2_AdminPlaySound", null, ["number"], [Number(ev.data.soundId) || 0]);
+        }
       } else if (ev.data.kind === "sbop2_admin_viewport") {
         applyAdminViewportHeight(ev.data.height);
       } else if (ev.data.kind === "sbop2_chat_log_request") {

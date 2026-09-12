@@ -14,6 +14,26 @@ import { loadSounds } from "../data/assets.js";
  * }} options
  * @returns {{ el: HTMLElement, getValue: () => number, setValue: (id: number) => void }}
  */
+/**
+ * 管理画面のゲームiframe（#admin-game-frame）を探す。
+ * 編集ペインは workspace-layout.js により別ウィンドウ（popup）へ adoptNode
+ * されることがあるが、iframe 自体はメインウィンドウ側に残る。
+ * このモジュールのコード自体はメインウィンドウの realm で動き続けるので
+ * 通常は `document` で見つかるが、念のため popup 側 document から
+ * `window.opener` 経由で辿るフォールバックも用意する。
+ */
+function findAdminGameFrame(el) {
+  const direct = document.getElementById("admin-game-frame");
+  if (direct) return direct;
+
+  const ownerWin = el?.ownerDocument?.defaultView;
+  const opener = ownerWin && ownerWin !== window ? ownerWin.opener : null;
+  if (opener && opener.document) {
+    return opener.document.getElementById("admin-game-frame");
+  }
+  return null;
+}
+
 export function createSoundPicker({ value = 0, onChange } = {}) {
   const wrap = document.createElement("div");
   wrap.className = "sound-picker";
@@ -26,9 +46,29 @@ export function createSoundPicker({ value = 0, onChange } = {}) {
   noneOpt.textContent = "(なし)";
   select.appendChild(noneOpt);
 
-  wrap.appendChild(select);
+  const playBtn = document.createElement("button");
+  playBtn.type = "button";
+  playBtn.className = "sound-picker-play";
+  playBtn.textContent = "▶";
+  playBtn.title = "選択中の効果音を試聴";
+  playBtn.disabled = true;
+  playBtn.addEventListener("click", () => {
+    const frame = findAdminGameFrame(wrap);
+    if (!frame || !frame.contentWindow) {
+      playBtn.title = "ゲーム画面が見つからないため試聴できません";
+      return;
+    }
+    playBtn.title = "選択中の効果音を試聴";
+    frame.contentWindow.postMessage(
+      { kind: "sbop2_admin_play_sound", soundId: _value },
+      "*"
+    );
+  });
+
+  wrap.append(select, playBtn);
 
   let _value = value;
+  playBtn.disabled = !_value;
 
   // 非同期でサウンド一覧を読み込む
   loadSounds().then((sounds) => {
@@ -49,6 +89,7 @@ export function createSoundPicker({ value = 0, onChange } = {}) {
 
   select.addEventListener("change", () => {
     _value = parseInt(select.value, 10);
+    playBtn.disabled = !_value;
     onChange?.(_value);
   });
 
@@ -57,6 +98,7 @@ export function createSoundPicker({ value = 0, onChange } = {}) {
   function setValue(id) {
     _value = id;
     select.value = String(id);
+    playBtn.disabled = !_value;
   }
 
   return { el: wrap, getValue, setValue };

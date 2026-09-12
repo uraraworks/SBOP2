@@ -124,6 +124,15 @@ extern "C" {
 		}
 	}
 
+	/// @brief Web管理画面からの効果音試聴エントリポイント
+	/// @param soundId SOUNDID。CMgrSound未生成時は何もしない
+	EMSCRIPTEN_KEEPALIVE void SBOP2_AdminPlaySound(int soundId)
+	{
+		if ((s_pMgrDataForAdminMode != NULL) && (s_pMgrDataForAdminMode->GetMgrSound() != NULL)) {
+			s_pMgrDataForAdminMode->GetMgrSound()->PlaySound(static_cast<DWORD>(soundId));
+		}
+	}
+
 	/// @brief DOM(JS)側からのチャット送信エントリポイント
 	/// @param pszText 送信テキスト（UTF-8。空文字列なら何もしない）
 	/// @param nType   チャット種別。負値は 0 に丸める
