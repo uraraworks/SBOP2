@@ -5,7 +5,7 @@
   <!-- ビルドスクリプトがこの meta をバージョン情報の script に置換する -->
   <meta name="sbop2-build-inject">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content, viewport-fit=cover">
   <title>SBOP2 SboCli Title</title>
   <style>
     :root {
@@ -17,7 +17,8 @@
       --accent: #58c4dd;
       --border: #2d3947;
       --game-scale: 1;
-      --pad-h: 160px; /* モバイル時のパッド領域の高さ */
+      --pad-h: 160px; /* モバイル時のパッド領域の高さ（縦持ち: ゲーム画面直下に積む） */
+      --pad-col-w: 172px; /* モバイル横持ち時、スティック/ボタン用に左右へ確保する列幅 */
       --embed-height: 100dvh;
       --app-height: 100dvh; /* 可視ビューポート高さ(JSが visualViewport.height を反映)。iOSのキーボード追従用 */
     }
@@ -340,9 +341,9 @@
     body.mobile-pad > main > section.panel:last-of-type {
       display: none !important;
     }
-    /* canvas-wrap を残りの縦領域すべてに拡張 */
+    /* canvas-wrap は「キャンバス＋パッド」の実寸ぶんだけ縦を使う（残りは #chatLogArea へ） */
     body.mobile-pad .panel.canvas-wrap {
-      flex: 1;
+      flex: 0 0 auto;
       min-height: 0;
       background: transparent;
       border: 0;
@@ -353,16 +354,6 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      /* 固定パッドとゲーム画面が重ならないよう下にパッド高分の余白を確保 */
-      padding-bottom: var(--pad-h);
-    }
-    /*
-      管理Webの iframe 埋め込みでは外側も全画面高さを管理するため、
-      mobile-pad の中央寄せだとゲーム画面と固定パッドの間に余白が出やすい。
-      埋め込み時だけキャンバスをパッド直上へ寄せる。
-    */
-    body.admin-embed.mobile-pad .panel.canvas-wrap {
-      justify-content: flex-end;
     }
     body.admin-embed.mobile-pad {
       position: relative;
@@ -371,32 +362,22 @@
     body.admin-embed.mobile-pad .layout {
       height: var(--embed-height);
     }
-    /* ゲーム画面を短辺基準でパッド高を差し引いた領域にフィット（正方形キャンバス想定） */
+    /* ---- 縦持ち(既定): ゲーム画面は幅いっぱいの正方形。パッドは直下に「積む」だけなので
+       高さから --pad-h を差し引く必要が無い（横持ちは下の @media で上書き） ---- */
     body.mobile-pad .canvas-stage {
-      /* dvh 非対応の古い iOS 向けに vh フォールバックを先に指定し、対応環境では下の dvh が上書きする */
-      /* キャンバスは可視領域(--app-height)に連動させない。連動させるとキーボード表示時に
-         ゲーム画面が縮小してログイン欄が小さくなりタップしづらくなるため、安定した 100dvh で
-         フルサイズを保ち、縮小ではなく上端寄せ(flex-start)で「ずらす」挙動にする。
-         可視領域へのアンカリングは body 側の position:fixed + top=offsetTop が担当する。 */
-      width: min(100vw, calc(100vh - var(--pad-h)));
-      height: min(100vw, calc(100vh - var(--pad-h)));
-      width: min(100vw, calc(100dvh - var(--pad-h)));
-      height: min(100vw, calc(100dvh - var(--pad-h)));
+      width: 100vw;
+      height: 100vw;
     }
     body.admin-embed.mobile-pad .canvas-stage {
-      width: min(100vw, calc(var(--embed-height) - var(--pad-h)));
-      height: min(100vw, calc(var(--embed-height) - var(--pad-h)));
+      width: 100vw;
+      height: 100vw;
     }
-    /* パッドを画面最下部に固定オーバーレイで常設（レイアウト/重なりの影響を受けないようにする） */
+    /* パッドはフローレイアウトの一部（canvas-stage の直下に積む）。固定オーバーレイはやめる */
     body.mobile-pad #virtualPad {
       display: flex;
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      flex: 0 0 auto;
       width: 100%;
       height: var(--pad-h);
-      z-index: 2147483647;
       justify-content: space-between;
       align-items: center;
       background: rgba(16, 20, 26, 0.92);
@@ -404,8 +385,49 @@
       padding: 8px 20px;
       box-sizing: border-box;
     }
-    body.admin-embed.mobile-pad #virtualPad {
-      position: absolute;
+
+    /* ---- 横持ち: ゲーム画面は高さいっぱいの正方形を中央に、パッドは左右カラムへ分割 ---- */
+    @media (orientation: landscape) {
+      body.mobile-pad .layout {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+      /* canvas-wrap と #virtualPad を「箱」ごと消して、中身を .layout 直下の横並びに見せる。
+         JS 側の DOM 構造・initVirtualPad は無改修のまま、CSS の display:contents だけで
+         スティック(左)・キャンバス(中央)・ボタン(右)の3カラムに再配置する。 */
+      body.mobile-pad .panel.canvas-wrap {
+        display: contents;
+      }
+      body.mobile-pad #virtualPad {
+        display: contents;
+      }
+      body.mobile-pad .canvas-stage {
+        order: 0;
+        width: min(100vh, calc(100vw - (var(--pad-col-w) * 2) - env(safe-area-inset-left) - env(safe-area-inset-right)));
+        height: min(100vh, calc(100vw - (var(--pad-col-w) * 2) - env(safe-area-inset-left) - env(safe-area-inset-right)));
+        width: min(100dvh, calc(100vw - (var(--pad-col-w) * 2) - env(safe-area-inset-left) - env(safe-area-inset-right)));
+        height: min(100dvh, calc(100vw - (var(--pad-col-w) * 2) - env(safe-area-inset-left) - env(safe-area-inset-right)));
+      }
+      body.admin-embed.mobile-pad .canvas-stage {
+        width: min(var(--embed-height), calc(100vw - (var(--pad-col-w) * 2)));
+        height: min(var(--embed-height), calc(100vw - (var(--pad-col-w) * 2)));
+      }
+      /* スティック側(左カラム)。今後「座る/向き固定」ボタンを上下の余りへ足しやすいよう
+         縦中央寄せの列として確保しておく */
+      body.mobile-pad .pad-stick {
+        order: -1;
+        flex: 0 0 auto;
+        margin-left: calc(16px + env(safe-area-inset-left));
+        margin-right: 16px;
+      }
+      /* ボタン側(右カラム) */
+      body.mobile-pad .pad-buttons {
+        order: 1;
+        flex: 0 0 auto;
+        margin-left: 16px;
+        margin-right: calc(16px + env(safe-area-inset-right));
+      }
     }
 
     /* ---- バーチャルパッド ---- */
@@ -604,9 +626,11 @@
       display: none;
     }
 
-    /* ---- スマホ: ミニログ (画面左上、タッチ透過) ---- */
+    /* ---- スマホ: ミニログ (画面左上、タッチ透過) ----
+       縦持ちでは #chatLogArea（後述）に出力を切り替えるため、二重表示を避けて非表示にする。
+       横持ちは従来どおりキャンバス左上にオーバーレイ表示する。 */
     body.mobile-pad #chatMiniLog {
-      display: block;
+      display: none;
       position: fixed;
       top: 8px;
       left: 8px;
@@ -615,6 +639,11 @@
       z-index: 600;
       font-family: "Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", sans-serif;
       font-size: 12px;
+    }
+    @media (orientation: landscape) {
+      body.mobile-pad.game-map #chatMiniLog {
+        display: block;
+      }
     }
     .chat-mini-line {
       background: rgba(10, 14, 20, 0.65);
@@ -631,15 +660,44 @@
       opacity: 0;
     }
 
-    /* ---- スマホ: チャット開くボタン ---- */
+    /* ---- チャットログ欄（スマホ縦持ち専用: ゲーム画面＋パッドの下に残り高さ全部） ---- */
+    #chatLogArea {
+      display: none;
+    }
+    /* ログイン前(タイトル画面)でも、縦持ちならパッド下の残り高さを空のログ欄で埋める。
+       中身はログイン後に流れてくればよい（#chatMiniLog/#chatOpenBtn とは異なり
+       ログイン状態に依存させない）。横持ちでは下の @media で強制的に非表示にする。 */
+    body.mobile-pad #chatLogArea {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      gap: 4px;
+      background: rgba(13, 17, 23, 0.55);
+      padding: 8px calc(12px + env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));
+      font-family: "Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", sans-serif;
+      font-size: 13px;
+    }
+    @media (orientation: landscape) {
+      /* 横持ちは従来のミニログ運用のまま。ログ欄はキャンバスの縦積みが前提なので出さない */
+      #chatLogArea,
+      body.mobile-pad.game-map #chatLogArea {
+        display: none !important;
+      }
+    }
+
+    /* ---- スマホ: チャット開くボタン ----
+       縦持ち: #chatLogArea の右下（画面右下、safe-area 考慮）。
+       横持ち: パッドが左右カラムに分かれ下部固定バーが無くなるため、画面左下(safe-area考慮)に置く。 */
     body.mobile-pad #chatOpenBtn {
       display: flex;
       align-items: center;
       justify-content: center;
       position: fixed;
-      /* バーチャルパッド(下160px)の左端付近、スティックと被らない位置 */
-      bottom: calc(var(--pad-h) + 8px);
-      left: 8px;
+      right: calc(8px + env(safe-area-inset-right));
+      bottom: calc(8px + env(safe-area-inset-bottom));
+      left: auto;
       width: 48px;
       height: 48px;
       border-radius: 50%;
@@ -653,6 +711,13 @@
       touch-action: none;
       user-select: none;
       -webkit-user-select: none;
+    }
+    @media (orientation: landscape) {
+      body.mobile-pad #chatOpenBtn {
+        left: calc(8px + env(safe-area-inset-left));
+        right: auto;
+        bottom: calc(8px + env(safe-area-inset-bottom));
+      }
     }
     body.mobile-pad #chatOpenBtn:active {
       background: rgba(88, 196, 221, 0.75);
@@ -741,6 +806,7 @@
     body.admin-embed #chatMiniLog,
     body.admin-embed #chatOpenBtn,
     body.admin-embed #chatBottomSheet,
+    body.admin-embed #chatLogArea,
     body.admin-embed.mobile-pad #chatPanel {
       display: none !important;
     }
@@ -769,8 +835,9 @@
       resize: none;
     }
 
-    /* ---- ゲーム開始(マップ画面)前はスマホ用チャット UI を出さない ---- */
-    /* body.game-map は JS が Module.sbop2GameState===GAMESTATE_MAP のとき付与する */
+    /* ---- ゲーム開始(マップ画面)前はスマホ用チャット UI を出さない ----
+       ただし #chatLogArea（縦持ちのログ枠）はタイトル画面でも空のまま出しておきたいので対象外。
+       body.game-map は JS が Module.sbop2GameState===GAMESTATE_MAP のとき付与する */
     body.mobile-pad:not(.game-map) #chatMiniLog,
     body.mobile-pad:not(.game-map) #chatOpenBtn,
     body.mobile-pad:not(.game-map) #chatBottomSheet {
@@ -849,6 +916,10 @@
         </div>
       </div>
     </section>
+
+    <!-- チャットログ欄: スマホ縦持ち専用。ゲーム画面＋パッドの下に残り高さ全部を使う。
+         横持ちや PC では非表示（CSS）。JS がここへ #chatMiniLog 相当の内容を流し込む。 -->
+    <div id="chatLogArea"></div>
 
     <section class="panel debug-panel">
       <textarea id="output" rows="8" readonly></textarea>
@@ -1015,6 +1086,11 @@
     }
 
     function updateIntegerGameScale() {
+      // mobile-pad ではキャンバス寸法は CSS 側の min()/@media(orientation) 分岐で決まり
+      // --game-scale は参照されない。PC 向け整数スケール計算は無駄なのでスキップする。
+      if (document.body.classList.contains('mobile-pad')) {
+        return;
+      }
       const maxW = document.body.classList.contains('admin-embed')
         ? window.innerWidth
         : Math.min(window.innerWidth * 0.9, 480);
@@ -1395,6 +1471,8 @@
     }
 
     window.addEventListener('resize', updateIntegerGameScale);
+    // 回転時は resize が来ない/遅れる端末があるため orientationchange でも明示的に再計算する
+    window.addEventListener('orientationchange', updateIntegerGameScale);
     updateIntegerGameScale();
 
     // ── iOS等でソフトキーボード表示時に画面が上にめり込み、閉じても戻らない問題への対処 ──
@@ -1821,8 +1899,10 @@
       }
       // モバイル全画面モードを有効化（ログ欄非表示・スクロール禁止・canvas フィット）
       document.body.classList.add('mobile-pad');
-      // パッドを表示（CSS 側の body.mobile-pad #virtualPad でも flex 指定済み）
-      pad.style.display = 'flex';
+      // パッドの表示・レイアウトは CSS (body.mobile-pad #virtualPad / @media orientation) に
+      // 完全に委ねる。ここで pad.style.display にインライン値を入れると、インラインスタイルは
+      // どのセレクタより優先されてしまい、横持ち用の `display: contents` 切り替え
+      // （キャンバスを潰さないための必須の分岐）が永久に効かなくなるため、絶対に触らない。
 
       // 表示後の実効スタイルを確認する診断ログ
       var cs = window.getComputedStyle(pad);
@@ -2082,6 +2162,7 @@
       var chatSendBtn    = document.getElementById('chatSendBtn');
       var chatCollapseBtn = document.getElementById('chatCollapseBtn');
       var chatMiniLog    = document.getElementById('chatMiniLog');
+      var chatLogArea    = document.getElementById('chatLogArea');
       var chatOpenBtn    = document.getElementById('chatOpenBtn');
       var chatBottomSheet = document.getElementById('chatBottomSheet');
       var chatSheetLog   = document.getElementById('chatSheetLog');
@@ -2093,6 +2174,12 @@
       var isTouch = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0))
                     && window.matchMedia('(pointer: coarse)').matches;
       isTouch = isTouch || (new URLSearchParams(window.location.search).get('forcepad') === '1');
+
+      // ---- 縦持ちか (5-3方針: 縦=#chatLogAreaへ出力/横=#chatMiniLogのまま) ----
+      var portraitMql = window.matchMedia('(orientation: portrait)');
+      function isPortraitPad() {
+        return !!chatLogArea && portraitMql.matches;
+      }
 
       // ---- ゲーム状態(マップ画面)監視: body.game-map を付け外し ----
       // GAMESTATE_MAP = 7 (SboCli_priv.h)。マップ表示中だけスマホ用チャット UI を出す。
@@ -2155,7 +2242,7 @@
         }
       }
 
-      // ---- ミニログ更新 ----
+      // ---- ミニログ更新（横持ち: キャンバス左上オーバーレイ、フェードあり） ----
       var miniLogFadeTimer = null;
       function updateMiniLog() {
         if (!chatMiniLog) { return; }
@@ -2179,6 +2266,55 @@
         miniLogFadeTimer = setTimeout(function() {
           chatMiniLog.classList.add('chat-mini-fade');
         }, MINI_FADE_MS);
+      }
+
+      // ---- ログ欄に1行追加（縦持ち: ゲーム画面＋パッド下の常設ログ欄、フェード無し） ----
+      function appendLogAreaLine(text, color) {
+        if (!chatLogArea) { return; }
+        var shouldFollow = isAtBottom(chatLogArea);
+        var line = document.createElement('div');
+        line.className = 'chat-log-line';
+        line.textContent = text;
+        if (color) { line.style.color = color; }
+        chatLogArea.appendChild(line);
+        while (chatLogArea.children.length > CHAT_LOG_MAX) {
+          chatLogArea.removeChild(chatLogArea.firstChild);
+        }
+        if (shouldFollow) {
+          scrollToBottom(chatLogArea);
+        }
+      }
+
+      // ---- ログ欄を保持履歴全体から再構築（縦⇄横の切替直後に呼ぶ） ----
+      function renderLogArea() {
+        if (!chatLogArea) { return; }
+        chatLogArea.innerHTML = '';
+        var start = Math.max(0, chatLogs.length - CHAT_LOG_MAX);
+        for (var i = start; i < chatLogs.length; i++) {
+          var entry = chatLogs[i];
+          var el = document.createElement('div');
+          el.className = 'chat-log-line';
+          el.textContent = entry.text;
+          if (entry.color) { el.style.color = entry.color; }
+          chatLogArea.appendChild(el);
+        }
+        scrollToBottom(chatLogArea);
+      }
+
+      // ---- 回転(縦⇄横)直後、いま表示すべき側の内容を保持履歴から作り直す ----
+      function handlePadOrientationChange() {
+        if (!isTouch) { return; }
+        if (isPortraitPad()) {
+          renderLogArea();
+        } else {
+          updateMiniLog();
+        }
+      }
+      if (portraitMql.addEventListener) {
+        portraitMql.addEventListener('change', handlePadOrientationChange);
+      } else if (portraitMql.addListener) {
+        // 古い Safari 向けフォールバック
+        portraitMql.addListener(handlePadOrientationChange);
       }
 
       // ============================================================
@@ -2206,9 +2342,13 @@
           appendPcLine(text, color);
         }
 
-        // ---- スマホ: ミニログ更新 ----
+        // ---- スマホ: 縦持ちはログ欄へ、横持ちは従来のミニログへ ----
         if (isTouch) {
-          updateMiniLog();
+          if (isPortraitPad()) {
+            appendLogAreaLine(text, color);
+          } else {
+            updateMiniLog();
+          }
           // シートが開いていれば追記
           if (chatBottomSheet && chatBottomSheet.classList.contains('sheet-open')) {
             appendSheetLine(text, color);
