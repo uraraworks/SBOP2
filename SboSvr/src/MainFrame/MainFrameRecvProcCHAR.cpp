@@ -825,17 +825,23 @@ void CMainFrame::RecvProcCHAR_REQ_PUSH(PBYTE pData, DWORD dwSessionID)
 	if (pInfoChar == pInfoPlayer) {
 		return;
 	}
-	// 押せる対象か（押し判定フラグ・NPC発生種別除外）をクライアントの選定条件と揃えて確認する
-	if (pInfoChar->m_bPush == FALSE) {
+	// 押せる対象か（押し判定フラグ・NPC発生種別除外）をクライアントの選定条件と揃えて確認する。
+	// ただしボールは X キー経由（OnXChar）で m_bPush を見ずに押し要求を送ってくるため、
+	// ボール種別なら m_bPush フラグが立っていなくても許可する。
+	if ((pInfoChar->m_bPush == FALSE) && (pInfoChar->m_nMoveType != CHARMOVETYPE_BALL)) {
 		return;
 	}
 	if (pInfoChar->m_nMoveType == CHARMOVETYPE_PUTNPC) {
 		return;
 	}
 	// 同じマップかつ近く（隣接〜数マス程度）にいるかを確認する。
+	// GetDistance は GetPosRect（旧スケールのまま=ほぼ点）の矩形間のすき間を測るため実質座標差になる上、
+	// サーバー側が持つプレイヤー座標は移動同期の間隔ぶん遅れる（自キャラはクライアント先行のDead Reckoning）。
+	// そのため隣接するだけでもしきい値ぎりぎりになりやすく、上限は遠隔からの操作を防げる程度に広めに取る。
 	// ラグで距離が一時的にずれる正規ケースがあり得るため、条件外でも切断はせず黙って無視する。
+	const int PUSH_DISTANCE_LIMIT = MAPPARTSSIZE * 6;
 	m_pLibInfoChar->GetDistance(sizeDistance, pInfoPlayer, pInfoChar);
-	if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 2) || (sizeDistance.cy > MAPPARTSSIZE * 2)) {
+	if ((sizeDistance.cx < 0) || (sizeDistance.cx > PUSH_DISTANCE_LIMIT) || (sizeDistance.cy > PUSH_DISTANCE_LIMIT)) {
 		return;
 	}
 	pInfoChar->m_nDirection = Packet.m_nDirection;
@@ -898,8 +904,9 @@ void CMainFrame::RecvProcCHAR_REQ_MODIFY_PARAM(PBYTE pData, DWORD dwSessionID)
 		if (pInfoChar->m_nMoveType != CHARMOVETYPE_SCORE) {
 			return;
 		}
+		// サーバー側のプレイヤー座標は移動同期の遅れぶんずれるため、しきい値は3マス程度に広げる。
 		m_pLibInfoChar->GetDistance(sizeDistance, pInfoPlayer, pInfoChar);
-		if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 2) || (sizeDistance.cy > MAPPARTSSIZE * 2)) {
+		if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 3) || (sizeDistance.cy > MAPPARTSSIZE * 3)) {
 			return;
 		}
 		pInfoChar->m_nAnime ++;
@@ -920,8 +927,9 @@ void CMainFrame::RecvProcCHAR_REQ_MODIFY_PARAM(PBYTE pData, DWORD dwSessionID)
 			RequestDisconnect(dwSessionID);
 			return;
 		}
+		// サーバー側のプレイヤー座標は移動同期の遅れぶんずれるため、しきい値は3マス程度に広げる。
 		m_pLibInfoChar->GetDistance(sizeDistance, pInfoPlayer, pInfoChar);
-		if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 2) || (sizeDistance.cy > MAPPARTSSIZE * 2)) {
+		if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 3) || (sizeDistance.cy > MAPPARTSSIZE * 3)) {
 			return;
 		}
 		pInfoCharTmp = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn((DWORD)Packet.m_nParam);
@@ -959,8 +967,9 @@ void CMainFrame::RecvProcCHAR_REQ_MODIFY_PARAM(PBYTE pData, DWORD dwSessionID)
 		if (pInfoCharTmp->m_nMoveType != CHARMOVETYPE_STYLECOPY_GET) {
 			break;
 		}
+		// サーバー側のプレイヤー座標は移動同期の遅れぶんずれるため、しきい値は3マス程度に広げる。
 		m_pLibInfoChar->GetDistance(sizeDistance, pInfoPlayer, pInfoCharTmp);
-		if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 2) || (sizeDistance.cy > MAPPARTSSIZE * 2)) {
+		if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 3) || (sizeDistance.cy > MAPPARTSSIZE * 3)) {
 			break;
 		}
 		pInfoChar->m_wGrpIDCloth	= pInfoCharTmp->m_wGrpIDCloth;	// 画像ID(服)
