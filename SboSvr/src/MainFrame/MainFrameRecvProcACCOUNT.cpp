@@ -12,6 +12,7 @@
 #include "InfoAccount.h"
 #include "InfoCharSvr.h"
 #include "LibInfoCharSvr.h"
+#include "TextOutput.h"
 #include "MgrData.h"
 #include "MainFrame.h"
 
@@ -34,8 +35,13 @@ void CMainFrame::RecvProcACCOUNT_REQ_ACCOUNTINFO(PBYTE pData, DWORD dwSessionID)
 	Packet.Set(pData);
 
 	pLibInfoAccount	= m_pMgrData->GetLibInfoAccount();
-	pInfoAccount	= pLibInfoAccount->GetPtr(Packet.m_dwAccountID);
+	pInfoAccount	= pLibInfoAccount->GetPtrSessionID(dwSessionID);
 	if (pInfoAccount == NULL) {
+		return;
+	}
+	if (pInfoAccount->m_dwAccountID != Packet.m_dwAccountID) {
+		m_pLog->Write("■ 他アカウント指定(ACCOUNTINFO) dwSessionID:%u 要求AccountID:%u 本人AccountID:%u", dwSessionID, Packet.m_dwAccountID, pInfoAccount->m_dwAccountID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 
@@ -62,8 +68,13 @@ void CMainFrame::RecvProcACCOUNT_REQ_MAKECHAR(PBYTE pData, DWORD dwSessionID)
 	pInfoCharPacket = Packet.m_pInfoCharBase;
 
 	pLibInfoAccount	= m_pMgrData->GetLibInfoAccount();
-	pInfoAccount	= pLibInfoAccount->GetPtr(Packet.m_dwAccountID);
+	pInfoAccount	= pLibInfoAccount->GetPtrSessionID(dwSessionID);
 	if (pInfoAccount == NULL) {
+		return;
+	}
+	if (pInfoAccount->m_dwAccountID != Packet.m_dwAccountID) {
+		m_pLog->Write("■ 他アカウント指定(MAKECHAR) dwSessionID:%u 要求AccountID:%u 本人AccountID:%u", dwSessionID, Packet.m_dwAccountID, pInfoAccount->m_dwAccountID);
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 
@@ -151,22 +162,26 @@ void CMainFrame::RecvProcACCOUNT_REQ_DELETECHAR(PBYTE pData, DWORD dwSessionID)
 	Packet.Set(pData);
 
 	pLibInfoAccount	= m_pMgrData->GetLibInfoAccount();
-	pInfoAccount	= pLibInfoAccount->GetPtr(Packet.m_dwAccountID);
+	pInfoAccount	= pLibInfoAccount->GetPtrSessionID(dwSessionID);
 	if (pInfoAccount == NULL) {
 		goto Exit;
 	}
+	if (pInfoAccount->m_dwAccountID != Packet.m_dwAccountID) {
+		m_pLog->Write("■ 他アカウント指定(DELETECHAR) dwSessionID:%u 要求AccountID:%u 本人AccountID:%u", dwSessionID, Packet.m_dwAccountID, pInfoAccount->m_dwAccountID);
+		RequestDisconnect(dwSessionID);
+		return;
+	}
 
-	// m_adwCharID から該当 CharID を検索して削除
+	// m_adwCharID から該当 CharID を検索して削除(本人所有のキャラのみ)
 	nCount = (int)pInfoAccount->m_adwCharID.size();
 	for (i = 0; i < nCount; i++) {
 		if (pInfoAccount->m_adwCharID[i] == Packet.m_dwCharID) {
 			pInfoAccount->m_adwCharID.erase(pInfoAccount->m_adwCharID.begin() + i);
+			m_pLibInfoChar->Delete(Packet.m_dwCharID);
+			nResult = DELETECHARRES_OK;
 			break;
 		}
 	}
-
-	m_pLibInfoChar->Delete(Packet.m_dwCharID);
-	nResult = DELETECHARRES_OK;
 
 Exit:
 	PacketRES_DELETECHAR.Make(nResult, Packet.m_dwCharID);

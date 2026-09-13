@@ -128,7 +128,9 @@ public:
 			m_dwFiredMapEventMapID,	// 発火済みイベント集合の対象マップID
 			m_dwLastRecvMoveTime,	// 最終移動受信時刻(ms)
 			m_dwLastRecvMovePacketTime,	// 最終移動受信パケット時刻(ms)
-			m_dwLastMoveRejectSyncTime;	// 移動速度超過拒否時に権威座標を送り返した最終時刻(ms)。連続拒否時の送信頻度を抑制するため
+			m_dwLastMoveRejectSyncTime,	// 移動速度超過拒否時に権威座標を送り返した最終時刻(ms)。連続拒否時の送信頻度を抑制するため
+			m_dwLastTalkEventNPCID,	// 最後に会話イベントを要求したNPCのID(REQ_ADDSKILLの正当性確認用。保存・送信対象外)
+			m_dwLastTalkEventTime;	// 上記を記録した時刻(ms)
 	int	m_nFiredMapEventCount,	// 発火済みイベント数
 			m_nLastMoveSyncDirection;	// 最終移動同期向き
 	int	m_nFiredMapEventTileX[MAPEVENT_FIRED_MAX];	// 発火済みイベントのタイルX（集合）

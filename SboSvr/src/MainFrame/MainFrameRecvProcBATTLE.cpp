@@ -21,6 +21,7 @@ void CMainFrame::RecvProcBATTLE(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcBATTLE_REQ_ATACK(PBYTE pData, DWORD dwSessionID)
 {
+	BOOL bResult;
 	PCInfoCharSvr pInfoChar;
 	CPacketBATTLE_REQ_ATACK Packet;
 
@@ -28,6 +29,11 @@ void CMainFrame::RecvProcBATTLE_REQ_ATACK(PBYTE pData, DWORD dwSessionID)
 
 	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwCharID);
 	if (pInfoChar == NULL) {
+		goto Exit;
+	}
+	bResult = pInfoChar->CheckSessionID(dwSessionID);
+	if (bResult == FALSE) {
+		RequestDisconnect(dwSessionID);
 		goto Exit;
 	}
 

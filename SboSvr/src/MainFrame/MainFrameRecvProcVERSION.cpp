@@ -17,6 +17,54 @@
 #include "MgrData.h"
 #include "MainFrame.h"
 #include "Platform/SvrPlatform.h"
+#include "TextOutput.h"
+
+// クライアント指定ファイル名のパストラバーサル対策
+// (".." の部分一致だけでは "..\.." の一部分だけを検知できない等、抜け道があるため
+//  セグメント単位でチェックする)
+static BOOL IsSafeRequestFileName(LPCTSTR pszFileName)
+{
+	if (pszFileName == NULL || pszFileName[0] == _T('\0')) {
+		return FALSE;
+	}
+
+	// 絶対パス(先頭が区切り文字)を拒否
+	if (pszFileName[0] == _T('/') || pszFileName[0] == _T('\\')) {
+		return FALSE;
+	}
+
+	// ドライブ指定・代替データストリーム等の ':' を拒否
+	if (_tcschr(pszFileName, _T(':')) != NULL) {
+		return FALSE;
+	}
+
+	// 制御文字を拒否
+	for (LPCTSTR p = pszFileName; *p != _T('\0'); p++) {
+		if ((BYTE)*p < 0x20) {
+			return FALSE;
+		}
+	}
+
+	// '/' '\' 区切りでセグメントに分解し、".." や空要素(連続区切り)を拒否
+	LPCTSTR pSegStart = pszFileName;
+	for (LPCTSTR p = pszFileName; ; p++) {
+		if (*p == _T('/') || *p == _T('\\') || *p == _T('\0')) {
+			int nSegLen = (int)(p - pSegStart);
+			if (nSegLen == 0) {
+				return FALSE;	// 空要素(連続区切り、または先頭/末尾の区切り)
+			}
+			if (nSegLen == 2 && pSegStart[0] == _T('.') && pSegStart[1] == _T('.')) {
+				return FALSE;	// 親ディレクトリ参照
+			}
+			if (*p == _T('\0')) {
+				break;
+			}
+			pSegStart = p + 1;
+		}
+	}
+
+	return TRUE;
+}
 
 void CMainFrame::RecvProcVERSION(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
@@ -88,7 +136,6 @@ void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)
 {
 	BOOL bReuslt;
 	PBYTE pFileData;
-	LPCSTR pszTmp;
 	FILE *pFile;
 	DWORD dwResult;
 	CPacketVERSION_REQ_FILE Packet;
@@ -98,14 +145,15 @@ void CMainFrame::RecvProcVERSION_REQ_FILE(PBYTE pData, DWORD dwSessionID)
 	pFileData = NULL;
 	Packet.Set(pData);
 
-        // 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
-        CString strBasePath = AnsiToTString(SboPlatform::GetExeDirectory().c_str());
-        strFileName.Format(_T("%sUpdate\\%s"), (LPCTSTR)strBasePath, (LPCTSTR)Packet.m_strFileName);
-	pszTmp = strstr((LPCSTR)strFileName, "..");
-	if (pszTmp) {
+	// パストラバーサル対策(空文字/絶対パス/ドライブ指定/".."/制御文字を拒否)
+	if (!IsSafeRequestFileName((LPCTSTR)Packet.m_strFileName)) {
+		m_pLog->Write("■ 不正なファイル名要求(REQ_FILE) dwSessionID:%u 要求ファイル名:[%s]", dwSessionID, Packet.m_strFileName.GetUtf8Pointer());
 		return;
 	}
 
+        // 実行ファイルのディレクトリ取得は SboPlatform::GetExeDirectory() に集約済み
+        CString strBasePath = AnsiToTString(SboPlatform::GetExeDirectory().c_str());
+        strFileName.Format(_T("%sUpdate\\%s"), (LPCTSTR)strBasePath, (LPCTSTR)Packet.m_strFileName);
 	pFile = fopen(strFileName, "rb");
 	if (pFile == NULL) {
 		return;

@@ -43,6 +43,7 @@ public:
 	void	LogOut(DWORD dwCharID);	// ログアウト
 	void	Revice(void);	// データの補正
 	void	Move(DWORD dwCharID, int nDirection, BOOL bTurn = FALSE);	// 1歩進める
+	int	GetCharMovePixelsPerSec(CInfoCharSvr *pInfoChar);	// キャラの現在の実移動速度(px/秒)を取得（不正速度チェック用）
 	DWORD	Tail(PCInfoCharBase pChar, PCInfoCharBase pCharTarget, BOOL bTail);	// 付いて行く設定・解除
 	BOOL	Atack(CInfoCharSvr *pChar);	// 攻撃
 	BOOL	AtackImple(CInfoCharSvr *pChar, DWORD dwCharID);	// 攻撃実処理

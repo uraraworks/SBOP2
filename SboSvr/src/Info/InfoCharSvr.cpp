@@ -97,6 +97,8 @@ CInfoCharSvr::CInfoCharSvr()
 	m_dwLastRecvMoveTime	= 0;
 	m_dwLastRecvMovePacketTime = 0;
 	m_dwLastMoveRejectSyncTime = 0;
+	m_dwLastTalkEventNPCID = 0;
+	m_dwLastTalkEventTime = 0;
 	m_nFiredMapEventCount = 0;
 	m_nLastMoveSyncDirection = -1;
 	m_bMoveSyncActive = FALSE;

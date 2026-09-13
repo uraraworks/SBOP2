@@ -97,6 +97,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	BOOL bResult;
 	int i, nCount, nResult, nCmdSub, nStopState;
 	int nNextPosX, nNextPosY, nMoveDist, nAllowDist, nSpeedLevel;
+	int nCharPixelsPerSec, nAllowPixelsPerSec;
 	DWORD dwNowTime = 0, dwElapsed, dwPacketTime;
 	BOOL bHasPacketTime;
 	LPCSTR pszPacketName;
@@ -337,8 +338,17 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 				nMoveDist = abs(nNextPosY - pInfoChar->m_nMapY);
 			}
 
-			// 基準120px/s(=4px*30fps) × 速度段階 + 32px余裕（フレームジャンクによるまとめ送信を許容）
-			nAllowDist = (int)((dwElapsed * 120 * nSpeedLevel) / 1000) + 32;
+			// 不正速度チェックはパケット自己申告の nSpeedLevel を信用せず、
+			// サーバーが保持するキャラの移動待ち(GetMoveWait)から算出した
+			// 実移動速度(px/秒)を基準にする（改造クライアントによる
+			// nSpeedLevel 詐称でのスピードハックを防止）。
+			// スキル/アイテムによる移動待ちの変化直後（特に「遅→速」の
+			// 切り替わり）で正規プレイを誤って拒否しないよう、+10%の
+			// 安全マージンを掛けたうえで、既存の+32px余裕
+			// （フレームジャンクによるまとめ送信の許容）も残す。
+			nCharPixelsPerSec = m_pLibInfoChar->GetCharMovePixelsPerSec(pInfoChar);
+			nAllowPixelsPerSec = (int)(((LONGLONG)nCharPixelsPerSec * 110) / 100);
+			nAllowDist = (int)((dwElapsed * (LONGLONG)nAllowPixelsPerSec) / 1000) + 32;
 			if (nMoveDist > nAllowDist) {
 				BOOL bDoSyncSend;
 
@@ -350,7 +360,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 				}
 
 				m_pLog->Write(
-					"移動速度超過を拒否 dwSessionID:%u [PACKET:%s][CHAR:%s][現在:%d,%d][受信:%d,%d][移動:%dpx][許容:%dpx][経過:%ums][段階:%d]%s",
+					"移動速度超過を拒否 dwSessionID:%u [PACKET:%s][CHAR:%s][現在:%d,%d][受信:%d,%d][移動:%dpx][許容:%dpx][経過:%ums][基準px/s:%d][申告段階:%d]%s",
 					dwSessionID,
 					pszPacketName,
 					pInfoChar->m_strCharName.GetUtf8Pointer(),
@@ -361,6 +371,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 					nMoveDist,
 					nAllowDist,
 					dwElapsed,
+					nAllowPixelsPerSec,
 					nSpeedLevel,
 					bDoSyncSend ? "[補正:送信]" : "[補正:抑制中]");
 
@@ -750,6 +761,7 @@ void CMainFrame::RecvProcCHAR_REQ_PUTGET(PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcCHAR_REQ_USEITEM(PBYTE pData, DWORD dwSessionID)
 {
+	BOOL bResult;
 	PCInfoCharSvr pInfoChar;
 	CPacketCHAR_REQ_USEITEM Packet;
 
@@ -759,11 +771,17 @@ void CMainFrame::RecvProcCHAR_REQ_USEITEM(PBYTE pData, DWORD dwSessionID)
 	if (pInfoChar == NULL) {
 		return;
 	}
+	bResult = pInfoChar->CheckSessionID(dwSessionID);
+	if (bResult == FALSE) {
+		RequestDisconnect(dwSessionID);
+		return;
+	}
 	m_pLibInfoChar->UseItem(pInfoChar, Packet.m_dwItemID);
 }
 
 void CMainFrame::RecvProcCHAR_REQ_DRAGITEM(PBYTE pData, DWORD dwSessionID)
 {
+	BOOL bResult;
 	PCInfoCharSvr pInfoChar;
 	CPacketCHAR_REQ_DRAGITEM Packet;
 
@@ -773,18 +791,51 @@ void CMainFrame::RecvProcCHAR_REQ_DRAGITEM(PBYTE pData, DWORD dwSessionID)
 	if (pInfoChar == NULL) {
 		return;
 	}
+	bResult = pInfoChar->CheckSessionID(dwSessionID);
+	if (bResult == FALSE) {
+		RequestDisconnect(dwSessionID);
+		return;
+	}
+	// 自分が持っていないアイテムの並べ替えは拒否する
+	bResult = pInfoChar->HaveItem(Packet.m_dwItemID);
+	if (bResult == FALSE) {
+		return;
+	}
 	m_pLibInfoChar->DragItem(pInfoChar, Packet.m_dwItemID, Packet.m_ptNewPos);
 }
 
 void CMainFrame::RecvProcCHAR_REQ_PUSH(PBYTE pData, DWORD dwSessionID)
 {
-	PCInfoCharSvr pInfoChar;
+	PCInfoCharSvr pInfoChar, pInfoPlayer;
 	CPacketCHAR_REQ_PUSH Packet;
+	SIZE sizeDistance;
 
 	Packet.Set(pData);
 
+	// Packet.m_dwCharID は「押される側(NPC/ボール等)」のIDで送られてくるため、
+	// CheckSessionID では検証できない。送信元セッション自身のプレイヤーは別途取得する。
 	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwCharID);
 	if (pInfoChar == NULL) {
+		return;
+	}
+	pInfoPlayer = (PCInfoCharSvr)m_pLibInfoChar->GetPtrSessionID(dwSessionID);
+	if (pInfoPlayer == NULL) {
+		return;
+	}
+	if (pInfoChar == pInfoPlayer) {
+		return;
+	}
+	// 押せる対象か（押し判定フラグ・NPC発生種別除外）をクライアントの選定条件と揃えて確認する
+	if (pInfoChar->m_bPush == FALSE) {
+		return;
+	}
+	if (pInfoChar->m_nMoveType == CHARMOVETYPE_PUTNPC) {
+		return;
+	}
+	// 同じマップかつ近く（隣接〜数マス程度）にいるかを確認する。
+	// ラグで距離が一時的にずれる正規ケースがあり得るため、条件外でも切断はせず黙って無視する。
+	m_pLibInfoChar->GetDistance(sizeDistance, pInfoPlayer, pInfoChar);
+	if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 2) || (sizeDistance.cy > MAPPARTSSIZE * 2)) {
 		return;
 	}
 	pInfoChar->m_nDirection = Packet.m_nDirection;
@@ -823,10 +874,11 @@ void CMainFrame::RecvProcCHAR_REQ_TAIL(PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcCHAR_REQ_MODIFY_PARAM(PBYTE pData, DWORD dwSessionID)
 {
-	PCInfoCharSvr pInfoChar, pInfoCharTmp;
+	PCInfoCharSvr pInfoChar, pInfoCharTmp, pInfoPlayer;
 	CPacketCHAR_REQ_MODIFY_PARAM Packet;
 	CPacketCHAR_MODIFY_PARAM PacketMODIFY_PARAM;
 	CPacketCHAR_RES_CHARINFO PacketRES_CHARINFO;
+	SIZE sizeDistance;
 
 	Packet.Set(pData);
 
@@ -834,9 +886,22 @@ void CMainFrame::RecvProcCHAR_REQ_MODIFY_PARAM(PBYTE pData, DWORD dwSessionID)
 	if (pInfoChar == NULL) {
 		return;
 	}
+	// Packet.m_dwCharID は m_nType によって「操作対象のNPC」か「送信元自身」のどちらもあり得るため、
+	// 先頭で一律に CheckSessionID はせず、種別ごとに主体を確認する。
+	pInfoPlayer = (PCInfoCharSvr)m_pLibInfoChar->GetPtrSessionID(dwSessionID);
+	if (pInfoPlayer == NULL) {
+		return;
+	}
 
 	switch (Packet.m_nType) {
-	case PARAMID_CHAR_REQ_MODIFY_ANIME:	// アニメーション番号の変更
+	case PARAMID_CHAR_REQ_MODIFY_ANIME:	// アニメーション番号の変更(得点NPC)
+		if (pInfoChar->m_nMoveType != CHARMOVETYPE_SCORE) {
+			return;
+		}
+		m_pLibInfoChar->GetDistance(sizeDistance, pInfoPlayer, pInfoChar);
+		if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 2) || (sizeDistance.cy > MAPPARTSSIZE * 2)) {
+			return;
+		}
 		pInfoChar->m_nAnime ++;
 		if (pInfoChar->m_nAnime >= 10) {
 			pInfoChar->m_nAnime = 0;
@@ -845,7 +910,20 @@ void CMainFrame::RecvProcCHAR_REQ_MODIFY_PARAM(PBYTE pData, DWORD dwSessionID)
 		SendToScreenChar(pInfoChar, &PacketMODIFY_PARAM);
 		break;
 
-	case PARAMID_CHAR_REQ_MODIFY_STYLECOPY_PUT:	// 容姿のコピー(取り込み)
+	case PARAMID_CHAR_REQ_MODIFY_STYLECOPY_PUT:	// 容姿のコピー(取り込み): NPCへ自分自身の容姿を取り込ませる
+		if (pInfoChar->m_nMoveType != CHARMOVETYPE_STYLECOPY_PUT) {
+			return;
+		}
+		if ((DWORD)Packet.m_nParam != pInfoPlayer->m_dwCharID) {
+			// 取り込み元に他人のキャラを指定するのは明らかな偽装
+			m_pLog->Write("■REQ_MODIFY_STYLECOPY_PUT不正 dwSessionID:%u [Param:%u][自身CharID:%u]", dwSessionID, (DWORD)Packet.m_nParam, pInfoPlayer->m_dwCharID);
+			RequestDisconnect(dwSessionID);
+			return;
+		}
+		m_pLibInfoChar->GetDistance(sizeDistance, pInfoPlayer, pInfoChar);
+		if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 2) || (sizeDistance.cy > MAPPARTSSIZE * 2)) {
+			return;
+		}
 		pInfoCharTmp = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn((DWORD)Packet.m_nParam);
 		if (pInfoCharTmp == NULL) {
 			break;
@@ -867,9 +945,22 @@ void CMainFrame::RecvProcCHAR_REQ_MODIFY_PARAM(PBYTE pData, DWORD dwSessionID)
 		PacketRES_CHARINFO.Make(pInfoChar);
 		SendToScreenChar(pInfoChar, &PacketRES_CHARINFO);
 		break;
-	case PARAMID_CHAR_REQ_MODIFY_STYLECOPY_GET:	// 容姿のコピー(反映)
+	case PARAMID_CHAR_REQ_MODIFY_STYLECOPY_GET:	// 容姿のコピー(反映): NPCの容姿を自分自身に反映する
+		if (pInfoChar != pInfoPlayer) {
+			// 主体に他人のプレイヤーキャラを指定するのは明らかな偽装
+			m_pLog->Write("■REQ_MODIFY_STYLECOPY_GET不正 dwSessionID:%u [指定CharID:%u][自身CharID:%u]", dwSessionID, pInfoChar->m_dwCharID, pInfoPlayer->m_dwCharID);
+			RequestDisconnect(dwSessionID);
+			return;
+		}
 		pInfoCharTmp = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn((DWORD)Packet.m_nParam);
 		if (pInfoCharTmp == NULL) {
+			break;
+		}
+		if (pInfoCharTmp->m_nMoveType != CHARMOVETYPE_STYLECOPY_GET) {
+			break;
+		}
+		m_pLibInfoChar->GetDistance(sizeDistance, pInfoPlayer, pInfoCharTmp);
+		if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 2) || (sizeDistance.cy > MAPPARTSSIZE * 2)) {
 			break;
 		}
 		pInfoChar->m_wGrpIDCloth	= pInfoCharTmp->m_wGrpIDCloth;	// 画像ID(服)
@@ -957,6 +1048,7 @@ Exit:
 
 void CMainFrame::RecvProcCHAR_REQ_CHECKMAPEVENT(PBYTE pData, DWORD dwSessionID)
 {
+	BOOL bResult;
 	PCInfoCharSvr pInfoChar;
 	CPacketCHAR_PARA1 Packet;
 
@@ -964,6 +1056,12 @@ void CMainFrame::RecvProcCHAR_REQ_CHECKMAPEVENT(PBYTE pData, DWORD dwSessionID)
 
 	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwCharID);
 	if (pInfoChar == NULL) {
+		goto Exit;
+	}
+	bResult = pInfoChar->CheckSessionID(dwSessionID);
+	if (bResult == FALSE) {
+		RequestDisconnect(dwSessionID);
+		pInfoChar = NULL;
 		goto Exit;
 	}
 	// Phase 8: 自由移動中もイベントを取りこぼさないよう、移動可否でチェック要求を拒否しない
@@ -978,6 +1076,7 @@ Exit:
 
 void CMainFrame::RecvProcCHAR_STATE_CHARGE(PBYTE pData, DWORD dwSessionID)
 {
+	BOOL bResult;
 	PCInfoCharSvr pInfoChar;
 	CPacketCHAR_PARA1 Packet;
 
@@ -985,6 +1084,11 @@ void CMainFrame::RecvProcCHAR_STATE_CHARGE(PBYTE pData, DWORD dwSessionID)
 
 	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwCharID);
 	if (pInfoChar == NULL) {
+		return;
+	}
+	bResult = pInfoChar->CheckSessionID(dwSessionID);
+	if (bResult == FALSE) {
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 
@@ -996,6 +1100,7 @@ void CMainFrame::RecvProcCHAR_STATE_CHARGE(PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcCHAR_REQ_RECOVERY(PBYTE pData, DWORD dwSessionID)
 {
+	BOOL bResult;
 	PCInfoCharSvr pInfoChar;
 	CPacketCHAR_PARA1 Packet;
 	CPacketMAP_PARA1 PacketMAP_PARA1;
@@ -1005,6 +1110,11 @@ void CMainFrame::RecvProcCHAR_REQ_RECOVERY(PBYTE pData, DWORD dwSessionID)
 
 	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwCharID);
 	if (pInfoChar == NULL) {
+		return;
+	}
+	bResult = pInfoChar->CheckSessionID(dwSessionID);
+	if (bResult == FALSE) {
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	if (pInfoChar->m_nMoveState != CHARMOVESTATE_SWOON) {
@@ -1023,7 +1133,7 @@ void CMainFrame::RecvProcCHAR_REQ_RECOVERY(PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcCHAR_REQ_TALKEVENT(PBYTE pData, DWORD dwSessionID)
 {
-	PCInfoCharSvr pInfoChar;
+	PCInfoCharSvr pInfoChar, pInfoPlayer;
 	CInfoTalkEvent InfoTalkEventTmp, *pInfoTalkEvent;
 	CPacketCHAR_PARA1 Packet;
 	CPacketCHAR_RES_TALKEVENT PacketCHAR_RES_TALKEVENT;
@@ -1038,6 +1148,15 @@ void CMainFrame::RecvProcCHAR_REQ_TALKEVENT(PBYTE pData, DWORD dwSessionID)
 	if (pInfoTalkEvent == NULL) {
 		pInfoTalkEvent = &InfoTalkEventTmp;
 		pInfoTalkEvent->m_dwTalkEventID = Packet.m_dwCharID;
+	} else {
+		// REQ_ADDSKILLの正当性確認用に、送信元セッションのプレイヤーへ
+		// 「最後に会話イベントを要求したNPCのIDと時刻」を記録する。
+		// 中身が取得できないNPC(会話イベント未設定)は対象外とする。
+		pInfoPlayer = (PCInfoCharSvr)m_pLibInfoChar->GetPtrSessionID(dwSessionID);
+		if (pInfoPlayer != NULL) {
+			pInfoPlayer->m_dwLastTalkEventNPCID = Packet.m_dwCharID;
+			pInfoPlayer->m_dwLastTalkEventTime = SboPlatform::GetTickMs();
+		}
 	}
 	PacketCHAR_RES_TALKEVENT.Make(pInfoTalkEvent, Packet.m_dwPara);
 	m_pSock->SendTo(dwSessionID, &PacketCHAR_RES_TALKEVENT);
@@ -1045,10 +1164,16 @@ void CMainFrame::RecvProcCHAR_REQ_TALKEVENT(PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
 {
+	BOOL bResult;
 	int i, nCount;
 	PARRAYDWORD paSkill;
-	PCInfoCharSvr pInfoChar;
+	PCInfoCharSvr pInfoChar, pInfoNPC;
 	PCInfoSkillBase pInfoSkill;
+	PCInfoTalkEvent pInfoTalkEvent;
+	PCInfoTalkEventBase pInfoTalkEventBase;
+	DWORD dwNowTime;
+	SIZE sizeDistance;
+	BOOL bFoundAddSkill;
 	CPacketCHAR_PARA1 Packet;
 	CPacketCHAR_SKILLINFO PacketCHAR_SKILLINFO;
 	CPacketMAP_FORMATMSG PacketMsg;
@@ -1057,6 +1182,11 @@ void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
 
 	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwCharID);
 	if (pInfoChar == NULL) {
+		return;
+	}
+	bResult = pInfoChar->CheckSessionID(dwSessionID);
+	if (bResult == FALSE) {
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	pInfoSkill = (PCInfoSkillBase)m_pLibInfoSkill->GetPtr(Packet.m_dwPara);
@@ -1076,8 +1206,51 @@ void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-//Todo:
-	// 条件の判定など入れる
+	// 改造クライアントによる任意スキル付与を防ぐため、直前に会話イベント(TALKEVENTTYPE_ADDSKILL)を
+	// 経由して正規に要求されたものかを確認する。切断はしない(会話の途中でタイムアウトする
+	// 正規ケースがあるため)。条件を満たさない場合はログに記録して黙って無視する。
+	pInfoNPC = NULL;
+	if (pInfoChar->m_dwLastTalkEventNPCID != 0) {
+		pInfoNPC = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(pInfoChar->m_dwLastTalkEventNPCID);
+	}
+	if (pInfoNPC == NULL) {
+		// 会話相手のNPCがログインしていない(存在しない/退出済み)
+		m_pLog->Write("■REQ_ADDSKILL不正 dwSessionID:%u [CharID:%u][SkillID:%u][理由:会話相手NPC不在]", dwSessionID, Packet.m_dwCharID, Packet.m_dwPara);
+		return;
+	}
+	dwNowTime = SboPlatform::GetTickMs();
+	// 会話を読み進める時間を考慮し、記録から5分以内を正規の範囲とする
+	if ((dwNowTime - pInfoChar->m_dwLastTalkEventTime) > (5 * 60 * 1000)) {
+		m_pLog->Write("■REQ_ADDSKILL不正 dwSessionID:%u [CharID:%u][SkillID:%u][理由:会話イベント要求から時間経過]", dwSessionID, Packet.m_dwCharID, Packet.m_dwPara);
+		return;
+	}
+	m_pLibInfoChar->GetDistance(sizeDistance, pInfoChar, pInfoNPC);
+	if ((sizeDistance.cx < 0) || (sizeDistance.cx > MAPPARTSSIZE * 3) || (sizeDistance.cy > MAPPARTSSIZE * 3)) {
+		m_pLog->Write("■REQ_ADDSKILL不正 dwSessionID:%u [CharID:%u][SkillID:%u][理由:会話相手NPCから離れている]", dwSessionID, Packet.m_dwCharID, Packet.m_dwPara);
+		return;
+	}
+	// 会話相手NPCの会話イベント定義の中に、種別TALKEVENTTYPE_ADDSKILLで
+	// m_dwDataが要求スキルIDと一致する項目があるかを確認する。
+	// m_apTalkEventはページ・分岐を問わず全項目がフラットに格納されているため、そのまま全走査する。
+	pInfoTalkEvent = (PCInfoTalkEvent)m_pLibInfoTalkEvent->GetPtr(pInfoChar->m_dwLastTalkEventNPCID);
+	bFoundAddSkill = FALSE;
+	if (pInfoTalkEvent != NULL) {
+		nCount = pInfoTalkEvent->m_apTalkEvent.GetSize();
+		for (i = 0; i < nCount; i ++) {
+			pInfoTalkEventBase = pInfoTalkEvent->m_apTalkEvent.GetAt(i);
+			if (pInfoTalkEventBase == NULL) {
+				continue;
+			}
+			if ((pInfoTalkEventBase->m_nEventType == TALKEVENTTYPE_ADDSKILL) && (pInfoTalkEventBase->m_dwData == Packet.m_dwPara)) {
+				bFoundAddSkill = TRUE;
+				break;
+			}
+		}
+	}
+	if (bFoundAddSkill == FALSE) {
+		m_pLog->Write("■REQ_ADDSKILL不正 dwSessionID:%u [CharID:%u][SkillID:%u][理由:会話イベントにADDSKILL項目なし]", dwSessionID, Packet.m_dwCharID, Packet.m_dwPara);
+		return;
+	}
 
 	paSkill->push_back(Packet.m_dwPara);
 	PacketCHAR_SKILLINFO.Make(Packet.m_dwCharID, paSkill);
@@ -1089,6 +1262,7 @@ void CMainFrame::RecvProcCHAR_REQ_ADDSKILL(PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcCHAR_REQ_USESKILL(PBYTE pData, DWORD dwSessionID)
 {
+	BOOL bResult;
 	PCInfoCharSvr pInfoChar;
 	CPacketCHAR_PARA1 Packet;
 
@@ -1096,6 +1270,11 @@ void CMainFrame::RecvProcCHAR_REQ_USESKILL(PBYTE pData, DWORD dwSessionID)
 
 	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwCharID);
 	if (pInfoChar == NULL) {
+		return;
+	}
+	bResult = pInfoChar->CheckSessionID(dwSessionID);
+	if (bResult == FALSE) {
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 	m_pLibInfoChar->UseSkill(pInfoChar, Packet.m_dwPara);

@@ -12,6 +12,9 @@
 #include "LibInfoMapBase.h"
 #include "LibInfoItem.h"
 #include "LibInfoCharSvr.h"
+#include "LibInfoAccount.h"
+#include "InfoAccount.h"
+#include "TextOutput.h"
 #include "MainFrame.h"
 
 void CMainFrame::RecvProcMSGCMD(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
@@ -247,6 +250,7 @@ void CMainFrame::RecvProcMSGCMD_MAKEITEM(PBYTE pData, DWORD dwSessionID)
 	PCInfoItem pInfoItem;
 	PCInfoMapBase pInfoMap;
 	PCInfoCharBase pInfoChar;
+	PCInfoAccount pInfoAccount;
 	CPacketMSGCMD_MAKEITEM Packet;
 	CPacketITEM_RES_ITEMINFO PacketITEM_RES_ITEMINFO;
 
@@ -256,7 +260,20 @@ void CMainFrame::RecvProcMSGCMD_MAKEITEM(PBYTE pData, DWORD dwSessionID)
 	if (pInfoChar == NULL) {
 		return;
 	}
-//Todo:権限チェック
+	bResult = pInfoChar->CheckSessionID(dwSessionID);
+	if (bResult == FALSE) {
+		RequestDisconnect(dwSessionID);
+		return;
+	}
+	pInfoAccount = m_pLibInfoAccount->GetPtrSessionID(dwSessionID);
+	if (pInfoAccount == NULL) {
+		return;
+	}
+	if (pInfoAccount->m_nAdminLevel == ADMINLEVEL_NONE) {
+		m_pLog->Write("■ 権限無しからの要求 dwSessionID:[%d] byCmdSub:MSGCMD_MAKEITEM CharID:[%d]", dwSessionID, Packet.m_dwCharID);
+		RequestDisconnect(dwSessionID);
+		return;
+	}
 	pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoChar->m_dwMapID);
 	if (pInfoMap == NULL) {
 		return;
@@ -305,6 +322,7 @@ void CMainFrame::RecvProcMSGCMD_BALLOON(PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcMSGCMD_DICE(PBYTE pData, DWORD dwSessionID)
 {
+	BOOL bResult;
 	PCInfoCharBase pInfoChar;
 	CPacketMSGCMD_PARA1 Packet;
 	CmyString strTmp;
@@ -316,6 +334,11 @@ void CMainFrame::RecvProcMSGCMD_DICE(PBYTE pData, DWORD dwSessionID)
 	if (pInfoChar == NULL) {
 		return;
 	}
+	bResult = pInfoChar->CheckSessionID(dwSessionID);
+	if (bResult == FALSE) {
+		RequestDisconnect(dwSessionID);
+		return;
+	}
 
 	strTmp.Format(_T("%sのサイコロ！[%d]が出ました"), (LPCTSTR)pInfoChar->m_strCharName, (genrand() % 6) + 1);
 	PacketSYSTEMMSG.Make(strTmp, RGB(255, 255, 255), FALSE);
@@ -324,6 +347,7 @@ void CMainFrame::RecvProcMSGCMD_DICE(PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcMSGCMD_RND(PBYTE pData, DWORD dwSessionID)
 {
+	BOOL bResult;
 	int nTmp;
 	PCInfoCharBase pInfoChar;
 	CPacketMSGCMD_PARA1 Packet;
@@ -334,6 +358,11 @@ void CMainFrame::RecvProcMSGCMD_RND(PBYTE pData, DWORD dwSessionID)
 
 	pInfoChar = (PCInfoCharBase)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwCharID);
 	if (pInfoChar == NULL) {
+		return;
+	}
+	bResult = pInfoChar->CheckSessionID(dwSessionID);
+	if (bResult == FALSE) {
+		RequestDisconnect(dwSessionID);
 		return;
 	}
 

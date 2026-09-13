@@ -404,6 +404,18 @@ void CLibInfoCharSvr::Revice(void)
 	}
 }
 
+/**
+ * @brief キャラの現在の実移動速度(px/秒)を取得する
+ *
+ * クライアントの GetPlayerMovePixelsPerSec(StateProcMAP.cpp) と同一の式。
+ * 不正速度チェック（MainFrameRecvProcCHAR.cpp）で、パケットが自己申告する
+ * nSpeedLevel の代わりにサーバー権威の速度として使用する。
+ */
+int CLibInfoCharSvr::GetCharMovePixelsPerSec(CInfoCharSvr *pInfoChar)
+{
+	return GetMovePixelsPerSec(pInfoChar);
+}
+
 void CLibInfoCharSvr::Move(
 	DWORD dwCharID,	// [in] キャラID
 	int nDirection,	// [in] 向き

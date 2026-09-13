@@ -222,6 +222,20 @@ void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)
 	if (pInfoAccount == NULL) {
 		goto Exit;
 	}
+
+	// なりすまし対策: 本人アカウントが所有するキャラかを確認
+	bResult = FALSE;
+	for (i = 0; i < (int)pInfoAccount->m_adwCharID.size(); i++) {
+		if (pInfoAccount->m_adwCharID[i] == Packet.m_dwCharID) {
+			bResult = TRUE;
+			break;
+		}
+	}
+	if (bResult == FALSE) {
+		m_pLog->Write("■ 他アカウントのキャラ指定(PLAY) dwSessionID:%u dwCharID:%u", dwSessionID, Packet.m_dwCharID);
+		goto Exit;
+	}
+
 	bResult = FALSE;
 
 	pInfoSystem	= (PCInfoSystem)m_pMgrData->GetLibInfoSystem()->GetPtr();
