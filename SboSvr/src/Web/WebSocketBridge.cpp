@@ -61,6 +61,18 @@ private:
     bool           m_bRegistered;
 };
 
+/// @brief Nagleアルゴリズムを無効化する。
+///
+/// 移動同期のような小さく頻繁なパケットが、Nagle + 遅延ACKの組み合わせで
+/// 待たされないようにするため、IIS側(hWsClient)・ゲームサーバー側(hTcpSock)
+/// 双方のソケットに設定する。失敗しても致命的ではないので戻り値は見ない。
+void SetTcpNoDelay(SOCKET hSocket)
+{
+    int nOn = 1;
+    setsockopt(hSocket, IPPROTO_TCP, TCP_NODELAY,
+               reinterpret_cast<const char *>(&nOn), sizeof(nOn));
+}
+
 } // anonymous namespace
 
 // ============================================================
@@ -289,6 +301,7 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient, DWORD dwPeerIpNet)
                reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
     setsockopt(hWsClient, SOL_SOCKET, SO_SNDTIMEO,
                reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
+    SetTcpNoDelay(hWsClient);
 
     // 1. WebSocketハンドシェイク
     std::string strHandshakeRequest;
@@ -339,6 +352,7 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient, DWORD dwPeerIpNet)
         closesocket(hWsClient);
         return;
     }
+    SetTcpNoDelay(hTcpSock);
 
     SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: TCP connected, starting bridge\n");
 

@@ -52,6 +52,17 @@ typedef struct _URARASOCKSEL_PACKETINFO
     DWORD dwCRC;
 } URARASOCKSEL_PACKETINFO;
 
+/// Nagleアルゴリズムを無効化する。
+///
+/// 移動同期のような小さく頻繁なパケットが、Nagle + 遅延ACKの組み合わせで
+/// 待たされないようにするため、accept直後のソケットに設定する。
+/// 失敗しても致命的ではないので戻り値は見ない。
+static void SetTcpNoDelay(SOCKET hSocket)
+{
+    int nOn = 1;
+    setsockopt(hSocket, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<const char *>(&nOn), sizeof(nOn));
+}
+
 // メインスレッドから select スレッドへ渡す指示
 //
 // 既存実装が PostMessage で行っていたスレッド越えを、
@@ -1020,6 +1031,7 @@ void CUraraSockTCPSelect::OnAccept(void)
         closesocket(hSocket);
         return;
     }
+    SetTcpNoDelay(hSocket);
 
     // プリチェックのチャレンジを送る
     dwChallenge = GetTickCount();

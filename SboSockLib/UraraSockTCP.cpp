@@ -52,6 +52,17 @@ enum
     URARASOCKMODE_CLIENT,
 };
 
+/// Nagleアルゴリズムを無効化する。
+///
+/// 移動同期のような小さく頻繁なパケットが、Nagle + 遅延ACKの組み合わせで
+/// 待たされないようにするため、accept/connect直後のソケットに設定する。
+/// 失敗しても致命的ではないので戻り値は見ない。
+static void SetTcpNoDelay(SOCKET hSocket)
+{
+    int nOn = 1;
+    setsockopt(hSocket, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<const char *>(&nOn), sizeof(nOn));
+}
+
 typedef struct _URARASOCK_PACKETINFO
 {
     DWORD dwSize;
@@ -1160,6 +1171,7 @@ void CUraraSockTCPImpl::OnSockACCEPT(void)
         closesocket(hSocket);
         return;
     }
+    SetTcpNoDelay(hSocket);
     DWORD dwData = GetTickCount();
     m_pSlot[nIndex].m_dwPreCheck = dwData;
     ++m_dwConnectCount;
@@ -1174,6 +1186,7 @@ void CUraraSockTCPImpl::OnConnect(void)
     if (!m_pSlot->Create(m_socket, m_sockAddr.sin_addr.s_addr, m_wPort, m_hWnd, 0)) {
         return;
     }
+    SetTcpNoDelay(m_socket);
     ++m_dwConnectCount;
 }
 
