@@ -265,6 +265,7 @@
     <ClCompile Include="src\MainFrame\MainFrameRecvProcADMIN.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcBATTLE.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcCHAR.cpp" />
+    <ClCompile Include="src\MainFrame\MoveStateDecision.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcCONNECT.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcEFFECT.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcITEM.cpp" />
@@ -440,6 +441,7 @@
     <ClInclude Include="src\Info\InfoChar\InfoCharPUTNPC.h" />
     <ClInclude Include="src\LibInfo\LibInfoCharSvr.h" />
     <ClInclude Include="src\MainFrame\MainFrame.h" />
+    <ClInclude Include="src\MainFrame\MoveStateDecision.h" />
     <ClInclude Include="src\MgrData.h" />
     <ClInclude Include="src\PasswordHash.h" />
     <ClInclude Include="src\Platform\SvrPlatform.h" />

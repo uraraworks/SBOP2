@@ -23,6 +23,7 @@
 #include "TextOutput.h"
 #include "MainFrame.h"
 #include "../Platform/SvrPlatform.h"
+#include "MoveStateDecision.h"
 
 static LPCSTR GetMovePacketName(int nCmdSub)
 {
@@ -103,6 +104,7 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	DWORD dwMapID, dwCharID;
 	int nDirection, nPacketPosX, nPacketPosY;
 	BOOL bUpdate;
+	BOOL bPosChanged;
 	CPacketBase PacketBase;
 	CPacketBase *pRelayPacket;
 	std::vector<PCInfoCharSvr> apInfoChar;
@@ -383,7 +385,8 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 	}
 
 	// 移動した？
-	if (!((pInfoChar->m_nMapX == nPacketPosX) && (pInfoChar->m_nMapY == nPacketPosY))) {
+	bPosChanged = !((pInfoChar->m_nMapX == nPacketPosX) && (pInfoChar->m_nMapY == nPacketPosY));
+	if (bPosChanged) {
 		// 付いて来ているキャラ一覧を作成
 		pInfoCharTmp = pInfoChar;
 		while (1) {
@@ -422,15 +425,22 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 
 	if (nCmdSub == SBOCOMMANDID_SUB_CHAR_MOVE_STOP) {
 		// 停止通知は最終位置を確定同期させる
-		pInfoChar->SetMoveState(nStopState);
 		pInfoChar->m_bChgUpdatePos = TRUE;
-	} else {
-		// MOVE_START / MOVE_DIR_CHANGE: 移動状態へ遷移させる。
-		int nMoveStateNext = CHARMOVESTATE_MOVE;
-		if (pInfoChar->IsStateBattle()) {
-			nMoveStateNext = CHARMOVESTATE_BATTLEMOVE;
+	}
+	{
+		// MoveState を変えるかどうかは純粋関数(MoveStateDecision::Decide)に判断させる。
+		// 位置が変わっていない MOVE_START / MOVE_DIR_CHANGE(＝向きだけの変更)では
+		// 座り中(CHARMOVESTATE_SIT)等の現在の状態を崩さないよう SetMoveState を呼ばない。
+		int nMoveStateOnMove = pInfoChar->IsStateBattle() ? CHARMOVESTATE_BATTLEMOVE : CHARMOVESTATE_MOVE;
+		int nMoveStateNext = MoveStateDecision::Decide(
+			nCmdSub == SBOCOMMANDID_SUB_CHAR_MOVE_STOP,
+			pInfoChar->IsStateMove() != FALSE,
+			bPosChanged,
+			nMoveStateOnMove,
+			nStopState);
+		if (nMoveStateNext != MoveStateDecision::NO_CHANGE) {
+			pInfoChar->SetMoveState(nMoveStateNext);
 		}
-		pInfoChar->SetMoveState(nMoveStateNext);
 	}
 
 	// PC はクライアント→サーバへ届いた MOVE_* パケットを

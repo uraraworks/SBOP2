@@ -103,11 +103,13 @@
     <ClCompile Include="TestMyString.cpp" />
     <ClCompile Include="TestProcessMetrics.cpp" />
     <ClCompile Include="TestSessionsJsonBuilder.cpp" />
+    <ClCompile Include="TestMoveStateDecision.cpp" />
     <ClCompile Include="TestProxyIpRegistry.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\ProxyIpRegistry.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\ProxyHeaderParser.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\ProcessMetrics.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\SessionsJsonBuilder.cpp" />
+    <ClCompile Include="..\SboSvr\src\MainFrame\MoveStateDecision.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\JsonUtils.cpp" />
     <ClCompile Include="..\SboSvr\src\Platform\SvrPlatform.cpp" />
     <ClCompile Include="..\Common\Platform\PlatformPath.cpp">
