@@ -29,6 +29,12 @@ protected:
 	BOOL	OnX(BOOL bDown);	// キーハンドラ(X)
 	BOOL	OnZ(BOOL bDown);	// キーハンドラ(Z)
 
+	CmyString	GetVirtualPadModeLabel(void);	// バーチャルパッド表示モードの現在値を表示用ラベルで返す
+
+
+public:
+	static void	CycleVirtualPadMode(void);	// バーチャルパッド表示モードを 自動→表示→非表示→… と切り替える（ブラウザ版以外は何もしない）
+
 
 protected:
 } CWindowOPTION_INPUTSET, *PCWindowOPTION_INPUTSET;

@@ -53,6 +53,20 @@
 #endif
 #include "MgrWindow.h"
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/em_js.h>
+#include <emscripten/emscripten.h>
+
+// ウィンドウがキー入力を奪っているか（CMgrWindow::IsKeyInput()）の変化を JS へ通知する。
+// JS 側 (sbocli-title.shell.html) の window.sbop2OnWindowStateChange(bool) がバーチャルパッドの
+// ボタン表記（マップ中: 盾/剣 ⇔ ウィンドウ中: ✕/○ 等）を切り替える。
+EM_JS(void, SBOP2_NotifyWindowStateChange, (int bWindowOpen), {
+	if (typeof window.sbop2OnWindowStateChange === 'function') {
+		window.sbop2OnWindowStateChange(!!bWindowOpen);
+	}
+});
+#endif
+
 #if !defined(_WIN32)
 
 CMgrWindow::CMgrWindow()
@@ -62,6 +76,7 @@ CMgrWindow::CMgrWindow()
 	m_pMgrGrpData = NULL;
 	m_pMgrData = NULL;
 	m_paWindow = new ARRAYWINDOWBASE;
+	m_nLastNotifiedKeyInput = -1;
 }
 
 CMgrWindow::~CMgrWindow()
@@ -568,6 +583,14 @@ void CMgrWindow::SetActive(void)
 	}
 
 	m_bKeyInput = bSet;
+
+#if defined(__EMSCRIPTEN__)
+	// 変化した時だけ JS へ通知（毎フレームではなく、ウィンドウの開閉が起きた時のみ SetActive() が呼ばれる）
+	if ((int)m_bKeyInput != m_nLastNotifiedKeyInput) {
+		m_nLastNotifiedKeyInput = (int)m_bKeyInput;
+		SBOP2_NotifyWindowStateChange(m_bKeyInput);
+	}
+#endif
 }
 
 #else
@@ -580,6 +603,7 @@ CMgrWindow::CMgrWindow()
 	m_pMgrGrpData	= NULL;
 	m_pMgrData		= NULL;
 	m_paWindow		= new ARRAYWINDOWBASE;
+	m_nLastNotifiedKeyInput	= -1;
 }
 
 

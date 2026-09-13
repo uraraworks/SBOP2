@@ -307,7 +307,7 @@
     }
 
     /* ---- モバイル全画面モード（タッチ操作が主の端末＝スマホ/タブレットのみ） ---- */
-    /* JS の initVirtualPad が isTouch 判定後に body.mobile-pad を付与する */
+    /* JS の sbop2ApplyPadMode() が自動判定/保存済みモード/?forcepad=1 に応じて body.mobile-pad を付け外しする */
     html:has(body.mobile-pad),
     body.mobile-pad {
       height: 100%;
@@ -474,24 +474,30 @@
       transform: translate(0px, 0px);
       pointer-events: none;
     }
-    /* A/B/補助ボタン: 右側グリッド */
+    /* A/B/Tab/Space/座る/向き固定 ボタン: 右側グリッド(3列×2段) */
     #virtualPad .pad-buttons {
       display: grid;
-      grid-template-columns: repeat(2, 64px);
-      gap: 10px;
+      grid-template-columns: repeat(3, 52px);
+      gap: 8px;
       align-items: center;
       justify-content: center;
     }
     /* 共通ボタンスタイル */
     #virtualPad button {
-      min-width: 56px;
-      min-height: 56px;
-      width: 64px;
-      height: 56px;
+      min-width: 48px;
+      min-height: 44px;
+      width: 52px;
+      height: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
       border: 2px solid rgba(255, 255, 255, 0.55);
-      border-radius: 999px;
-      font-size: 18px;
+      border-radius: 14px;
+      font-size: 12px;
       font-weight: bold;
+      line-height: 1.1;
       cursor: pointer;
       background: rgba(255, 255, 255, 0.30);
       color: #ffffff;
@@ -501,8 +507,39 @@
       user-select: none;
       -webkit-user-select: none;
     }
-    #virtualPad button:active {
+    #virtualPad button:active,
+    #virtualPad button.pressed,
+    #virtualPad button.locked {
       background: rgba(88, 196, 221, 0.75);
+    }
+    /* 向き固定ボタンの ON 表示(トグル状態がひと目でわかるよう小さく出す) */
+    #virtualPad button .pad-btn-on {
+      display: none;
+      font-size: 8px;
+      line-height: 1;
+      opacity: 0.9;
+    }
+    #virtualPad button.locked .pad-btn-on {
+      display: block;
+    }
+    /* ボタン内アイコン(大きめ) */
+    #virtualPad button .pad-btn-icon {
+      font-size: 16px;
+      line-height: 1;
+    }
+    /* ボタン内役割ラベル(小さめ) */
+    #virtualPad button .pad-btn-label {
+      font-size: 9px;
+      line-height: 1;
+      opacity: 0.9;
+      white-space: nowrap;
+      letter-spacing: -0.5px;
+    }
+    /* ボタン内キー名併記(さらに小さく、任意) */
+    #virtualPad button .pad-btn-key {
+      font-size: 8px;
+      line-height: 1;
+      opacity: 0.55;
     }
     /* 十字キー dpad 配置ルールは削除（アナログスティックに置き換え済み） */
     /* 管理者画面埋め込み時はバーチャルパッドを非表示 */
@@ -907,12 +944,27 @@
         <div class="pad-stick" id="padStick">
           <div class="pad-stick-knob" id="padStickKnob"></div>
         </div>
-        <!-- A/B/補助ボタン（右側グリッド） -->
+        <!-- A/B/Tab/Space/座る/向き固定 ボタン（右側グリッド 3列×2段）。
+             A(Z)/B(X) の表記は戦闘モード/ウィンドウ開閉に応じて JS (sbop2OnBattleModeChange / sbop2OnWindowStateChange) が切り替える。 -->
         <div class="pad-buttons">
-          <button id="padA" type="button">Z</button>
-          <button id="padB" type="button">X</button>
-          <button id="padTab" type="button">Tab</button>
-          <button id="padSpace" type="button">Space</button>
+          <button id="padA" type="button">
+            <span class="pad-btn-icon">✕</span><span class="pad-btn-label">戻る</span><span class="pad-btn-key">Z</span>
+          </button>
+          <button id="padB" type="button">
+            <span class="pad-btn-icon">○</span><span class="pad-btn-label">決定</span><span class="pad-btn-key">X</span>
+          </button>
+          <button id="padTab" type="button">
+            <span class="pad-btn-label">戦闘</span><span class="pad-btn-key">Tab</span>
+          </button>
+          <button id="padSpace" type="button">
+            <span class="pad-btn-label">メニュー</span><span class="pad-btn-key">Space</span>
+          </button>
+          <button id="padSit" type="button">
+            <span class="pad-btn-label">座る</span><span class="pad-btn-key">R</span>
+          </button>
+          <button id="padLock" type="button">
+            <span class="pad-btn-label">向き</span><span class="pad-btn-key">Shift</span><span class="pad-btn-on">ON</span>
+          </button>
         </div>
       </div>
     </section>
@@ -1035,6 +1087,45 @@
     canvasElement.getContext('2d');
     const imeInputElement = document.getElementById('sbop2ImeInput');
 
+    // 物理キーボードのキーを、仮想パッドのボタンと同じ注入経路
+    // (SBOP2_BrowserSetPadKey) に流し込むためのヘルパ。
+    // mobile-pad(タッチ全画面)で、キー入力をきっかけに #sbop2ImeInput へ
+    // フォーカスを移した「その1打目」を補うフォールバックとして使う
+    // (フォーカス移動前に dispatch 済みのイベントは SDL 側リスナーに届かないため)。
+    function browserInjectPadKey(vk, down) {
+      if (window.Module && typeof Module.ccall === 'function') {
+        Module.ccall('SBOP2_BrowserSetPadKey', null, ['number', 'number'], [vk, down ? 1 : 0]);
+      }
+    }
+
+    // KeyboardEvent.key → Windows VK 相当コードへの簡易マッピング。
+    // パッド注入経路が受理する範囲(矢印・英字・主要制御キー)のみ対応すれば十分。
+    function mapPhysicalKeyToVk(event) {
+      const key = event.key;
+      if (key.length === 1) {
+        const upper = key.toUpperCase();
+        if (upper >= 'A' && upper <= 'Z') {
+          return upper.charCodeAt(0); // 0x41-0x5A
+        }
+      }
+      switch (key) {
+        case 'ArrowLeft': return 0x25;
+        case 'ArrowUp': return 0x26;
+        case 'ArrowRight': return 0x27;
+        case 'ArrowDown': return 0x28;
+        case 'Tab': return 0x09;
+        case ' ': return 0x20;
+        case 'Enter': return 0x0D;
+        case 'Escape': return 0x1B;
+        case 'Shift': return 0x10;
+        default: return null;
+      }
+    }
+
+    // mobile-pad 中にフォーカス移動が間に合わず、上記フォールバックで
+    // down を注入したキーの VK を保持する（対応する keyup で確実に解放するため）。
+    const mobilePadManualKeys = new Set();
+
     function applyAdminViewportHeight(height) {
       var nHeight = Number(height);
       if (!Number.isFinite(nHeight) || nHeight < 240) {
@@ -1059,11 +1150,15 @@
     const charNamePanel = document.getElementById('charNamePanel');
     const charNameInput = document.getElementById('charNameInput');
 
-    function focusGameInput(force) {
+    function focusGameInput(force, fromKey) {
       // モバイル全画面モード(body.mobile-pad)では仮想パッドで操作するため、
-      // 隠しIME入力欄(#sbop2ImeInput)へのフォーカスは行わない。
-      // iOS でこれを行うとソフトキーボードが出て画面下のバーチャルパッドを覆ってしまう。
-      if (document.body.classList.contains('mobile-pad')) {
+      // タップ／クリック起点(fromKey が偽)では隠しIME入力欄(#sbop2ImeInput)へ
+      // フォーカスを行わない。iOS でこれを行うとソフトキーボードが出て
+      // 画面下のバーチャルパッドを覆ってしまうため。
+      // 一方、物理キーボードのキー入力起点(fromKey=true)はソフトキーボードを
+      // 誘発しないため、mobile-pad 中でも SDL がキーを拾えるようフォーカスを許可する
+      // (PC で ?forcepad=1 やパッド「表示」設定、iPad+外付けキーボード等の救済)。
+      if (document.body.classList.contains('mobile-pad') && !fromKey) {
         return;
       }
       // 以下、既存処理
@@ -1202,11 +1297,37 @@
       if (!startGameCalled || isLoginElementActive() || isChatInputActive()) {
         return;
       }
-      if (document.activeElement !== imeInputElement) {
-        focusGameInput(true);
+      const wasImeFocused = document.activeElement === imeInputElement;
+      if (!wasImeFocused) {
+        focusGameInput(true, true);
+      }
+      // mobile-pad で今回初めてフォーカスした場合、現在処理中のこのイベント自体は
+      // フォーカス移動前の要素へ dispatch 済みのため SDL 側リスナー(imeInputElement に
+      // 紐付く)には届かない。パッドボタンと同じ注入経路で、このキーだけ明示的に
+      // down 状態にして最初の1打を取りこぼさないようにする。
+      if (document.body.classList.contains('mobile-pad') && !wasImeFocused) {
+        const vk = mapPhysicalKeyToVk(event);
+        if (vk !== null) {
+          browserInjectPadKey(vk, true);
+          mobilePadManualKeys.add(vk);
+        }
       }
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(event.key)) {
         event.preventDefault();
+      }
+    }, true);
+
+    // 上記フォールバックで down を注入したキーは、対応する keyup で確実に解放する
+    // (SDL 側がフォーカス取得後に同じキーの keyup を拾っても、パッド注入は
+    // OR 合成の下降エッジに過ぎないため二重解放しても副作用は無い)。
+    document.addEventListener('keyup', (event) => {
+      if (!startGameCalled) {
+        return;
+      }
+      const vk = mapPhysicalKeyToVk(event);
+      if (vk !== null && mobilePadManualKeys.has(vk)) {
+        browserInjectPadKey(vk, false);
+        mobilePadManualKeys.delete(vk);
       }
     }, true);
 
@@ -1870,46 +1991,81 @@
     };
 
     // ---- バーチャルパッド ----
-    // タッチ端末のみ表示し、各ボタンのタッチ/マウスイベントを仮想キー入力に変換する
+    // 表示要否は sbop2ApplyPadMode() が body.mobile-pad の付け外しで一元管理する。
+    // ボタンのイベント配線自体はタッチ/マウス両対応で常に行っておき(非表示時は無害)、
+    // 表示クラスの切替だけを分離することで、オプション画面からの手動切替
+    // (自動/表示/非表示、localStorage 'sbop2.virtualPad') に対応する。
     (function initVirtualPad() {
-      // ?forcepad=1 を付けると PC（pointer:fine）でも強制的にパッドを有効化する（デバッグ用）
-      var forcePad = new URLSearchParams(window.location.search).get('forcepad') === '1';
-
-      // タッチ操作が主の端末＝スマホ/タブレットのみ対象
-      // pointer:coarse を AND することで、タッチ対応ノート PC 等の誤検出を抑制する
-      var isTouch = ((('ontouchstart' in window) || (navigator.maxTouchPoints > 0))
-                    && window.matchMedia('(pointer: coarse)').matches)
-                    || forcePad;
-
-      // 原因切り分け用診断ログ
-      console.log('[SBOP2][pad] forcePad=' + forcePad +
-        ' isTouch=' + isTouch +
-        ' ontouchstart=' + ('ontouchstart' in window) +
-        ' maxTouchPoints=' + navigator.maxTouchPoints +
-        ' coarse=' + window.matchMedia('(pointer: coarse)').matches +
-        ' adminEmbed=' + document.body.classList.contains('admin-embed'));
-
-      if (!isTouch) {
-        return;
-      }
-
       var pad = document.getElementById('virtualPad');
       if (!pad) {
         return;
       }
-      // モバイル全画面モードを有効化（ログ欄非表示・スクロール禁止・canvas フィット）
-      document.body.classList.add('mobile-pad');
-      // パッドの表示・レイアウトは CSS (body.mobile-pad #virtualPad / @media orientation) に
-      // 完全に委ねる。ここで pad.style.display にインライン値を入れると、インラインスタイルは
-      // どのセレクタより優先されてしまい、横持ち用の `display: contents` 切り替え
-      // （キャンバスを潰さないための必須の分岐）が永久に効かなくなるため、絶対に触らない。
 
-      // 表示後の実効スタイルを確認する診断ログ
-      var cs = window.getComputedStyle(pad);
-      console.log('[SBOP2][pad] after-show bodyClass="' + document.body.className +
-        '" computedDisplay=' + cs.display +
-        ' visibility=' + cs.visibility +
-        ' rect=' + JSON.stringify(pad.getBoundingClientRect()));
+      // タッチ操作が主の端末＝スマホ/タブレットの自動判定
+      // pointer:coarse を AND することで、タッチ対応ノート PC 等の誤検出を抑制する
+      function isTouchDeviceAuto() {
+        return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0))
+              && window.matchMedia('(pointer: coarse)').matches;
+      }
+
+      // ?forcepad=1 を付けると PC（pointer:fine）でも強制的にパッドを有効化する（デバッグ用）。
+      // 常に表示を優先する。
+      function isForcePad() {
+        return new URLSearchParams(window.location.search).get('forcepad') === '1';
+      }
+
+      // localStorage 'sbop2.virtualPad' ('on'/'off'/それ以外=自動) と ?forcepad=1 を見て
+      // body.mobile-pad の付け外しを行い、必要ならレイアウト再計算を呼ぶ。
+      // オプション画面(WindowOPTION_INPUTSET)の EM_JS SBOP2_SetVirtualPadMode からも呼ばれる。
+      window.sbop2ApplyPadMode = function() {
+        var stored = 'auto';
+        try {
+          stored = localStorage.getItem('sbop2.virtualPad') || 'auto';
+        } catch (e) {}
+
+        var show;
+        if (isForcePad()) {
+          show = true;
+        } else if (stored === 'on') {
+          show = true;
+        } else if (stored === 'off') {
+          show = false;
+        } else {
+          show = isTouchDeviceAuto();
+        }
+
+        var changed = document.body.classList.contains('mobile-pad') !== show;
+        // パッドの表示・レイアウトは CSS (body.mobile-pad #virtualPad / @media orientation) に
+        // 完全に委ねる。ここで pad.style.display にインライン値を入れると、インラインスタイルは
+        // どのセレクタより優先されてしまい、横持ち用の `display: contents` 切り替え
+        // （キャンバスを潰さないための必須の分岐）が永久に効かなくなるため、絶対に触らない。
+        document.body.classList.toggle('mobile-pad', show);
+
+        // mobile-pad 中に物理キーボード起点で #sbop2ImeInput へフォーカスすることが
+        // あり得るため(focusGameInput の fromKey=true 経路)、念のためソフトキーボード
+        // 抑止のヒントを付けておく(タップでは focusGameInput 自体が到達しないので無関係)。
+        if (imeInputElement) {
+          if (show) {
+            imeInputElement.setAttribute('inputmode', 'none');
+          } else {
+            imeInputElement.removeAttribute('inputmode');
+          }
+        }
+
+        if (changed && typeof updateIntegerGameScale === 'function') {
+          // mobile-pad を外した(PC 表示に戻す)時は整数スケール再計算が必要。
+          // 逆に付けた時は同関数内で早期 return されるだけなので呼んでも無害。
+          updateIntegerGameScale();
+        }
+
+        // パッド自体を非表示にした時は、押しっぱなしの向き固定(Shift)を解除しておく。
+        if (changed && !show) {
+          setPadLock(false);
+        }
+
+        console.log('[SBOP2][pad] applyPadMode stored=' + stored +
+          ' forcePad=' + isForcePad() + ' show=' + show + ' changed=' + changed);
+      };
 
       // Module.ccall ラッパ — Module 初期化前でも安全に呼べるようガード
       function setPadKey(vk, down) {
@@ -1920,36 +2076,130 @@
 
       // 各ボタンに VK をバインドするヘルパ
       // touchstart/touchend/touchcancel (passive:false で preventDefault) +
-      // mousedown/mouseup/mouseleave でマウス操作にも対応
+      // mousedown/mouseup/mouseleave でマウス操作にも対応。
+      // 押している間だけ .pressed を付け外しして見た目でも押下状態がわかるようにする。
+      // (向き固定ボタンは同時押しできないマウス操作向けにトグル式にしており、
+      // このヘルパではなく後述の setPadLock/togglePadLock で個別に配線する)。
       function bindPadButton(el, vk) {
+        if (!el) {
+          return;
+        }
+        function press() {
+          setPadKey(vk, true);
+          el.classList.add('pressed');
+        }
+        function release() {
+          setPadKey(vk, false);
+          el.classList.remove('pressed');
+        }
         el.addEventListener('touchstart', function(e) {
           e.preventDefault();
-          setPadKey(vk, true);
+          press();
         }, { passive: false });
         el.addEventListener('touchend', function(e) {
           e.preventDefault();
-          setPadKey(vk, false);
+          release();
         }, { passive: false });
         el.addEventListener('touchcancel', function() {
-          setPadKey(vk, false);
+          release();
         });
         el.addEventListener('mousedown', function() {
-          setPadKey(vk, true);
+          press();
         });
         el.addEventListener('mouseup', function() {
-          setPadKey(vk, false);
+          release();
         });
         el.addEventListener('mouseleave', function() {
-          setPadKey(vk, false);
+          release();
         });
       }
 
       // 各ボタンを Win32 VK 値にバインド
-      // A(Z=決定)=0x5A, B(X=キャンセル)=0x58, Tab=0x09, Space=0x20
+      // A(Z=決定/防御)=0x5A, B(X=キャンセル/攻撃)=0x58, Tab(戦闘)=0x09, Space(メニュー)=0x20,
+      // 座る=R=0x52
       bindPadButton(document.getElementById('padA'),     0x5A);
       bindPadButton(document.getElementById('padB'),     0x58);
       bindPadButton(document.getElementById('padTab'),   0x09);
       bindPadButton(document.getElementById('padSpace'), 0x20);
+      bindPadButton(document.getElementById('padSit'),   0x52);
+
+      // 向き固定=Shift=0x10 はタップするたびに ON/OFF が切り替わるトグル式
+      // (PC のマウスでは他ボタンと同時押しできないため、長押しではなくトグルにした)。
+      // ON の間は setPadKey(0x10, true) を保持し続け、安全のため以下のタイミングで
+      // 自動的に OFF へ戻す: ウィンドウが開いた時・ページが非表示になった時・
+      // バーチャルパッド自体が非表示になった時。
+      var padLockOn = false;
+      var padLockEl = document.getElementById('padLock');
+      function setPadLock(on) {
+        padLockOn = !!on;
+        setPadKey(0x10, padLockOn);
+        if (padLockEl) {
+          padLockEl.classList.toggle('locked', padLockOn);
+        }
+      }
+      function togglePadLock() {
+        setPadLock(!padLockOn);
+      }
+      if (padLockEl) {
+        padLockEl.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          togglePadLock();
+        }, { passive: false });
+        padLockEl.addEventListener('mousedown', function() {
+          togglePadLock();
+        });
+      }
+
+      // ---- ボタン表記の役割化 ----
+      // 戦闘モード中(かつウィンドウ非表示): Z=防御/X=攻撃、それ以外(普段のモード or ウィンドウ表示中): Z=戻る/X=決定。
+      // MgrWindow::SetActive() の変化時に EM_JS SBOP2_NotifyWindowStateChange (ウィンドウ開閉) が、
+      // CStateProcMAP::TimerProc() の変化時に EM_JS SBOP2_NotifyBattleModeChange (戦闘モード) が呼ぶ。
+      // 2つの状態を保持し、1つの描画関数 (updatePadButtonLabels) にまとめて表記を決める。
+      var padAIcon  = pad.querySelector('#padA .pad-btn-icon');
+      var padALabel = pad.querySelector('#padA .pad-btn-label');
+      var padBIcon  = pad.querySelector('#padB .pad-btn-icon');
+      var padBLabel = pad.querySelector('#padB .pad-btn-label');
+      var padIsWindowOpen = false;
+      var padIsBattleMode = false;
+      function updatePadButtonLabels() {
+        if (!padAIcon || !padALabel || !padBIcon || !padBLabel) {
+          return;
+        }
+        if (padIsBattleMode && !padIsWindowOpen) {
+          padAIcon.textContent = '🛡';
+          padALabel.textContent = '防御';
+          padBIcon.textContent = '⚔';
+          padBLabel.textContent = '攻撃';
+        } else {
+          padAIcon.textContent = '✕';
+          padALabel.textContent = '戻る';
+          padBIcon.textContent = '○';
+          padBLabel.textContent = '決定';
+        }
+      }
+      window.sbop2OnWindowStateChange = function(isWindowOpen) {
+        padIsWindowOpen = !!isWindowOpen;
+        updatePadButtonLabels();
+        // ウィンドウを開いた時は安全のため向き固定を自動解除する
+        if (padIsWindowOpen) {
+          setPadLock(false);
+        }
+      };
+      // ページが非表示(タブ切替/バックグラウンド化)になった時も向き固定を自動解除する
+      document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+          setPadLock(false);
+        }
+      });
+      window.sbop2OnBattleModeChange = function(isBattle) {
+        padIsBattleMode = !!isBattle;
+        updatePadButtonLabels();
+      };
+      // 初期状態は「戦闘モードでない・ウィンドウなし」＝戻る/決定（HTML 側の初期値と一致させる）
+      updatePadButtonLabels();
+
+      // 初期表示状態を適用（自動判定 or 保存済みモード or ?forcepad=1）
+      window.sbop2ApplyPadMode();
 
       // ---- アナログスティック（8方向） ----
       var stick = document.getElementById('padStick');

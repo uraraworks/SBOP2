@@ -104,6 +104,15 @@ EM_JS(void, SBOP2_PostAdminPickupParts, (unsigned int mapId, int cellX, int cell
 	}
 });
 
+// 自キャラが戦闘モードか（CHARMOVESTATE_BATTLE系）の変化を JS へ通知する。
+// JS 側 (sbocli-title.shell.html) の window.sbop2OnBattleModeChange(bool) がバーチャルパッドの
+// ボタン表記（戦闘モード中: 盾/剣 ⇔ それ以外: ✕/○）を切り替える。
+EM_JS(void, SBOP2_NotifyBattleModeChange, (int bBattle), {
+	if (typeof window.sbop2OnBattleModeChange === 'function') {
+		window.sbop2OnBattleModeChange(!!bBattle);
+	}
+});
+
 static CMgrData *s_pMgrDataForAdminMode = NULL;
 
 /// アクティブな CStateProcMAP インスタンスへのグローバルポインタ（ブラウザ版のみ）
@@ -148,6 +157,9 @@ static void SBOP2_PostAdminPick(unsigned int, int, int, unsigned int, unsigned i
 {
 }
 static void SBOP2_PostAdminPickupParts(unsigned int, int, int, unsigned int)
+{
+}
+static void SBOP2_NotifyBattleModeChange(int)
 {
 }
 #endif
@@ -276,6 +288,7 @@ CStateProcMAP::CStateProcMAP()
 	m_bChgScrollMode		= FALSE;
 	m_bSendCheckMapEvent	= FALSE;
 	m_nScrollMode			= 0;
+	m_nLastNotifiedBattleMode = -1;
 	m_dwLastTimeMove		= 0;
 	m_dwLastTimeKeepAlive	= 0;
 	m_dwLastBalloonID		= 0;
@@ -356,6 +369,8 @@ void CStateProcMAP::Init(void)
 {
 	m_pPlayerChar	= m_pMgrData->GetPlayerChar();
 	m_pMap			= m_pMgrData->GetMap();
+	// マップ入り直後は必ず現在値をJSへ通知し直す（未通知状態に戻す）
+	m_nLastNotifiedBattleMode = -1;
 	m_dwLastEventMapID = 0;
 	m_bHasLastEventTile = FALSE;
 	m_bAutoWalkToEvent = FALSE;
@@ -729,6 +744,29 @@ BOOL CStateProcMAP::TimerProc(void)
 
 	bRet = FALSE;
 	m_pPlayerChar = m_pMgrData->GetPlayerChar();
+
+	{
+		// 自キャラの戦闘モード状態（サーバーからの状態変更・気絶・マップ移動等でも追従するよう毎フレーム判定）が
+		// 変化した時だけ JS へ通知する
+		BOOL bIsBattleMode = FALSE;
+		if (m_pPlayerChar) {
+			switch (m_pPlayerChar->m_nMoveState) {
+			case CHARMOVESTATE_BATTLE:
+			case CHARMOVESTATE_BATTLEMOVE:
+			case CHARMOVESTATE_BATTLEATACK:
+			case CHARMOVESTATE_BATTLEATACK_WAIT:
+			case CHARMOVESTATE_BATTLE_DEFENSE:
+				bIsBattleMode = TRUE;
+				break;
+			default:
+				break;
+			}
+		}
+		if ((int)bIsBattleMode != m_nLastNotifiedBattleMode) {
+			m_nLastNotifiedBattleMode = (int)bIsBattleMode;
+			SBOP2_NotifyBattleModeChange(bIsBattleMode);
+		}
+	}
 
 	if (m_dwLastTimeMove != 0) {
 		dwTime = timeGetTime() - m_dwLastTimeMove;
@@ -3682,6 +3720,9 @@ BOOL CStateProcMAP::OnWindowMsgOPTION_INPUTSET(DWORD dwPara)
 		pMgrKeyInput = m_pMgrData->GetMgrKeyInput();
 		pMgrKeyInput->Enum();
 		m_pMgrWindow->MakeWindowOPTION_INPUTSET_SETDEVICE();
+		break;
+	case 1:		// バーチャルパッドの表示設定（自動/表示/非表示を切り替え。ウィンドウは閉じない）
+		CWindowOPTION_INPUTSET::CycleVirtualPadMode();
 		break;
 	default:
 		goto Exit;

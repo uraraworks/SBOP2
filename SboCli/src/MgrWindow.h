@@ -138,4 +138,5 @@ private:
 	CMgrData			*m_pMgrData;			// データ管理
 	CMgrGrpData			*m_pMgrGrpData;			// グラフィックデータ管理
 	CMgrKeyInput		*m_pMgrKeyInput;		// キー入力管理
+	int					m_nLastNotifiedKeyInput;	// ブラウザ版: 直近に JS へ通知した m_bKeyInput（-1=未通知）
 } CMgrWindow, *PCMgrWindow;

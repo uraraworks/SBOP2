@@ -114,6 +114,7 @@ protected:
 	BOOL  m_bChgScrollMode,        // スクロールモードの変更に入れるかチェック
 	      m_bSendCheckMapEvent;    // マップイベントチェックを送信したか判定
 	int   m_nScrollMode;           // スクロールモード
+	int   m_nLastNotifiedBattleMode; // 最後にJSへ通知した戦闘モード状態(-1:未通知, 0/1)
 	DWORD m_dwLastTimeMove,        // 最後に移動した時間
 	      m_dwLastTimeKeepAlive,   // 最後に生存確認通知を送信した時間
 	      m_dwLastTimeGauge,       // ゲージ回復時間
