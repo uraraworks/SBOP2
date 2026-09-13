@@ -265,7 +265,10 @@
     <ClCompile Include="src\MainFrame\MainFrameRecvProcADMIN.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcBATTLE.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcCHAR.cpp" />
-    <ClCompile Include="src\MainFrame\MoveStateDecision.cpp" />
+    <ClCompile Include="src\MainFrame\MoveStateDecision.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\MainFrame\MainFrameRecvProcCONNECT.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcEFFECT.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcITEM.cpp" />
@@ -309,8 +312,14 @@
     <ClCompile Include="src\Web\GrpImageStore.cpp" />
     <ClCompile Include="src\Web\Handlers\ServerInfoHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\ServerSessionsHandler.cpp" />
-    <ClCompile Include="src\Web\ProcessMetrics.cpp" />
-    <ClCompile Include="src\Web\SessionsJsonBuilder.cpp" />
+    <ClCompile Include="src\Web\ProcessMetrics.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Web\SessionsJsonBuilder.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\Web\AuthProvider.cpp" />
     <ClCompile Include="src\Web\SessionStore.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
