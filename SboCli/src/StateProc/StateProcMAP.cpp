@@ -306,6 +306,7 @@ CStateProcMAP::CStateProcMAP()
 	m_nLastPushSyncSentX		= 0;
 	m_nLastPushSyncSentY		= 0;
 	m_bLastPushSyncSentValid	= FALSE;
+	m_bPushReleaseSent			= FALSE;
 	m_nMoveSpeedAccum			= 0;
 	m_dwLastPlayerMoveStepTime	= 0;
 	m_dwLastPlayerMoveTurnTime	= 0;
@@ -2908,7 +2909,7 @@ void CStateProcMAP::OnMgrDrawEND_FADEIN(DWORD dwPara)
 // 即時送信)だけ SboDbgLog へ出す。ブラウザのコンソールで "[PushDbg]" で検索できる。
 #define PUSH_CLIENT_DEBUG_LOG 0
 
-void CStateProcMAP::SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *pInfoObj)
+void CStateProcMAP::SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *pInfoObj, BOOL bRelease)
 {
 	CPacketCHAR_REQ_PUSH PacketReqPush;
 	POINT ptObjTarget, ptSelf;
@@ -2921,7 +2922,7 @@ void CStateProcMAP::SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *p
 	ptSelf.x = m_pPlayerChar->m_nMapX;
 	ptSelf.y = m_pPlayerChar->m_nMapY;
 
-	PacketReqPush.Make(dwObjCharID, nPushDir, PUSHTYPE_PUSH, ptObjTarget, ptSelf, timeGetTime());
+	PacketReqPush.Make(dwObjCharID, nPushDir, PUSHTYPE_PUSH, ptObjTarget, ptSelf, timeGetTime(), bRelease);
 	m_pSock->Send(&PacketReqPush);
 
 	m_dwLastTimePushSyncSend = timeGetTime();
@@ -2940,8 +2941,10 @@ void CStateProcMAP::EndPushPredict(BOOL bSendFinal)
 	}
 	pInfoObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(m_dwPushSyncObjCharID);
 	if (bSendFinal && (pInfoObj != NULL)) {
-		// 離す直前の最新座標をすぐ反映させる(最大100ms分の送信間引きを打ち切る)
-		SendReqPush(m_dwPushSyncObjCharID, m_nPushSyncDirection, pInfoObj);
+		// 離す直前の最新座標をすぐ反映させる(最大100ms分の送信間引きを打ち切る)。
+		// S4: 離した印(bRelease=TRUE)を付け、サーバーが150msタイムアウトを待たず
+		// 即停止できるようにする(docs/push-object-redesign.md S4)。
+		SendReqPush(m_dwPushSyncObjCharID, m_nPushSyncDirection, pInfoObj, TRUE);
 	}
 	if ((pInfoObj != NULL) && m_pPlayerChar && (pInfoObj->m_dwPushPredictOwnerCharID == m_pPlayerChar->m_dwCharID)) {
 #if PUSH_CLIENT_DEBUG_LOG
@@ -2949,6 +2952,11 @@ void CStateProcMAP::EndPushPredict(BOOL bSendFinal)
 			pInfoObj->m_dwCharID, pInfoObj->m_nMapX, pInfoObj->m_nMapY, bSendFinal ? 1 : 0);
 #endif
 		pInfoObj->m_bPushPredicting = FALSE;
+		// S4: 予測を終えた時刻を記録する。直後(1000ms以内)に届く自分の押し更新は
+		// DRで動かすと行き過ぎた予測分がもう一度戻る動きに見えるため、
+		// RecvProcCHAR_MOVE_CORE 側でこの時刻を見て一時的に直接座標合わせへ戻す
+		// (docs/push-object-redesign.md S4)。
+		pInfoObj->m_dwPushPredictEndTime = SDL_GetTicks();
 		// 追従用の経由点が万一残っていれば破棄する。押せる物は
 		// RecvProcCHAR_MOVE_CORE 側で既にキューへ乗せない扱いにしているため
 		// 通常は空だが、予測を終える境目で古い点が再生されないよう防御的に消す
@@ -2957,9 +2965,7 @@ void CStateProcMAP::EndPushPredict(BOOL bSendFinal)
 		if (pInfoObj->m_apMovePosQue.size() > 0) {
 			pInfoObj->DeleteAllMovePosQue();
 		}
-		if (pInfoObj->m_nMoveState == CHARMOVESTATE_MOVE) {
-			pInfoObj->ChgMoveState(CHARMOVESTATE_STAND);
-		}
+		pInfoObj->ForceStopMoveState(CHARMOVESTATE_STAND);
 	}
 	m_bPushSyncActive = FALSE;
 	m_dwPushSyncObjCharID = 0;
@@ -2967,6 +2973,7 @@ void CStateProcMAP::EndPushPredict(BOOL bSendFinal)
 	m_dwLastTimePushSyncSend = 0;
 	m_dwLastTimePushContact = 0;
 	m_bLastPushSyncSentValid = FALSE;
+	m_bPushReleaseSent = FALSE;
 }
 
 BOOL CStateProcMAP::TryPushObject(PCInfoMapBase pMap, DWORD dwObjCharID, int nPushDir)
@@ -3017,6 +3024,13 @@ BOOL CStateProcMAP::TryPushObject(PCInfoMapBase pMap, DWORD dwObjCharID, int nPu
 	bAreaFree = m_pLibInfoChar->IsPushAreaFree(m_pPlayerChar, pInfoObj, pInfoObj->m_dwMapID, rcObjMoveTo);
 	if (!bAreaFree) {
 		return FALSE;
+	}
+
+	// 二重駆動防止: 直前まで見ていた側として DR(Dead Reckoning) 中だった場合、
+	// これから始めるローカル押し予測と競合しないよう先に止める(座標はそのまま)。
+	if (pInfoObj->m_bPredictedMove) {
+		pInfoObj->m_bPredictedMove = FALSE;
+		pInfoObj->m_nPredictDirection = -1;
 	}
 
 	// 予測: 押せる物をローカルで1px動かす
@@ -3431,6 +3445,8 @@ BOOL CStateProcMAP::MoveProc(
 			m_dwPushSyncObjCharID = dwPushObjCharID;
 			m_nPushSyncDirection = nPushDir;
 			m_dwLastTimePushContact = timeGetTime();
+			// まだ押し続けているので「離した」印はまだ送っていない扱いに戻す(S4)
+			m_bPushReleaseSent = FALSE;
 		}
 	} else if (m_bPushSyncActive) {
 		// S3b: 接触を失った瞬間の即時送信(docs/push-object-redesign.md 4章3項)。
@@ -3448,12 +3464,17 @@ BOOL CStateProcMAP::MoveProc(
 			bAlreadySent = m_bLastPushSyncSentValid &&
 				(m_nLastPushSyncSentX == pInfoObj->m_nMapX) &&
 				(m_nLastPushSyncSentY == pInfoObj->m_nMapY);
-			if (!bAlreadySent) {
+			// S4: 座標が同じで送信済みでも、離した印(m_bRelease)はまだ送っていなければ
+			// 1回だけ送っておく。ここが接触を失った瞬間＝押すのをやめた瞬間のため
+			// (docs/push-object-redesign.md S4)。毎フレーム重複送信しないよう
+			// m_bPushReleaseSent で1回に絞る。
+			if (!bAlreadySent || !m_bPushReleaseSent) {
 #if PUSH_CLIENT_DEBUG_LOG
 				SboDbgLog("[PushDbg][接触喪失即送信][obj:%u][pos:%d,%d][dir:%d]",
 					pInfoObj->m_dwCharID, pInfoObj->m_nMapX, pInfoObj->m_nMapY, m_nPushSyncDirection);
 #endif
-				SendReqPush(m_dwPushSyncObjCharID, m_nPushSyncDirection, pInfoObj);
+				SendReqPush(m_dwPushSyncObjCharID, m_nPushSyncDirection, pInfoObj, TRUE);
+				m_bPushReleaseSent = TRUE;
 			}
 		}
 	}

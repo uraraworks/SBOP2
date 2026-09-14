@@ -1372,6 +1372,22 @@ void CMainFrame::RecvProcCHAR_REQ_PUSH(PBYTE pData, DWORD dwSessionID)
 			m_pSock->SendTo(dwSessionID, &PacketResPush);
 		}
 	}
+
+	// S4(docs/push-object-redesign.md): クライアントは指を離した(押すのをやめた)瞬間の
+	// 最後の1通に「離した」印(m_bRelease)を付けて送ってくる。これが付いていて、かつ
+	// 押していた本人からの要求であれば、150msのタイマー停止(CInfoCharSvr::TimerProcMOVE)
+	// を待たずにここで即座に停止させ、周囲へのMOVE_STOP配信を早める
+	// (見る側の推測航法の行き過ぎを軽減する)。受理・却下どちらでも効かせる
+	// (押し続けたまま向きだけ変えて却下される場合等もあるため)。
+	// タイマー側の150msタイムアウト停止は、このパケットが届かなかった場合の保険として残す。
+	if (Packet.m_bRelease && pInfoObj->IsStateMove() && (pInfoObj->m_dwPushingCharID == pInfoPlayer->m_dwCharID)) {
+		int nStopState = CHARMOVESTATE_STAND;
+		if (pInfoObj->IsStateBattle()) {
+			nStopState = CHARMOVESTATE_BATTLE;
+		}
+		pInfoObj->SetMoveState(nStopState);
+		pInfoObj->m_dwPushingCharID = 0;
+	}
 }
 
 void CMainFrame::RecvProcCHAR_REQ_TAIL(PBYTE pData, DWORD dwSessionID)

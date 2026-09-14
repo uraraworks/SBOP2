@@ -74,7 +74,7 @@ protected:
 	BOOL  MoveProc(int x, int y, int xx, int yy, int nDirection, BOOL bSyncSend = TRUE);      // 移動処理
 	BOOL  TryMoveOrPushDirection(CInfoMapBase *pMap, int nDirection, int nPushDir, DWORD &dwPushObjCharIDOut); // 1方向の移動可否判定(押せる物なら押し予測を試みる。S3b)
 	BOOL  TryPushObject(CInfoMapBase *pMap, DWORD dwObjCharID, int nPushDir);                // 押せる物をローカルで1px押せるか試す(予測。S3b)
-	void  SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *pInfoObj);              // REQ_PUSHを送信する(S3b)
+	void  SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *pInfoObj, BOOL bRelease = FALSE); // REQ_PUSHを送信する(S3b。bRelease=TRUEは押すのをやめた最後の送信。S4)
 	void  EndPushPredict(BOOL bSendFinal);                                                    // 押し予測を終える(S3b)
 	BOOL  OnWindowMsgCHAT(DWORD dwPara);                                                      // チャット入力
 	BOOL  OnWindowMsgSYSTEMMENU(DWORD dwPara);                                                // システムメニュー
@@ -140,6 +140,9 @@ protected:
 	int   m_nLastPushSyncSentX,       // 直近に送信したREQ_PUSHの目標座標X
 	      m_nLastPushSyncSentY;       // 直近に送信したREQ_PUSHの目標座標Y
 	BOOL  m_bLastPushSyncSentValid;   // 上記が有効か(未送信/リセット直後はFALSE)
+	// S4: 離した印(m_bRelease)を1回だけ送るためのフラグ。docs/push-object-redesign.md。
+	// 座標が同じで送信を間引く場合でも、離した印はまだ送っていなければ1回は送る
+	BOOL  m_bPushReleaseSent;
 	int   m_nMoveSpeedAccum;       // 自キャラ速度のサブピクセル累積
 	DWORD m_dwLastPlayerMoveStepTime; // 自キャラ速度計算の前回時刻
 	DWORD m_dwLastPlayerMoveTurnTime; // 自キャラの回頭計算の前回時刻

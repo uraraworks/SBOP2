@@ -30,10 +30,11 @@ public:
 		m_ptObjTarget.x = m_ptObjTarget.y = 0;
 		m_ptSelf.x = m_ptSelf.y = 0;
 		m_dwTimeStamp = 0;
+		m_bRelease = FALSE;
 	}
 	virtual ~CPacketCHAR_REQ_PUSH() {}
 
-	void Make(DWORD dwObjCharID, int nDirection, int nPushType, POINT ptObjTarget, POINT ptSelf, DWORD dwTimeStamp)
+	void Make(DWORD dwObjCharID, int nDirection, int nPushType, POINT ptObjTarget, POINT ptSelf, DWORD dwTimeStamp, BOOL bRelease)
 	{
 		PBYTE pData, pDataTmp;
 		DWORD dwSize;
@@ -45,7 +46,8 @@ public:
 				 sizeof (nPushType) +
 				 sizeof (ptObjTarget) +
 				 sizeof (ptSelf) +
-				 sizeof (dwTimeStamp);
+				 sizeof (dwTimeStamp) +
+				 sizeof (bRelease);
 
 		pData = new BYTE[dwSize];
 		ZeroMemory(pData, dwSize);
@@ -61,6 +63,7 @@ public:
 		CopyMemoryRenew(pDataTmp, &ptObjTarget, sizeof (ptObjTarget), pDataTmp);
 		CopyMemoryRenew(pDataTmp, &ptSelf, sizeof (ptSelf), pDataTmp);
 		CopyMemoryRenew(pDataTmp, &dwTimeStamp, sizeof (dwTimeStamp), pDataTmp);
+		CopyMemoryRenew(pDataTmp, &bRelease, sizeof (bRelease), pDataTmp);
 
 		RenewPacket(pData, dwSize);
 	}
@@ -78,6 +81,7 @@ public:
 		CopyMemoryRenew(&m_ptObjTarget, pDataTmp, sizeof (m_ptObjTarget), pDataTmp);
 		CopyMemoryRenew(&m_ptSelf, pDataTmp, sizeof (m_ptSelf), pDataTmp);
 		CopyMemoryRenew(&m_dwTimeStamp, pDataTmp, sizeof (m_dwTimeStamp), pDataTmp);
+		CopyMemoryRenew(&m_bRelease, pDataTmp, sizeof (m_bRelease), pDataTmp);
 
 		pRet = pDataTmp;
 		return pRet;
@@ -90,4 +94,5 @@ public:
 	POINT m_ptObjTarget;	// 押せる物の目標座標(自己申告。サーバーが空いている所まで進める)
 	POINT m_ptSelf;	// 押している本人の座標(自己申告。サーバー座標との乖離チェックに使う)
 	DWORD m_dwTimeStamp;	// クライアント時刻(ms)
+	BOOL m_bRelease;	// 押すのをやめた最後の送信か(TRUEならサーバーは150msタイムアウトを待たず即停止)
 } CPacketCHAR_REQ_PUSH, *PCPacketCHAR_REQ_PUSH;

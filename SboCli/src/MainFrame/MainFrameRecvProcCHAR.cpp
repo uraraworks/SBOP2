@@ -753,22 +753,17 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 
 	} else if (pInfoChar->m_bPush) {
 		// ─────────────────────────────────────────────────────────────
-		// 押せる物(Push=1 NPC): ウェイポイントキューには乗せず、届いた座標へ
-		// 直接合わせる。NPC同様にキューへ経由点を溜める方式だと、押し予測中に
-		// (押す向きの遅れ以外のずれで)取りこぼされずキューに乗ってしまった
-		// 古い経由点が、予測終了後や別方向へ押し直した後に再生されて
-		// 「押す前の古い位置へワープしてから戻る」不具合になる
-		// (docs/push-object-redesign.md 4章)。滑らかさは SetPos の描画区間
-		// 補間に任せる。自分が押している最中でも他人が押しているのを見ている
-		// 場合でも同じ扱いでよい。
+		// 押せる物(Push=1 NPC): 見ている側も Dead Reckoning(DR) で先読み表示する。
+		// サーバーの押し更新は〜100ms間隔で、押している本人(PC)はDRで先読み
+		// 表示されるため、見る側だけNPC同様の外挿無し方式だと100〜200ms遅れて
+		// 表示され、押している人がボールにめり込んで見える
+		// (docs/push-object-redesign.md S4)。ウェイポイントキューには元々乗せない
+		// (理由は元コメント参照: 古い経由点の再生でワープして戻る不具合になるため)。
 		// ─────────────────────────────────────────────────────────────
 		pInfoChar->m_bWaypointMove = FALSE;
 		if (pInfoChar->m_apMovePosQue.size() > 0) {
 			pInfoChar->DeleteAllMovePosQue();
 		}
-		pInfoChar->m_dwPredictRecvTime = dwRecvTime;
-		pInfoChar->m_nPredictSyncX = nPacketPosX;
-		pInfoChar->m_nPredictSyncY = nPacketPosY;
 #if PUSH_CLIENT_DEBUG_LOG
 		if ((pInfoChar->m_nMapX != nPacketPosX) || (pInfoChar->m_nMapY != nPacketPosY)) {
 			SboDbgLog("[PushDbg][%s][obj:%u][旧pos:%d,%d][新pos:%d,%d]",
@@ -776,14 +771,54 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 				pInfoChar->m_dwCharID, pInfoChar->m_nMapX, pInfoChar->m_nMapY, nPacketPosX, nPacketPosY);
 		}
 #endif
-		pInfoChar->SetDirection(nDirection);
-		pInfoChar->SetPos(nPacketPosX, nPacketPosY);
-		if (bForceStop) {
-			// 停止通知: 押せる物は戦闘状態を持たないため STAND で止める
-			pInfoChar->ChgMoveState(nStateStand);
+		if ((pInfoCharPlayer != NULL) &&
+			(pInfoChar->m_dwPushPredictOwnerCharID == pInfoCharPlayer->m_dwCharID) &&
+			((SDL_GetTicks() - pInfoChar->m_dwPushPredictEndTime) < 1000)) {
+			// 押している本人の画面で、ローカル予測(m_bPushPredicting)を終えた直後。
+			// この間にDRへ切り替えると、予測で行き過ぎていた分だけ一度戻ってから
+			// 進むように見えてしまうため、従来どおり届いた座標へ直接合わせる。
+			pInfoChar->m_dwPredictRecvTime = dwRecvTime;
+			pInfoChar->m_nPredictSyncX = nPacketPosX;
+			pInfoChar->m_nPredictSyncY = nPacketPosY;
+			pInfoChar->SetDirection(nDirection);
+			pInfoChar->SetPos(nPacketPosX, nPacketPosY);
+			if (bForceStop) {
+				// 停止通知: 押せる物は戦闘状態を持たないため STAND で止める
+				// (移動中だと ChgMoveState はキューに積まれるだけで止まらないため
+				// ForceStopMoveState で即座に止める)
+				pInfoChar->ForceStopMoveState(nStateStand);
+				nState = -1;
+			}
+			pInfoChar->m_bRedraw = TRUE;
+		} else if (bForceStop) {
+			// 停止通知: DRを止め、届いた座標で確実に STAND へ止める
+			pInfoChar->StopPredictedMove(nPacketPosX, nPacketPosY);
+			pInfoChar->SetDirection(nDirection);
+			pInfoChar->ForceStopMoveState(nStateStand);
 			nState = -1;
+			pInfoChar->m_bRedraw = TRUE;
+		} else if (bPositionChanged) {
+			// 位置変化: NPCと違い外挿(DR)で先読み表示する。StartPredictedMove は
+			// 直前の m_dwPredictRecvTime / m_nPredictSyncX/Y から実速度を測るため、
+			// 呼ぶ前にこれらを上書きしてはいけない。
+			pInfoChar->SetDirection(nDirection);
+			// PC の位置同期受信(同ファイル184〜209行付近)と同じく、先に確定座標へ
+			// 合わせてから先読みを始める。表示位置から先読みし直すだけだと遅れが
+			// 32px未満のまま溜まり続け、見る側で押している人にボールが追い抜かれて
+			// 見える(見た目は SetPos の描画補間で滑らかにつながる)。
+			pInfoChar->SetPos(nPacketPosX, nPacketPosY);
+			pInfoChar->StartPredictedMove(nDirection, nPacketPosX, nPacketPosY, dwRecvTime);
+			if (!pInfoChar->IsStateMove()) {
+				pInfoChar->ChgMoveState(nStateMove);
+			}
+			nState = -1;
+			pInfoChar->m_bRedraw = TRUE;
+		} else if (bDirectionChanged) {
+			// 向きだけ変化
+			pInfoChar->SetDirection(nDirection);
+			nState = -1;
+			pInfoChar->m_bRedraw = TRUE;
 		}
-		pInfoChar->m_bRedraw = TRUE;
 
 	} else if (pInfoChar->IsNPC()) {
 		// ─────────────────────────────────────────────────────────────

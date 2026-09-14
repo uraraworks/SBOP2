@@ -247,6 +247,7 @@ CInfoCharCli::CInfoCharCli()
 
 	m_bPushPredicting	= FALSE;
 	m_dwPushPredictOwnerCharID	= 0;
+	m_dwPushPredictEndTime	= 0;
 
 	m_ptMove.x = m_ptMove.y = 0;
 
@@ -483,6 +484,21 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 	if (IsStateMove() == FALSE) {
 		DeleteAllMovePosQue();
 	}
+}
+
+
+void CInfoCharCli::ForceStopMoveState(int nMoveState)
+{
+	// ChgMoveState は移動中に立ち系状態を渡されるとキューにマーカーを積んで
+	// return するだけの仕様(388行付近)。押せる物は m_bWaypointMove=FALSE の
+	// ためこのマーカーが消化されず MOVE のまま残ってしまう。
+	// UpdateWaypointMove(1848行付近)と同じ手順で先に移動状態を解除してから
+	// 適用し、確実に止める。
+	if (IsStateMove()) {
+		m_nAnimeBack = m_nAnime;
+		m_nMoveState = 0;
+	}
+	ChgMoveState(nMoveState);
 }
 
 
@@ -1096,6 +1112,13 @@ CInfoMotion *CInfoCharCli::GetMotionInfo(int *pnCount)
 			paMotionInfo = &m_aMotion[CHARMOTIONID_SIT][nDirection];
 			break;
 		case CHARMOVESTATE_MOVE:	// 移動中
+			if (m_bPush && (m_nMoveType != CHARMOVETYPE_BALL)) {
+				// 岩・箱は移動中も歩きモーションを持たないため立ちモーションを使う
+				// (転がるボールだけ WALK で表現する)
+				paMotionInfo = &m_aMotion[CHARMOTIONID_STAND][nDirection];
+				break;
+			}
+			// FALLTHROUGH
 		case CHARMOVESTATE_WALKANIME:	// 足踏み
 			paMotionInfo = &m_aMotion[CHARMOTIONID_WALK][nDirection];
 			break;
@@ -1686,6 +1709,11 @@ void CInfoCharCli::UpdatePredictedPos(DWORD dwNowTime)
 	// 停止が届かない環境で予測が延々と先読みを続けて止まらなくなる。
 	if (dwPredictElapsed >= PREDICT_STALE_STOP_MS) {
 		StopPredictedMove(m_nPredictSyncX, m_nPredictSyncY);
+		if (m_bPush && IsStateMove()) {
+			// 押せる物はウェイポイント追従を使わないため、MOVE のまま残ると
+			// StopPredictedMove だけでは止まらない(ForceStopMoveStateで確実に止める)。
+			ForceStopMoveState(CHARMOVESTATE_STAND);
+		}
 		m_bRedraw = TRUE;
 		return;
 	}

@@ -2420,8 +2420,12 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 			m_pMainFrame->SendToScreenChar(pInfoChar, &PacketMoveDirChange);
 			pInfoChar->m_nLastMoveSyncDirection = pInfoChar->m_nDirection;
 			pInfoChar->m_dwLastMoveSyncSendTime = dwNowTime;
-		} else if (dwNowTime - pInfoChar->m_dwLastMoveSyncSendTime >= 100) {
+		} else if (pInfoChar->m_bPush || dwNowTime - pInfoChar->m_dwLastMoveSyncSendTime >= 100) {
 			// NPC の 100ms 補正
+			// 押せる物(m_bPush)は m_bChgPos が押し受理時にしか立たない
+			// (送信頻度は押し要求の間隔=100ms以下)ため、ここで100ms間引きを
+			// かけると押し更新が捨てられ見る側の更新間隔が100ms/200msでばらつく。
+			// 押せる物は間引かずに毎回送る。
 			// 同様に補間座標を使って連続換算位置を送る。
 			int nUpdateX, nUpdateY;
 			GetNPCSyncPos(pInfoChar, nUpdateX, nUpdateY);
@@ -2484,14 +2488,54 @@ void CLibInfoCharSvr::ApplyAdminEditWarp(CInfoCharSvr *pInfoChar, DWORD dwNewMap
 	BOOL bPosChanged = (nNewX != pInfoChar->m_nMapX) || (nNewY != pInfoChar->m_nMapY);
 	BOOL bDirChanged = (nNewDir >= 0) && (nNewDir != pInfoChar->m_nDirection);
 
-	// 未ログインなら値だけ書き換えて終了 (m_dwSessionID==0 は NPC または未接続)
-	if (pInfoChar->m_dwSessionID == 0) {
+	// 未接続PCなら値だけ書き換えて終了 (m_dwSessionID==0 は NPC または未接続PC)
+	if (pInfoChar->m_dwSessionID == 0 && !pInfoChar->IsNPC()) {
 		pInfoChar->m_dwMapID = dwNewMapID;
 		pInfoChar->m_nMapX = nNewX;
 		pInfoChar->m_nMapY = nNewY;
 		if (nNewDir >= 0) {
 			pInfoChar->m_nDirection = nNewDir;
 		}
+		return;
+	}
+
+	// NPC(押せる物含む)はセッションが無いため PC 分岐とは別に、
+	// DELETE→座標更新→RES_CHARINFO の順で周囲クライアントへ反映する
+	if (pInfoChar->m_dwSessionID == 0 && pInfoChar->IsNPC()) {
+		// 変更が無ければ何もしない
+		if (!bMapChanged && !bPosChanged && !bDirChanged) {
+			return;
+		}
+
+		// 旧位置のAOIから消す (mapID/posはまだ旧値)
+		CPacketCHAR_STATE PacketCHAR_STATE;
+		PacketCHAR_STATE.Make(pInfoChar->m_dwCharID, CHARMOVESTATE_DELETE);
+		m_pMainFrame->SendToScreenChar(pInfoChar, &PacketCHAR_STATE);
+
+		// 押されている途中なら解除し、移動状態を止めておく
+		pInfoChar->m_dwPushingCharID = 0;
+		if (pInfoChar->IsStateMove()) {
+			int nState = CHARMOVESTATE_STAND;
+			if (pInfoChar->IsStateBattle()) {
+				nState = CHARMOVESTATE_BATTLE;
+			}
+			pInfoChar->SetMoveState(nState);
+		}
+		pInfoChar->m_bMoveSyncActive = FALSE;
+		pInfoChar->m_nLastMoveSyncDirection = -1;
+		pInfoChar->m_dwLastMoveSyncSendTime = 0;
+
+		// 新しい位置へ反映
+		pInfoChar->m_dwMapID = dwNewMapID;
+		SetPos(pInfoChar, dwNewMapID, nNewX, nNewY, TRUE);
+		if (nNewDir >= 0) {
+			pInfoChar->SetDirection(nNewDir);
+		}
+
+		// 新位置のAOIへ新規キャラとして通知 (NPCはセッション無しなのでSendTo等は不要)
+		CPacketCHAR_RES_CHARINFO PacketCHAR_RES_CHARINFO;
+		PacketCHAR_RES_CHARINFO.Make(pInfoChar);
+		m_pMainFrame->SendToScreenChar(pInfoChar, &PacketCHAR_RES_CHARINFO);
 		return;
 	}
 

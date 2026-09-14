@@ -45,6 +45,7 @@ public:
 
 			void	ChgDirection	(int nDirection);	// 向き変更
 	virtual void	ChgMoveState	(int nMoveState);	// 移動状態変更
+			void	ForceStopMoveState	(int nMoveState);	// 移動中でも確実に止めて状態変更する
 			BOOL	TimerProc	(DWORD dwTime);	// 時間処理
 	virtual int	SetPos	(int x, int y, BOOL bBack = FALSE);	// 座標を指定
 
@@ -180,5 +181,6 @@ public:
 	// 画面でだけ TRUE になり、他人の画面では常に FALSE（S4で別途対応）。
 	BOOL	m_bPushPredicting;	// 押し予測中か
 	DWORD	m_dwPushPredictOwnerCharID;	// 予測している本人のCharID
+	DWORD	m_dwPushPredictEndTime;	// 押し予測を終えた時刻(SDL_GetTicks)。0なら未終了/未使用
 } CInfoCharCli, *PCInfoCharCli;
 

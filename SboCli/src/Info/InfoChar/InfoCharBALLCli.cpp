@@ -26,12 +26,20 @@ CInfoCharBALLCli::~CInfoCharBALLCli()
 
 void CInfoCharBALLCli::ChgMoveState(int nMoveState)
 {
+	BOOL bWasMove;
+
+	bWasMove = IsStateMove();
 	CInfoCharCli::ChgMoveState(nMoveState);
 
 	switch (nMoveState) {
 	case CHARMOVESTATE_MOVE:	// 移動中
-		m_nAnime = 0;
-		m_dwLastTimeAnime = timeGetTime();
+		if (!bWasMove) {
+			// MOVE 以外から MOVE に切り替わった時だけコマを戻す。見る側は
+			// サーバーからほぼ毎パケットで MOVE を受け取るため、ここを毎回
+			// リセットすると常に1コマ目に固定され転がって見えなくなる。
+			m_nAnime = 0;
+			m_dwLastTimeAnime = timeGetTime();
+		}
 		break;
 	}
 }
