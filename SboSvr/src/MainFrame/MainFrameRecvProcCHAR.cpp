@@ -24,6 +24,7 @@
 #include "MainFrame.h"
 #include "../Platform/SvrPlatform.h"
 #include "MoveStateDecision.h"
+#include "PushDecision.h"
 
 static LPCSTR GetMovePacketName(int nCmdSub)
 {
@@ -38,6 +39,149 @@ static LPCSTR GetMovePacketName(int nCmdSub)
 		return "MOVEPOS";
 	}
 	return "UNKNOWN";
+}
+
+// ─────────────────────────────────────────────
+// S3a: 押せる物(Push=1 NPC)への押し要求。docs/push-object-redesign.md 参照。
+// PushDecision(純粋関数)へ渡すための小さなヘルパー群。
+// ─────────────────────────────────────────────
+
+// 接触とみなすすき間の許容(px)。docs/push-object-redesign.md 2章4項の値。
+static const int PUSH_CONTACT_GAP_ALLOWED_PX = 4;
+// 申告された本人座標とサーバー座標の許容ズレ(px)。移動速度超過チェックの
+// +32px余裕(MainFrameRecvProcCHAR.cpp内 nAllowDist計算)に合わせた。
+static const int PUSH_SELF_POS_TOLERANCE_PX = MAPPARTSSIZE;
+// 却下時のRES_PUSH補正送信は毎回行うことにしたため未使用(現在は
+// PushDecision::REASON_NOT_CONTACT等ログの間引きにはPUSH_REJECT_LOG_INTERVAL_MSのみ使用)。
+// CInfoCharSvr::m_dwLastPushRejectSyncTimeも同様に未使用。将来また間引きが
+// 必要になった場合のために定義自体は残す。
+static const DWORD PUSH_REJECT_SYNC_INTERVAL_MS = 1000;
+// 経過時間(dwElapsedMs)の上限(ms)。クライアントは約100ms間隔でREQ_PUSHを送るため、
+// 前回受理が無い最初の1回をこの値扱いにしないと許容距離が0px相当になり毎回却下される。
+// 逆に上限を設けないと、しばらく送らずに溜めてから送ることで1回で大きく押せてしまう
+// (悪用対策)。速度超過チェックの許容間隔より少し余裕を持たせた値。
+static const DWORD PUSH_ELAPSED_MAX_MS = 300;
+// クライアント時刻の逆行がこの値(ms)以上なら、SDL_GetTicks系の時刻が
+// ページ再読み込み等で0から数え直されたもの(=クライアント再起動)とみなし、
+// 却下せず基準(m_dwLastPushClientTime)を取り直す。再ログイン後は
+// CLibInfoCharSvr::LogIn()でも0にリセットしているが、同一セッション内で
+// クライアントだけ再読み込みされるケースの保険として、ここでも吸収する。
+static const DWORD PUSH_RELOAD_REWIND_THRESHOLD_MS = 5000;
+// 却下ログの出力間隔(ms)。100ms間隔の連続却下でログが溢れないよう、
+// 補正送信の間引き(PUSH_REJECT_SYNC_INTERVAL_MS)とは別に1秒に1回までに絞る。
+static const DWORD PUSH_REJECT_LOG_INTERVAL_MS = 1000;
+// 受理ログの出力間隔(ms)。却下ログと同じく1秒に1回までに絞る。
+static const DWORD PUSH_ACCEPT_LOG_INTERVAL_MS = 1000;
+
+// 診断用。通常は0。原因調査時に1にする。
+// 却下ログの詳細化・受理ログの追加を行う。
+#define PUSH_DEBUG_LOG 0
+
+// 却下理由(PushDecision::REASON)を文字列にする。診断ログ用。
+static LPCSTR GetPushRejectReasonName(PushDecision::REASON eReason)
+{
+	switch (eReason) {
+	case PushDecision::REASON_NONE:                 return "NONE";
+	case PushDecision::REASON_SPEED_OVER:           return "SPEED_OVER";
+	case PushDecision::REASON_AXIS_INVALID:         return "AXIS_INVALID";
+	case PushDecision::REASON_SELF_POS_MISMATCH:    return "SELF_POS_MISMATCH";
+	case PushDecision::REASON_NOT_CONTACT:          return "NOT_CONTACT";
+	case PushDecision::REASON_SWAP_NOT_OWNER:       return "SWAP_NOT_OWNER";
+	case PushDecision::REASON_SWAP_TARGET_MISMATCH: return "SWAP_TARGET_MISMATCH";
+	case PushDecision::REASON_SWAP_LATERAL_CHANGE:  return "SWAP_LATERAL_CHANGE";
+	case PushDecision::REASON_SWAP_TOO_FAR:         return "SWAP_TOO_FAR";
+	}
+	return "UNKNOWN";
+}
+
+// PushDecision::CheckSpeed と同じ式で許容距離を計算する(診断ログ用)。
+static double GetPushAllowedDistance(unsigned int dwElapsedMs, int nPixelsPerSec)
+{
+	return (static_cast<double>(dwElapsedMs) / 1000.0) * nPixelsPerSec * 1.1 + 8.0;
+}
+
+#if PUSH_DEBUG_LOG
+// 診断用。原因特定後に無効化。
+// RecvProcCHAR_REQ_PUSH内で「本人(pInfoPlayer)がまだ特定できていない」段階の
+// 黙殺returnログ(向き範囲外・本人セッションが見つからない)を、セッションID単位で
+// 1秒1回までに抑制するための簡易マップ。本人特定後はCInfoCharSvr側のメンバで抑制する。
+#include <map>
+static std::map<DWORD, DWORD> s_mapPushPreLogTime;
+
+// dwSessionIDについて、dwNowTimeを基準に1秒1回までログを許可するか判定する。
+// 許可する場合はs_mapPushPreLogTimeを更新してTRUEを返す。
+static BOOL AllowPushPreLog(DWORD dwSessionID, DWORD dwNowTime)
+{
+	std::map<DWORD, DWORD>::iterator it = s_mapPushPreLogTime.find(dwSessionID);
+	if ((it != s_mapPushPreLogTime.end()) && ((dwNowTime - it->second) < PUSH_REJECT_LOG_INTERVAL_MS)) {
+		return FALSE;
+	}
+	s_mapPushPreLogTime[dwSessionID] = dwNowTime;
+	return TRUE;
+}
+#endif
+
+static PushDecision::RECT_PX ToPushRect(const RECT &rc)
+{
+	PushDecision::RECT_PX r;
+	r.nLeft		= rc.left;
+	r.nTop		= rc.top;
+	r.nRight	= rc.right;
+	r.nBottom	= rc.bottom;
+	return r;
+}
+
+static void PushDirVector(int nDir, int &dx, int &dy)
+{
+	dx = 0;
+	dy = 0;
+	switch (nDir) {
+	case PushDecision::DIR_UP:    dy = -1; break;
+	case PushDecision::DIR_DOWN:  dy =  1; break;
+	case PushDecision::DIR_LEFT:  dx = -1; break;
+	case PushDecision::DIR_RIGHT: dx =  1; break;
+	}
+}
+
+// 押せる物が1px先へ進めるか、押している本人・押せる物自身を除く同じマップの
+// 全キャラ(m_bBlockは見ない)と当たるかを見る。
+// S3b: 判定本体は Common::CLibInfoCharBase::IsPushAreaFree（クライアントの押し予測と
+// 共用）へ移設済み。ここは PushDecision::RECT_PX ⇔ RECT の橋渡しだけを行う。
+static BOOL IsPushCharAreaFree(
+	CLibInfoCharSvr *pLibInfoChar,
+	DWORD dwMapID,
+	PCInfoCharSvr pExclude1,
+	PCInfoCharSvr pExclude2,
+	const PushDecision::RECT_PX &rcMoveTo)
+{
+	RECT rcTmp;
+
+	SetRect(&rcTmp, rcMoveTo.nLeft, rcMoveTo.nTop, rcMoveTo.nRight, rcMoveTo.nBottom);
+	return pLibInfoChar->IsPushAreaFree(pExclude1, pExclude2, dwMapID, rcTmp);
+}
+
+// 押せる物がマップ的に1px先(nDir)へ進めるか。
+// クライアントの自キャラ移動判定と同じ CLibInfoCharBase::CanMoveDirection
+// (Common/LibInfo/LibInfoCharBase.cpp。S3でクライアントと共用するために移設した)を使う。
+// nCurX/nCurYは呼び出し側が1pxずつ進めている「確定済み」座標で、pInfoObjの実座標は
+// 一時的にしか書き換えない(最終的な反映はDecidePushの結果を見てから行う)。
+static BOOL IsPushMapFree(CLibInfoCharBase *pLibInfoChar, CInfoMapBase *pInfoMap, PCInfoCharSvr pInfoObj, int nCurX, int nCurY, int nDir)
+{
+	int nSaveX, nSaveY;
+	BOOL bResult;
+
+	if (pInfoMap == NULL) {
+		return FALSE;
+	}
+
+	nSaveX = pInfoObj->m_nMapX;
+	nSaveY = pInfoObj->m_nMapY;
+	pInfoObj->m_nMapX = nCurX;
+	pInfoObj->m_nMapY = nCurY;
+	bResult = pLibInfoChar->CanMoveDirection(pInfoMap, pInfoObj, nDir);
+	pInfoObj->m_nMapX = nSaveX;
+	pInfoObj->m_nMapY = nSaveY;
+	return bResult;
 }
 
 void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
@@ -806,52 +950,428 @@ void CMainFrame::RecvProcCHAR_REQ_DRAGITEM(PBYTE pData, DWORD dwSessionID)
 
 void CMainFrame::RecvProcCHAR_REQ_PUSH(PBYTE pData, DWORD dwSessionID)
 {
-	PCInfoCharSvr pInfoChar, pInfoPlayer;
+	PCInfoCharSvr pInfoObj, pInfoPlayer;
 	CPacketCHAR_REQ_PUSH Packet;
-	SIZE sizeDistance;
+	CPacketCHAR_RES_PUSH PacketResPush;
+	DWORD dwNowTime;
+	DWORD dwElapsedMs;
+	DWORD dwRawElapsedMs; // 診断用。上限クランプ前の生の経過時間(ms)。原因特定後に無効化
+	DWORD dwPrevClientTime; // 診断用。前回受理したクライアント時刻(ms)。原因特定後に無効化
+	int nPixelsPerSec;
+	int nSaveSelfX, nSaveSelfY;
+	RECT rcSelfWin, rcObjWin;
+	PushDecision::RECT_PX rcSelf, rcObj;
+	PushDecision::POINT_PX ptReportedSelf, ptServerSelf;
+	int dx, dy;
+	int nCurX, nCurY;
+	int nDir;
+	POINT ptFinal;
 
 	Packet.Set(pData);
 
-	// Packet.m_dwCharID は「押される側(NPC/ボール等)」のIDで送られてくるため、
-	// CheckSessionID では検証できない。送信元セッション自身のプレイヤーは別途取得する。
-	pInfoChar = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwCharID);
-	if (pInfoChar == NULL) {
+	dwNowTime = SboPlatform::GetTickMs();
+
+#if PUSH_DEBUG_LOG
+	// 診断用。原因特定後に無効化。受信した生の値をそのまま出す(本人特定前なのでセッション単位で抑制)。
+	if (AllowPushPreLog(dwSessionID, dwNowTime)) {
+		m_pLog->Write(
+			"押し要求を受信(診断) dwSessionID:%u [OBJ_ID:%u][向き:%d][種別:%d]"
+			"[目標座標:%d,%d][申告自己座標:%d,%d][クライアント時刻:%u][パケットサイズ:%u]",
+			dwSessionID,
+			Packet.m_dwObjCharID,
+			Packet.m_nDirection,
+			Packet.m_nPushType,
+			Packet.m_ptObjTarget.x, Packet.m_ptObjTarget.y,
+			Packet.m_ptSelf.x, Packet.m_ptSelf.y,
+			Packet.m_dwTimeStamp,
+			Packet.GetSize());
+	}
+#endif
+
+	nDir = Packet.m_nDirection;
+	if ((nDir < PushDecision::DIR_UP) || (nDir > PushDecision::DIR_RIGHT)) {
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if (AllowPushPreLog(dwSessionID, dwNowTime)) {
+			m_pLog->Write("押し要求を破棄 [理由:向き範囲外] dwSessionID:%u [向き:%d]", dwSessionID, nDir);
+		}
+#endif
 		return;
 	}
+
+	// 押している本人は送信元セッションで決める(改造クライアント対策)。
+	// パケット内のIDは「押される側(押せる物)」でしか無く、これを本人特定に使わない。
 	pInfoPlayer = (PCInfoCharSvr)m_pLibInfoChar->GetPtrSessionID(dwSessionID);
 	if (pInfoPlayer == NULL) {
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if (AllowPushPreLog(dwSessionID, dwNowTime)) {
+			m_pLog->Write("押し要求を破棄 [理由:本人が見つからない] dwSessionID:%u", dwSessionID);
+		}
+#endif
 		return;
 	}
-	if (pInfoChar == pInfoPlayer) {
+	pInfoObj = (PCInfoCharSvr)m_pLibInfoChar->GetPtrLogIn(Packet.m_dwObjCharID);
+	if (pInfoObj == NULL) {
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if ((pInfoPlayer->m_dwLastPushDiagLogTime == 0) ||
+			(dwNowTime - pInfoPlayer->m_dwLastPushDiagLogTime >= PUSH_REJECT_LOG_INTERVAL_MS)) {
+			pInfoPlayer->m_dwLastPushDiagLogTime = dwNowTime;
+			m_pLog->Write("押し要求を破棄 [理由:押せる物が見つからない] dwSessionID:%u [CHAR:%s][OBJ_ID:%u]",
+				dwSessionID, pInfoPlayer->m_strCharName.GetUtf8Pointer(), Packet.m_dwObjCharID);
+		}
+#endif
 		return;
 	}
-	// 押せる対象か（押し判定フラグ・NPC発生種別除外）をクライアントの選定条件と揃えて確認する。
-	// ただしボールは X キー経由（OnXChar）で m_bPush を見ずに押し要求を送ってくるため、
-	// ボール種別なら m_bPush フラグが立っていなくても許可する。
-	if ((pInfoChar->m_bPush == FALSE) && (pInfoChar->m_nMoveType != CHARMOVETYPE_BALL)) {
+	if (pInfoObj == pInfoPlayer) {
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if ((pInfoPlayer->m_dwLastPushDiagLogTime == 0) ||
+			(dwNowTime - pInfoPlayer->m_dwLastPushDiagLogTime >= PUSH_REJECT_LOG_INTERVAL_MS)) {
+			pInfoPlayer->m_dwLastPushDiagLogTime = dwNowTime;
+			m_pLog->Write("押し要求を破棄 [理由:押せる物が自分自身] dwSessionID:%u [CHAR:%s]",
+				dwSessionID, pInfoPlayer->m_strCharName.GetUtf8Pointer());
+		}
+#endif
 		return;
 	}
-	if (pInfoChar->m_nMoveType == CHARMOVETYPE_PUTNPC) {
+	if (pInfoObj->IsLogin() == FALSE) {
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if ((pInfoPlayer->m_dwLastPushDiagLogTime == 0) ||
+			(dwNowTime - pInfoPlayer->m_dwLastPushDiagLogTime >= PUSH_REJECT_LOG_INTERVAL_MS)) {
+			pInfoPlayer->m_dwLastPushDiagLogTime = dwNowTime;
+			m_pLog->Write("押し要求を破棄 [理由:押せる物がログインしていない] dwSessionID:%u [CHAR:%s][OBJ_ID:%u]",
+				dwSessionID, pInfoPlayer->m_strCharName.GetUtf8Pointer(), Packet.m_dwObjCharID);
+		}
+#endif
 		return;
 	}
-	// 同じマップかつ近く（隣接〜数マス程度）にいるかを確認する。
-	// GetDistance は GetPosRect（旧スケールのまま=ほぼ点）の矩形間のすき間を測るため実質座標差になる上、
-	// サーバー側が持つプレイヤー座標は移動同期の間隔ぶん遅れる（自キャラはクライアント先行のDead Reckoning）。
-	// そのため隣接するだけでもしきい値ぎりぎりになりやすく、上限は遠隔からの操作を防げる程度に広めに取る。
-	// ラグで距離が一時的にずれる正規ケースがあり得るため、条件外でも切断はせず黙って無視する。
-	const int PUSH_DISTANCE_LIMIT = MAPPARTSSIZE * 6;
-	m_pLibInfoChar->GetDistance(sizeDistance, pInfoPlayer, pInfoChar);
-	if ((sizeDistance.cx < 0) || (sizeDistance.cx > PUSH_DISTANCE_LIMIT) || (sizeDistance.cy > PUSH_DISTANCE_LIMIT)) {
+	if (pInfoObj->m_bPush == FALSE) {
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if ((pInfoPlayer->m_dwLastPushDiagLogTime == 0) ||
+			(dwNowTime - pInfoPlayer->m_dwLastPushDiagLogTime >= PUSH_REJECT_LOG_INTERVAL_MS)) {
+			pInfoPlayer->m_dwLastPushDiagLogTime = dwNowTime;
+			m_pLog->Write("押し要求を破棄 [理由:m_bPushでない] dwSessionID:%u [CHAR:%s][OBJ:%s]",
+				dwSessionID, pInfoPlayer->m_strCharName.GetUtf8Pointer(), pInfoObj->m_strCharName.GetUtf8Pointer());
+		}
+#endif
 		return;
 	}
-	pInfoChar->m_nDirection = Packet.m_nDirection;
-	// 押し移動はステップ移動経路に統一する。移動ステートにすることで
-	// MoveSync が MOVE_START/STOP を送り、進行中のみアニメ＋停止で止まる。
-	// 連射時に歩数が際限なく溜まらないよう上書き方式で上限を抑える。
-	if (Packet.m_nPushCount > pInfoChar->m_nMoveCount) {
-		pInfoChar->m_nMoveCount = Packet.m_nPushCount;
+	if (pInfoObj->m_nMoveType == CHARMOVETYPE_PUTNPC) {
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if ((pInfoPlayer->m_dwLastPushDiagLogTime == 0) ||
+			(dwNowTime - pInfoPlayer->m_dwLastPushDiagLogTime >= PUSH_REJECT_LOG_INTERVAL_MS)) {
+			pInfoPlayer->m_dwLastPushDiagLogTime = dwNowTime;
+			m_pLog->Write("押し要求を破棄 [理由:PUTNPC] dwSessionID:%u [CHAR:%s][OBJ:%s][m_nMoveType:%d]",
+				dwSessionID, pInfoPlayer->m_strCharName.GetUtf8Pointer(), pInfoObj->m_strCharName.GetUtf8Pointer(),
+				pInfoObj->m_nMoveType);
+		}
+#endif
+		return;
 	}
-	pInfoChar->SetMoveState(CHARMOVESTATE_MOVE);
+	if (pInfoObj->m_dwMapID != pInfoPlayer->m_dwMapID) {
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if ((pInfoPlayer->m_dwLastPushDiagLogTime == 0) ||
+			(dwNowTime - pInfoPlayer->m_dwLastPushDiagLogTime >= PUSH_REJECT_LOG_INTERVAL_MS)) {
+			pInfoPlayer->m_dwLastPushDiagLogTime = dwNowTime;
+			m_pLog->Write("押し要求を破棄 [理由:別マップ] dwSessionID:%u [CHAR:%s][OBJ:%s][本人MapID:%u][OBJ MapID:%u]",
+				dwSessionID, pInfoPlayer->m_strCharName.GetUtf8Pointer(), pInfoObj->m_strCharName.GetUtf8Pointer(),
+				pInfoPlayer->m_dwMapID, pInfoObj->m_dwMapID);
+		}
+#endif
+		// 押せる物・本人は特定できているので、確定座標を返して補正する。
+		ptFinal.x = pInfoObj->m_nMapX;
+		ptFinal.y = pInfoObj->m_nMapY;
+		PacketResPush.Make(pInfoObj->m_dwCharID, ptFinal, FALSE);
+		m_pSock->SendTo(dwSessionID, &PacketResPush);
+		return;
+	}
+
+	// TODO(S5): 入れ替わり(SWAP)は未実装。却下して現在の確定座標だけ返す。
+	// docs/push-object-redesign.md 2章7項・PushDecision::StartSwap/UpdateSwap 参照。
+	if (Packet.m_nPushType == PUSHTYPE_SWAP) {
+		ptFinal.x = pInfoObj->m_nMapX;
+		ptFinal.y = pInfoObj->m_nMapY;
+		PacketResPush.Make(pInfoObj->m_dwCharID, ptFinal, FALSE);
+		m_pSock->SendTo(dwSessionID, &PacketResPush);
+		return;
+	}
+
+	// 時刻逆行チェック(前回受理したクライアント時刻との比較)。
+	// 判定そのものはPushDecision::CheckClientTime(純粋関数)に切り出してある。
+	// - 小さな逆行(パケットの入れ替わり・重複)は却下する。ただし押せる物と本人は
+	//   特定できているため、黙って無視せずRES_PUSHで現在座標を返し、クライアントが
+	//   予測だけで動き続けないようにする。
+	// - 大きな逆行(PUSH_RELOAD_REWIND_THRESHOLD_MS以上)はクライアント再起動
+	//   (ページ再読み込み等でSDL_GetTicks系が0から数え直された)とみなし、却下せず
+	//   基準(m_dwLastPushClientTime)を0に戻して「前回受理なし」として通常どおり判定する。
+	dwPrevClientTime = pInfoPlayer->m_dwLastPushClientTime; // 診断用。原因特定後に無効化
+
+	PushDecision::CLIENT_TIME_RESULT timeResult = PushDecision::CheckClientTime(
+		Packet.m_dwTimeStamp, pInfoPlayer->m_dwLastPushClientTime,
+		PUSH_RELOAD_REWIND_THRESHOLD_MS, PUSH_ELAPSED_MAX_MS);
+
+	if (timeResult.bRejected) {
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if ((pInfoPlayer->m_dwLastPushDiagLogTime == 0) ||
+			(dwNowTime - pInfoPlayer->m_dwLastPushDiagLogTime >= PUSH_REJECT_LOG_INTERVAL_MS)) {
+			pInfoPlayer->m_dwLastPushDiagLogTime = dwNowTime;
+			m_pLog->Write("押し要求を破棄 [理由:時刻逆行] dwSessionID:%u [CHAR:%s][OBJ:%s]"
+				"[今回クライアント時刻:%u][前回受理クライアント時刻:%u]",
+				dwSessionID, pInfoPlayer->m_strCharName.GetUtf8Pointer(), pInfoObj->m_strCharName.GetUtf8Pointer(),
+				Packet.m_dwTimeStamp, pInfoPlayer->m_dwLastPushClientTime);
+		}
+#endif
+		// 押せる物・本人は特定できているので、確定座標を返して補正する。
+		ptFinal.x = pInfoObj->m_nMapX;
+		ptFinal.y = pInfoObj->m_nMapY;
+		PacketResPush.Make(pInfoObj->m_dwCharID, ptFinal, FALSE);
+		m_pSock->SendTo(dwSessionID, &PacketResPush);
+		return;
+	}
+
+	if (timeResult.bTreatedAsReload) {
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if ((pInfoPlayer->m_dwLastPushDiagLogTime == 0) ||
+			(dwNowTime - pInfoPlayer->m_dwLastPushDiagLogTime >= PUSH_REJECT_LOG_INTERVAL_MS)) {
+			pInfoPlayer->m_dwLastPushDiagLogTime = dwNowTime;
+			m_pLog->Write("押し時刻の大幅な逆行を検知(読み込み直しとみなし基準をリセット) dwSessionID:%u [CHAR:%s]"
+				"[今回クライアント時刻:%u][前回受理クライアント時刻:%u]",
+				dwSessionID, pInfoPlayer->m_strCharName.GetUtf8Pointer(),
+				Packet.m_dwTimeStamp, pInfoPlayer->m_dwLastPushClientTime);
+		}
+#endif
+		pInfoPlayer->m_dwLastPushClientTime = 0;
+	}
+
+	dwElapsedMs = timeResult.dwElapsedMs;
+	// 診断用。原因特定後に無効化。上限クランプ前の生の経過時間(ms)。
+	if ((Packet.m_dwTimeStamp != 0) && (dwPrevClientTime != 0) && !timeResult.bTreatedAsReload) {
+		dwRawElapsedMs = Packet.m_dwTimeStamp - dwPrevClientTime;
+	} else {
+		dwRawElapsedMs = PUSH_ELAPSED_MAX_MS;
+	}
+
+	nPixelsPerSec = m_pLibInfoChar->GetCharMovePixelsPerSec(pInfoPlayer);
+
+	// 押している本人の当たり矩形(申告座標基準)。サーバー座標は変えずに一時的に
+	// 申告座標へ差し替えてGetCollisionRectを取る。
+	nSaveSelfX = pInfoPlayer->m_nMapX;
+	nSaveSelfY = pInfoPlayer->m_nMapY;
+	pInfoPlayer->m_nMapX = Packet.m_ptSelf.x;
+	pInfoPlayer->m_nMapY = Packet.m_ptSelf.y;
+	pInfoPlayer->GetCollisionRect(rcSelfWin);
+	pInfoPlayer->m_nMapX = nSaveSelfX;
+	pInfoPlayer->m_nMapY = nSaveSelfY;
+	rcSelf = ToPushRect(rcSelfWin);
+
+	pInfoObj->GetCollisionRect(rcObjWin);
+	rcObj = ToPushRect(rcObjWin);
+
+	ptReportedSelf.x = Packet.m_ptSelf.x;
+	ptReportedSelf.y = Packet.m_ptSelf.y;
+	ptServerSelf.x = nSaveSelfX;
+	ptServerSelf.y = nSaveSelfY;
+
+	dx = Packet.m_ptObjTarget.x - pInfoObj->m_nMapX;
+	dy = Packet.m_ptObjTarget.y - pInfoObj->m_nMapY;
+
+	// isFree: 1px先が空いているか(マップ+本人と押せる物自身を除く全キャラ)。
+	// nCurX/nCurYは呼び出されるたびに1pxずつ進める「確定済み」座標で、
+	// pInfoObjの実座標(m_nMapX/Y)は受理が確定するまで書き換えない。
+	// pInfoObj->m_pInfoMapはSetMap()経由(スキル/アイテム生成/NPC発生)でしか
+	// セットされず、DBから配置されたNPC(押せるボール等)ではNULLのままになる
+	// ため使わない。他の受信処理(RecvProcCHAR_REQ_PUTGET等)と同じく
+	// m_pLibInfoMap->GetPtr()でpInfoObjのマップIDから引く。
+	PCInfoMapBase pInfoObjMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoObj->m_dwMapID);
+	nCurX = pInfoObj->m_nMapX;
+	nCurY = pInfoObj->m_nMapY;
+	PushDecision::IsPositionFreeFunc isFree = [&](const PushDecision::RECT_PX &rcMoveTo) -> bool {
+		if (!IsPushMapFree(m_pLibInfoChar, pInfoObjMap, pInfoObj, nCurX, nCurY, nDir)) {
+			return false;
+		}
+		if (!IsPushCharAreaFree(m_pLibInfoChar, pInfoObj->m_dwMapID, pInfoPlayer, pInfoObj, rcMoveTo)) {
+			return false;
+		}
+		int nStepX, nStepY;
+		PushDirVector(nDir, nStepX, nStepY);
+		nCurX += nStepX;
+		nCurY += nStepY;
+		return true;
+	};
+
+#if PUSH_DEBUG_LOG
+	// 診断用。原因特定後に無効化。DecidePush直前の元値(受理・却下どちらになるかによらず出す)。
+	if ((pInfoPlayer->m_dwLastPushDecideLogTime == 0) ||
+		(dwNowTime - pInfoPlayer->m_dwLastPushDecideLogTime >= PUSH_REJECT_LOG_INTERVAL_MS)) {
+		pInfoPlayer->m_dwLastPushDecideLogTime = dwNowTime;
+		m_pLog->Write(
+			"押し判定直前(診断) dwSessionID:%u [CHAR:%s][OBJ:%s][向き:%d]"
+			"[OBJ座標:%d,%d][目標座標:%d,%d][dx:%d,dy:%d][経過ms:%u(生:%u)][速度px/s:%d]",
+			dwSessionID,
+			pInfoPlayer->m_strCharName.GetUtf8Pointer(),
+			pInfoObj->m_strCharName.GetUtf8Pointer(),
+			nDir,
+			pInfoObj->m_nMapX, pInfoObj->m_nMapY,
+			Packet.m_ptObjTarget.x, Packet.m_ptObjTarget.y,
+			dx, dy,
+			dwElapsedMs, dwRawElapsedMs,
+			nPixelsPerSec);
+	}
+#endif
+
+	PushDecision::PUSH_RESULT result = PushDecision::DecidePush(
+		rcSelf,
+		ptReportedSelf,
+		ptServerSelf,
+		PUSH_SELF_POS_TOLERANCE_PX,
+		rcObj,
+		nDir,
+		dx, dy,
+		dwElapsedMs,
+		nPixelsPerSec,
+		PUSH_CONTACT_GAP_ALLOWED_PX,
+		isFree);
+
+	if (result.bAccepted) {
+		int nStepX, nStepY;
+		int nNewX, nNewY;
+
+		if (result.nAcceptedDistance == 0) {
+			// 要求距離0(dx==dy==0、クライアントが押すのをやめた時等)。
+			// 押せる物は動かさない(位置・向き・移動状態のいずれも変更しない)。
+			// 時刻の基準(m_dwLastPushClientTime)だけは更新する。これを更新しないと
+			// 押すのをやめている間はここに来るたびに前回受理時刻が古いまま溜まり、
+			// 次に実際に押し始めた時のdwElapsedMsが不当に大きくなる
+			// (=速度検証の許容距離が不当に緩くなる)ため。
+			nNewX = pInfoObj->m_nMapX;
+			nNewY = pInfoObj->m_nMapY;
+			pInfoPlayer->m_dwLastPushClientTime = Packet.m_dwTimeStamp;
+		} else {
+			PushDirVector(nDir, nStepX, nStepY);
+			nNewX = pInfoObj->m_nMapX + nStepX * result.nAcceptedDistance;
+			nNewY = pInfoObj->m_nMapY + nStepY * result.nAcceptedDistance;
+
+			pInfoObj->SetPos(nNewX, nNewY);
+			pInfoObj->SetDirection(nDir);
+			pInfoObj->m_bChgPos = TRUE;
+
+			{
+				int nMoveStateOnMove = pInfoObj->IsStateBattle() ? CHARMOVESTATE_BATTLEMOVE : CHARMOVESTATE_MOVE;
+				if (pInfoObj->m_nMoveState != nMoveStateOnMove) {
+					pInfoObj->SetMoveState(nMoveStateOnMove);
+				}
+			}
+			pInfoObj->m_dwLastPushedTime = dwNowTime;
+			pInfoObj->m_dwPushingCharID = pInfoPlayer->m_dwCharID;
+
+			pInfoPlayer->m_dwLastPushClientTime = Packet.m_dwTimeStamp;
+
+#if PUSH_DEBUG_LOG
+			// 診断用。原因特定後に無効化。受理ログも却下ログと同じく1秒に1回までに絞る。
+			if ((pInfoPlayer->m_dwLastPushAcceptLogTime == 0) ||
+				(dwNowTime - pInfoPlayer->m_dwLastPushAcceptLogTime >= PUSH_ACCEPT_LOG_INTERVAL_MS)) {
+				pInfoPlayer->m_dwLastPushAcceptLogTime = dwNowTime;
+				int nRequestedDistanceLog = abs(dx) + abs(dy);
+				m_pLog->Write(
+					"押し要求を受理(診断) dwSessionID:%u [CHAR:%s][OBJ:%s][受理距離:%d][要求距離:%d(dx:%d,dy:%d)][経過ms:%u(生:%u)][新座標:%d,%d]",
+					dwSessionID,
+					pInfoPlayer->m_strCharName.GetUtf8Pointer(),
+					pInfoObj->m_strCharName.GetUtf8Pointer(),
+					result.nAcceptedDistance,
+					nRequestedDistanceLog, dx, dy,
+					dwElapsedMs, dwRawElapsedMs,
+					nNewX, nNewY);
+			}
+#endif
+		}
+
+		ptFinal.x = nNewX;
+		ptFinal.y = nNewY;
+		PacketResPush.Make(pInfoObj->m_dwCharID, ptFinal, TRUE);
+		m_pSock->SendTo(dwSessionID, &PacketResPush);
+	} else {
+		// 却下時のRES_PUSH補正送信は毎回行う(押し要求は100ms間隔=最大10回/秒なので
+		// 送信自体は間引かない。クライアントのずれをすぐ戻すため)。
+		// m_dwLastPushRejectSyncTimeは間引きに使っていたが不要になった。
+		// メンバ自体は他用途に転用しやすいよう残す(未使用)。
+		// ログのみ従来どおり本人ごと1秒に1回までとし、100ms間隔の連続却下でログが
+		// 溢れないようにする。抑制した件数は次に出すログへ添えて捨てない。
+		BOOL bDoSyncSend = TRUE;
+		BOOL bDoLog = FALSE;
+
+		if ((pInfoPlayer->m_dwLastPushRejectLogTime == 0) ||
+			(dwNowTime - pInfoPlayer->m_dwLastPushRejectLogTime >= PUSH_REJECT_LOG_INTERVAL_MS)) {
+			pInfoPlayer->m_dwLastPushRejectLogTime = dwNowTime;
+			bDoLog = TRUE;
+		}
+
+		if (bDoLog) {
+			CmyString strSuppressed;
+			if (pInfoPlayer->m_nPushRejectSuppressedCount > 0) {
+				strSuppressed.Format(_T("(他%d件)"), pInfoPlayer->m_nPushRejectSuppressedCount);
+			}
+#if PUSH_DEBUG_LOG
+			// 診断用。原因特定後は下のシンプル版に戻して無効化する。
+			{
+				int nRequestedDistanceLog = abs(dx) + abs(dy);
+				double dAllowedDistanceLog = GetPushAllowedDistance(dwElapsedMs, nPixelsPerSec);
+				m_pLog->Write(
+					"押し要求を却下 dwSessionID:%u [CHAR:%s][OBJ:%s][理由:%d:%s]"
+					"[要求距離:%d(dx:%d,dy:%d)][経過ms:%u(生:%u)][速度px/s:%d][許容距離:%.1f]"
+					"[申告座標:%d,%d][サーバー座標:%d,%d][OBJ座標:%d,%d][目標座標:%d,%d][向き:%d]"
+					"[前回受理時刻:%u][今回時刻:%u]%s%s",
+					dwSessionID,
+					pInfoPlayer->m_strCharName.GetUtf8Pointer(),
+					pInfoObj->m_strCharName.GetUtf8Pointer(),
+					result.eReason, GetPushRejectReasonName(result.eReason),
+					nRequestedDistanceLog, dx, dy,
+					dwElapsedMs, dwRawElapsedMs,
+					nPixelsPerSec, dAllowedDistanceLog,
+					Packet.m_ptSelf.x,
+					Packet.m_ptSelf.y,
+					nSaveSelfX,
+					nSaveSelfY,
+					pInfoObj->m_nMapX, pInfoObj->m_nMapY,
+					Packet.m_ptObjTarget.x, Packet.m_ptObjTarget.y,
+					nDir,
+					dwPrevClientTime, Packet.m_dwTimeStamp,
+					bDoSyncSend ? "[補正:送信]" : "[補正:抑制中]",
+					strSuppressed.GetUtf8Pointer());
+			}
+#else
+			m_pLog->Write(
+				"押し要求を却下 dwSessionID:%u [CHAR:%s][OBJ:%s][理由:%d][申告座標:%d,%d][サーバー座標:%d,%d]%s%s",
+				dwSessionID,
+				pInfoPlayer->m_strCharName.GetUtf8Pointer(),
+				pInfoObj->m_strCharName.GetUtf8Pointer(),
+				result.eReason,
+				Packet.m_ptSelf.x,
+				Packet.m_ptSelf.y,
+				nSaveSelfX,
+				nSaveSelfY,
+				bDoSyncSend ? "[補正:送信]" : "[補正:抑制中]",
+				strSuppressed.GetUtf8Pointer());
+#endif
+			pInfoPlayer->m_nPushRejectSuppressedCount = 0;
+		} else {
+			pInfoPlayer->m_nPushRejectSuppressedCount ++;
+		}
+
+		if (bDoSyncSend) {
+			ptFinal.x = pInfoObj->m_nMapX;
+			ptFinal.y = pInfoObj->m_nMapY;
+			PacketResPush.Make(pInfoObj->m_dwCharID, ptFinal, FALSE);
+			m_pSock->SendTo(dwSessionID, &PacketResPush);
+		}
+	}
 }
 
 void CMainFrame::RecvProcCHAR_REQ_TAIL(PBYTE pData, DWORD dwSessionID)

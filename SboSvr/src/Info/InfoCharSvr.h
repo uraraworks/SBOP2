@@ -130,9 +130,18 @@ public:
 			m_dwLastRecvMovePacketTime,	// 最終移動受信パケット時刻(ms)
 			m_dwLastMoveRejectSyncTime,	// 移動速度超過拒否時に権威座標を送り返した最終時刻(ms)。連続拒否時の送信頻度を抑制するため
 			m_dwLastTalkEventNPCID,	// 最後に会話イベントを要求したNPCのID(REQ_ADDSKILLの正当性確認用。保存・送信対象外)
-			m_dwLastTalkEventTime;	// 上記を記録した時刻(ms)
+			m_dwLastTalkEventTime,	// 上記を記録した時刻(ms)
+			m_dwLastPushedTime,	// [押せる物側] 最後に押された時刻(ms)。150ms経過で停止させる(保存・送信対象外)
+			m_dwPushingCharID,	// [押せる物側] 押している本人のキャラID。0なら押されていない(保存・送信対象外)
+			m_dwLastPushClientTime,	// [押す本人側] 最後に受理したREQ_PUSHのクライアント時刻(ms)。速度検証の基準(保存・送信対象外)
+			m_dwLastPushRejectSyncTime,	// [押す本人側] 押し要求を却下してRES_PUSHで補正送信した最終時刻(ms)。連続拒否時の送信頻度を抑制する(保存・送信対象外)
+			m_dwLastPushRejectLogTime,	// [押す本人側] 押し要求却下ログを最後に出力した時刻(ms)。連続拒否時のログ出力頻度を抑制する(保存・送信対象外)
+			m_dwLastPushAcceptLogTime,	// [押す本人側] 診断用。押し要求受理ログを最後に出力した時刻(ms)。原因特定後に無効化(保存・送信対象外)
+			m_dwLastPushDiagLogTime,	// [押す本人側] 診断用。REQ_PUSH入口ログ・判定前の黙殺returnログの共通抑制(1秒1回)。原因特定後に無効化(保存・送信対象外)
+			m_dwLastPushDecideLogTime;	// [押す本人側] 診断用。DecidePush直前ログの抑制(1秒1回)。原因特定後に無効化(保存・送信対象外)
 	int	m_nFiredMapEventCount,	// 発火済みイベント数
-			m_nLastMoveSyncDirection;	// 最終移動同期向き
+			m_nLastMoveSyncDirection,	// 最終移動同期向き
+			m_nPushRejectSuppressedCount;	// [押す本人側] ログ抑制中に却下したが出力しなかった件数(保存・送信対象外)
 	int	m_nFiredMapEventTileX[MAPEVENT_FIRED_MAX];	// 発火済みイベントのタイルX（集合）
 	int	m_nFiredMapEventTileY[MAPEVENT_FIRED_MAX];	// 発火済みイベントのタイルY（集合）
 	BOOL	m_bMoveSyncActive,	// 移動同期中

@@ -9,51 +9,6 @@
 #include "InfoCharSvr.h"
 #include "../Platform/SvrPlatform.h"
 
-namespace {
-
-static const int SERVER_CHAR_MOVE_PIXELS_PER_SEC = 128;
-
-static DWORD GetMoveWaitBase(CInfoCharSvr *pInfoChar)
-{
-	DWORD dwMoveWait;
-
-	if (pInfoChar == NULL) {
-		return 11;
-	}
-	dwMoveWait = pInfoChar->GetMoveWait();
-	if (dwMoveWait == 0) {
-		return 11;
-	}
-	return dwMoveWait;
-}
-
-static int GetMovePixelsPerSec(CInfoCharSvr *pInfoChar)
-{
-	DWORD dwMoveWait;
-	ULONGLONG ullSpeed;
-
-	dwMoveWait = GetMoveWaitBase(pInfoChar);
-	ullSpeed = (ULONGLONG)SERVER_CHAR_MOVE_PIXELS_PER_SEC * 11;
-	ullSpeed = (ullSpeed + dwMoveWait - 1) / dwMoveWait;
-	if (ullSpeed == 0) {
-		return 1;
-	}
-	if (ullSpeed > INT_MAX) {
-		return INT_MAX;
-	}
-	return (int)ullSpeed;
-}
-
-static DWORD GetHalfTileMoveInterval(CInfoCharSvr *pInfoChar)
-{
-	int nMovePixelsPerSec;
-
-	nMovePixelsPerSec = GetMovePixelsPerSec(pInfoChar);
-	return max((DWORD)(((ULONGLONG)HALF_TILE * 1000 + nMovePixelsPerSec - 1) / nMovePixelsPerSec), (DWORD)1);
-}
-
-}	// namespace
-
 CInfoCharSvr::CInfoCharSvr()
 {
 	m_nReserveChgEfect	= 0;
@@ -99,8 +54,17 @@ CInfoCharSvr::CInfoCharSvr()
 	m_dwLastMoveRejectSyncTime = 0;
 	m_dwLastTalkEventNPCID = 0;
 	m_dwLastTalkEventTime = 0;
+	m_dwLastPushedTime = 0;
+	m_dwPushingCharID = 0;
+	m_dwLastPushClientTime = 0;
+	m_dwLastPushRejectSyncTime = 0;
+	m_dwLastPushRejectLogTime = 0;
+	m_dwLastPushAcceptLogTime = 0;
+	m_dwLastPushDiagLogTime = 0;
+	m_dwLastPushDecideLogTime = 0;
 	m_nFiredMapEventCount = 0;
 	m_nLastMoveSyncDirection = -1;
+	m_nPushRejectSuppressedCount = 0;
 	m_bMoveSyncActive = FALSE;
 	m_bPendingMapEvent = FALSE;
 	m_nPendingEventTileX = 0;
@@ -367,36 +331,25 @@ BOOL CInfoCharSvr::TimerProc(DWORD dwTime)
 BOOL CInfoCharSvr::TimerProcMOVE(DWORD dwTime)
 {
 	BOOL bRet;
-	DWORD dwTimeTmp;
-	DWORD dwMoveInterval;
 
 	bRet = FALSE;
-	dwMoveInterval = GetHalfTileMoveInterval(this);
-	if (m_nMoveCount == 0) {
-		// 押し移動の終了判定: STAND/BALL が移動ステートのまま
-		// 1移動間隔ステップが来なければ停止し、MoveSync に MOVE_STOP を送らせる。
-		if ((m_nMoveType == CHARMOVETYPE_STAND || m_nMoveType == CHARMOVETYPE_BALL)
-			&& IsStateMove()
-			&& (dwTime - m_dwLastTimeMove >= dwMoveInterval)) {
+
+	// S3: 押せる物(m_bPush)の停止判定。押しはRecvProcCHAR_REQ_PUSHが1pxずつ
+	// SetPos()するだけで、歩数(m_nMoveCount)方式は使わない(docs/push-object-redesign.md)。
+	// 最後に押されてから PUSH_STOP_TIMEOUT_MS 経っても次の押しが来なければ、
+	// MOVE状態のまま止まっているクライアントへ MOVE_STOP を送らせるため停止させる。
+	if (m_bPush && (m_nMoveType != CHARMOVETYPE_PUTNPC) && IsStateMove()) {
+		const DWORD PUSH_STOP_TIMEOUT_MS = 150;
+		if (dwTime - m_dwLastPushedTime >= PUSH_STOP_TIMEOUT_MS) {
 			int nState = CHARMOVESTATE_STAND;
 			if (IsStateBattle()) {
 				nState = CHARMOVESTATE_BATTLE;
 			}
 			SetMoveState(nState);
+			m_dwPushingCharID = 0;
 		}
-		goto Exit;
 	}
 
-	dwTimeTmp = dwTime - m_dwLastTimeMove;
-	if (dwTimeTmp < dwMoveInterval) {
-		goto Exit;
-	}
-	m_bChgMoveCount = TRUE;
-	m_nMoveCount --;
-	m_dwLastTimeMove = dwTime;
-
-	bRet = TRUE;
-Exit:
 	return bRet;
 }
 

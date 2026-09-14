@@ -45,6 +45,7 @@
 #include "CHAR/PacketCHAR_SET_EFFECT.h"	// エフェクト指定
 #include "CHAR/PacketCHAR_ITEMINFO.h"	// アイテム情報通知
 #include "CHAR/PacketCHAR_REQ_PUSH.h"	// 押す要求
+#include "CHAR/PacketCHAR_RES_PUSH.h"	// 押す応答
 #include "CHAR/PacketCHAR_REQ_TAIL.h"	// 付いて行く要求
 #include "CHAR/PacketCHAR_RES_TAIL.h"	// 付いて行く応答
 #include "CHAR/PacketCHAR_REQ_MODIFY_PARAM.h"	// パラメータ変更要求

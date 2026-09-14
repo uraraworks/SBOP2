@@ -159,6 +159,7 @@ private:
 	void RecvProcCHAR_MOVE_DIR_CHANGE(PBYTE pData);
 	void RecvProcCHAR_MOVE_STOP(PBYTE pData);
 	void RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPacketPosX, int nPacketPosY, BOOL bUpdate, BOOL bForceStop);
+	void RecvProcCHAR_RES_PUSH(PBYTE pData);
 	void RecvProcCHAR_POS_SYNC(PBYTE pData);
 	void RecvProcCHAR_STATE(PBYTE pData);
 	void RecvProcCHAR_PROCSTATE(PBYTE pData);

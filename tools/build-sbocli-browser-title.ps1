@@ -318,7 +318,6 @@ $sources = @(
     "Common/Packet/CHAR/PacketCHAR_REQ_DRAGITEM.cpp",
     "Common/Packet/CHAR/PacketCHAR_REQ_EQUIP.cpp",
     "Common/Packet/CHAR/PacketCHAR_REQ_MODIFY_PARAM.cpp",
-    "Common/Packet/CHAR/PacketCHAR_REQ_PUSH.cpp",
     "Common/Packet/CHAR/PacketCHAR_REQ_PUTGET.cpp",
     "Common/Packet/CHAR/PacketCHAR_REQ_TAIL.cpp",
     "Common/Packet/CHAR/PacketCHAR_REQ_USEITEM.cpp",

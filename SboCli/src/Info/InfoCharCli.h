@@ -174,5 +174,11 @@ public:
 			m_dDrawMoveStartY,	// 描画補間開始Y
 			m_dDrawMoveEndX,	// 描画補間終了X
 			m_dDrawMoveEndY;	// 描画補間終了Y
+
+	// docs/push-object-redesign.md S3b: 押せる物(Push=1 NPC)側が持つ、
+	// 「誰かにローカル予測で押されている最中か」の状態。押している本人の
+	// 画面でだけ TRUE になり、他人の画面では常に FALSE（S4で別途対応）。
+	BOOL	m_bPushPredicting;	// 押し予測中か
+	DWORD	m_dwPushPredictOwnerCharID;	// 予測している本人のCharID
 } CInfoCharCli, *PCInfoCharCli;
 

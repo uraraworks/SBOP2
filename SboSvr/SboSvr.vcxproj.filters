@@ -540,6 +540,9 @@
     <ClCompile Include="src\MainFrame\MoveStateDecision.cpp">
       <Filter>Source Files\MainFrame</Filter>
     </ClCompile>
+    <ClCompile Include="src\MainFrame\PushDecision.cpp">
+      <Filter>Source Files\MainFrame</Filter>
+    </ClCompile>
     <ClCompile Include="src\MainFrame\MainFrameRecvProcCONNECT.cpp">
       <Filter>Source Files\MainFrame</Filter>
     </ClCompile>
@@ -888,6 +891,9 @@
       <Filter>Header Files\MainFrame No. 1</Filter>
     </ClInclude>
     <ClInclude Include="src\MainFrame\MoveStateDecision.h">
+      <Filter>Header Files\MainFrame No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainFrame\PushDecision.h">
       <Filter>Header Files\MainFrame No. 1</Filter>
     </ClInclude>
     <ClInclude Include="src\LibInfo\LibInfoCharSvr.h">

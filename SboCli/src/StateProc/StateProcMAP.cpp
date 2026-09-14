@@ -298,6 +298,14 @@ CStateProcMAP::CStateProcMAP()
 	m_dwStartChargeTime		= 0;
 	m_bMoveSyncActive			= FALSE;
 	m_nMoveSyncDirection		= -1;
+	m_bPushSyncActive			= FALSE;
+	m_dwPushSyncObjCharID		= 0;
+	m_nPushSyncDirection		= -1;
+	m_dwLastTimePushSyncSend	= 0;
+	m_dwLastTimePushContact	= 0;
+	m_nLastPushSyncSentX		= 0;
+	m_nLastPushSyncSentY		= 0;
+	m_bLastPushSyncSentValid	= FALSE;
 	m_nMoveSpeedAccum			= 0;
 	m_dwLastPlayerMoveStepTime	= 0;
 	m_dwLastPlayerMoveTurnTime	= 0;
@@ -564,6 +572,7 @@ void CStateProcMAP::ResetPlayerMoveSyncState(void)
 	m_bAutoWalkToEvent = FALSE;
 	m_bNeedIdleMapEventCheck = FALSE;
 	m_bSendCheckMapEvent = FALSE;
+	EndPushPredict(FALSE);	// S3b: マップ切替等では最終送信せずローカル予測状態だけ破棄する
 }
 
 
@@ -779,6 +788,14 @@ BOOL CStateProcMAP::TimerProc(void)
 		}
 	}
 
+	// S3b: 押し予測タイムアウト。壁際で押しが塞がれた等でMoveProcが押しを続けられない
+	// フレームが続いても、300ms以内なら接触継続とみなして予測を保つ
+	// (docs/push-object-redesign.md 4章。1フレームでも即終了させると軸が合わない
+	// 一瞬の入力揺れで予測がちらつく)。300msを超えたら停止とみなし、予測を終える。
+	if (m_bPushSyncActive && (timeGetTime() - m_dwLastTimePushContact > 300)) {
+		EndPushPredict(FALSE);
+	}
+
 	dwTime = timeGetTime() - m_dwLastTimeKeepAlive;
 	if (dwTime > 20 * 1000) {
 		CPacketCONNECT_KEEPALIVE Packet;
@@ -932,6 +949,9 @@ void CStateProcMAP::KeyProc(
 					m_nMoveSyncDirection = -1;
 					m_dwLastTimeMoveSyncSend = 0;
 				}
+				// S3b: 移動キーを全て離した＝押すのもやめたとみなし、最終座標を1回送ってから
+				// 予測を終える(docs/push-object-redesign.md 4章「送信」参照)。
+				EndPushPredict(TRUE);
 				if (!m_bAutoWalkToEvent) {
 					/* 接触位置で止まっただけでも、停止直後にイベント判定を要求する */
 					m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
@@ -2874,6 +2894,172 @@ void CStateProcMAP::OnMgrDrawEND_FADEIN(DWORD dwPara)
 
 
 
+// ─────────────────────────────────────────────
+// S3b: 押せる物(Push=1 NPC)の押し予測。docs/push-object-redesign.md 4章。
+// サーバー(SboSvr/src/MainFrame/MainFrameRecvProcCHAR.cpp の
+// RecvProcCHAR_REQ_PUSH/IsPushMapFree/IsPushCharAreaFree)と同じ判定
+// (CLibInfoCharBase::CanMoveDirection/IsPushAreaFree、Commonで共用)を使い、
+// ずれによる引き戻しを減らす。
+// ─────────────────────────────────────────────
+
+// 診断用。通常は0。原因調査時に1にする。斜め押しで止めた直後に押せる物が
+// 少し逆走する不具合の調査用ログ。予測の1pxごと(TryPushObject)は多すぎるので
+// 出さず、それ以外の座標変更イベント(受理/却下/位置パケット/予測終了/接触喪失時の
+// 即時送信)だけ SboDbgLog へ出す。ブラウザのコンソールで "[PushDbg]" で検索できる。
+#define PUSH_CLIENT_DEBUG_LOG 0
+
+void CStateProcMAP::SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *pInfoObj)
+{
+	CPacketCHAR_REQ_PUSH PacketReqPush;
+	POINT ptObjTarget, ptSelf;
+
+	if ((m_pPlayerChar == NULL) || (pInfoObj == NULL) || (m_pSock == NULL)) {
+		return;
+	}
+	ptObjTarget.x = pInfoObj->m_nMapX;
+	ptObjTarget.y = pInfoObj->m_nMapY;
+	ptSelf.x = m_pPlayerChar->m_nMapX;
+	ptSelf.y = m_pPlayerChar->m_nMapY;
+
+	PacketReqPush.Make(dwObjCharID, nPushDir, PUSHTYPE_PUSH, ptObjTarget, ptSelf, timeGetTime());
+	m_pSock->Send(&PacketReqPush);
+
+	m_dwLastTimePushSyncSend = timeGetTime();
+	// S3b: 接触喪失時の即時送信(MoveProc)が同じ座標で重複送信しないための記録
+	m_nLastPushSyncSentX = ptObjTarget.x;
+	m_nLastPushSyncSentY = ptObjTarget.y;
+	m_bLastPushSyncSentValid = TRUE;
+}
+
+void CStateProcMAP::EndPushPredict(BOOL bSendFinal)
+{
+	PCInfoCharCli pInfoObj;
+
+	if (m_bPushSyncActive == FALSE) {
+		return;
+	}
+	pInfoObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(m_dwPushSyncObjCharID);
+	if (bSendFinal && (pInfoObj != NULL)) {
+		// 離す直前の最新座標をすぐ反映させる(最大100ms分の送信間引きを打ち切る)
+		SendReqPush(m_dwPushSyncObjCharID, m_nPushSyncDirection, pInfoObj);
+	}
+	if ((pInfoObj != NULL) && m_pPlayerChar && (pInfoObj->m_dwPushPredictOwnerCharID == m_pPlayerChar->m_dwCharID)) {
+#if PUSH_CLIENT_DEBUG_LOG
+		SboDbgLog("[PushDbg][予測終了][obj:%u][pos:%d,%d][bSendFinal:%d]",
+			pInfoObj->m_dwCharID, pInfoObj->m_nMapX, pInfoObj->m_nMapY, bSendFinal ? 1 : 0);
+#endif
+		pInfoObj->m_bPushPredicting = FALSE;
+		// 追従用の経由点が万一残っていれば破棄する。押せる物は
+		// RecvProcCHAR_MOVE_CORE 側で既にキューへ乗せない扱いにしているため
+		// 通常は空だが、予測を終える境目で古い点が再生されないよう防御的に消す
+		// (docs/push-object-redesign.md 4章)。
+		pInfoObj->m_bWaypointMove = FALSE;
+		if (pInfoObj->m_apMovePosQue.size() > 0) {
+			pInfoObj->DeleteAllMovePosQue();
+		}
+		if (pInfoObj->m_nMoveState == CHARMOVESTATE_MOVE) {
+			pInfoObj->ChgMoveState(CHARMOVESTATE_STAND);
+		}
+	}
+	m_bPushSyncActive = FALSE;
+	m_dwPushSyncObjCharID = 0;
+	m_nPushSyncDirection = -1;
+	m_dwLastTimePushSyncSend = 0;
+	m_dwLastTimePushContact = 0;
+	m_bLastPushSyncSentValid = FALSE;
+}
+
+BOOL CStateProcMAP::TryPushObject(PCInfoMapBase pMap, DWORD dwObjCharID, int nPushDir)
+{
+	static const int anPosX[] = {0, 0, -1, 1};
+	static const int anPosY[] = {-1, 1, 0, 0};
+	PCInfoCharCli pInfoObj;
+	RECT rcObjMoveTo;
+	int nSaveX, nSaveY, nNewX, nNewY;
+	BOOL bMapFree, bAreaFree;
+
+	if ((pMap == NULL) || (m_pPlayerChar == NULL)) {
+		return FALSE;
+	}
+	pInfoObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(dwObjCharID);
+	if (pInfoObj == NULL) {
+		return FALSE;
+	}
+	// サーバー(RecvProcCHAR_REQ_PUSH)は CHARMOVETYPE_PUTNPC を押し対象から除外して
+	// 即座に却下する。送っても無駄なので予測もしない。
+	if (pInfoObj->m_nMoveType == CHARMOVETYPE_PUTNPC) {
+		return FALSE;
+	}
+	// 他の人が押し予測中(専有)なら、こちらでは押さない(横取りしない)。
+	// 自分が既に予測中の物はそのまま続行してよい。
+	if (pInfoObj->m_bPushPredicting && (pInfoObj->m_dwPushPredictOwnerCharID != m_pPlayerChar->m_dwCharID)) {
+		return FALSE;
+	}
+
+	nNewX = pInfoObj->m_nMapX + anPosX[nPushDir];
+	nNewY = pInfoObj->m_nMapY + anPosY[nPushDir];
+
+	// マップ判定: サーバーと共用のCanMoveDirection(Common)を使う
+	bMapFree = m_pLibInfoChar->CanMoveDirection(pMap, pInfoObj, nPushDir);
+	if (!bMapFree) {
+		return FALSE;
+	}
+
+	// キャラ判定: 押している本人・押せる物自身を除く全キャラ(サーバーと共用のIsPushAreaFree)
+	nSaveX = pInfoObj->m_nMapX;
+	nSaveY = pInfoObj->m_nMapY;
+	pInfoObj->m_nMapX = nNewX;
+	pInfoObj->m_nMapY = nNewY;
+	pInfoObj->GetCollisionRect(rcObjMoveTo);
+	pInfoObj->m_nMapX = nSaveX;
+	pInfoObj->m_nMapY = nSaveY;
+
+	bAreaFree = m_pLibInfoChar->IsPushAreaFree(m_pPlayerChar, pInfoObj, pInfoObj->m_dwMapID, rcObjMoveTo);
+	if (!bAreaFree) {
+		return FALSE;
+	}
+
+	// 予測: 押せる物をローカルで1px動かす
+	pInfoObj->SetPos(nNewX, nNewY);
+	pInfoObj->SetDirection(nPushDir);
+	if (pInfoObj->m_nMoveState != CHARMOVESTATE_MOVE) {
+		pInfoObj->ChgMoveState(CHARMOVESTATE_MOVE);
+	}
+	pInfoObj->m_bPushPredicting = TRUE;
+	pInfoObj->m_dwPushPredictOwnerCharID = m_pPlayerChar->m_dwCharID;
+
+	return TRUE;
+}
+
+BOOL CStateProcMAP::TryMoveOrPushDirection(PCInfoMapBase pMap, int nDirection, int nPushDir, DWORD &dwPushObjCharIDOut)
+{
+	BOOL bResult;
+	DWORD dwObjCharID;
+
+	// 通常キャラのブロック判定(押せる物以外)
+	bResult = m_pLibInfoChar->IsBlockChar(m_pPlayerChar, nDirection, TRUE, TRUE);
+	if (bResult) {
+		return TRUE;
+	}
+	dwObjCharID = m_pLibInfoChar->GetPushBlockCharID(m_pPlayerChar, nDirection);
+	if (dwObjCharID == 0) {
+		return FALSE;
+	}
+	// 押している向き(nPushDir)の軸成分を含む移動でなければ、押さずに今まで通り固い物として扱う
+	// (斜め移動で押す向きと違う軸に押せる物がある場合。入れ替わりはS5で別途対応)
+	if (nDirection != nPushDir) {
+		return TRUE;
+	}
+	if (TryPushObject(pMap, dwObjCharID, nPushDir) == FALSE) {
+		// マップ/他キャラで塞がっていて押せない: プレイヤーもその軸では進めない(TODO(S5): 入れ替わり)
+		return TRUE;
+	}
+	dwPushObjCharIDOut = dwObjCharID;
+	return FALSE;
+}
+
+
+
 BOOL CStateProcMAP::MoveProc(
 	int x,				// [in] 現在位置(ヨコ)
 	int y,				// [in] 現在位置(タテ)
@@ -2884,17 +3070,20 @@ BOOL CStateProcMAP::MoveProc(
 {
 	int nDirectionBack, nDirectionView, nState, nTmp, nInputDirection, nKeepDirection, nOtherDirection, xBack, yBack, nMovePixel,
 		anPosChangeX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosChangeY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+	int nPushDir;			// S3b: 押している人の向き(4方向)。押し判定・送信に使う
+	DWORD dwPushObjCharID;	// S3b: このMoveProc呼び出しで実際に押した押せる物のCharID(0:押していない)
 	BOOL bRet, bResult;
-	DWORD dwCharID;
 	RECT rcTmp;
 	PCInfoMapBase pMap;
 	PCLayerMap pLayerMap;
 	PCMgrKeyInput pMgrKeyInput;
 	CPacketCHAR_MOVE_START PacketMoveStart;
 	CPacketCHAR_MOVE_DIR_CHANGE PacketMoveDirChange;
-	CPacketCHAR_REQ_PUSH PacketREQ_PUSH;
 	CPacketCHAR_STATE PacketSTATE;
 	ARRAYINT anDirection;
+
+	nPushDir = -1;
+	dwPushObjCharID = 0;
 
 	bRet = FALSE;
 	m_pPlayerChar = m_pMgrData->GetPlayerChar();
@@ -3095,15 +3284,6 @@ BOOL CStateProcMAP::MoveProc(
 			goto Exit;
 		}
 	}
-	/* 1歩前に押せるキャラがいる？ */
-	dwCharID = m_pLibInfoChar->GetFrontCharIDPush(m_pPlayerChar->m_dwCharID, nDirection);
-	if (dwCharID) {
-		PacketREQ_PUSH.Make(dwCharID, nDirection);
-		m_pSock->Send(&PacketREQ_PUSH);
-		m_pPlayerChar->m_dwMoveWaitOnce = BATTLEMOVEWAIT;
-		pLayerMap->m_dwMoveWaitOnce = BATTLEMOVEWAIT;
-	}
-
 	nTmp = nDirection;
 	switch (nDirection) {
 	case 4:
@@ -3126,27 +3306,60 @@ BOOL CStateProcMAP::MoveProc(
 		anDirection.push_back(nDirection);
 		break;
 	}
+	// S3b: 押している人の向き(4方向)。パッド入力があればその向きを、無ければ
+	// 移動方向(斜め含む)をGetDrawDirectionで4方向へ丸めたものを使う
+	// (docs/push-object-redesign.md 4章1項。後段のnBodyDirと同じ考え方だが、
+	// 押し判定で先に必要なためここで求めて使い回す)。
+	{
+		int nPadFacing = pMgrKeyInput ? pMgrKeyInput->GetBrowserPadFacing() : -1;
+		nPushDir = (nPadFacing >= 0) ? nPadFacing : m_pPlayerChar->GetDrawDirection(nDirection);
+	}
+
 	if (anDirection.size() == 1) {
-		/* ぶつかる？ */
-		bResult = m_pLibInfoChar->IsBlockChar(m_pPlayerChar, nDirection, TRUE, TRUE);
+		/* ぶつかる？(通常キャラのブロック判定 + 押せる物なら押し予測を試みる) */
+		bResult = TryMoveOrPushDirection(pMap, nDirection, nPushDir, dwPushObjCharID);
 		if (bResult) {
 			bRet = TRUE;
 			goto Exit;
 		}
 	} else {
-		bResult = m_pLibInfoChar->IsBlockChar(m_pPlayerChar, nDirection, TRUE, TRUE);
+		// 斜め移動(4方向へ分解)。まず斜めそのものをブロック判定し、通れるなら
+		// (押せる物が斜めの角に無い限り)従来通り斜めのまま進む。
+		// 斜めがブロックされた場合、以前は anDirection[0]→[1] の順に「片方の軸だけ」へ
+		// 逃がしていたため、押す向き(nPushDir)側の軸で押せる物に接していても、
+		// その軸を先に試して押せてしまうと直交軸の成分が失われ、逆に直交軸を先に
+		// 試すと押す向きの軸そのものを試さず素通りしてしまい、斜め移動中は
+		// 押せる物を押せなかった。ここでは2軸を独立に判定し、押す向きの軸では
+		// 押し判定(押せればその軸へ1px押す)、直交する軸では従来通り押せる物を
+		// 固い物として扱う通常のブロック判定を行い、両方の結果を合成する。
+		// (docs/push-object-redesign.md 4章2項)
+		BOOL bResult0, bResult1;
+		DWORD dwPushObjCharID0, dwPushObjCharID1;
+
+		bResult = TryMoveOrPushDirection(pMap, nDirection, nPushDir, dwPushObjCharID);
 		if (bResult) {
-			bResult = m_pLibInfoChar->IsBlockChar(m_pPlayerChar, anDirection[0], TRUE, TRUE);
-			if (bResult == FALSE) {
+			dwPushObjCharID = 0;
+			dwPushObjCharID0 = 0;
+			dwPushObjCharID1 = 0;
+			bResult0 = TryMoveOrPushDirection(pMap, anDirection[0], nPushDir, dwPushObjCharID0);
+			bResult1 = TryMoveOrPushDirection(pMap, anDirection[1], nPushDir, dwPushObjCharID1);
+
+			if (bResult0 && bResult1) {
+				// 両軸ともブロック: 斜めはおろかどちらの軸へも進めない
+				bRet = TRUE;
+				goto Exit;
+			} else if (bResult0) {
+				// anDirection[0]側がブロック: anDirection[1]側だけへ進む(押していればそれも維持)
+				nDirection = anDirection[1];
+				dwPushObjCharID = dwPushObjCharID1;
+			} else if (bResult1) {
+				// anDirection[1]側がブロック: anDirection[0]側だけへ進む(押していればそれも維持)
 				nDirection = anDirection[0];
+				dwPushObjCharID = dwPushObjCharID0;
 			} else {
-				bResult = m_pLibInfoChar->IsBlockChar(m_pPlayerChar, anDirection[1], TRUE, TRUE);
-				if (bResult == FALSE) {
-					nDirection = anDirection[1];
-				} else {
-					bRet = TRUE;
-					goto Exit;
-				}
+				// 両軸とも通れる: nDirectionは斜めのまま(xx/yyは両軸分そのまま使う)。
+				// 押す向きの軸で押せた物があれば、直交軸へ移動しつつその物も押す。
+				dwPushObjCharID = (dwPushObjCharID0 != 0) ? dwPushObjCharID0 : dwPushObjCharID1;
 			}
 		}
 	}
@@ -3198,6 +3411,52 @@ BOOL CStateProcMAP::MoveProc(
 	}
 	pLayerMap->SetSystemIconMode(1);
 	m_dwLastTimeMove = timeGetTime();
+
+	if (dwPushObjCharID != 0) {
+		// S3b: 押し要求の送信。100ms毎・向き変更時に送る(docs/push-object-redesign.md 4章3項)。
+		// 押し始めの1px目は m_bPushSyncActive がFALSEなのですぐ送る。
+		PCInfoCharCli pInfoObj;
+
+		pInfoObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(dwPushObjCharID);
+		if (pInfoObj != NULL) {
+			BOOL bPushChanged;
+
+			bPushChanged = (m_bPushSyncActive == FALSE) ||
+				(m_dwPushSyncObjCharID != dwPushObjCharID) ||
+				(m_nPushSyncDirection != nPushDir);
+			if (bPushChanged || (timeGetTime() - m_dwLastTimePushSyncSend >= 100)) {
+				SendReqPush(dwPushObjCharID, nPushDir, pInfoObj);
+			}
+			m_bPushSyncActive = TRUE;
+			m_dwPushSyncObjCharID = dwPushObjCharID;
+			m_nPushSyncDirection = nPushDir;
+			m_dwLastTimePushContact = timeGetTime();
+		}
+	} else if (m_bPushSyncActive) {
+		// S3b: 接触を失った瞬間の即時送信(docs/push-object-redesign.md 4章3項)。
+		// 斜め移動で直前の1歩までは押せていたのに、この1歩ですり抜けて押せなかった
+		// (dwPushObjCharID==0)場合、100ms間引き・300msタイムアウトを待つと、その間に
+		// 自分だけ押せる物から離れていき、最後に送るREQ_PUSHの本人座標が接触していた
+		// 頃からずれてサーバーにNOT_CONTACT等で却下され、押せる物が古い座標へ
+		// 引き戻される(逆走)。まだ接していた最後の瞬間の座標で今すぐ送っておく。
+		PCInfoCharCli pInfoObj;
+
+		pInfoObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(m_dwPushSyncObjCharID);
+		if (pInfoObj != NULL) {
+			BOOL bAlreadySent;
+
+			bAlreadySent = m_bLastPushSyncSentValid &&
+				(m_nLastPushSyncSentX == pInfoObj->m_nMapX) &&
+				(m_nLastPushSyncSentY == pInfoObj->m_nMapY);
+			if (!bAlreadySent) {
+#if PUSH_CLIENT_DEBUG_LOG
+				SboDbgLog("[PushDbg][接触喪失即送信][obj:%u][pos:%d,%d][dir:%d]",
+					pInfoObj->m_dwCharID, pInfoObj->m_nMapX, pInfoObj->m_nMapY, m_nPushSyncDirection);
+#endif
+				SendReqPush(m_dwPushSyncObjCharID, m_nPushSyncDirection, pInfoObj);
+			}
+		}
+	}
 
 	x += xx;
 	y += yy;
@@ -4006,7 +4265,6 @@ BOOL CStateProcMAP::OnXChar(DWORD dwCharID)
 	BOOL bRet, bResult;
 	PCInfoCharBase pInfoChar;
 	CPacketCHAR_REQ_MODIFY_PARAM Packet;
-	CPacketCHAR_REQ_PUSH PacketREQ_PUSH;
 	CmyString strTmp;
 
 	bRet = FALSE;
@@ -4032,10 +4290,6 @@ BOOL CStateProcMAP::OnXChar(DWORD dwCharID)
 	case CHARMOVETYPE_STYLECOPY_GET:	// 容姿コピー(反映)
 		Packet.Make(m_pPlayerChar->m_dwCharID, PARAMID_CHAR_REQ_MODIFY_STYLECOPY_GET, dwCharID);
 		m_pSock->Send(&Packet);
-		break;
-	case CHARMOVETYPE_BALL:				// ボール
-		PacketREQ_PUSH.Make(dwCharID, m_pPlayerChar->m_nDirection, 2);
-		m_pSock->Send(&PacketREQ_PUSH);
 		break;
 	default:
 		TrimViewString(strTmp, (LPCSTR)pInfoChar->m_strTalk);

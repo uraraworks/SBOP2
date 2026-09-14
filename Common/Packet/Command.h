@@ -108,6 +108,7 @@ enum {
 	SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE,	// 移動方向変更通知(Dead Reckoning)
 	SBOCOMMANDID_SUB_CHAR_MOVE_STOP,	// 移動停止通知(Dead Reckoning)
 	SBOCOMMANDID_SUB_CHAR_POS_SYNC,	// 座標同期通知(Dead Reckoning)
+	SBOCOMMANDID_SUB_CHAR_RES_PUSH,	// 押す応答
 };
 
 	// コマンドID(マップ系)

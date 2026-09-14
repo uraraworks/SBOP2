@@ -65,15 +65,51 @@ void CTextOutput::Write(
 	LPCSTR format, ...)	// [in] 出力するフォーマット付き文字列
 {
 	int nLen;
-	char szTmp[256];
+	char szTmp[2048];
+	BOOL bTruncated;
 	va_list ap;
+
+	bTruncated = FALSE;
 
 	// 引数の取り出し
 	va_start(ap, format);
 
-	nLen = _vsnprintf(szTmp, sizeof(szTmp), format, ap);
+#ifdef _WIN32
+	// Windows: _vsnprintf は入りきらない場合 -1 を返し、終端も保証されない
+	nLen = _vsnprintf(szTmp, _countof(szTmp) - 1, format, ap);
+	if (nLen < 0) {
+		// 入りきらなかった: 切り詰めて出力する
+		nLen = _countof(szTmp) - 1;
+		bTruncated = TRUE;
+	}
+	szTmp[nLen] = '\0';
+#else
+	// 非Windows: vsnprintf(C99) は書き込みに必要だった長さを返す
+	nLen = vsnprintf(szTmp, sizeof(szTmp), format, ap);
+	if (nLen < 0) {
+		va_end(ap);
+		goto Exit;
+	}
+	if ((size_t)nLen >= sizeof(szTmp)) {
+		// 入りきらなかった: 切り詰めて出力する
+		nLen = sizeof(szTmp) - 1;
+		bTruncated = TRUE;
+	}
+#endif
+	va_end(ap);
+
 	if (nLen <= 0) {
 		goto Exit;
+	}
+
+	// 切り詰めが発生した場合は末尾に印を付ける（黙って捨てない）
+	if (bTruncated) {
+		static const char szTruncMark[] = "...(切り詰め)";
+		size_t nMarkLen = sizeof(szTruncMark) - 1;
+
+		if (nMarkLen < sizeof(szTmp)) {
+			memcpy(szTmp + sizeof(szTmp) - 1 - nMarkLen, szTruncMark, nMarkLen + 1);
+		}
 	}
 
 	WriteProc(szTmp);

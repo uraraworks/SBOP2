@@ -72,6 +72,10 @@ protected:
 	void  OnMgrDrawSTART_FADEIN(DWORD dwPara);                                                 // フェードイン開始
 	void  OnMgrDrawEND_FADEIN(DWORD dwPara);                                                   // フェードイン完了
 	BOOL  MoveProc(int x, int y, int xx, int yy, int nDirection, BOOL bSyncSend = TRUE);      // 移動処理
+	BOOL  TryMoveOrPushDirection(CInfoMapBase *pMap, int nDirection, int nPushDir, DWORD &dwPushObjCharIDOut); // 1方向の移動可否判定(押せる物なら押し予測を試みる。S3b)
+	BOOL  TryPushObject(CInfoMapBase *pMap, DWORD dwObjCharID, int nPushDir);                // 押せる物をローカルで1px押せるか試す(予測。S3b)
+	void  SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *pInfoObj);              // REQ_PUSHを送信する(S3b)
+	void  EndPushPredict(BOOL bSendFinal);                                                    // 押し予測を終える(S3b)
 	BOOL  OnWindowMsgCHAT(DWORD dwPara);                                                      // チャット入力
 	BOOL  OnWindowMsgSYSTEMMENU(DWORD dwPara);                                                // システムメニュー
 	BOOL  OnWindowMsgSETCOLOR(DWORD dwPara);                                                  // 名前と発言色の設定
@@ -124,6 +128,18 @@ protected:
 	      m_dwStartChargeTime;     // 溜め開始時間
 	BOOL  m_bMoveSyncActive;       // Dead Reckoning送信中か
 	int   m_nMoveSyncDirection;    // 最後に送信した移動方向
+	// S3b: 押し予測(REQ_PUSH)送信状態。docs/push-object-redesign.md 4章
+	BOOL  m_bPushSyncActive;          // 押している最中(REQ_PUSH送信対象を持っている)か
+	DWORD m_dwPushSyncObjCharID;      // 押している押せる物のCharID
+	int   m_nPushSyncDirection;       // 最後に送信した押す向き(-1:未送信)
+	DWORD m_dwLastTimePushSyncSend;   // 最後にREQ_PUSHを送信した時刻
+	DWORD m_dwLastTimePushContact;    // 最後に押せる物へ接触して押せていた時刻(離れ検出の基準)
+	// S3b: 接触喪失時の即時送信で重複送信しないための直近送信済み目標座標
+	// (docs/push-object-redesign.md 4章。斜め移動で接触が切れた瞬間に毎フレーム
+	// 送ってしまわないよう、同じ座標なら送らない)
+	int   m_nLastPushSyncSentX,       // 直近に送信したREQ_PUSHの目標座標X
+	      m_nLastPushSyncSentY;       // 直近に送信したREQ_PUSHの目標座標Y
+	BOOL  m_bLastPushSyncSentValid;   // 上記が有効か(未送信/リセット直後はFALSE)
 	int   m_nMoveSpeedAccum;       // 自キャラ速度のサブピクセル累積
 	DWORD m_dwLastPlayerMoveStepTime; // 自キャラ速度計算の前回時刻
 	DWORD m_dwLastPlayerMoveTurnTime; // 自キャラの回頭計算の前回時刻

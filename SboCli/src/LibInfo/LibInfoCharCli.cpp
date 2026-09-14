@@ -19,130 +19,12 @@
 #include "LibInfoCharCli.h"
 
 
-static void GetMoveCheckMapRect(
-	PCInfoCharBase pInfoChar,
-	RECT &rcDst,
-	int nDirection,
-	int nLookAheadPixel)
-{
-	int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
-	int nMapXBack, nMapYBack;
-	int nMovePixel;
-
-	nMapXBack = pInfoChar->m_nMapX;
-	nMapYBack = pInfoChar->m_nMapY;
-	nMovePixel = nLookAheadPixel;
-	if (nMovePixel < 0) {
-		// 負値のみガード。0 は「現在位置のリーディングエッジ」を意味するのでそのまま許す
-		nMovePixel = 0;
-	}
-
-	pInfoChar->m_nMapX = nMapXBack + anPosX[nDirection] * nMovePixel;
-	pInfoChar->m_nMapY = nMapYBack + anPosY[nDirection] * nMovePixel;
-	pInfoChar->GetCollisionRect(rcDst);
-	pInfoChar->m_nMapX = nMapXBack;
-	pInfoChar->m_nMapY = nMapYBack;
-
-	// 直進時は移動方向のリーディングエッジ(先頭辺)だけを調べ、壁沿い移動時の引っ掛かりを減らす
-	// (nLookAheadPixel=0 なら現在位置、正値なら移動先のリーディングエッジタイルになる)
-	switch (nDirection) {
-	case 0:
-		rcDst.bottom = rcDst.top;
-		break;
-	case 1:
-		rcDst.top = rcDst.bottom;
-		break;
-	case 2:
-		rcDst.right = rcDst.left;
-		break;
-	case 3:
-		rcDst.left = rcDst.right;
-		break;
-	}
-
-	rcDst.left	/= MAPPARTSSIZE;
-	rcDst.right	/= MAPPARTSSIZE;
-	rcDst.top	/= MAPPARTSSIZE;
-	rcDst.bottom	/= MAPPARTSSIZE;
-
-	if ((rcDst.left < 0) || (rcDst.top < 0)) {
-		SetRect(&rcDst, -1, -1, -1, -1);
-	}
-}
-
-static BOOL CanMoveDirection(
-	PCInfoMapBase pInfoMap,
-	PCInfoCharBase pInfoChar,
-	int nDirection)
-{
-	int x, y;
-	int nLookAheadPixel;
-	int nDirTmp;
-	BOOL bEscape;
-	RECT rcMapNow, rcMapDst;
-
-	if (pInfoMap == NULL) {
-		return FALSE;
-	}
-
-	// 方向ブロックビットはタイルの辺属性なので、タイル境界を跨ぐ瞬間だけ判定する
-	nLookAheadPixel = CHAR_MOVE_COLLISION_LOOKAHEAD;
-	if (nLookAheadPixel <= 0) {
-		nLookAheadPixel = 1;
-	}
-	if (nLookAheadPixel > CHAR_MOVE_SPEED) {
-		nLookAheadPixel = CHAR_MOVE_SPEED;
-	}
-	GetMoveCheckMapRect(pInfoChar, rcMapNow, nDirection, 0);
-	GetMoveCheckMapRect(pInfoChar, rcMapDst, nDirection, nLookAheadPixel);
-
-	// 移動先がマップ外(無効矩形)なら移動不可
-	if ((rcMapDst.left == -1) && (rcMapDst.top == -1) &&
-	    (rcMapDst.right == -1) && (rcMapDst.bottom == -1)) {
-		return FALSE;
-	}
-
-	// タイル境界を跨がない移動は辺ビット判定不要
-	if ((rcMapNow.left == rcMapDst.left) && (rcMapNow.top == rcMapDst.top) &&
-	    (rcMapNow.right == rcMapDst.right) && (rcMapNow.bottom == rcMapDst.bottom)) {
-		return TRUE;
-	}
-
-	// 出口チェック: 今いるタイルの辺から出られるか
-	for (y = rcMapNow.top; y <= rcMapNow.bottom; y ++) {
-		for (x = rcMapNow.left; x <= rcMapNow.right; x ++) {
-			if (!pInfoMap->IsMoveOut(x, y, nDirection)) {
-				// どの方向からも進入できないタイル（全方向ブロック等）に
-				// めり込んでいる場合だけ、脱出用に出口チェックを免除する。
-				// 一部方向からのみ進入できるタイル（例: 右からだけ入れるイス）は
-				// 正規に重なれるため、辺ビット通りに出口をブロックする
-				bEscape = TRUE;
-				for (nDirTmp = 0; nDirTmp < 4; nDirTmp ++) {
-					if (pInfoMap->IsMove(x, y, nDirTmp)) {
-						bEscape = FALSE;
-						break;
-					}
-				}
-				if (bEscape == FALSE) {
-					return FALSE;
-				}
-			}
-		}
-	}
-
-	// 入口チェック: 移動先タイルの辺から入れるか
-	for (y = rcMapDst.top; y <= rcMapDst.bottom; y ++) {
-		for (x = rcMapDst.left; x <= rcMapDst.right; x ++) {
-			if (!pInfoMap->IsMove(x, y, nDirection)) {
-				return FALSE;
-			}
-		}
-	}
-
-	return TRUE;
-}
+// GetMoveCheckMapRect / CanMoveDirection は S3 で Common/LibInfo/LibInfoCharBase.* へ移設し、
+// サーバー側の押し判定(S3a, PushDecision 経由)と同じロジックを共用するようにした。
+// ここでは元々の static 自由関数を、継承した CLibInfoCharBase のメンバ呼び出しに置き換えている。
 
 static BOOL TrySlideMove(
+	CLibInfoCharBase *pLib,
 	PCInfoMapBase pInfoMap,
 	PCInfoCharBase pInfoChar,
 	int nDirection,
@@ -173,7 +55,7 @@ static BOOL TrySlideMove(
 		default:
 			break;
 		}
-		if (CanMoveDirection(pInfoMap, pInfoChar, nDirection)) {
+		if (pLib->CanMoveDirection(pInfoMap, pInfoChar, nDirection)) {
 			return TRUE;
 		}
 	}
@@ -798,6 +680,7 @@ BOOL CLibInfoCharCli::IsMove(
 	if (bResult == FALSE) {
 		if (nDirection < 4) {
 			bResult = TrySlideMove(
+				this,
 				pInfoMap,
 				pInfoChar,
 				nDirection,

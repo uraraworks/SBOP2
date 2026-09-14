@@ -245,6 +245,9 @@ CInfoCharCli::CInfoCharCli()
 	m_dDrawMoveEndX	= 0.0;
 	m_dDrawMoveEndY	= 0.0;
 
+	m_bPushPredicting	= FALSE;
+	m_dwPushPredictOwnerCharID	= 0;
+
 	m_ptMove.x = m_ptMove.y = 0;
 
 	m_hFont = (HFONT)SdlFontCreate(12, false);

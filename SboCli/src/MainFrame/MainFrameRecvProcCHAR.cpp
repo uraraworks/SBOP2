@@ -16,6 +16,7 @@
 #include "LibInfoCharCli.h"
 #include "LibInfoItem.h"
 #include "InfoCharCli.h"
+#include "PacketCHAR_RES_PUSH.h"
 #include "LayerMap.h"
 #include "StateProcBase.h"
 #include "StateProcMAP.h"
@@ -28,6 +29,24 @@
 // POS_SYNC(update) を予測移動として扱う最小変位(px)。前回同期からこの値未満しか
 // 動いていなければ、実際には移動していない静止キャラへの定期同期とみなす。
 #define PREDICT_MIN_MOVE_PIXELS 4
+
+// S3b: RES_PUSH受理時、予測位置と確定座標の差がこの値を超えたら確定座標へ
+// 合わせ直す(docs/push-object-redesign.md 4章「予測中の表示と補正」)。
+// ずれを溜め込んで速度超過却下の連鎖に陥らないよう、以前の24pxより厳しくする。
+#define PUSH_PREDICT_IGNORE_TOLERANCE_PX 8
+// 押している本人の画面で、押している押せる物のローカル予測位置より、押す向きに
+// 遅れているだけ(サーバーが受理した分しか動かしていない正常な遅延)で、その遅れが
+// この値以内ならパケットを無視して予測を優先する。押す向き以外にずれていたり、
+// 遅れがこれを超える場合は却下等の異常なのでサーバーに従う。
+#define PUSH_PREDICT_LAG_IGNORE_TOLERANCE_PX 8
+// 停止パケット(MOVE_STOP)は、差がこの値以下ならそのまま合わせて予測を終える。
+#define PUSH_STOP_SNAP_TOLERANCE_PX 4
+
+// 診断用。通常は0。原因調査時に1にする。斜め押しで止めた直後に押せる物が
+// 少し逆走する不具合の調査用ログ。予測の1pxごと(CStateProcMAP::TryPushObject)は
+// 多すぎるので出さず、それ以外の座標変更イベント(受理/却下/位置パケット)だけ
+// SboDbgLog へ出す。ブラウザのコンソールで "[PushDbg]" で検索できる。
+#define PUSH_CLIENT_DEBUG_LOG 0
 
 namespace {
 
@@ -85,6 +104,7 @@ void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData)
 	case SBOCOMMANDID_SUB_CHAR_STATE_CHARGE: RecvProcCHAR_STATE_CHARGE(pData); break; // 溜め状態通知
 	case SBOCOMMANDID_SUB_CHAR_RES_TALKEVENT: RecvProcCHAR_RES_TALKEVENT(pData); break; // 会話イベント情報応答
 	case SBOCOMMANDID_SUB_CHAR_SKILLINFO: RecvProcCHAR_SKILLINFO(pData); break; // スキル情報通知
+	case SBOCOMMANDID_SUB_CHAR_RES_PUSH: RecvProcCHAR_RES_PUSH(pData); break; // 押す応答
 	}
 }
 
@@ -515,6 +535,60 @@ void CMainFrame::RecvProcCHAR_MOVE_STOP(PBYTE pData)
 }
 
 
+void CMainFrame::RecvProcCHAR_RES_PUSH(PBYTE pData)
+{
+	// S3b: REQ_PUSHを送った本人へ返る応答。docs/push-object-redesign.md 4章。
+	CPacketCHAR_RES_PUSH Packet;
+	PCInfoCharCli pInfoObj;
+	int nDiffX, nDiffY;
+
+	Packet.Set(pData);
+
+	pInfoObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(Packet.m_dwObjCharID);
+	if (pInfoObj == NULL) {
+		return;
+	}
+
+	if (Packet.m_bAccepted) {
+		if (pInfoObj->m_bPushPredicting) {
+			// 予測中: そのまま継続する。差が大きい時だけ確定座標へ即補正する
+			// (通常は接触判定・速度上限が一致していればほぼ一致するはず)。
+			nDiffX = abs(pInfoObj->m_nMapX - Packet.m_ptObj.x);
+			nDiffY = abs(pInfoObj->m_nMapY - Packet.m_ptObj.y);
+			if (max(nDiffX, nDiffY) > PUSH_PREDICT_IGNORE_TOLERANCE_PX) {
+#if PUSH_CLIENT_DEBUG_LOG
+				SboDbgLog("[PushDbg][受理RES(補正)][obj:%u][旧pos:%d,%d][新pos:%d,%d]",
+					pInfoObj->m_dwCharID, pInfoObj->m_nMapX, pInfoObj->m_nMapY, Packet.m_ptObj.x, Packet.m_ptObj.y);
+#endif
+				pInfoObj->SetPos(Packet.m_ptObj.x, Packet.m_ptObj.y);
+			}
+		} else {
+			// S3b: 予測が既に終わっている(離す/300ms超過等)のに届いた受理応答。
+			// 差が小さいからと合わせずに放置すると、ずれを溜め込んだまま次の
+			// 押し開始を迎えてしまう(docs/push-object-redesign.md 4章)ので、
+			// 差の大小によらず必ず確定座標へ合わせる。
+			if ((pInfoObj->m_nMapX != Packet.m_ptObj.x) || (pInfoObj->m_nMapY != Packet.m_ptObj.y)) {
+#if PUSH_CLIENT_DEBUG_LOG
+				SboDbgLog("[PushDbg][受理RES(予測終了後)][obj:%u][旧pos:%d,%d][新pos:%d,%d]",
+					pInfoObj->m_dwCharID, pInfoObj->m_nMapX, pInfoObj->m_nMapY, Packet.m_ptObj.x, Packet.m_ptObj.y);
+#endif
+				pInfoObj->SetPos(Packet.m_ptObj.x, Packet.m_ptObj.y);
+			}
+		}
+	} else {
+		// 却下: 確定座標へ即座に合わせ(補間はしない。見た目の小さな飛びは許容する)、
+		// 予測を終える。次に押した時は確定座標から予測し直すので、ここでずれを
+		// 持ち越さない(補間で待つ間にずれが広がり続け、速度超過却下が連鎖する不具合の対策)。
+#if PUSH_CLIENT_DEBUG_LOG
+		SboDbgLog("[PushDbg][却下RES][obj:%u][旧pos:%d,%d][新pos:%d,%d]",
+			pInfoObj->m_dwCharID, pInfoObj->m_nMapX, pInfoObj->m_nMapY, Packet.m_ptObj.x, Packet.m_ptObj.y);
+#endif
+		pInfoObj->SetPos(Packet.m_ptObj.x, Packet.m_ptObj.y);
+		pInfoObj->m_bPushPredicting = FALSE;
+	}
+}
+
+
 void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPacketPosX, int nPacketPosY, BOOL bUpdate, BOOL bForceStop)
 {
 	int nState, nStateStand, nStateMove, nResult, nStateStop;
@@ -569,6 +643,51 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 	// フェードを完走させる（プレイヤー移動等に伴う再送での中断/即消滅を防ぐ）。
 	if (pInfoChar->m_nMoveState == CHARMOVESTATE_DELETEREADY) {
 		return;
+	}
+	// S3b: 押している本人の画面では、押せる物(Push=1 NPC)のローカル予測を
+	// サーバーの移動パケットより優先する。でないと1px押した直後に古い座標へ
+	// 引き戻されてちらつく(docs/push-object-redesign.md 4章)。
+	// ただし「押す向きに遅れているだけ」以外のずれ(サーバーが却下して押し戻した、
+	// 別の軸にずれた等)は放置せず、確定座標に従って予測を打ち切る
+	// (ずれを溜め込むと速度超過却下が連鎖する不具合の対策)。
+	if (pInfoChar->m_bPushPredicting) {
+		// CStateProcMAP::TryPushObject の anPosX/anPosY と同じ向きの並び
+		// (0:上 1:下 2:左 3:右)。SetDirection(nPushDir) で m_nDirection に
+		// この値が入っている。
+		static const int anPushDirX[] = {0, 0, -1, 1};
+		static const int anPushDirY[] = {-1, 1, 0, 0};
+		int nPushDiffX, nPushDiffY, nPushDiffMax, nDirX, nDirY, nLagAlongPush, nDiffPerp;
+		BOOL bLagBehindPush;
+
+		nPushDiffX = abs(pInfoChar->m_nMapX - nPacketPosX);
+		nPushDiffY = abs(pInfoChar->m_nMapY - nPacketPosY);
+		nPushDiffMax = max(nPushDiffX, nPushDiffY);
+		bLagBehindPush = FALSE;
+		if ((pInfoChar->m_nDirection >= 0) && (pInfoChar->m_nDirection <= 3)) {
+			nDirX = anPushDirX[pInfoChar->m_nDirection];
+			nDirY = anPushDirY[pInfoChar->m_nDirection];
+			// 押す向きの軸成分: 予測位置よりサーバー座標が押す向きの後ろにあるほど正
+			nLagAlongPush = (pInfoChar->m_nMapX - nPacketPosX) * nDirX + (pInfoChar->m_nMapY - nPacketPosY) * nDirY;
+			// 押す向きと垂直な軸のずれ(本来は0のはず)
+			nDiffPerp = abs(nPushDiffX * nDirY) + abs(nPushDiffY * nDirX);
+			bLagBehindPush = (nDiffPerp == 0) && (nLagAlongPush >= 0) && (nLagAlongPush <= PUSH_PREDICT_LAG_IGNORE_TOLERANCE_PX);
+		}
+		if (bForceStop && (nPushDiffMax <= PUSH_STOP_SNAP_TOLERANCE_PX)) {
+			// 差が小さい停止通知: 予測を終えてそのまま受け入れる(下の通常処理へ進む)
+			pInfoChar->m_bPushPredicting = FALSE;
+		} else if (bLagBehindPush) {
+			// サーバーが受理した分しか動かしていないだけの正常な遅延: 予測を優先し、
+			// このパケットは無視する(ぴくぴく戻りを防ぐ)。
+			// 万一追従用の経由点が溜まっていれば、後で再生されないようここで捨てる。
+			if (pInfoChar->m_apMovePosQue.size() > 0) {
+				pInfoChar->DeleteAllMovePosQue();
+			}
+			return;
+		} else {
+			// 押す向き以外のずれ、または遅れが大きすぎる: 予測を諦めてサーバーに従う
+			// (下の通常処理へ進む)
+			pInfoChar->m_bPushPredicting = FALSE;
+		}
 	}
 	nState = -1;
 	bDirectionChanged = FALSE;
@@ -631,6 +750,40 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 		nState = CHARMOVESTATE_DELETEREADY;
 		pInfoChar->m_bWaypointMove = FALSE;
 		pInfoChar->StopPredictedMove(nPacketPosX, nPacketPosY);
+
+	} else if (pInfoChar->m_bPush) {
+		// ─────────────────────────────────────────────────────────────
+		// 押せる物(Push=1 NPC): ウェイポイントキューには乗せず、届いた座標へ
+		// 直接合わせる。NPC同様にキューへ経由点を溜める方式だと、押し予測中に
+		// (押す向きの遅れ以外のずれで)取りこぼされずキューに乗ってしまった
+		// 古い経由点が、予測終了後や別方向へ押し直した後に再生されて
+		// 「押す前の古い位置へワープしてから戻る」不具合になる
+		// (docs/push-object-redesign.md 4章)。滑らかさは SetPos の描画区間
+		// 補間に任せる。自分が押している最中でも他人が押しているのを見ている
+		// 場合でも同じ扱いでよい。
+		// ─────────────────────────────────────────────────────────────
+		pInfoChar->m_bWaypointMove = FALSE;
+		if (pInfoChar->m_apMovePosQue.size() > 0) {
+			pInfoChar->DeleteAllMovePosQue();
+		}
+		pInfoChar->m_dwPredictRecvTime = dwRecvTime;
+		pInfoChar->m_nPredictSyncX = nPacketPosX;
+		pInfoChar->m_nPredictSyncY = nPacketPosY;
+#if PUSH_CLIENT_DEBUG_LOG
+		if ((pInfoChar->m_nMapX != nPacketPosX) || (pInfoChar->m_nMapY != nPacketPosY)) {
+			SboDbgLog("[PushDbg][%s][obj:%u][旧pos:%d,%d][新pos:%d,%d]",
+				bForceStop ? "停止パケット" : "位置パケット",
+				pInfoChar->m_dwCharID, pInfoChar->m_nMapX, pInfoChar->m_nMapY, nPacketPosX, nPacketPosY);
+		}
+#endif
+		pInfoChar->SetDirection(nDirection);
+		pInfoChar->SetPos(nPacketPosX, nPacketPosY);
+		if (bForceStop) {
+			// 停止通知: 押せる物は戦闘状態を持たないため STAND で止める
+			pInfoChar->ChgMoveState(nStateStand);
+			nState = -1;
+		}
+		pInfoChar->m_bRedraw = TRUE;
 
 	} else if (pInfoChar->IsNPC()) {
 		// ─────────────────────────────────────────────────────────────

@@ -332,9 +332,6 @@
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_MODIFY_PARAM.cpp">
       <Filter>Source Files\Common\Packet\CHAR</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUSH.cpp">
-      <Filter>Source Files\Common\Packet\CHAR</Filter>
-    </ClCompile>
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUTGET.cpp">
       <Filter>Source Files\Common\Packet\CHAR</Filter>
     </ClCompile>
@@ -650,6 +647,9 @@
       <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUSH.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_RES_PUSH.h">
       <Filter>Header Files\Common No. 1\Packet No. 1\CHAR No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUTGET.h">

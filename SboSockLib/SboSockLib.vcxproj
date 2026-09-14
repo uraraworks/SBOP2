@@ -188,7 +188,6 @@
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_DRAGITEM.cpp" />
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_EQUIP.cpp" />
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_MODIFY_PARAM.cpp" />
-    <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUSH.cpp" />
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUTGET.cpp" />
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_TAIL.cpp" />
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_REQ_USEITEM.cpp" />
@@ -416,6 +415,7 @@
     <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_EQUIP.h" />
     <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_MODIFY_PARAM.h" />
     <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUSH.h" />
+    <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_RES_PUSH.h" />
     <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_PUTGET.h" />
     <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_TAIL.h" />
     <ClInclude Include="..\Common\Packet\CHAR\PacketCHAR_REQ_USEITEM.h" />

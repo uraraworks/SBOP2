@@ -528,61 +528,69 @@ Exit:
 	return dwRet;
 }
 
-DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
+BOOL CLibInfoCharBase::IsPushBlockChar(PCInfoCharBase pChar, int nDirection)
 {
+	return GetPushBlockCharID(pChar, nDirection) != 0;
+}
+
+DWORD CLibInfoCharBase::GetPushBlockCharID(PCInfoCharBase pChar, int nDirection)
+{
+	// S1: 押せる物(m_bPush)の作り直し第1段階。押す動作はまだ実装せず、
+	// 押せる物を「Block=0 でも固い物」として扱い、壊れた押し送信(REQ_PUSH)を止める。
+	// S3b: 押し予測(MoveProc)が「どの押せる物に接しているか」を知る必要があるため、
+	// IsPushBlockChar から判定本体をこちらへ切り出し、相手のCharIDを返すようにした。
+	// GetCollisionRectOnce は GetDrawDirection に依存するため使わず、
+	// 呼び出し元から渡された向きへ1pxだけずらした矩形で判定する。
+	static const int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1};
+	static const int anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	int i, nCount;
 	DWORD dwRet;
-	PCInfoCharBase pInfoCharSrc, pInfoCharTmp;
-	POINT ptBack, ptFront;
-	RECT rcFrontRect, rcTmp;
-	int nDirectionBack;
+	BOOL bResult;
+	PCInfoCharBase pInfoCharTmp;
+	int nMapXBack, nMapYBack;
+	RECT rcSrc, rcFront, rcTmp;
 
 	dwRet = 0;
 
-	pInfoCharSrc = (PCInfoCharBase)GetPtr(dwCharID);
-	if (pInfoCharSrc == NULL) {
+	if ((nDirection < 0) || (nDirection > 7)) {
 		goto Exit;
 	}
-	// 押し判定は Block=0 のボールが対象で、1フレームでも検出を外すと
-	// プレイヤーが食い込んですり抜けるため、現在位置〜前方位置を含む
-	// 掃引矩形(union)で広めに判定する。
-	RECT rcCur, rcFrontPos;
-	ptBack.x = pInfoCharSrc->m_nMapX;
-	ptBack.y = pInfoCharSrc->m_nMapY;
-	nDirectionBack = pInfoCharSrc->m_nDirection;
-	pInfoCharSrc->m_nDirection = nDirection;
-	pInfoCharSrc->GetCollisionRect(rcCur);
-	pInfoCharSrc->GetFrontPos(ptFront, nDirection, TRUE);
-	pInfoCharSrc->m_nMapX = ptFront.x;
-	pInfoCharSrc->m_nMapY = ptFront.y;
-	pInfoCharSrc->GetCollisionRect(rcFrontPos);
-	pInfoCharSrc->m_nMapX = ptBack.x;
-	pInfoCharSrc->m_nMapY = ptBack.y;
-	pInfoCharSrc->m_nDirection = nDirectionBack;
-	// 現在と前方の collision 矩形を包含する掃引矩形
-	rcFrontRect.left   = (rcCur.left   < rcFrontPos.left)   ? rcCur.left   : rcFrontPos.left;
-	rcFrontRect.top    = (rcCur.top    < rcFrontPos.top)    ? rcCur.top    : rcFrontPos.top;
-	rcFrontRect.right  = (rcCur.right  > rcFrontPos.right)  ? rcCur.right  : rcFrontPos.right;
-	rcFrontRect.bottom = (rcCur.bottom > rcFrontPos.bottom) ? rcCur.bottom : rcFrontPos.bottom;
+
+	// 現在位置の当たり矩形（既に重なっている相手を除外するために使う）
+	pChar->GetCollisionRect(rcSrc);
+
+	nMapXBack = pChar->m_nMapX;
+	nMapYBack = pChar->m_nMapY;
+	pChar->m_nMapX = nMapXBack + anPosX[nDirection];
+	pChar->m_nMapY = nMapYBack + anPosY[nDirection];
+	pChar->GetCollisionRect(rcFront);
+	pChar->m_nMapX = nMapXBack;
+	pChar->m_nMapY = nMapYBack;
 
 	nCount = m_paInfo->size();
 	for (i = 0; i < nCount; i ++) {
 		pInfoCharTmp = m_paInfo->at(i);
-		if (pInfoCharSrc == pInfoCharTmp) {
+		if (pChar == pInfoCharTmp) {
+			continue;
+	}
+		bResult = pInfoCharTmp->IsLogin();
+		if (bResult == FALSE) {
+			continue;
+	}
+		if (pChar->m_dwMapID != pInfoCharTmp->m_dwMapID) {
 			continue;
 	}
 		if (pInfoCharTmp->m_bPush == FALSE) {
 			continue;
 	}
-		if (pInfoCharTmp->m_nMoveType == CHARMOVETYPE_PUTNPC) {
-			continue;
-	}
-		if (pInfoCharSrc->m_dwMapID != pInfoCharTmp->m_dwMapID) {
-			continue;
-	}
 		pInfoCharTmp->GetCollisionRect(rcTmp);
-		if (!((rcFrontRect.left <= rcTmp.right) && (rcTmp.left <= rcFrontRect.right) &&
-			(rcFrontRect.top <= rcTmp.bottom) && (rcTmp.top <= rcFrontRect.bottom))) {
+		if ((rcSrc.left <= rcTmp.right) && (rcTmp.left <= rcSrc.right) &&
+			(rcSrc.top <= rcTmp.bottom) && (rcTmp.top <= rcSrc.bottom)) {
+			// 現在位置で既に重なっている相手は、そこから抜け出せるように対象外にする
+			continue;
+	}
+		if (!((rcFront.left <= rcTmp.right) && (rcTmp.left <= rcFront.right) &&
+			(rcFront.top <= rcTmp.bottom) && (rcTmp.top <= rcFront.bottom))) {
 			continue;
 		}
 		dwRet = pInfoCharTmp->m_dwCharID;
@@ -591,6 +599,165 @@ DWORD CLibInfoCharBase::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
 
 Exit:
 	return dwRet;
+}
+
+BOOL CLibInfoCharBase::IsPushAreaFree(PCInfoCharBase pExclude1, PCInfoCharBase pExclude2, DWORD dwMapID, const RECT &rcMoveTo)
+{
+	// S3b: 押せる物が1px先へ進めるか、本人・押せる物自身を除く全キャラと当たるかを見る。
+	// SboSvr/src/MainFrame/MainFrameRecvProcCHAR.cpp の static IsPushCharAreaFree と
+	// 同じ判定(m_bBlockは見ない)。サーバーと押し予測(クライアント)で共用するため
+	// Common へ置く。クライアントは m_paInfo に画面内・既知のキャラしか持たないため、
+	// サーバーより判定対象が狭くなる(=予測がサーバーよりゆるく通ることがある)点は
+	// RES_PUSH による補正で吸収する想定。
+	int i, nCount;
+	PCInfoCharBase pInfoCharTmp;
+	RECT rcTmp;
+
+	nCount = m_paInfo->size();
+	for (i = 0; i < nCount; i ++) {
+		pInfoCharTmp = m_paInfo->at(i);
+		if (pInfoCharTmp == NULL) {
+			continue;
+		}
+		if ((pInfoCharTmp == pExclude1) || (pInfoCharTmp == pExclude2)) {
+			continue;
+		}
+		if (pInfoCharTmp->IsLogin() == FALSE) {
+			continue;
+		}
+		if (pInfoCharTmp->m_dwMapID != dwMapID) {
+			continue;
+		}
+		pInfoCharTmp->GetCollisionRect(rcTmp);
+		if ((rcMoveTo.left <= rcTmp.right) && (rcTmp.left <= rcMoveTo.right) &&
+			(rcMoveTo.top <= rcTmp.bottom) && (rcTmp.top <= rcMoveTo.bottom)) {
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+
+void CLibInfoCharBase::GetMoveCheckMapRect(
+	PCInfoCharBase pInfoChar,
+	RECT &rcDst,
+	int nDirection,
+	int nLookAheadPixel)
+{
+	// SboCli/LibInfoCharCli.cpp の GetMoveCheckMapRect (自キャラ移動判定) を
+	// S3 でサーバーと共用するため Common へ移設したもの。ロジックは変更していない。
+	int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1}, anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+	int nMapXBack, nMapYBack;
+	int nMovePixel;
+
+	nMapXBack = pInfoChar->m_nMapX;
+	nMapYBack = pInfoChar->m_nMapY;
+	nMovePixel = nLookAheadPixel;
+	if (nMovePixel < 0) {
+		// 負値のみガード。0 は「現在位置のリーディングエッジ」を意味するのでそのまま許す
+		nMovePixel = 0;
+	}
+
+	pInfoChar->m_nMapX = nMapXBack + anPosX[nDirection] * nMovePixel;
+	pInfoChar->m_nMapY = nMapYBack + anPosY[nDirection] * nMovePixel;
+	pInfoChar->GetCollisionRect(rcDst);
+	pInfoChar->m_nMapX = nMapXBack;
+	pInfoChar->m_nMapY = nMapYBack;
+
+	// 直進時は移動方向のリーディングエッジ(先頭辺)だけを調べ、壁沿い移動時の引っ掛かりを減らす
+	// (nLookAheadPixel=0 なら現在位置、正値なら移動先のリーディングエッジタイルになる)
+	switch (nDirection) {
+	case 0:
+		rcDst.bottom = rcDst.top;
+		break;
+	case 1:
+		rcDst.top = rcDst.bottom;
+		break;
+	case 2:
+		rcDst.right = rcDst.left;
+		break;
+	case 3:
+		rcDst.left = rcDst.right;
+		break;
+	}
+
+	rcDst.left	/= MAPPARTSSIZE;
+	rcDst.right	/= MAPPARTSSIZE;
+	rcDst.top	/= MAPPARTSSIZE;
+	rcDst.bottom	/= MAPPARTSSIZE;
+
+	if ((rcDst.left < 0) || (rcDst.top < 0)) {
+		SetRect(&rcDst, -1, -1, -1, -1);
+	}
+}
+
+BOOL CLibInfoCharBase::CanMoveDirection(
+	PCInfoMapBase pInfoMap,
+	PCInfoCharBase pInfoChar,
+	int nDirection)
+{
+	// SboCli/LibInfoCharCli.cpp の CanMoveDirection (自キャラ移動判定) を
+	// S3 でサーバーと共用するため Common へ移設したもの。
+	// クライアントの当たり判定先読み(CHAR_MOVE_COLLISION_LOOKAHEAD)は
+	// CHAR_MOVE_SPEED_MAX と同じく常に1pxのため、ここでは1px固定で扱う
+	// (押せる物の判定も1pxずつ呼ばれるため、この固定値でクライアントと一致する)。
+	static const int nLookAheadPixel = 1;
+	int x, y;
+	int nDirTmp;
+	BOOL bEscape;
+	RECT rcMapNow, rcMapDst;
+
+	if (pInfoMap == NULL) {
+		return FALSE;
+	}
+
+	// 方向ブロックビットはタイルの辺属性なので、タイル境界を跨ぐ瞬間だけ判定する
+	GetMoveCheckMapRect(pInfoChar, rcMapNow, nDirection, 0);
+	GetMoveCheckMapRect(pInfoChar, rcMapDst, nDirection, nLookAheadPixel);
+
+	// 移動先がマップ外(無効矩形)なら移動不可
+	if ((rcMapDst.left == -1) && (rcMapDst.top == -1) &&
+	    (rcMapDst.right == -1) && (rcMapDst.bottom == -1)) {
+		return FALSE;
+	}
+
+	// タイル境界を跨がない移動は辺ビット判定不要
+	if ((rcMapNow.left == rcMapDst.left) && (rcMapNow.top == rcMapDst.top) &&
+	    (rcMapNow.right == rcMapDst.right) && (rcMapNow.bottom == rcMapDst.bottom)) {
+		return TRUE;
+	}
+
+	// 出口チェック: 今いるタイルの辺から出られるか
+	for (y = rcMapNow.top; y <= rcMapNow.bottom; y ++) {
+		for (x = rcMapNow.left; x <= rcMapNow.right; x ++) {
+			if (!pInfoMap->IsMoveOut(x, y, nDirection)) {
+				// どの方向からも進入できないタイル（全方向ブロック等）に
+				// めり込んでいる場合だけ、脱出用に出口チェックを免除する。
+				// 一部方向からのみ進入できるタイル（例: 右からだけ入れるイス）は
+				// 正規に重なれるため、辺ビット通りに出口をブロックする
+				bEscape = TRUE;
+				for (nDirTmp = 0; nDirTmp < 4; nDirTmp ++) {
+					if (pInfoMap->IsMove(x, y, nDirTmp)) {
+						bEscape = FALSE;
+						break;
+					}
+				}
+				if (bEscape == FALSE) {
+					return FALSE;
+				}
+			}
+		}
+	}
+
+	// 入口チェック: 移動先タイルの辺から入れるか
+	for (y = rcMapDst.top; y <= rcMapDst.bottom; y ++) {
+		for (x = rcMapDst.left; x <= rcMapDst.right; x ++) {
+			if (!pInfoMap->IsMove(x, y, nDirection)) {
+				return FALSE;
+			}
+		}
+	}
+
+	return TRUE;
 }
 
 DWORD CLibInfoCharBase::GetHitCharID(DWORD dwCharIDBase, int x, int y)

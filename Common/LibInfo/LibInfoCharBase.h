@@ -7,6 +7,7 @@
 #pragma once
 
 #include "InfoCharBase.h"
+#include "InfoMapBase.h"
 #include "LibInfoBase.h"
 
 typedef class CLibInfoCharBase : public CLibInfoBase
@@ -34,6 +35,11 @@ public:
 	void	DeleteAll(void);	// 全て削除
 	void	SortY(void);	// Y座標順にソート
 	BOOL	IsBlockChar(PCInfoCharBase pChar, int nDirection, BOOL bNoBlockFlg=TRUE, BOOL bHitCheck=FALSE);	// 一歩前でぶつかるかチェック
+	BOOL	IsPushBlockChar(PCInfoCharBase pChar, int nDirection);	// 押せるキャラに1px先でぶつかるかチェック(S1: 押せる物を固い物として扱う)
+	DWORD	GetPushBlockCharID(PCInfoCharBase pChar, int nDirection);	// 押せるキャラに1px先でぶつかるか調べ、相手のCharIDを返す(0:無し。S3bでクライアントの押し予測が使う)
+	BOOL	IsPushAreaFree(PCInfoCharBase pExclude1, PCInfoCharBase pExclude2, DWORD dwMapID, const RECT &rcMoveTo);	// 押せる物がそこへ進めるか(本人・押せる物自身を除く全キャラとの当たり判定。S3bでサーバーのIsPushCharAreaFreeと共用)
+	void	GetMoveCheckMapRect(PCInfoCharBase pInfoChar, RECT &rcDst, int nDirection, int nLookAheadPixel);	// 移動先のマップ当たり判定用矩形(タイル座標)を取得
+	BOOL	CanMoveDirection(PCInfoMapBase pInfoMap, PCInfoCharBase pInfoChar, int nDirection);	// 1px先へマップ的に進めるか判定(0-3方向。クライアントの移動判定とS3の押し判定で共用)
 	BOOL	IsUseName(LPCSTR pszName);	// 名前が使用されているかチェック
 	BOOL	NameCheck(LPCSTR pszName);	// 名前に使用できない名前があるかチェック
 	int	GetTurnDirection(int nDirection);	// 逆向きを取得
@@ -42,7 +48,6 @@ public:
 	BOOL	IsScreenInside(PCInfoCharBase pCharBase, PCInfoCharBase pCharTarget);	// 画面内にいるかチェック
 
 	virtual	DWORD	GetFrontCharID(DWORD dwCharID, int nDirection = -1);	// 一歩前のキャラIDを取得
-	virtual	DWORD	GetFrontCharIDPush(DWORD dwCharID, int nDirection = -1);	// 一歩前の押せるキャラIDを取得
 	virtual	DWORD	GetHitCharID(DWORD dwCharIDBase, int x, int y);	// 指定座標に当たるキャラIDを取得
 	virtual	void	SetPtr(DWORD dwCharID, PCInfoCharBase pChar);	// キャラ情報を更新
 			PCInfoBase	GetPtr(int nNo);	// キャラ情報を取得

@@ -139,6 +139,24 @@ static void GetInterpolatedNPCPos(CInfoCharSvr *pInfoChar, int &nOutX, int &nOut
 	nOutY = pInfoChar->m_ptCharBack.y + (int)((LONGLONG)nDiffY * dwElapsed / dwInterval);
 }
 
+/**
+ * @brief NPC の配信用座標を取得する(押せる物はそのまま、それ以外は補間)
+ *
+ * 押せる物(m_bPush)は RecvProcCHAR_REQ_PUSH が1pxずつ SetPos() するため
+ * m_nMapX/Y が既に連続値であり、HALF_TILE ジャンプ方式の GetInterpolatedNPCPos
+ * による補間はかえって位置をズラしてしまう。押せる物は m_nMapX/Y をそのまま送る
+ * (docs/push-object-redesign.md 3章)。
+ */
+static void GetNPCSyncPos(CInfoCharSvr *pInfoChar, int &nOutX, int &nOutY)
+{
+	if (pInfoChar->m_bPush) {
+		nOutX = pInfoChar->m_nMapX;
+		nOutY = pInfoChar->m_nMapY;
+		return;
+	}
+	GetInterpolatedNPCPos(pInfoChar, nOutX, nOutY);
+}
+
 }	// namespace
 
 CLibInfoCharSvr::CLibInfoCharSvr()
@@ -306,6 +324,18 @@ void CLibInfoCharSvr::LogIn(
 		pCharSvr->m_dwLastRecvMovePacketTime = 0;
 		pCharSvr->m_dwLastMoveSyncSendTime = 0;
 		pCharSvr->m_dwLastMoveRejectSyncTime = 0;
+		// 押し要求(REQ_PUSH)側も同じ理由でクライアント時刻基準が0からになるため、
+		// 新規ログイン時にリセットする。これをしないと、前回ログイン時に残った
+		// 大きなクライアント時刻がそのまま前回受理時刻として残り、再ログイン後の
+		// 押し要求が全て「時刻逆行」扱いで破棄され続けてしまう
+		// (却下ログ・診断ログの間引き時刻や抑制カウンタも合わせてリセットする)。
+		pCharSvr->m_dwLastPushClientTime = 0;
+		pCharSvr->m_dwLastPushRejectSyncTime = 0;
+		pCharSvr->m_dwLastPushRejectLogTime = 0;
+		pCharSvr->m_dwLastPushAcceptLogTime = 0;
+		pCharSvr->m_dwLastPushDiagLogTime = 0;
+		pCharSvr->m_dwLastPushDecideLogTime = 0;
+		pCharSvr->m_nPushRejectSuppressedCount = 0;
 	}
 	m_paInfoLogin->push_back(pChar);
 }
@@ -1742,57 +1772,6 @@ Exit:
 	return dwRet;
 }
 
-DWORD CLibInfoCharSvr::GetFrontCharIDPush(DWORD dwCharID, int nDirection)
-{
-	int i, nCount;
-	DWORD dwRet;
-	PCInfoCharBase pInfoCharSrc, pInfoCharTmp;
-	POINT ptBack, ptFront;
-	RECT rcFrontRect, rcTmp;
-
-	dwRet = 0;
-
-	pInfoCharSrc = (PCInfoCharBase)GetPtr(dwCharID);
-	if (pInfoCharSrc == NULL) {
-		goto Exit;
-	}
-	pInfoCharSrc->GetFrontPos(ptFront, nDirection, FALSE);
-	ptBack.x = pInfoCharSrc->m_nMapX;
-	ptBack.y = pInfoCharSrc->m_nMapY;
-	pInfoCharSrc->m_nMapX = ptFront.x;
-	pInfoCharSrc->m_nMapY = ptFront.y;
-	pInfoCharSrc->GetPosRect(rcFrontRect);
-	pInfoCharSrc->m_nMapX = ptBack.x;
-	pInfoCharSrc->m_nMapY = ptBack.y;
-
-	nCount = GetCountLogIn();
-	for (i = 0; i < nCount; i ++) {
-		pInfoCharTmp = m_paInfoLogin->at(i);
-		if (pInfoCharSrc == pInfoCharTmp) {
-			continue;
-		}
-		if (pInfoCharTmp->m_bPush == FALSE) {
-			continue;
-		}
-		if (pInfoCharSrc->m_dwMapID != pInfoCharTmp->m_dwMapID) {
-			continue;
-		}
-		if ((pInfoCharSrc->m_nMapX == pInfoCharTmp->m_nMapX) && (pInfoCharSrc->m_nMapY == pInfoCharTmp->m_nMapY)) {
-			continue;
-		}
-		pInfoCharTmp->GetPosRect(rcTmp);
-		if (!((rcFrontRect.left <= rcTmp.right) && (rcTmp.left <= rcFrontRect.right) &&
-			(rcFrontRect.top <= rcTmp.bottom) && (rcTmp.top <= rcFrontRect.bottom))) {
-			continue;
-		}
-		dwRet = pInfoCharTmp->m_dwCharID;
-		break;
-	}
-
-Exit:
-	return dwRet;
-}
-
 DWORD CLibInfoCharSvr::GetFrontCharIDTarget(
 	DWORD dwCharID,	// [in] 攻撃するキャラID
 	int nDirection/*=-1*/,			// [in] 向き
@@ -2397,7 +2376,7 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 	// MOVE_START 用: 連続換算位置ヘルパーで補間座標を取得する。
 	// 旧実装は m_ptCharBack を直接使っていたが、HALF_TILE ジャンプ直後に
 	// 呼ばれると最大 16px 未来の座標が届いてクライアント予測とズレる。
-	GetInterpolatedNPCPos(pInfoChar, nStartX, nStartY);
+	GetNPCSyncPos(pInfoChar, nStartX, nStartY);
 	dwStartTime = dwNowTime;
 	if (pInfoChar->m_dwLastTimeMove != 0) {
 		dwStartTime = pInfoChar->m_dwLastTimeMove;
@@ -2428,7 +2407,7 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 			// m_nMapX/Y をそのまま送ると HALF_TILE ジャンプ後の未来座標になるため
 			// 連続換算位置ヘルパーで補間した座標を使う。
 			int nDirChangeX, nDirChangeY;
-			GetInterpolatedNPCPos(pInfoChar, nDirChangeX, nDirChangeY);
+			GetNPCSyncPos(pInfoChar, nDirChangeX, nDirChangeY);
 			PacketMoveDirChange.Make(
 					pInfoChar->m_dwMapID,
 					pInfoChar->m_dwCharID,
@@ -2445,7 +2424,7 @@ void CLibInfoCharSvr::ProcChgPos(CInfoCharSvr *pInfoChar)
 			// NPC の 100ms 補正
 			// 同様に補間座標を使って連続換算位置を送る。
 			int nUpdateX, nUpdateY;
-			GetInterpolatedNPCPos(pInfoChar, nUpdateX, nUpdateY);
+			GetNPCSyncPos(pInfoChar, nUpdateX, nUpdateY);
 			PacketMoveDirChange.Make(
 					pInfoChar->m_dwMapID,
 					pInfoChar->m_dwCharID,
