@@ -143,10 +143,14 @@ public:
 			m_dwLastPushRejectLogTime,	// [押す本人側] 押し要求却下ログを最後に出力した時刻(ms)。連続拒否時のログ出力頻度を抑制する(保存・送信対象外)
 			m_dwLastPushAcceptLogTime,	// [押す本人側] 診断用。押し要求受理ログを最後に出力した時刻(ms)。原因特定後に無効化(保存・送信対象外)
 			m_dwLastPushDiagLogTime,	// [押す本人側] 診断用。REQ_PUSH入口ログ・判定前の黙殺returnログの共通抑制(1秒1回)。原因特定後に無効化(保存・送信対象外)
-			m_dwLastPushDecideLogTime;	// [押す本人側] 診断用。DecidePush直前ログの抑制(1秒1回)。原因特定後に無効化(保存・送信対象外)
+			m_dwLastPushDecideLogTime,	// [押す本人側] 診断用。DecidePush直前ログの抑制(1秒1回)。原因特定後に無効化(保存・送信対象外)
+			m_dwLastAtackAcceptedTime,	// 最後に受理した攻撃要求の時刻(ms)。攻撃間隔チェックの基準(保存・送信対象外)
+			m_dwPrevAtackAcceptedTime,	// 前々回に受理した攻撃要求の時刻(ms)。通信の揺らぎ許容の基準(保存・送信対象外)
+			m_dwLastAtackRejectLogTime;	// 攻撃要求却下ログを最後に出力した時刻(ms)。連続拒否時のログ出力頻度を抑制する(保存・送信対象外)
 	int	m_nFiredMapEventCount,	// 発火済みイベント数
 			m_nLastMoveSyncDirection,	// 最終移動同期向き
-			m_nPushRejectSuppressedCount;	// [押す本人側] ログ抑制中に却下したが出力しなかった件数(保存・送信対象外)
+			m_nPushRejectSuppressedCount,	// [押す本人側] ログ抑制中に却下したが出力しなかった件数(保存・送信対象外)
+			m_nAtackRejectSuppressedCount;	// ログ抑制中に却下したが出力しなかった攻撃要求の件数(保存・送信対象外)
 	int	m_nFiredMapEventTileX[MAPEVENT_FIRED_MAX];	// 発火済みイベントのタイルX（集合）
 	int	m_nFiredMapEventTileY[MAPEVENT_FIRED_MAX];	// 発火済みイベントのタイルY（集合）
 	BOOL	m_bMoveSyncActive,	// 移動同期中

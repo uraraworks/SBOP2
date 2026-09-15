@@ -125,9 +125,13 @@ CInfoCharSvr::CInfoCharSvr()
 	m_dwLastPushAcceptLogTime = 0;
 	m_dwLastPushDiagLogTime = 0;
 	m_dwLastPushDecideLogTime = 0;
+	m_dwLastAtackAcceptedTime = 0;
+	m_dwPrevAtackAcceptedTime = 0;
+	m_dwLastAtackRejectLogTime = 0;
 	m_nFiredMapEventCount = 0;
 	m_nLastMoveSyncDirection = -1;
 	m_nPushRejectSuppressedCount = 0;
+	m_nAtackRejectSuppressedCount = 0;
 	m_bMoveSyncActive = FALSE;
 	m_bPendingMapEvent = FALSE;
 	m_bSwapActive = FALSE;
@@ -580,11 +584,18 @@ BOOL CInfoCharSvr::IsAtackTarget(void)
 	if (m_bStatusInvincible) {
 		goto Exit;
 	}
+	// ホワイトリスト化(docs/battle-redesign.md S1)。PC・戦闘1・戦闘2・
+	// 被弾アニメーションのみを対象にする。容姿コピー(STYLECOPY_PUT/GET)は
+	// 会話で動く仕掛けで攻撃対象外、矢等(MOVEATACK)も対象外(親付きの攻撃側であり
+	// 的にはしない)。この関数は敵NPCのAI索敵・スキル対象探索でも使われるため、
+	// PCも対象に残す(PvP可否はAtackImple側のAttackDecision::IsPvpAttackBlocked()で判定する)。
 	switch (m_nMoveType) {
-	case CHARMOVETYPE_STAND:	// 移動しない
-	case CHARMOVETYPE_BALL:	// ボール
-	case CHARMOVETYPE_SCORE:	// 得点
-	case CHARMOVETYPE_PUTNPC:	// NPC発生
+	case CHARMOVETYPE_PC:		// プレイヤーキャラ
+	case CHARMOVETYPE_BATTLE1:	// 戦闘1
+	case CHARMOVETYPE_BATTLE2:	// 戦闘2
+	case CHARMOVETYPE_ATACKANIME:	// 攻撃受けるとアニメーション
+		break;
+	default:
 		bRet = FALSE;
 		goto Exit;
 	}

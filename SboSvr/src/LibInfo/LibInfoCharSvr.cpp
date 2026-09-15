@@ -29,6 +29,7 @@
 #include "MainFrame.h"
 #include "MgrData.h"
 #include "LibInfoCharSvr.h"
+#include "AttackDecision.h"
 #include "../Platform/SvrPlatform.h"
 
 namespace {
@@ -336,6 +337,9 @@ void CLibInfoCharSvr::LogIn(
 		pCharSvr->m_dwLastPushDiagLogTime = 0;
 		pCharSvr->m_dwLastPushDecideLogTime = 0;
 		pCharSvr->m_nPushRejectSuppressedCount = 0;
+		// 攻撃要求却下ログの間引き時刻・抑制カウンタも同じ理由でリセットする。
+		pCharSvr->m_dwLastAtackRejectLogTime = 0;
+		pCharSvr->m_nAtackRejectSuppressedCount = 0;
 	}
 	m_paInfoLogin->push_back(pChar);
 }
@@ -768,6 +772,22 @@ BOOL CLibInfoCharSvr::AtackImple(PCInfoCharSvr pChar, DWORD dwCharID)
 		if (pChar->m_bParentInfo) {
 			// 親がいる場合は親の情報を使用する
 			pCharTmp = pCharParent;
+		}
+	}
+
+	// PvP判定(docs/battle-redesign.md S1)。攻撃の主体(親がいれば親、親が見つからなければ
+	// 攻撃者自身)がPCで、対象もPCで、そのマップがPvP不可なら当てない。
+	// PvP可否のマップ設定はまだ無いため、現状は常にfalse(PvP不可)を渡す
+	// (後段でマップ設定を追加したら、そこから引いた値を渡すよう変更する)。
+	{
+		PCInfoCharSvr pCharAtackSubject;
+		BOOL bAttackerIsPC, bTargetIsPC;
+
+		pCharAtackSubject = (pCharParent != NULL) ? pCharParent : pChar;
+		bAttackerIsPC = (IsNPC(pCharAtackSubject) == FALSE);
+		bTargetIsPC = (IsNPC(pCharTarget) == FALSE);
+		if (AttackDecision::IsPvpAttackBlocked(bAttackerIsPC != FALSE, bTargetIsPC != FALSE, /*bMapAllowsPvp=*/false)) {
+			goto Exit;
 		}
 	}
 

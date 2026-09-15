@@ -265,6 +265,10 @@
     <ClCompile Include="src\MainFrame\MainFrameRecvProcADMIN.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcBATTLE.cpp" />
     <ClCompile Include="src\MainFrame\MainFrameRecvProcCHAR.cpp" />
+    <ClCompile Include="src\MainFrame\AttackDecision.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\MainFrame\MoveStateDecision.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -454,6 +458,7 @@
     <ClInclude Include="src\Info\InfoChar\InfoCharPUTNPC.h" />
     <ClInclude Include="src\LibInfo\LibInfoCharSvr.h" />
     <ClInclude Include="src\MainFrame\MainFrame.h" />
+    <ClInclude Include="src\MainFrame\AttackDecision.h" />
     <ClInclude Include="src\MainFrame\MoveStateDecision.h" />
     <ClInclude Include="src\MainFrame\PushDecision.h" />
     <ClInclude Include="src\MgrData.h" />

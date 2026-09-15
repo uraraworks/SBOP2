@@ -18,7 +18,7 @@
 - 攻撃ゲージ `m_wAtackGauge`（`Common/Info/InfoCharBase.h:157`、`MAX_ATACKGAUGE=100`）はクライアントのみ。`TimerProcGauge`（`SboCli/src/StateProc/StateProcMAP.cpp:1791`）で最終行動から750ms後に25msごと+1。消費は `OnX`（`StateProcMAP.cpp:2165`、`Todo:暫定` コメントあり）。同期なし。
 - 攻撃の流れ: `OnX` → `CHAR_STATE(BATTLEATACK)` 送信・`ChgWait` → サーバー応答でモーション → 攻撃コマで `BATTLE_REQ_ATACK`（`SboCli/src/Info/InfoCharCli.cpp:2369`）→ サーバー `RecvProcBATTLE_REQ_ATACK`（`SboSvr/src/MainFrame/MainFrameRecvProcBATTLE.cpp:22`）→ `CLibInfoCharSvr::Atack`/`AtackImple`（`SboSvr/src/LibInfo/LibInfoCharSvr.cpp:642`/`722`）。攻撃1回に往復2回。
 - サーバー検証の欠如: 間隔・ゲージ・状態・戦闘可能マップのいずれも未検証（HP>0・非気絶のみ）。改造クライアントで無制限連打・非戦闘モードから攻撃可能。`CHARMOVESTATE_BATTLEATACK_WAIT`（1000ms、`SboSvr/src/Info/InfoCharSvr.cpp:172`）は定義済みだがどこからもセットされず未使用。
-- 攻撃対象判定: `AtackImple` の `m_nAtackTarget` 分岐（`LibInfoCharSvr.cpp:737-755`）で、未設定なら「NPC同士」以外は全部当たる（店員NPCや非戦闘PCも殴れる）。PvP可否フラグなし。
+- 攻撃対象判定: `AtackImple` の `m_nAtackTarget` 分岐（`LibInfoCharSvr.cpp:737-755`）で、未設定なら「NPC同士」以外は全部当たる。~~店員NPCや非戦闘PCも殴れる~~ → 訂正: `CInfoCharSvr::IsAtackTarget`（`InfoCharSvr.cpp:572`付近）が STAND/BALL/SCORE/PUTNPC を既に除外しており、店員NPC等（`CHARMOVETYPE_STAND`）は対象外だった。一方、容姿コピー(`STYLECOPY_PUT`/`GET`)・矢等(`MOVEATACK`)・PCは対象に残っていた（容姿コピーは会話専用の仕掛けでダメージ想定外、矢は攻撃側であり的にする想定外、PCはPvP可否フラグが無いのに殴れてしまう）。PvP可否フラグなし。
 - 溜め攻撃: X 2秒押しで成立（`StateProcMAP.cpp:1766` 付近、`dwTime < 2000` 判定）、ダメージ2倍。
 - 釣り: 戦闘モード＋釣り竿装備で X → 攻撃モーションが釣りに差し替わり（`SboCli/src/LibInfo/LibInfoCharCli.cpp:273`）、`SBOCOMMANDID_SUB_CHAR_PROC_FISHING` 送信（`InfoCharCli.cpp:2376`）。サーバーで水タイル確認し待ち登録（`MainFrameRecvProcCHAR.cpp:1929` 付近）、アタリ・釣り上げは完全自動（`SboSvr/src/Info/InfoCharSvr.cpp:649,672` 付近）。ゲージも10消費。
 - キー: X は戦闘モード中=攻撃、立ち=会話(`OnXChar`)→拾う→追従解除（`StateProcMAP.cpp:2131-2252`）。Z は戦闘中=防御、それ以外=追従要求（`StateProcMAP.cpp:2256`〜）。押す/蹴るは移動キーで当たる方式なので1ボタン化と衝突しない。
@@ -51,12 +51,18 @@
 
 | 段階 | 目的 | 変更対象 | 完了条件 | 確認方法 |
 |---|---|---|---|---|
-| S1 | 改造クライアント対策としてサーバー側の攻撃検証を先に固める（仕様変更と独立に有効） | サーバーの攻撃間隔（`CHARMOVESTATE_BATTLEATACK_WAIT` 活用）・戦闘可能マップチェック・攻撃対象判定（共通コードへ切り出し） | 未検証だった間隔・マップ・対象がサーバーで拒否できる | `SboSvrTest` にテスト追加（新テストは必ず一度落ちることを確認してから直す） |
+| S1 | 改造クライアント対策としてサーバー側の攻撃検証を先に固める（仕様変更と独立に有効） | サーバーの攻撃間隔・戦闘可能マップチェック・PvP判定・攻撃対象判定のホワイトリスト化（`AttackDecision.h/.cpp` に純粋関数として切り出し、`RecvProcBATTLE_REQ_ATACK`/`AtackImple` から利用） | 未検証だった間隔・マップ・対象がサーバーで拒否できる | `SboSvrTest` にテスト追加（新テストは必ず一度落ちることを確認してから直す） |
 | S2 | ゲージ・溜め攻撃を廃止し即攻撃＋押しっぱなし連続にする | `m_wAtackGauge`/`TimerProcGauge`/溜め攻撃周りの削除、`OnTab`・スマホ「戦闘」ボタン削除、戦闘状態の自動遷移、攻撃の往復2回をクライアント即モーション＋送信1回に（クライアント予測） | Tab無しで敵に攻撃が当たり連打できる、戦闘モードへの明示切替が不要 | 手元サーバー＋ブラウザ版で連続攻撃・自動遷移・復帰を確認 |
 | S3 | X・Z を状況依存の1ボタンにする | `OnX`/`OnXChar`/`OnZ` の判定順（敵優先）の実装 | 正面の敵/会話NPC/水/何もなしで意図した動作になる | 敵と会話NPCが同時にいる配置で優先順を確認 |
 | S4 | 釣りを攻撃から切り離す | 釣り竿装備＋正面水＋X の専用経路に分離 | 戦闘可能マップでも竿装備時は釣りが優先して起きる | 水際・戦闘可能マップの両方で確認 |
 | S5 | 被弾減速とHPバーのフェード表示、攻撃での追従解除 | 移動速度チェックの整合、`LayerMap` のHP表示、追従解除処理 | 被弾後に減速し時間で戻る、HPバーがフェードイン/アウトする、攻撃で追従が切れる | 被弾・放置・攻撃の各シナリオで確認 |
 | 後段 | スキル詠唱時間・クールダウン、弓バランス、PvPマップ設定、戦闘BGMの扱い | 未着手 | — | — |
+
+### S1 実装メモ
+
+- 間隔は `CHARMOVESTATE_BATTLEATACK_WAIT` 状態(未使用のまま残す)ではなく、`CInfoCharSvr::m_dwLastAtackAcceptedTime`/`m_dwPrevAtackAcceptedTime`(受理時刻2つ)で判定する。移動同期等、状態同期に割り込むモード変更を増やさないため。
+- S1ではPC同士の攻撃を全面禁止する（`AttackDecision::IsPvpAttackBlocked()` に呼び出し側から常に `bMapAllowsPvp=false` を渡す）。PvPマップ設定を追加したらそこから引いた値を渡して解禁する。
+- 容姿コピー(`STYLECOPY_PUT`/`GET`)・矢等(`MOVEATACK`)は `CInfoCharSvr::IsAtackTarget` のホワイトリスト化により攻撃対象外になった(PC・`BATTLE1`・`BATTLE2`・`ATACKANIME` のみ対象)。
 
 ---
 
