@@ -645,10 +645,6 @@ void CMainFrame::ChgMoveState(
 	pInfoMap = m_pMgrData->GetMap();
 
 	dwMoveWait = pPlayerChar->GetMoveWait();
-	if (pPlayerChar->m_bChargeAtack) {
-		bChgWait = TRUE;
-		dwMoveWait *= 2;
-	}
 
 	switch (pPlayerChar->m_nMoveState) {
 	case CHARMOVESTATE_MOVE: // 移動中

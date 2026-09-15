@@ -43,4 +43,31 @@ namespace AttackDecision
 	/// @param bTargetIsPC 対象がPCか
 	/// @param bMapAllowsPvp 対象マップがPvP可か
 	bool IsPvpAttackBlocked(bool bAttackerIsPC, bool bTargetIsPC, bool bMapAllowsPvp);
+
+	/// docs/battle-redesign.md の S2。攻撃モーション1つの全体時間(ms)を計算する。
+	/// クライアントの表示ロジック(CInfoCharCli::TimerProcAtack)は、最終コマ表示後
+	/// さらに最終コマの待ち時間ぶん(=最終コマだけ2倍)経ってから次の行動に移る。
+	/// そのため全体時間は「全コマの待ち時間の合計」+「最終コマの待ち時間」になる
+	/// (最終コマだけ2倍表示、という意味)。
+	///
+	/// @param padwWait 各コマの待ち時間(×10ms前の生の値。sys_motion.Wait相当)の配列
+	/// @param nCount コマ数。0以下、または padwWait==NULL なら0を返す
+	unsigned int GetMotionDurationMs(const unsigned int *padwWait, int nCount);
+
+	/// 攻撃間隔の下限(ms)を計算する: 起こりうる攻撃モーション(向き・振り/突き等の
+	/// 候補すべて)の全体時間のうち最短のものを求め、その80%を下限とする。
+	/// 候補が無い、または全て0(モーション未定義・Wait合計0)の場合は dwFallbackMs を
+	/// 使う。結果はどちらの経路でも dwMinClampMs 未満にはしない。
+	///
+	/// @param padwCandidateDurationMs 候補モーションそれぞれの全体時間(ms、
+	///        GetMotionDurationMs() の戻り値)の配列。0は「未定義」として無視する
+	/// @param nCount 候補数。0以下、または padwCandidateDurationMs==NULL なら
+	///        候補無し(フォールバック)扱い
+	/// @param dwFallbackMs 候補が求められない場合の間隔(ms)
+	/// @param dwMinClampMs 結果の下限(ms)
+	unsigned int ComputeAttackIntervalMs(
+		const unsigned int *padwCandidateDurationMs,
+		int nCount,
+		unsigned int dwFallbackMs,
+		unsigned int dwMinClampMs);
 }

@@ -474,13 +474,19 @@
       transform: translate(0px, 0px);
       pointer-events: none;
     }
-    /* A/B/Tab/Space/座る/向き固定 ボタン: 右側グリッド(3列×2段) */
+    /* A/B/Space/座る/向き固定 ボタン(旧Tab枠は空き): 右側グリッド(3列×2段) */
     #virtualPad .pad-buttons {
       display: grid;
       grid-template-columns: repeat(3, 52px);
       gap: 8px;
       align-items: center;
       justify-content: center;
+    }
+    /* docs/battle-redesign.md S2: Tab(戦闘)ボタン廃止で空けたグリッドの1マス。
+       ボタンと同じ寸法だけ確保し、見た目・操作は出さない */
+    #virtualPad .pad-slot-empty {
+      width: 52px;
+      height: 48px;
     }
     /* 共通ボタンスタイル */
     #virtualPad button {
@@ -944,7 +950,7 @@
         <div class="pad-stick" id="padStick">
           <div class="pad-stick-knob" id="padStickKnob"></div>
         </div>
-        <!-- A/B/Tab/Space/座る/向き固定 ボタン（右側グリッド 3列×2段）。
+        <!-- A/B/Space/座る/向き固定 ボタン(旧Tab枠は空き)（右側グリッド 3列×2段）。
              A(Z)/B(X) の表記は戦闘モード/ウィンドウ開閉に応じて JS (sbop2OnBattleModeChange / sbop2OnWindowStateChange) が切り替える。 -->
         <div class="pad-buttons">
           <button id="padA" type="button">
@@ -953,9 +959,8 @@
           <button id="padB" type="button">
             <span class="pad-btn-icon">○</span><span class="pad-btn-label">決定</span><span class="pad-btn-key">X</span>
           </button>
-          <button id="padTab" type="button">
-            <span class="pad-btn-label">戦闘</span><span class="pad-btn-key">Tab</span>
-          </button>
+          <!-- docs/battle-redesign.md S2: 戦闘モード切替(Tab)は廃止。グリッドの1マスは空けておく -->
+          <div class="pad-slot-empty" aria-hidden="true"></div>
           <button id="padSpace" type="button">
             <span class="pad-btn-label">メニュー</span><span class="pad-btn-key">Space</span>
           </button>
@@ -2119,7 +2124,6 @@
       // 座る=R=0x52
       bindPadButton(document.getElementById('padA'),     0x5A);
       bindPadButton(document.getElementById('padB'),     0x58);
-      bindPadButton(document.getElementById('padTab'),   0x09);
       bindPadButton(document.getElementById('padSpace'), 0x20);
       bindPadButton(document.getElementById('padSit'),   0x52);
 

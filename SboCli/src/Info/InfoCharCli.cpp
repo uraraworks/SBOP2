@@ -408,8 +408,6 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 		nAnime = 0;
 		m_nMoveDirection = -1;
 		RenewBlockMapArea(0, 0, -1);
-		// 溜め攻撃解除
-		m_bChargeAtack = FALSE;
 		bCheck = FALSE;
 		break;
 	case CHARMOVESTATE_MOVE:	// 移動中
@@ -440,13 +438,7 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 		if (m_nMoveState == nMoveState) {
 			break;
 		}
-		if (m_bChargeAtack) {
-			// 溜め攻撃解除
-			m_bChargeAtack = FALSE;
-			nAnime = 1;
-		} else {
-			nAnime = 0;
-		}
+		nAnime = 0;
 		m_dwLastTimeAnime = SDL_GetTicks();
 		break;
 	case CHARMOVESTATE_ANIME:	// アニメーション
@@ -454,8 +446,6 @@ void CInfoCharCli::ChgMoveState(int nMoveState)
 		m_dwLastTimeAnime = SDL_GetTicks();
 		break;
 	case CHARMOVESTATE_SWOON:	// 気絶
-		// 溜め攻撃解除
-		m_bChargeAtack = FALSE;
 		m_bModeSleepTimer = FALSE;
 		nAnime = 0;
 		break;
@@ -1098,19 +1088,6 @@ CInfoMotion *CInfoCharCli::GetMotionInfo(int *pnCount)
 		paMotionInfo = &m_aMotion[CHARMOTIONID_INTERRUUPT][nDirection];
 
 	} else {
-		// 溜め攻撃中？
-		if (m_bChargeAtack) {
-			switch (nMoveState) {
-			case CHARMOVESTATE_BATTLEMOVE:	// 戦闘移動中
-				break;
-			default:
-				// 溜め中は攻撃モーションの1コマ目を表示する
-				nAnime	= 0;
-				nMoveState	= CHARMOVESTATE_BATTLEATACK;
-				break;
-			}
-		}
-
 		switch (nMoveState) {
 		case CHARMOVESTATE_STAND:	// 立ち
 		case CHARMOVESTATE_DELETE:	// 消去
@@ -2114,9 +2091,6 @@ BOOL CInfoCharCli::TimerProcMove(DWORD dwTime)
 	default:
 		goto Exit;
 	}
-	if (m_bChargeAtack) {
-		dwWait *= 2;
-	}
 
 	nDirection = m_nDirection;
 	if (m_nMoveDirection != -1) {
@@ -2358,9 +2332,6 @@ void CInfoCharCli::MotionProc(DWORD dwProcID)
 		return;
 	}
 	if (m_pMgrData->GetCharID() != m_dwCharID) {
-		return;
-	}
-	if (m_bChargeAtack) {
 		return;
 	}
 

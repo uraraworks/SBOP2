@@ -32,13 +32,13 @@
 
 ## 3. 決定した仕様
 
-1. 通常攻撃: 即発動・押しっぱなしで連続。武器ごとの攻撃間隔。攻撃モーション中は足が止まる。
+1. 通常攻撃: 即発動・押しっぱなしで連続。武器ごとの攻撃間隔＝装備武器の攻撃モーション全体時間（起こりうる向き・振り/突きの候補すべてのうち最短）。サーバーはその80%を下限とし、モーションが求められない場合は200ms、どちらの経路でも下限100msでクランプする（`AttackDecision::GetMotionDurationMs`/`ComputeAttackIntervalMs`、S2実装）。攻撃モーション中は足が止まる。
 2. 攻撃ゲージ廃止。溜め攻撃はいったん廃止。
-3. 戦闘モード切替（Tab・スマホ「戦闘」ボタン）廃止。戦闘可能マップで攻撃すると内部的に戦闘状態へ自動遷移し、一定時間攻撃しなければ戻る。
+3. 戦闘モード切替（Tab・スマホ「戦闘」ボタン）廃止。戦闘可能マップで攻撃すると内部的に戦闘状態へ自動遷移し、一定時間（攻撃しないで5秒）攻撃しなければ戻る。サーバーは戦闘不可マップでの戦闘状態遷移（BATTLE/BATTLEATACK/BATTLE_DEFENSE）を拒否する（`RecvProcCHAR_STATE`、S2実装）。
 4. 攻撃対象の判定（共通コードに置き、クライアントのボタン動作決定とサーバーの受付判定の両方で使う）: 移動種別 BATTLE1/BATTLE2/ATACKANIME かつ HP≥1。PvP可マップではPCも対象（PvP可否のマップ設定は新設が必要）。スポーン元有無・HPのみでの判定は不採用（理由: スポーン元はDB直置き敵を見逃す・敵以外も出す、HPは村人等にも入っている）。
 5. X ボタン（状況依存1ボタン）: 押した瞬間に正面を判定する。敵→攻撃、会話可NPC→会話、釣り竿装備で正面が水→釣り、何もなし→空振り。敵と会話NPCが同時なら敵優先。押しっぱなしで攻撃が始まったら離すまで攻撃（空振り含む）、会話・釣りは押し直した時だけ（連続攻撃中に奥の村人と会話が始まる事故防止）。
 6. Z ボタン: 正面がPC→付いて行く、それ以外は戦闘可能マップで防御。PvPマップで相手がPCなら防御優先。
-7. 移動速度: 戦闘モード中の1.4倍減速はなくなる。代わりに被弾で一定時間減速。サーバーの速度チェックも同じ値に揃える（過去に速度超過で移動が永久に弾かれる事故あり）。弓は引き撃ち対策として攻撃後の停止を長めにする調整を後で検討。
+7. 移動速度: 戦闘モード中の1.4倍減速はなくなる。PCの戦闘中減速はS2で廃止（`GetMoveWait`、S2実装。NPCは従来どおり1.4倍/`m_dwMoveWaitBattle`を維持）。代わりに被弾で一定時間減速（S5で実装）。サーバーの速度チェック（`GetMoveWaitBase`/`GetCharMovePixelsPerSec`）は同じ`GetMoveWait`を経由するため自動的に揃う（過去に速度超過で移動が永久に弾かれる事故あり）。弓は引き撃ち対策として攻撃後の停止を長めにする調整を後で検討。
 8. HP バー: 戦闘可能マップで常時表示、立ち止まってしばらくでフェードアウト、攻撃・被弾で再表示、メニューを開いたら隠す。
 9. 付いて行く: 攻撃したら解除。「相手が戦闘モードなら拒否」チェックは不要になる。
 10. BGM: 切替なし。戦闘BGMはいったん未使用。
@@ -63,6 +63,25 @@
 - 間隔は `CHARMOVESTATE_BATTLEATACK_WAIT` 状態(未使用のまま残す)ではなく、`CInfoCharSvr::m_dwLastAtackAcceptedTime`/`m_dwPrevAtackAcceptedTime`(受理時刻2つ)で判定する。移動同期等、状態同期に割り込むモード変更を増やさないため。
 - S1ではPC同士の攻撃を全面禁止する（`AttackDecision::IsPvpAttackBlocked()` に呼び出し側から常に `bMapAllowsPvp=false` を渡す）。PvPマップ設定を追加したらそこから引いた値を渡して解禁する。
 - 容姿コピー(`STYLECOPY_PUT`/`GET`)・矢等(`MOVEATACK`)は `CInfoCharSvr::IsAtackTarget` のホワイトリスト化により攻撃対象外になった(PC・`BATTLE1`・`BATTLE2`・`ATACKANIME` のみ対象)。
+
+### S2 実装メモ（サーバー・共通コード分。クライアントは別作業）
+
+- 攻撃間隔: `AttackDecision::GetMotionDurationMs()`(Wait配列→全体時間)と`ComputeAttackIntervalMs()`(候補の最短×80%・フォールバック・下限クランプ)を純粋関数として追加。武器→候補モーション列挙(振り/突き両方、弓・打撃・釣りの上書き優先順、上下左右4方向)は `MainFrameRecvProcBATTLE.cpp` の `CollectAtackMotionListBases()`/`GetAtackIntervalMs()` に置き、クライアントの選択ロジック(`SboCli/src/LibInfo/LibInfoCharCli.cpp` の `SetMotionInfo()`)と同じ優先順位で候補を集める。`RecvProcBATTLE_REQ_ATACK` の固定300ms(`ATACK_MIN_INTERVAL_MS`)をこれに置き換えた。
+- `RecvProcCHAR_STATE`(`MainFrameRecvProcCHAR.cpp`)で、BATTLE/BATTLEATACK/BATTLE_DEFENSE への遷移要求は `IsEnableBattle()` に加え、`pInfoChar->m_dwMapID` から引いたマップの `IsEnableBattle()` も必須にした（Tabを介さず攻撃と同時に自動遷移するため、戦闘不可マップでの遷移をサーバーで拒否）。
+- `CInfoCharBase::GetMoveWait()`(`Common/Info/InfoCharBase.cpp`)で `m_nMoveType==CHARMOVETYPE_PC` の場合は戦闘状態でも1.4倍/`m_dwMoveWaitBattle`を適用しないようにした。NPCは従来どおり。サーバーの移動速度検証(`GetMoveWaitBase`/`GetCharMovePixelsPerSec`、押し要求の速度検証も同じ経路)はこの関数を経由するため、PCの許容速度も自動的に緩和側へ揃い、矛盾は生じない。
+- 「戦闘状態の自動遷移」「攻撃しないで5秒で戦闘状態を解除」自体（クライアント側のTab/ゲージ削除・自動遷移・タイムアウト）はクライアント側作業として別途行う。
+
+### S2 実装メモ（クライアント側。クライアント側実装済み・実機確認済み（2026-09-16））
+
+- `CStateProcMAP::OnX`(`StateProcMAP.cpp`): bDown==TRUEの時だけ処理し、bDown==FALSE(離した時)は何もしない（攻撃・会話・拾いを押した瞬間に1回だけ決定する）。STANDでは従来通り会話(`OnXChar`)→足元アイテム拾いを優先し、どちらも成立しなければ`m_pMap->IsEnableBattle()`が真の場合に`StartLocalAtack()`で即座にBATTLEATACKへ入る。BATTLE(静止)でも同様に即攻撃。付いて行き中(`m_dwFrontCharID`)はOnTab旧メッセージ相当（「付いて行っている時は攻撃できません」）を出し、`IsEnableMove()==FALSE`（攻撃モーション中・気絶・防御中含む）は何もしない。
+- `CStateProcMAP::StartLocalAtack()`(新設): サーバーの返事を待たずCHAR_STATE(BATTLEATACK)を1回送信した直後に、ローカルでも`RenewMotionInfo`+`ChgMoveState(BATTLEATACK)`を呼んで即座に攻撃モーションを開始する（往復2回→送信1回+ローカル即時反映）。MOVE_STOPも同時送信して他プレイヤーの見た目を止める。
+- 自キャラの二重再生/引き延ばし対策: `MainFrameRecvProcCHAR.cpp`の`RecvProcCHAR_STATE`で、`nState==CHARMOVESTATE_BATTLEATACK`かつ自キャラが既にBATTLEATACK中（＝ローカルで開始済み）の場合は`RenewMotionInfo`を呼び直さないようにした。`RenewMotionInfo`→`InitMotionInfo(-1)`が`m_dwLastTimeAnime`をリセットするため、素朴にサーバーエコーへ反応すると再生中の攻撃モーションの現在コマ表示時間が引き延ばされて見えることが分かったため。`ChgMoveState`自体は同一状態なら`break`するだけで実害はない。
+- 自キャラの攻撃モーション中はサーバーからの BATTLE エコーを無視（モーション切れ・連続攻撃の早撃ち防止）。
+- 押しっぱなし連続攻撃: `TimerProcAtackRepeat()`(旧`TimerProcChargeAtack`を作り替え)が毎フレーム、`m_bAtackKeyAutoRepeat`(攻撃で始まった押下のみTRUE。会話・拾いで始まった押下はFALSEのまま)かつ`m_nMoveState==CHARMOVESTATE_BATTLE`（＝攻撃モーションが自動的にBATTLEへ戻った後）かつXキー押下継続中なら`StartLocalAtack()`を再度呼ぶ。ウィンドウ表示中・Xキー解放・戦闘不可マップになった場合は`m_bAtackKeyAutoRepeat`をFALSEにして止める。防御開始(`OnZ`)でも明示的にFALSEにする。BATTLEATACK再生中(攻撃モーション終了は既存の`CInfoCharCli::TimerProcAtack`が自動でBATTLEへ戻す)はこの関数では何もしない。
+- 自動解除: `TimerProcAtackAutoOff()`(旧`TimerProcGauge`を作り替え)が、`m_nMoveState==CHARMOVESTATE_BATTLE`のまま`m_dwLastAtackTime`(最後に`StartLocalAtack()`した時刻)から5秒経過したらSTANDへ戻しCHAR_STATE(STAND)を送る。BATTLEMOVE中は判定しない（止まってから判定でよい、5章参照）。
+- 廃止した箇所: `TimerProcGauge`・`OnX`のゲージ判定・被弾時ゲージ減少(`OnWindowMsg`の`MAINFRAMEMSG_DAMAGE`)・`LayerMap::DrawGauge`のアタック/ガードゲージ描画・溜め攻撃(`TimerProcChargeAtack`・`m_dwStartChargeTime`・`OnX`/`OnZ`/`OnTab`の`m_bChargeAtack`分岐・`CInfoCharCli::ChgMoveState`/`MotionProc`/`TimerProcMove`/`GetMotionInfo`の`m_bChargeAtack`分岐・`CMainFrame::ChgMoveState`の溜め時2倍待ち)・`OnTab`本体（no-opのスタブ化）・スマホパッドの`padTab`ボタン（`tools/emscripten/sbocli-title.shell.html`、空きマスとして`.pad-slot-empty`に置換）。`SBOCOMMANDID_SUB_CHAR_STATE_CHARGE`の送信元が無くなったため、クライアントの受信ハンドラ(`RecvProcCHAR_STATE_CHARGE`)とサーバー側・`Common`の`m_bChargeAtack`/`m_wAtackGauge`/`m_wDefenseGauge`フィールド自体は実害がないため残した（`SboSvr`/`Common`は本タスクの対象外）。
+- BGM: `OnTab`が唯一`CMainFrame::ChgMoveState(TRUE)`(BGM切替あり)を呼んでいた呼び出し元だったため、OnTab削除に伴い戦闘BGMへの切替は自動的に発生しなくなった（想定通り。個別の分岐削除はしていない）。
+- 未確定/判断した点: 「付いて行き中は従来メッセージ」は元のOnTabの文言をそのまま使わず「付いて行っている時は攻撃できません」に変更した（Tab→攻撃に主語を合わせた）。また、付いて行い中でも従来通りREQ_TAIL(0,FALSE)で追従解除は行う（メッセージ表示と両立、追従解除機能自体は壊さない判断）。連続攻撃の一時停止条件はBATTLE_DEFENSE中を含め「BATTLE状態でなければ何もしない」という単純な条件に統一し、防御解除後に再開したくない場合を考慮して`OnZ`の防御開始時に明示的に`m_bAtackKeyAutoRepeat=FALSE`にした。
 
 ---
 

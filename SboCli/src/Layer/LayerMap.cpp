@@ -1680,28 +1680,7 @@ void CLayerMap::DrawGauge(PCImg32 pDst)
 		pDst->BltFrom256(x + 3, y + 3 + 70 - nTmp, 70, nTmp, m_pDibSystem, 224, 128 + 70 - nTmp, TRUE);
 	}
 
-	// アタックゲージ
-	x = 32 + 32 * 6;
-	y = 32 + SCRSIZEY - 66;
-	fAverage = (float)pPlayerChar->m_wAtackGauge * 100 / MAX_ATACKGAUGE;
-	nTmp = (int)(98 * fAverage * 0.01f) + 1;
-	pDst->BltFrom256(x,       y,      104, 34, m_pDibSystem, 504, 52, TRUE); // ゲージ部分
-	pDst->BltFrom256(x + 104, y + 8,   28, 30, m_pDibSystem, 608, 60, TRUE); // アイコン部分
-	if (pPlayerChar->m_wAtackGauge > 0) {
-		pDst->BltFrom256(x + 3, y + 15, nTmp, 16, m_pDibSystem, 448, 128);
-	}
-
-	if (pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
-		// ガードゲージ
-		x = 32 + 32 * 6;
-		y = 32 + SCRSIZEY - 30;
-		fAverage = (float)pPlayerChar->m_wDefenseGauge * 100 / MAX_DEFENSEGAUGE;
-		nTmp = (int)(98 * fAverage * 0.01f) + 1;
-		pDst->BltFrom256(x, y, 104, 28, m_pDibSystem, 488, 88, TRUE);
-		if (pPlayerChar->m_wDefenseGauge > 0) {
-			pDst->BltFrom256(x + 3, y + 3, nTmp, 10, m_pDibSystem, 448, 147, TRUE);
-		}
-	}
+	// docs/battle-redesign.md S2: 攻撃/防御ゲージは廃止したため描画しない
 }
 
 

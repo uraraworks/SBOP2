@@ -293,9 +293,9 @@ CStateProcMAP::CStateProcMAP()
 	m_dwLastTimeKeepAlive	= 0;
 	m_dwLastBalloonID		= 0;
 	m_dwLastKeyInput		= 0;
-	m_dwLastTimeGauge		= 0;
 	m_dwLastTimeMoveSyncSend = 0;
-	m_dwStartChargeTime		= 0;
+	m_dwLastAtackTime		= 0;
+	m_bAtackKeyAutoRepeat	= FALSE;
 	m_bMoveSyncActive			= FALSE;
 	m_nMoveSyncDirection		= -1;
 	m_bPushSyncActive			= FALSE;
@@ -918,10 +918,10 @@ BOOL CStateProcMAP::TimerProc(void)
 
 	/* おひるねタイマー処理 */
 	TimerProcSleepTimer();
-	/* 溜め攻撃処理 */
-	TimerProcChargeAtack();
-	/* ゲージ回復 */
-	TimerProcGauge();
+	/* Xキー押しっぱなしの連続攻撃 */
+	TimerProcAtackRepeat();
+	/* 無操作で戦闘状態を自動解除 */
+	TimerProcAtackAutoOff();
 
 	return bRet;
 }
@@ -1576,25 +1576,7 @@ void CStateProcMAP::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 		break;
 
 	case MAINFRAMEMSG_DAMAGE:			// ダメージを受けた
-		{
-			int nTmp;
-
-			if (m_pPlayerChar == NULL) {
-				break;
-			}
-			m_dwLastTimeGauge = timeGetTime();
-
-			nTmp = 3;
-			if (m_pPlayerChar->m_wAtackGauge < 3) {
-				nTmp = m_pPlayerChar->m_wAtackGauge;
-			}
-			m_pPlayerChar->m_wAtackGauge -= nTmp;
-			nTmp = 3;
-			if (m_pPlayerChar->m_wDefenseGauge < 3) {
-				nTmp = m_pPlayerChar->m_wDefenseGauge;
-			}
-			m_pPlayerChar->m_wDefenseGauge -= nTmp;
-		}
+		// docs/battle-redesign.md S2: 攻撃/防御ゲージ廃止に伴い削除(被弾減速はS5で別途実装)
 		break;
 	}
 }
@@ -1722,130 +1704,109 @@ void CStateProcMAP::TimerProcSleepTimer(void)
 
 
 
-void CStateProcMAP::TimerProcChargeAtack(void)
+void CStateProcMAP::TimerProcAtackRepeat(void)
 {
-	BOOL bResult, bCancel;
-	DWORD dwTime;
-	CMainFrame *pMainFrame;
+	BOOL bResult;
 	PCMgrKeyInput pMgrKeyInput;
-	CPacketCHAR_PARA1 Packet;
-
-	bCancel = FALSE;
-	pMgrKeyInput = m_pMgrData->GetMgrKeyInput();
-	pMainFrame	 = m_pMgrData->GetMainFrame();
 
 	if (m_pPlayerChar == NULL) {
-		bCancel = TRUE;
-		goto Exit;
+		return;
 	}
-	if (m_dwStartChargeTime == 0) {
+	if (m_bAtackKeyAutoRepeat == FALSE) {
+		return;
+	}
+	if (m_pPlayerChar->m_nMoveState != CHARMOVESTATE_BATTLE) {
+		/* 攻撃モーション(BATTLEATACK)中や防御中はここでは何もせず、
+		   モーション終了で自動的にBATTLEへ戻ってから再攻撃する */
 		return;
 	}
 	if (m_pMgrWindow->IsKeyInput()) {
-		bCancel = TRUE;
-		goto Exit;
+		m_bAtackKeyAutoRepeat = FALSE;
+		return;
 	}
-	if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_SWOON) {
-		bCancel = TRUE;
-		goto Exit;
-	}
-	if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
-		bCancel = TRUE;
-		goto Exit;
-	}
+	pMgrKeyInput = m_pMgrData->GetMgrKeyInput();
 	bResult = pMgrKeyInput->IsInput('X');
 	if (bResult == FALSE) {
-		bCancel = TRUE;
-		goto Exit;
+		m_bAtackKeyAutoRepeat = FALSE;
+		return;
 	}
-	if (m_pPlayerChar->m_bChargeAtack) {
+	if (m_pPlayerChar->IsChgWait()) {
+		return;
+	}
+	if ((m_pMap == NULL) || (m_pMap->IsEnableBattle() == FALSE)) {
+		m_bAtackKeyAutoRepeat = FALSE;
 		return;
 	}
 
-	dwTime = timeGetTime() - m_dwStartChargeTime;
-	if (dwTime < 2000) {
-		return;
-	}
-
-	/* 溜め状態ONを通知 */
-	Packet.Make(SBOCOMMANDID_SUB_CHAR_STATE_CHARGE, m_pPlayerChar->m_dwCharID, 1);
-	m_pSock->Send(&Packet);
-	m_pPlayerChar->m_bChargeAtack = TRUE;
-	pMainFrame->ChgMoveState(FALSE);
-
-Exit:
-	if (bCancel) {
-		if (m_pPlayerChar) {
-			m_pPlayerChar->m_bChargeAtack = FALSE;
-			/* 溜め状態OFFを通知 */
-			Packet.Make(SBOCOMMANDID_SUB_CHAR_STATE_CHARGE, m_pPlayerChar->m_dwCharID, 0);
-			m_pSock->Send(&Packet);
-		}
-		m_dwStartChargeTime = 0;
-		pMainFrame->ChgMoveState(FALSE);
-	}
+	StartLocalAtack();
 }
 
 
 
-void CStateProcMAP::TimerProcGauge(void)
+void CStateProcMAP::TimerProcAtackAutoOff(void)
 {
-	BOOL bResult;
-	int nTmp;
-	float fAverage;
-	DWORD dwTime;
+	DWORD dwNow;
+	CPacketCHAR_STATE Packet;
 
 	if (m_pPlayerChar == NULL) {
 		return;
 	}
-	if (m_dwLastTimeGauge == 0) {
+	if (m_pPlayerChar->m_nMoveState != CHARMOVESTATE_BATTLE) {
+		/* 戦闘移動中(BATTLEMOVE)は止まってから判定すればよい */
+		return;
+	}
+	if (m_dwLastAtackTime == 0) {
+		return;
+	}
+	dwNow = timeGetTime();
+	if (dwNow - m_dwLastAtackTime < 5000) {
 		return;
 	}
 
-	bResult = m_pPlayerChar->IsStateBattle();
-	if (bResult == FALSE) {
-		return;
-	}
+	m_bAtackKeyAutoRepeat = FALSE;
+	m_dwLastAtackTime = 0;
+	m_pPlayerChar->ChgMoveState(CHARMOVESTATE_STAND);
+	Packet.Make(m_pPlayerChar->m_dwCharID, CHARMOVESTATE_STAND);
+	m_pSock->Send(&Packet);
+}
 
-	dwTime = timeGetTime() - m_dwLastTimeGauge;
-	if (dwTime < 750) {
-		return;
-	}
-	dwTime -= 750;
-	fAverage = (float)dwTime * 100.0f / 5000.0f;
 
-	/* アタックゲージの処理 */
-	{
-		nTmp = (int)(MAX_ATACKGAUGE * fAverage * 0.02f);
-		if (nTmp > 0) {
-			m_pPlayerChar->m_wAtackGauge += (WORD)nTmp;
-			if (m_pPlayerChar->m_wAtackGauge >= MAX_ATACKGAUGE) {
-				m_pPlayerChar->m_wAtackGauge = MAX_ATACKGAUGE;
-			}
-		}
-	}
 
-	/* ガードゲージの処理 */
-	{
-		nTmp = (int)(MAX_DEFENSEGAUGE * fAverage * 0.02f);
-		if (nTmp > 0) {
-			m_pPlayerChar->m_wDefenseGauge += (WORD)nTmp;
-			if (m_pPlayerChar->m_wDefenseGauge >= MAX_DEFENSEGAUGE) {
-				m_pPlayerChar->m_wDefenseGauge = MAX_DEFENSEGAUGE;
-			}
-		}
-	}
+BOOL CStateProcMAP::StartLocalAtack(void)
+{
+	/* 攻撃モーションをサーバーの返事を待たずローカルで即時開始する(docs/battle-redesign.md S2)。
+	   CHAR_STATE(BATTLEATACK)は他プレイヤーの見た目用に1回だけ送る。
+	   呼び出し前提: m_pPlayerChar・m_pMap が有効で、戦闘可能マップ */
+	int anDirection[] = {0, 1, 2, 3, 0, 1, 1, 0};
+	CPacketCHAR_STATE PacketCHAR_STATE;
+	CPacketCHAR_MOVE_STOP PacketCHAR_MOVE_STOP;
 
-	if ((m_pPlayerChar->m_wAtackGauge >= MAX_ATACKGAUGE) &&
-		(m_pPlayerChar->m_wDefenseGauge >= MAX_DEFENSEGAUGE)) {
-		m_dwLastTimeGauge = 0;
+	PacketCHAR_MOVE_STOP.Make(
+			m_pPlayerChar->m_dwMapID,
+			m_pPlayerChar->m_dwCharID,
+			anDirection[m_pPlayerChar->m_nDirection],
+			m_pPlayerChar->m_nMapX,
+			m_pPlayerChar->m_nMapY,
+			FALSE,
+			1,
+			timeGetTime());
+	m_pSock->Send(&PacketCHAR_MOVE_STOP);
+	m_bMoveSyncActive = FALSE;
+	m_nMoveSyncDirection = -1;
+	m_dwLastTimeMoveSyncSend = 0;
 
-	} else {
-		/* アタックゲージとガードゲージの最大が同じ間は同じ処理で。 */
-		if (nTmp > 0) {
-			m_dwLastTimeGauge = timeGetTime() - 750;
-		}
-	}
+	/* 他プレイヤーの見た目用の通知(自キャラへのエコーはRecvProcCHAR_STATEで無視する) */
+	PacketCHAR_STATE.Make(m_pPlayerChar->m_dwCharID, CHARMOVESTATE_BATTLEATACK);
+	m_pSock->Send(&PacketCHAR_STATE);
+
+	/* サーバーの返事を待たずローカルで攻撃モーションを開始 */
+	m_pLibInfoChar->RenewMotionInfo(m_pPlayerChar);
+	m_pPlayerChar->ChgMoveState(CHARMOVESTATE_BATTLEATACK);
+
+	m_dwLastAtackTime = timeGetTime();
+	m_bAtackKeyAutoRepeat = TRUE;
+
+	return TRUE;
 }
 
 
@@ -2130,22 +2091,14 @@ Exit:
 
 BOOL CStateProcMAP::OnX(BOOL bDown)
 {
-	int i, nCount, anDirection[] = {0, 1, 2, 3, 0, 1, 1, 0};
 	BOOL bRet, bResult;
 	DWORD dwFrontCharID;
-	POINT ptPos, ptFrontPos;
 	PCInfoItem pInfoItem;
-	CMainFrame *pMainFrame;
-	CPacketCHAR_STATE PacketCHAR_STATE;
 	CPacketCHAR_REQ_PUTGET PacketCHAR_REQ_PUTGET;
-	CPacketCHAR_MOVE_STOP PacketCHAR_MOVE_STOP;
 	CPacketCHAR_REQ_TAIL PacketCHAR_REQ_TAIL;
-	CPacketCHAR_PARA1 PacketCHAR_PARA1;
-	std::vector<POINT> aptPos;
 
 	bRet = FALSE;
 
-	pMainFrame = m_pMgrData->GetMainFrame();
 	m_pPlayerChar = m_pMgrData->GetPlayerChar();
 	if (m_pPlayerChar == NULL) {
 		goto Exit;
@@ -2158,59 +2111,27 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 	if (bResult) {
 		goto Exit;
 	}
-	if (bDown) {
-		if ((m_dwStartChargeTime == 0) && (m_pPlayerChar->m_bChargeAtack == FALSE)) {
-			if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE) {
-//Todo:暫定
-				if (m_pPlayerChar->m_wAtackGauge > 10) {
-					m_pPlayerChar->m_wAtackGauge -= 10;
-					m_dwLastTimeGauge = timeGetTime();
-
-					PacketCHAR_MOVE_STOP.Make(
-							m_pPlayerChar->m_dwMapID,
-							m_pPlayerChar->m_dwCharID,
-							anDirection[m_pPlayerChar->m_nDirection],
-							m_pPlayerChar->m_nMapX,
-							m_pPlayerChar->m_nMapY,
-							FALSE,
-							1,
-							timeGetTime());
-					m_pSock->Send(&PacketCHAR_MOVE_STOP);
-					m_bMoveSyncActive = FALSE;
-					m_nMoveSyncDirection = -1;
-					m_dwLastTimeMoveSyncSend = 0;
-
-					m_pPlayerChar->SetChgWait(TRUE);
-					PacketCHAR_STATE.Make(m_pPlayerChar->m_dwCharID, CHARMOVESTATE_BATTLEATACK);
-					m_pSock->Send(&PacketCHAR_STATE);
-					/* 溜め開始 */
-					m_dwStartChargeTime = timeGetTime();
-				}
-			}
-		}
+	if (bDown == FALSE) {
+		/* docs/battle-redesign.md S2: 攻撃・会話・拾いは押した瞬間(bDown==TRUE)に
+		   決定済み。離した時は何もしない */
 		goto Exit;
 	}
-	if (m_dwStartChargeTime) {
-		if (m_pPlayerChar->m_bChargeAtack) {
-			/* 溜め攻撃 */
-			m_pPlayerChar->SetChgWait(TRUE);
-			PacketCHAR_STATE.Make(m_pPlayerChar->m_dwCharID, CHARMOVESTATE_BATTLEATACK);
-			m_pSock->Send(&PacketCHAR_STATE);
-			pMainFrame->ChgMoveState(FALSE);
-		}
-		m_dwStartChargeTime = 0;
-		goto Exit;
-	}
+	m_dwLastKeyInput = timeGetTime();
+	m_bAtackKeyAutoRepeat = FALSE;
 
 	bResult = m_pPlayerChar->IsEnableMove();
 	if (bResult == FALSE) {
+		/* 付いて行き中(m_dwFrontCharID)・攻撃モーション中・気絶中・防御中等はここに来る。
+		   付いて行き中はOnTabの旧メッセージ相当を出す */
+		if (m_pPlayerChar->m_dwFrontCharID) {
+			AddSystemMsg(FALSE, "付いて行っている時は攻撃できません", RGB(255, 255, 255));
+		}
 		if ((m_pPlayerChar->m_dwFrontCharID) || (m_pPlayerChar->m_dwTailCharID)) {
 			PacketCHAR_REQ_TAIL.Make(m_pPlayerChar->m_dwCharID, 0, FALSE);
 			m_pSock->Send(&PacketCHAR_REQ_TAIL);
 		}
 		goto Exit;
 	}
-	m_dwLastKeyInput = timeGetTime();
 
 	switch (m_pPlayerChar->m_nMoveState) {
 	case CHARMOVESTATE_STAND:			// 立ち
@@ -2236,9 +2157,22 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 				break;
 			}
 		}
+
+		/* 会話・拾いが無ければ、戦闘可能マップなら即攻撃して戦闘状態へ自動遷移する(S2) */
+		if (m_pMap && m_pMap->IsEnableBattle()) {
+			StartLocalAtack();
+			break;
+		}
+
 		if ((m_pPlayerChar->m_dwFrontCharID) || (m_pPlayerChar->m_dwTailCharID)) {
 			PacketCHAR_REQ_TAIL.Make(m_pPlayerChar->m_dwCharID, 0, FALSE);
 			m_pSock->Send(&PacketCHAR_REQ_TAIL);
+		}
+		break;
+
+	case CHARMOVESTATE_BATTLE:			// 戦闘中(静止)
+		if (m_pMap && m_pMap->IsEnableBattle()) {
+			StartLocalAtack();
 		}
 		break;
 
@@ -2257,14 +2191,11 @@ BOOL CStateProcMAP::OnZ(BOOL bDown)
 {
 	BOOL bRet, bResult, bStateBattle;
 	DWORD dwCharID;
-	CMainFrame *pMainFrame;
 	CPacketCHAR_REQ_TAIL PacketCHAR_REQ_TAIL;
 	CPacketCHAR_STATE Packet;
-	CPacketCHAR_PARA1 PacketCHAR_PARA1;
 
 	bRet = FALSE;
 
-	pMainFrame	  = m_pMgrData->GetMainFrame();
 	m_pPlayerChar = m_pMgrData->GetPlayerChar();
 	if (m_pPlayerChar == NULL) {
 		goto Exit;
@@ -2290,12 +2221,8 @@ BOOL CStateProcMAP::OnZ(BOOL bDown)
 		m_pPlayerChar->SetChgWait(TRUE);
 		bRet = TRUE;
 
-		m_pPlayerChar->m_bChargeAtack = FALSE;
-		/* 溜め状態OFFを通知 */
-		PacketCHAR_PARA1.Make(SBOCOMMANDID_SUB_CHAR_STATE_CHARGE, m_pPlayerChar->m_dwCharID, 0);
-		m_pSock->Send(&PacketCHAR_PARA1);
-		m_dwStartChargeTime = 0;
-		pMainFrame->ChgMoveState(FALSE);
+		/* 防御中は押しっぱなし連続攻撃を止める(docs/battle-redesign.md S2) */
+		m_bAtackKeyAutoRepeat = FALSE;
 		goto Exit;
 	}
 
@@ -2658,76 +2585,8 @@ Exit:
 
 BOOL CStateProcMAP::OnTab(BOOL bDown)
 {
-	BOOL bRet, bResult;
-	CMainFrame *pMainFrame;
-	CPacketCHAR_STATE Packet;
-	CPacketCHAR_PARA1 PacketCHAR_PARA1;
-
-	bRet = FALSE;
-
-	m_pPlayerChar = m_pMgrData->GetPlayerChar();
-	if (m_pPlayerChar == NULL) {
-		goto Exit;
-	}
-	if (IsKeyInputEnable() == FALSE) {
-		goto Exit;
-	}
-	if (bDown) {
-		goto Exit;
-	}
-	m_dwLastKeyInput = timeGetTime();
-	bResult = m_pPlayerChar->IsChgWait();
-	/* 状態変更待ち？ */
-	if (bResult) {
-		goto Exit;
-	}
-	bResult = m_pPlayerChar->IsEnableMove();
-	if (bResult == FALSE) {
-		goto Exit;
-	}
-	/* 座り中？ */
-	if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_SIT) {
-		goto Exit;
-	}
-
-	/* 誰かに付いて行っている？ */
-	if (m_pPlayerChar->m_dwFrontCharID) {
-		AddSystemMsg(FALSE, "付いて行っている時はモード変更できません", RGB(255, 255, 255));
-		goto Exit;
-	}
-
-	switch (m_pPlayerChar->m_nMoveState) {
-	case CHARMOVESTATE_STAND:			// 立ち
-		bResult = m_pMap->IsEnableBattle();
-		if (bResult == FALSE) {
-			AddSystemMsg(FALSE, "このマップでは戦闘できません", RGB(255, 255, 255));
-			goto Exit;
-		}
-		m_pPlayerChar->SetMoveState(CHARMOVESTATE_BATTLE);
-		m_dwLastTimeGauge = timeGetTime();
-		break;
-	case CHARMOVESTATE_BATTLE:			// 戦闘中
-		m_pPlayerChar->SetMoveState(CHARMOVESTATE_STAND);
-
-		if (m_dwStartChargeTime || m_pPlayerChar->m_bChargeAtack) {
-			m_dwStartChargeTime = 0;
-			m_pPlayerChar->m_bChargeAtack = FALSE;
-			/* 溜め状態OFFを通知 */
-			PacketCHAR_PARA1.Make(SBOCOMMANDID_SUB_CHAR_STATE_CHARGE, m_pPlayerChar->m_dwCharID, 0);
-			m_pSock->Send(&PacketCHAR_PARA1);
-		}
-		break;
-	}
-	pMainFrame = m_pMgrData->GetMainFrame();
-	pMainFrame->ChgMoveState(TRUE);
-
-	Packet.Make(m_pPlayerChar->m_dwCharID, m_pPlayerChar->m_nMoveState);
-	m_pSock->Send(&Packet);
-	m_pPlayerChar->SetChgWait(TRUE);
-
-	bRet = TRUE;
-Exit:
-	return bRet;
+	// docs/battle-redesign.md S2: 戦闘モードのTab切替は廃止。戦闘状態は攻撃(OnX)で自動遷移する
+	return FALSE;
 }
 
 
@@ -3943,7 +3802,6 @@ ExitSend:
 		m_nLastEventTileY = nCurTileY;
 		m_bHasLastEventTile = TRUE;
 		m_bNeedIdleMapEventCheck = TRUE;
-		m_dwLastTimeGauge = timeGetTime();
 	}
 
 	bRet = TRUE;
@@ -4185,7 +4043,6 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU_SELECT(DWORD dwPara)
 		}
 		PacketCHAR_REQ_EQUIP.Make(m_pPlayerChar->m_dwCharID, dwItemID, -1);
 		pPacket = &PacketCHAR_REQ_EQUIP;
-		m_dwLastTimeGauge = timeGetTime();
 		break;
 	case ITEMMENU_SELECT_COMMAND_EQUIP_UNSET:	// 装備を外す
 		if (bEnableMove == FALSE) {
@@ -4194,7 +4051,6 @@ BOOL CStateProcMAP::OnWindowMsgITEMMENU_SELECT(DWORD dwPara)
 		}
 		PacketCHAR_REQ_EQUIP.Make(m_pPlayerChar->m_dwCharID, dwItemID, pWndITEMMENU_SELECT->GetType());
 		pPacket = &PacketCHAR_REQ_EQUIP;
-		m_dwLastTimeGauge = timeGetTime();
 		break;
 	case ITEMMENU_SELECT_COMMAND_USE:			// 使う
 		PacketCHAR_REQ_USEITEM.Make(m_pPlayerChar->m_dwCharID, dwItemID);

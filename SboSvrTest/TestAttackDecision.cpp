@@ -112,3 +112,61 @@ TEST(AttackDecision_PvP_NPC同士なら許可)
 {
 	CHECK(!IsPvpAttackBlocked(/*bAttackerIsPC=*/false, /*bTargetIsPC=*/false, /*bMapAllowsPvp=*/false));
 }
+
+// ---- モーション全体時間 ----
+
+TEST(AttackDecision_モーション時間_全コマの合計に最終コマ分を追加して10倍する)
+{
+	// 合計(10+10+5)=25、最終コマ5を追加して30 → ×10=300ms
+	unsigned int adwWait[] = {10, 10, 5};
+	CHECK_EQ(300u, GetMotionDurationMs(adwWait, 3));
+}
+
+TEST(AttackDecision_モーション時間_コマ配列が空なら0)
+{
+	CHECK_EQ(0u, GetMotionDurationMs(NULL, 0));
+}
+
+TEST(AttackDecision_モーション時間_1コマなら合計と最終コマが同じ値を2回加える)
+{
+	// 20+20=40 → ×10=400ms(素手のイメージ)
+	unsigned int adwWait[] = {20};
+	CHECK_EQ(400u, GetMotionDurationMs(adwWait, 1));
+}
+
+// ---- 攻撃間隔の下限計算 ----
+
+TEST(AttackDecision_間隔計算_候補の最短値の80パーセントになる)
+{
+	unsigned int adwCandidates[] = {350, 250, 400};	// 最短250 → 80%=200
+	CHECK_EQ(200u, ComputeAttackIntervalMs(adwCandidates, 3, 200, 100));
+}
+
+TEST(AttackDecision_間隔計算_0の候補は未定義として無視する)
+{
+	unsigned int adwCandidates[] = {0, 0, 500};	// 有効な候補は500だけ → 80%=400
+	CHECK_EQ(400u, ComputeAttackIntervalMs(adwCandidates, 3, 200, 100));
+}
+
+TEST(AttackDecision_間隔計算_候補が全部無ければフォールバック)
+{
+	unsigned int adwCandidates[] = {0, 0};
+	CHECK_EQ(200u, ComputeAttackIntervalMs(adwCandidates, 2, 200, 100));
+}
+
+TEST(AttackDecision_間隔計算_候補配列が無くてもフォールバック)
+{
+	CHECK_EQ(200u, ComputeAttackIntervalMs(NULL, 0, 200, 100));
+}
+
+TEST(AttackDecision_間隔計算_下限クランプが効く)
+{
+	unsigned int adwCandidates[] = {100};	// 80%=80 → 下限100に持ち上げ
+	CHECK_EQ(100u, ComputeAttackIntervalMs(adwCandidates, 1, 200, 100));
+}
+
+TEST(AttackDecision_間隔計算_フォールバック自体が下限未満なら下限にクランプ)
+{
+	unsigned int adwCandidates[] = {0};
+	CHECK_EQ(100u, ComputeAttackIntervalMs(adwCandidates, 1, 50, 100));
+}

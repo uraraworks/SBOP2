@@ -1012,6 +1012,7 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData, DWORD dwSessionID)
 	BOOL bResult;
 	int nState;
 	PCInfoCharSvr pInfoChar;
+	PCInfoMapBase pInfoMap;
 	CPacketCHAR_STATE Packet;
 
 	Packet.Set(pData);
@@ -1038,6 +1039,13 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData, DWORD dwSessionID)
 	case CHARMOVESTATE_BATTLEATACK:	// 戦闘攻撃中
 	case CHARMOVESTATE_BATTLE_DEFENSE:	// 防御中
 		bResult = pInfoChar->IsEnableBattle();
+		if (bResult != FALSE) {
+			// docs/battle-redesign.md S2: Tabによる明示切替が無くなり、クライアントが
+			// 攻撃と同時に自動で戦闘状態へ遷移するため、戦闘不可マップでの遷移も
+			// サーバーで拒否する(改造クライアント対策)。マップ不明も拒否。
+			pInfoMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoChar->m_dwMapID);
+			bResult = (pInfoMap != NULL) && pInfoMap->IsEnableBattle();
+		}
 		if (bResult == FALSE) {
 			nState = pInfoChar->m_nMoveState;
 		}

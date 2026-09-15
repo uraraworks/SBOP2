@@ -1490,7 +1490,9 @@ DWORD CInfoCharBase::GetMoveWait(void)
 	DWORD dwRet;
 
 	dwRet = m_dwMoveWait;
-	if (IsStateBattle()) {
+	// docs/battle-redesign.md S2: 戦闘モード切替の自動化に合わせ、PCの戦闘中減速
+	// (1.4倍・m_dwMoveWaitBattle)は廃止する(被弾減速はS5で別途導入)。NPCは従来どおり。
+	if ((m_nMoveType != CHARMOVETYPE_PC) && IsStateBattle()) {
 		if (m_dwMoveWaitBattle == 0) {
 			dwRet = (DWORD)((float)dwRet * 1.4f);
 		} else {

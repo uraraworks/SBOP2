@@ -1133,8 +1133,26 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData)
 		}
 	}
 
+	if ((pInfoChar == pInfoCharPlayer) &&
+		(pInfoChar->m_nMoveState == CHARMOVESTATE_BATTLEATACK) &&
+		(nState == CHARMOVESTATE_BATTLE)) {
+		/* docs/battle-redesign.md S2: サーバーは攻撃要求処理直後に状態をBATTLEへ戻して
+		   CHAR_STATE(BATTLE)を送ってくるが、自キャラの攻撃モーション再生中にこれを反映すると
+		   モーションが途中で切れ、TimerProcAtackRepeatがBATTLE復帰と誤認して次の攻撃を早撃ちしてしまう。
+		   BATTLEへの復帰はモーション終了時にクライアント自身が行う(InfoCharCli::RenewMotionInfo付近)ため、
+		   ここでは反映せず待機フラグのみ解除する */
+		pInfoChar->SetChgWait(FALSE);
+		return;
+	}
+
 	if (nState == CHARMOVESTATE_BATTLEATACK) {
-		m_pLibInfoChar->RenewMotionInfo(pInfoChar);
+		/* docs/battle-redesign.md S2: 自キャラはXキー押下時にローカルで即座に攻撃モーションを
+		   開始済み(StateProcMAP::StartLocalAtack)。サーバーからのエコーで RenewMotionInfo を
+		   呼び直すとアニメのタイミングがリセットされ、再生中の攻撃モーションが一瞬引き延ばされて
+		   見えるため、既にBATTLEATACK中の自キャラへのエコーはモーション再初期化をスキップする */
+		if ((pInfoChar != pInfoCharPlayer) || (pInfoChar->m_nMoveState != CHARMOVESTATE_BATTLEATACK)) {
+			m_pLibInfoChar->RenewMotionInfo(pInfoChar);
+		}
 	}
 	pInfoChar->ChgMoveState(nState);
 	pInfoChar->SetChgWait(FALSE);

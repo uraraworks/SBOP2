@@ -44,8 +44,9 @@ public:
 
 protected:
 	void  TimerProcSleepTimer(void);                                                           // 時間処理(おひるねタイマー)
-	void  TimerProcChargeAtack(void);                                                          // 時間処理(溜め攻撃)
-	void  TimerProcGauge(void);                                                                // 時間処理(ゲージ回復)
+	void  TimerProcAtackRepeat(void);                                                          // 時間処理(Xキー押しっぱなしの連続攻撃。docs/battle-redesign.md S2)
+	void  TimerProcAtackAutoOff(void);                                                         // 時間処理(無操作で戦闘状態を自動解除。docs/battle-redesign.md S2)
+	BOOL  StartLocalAtack(void);                                                               // 攻撃モーションをローカルで即時開始する(docs/battle-redesign.md S2)
 	BOOL  IsKeyInputEnable(void);                                                              // キー入力を許可するか判定
 	BOOL  OnUp(BOOL bDown);                                                                    // キーハンドラ(↑)
 	BOOL  OnDown(BOOL bDown);                                                                  // キーハンドラ(↓)
@@ -127,11 +128,11 @@ protected:
 	int   m_nLastNotifiedBattleMode; // 最後にJSへ通知した戦闘モード状態(-1:未通知, 0/1)
 	DWORD m_dwLastTimeMove,        // 最後に移動した時間
 	      m_dwLastTimeKeepAlive,   // 最後に生存確認通知を送信した時間
-	      m_dwLastTimeGauge,       // ゲージ回復時間
 	      m_dwLastTimeMoveSyncSend, // 最後に移動同期を送信した時間
 	      m_dwLastBalloonID,       // 最後に使った噴出しID
 	      m_dwLastKeyInput,        // 最後にキー入力した時間
-	      m_dwStartChargeTime;     // 溜め開始時間
+	      m_dwLastAtackTime;       // 最後に攻撃を開始した時間(無操作5秒でBATTLE解除に使う。docs/battle-redesign.md S2)
+	BOOL  m_bAtackKeyAutoRepeat;   // 今回のXキー押下が攻撃で始まったか(押しっぱなし連続攻撃の対象か。docs/battle-redesign.md S2)
 	BOOL  m_bMoveSyncActive;       // Dead Reckoning送信中か
 	int   m_nMoveSyncDirection;    // 最後に送信した移動方向
 	// S3b: 押し予測(REQ_PUSH)送信状態。docs/push-object-redesign.md 4章
