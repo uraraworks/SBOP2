@@ -7,7 +7,66 @@
 #include "StdAfx.h"
 #include "InfoMotion.h"
 #include "InfoCharSvr.h"
+#include "InfoMapBase.h"
+#include "LibInfoMapBase.h"
+#include "LibInfoCharSvr.h"
+#include "../MainFrame/PushDecision.h"
+#include "../MainFrame/MainFrame.h"
+#include "TextOutput.h"
 #include "../Platform/SvrPlatform.h"
+
+// 診断用。MainFrameRecvProcCHAR.cppのPUSH_DEBUG_LOGと同じ値にすること
+// (原因調査時のみ1にする)。モジュールが違うため定義を共有できず重複させている。
+#define PUSH_DEBUG_LOG 0
+
+namespace {
+
+// PushDecision::DIRECTION の単位ベクトル。MainFrameRecvProcCHAR.cppのPushDirVectorと
+// 同じ対応(CHARDIR_*とインデックスが一致する前提)。モジュールが違うため重複させている。
+void EjectDirVector(int nDir, int &dx, int &dy)
+{
+	dx = 0;
+	dy = 0;
+	switch (nDir) {
+	case PushDecision::DIR_UP:    dy = -1; break;
+	case PushDecision::DIR_DOWN:  dy =  1; break;
+	case PushDecision::DIR_LEFT:  dx = -1; break;
+	case PushDecision::DIR_RIGHT: dx =  1; break;
+	}
+}
+
+PushDecision::RECT_PX ToPushRectEject(const RECT &rc)
+{
+	PushDecision::RECT_PX r;
+	r.nLeft   = rc.left;
+	r.nTop    = rc.top;
+	r.nRight  = rc.right;
+	r.nBottom = rc.bottom;
+	return r;
+}
+
+// 押せる物がマップ的に1px先(nDir)へ進めるか。MainFrameRecvProcCHAR.cppの
+// IsPushMapFreeと同じ実装(モジュールが違うため重複させている)。
+BOOL EjectIsMapFree(CLibInfoCharBase *pLibInfoChar, CInfoMapBase *pInfoMap, CInfoCharSvr *pInfoObj, int nCurX, int nCurY, int nDir)
+{
+	int nSaveX, nSaveY;
+	BOOL bResult;
+
+	if (pInfoMap == NULL) {
+		return FALSE;
+	}
+
+	nSaveX = pInfoObj->m_nMapX;
+	nSaveY = pInfoObj->m_nMapY;
+	pInfoObj->m_nMapX = nCurX;
+	pInfoObj->m_nMapY = nCurY;
+	bResult = pLibInfoChar->CanMoveDirection(pInfoMap, pInfoObj, nDir);
+	pInfoObj->m_nMapX = nSaveX;
+	pInfoObj->m_nMapY = nSaveY;
+	return bResult;
+}
+
+}
 
 CInfoCharSvr::CInfoCharSvr()
 {
@@ -57,6 +116,10 @@ CInfoCharSvr::CInfoCharSvr()
 	m_dwLastPushedTime = 0;
 	m_dwPushingCharID = 0;
 	m_dwLastPushClientTime = 0;
+	m_dwSwapOwnerSessionID = 0;
+	m_dwLastSwapReqTime = 0;
+	m_dwEjectOwnerCharID = 0;
+	m_dwLastEjectProcTime = 0;
 	m_dwLastPushRejectSyncTime = 0;
 	m_dwLastPushRejectLogTime = 0;
 	m_dwLastPushAcceptLogTime = 0;
@@ -67,8 +130,15 @@ CInfoCharSvr::CInfoCharSvr()
 	m_nPushRejectSuppressedCount = 0;
 	m_bMoveSyncActive = FALSE;
 	m_bPendingMapEvent = FALSE;
+	m_bSwapActive = FALSE;
+	m_bEjectActive = FALSE;
 	m_nPendingEventTileX = 0;
 	m_nPendingEventTileY = 0;
+	m_nSwapDir = 0;
+	m_nEjectDir = 0;
+	m_ptSwapP0.x = m_ptSwapP0.y = 0;
+	m_ptSwapB0.x = m_ptSwapB0.y = 0;
+	m_dEjectPxRemainder = 0.0;
 
 	m_pLibInfoCharSvr	= NULL;
 }
@@ -350,7 +420,153 @@ BOOL CInfoCharSvr::TimerProcMOVE(DWORD dwTime)
 		}
 	}
 
+	// S5: 入れ替わり(SWAP)専有者からの要求がPUSH_SWAP_OWNER_TIMEOUT_MS以上
+	// 途絶えたら、入れ替わりを打ち切る(eject化はしない。docs/push-object-redesign.md 2章7項)。
+	if (m_bSwapActive) {
+		const DWORD PUSH_SWAP_OWNER_TIMEOUT_MS = 2000;
+		if (dwTime - m_dwLastSwapReqTime >= PUSH_SWAP_OWNER_TIMEOUT_MS) {
+			m_bSwapActive = FALSE;
+		}
+	}
+
+	// S5: 自走(eject)を1周期ぶん進める。
+	if (m_bEjectActive) {
+		ProcEjectMove(dwTime);
+	}
+
 	return bRet;
+}
+
+// S5: 自走(eject)を1周期ぶん進める。入れ替わり(SWAP)が向き変更で終了した後、
+// 専有者と重なったままのボールを専有者の2倍速で転がし、重ならなくなった所で
+// 止める(docs/push-object-redesign.md 2章7項)。配信が多くなりすぎないよう
+// 50ms未満はまとめて進める。
+void CInfoCharSvr::ProcEjectMove(DWORD dwTime)
+{
+	const DWORD EJECT_BATCH_MS = 50;
+
+	if (m_pLibInfoCharSvr == NULL) {
+		m_bEjectActive = FALSE;
+		return;
+	}
+
+	PCInfoCharSvr pOwner = (PCInfoCharSvr)m_pLibInfoCharSvr->GetPtrLogIn(m_dwEjectOwnerCharID);
+	if (pOwner == NULL) {
+		// 専有者ログアウトで自走を終了する。
+		m_bEjectActive = FALSE;
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if ((m_pLibInfoCharSvr->m_pMainFrame != NULL) && (m_pLibInfoCharSvr->m_pMainFrame->GetLog() != NULL)) {
+			m_pLibInfoCharSvr->m_pMainFrame->GetLog()->Write("EJECT終了 why:owner mv:0 obj:%d,%d", m_nMapX, m_nMapY);
+		}
+#endif
+		return;
+	}
+
+	if (m_dwLastEjectProcTime == 0) {
+		// 初回呼び出し。ここでは進めず、次回からの経過時間計算の基準だけ作る。
+		m_dwLastEjectProcTime = dwTime;
+		return;
+	}
+
+	DWORD dwElapsed = dwTime - m_dwLastEjectProcTime;
+	if (dwElapsed < EJECT_BATCH_MS) {
+		return;
+	}
+
+	int nOwnerPixelsPerSec = m_pLibInfoCharSvr->GetCharMovePixelsPerSec(pOwner);
+	double dDistance = (static_cast<double>(dwElapsed) / 1000.0) * (nOwnerPixelsPerSec * 2) + m_dEjectPxRemainder;
+	int nMaxDistance = static_cast<int>(dDistance);
+	m_dEjectPxRemainder = dDistance - nMaxDistance;
+	m_dwLastEjectProcTime = dwTime;
+
+	if (nMaxDistance <= 0) {
+		return;
+	}
+
+	RECT rcObjWin, rcOwnerWin;
+	GetCollisionRect(rcObjWin);
+	pOwner->GetCollisionRect(rcOwnerWin);
+	PushDecision::RECT_PX rcObjStart = ToPushRectEject(rcObjWin);
+	PushDecision::RECT_PX rcOwner = ToPushRectEject(rcOwnerWin);
+	// 専有者の矩形を四方に EJECT_CLEAR_MARGIN_PX 広げてから「重なりが解けたか」を見る。
+	// サーバーが知る専有者の位置は、クライアントより通信の遅れ分(100ms毎の送信＋通信時間で
+	// 10〜20px)後ろにある。重なりが解けた瞬間(すき間数px)で止めると、歩き続けている本人が
+	// すぐボールに重なり、重なった相手は押す判定から外れるため「めり込んだまま押せない」。
+	const int EJECT_CLEAR_MARGIN_PX = 24;
+	rcOwner.nLeft   -= EJECT_CLEAR_MARGIN_PX;
+	rcOwner.nTop    -= EJECT_CLEAR_MARGIN_PX;
+	rcOwner.nRight  += EJECT_CLEAR_MARGIN_PX;
+	rcOwner.nBottom += EJECT_CLEAR_MARGIN_PX;
+
+	CInfoMapBase *pMap = (m_pLibInfoCharSvr->m_pLibInfoMap != NULL)
+		? (CInfoMapBase *)m_pLibInfoCharSvr->m_pLibInfoMap->GetPtr(m_dwMapID)
+		: NULL;
+
+	int nCurX = m_nMapX;
+	int nCurY = m_nMapY;
+	CLibInfoCharSvr *pLibInfoChar = m_pLibInfoCharSvr;
+	CInfoCharSvr *pThis = this;
+	int nDir = m_nEjectDir;
+	PushDecision::IsPositionFreeFunc isFree = [&nCurX, &nCurY, pLibInfoChar, pMap, pThis, pOwner, nDir](const PushDecision::RECT_PX &rcMoveTo) -> bool {
+		if (!EjectIsMapFree(pLibInfoChar, pMap, pThis, nCurX, nCurY, nDir)) {
+			return false;
+		}
+		RECT rcTmp;
+		SetRect(&rcTmp, rcMoveTo.nLeft, rcMoveTo.nTop, rcMoveTo.nRight, rcMoveTo.nBottom);
+		// 専有者と自分自身を除く全キャラとの当たりを見る(専有者と重なっている
+		// 間は「塞がっている」扱いにしない。それが自走終了の条件のため)。
+		if (!pLibInfoChar->IsPushAreaFree(pOwner, pThis, pThis->m_dwMapID, rcTmp)) {
+			return false;
+		}
+		int dx, dy;
+		EjectDirVector(nDir, dx, dy);
+		nCurX += dx;
+		nCurY += dy;
+		return true;
+	};
+
+	bool bSeparated = false;
+	int nMoved = PushDecision::ResolveEjectDistance(rcObjStart, nDir, nMaxDistance, rcOwner, isFree, bSeparated);
+
+	if (nMoved > 0) {
+		int dx, dy;
+		EjectDirVector(nDir, dx, dy);
+		int nNewX = m_nMapX + dx * nMoved;
+		int nNewY = m_nMapY + dy * nMoved;
+
+		SetPos(nNewX, nNewY);
+		SetDirection(nDir);
+		{
+			int nMoveStateOnMove = IsStateBattle() ? CHARMOVESTATE_BATTLEMOVE : CHARMOVESTATE_MOVE;
+			if (m_nMoveState != nMoveStateOnMove) {
+				SetMoveState(nMoveStateOnMove);
+			}
+		}
+		m_bChgPos = TRUE;
+		m_dwLastPushedTime = dwTime;
+	}
+
+	if (bSeparated) {
+		m_bEjectActive = FALSE;
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if ((m_pLibInfoCharSvr->m_pMainFrame != NULL) && (m_pLibInfoCharSvr->m_pMainFrame->GetLog() != NULL)) {
+			m_pLibInfoCharSvr->m_pMainFrame->GetLog()->Write("EJECT終了 why:sep mv:%d obj:%d,%d", nMoved, m_nMapX, m_nMapY);
+		}
+#endif
+	} else if (nMoved < nMaxDistance) {
+		// 重なりが解ける前に塞がれた: ボールはそこで止める(docs/push-object-redesign.md
+		// 2章7項)。自走を続けたままだと、自走中は押し要求を全て却下するため
+		// 専有者がログアウトするまで誰も押せなくなる。
+		m_bEjectActive = FALSE;
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		if ((m_pLibInfoCharSvr->m_pMainFrame != NULL) && (m_pLibInfoCharSvr->m_pMainFrame->GetLog() != NULL)) {
+			m_pLibInfoCharSvr->m_pMainFrame->GetLog()->Write("EJECT終了 why:blk mv:%d obj:%d,%d", nMoved, m_nMapX, m_nMapY);
+		}
+#endif
+	}
 }
 
 BOOL CInfoCharSvr::IsAtackTarget(void)

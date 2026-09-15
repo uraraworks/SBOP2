@@ -216,13 +216,20 @@ namespace PushDecision
 
 	/// 入れ替わり中の要求を検証する。
 	/// - 専有者以外からの要求は却下(REASON_SWAP_NOT_OWNER)
-	/// - 向きが開始時と変わっていれば「終了」を返す(bShouldEnd=true)。
-	///   TODO(S5): 終了後、ボールを本人の2倍速で本人の前に押し出す処理は
-	///   docs/push-object-redesign.md 2章7項の通り S5 で実装する。
-	///   S2 では終了判定だけ行い、以後の再加速ロジックは持たない。
-	/// - ボール目標(要求されたボール座標)が B0-(P-P0) の nDir 軸成分と一致し、
-	///   横方向が不変で、合計移動量(P0からの距離)が本人の幅(nSelfWidthAlongDir)
-	///   以下で、経路(isFreeForObj)が空いていることを確認する。
+	/// - 向きが開始時と変わっていれば「終了」を返す(bShouldEnd=true, bAccepted=false)。
+	///   呼び出し側(RecvProcCHAR_REQ_PUSH)はこの組み合わせを見て、重なりが解けるまで
+	///   ボールを本人の2倍速で転がす「自走(eject)」を開始する
+	///   (docs/push-object-redesign.md 2章7項)。eject の1px単位の前進計算は
+	///   ResolveEjectDistance() が受け持つ。
+	/// - ボール目標(要求されたボール座標)が B0-min(P-P0, 幅) の nDir 軸成分と一致し、
+	///   横方向が不変で、経路(isFreeForObj)が空いていることを確認する。本人は
+	///   1フレームに数px進むため、入れ替わりが終わる要求ではP0からの移動量が本人の幅
+	///   をわずかに超えることがある。クライアントはボール目標をB0から幅で打ち切って
+	///   送ってくるため、サーバーも同じ打ち切り(min(移動量, 幅))で期待値を計算する。
+	///   打ち切り後の移動量が幅に達したら受理してbShouldEnd=trueにする。
+	///   REASON_SWAP_TOO_FAR は、これとは別に、要求されたボール目標自体がB0から
+	///   幅を超えて下がっている場合にのみ返す(本人の移動量そのものが幅を大きく
+	///   超えるものは、本人座標の妥当性・速度の検証で別途弾かれる前提)。
 	struct SWAP_UPDATE_RESULT
 	{
 		bool    bAccepted;
@@ -244,4 +251,25 @@ namespace PushDecision
 		const RECT_PX &rcObjAtB0,
 		int nSelfWidthAlongDir,
 		const IsPositionFreeFunc &isFreeForObj);
+
+	/// 自走(eject): 入れ替わり終了(向き変更)後、専有者と重なったままのボールを
+	/// nDir へ最大 nMaxDistance px、1pxずつ isFree で確認しながら進める。
+	/// 専有者の当たり矩形(rcOwner)と重ならなくなった時点で、その1pxぶんも含めて
+	/// 進めた距離を返し、bSeparated=true にする(=自走終了)。途中で塞がれれば
+	/// そこまでの距離を返す(bSeparatedはfalseのまま。自走状態は呼び出し側が
+	/// 維持し、次回また同じ位置から再試行できるようにする)。
+	///
+	/// @param rcObjStart 押せる物(ボール)の現在の当たり矩形
+	/// @param nDir 自走する向き(入れ替わり終了時に検出した新しい向き)
+	/// @param nMaxDistance 今回進められる最大距離(px, 0以上)
+	/// @param rcOwner 専有者(本人)の当たり矩形。これと重ならなくなったら止める
+	/// @param isFree 1px先が空いているかを判定するコールバック(専有者以外に対して)
+	/// @param bSeparated [out] 専有者の矩形と重ならなくなって自走が終了したか
+	int ResolveEjectDistance(
+		const RECT_PX &rcObjStart,
+		int nDir,
+		int nMaxDistance,
+		const RECT_PX &rcOwner,
+		const IsPositionFreeFunc &isFree,
+		bool &bSeparated);
 }

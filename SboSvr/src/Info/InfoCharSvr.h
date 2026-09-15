@@ -61,6 +61,7 @@ public:
 	virtual BOOL  ProcHit(CInfoCharSvr *pInfoChar);	// 処理(攻撃を受けた時)
 	virtual BOOL  TimerProc(DWORD dwTime);	// 時間処理
 	virtual BOOL  TimerProcMOVE(DWORD dwTime);	// 時間処理(移動)
+			void  ProcEjectMove(DWORD dwTime);	// [押せる物側] 自走(eject)を1周期ぶん進める(docs/push-object-redesign.md 2章7項)
 	virtual BOOL  IsAtackTarget(void);	// 攻撃対象となるか判定
 	virtual DWORD GetHitEffectID(void);	// ヒット時に相手に表示するエフェクトIDを取得
 	virtual DWORD GetDamage(void);	// ダメージ値を取得
@@ -134,6 +135,10 @@ public:
 			m_dwLastPushedTime,	// [押せる物側] 最後に押された時刻(ms)。150ms経過で停止させる(保存・送信対象外)
 			m_dwPushingCharID,	// [押せる物側] 押している本人のキャラID。0なら押されていない(保存・送信対象外)
 			m_dwLastPushClientTime,	// [押す本人側] 最後に受理したREQ_PUSHのクライアント時刻(ms)。速度検証の基準(保存・送信対象外)
+			m_dwSwapOwnerSessionID,	// [押せる物側] 入れ替わり(SWAP)を専有している本人のセッションID。改造クライアント対策の照合用(保存・送信対象外)
+			m_dwLastSwapReqTime,	// [押せる物側] 専有者から最後にSWAP/PUSH要求を受けた時刻(ms)。PUSH_SWAP_OWNER_TIMEOUT_MS途絶えたら打ち切る(保存・送信対象外)
+			m_dwEjectOwnerCharID,	// [押せる物側] 自走(eject)を開始した専有者のキャラID。ログアウトで自走を終了する判定に使う(保存・送信対象外)
+			m_dwLastEjectProcTime,	// [押せる物側] 自走(eject)を最後に進めた時刻(ms)。50ms未満はまとめて進める(保存・送信対象外)
 			m_dwLastPushRejectSyncTime,	// [押す本人側] 押し要求を却下してRES_PUSHで補正送信した最終時刻(ms)。連続拒否時の送信頻度を抑制する(保存・送信対象外)
 			m_dwLastPushRejectLogTime,	// [押す本人側] 押し要求却下ログを最後に出力した時刻(ms)。連続拒否時のログ出力頻度を抑制する(保存・送信対象外)
 			m_dwLastPushAcceptLogTime,	// [押す本人側] 診断用。押し要求受理ログを最後に出力した時刻(ms)。原因特定後に無効化(保存・送信対象外)
@@ -145,9 +150,16 @@ public:
 	int	m_nFiredMapEventTileX[MAPEVENT_FIRED_MAX];	// 発火済みイベントのタイルX（集合）
 	int	m_nFiredMapEventTileY[MAPEVENT_FIRED_MAX];	// 発火済みイベントのタイルY（集合）
 	BOOL	m_bMoveSyncActive,	// 移動同期中
-			m_bPendingMapEvent;	// イベント自動歩行フェーズ待機中
+			m_bPendingMapEvent,	// イベント自動歩行フェーズ待機中
+			m_bSwapActive,	// [押せる物側] 入れ替わり(SWAP)中か(保存・送信対象外)
+			m_bEjectActive;	// [押せる物側] 入れ替わり終了後の自走(eject)中か(保存・送信対象外)
 	int	m_nPendingEventTileX,	// 待機中イベントのタイルX
-			m_nPendingEventTileY;	// 待機中イベントのタイルY
+			m_nPendingEventTileY,	// 待機中イベントのタイルY
+			m_nSwapDir,	// [押せる物側] 入れ替わり開始時の(本人の)向き(保存・送信対象外)
+			m_nEjectDir;	// [押せる物側] 自走(eject)の向き(保存・送信対象外)
+	POINT	m_ptSwapP0,	// [押せる物側] 入れ替わり開始時の本人位置(保存・送信対象外)
+			m_ptSwapB0;	// [押せる物側] 入れ替わり開始時のボール位置(保存・送信対象外)
+	double	m_dEjectPxRemainder;	// [押せる物側] 自走(eject)のpx端数。50ms単位で進める際の取りこぼし防止(保存・送信対象外)
 
 	CInfoMapBase	*m_pInfoMap;	// マップ情報
 	CLibInfoCharSvr	*m_pLibInfoCharSvr;	// キャラ情報ライブラリ

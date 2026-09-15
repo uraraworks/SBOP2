@@ -184,6 +184,327 @@ static BOOL IsPushMapFree(CLibInfoCharBase *pLibInfoChar, CInfoMapBase *pInfoMap
 	return bResult;
 }
 
+// ─────────────────────────────────────────────
+// S5: 入れ替わり(SWAP)。docs/push-object-redesign.md 2章7項参照。
+// ─────────────────────────────────────────────
+
+// 専有者からSWAP/PUSH要求がこの間隔(ms)以上途絶えたら、入れ替わりを打ち切る。
+static const DWORD PUSH_SWAP_OWNER_TIMEOUT_MS = 2000;
+
+static int PushOppositeDir(int nDir)
+{
+	switch (nDir) {
+	case PushDecision::DIR_UP:    return PushDecision::DIR_DOWN;
+	case PushDecision::DIR_DOWN:  return PushDecision::DIR_UP;
+	case PushDecision::DIR_LEFT:  return PushDecision::DIR_RIGHT;
+	case PushDecision::DIR_RIGHT: return PushDecision::DIR_LEFT;
+	}
+	return nDir;
+}
+
+static PushDecision::POINT_PX ToPushPoint(const POINT &pt)
+{
+	PushDecision::POINT_PX p;
+	p.x = pt.x;
+	p.y = pt.y;
+	return p;
+}
+
+// 押せる物(pInfoObj)がnStepDir方向へ1pxずつ進めるかを見るIsPositionFreeFuncを作る。
+// nCurX/nCurYは呼び出し元のローカル変数への参照(呼ばれるたびに1pxずつ進める
+// 「確定済み」座標)。pExcludeは当たり判定から除外するキャラ(押している本人、
+// または入れ替わり中の専有者)。IsPushCharAreaFree/IsPushMapFreeは通常の押し
+// (RecvProcCHAR_REQ_PUSH内のisFree)と同じものを使う。
+static PushDecision::IsPositionFreeFunc MakeIsFreeForObjStepper(
+	CLibInfoCharSvr *pLibInfoChar,
+	CInfoMapBase *pInfoObjMap,
+	PCInfoCharSvr pInfoObj,
+	PCInfoCharSvr pExclude,
+	int nStepDir,
+	int &nCurX,
+	int &nCurY)
+{
+	return [&nCurX, &nCurY, pLibInfoChar, pInfoObjMap, pInfoObj, pExclude, nStepDir](const PushDecision::RECT_PX &rcMoveTo) -> bool {
+		if (!IsPushMapFree(pLibInfoChar, pInfoObjMap, pInfoObj, nCurX, nCurY, nStepDir)) {
+			return false;
+		}
+		if (!IsPushCharAreaFree(pLibInfoChar, pInfoObj->m_dwMapID, pExclude, pInfoObj, rcMoveTo)) {
+			return false;
+		}
+		int nStepX, nStepY;
+		PushDirVector(nStepDir, nStepX, nStepY);
+		nCurX += nStepX;
+		nCurY += nStepY;
+		return true;
+	};
+}
+
+// PUSHTYPE_SWAP要求(入れ替わり)を処理する。開始判定・継続検証・向き変更検出
+// による自走(eject)開始のいずれもここでまとめて行い、RES_PUSHの送信まで行う。
+// 呼び出し時点で「専有者以外からの要求」「eject中」は呼び出し元で既に
+// 却下・returnされている前提(専有者、またはまだ誰も専有していない状態のみ)。
+static void ProcSwapPush(
+	CTextOutput *pLog,
+	CLibInfoCharSvr *pLibInfoChar,
+	CUraraSockTCPSBO *pSock,
+	PCInfoCharSvr pInfoPlayer,
+	PCInfoCharSvr pInfoObj,
+	DWORD dwSessionID,
+	DWORD dwNowTime,
+	CPacketCHAR_REQ_PUSH &Packet,
+	int nDir,
+	const PushDecision::RECT_PX &rcSelf,
+	const PushDecision::RECT_PX &rcObj,
+	PCInfoMapBase pInfoObjMap)
+{
+	CPacketCHAR_RES_PUSH PacketResPush;
+	POINT ptFinal;
+	BOOL bAccepted = FALSE;
+	PushDecision::POINT_PX ptAccepted;
+	ptAccepted.x = pInfoObj->m_nMapX;
+	ptAccepted.y = pInfoObj->m_nMapY;
+
+	// GetCollisionRectは端を含む矩形(横x..x+31、縦y-15..y)なので、
+	// right-left/bottom-topでは1px不足する(31/15)。+1して実サイズ(32/16)にする
+	// (クライアント側も同様に修正。docs/push-object-redesign.md 2章7項)。
+	int nSelfWidthAlongDir = (nDir == PushDecision::DIR_LEFT || nDir == PushDecision::DIR_RIGHT)
+		? (rcSelf.nRight - rcSelf.nLeft + 1)
+		: (rcSelf.nBottom - rcSelf.nTop + 1);
+
+	PushDecision::POINT_PX ptSelfNow = ToPushPoint(Packet.m_ptSelf);
+	PushDecision::POINT_PX ptRequestedObj = ToPushPoint(Packet.m_ptObjTarget);
+
+#if PUSH_DEBUG_LOG
+	// 診断用。原因特定後に無効化。
+	if (pLog != NULL) {
+		pLog->Write("SWAP受信 s:%u act:%d dir:%d tgt:%d,%d self:%d,%d obj:%d,%d",
+			dwSessionID, pInfoObj->m_bSwapActive, nDir,
+			ptRequestedObj.x, ptRequestedObj.y, ptSelfNow.x, ptSelfNow.y,
+			pInfoObj->m_nMapX, pInfoObj->m_nMapY);
+	}
+#endif
+
+	if (!pInfoObj->m_bSwapActive) {
+		// 未開始: 開始条件を検証する。
+		// クライアントは最初のSWAP要求を送るまでに既にk px本人がボールへ
+		// めり込んで進んでいる(ボタン押下から最初のSWAP判定までに数px〜十数px
+		// 進んでいることがある)ため、P0(開始時の本人位置)はサーバーが持つ
+		// 「今」の本人座標ではなく、今回の要求(目標ボール座標・申告自己座標)
+		// から逆算する(親からの追加指示。docs/push-object-redesign.md 2章7項)。
+		// これによりクライアント側の目標計算 B0-(P-P0) と構造的に一致する。
+		BOOL bIsBall = (pInfoObj->m_nMoveType == CHARMOVETYPE_BALL);
+		int nRetreatDir = PushOppositeDir(nDir);
+		PushDecision::POINT_PX ptB0;
+		ptB0.x = pInfoObj->m_nMapX;
+		ptB0.y = pInfoObj->m_nMapY;
+
+		int nAxisDx, nAxisDy;
+		PushDirVector(nDir, nAxisDx, nAxisDy);
+
+		// k: 要求されたボール目標がB0から-d方向へ動いている量(d軸成分)。
+		// 横方向がB0からずれていれば却下。
+		BOOL bLateralOK;
+		int k;
+		if (nAxisDx != 0) {
+			bLateralOK = (ptRequestedObj.y == ptB0.y);
+			k = (ptB0.x - ptRequestedObj.x) * nAxisDx;
+		} else {
+			bLateralOK = (ptRequestedObj.x == ptB0.x);
+			k = (ptB0.y - ptRequestedObj.y) * nAxisDy;
+		}
+
+		if (bLateralOK && (k >= 0) && (k <= nSelfWidthAlongDir)) {
+			PushDecision::POINT_PX ptP0;
+			ptP0.x = ptSelfNow.x - k * nAxisDx;
+			ptP0.y = ptSelfNow.y - k * nAxisDy;
+
+			// 接触判定は「導出したP0の本人矩形」と「B0のボール矩形」で行う
+			// (今の本人はkpxめり込んでおり、接触許容±4pxに収まらないため)。
+			PushDecision::RECT_PX rcSelfAtP0;
+			rcSelfAtP0.nLeft   = rcSelf.nLeft   - k * nAxisDx;
+			rcSelfAtP0.nRight  = rcSelf.nRight  - k * nAxisDx;
+			rcSelfAtP0.nTop    = rcSelf.nTop    - k * nAxisDy;
+			rcSelfAtP0.nBottom = rcSelf.nBottom - k * nAxisDy;
+
+			int nCurXFwd = ptB0.x;
+			int nCurYFwd = ptB0.y;
+			PushDecision::IsPositionFreeFunc isFreeForObjFwd =
+				MakeIsFreeForObjStepper(pLibInfoChar, pInfoObjMap, pInfoObj, pInfoPlayer, nDir, nCurXFwd, nCurYFwd);
+
+			int nCurXRet = ptB0.x;
+			int nCurYRet = ptB0.y;
+			PushDecision::IsPositionFreeFunc isFreeForObjRetreat =
+				MakeIsFreeForObjStepper(pLibInfoChar, pInfoObjMap, pInfoObj, pInfoPlayer, nRetreatDir, nCurXRet, nCurYRet);
+
+			BOOL bContact = PushDecision::CheckContact(rcSelfAtP0, rcObj, nDir, PUSH_CONTACT_GAP_ALLOWED_PX);
+			BOOL bCanStart = PushDecision::CanStartSwap(bIsBall, rcObj, nDir, isFreeForObjFwd);
+			BOOL bRetreatClear = bCanStart && PushDecision::IsSwapRetreatPathClear(rcObj, nDir, nSelfWidthAlongDir, isFreeForObjRetreat);
+
+#if PUSH_DEBUG_LOG
+			// 診断用。原因特定後に無効化。
+			if (pLog != NULL) {
+				pLog->Write("SWAP開始判定 lat:%d k:%d w:%d ct:%d cs:%d rt:%d",
+					bLateralOK, k, nSelfWidthAlongDir, bContact, bCanStart, bRetreatClear);
+			}
+#endif
+
+			if (bContact && bCanStart && bRetreatClear) {
+				PushDecision::SWAP_STATE state = PushDecision::StartSwap(dwSessionID, ptP0, ptB0, nDir);
+
+				pInfoObj->m_bSwapActive = TRUE;
+				pInfoObj->m_dwSwapOwnerSessionID = dwSessionID;
+				pInfoObj->m_ptSwapP0.x = ptP0.x;
+				pInfoObj->m_ptSwapP0.y = ptP0.y;
+				pInfoObj->m_ptSwapB0.x = ptB0.x;
+				pInfoObj->m_ptSwapB0.y = ptB0.y;
+				pInfoObj->m_nSwapDir = nDir;
+				pInfoObj->m_dwLastSwapReqTime = dwNowTime;
+
+				// 開始した今回の要求も直後にUpdateSwapへ渡して検証・受理する
+				// (P0を上記の通り逆算しているため、この最初の要求は構造的に
+				// 目標一致するはずで、正常なら受理される)。
+				int nCurXRet2 = ptB0.x;
+				int nCurYRet2 = ptB0.y;
+				PushDecision::IsPositionFreeFunc isFreeForObjRetreat2 =
+					MakeIsFreeForObjStepper(pLibInfoChar, pInfoObjMap, pInfoObj, pInfoPlayer, nRetreatDir, nCurXRet2, nCurYRet2);
+
+				PushDecision::SWAP_UPDATE_RESULT updateResult = PushDecision::UpdateSwap(
+					state, dwSessionID, ptSelfNow, nDir, ptRequestedObj, rcObj,
+					nSelfWidthAlongDir, isFreeForObjRetreat2);
+
+#if PUSH_DEBUG_LOG
+				// 診断用。原因特定後に無効化。
+				if (pLog != NULL) {
+					pLog->Write("SWAP開始後初回 acc:%d end:%d rs:%d",
+						updateResult.bAccepted, updateResult.bShouldEnd, updateResult.eReason);
+				}
+#endif
+
+				if (updateResult.bAccepted) {
+					bAccepted = TRUE;
+					ptAccepted = updateResult.ptAcceptedObj;
+					if (updateResult.bShouldEnd) {
+						pInfoObj->m_bSwapActive = FALSE;
+					}
+				}
+				// 却下ならbAccepted=FALSEのまま(開始はしたが今回の1回分は
+				// 受理しない。次のSWAP要求で再検証される)。
+			}
+		}
+		// 開始条件を満たさなければ何もしない(bAccepted=FALSEのまま、現在座標を返す)。
+
+	} else {
+		// 入れ替わり中の更新(専有者からの要求であることは呼び出し元で確定済み)。
+		PushDecision::SWAP_STATE state;
+		state.bActive = TRUE;
+		state.dwOwnerSessionID = pInfoObj->m_dwSwapOwnerSessionID;
+		state.ptP0.x = pInfoObj->m_ptSwapP0.x;
+		state.ptP0.y = pInfoObj->m_ptSwapP0.y;
+		state.ptB0.x = pInfoObj->m_ptSwapB0.x;
+		state.ptB0.y = pInfoObj->m_ptSwapB0.y;
+		state.nDir = pInfoObj->m_nSwapDir;
+
+		pInfoObj->m_dwLastSwapReqTime = dwNowTime;
+
+		int nRetreatDir = PushOppositeDir(state.nDir);
+		int nCurXRet = state.ptB0.x;
+		int nCurYRet = state.ptB0.y;
+		PushDecision::IsPositionFreeFunc isFreeForObjRetreat =
+			MakeIsFreeForObjStepper(pLibInfoChar, pInfoObjMap, pInfoObj, pInfoPlayer, nRetreatDir, nCurXRet, nCurYRet);
+
+		// rcObjはpInfoObjの"今の"当たり矩形。UpdateSwap内部の経路確認はB0基準の
+		// 相対位置で行うため、B0時点の矩形に組み直して渡す(入れ替わり中、
+		// pInfoObjは毎回SetPos(ptAcceptedObj)されているのでサイズは不変)。
+		PushDecision::RECT_PX rcObjAtB0;
+		{
+			int nOffX = pInfoObj->m_nMapX - state.ptB0.x;
+			int nOffY = pInfoObj->m_nMapY - state.ptB0.y;
+			rcObjAtB0.nLeft   = rcObj.nLeft   - nOffX;
+			rcObjAtB0.nTop    = rcObj.nTop    - nOffY;
+			rcObjAtB0.nRight  = rcObj.nRight  - nOffX;
+			rcObjAtB0.nBottom = rcObj.nBottom - nOffY;
+		}
+
+		PushDecision::SWAP_UPDATE_RESULT updateResult = PushDecision::UpdateSwap(
+			state, dwSessionID, ptSelfNow, nDir, ptRequestedObj, rcObjAtB0,
+			nSelfWidthAlongDir, isFreeForObjRetreat);
+
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。mv=本人の移動量(P0からの軸成分)。
+		if (pLog != NULL) {
+			int nMvAxisDx, nMvAxisDy;
+			PushDirVector(state.nDir, nMvAxisDx, nMvAxisDy);
+			int nMv = (ptSelfNow.x - state.ptP0.x) * nMvAxisDx + (ptSelfNow.y - state.ptP0.y) * nMvAxisDy;
+			pLog->Write("SWAP更新 acc:%d end:%d rs:%d mv:%d tgt:%d,%d",
+				updateResult.bAccepted, updateResult.bShouldEnd, updateResult.eReason,
+				nMv, ptRequestedObj.x, ptRequestedObj.y);
+		}
+#endif
+
+		if (updateResult.bAccepted) {
+			bAccepted = TRUE;
+			ptAccepted = updateResult.ptAcceptedObj;
+			if (updateResult.bShouldEnd) {
+				pInfoObj->m_bSwapActive = FALSE;
+			}
+		} else if (updateResult.bShouldEnd) {
+			// 向き変更を検出。入れ替わりを終え、自走(eject)を開始する。
+			pInfoObj->m_bSwapActive = FALSE;
+			pInfoObj->m_bEjectActive = TRUE;
+			// DB配置のNPC(ボール等)は SetLibInfoChar されておらず m_pLibInfoCharSvr が
+			// NULLのため、自走処理(ProcEjectMove)が最初のreturnで黙って終わり転がらない。
+			// 自走を始める時に必ずセットする。
+			pInfoObj->SetLibInfoChar(pLibInfoChar);
+			pInfoObj->m_dwEjectOwnerCharID = pInfoPlayer->m_dwCharID;
+			pInfoObj->m_nEjectDir = nDir;
+			pInfoObj->m_dwLastEjectProcTime = dwNowTime;
+			pInfoObj->m_dEjectPxRemainder = 0.0;
+#if PUSH_DEBUG_LOG
+			// 診断用。原因特定後に無効化。
+			if (pLog != NULL) {
+				pLog->Write("EJECT開始 dir:%d obj:%d,%d", nDir, pInfoObj->m_nMapX, pInfoObj->m_nMapY);
+			}
+#endif
+			pInfoObj->SetDirection(nDir);
+			bAccepted = TRUE; // 仕様: RES_PUSHは受理・現在座標で返す
+			ptAccepted.x = pInfoObj->m_nMapX;
+			ptAccepted.y = pInfoObj->m_nMapY;
+		}
+		// それ以外の却下(目標不一致・横方向変化・塞がり等)はbAccepted=FALSEの
+		// まま、SWAP状態はそのまま維持する(クライアントは補正座標を受けて
+		// 送り直す)。
+	}
+
+	if (bAccepted) {
+		pInfoObj->SetPos(ptAccepted.x, ptAccepted.y);
+		// ボールの向きはdの逆(見る側の推測航法が向きで先読みするため)。
+		// ただしeject開始直後は既にSetDirection(nDir)を呼んでいるので、
+		// m_bSwapActiveがFALSEになっている場合は上書きしない。
+		if (pInfoObj->m_bSwapActive) {
+			pInfoObj->SetDirection(PushOppositeDir(nDir));
+		}
+		{
+			int nMoveStateOnMove = pInfoObj->IsStateBattle() ? CHARMOVESTATE_BATTLEMOVE : CHARMOVESTATE_MOVE;
+			if (pInfoObj->m_nMoveState != nMoveStateOnMove) {
+				pInfoObj->SetMoveState(nMoveStateOnMove);
+			}
+		}
+		pInfoObj->m_bChgPos = TRUE;
+		pInfoObj->m_dwLastPushedTime = dwNowTime;
+		pInfoObj->m_dwPushingCharID = pInfoPlayer->m_dwCharID;
+
+		ptFinal.x = ptAccepted.x;
+		ptFinal.y = ptAccepted.y;
+		PacketResPush.Make(pInfoObj->m_dwCharID, ptFinal, TRUE);
+		pSock->SendTo(dwSessionID, &PacketResPush);
+	} else {
+		ptFinal.x = pInfoObj->m_nMapX;
+		ptFinal.y = pInfoObj->m_nMapY;
+		PacketResPush.Make(pInfoObj->m_dwCharID, ptFinal, FALSE);
+		pSock->SendTo(dwSessionID, &PacketResPush);
+	}
+}
+
 void CMainFrame::RecvProcCHAR(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
@@ -1092,9 +1413,26 @@ void CMainFrame::RecvProcCHAR_REQ_PUSH(PBYTE pData, DWORD dwSessionID)
 		return;
 	}
 
-	// TODO(S5): 入れ替わり(SWAP)は未実装。却下して現在の確定座標だけ返す。
-	// docs/push-object-redesign.md 2章7項・PushDecision::StartSwap/UpdateSwap 参照。
-	if (Packet.m_nPushType == PUSHTYPE_SWAP) {
+	// 自走(eject)中はPUSH/SWAPどちらの要求も誰からも受け付けない
+	// (親からの追加指示。docs/push-object-redesign.md 2章7項)。ここでreturnして
+	// 関数末尾のm_bRelease即停止処理も通さないことで、eject中は止めない。
+	if (pInfoObj->m_bEjectActive) {
+#if PUSH_DEBUG_LOG
+		// 診断用。原因特定後に無効化。
+		m_pLog->Write("EJECT中却下 type:%d dir:%d", Packet.m_nPushType, nDir);
+#endif
+		ptFinal.x = pInfoObj->m_nMapX;
+		ptFinal.y = pInfoObj->m_nMapY;
+		PacketResPush.Make(pInfoObj->m_dwCharID, ptFinal, FALSE);
+		m_pSock->SendTo(dwSessionID, &PacketResPush);
+		return;
+	}
+
+	// 入れ替わり(SWAP)中に専有者以外から要求が来た場合はここで却下する
+	// (通常の押し要求(PUSHTYPE_PUSH)・SWAP要求のどちらも対象。
+	// docs/push-object-redesign.md 2章7項)。専有者からの要求はSWAP/PUSHどちらも
+	// この先の分岐(dwNowTime計算後)で処理する。
+	if (pInfoObj->m_bSwapActive && (dwSessionID != pInfoObj->m_dwSwapOwnerSessionID)) {
 		ptFinal.x = pInfoObj->m_nMapX;
 		ptFinal.y = pInfoObj->m_nMapY;
 		PacketResPush.Make(pInfoObj->m_dwCharID, ptFinal, FALSE);
@@ -1180,17 +1518,57 @@ void CMainFrame::RecvProcCHAR_REQ_PUSH(PBYTE pData, DWORD dwSessionID)
 	ptServerSelf.x = nSaveSelfX;
 	ptServerSelf.y = nSaveSelfY;
 
+	// pInfoObj->m_pInfoMapはSetMap()経由(スキル/アイテム生成/NPC発生)でしか
+	// セットされず、DBから配置されたNPC(押せるボール等)ではNULLのままになる
+	// ため使わない。他の受信処理(RecvProcCHAR_REQ_PUTGET等)と同じく
+	// m_pLibInfoMap->GetPtr()でpInfoObjのマップIDから引く。SWAP/PUSH共通で使う。
+	PCInfoMapBase pInfoObjMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoObj->m_dwMapID);
+
+	if (pInfoObj->m_bSwapActive && (Packet.m_nPushType == PUSHTYPE_PUSH)) {
+		// 入れ替わり中に専有者(=ここに来た時点でdwSessionIDは専有者で確定済み。
+		// 専有者以外は関数冒頭で既に却下してreturn済み)からPUSHTYPE_PUSHが来た場合。
+		// 向きが同じなら却下(SWAPパケットで継続させる)、違えば自走(eject)を開始する
+		// (docs/push-object-redesign.md 2章7項)。
+		pInfoObj->m_dwLastSwapReqTime = dwNowTime;
+		if (nDir != pInfoObj->m_nSwapDir) {
+			pInfoObj->m_bSwapActive = FALSE;
+			pInfoObj->m_bEjectActive = TRUE;
+			// DB配置のNPCは m_pLibInfoCharSvr がNULLのため、自走を始める時にセットする
+			// (ProcSwapPush の自走開始と同じ理由)。
+			pInfoObj->SetLibInfoChar(m_pLibInfoChar);
+			pInfoObj->m_dwEjectOwnerCharID = pInfoPlayer->m_dwCharID;
+			pInfoObj->m_nEjectDir = nDir;
+			pInfoObj->m_dwLastEjectProcTime = dwNowTime;
+			pInfoObj->m_dEjectPxRemainder = 0.0;
+			pInfoObj->SetDirection(nDir);
+#if PUSH_DEBUG_LOG
+			// 診断用。原因特定後に無効化。
+			m_pLog->Write("EJECT開始 dir:%d obj:%d,%d", nDir, pInfoObj->m_nMapX, pInfoObj->m_nMapY);
+#endif
+			ptFinal.x = pInfoObj->m_nMapX;
+			ptFinal.y = pInfoObj->m_nMapY;
+			PacketResPush.Make(pInfoObj->m_dwCharID, ptFinal, TRUE);
+			m_pSock->SendTo(dwSessionID, &PacketResPush);
+		} else {
+#if PUSH_DEBUG_LOG
+			// 診断用。原因特定後に無効化。
+			m_pLog->Write("SWAP中PUSH却下 dir:%d", nDir);
+#endif
+			ptFinal.x = pInfoObj->m_nMapX;
+			ptFinal.y = pInfoObj->m_nMapY;
+			PacketResPush.Make(pInfoObj->m_dwCharID, ptFinal, FALSE);
+			m_pSock->SendTo(dwSessionID, &PacketResPush);
+		}
+	} else if (Packet.m_nPushType == PUSHTYPE_SWAP) {
+		ProcSwapPush(m_pLog, m_pLibInfoChar, m_pSock, pInfoPlayer, pInfoObj, dwSessionID, dwNowTime, Packet, nDir, rcSelf, rcObj, pInfoObjMap);
+	} else {
+
 	dx = Packet.m_ptObjTarget.x - pInfoObj->m_nMapX;
 	dy = Packet.m_ptObjTarget.y - pInfoObj->m_nMapY;
 
 	// isFree: 1px先が空いているか(マップ+本人と押せる物自身を除く全キャラ)。
 	// nCurX/nCurYは呼び出されるたびに1pxずつ進める「確定済み」座標で、
 	// pInfoObjの実座標(m_nMapX/Y)は受理が確定するまで書き換えない。
-	// pInfoObj->m_pInfoMapはSetMap()経由(スキル/アイテム生成/NPC発生)でしか
-	// セットされず、DBから配置されたNPC(押せるボール等)ではNULLのままになる
-	// ため使わない。他の受信処理(RecvProcCHAR_REQ_PUTGET等)と同じく
-	// m_pLibInfoMap->GetPtr()でpInfoObjのマップIDから引く。
-	PCInfoMapBase pInfoObjMap = (PCInfoMapBase)m_pLibInfoMap->GetPtr(pInfoObj->m_dwMapID);
 	nCurX = pInfoObj->m_nMapX;
 	nCurY = pInfoObj->m_nMapY;
 	PushDecision::IsPositionFreeFunc isFree = [&](const PushDecision::RECT_PX &rcMoveTo) -> bool {
@@ -1372,6 +1750,8 @@ void CMainFrame::RecvProcCHAR_REQ_PUSH(PBYTE pData, DWORD dwSessionID)
 			m_pSock->SendTo(dwSessionID, &PacketResPush);
 		}
 	}
+
+	} // else (Packet.m_nPushType == PUSHTYPE_PUSH)
 
 	// S4(docs/push-object-redesign.md): クライアントは指を離した(押すのをやめた)瞬間の
 	// 最後の1通に「離した」印(m_bRelease)を付けて送ってくる。これが付いていて、かつ

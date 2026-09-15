@@ -29,6 +29,7 @@ public:
 	void Init(void);                                           // 初期化
 	void GetMsgLogRect(RECT &rcDst);                           // メッセージログウィンドウの矩形を取得
 	void SyncLastEventTile(DWORD dwMapID, int x, int y);       // イベント再発火抑止用の基準タイルを同期
+	void OnPushSwapRejected(DWORD dwObjCharID);                // 入れ替わり中のボールがRES_PUSHで却下された時の後始末(S5)
 	void ResetMapEventCheckSendState(void);                    // マップイベント送信状態をリセット
 	BOOL TimerProc(void);                                      // 時間処理
 	void KeyProc(BYTE byCode, BOOL bDown);                     // キー処理
@@ -72,10 +73,15 @@ protected:
 	void  OnMgrDrawSTART_FADEIN(DWORD dwPara);                                                 // フェードイン開始
 	void  OnMgrDrawEND_FADEIN(DWORD dwPara);                                                   // フェードイン完了
 	BOOL  MoveProc(int x, int y, int xx, int yy, int nDirection, BOOL bSyncSend = TRUE);      // 移動処理
-	BOOL  TryMoveOrPushDirection(CInfoMapBase *pMap, int nDirection, int nPushDir, DWORD &dwPushObjCharIDOut); // 1方向の移動可否判定(押せる物なら押し予測を試みる。S3b)
+	BOOL  TryMoveOrPushDirection(CInfoMapBase *pMap, int nDirection, int nPushDir, int nMovePixel, DWORD &dwPushObjCharIDOut); // 1方向の移動可否判定(押せる物なら押し予測を試みる。S3b。nMovePixelは今回の移動量px、入れ替わり継続判定に使う。S5)
 	BOOL  TryPushObject(CInfoMapBase *pMap, DWORD dwObjCharID, int nPushDir);                // 押せる物をローカルで1px押せるか試す(予測。S3b)
-	void  SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *pInfoObj, BOOL bRelease = FALSE); // REQ_PUSHを送信する(S3b。bRelease=TRUEは押すのをやめた最後の送信。S4)
+	void  SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *pInfoObj, BOOL bRelease = FALSE, int nPushType = 0); // REQ_PUSHを送信する(S3b。bRelease=TRUEは押すのをやめた最後の送信。S4。nPushTypeはPUSHTYPE_*。S5)
 	void  EndPushPredict(BOOL bSendFinal);                                                    // 押し予測を終える(S3b)
+	BOOL  TryStartPushSwap(CInfoMapBase *pMap, CInfoCharCli *pInfoObj, int nDirection);        // ボールとの入れ替わり開始を試す(S5)
+	void  EndPushSwapOnDirectionChange(int nNewPushDir);                                       // 入れ替わり中に本人が向きを変えた時の終了処理(S5)
+	void  DiscardPushSwapState(BOOL bClearOwnership, LPCSTR pszReason = "");                    // 入れ替わり状態を消す(完了/向き変更/マップ切替/却下/タイムアウトの共通後始末。S5。
+	                                                                                            // bClearOwnershipはボールのm_bPushPredicting/所有者/m_dwPushPredictEndTimeも一緒に消すか
+	                                                                                            // pszReasonは診断ログ用の理由(done/dirchg/map/reject/timeout)
 	BOOL  OnWindowMsgCHAT(DWORD dwPara);                                                      // チャット入力
 	BOOL  OnWindowMsgSYSTEMMENU(DWORD dwPara);                                                // システムメニュー
 	BOOL  OnWindowMsgSETCOLOR(DWORD dwPara);                                                  // 名前と発言色の設定
@@ -143,6 +149,13 @@ protected:
 	// S4: 離した印(m_bRelease)を1回だけ送るためのフラグ。docs/push-object-redesign.md。
 	// 座標が同じで送信を間引く場合でも、離した印はまだ送っていなければ1回は送る
 	BOOL  m_bPushReleaseSent;
+	// S5: 入れ替わり(SWAP。ボールのみ)予測状態。docs/push-object-redesign.md 2章7項
+	BOOL  m_bPushSwapActive;       // 入れ替わり中か
+	DWORD m_dwPushSwapObjCharID;   // 入れ替わり中のボールのCharID
+	int   m_nPushSwapDirection;    // 開始時の本人の向きd(0-3)。以後この向きのまま
+	POINT m_ptPushSwapP0;          // 開始時の本人座標P0
+	POINT m_ptPushSwapB0;          // 開始時のボール座標B0
+	DWORD m_dwLastTimePushSwapSend; // 最後にSWAP種別のREQ_PUSHを送信した時刻(1800ms放置で手放す。親レビュー指摘)
 	int   m_nMoveSpeedAccum;       // 自キャラ速度のサブピクセル累積
 	DWORD m_dwLastPlayerMoveStepTime; // 自キャラ速度計算の前回時刻
 	DWORD m_dwLastPlayerMoveTurnTime; // 自キャラの回頭計算の前回時刻

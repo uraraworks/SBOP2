@@ -96,6 +96,9 @@ public:
 	static	BOOL	RequestStopRunningServer(void);	// 稼働中のヘッドレスサーバーへ停止を要求する
 	static	void	WriteConsoleMessage(LPCTSTR pszFormat, ...);	// 接続したコンソールへ出力する
 
+	// S5診断用。CLibInfoCharSvr::m_pMainFrame経由でCInfoCharSvrからログを書くためのアクセサ。
+	CTextOutput	*GetLog(void)	{ return m_pLog;	}
+
 private:
 	int	MainLoopWindow(HINSTANCE hInstance);	// メインループ(ウィンドウあり)
 	int	MainLoopHeadless(void);	// メインループ(ヘッドレス)

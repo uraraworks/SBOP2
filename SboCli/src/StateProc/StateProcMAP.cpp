@@ -307,6 +307,13 @@ CStateProcMAP::CStateProcMAP()
 	m_nLastPushSyncSentY		= 0;
 	m_bLastPushSyncSentValid	= FALSE;
 	m_bPushReleaseSent			= FALSE;
+	// S5: 入れ替わり(SWAP)予測状態。docs/push-object-redesign.md 2章7項
+	m_bPushSwapActive			= FALSE;
+	m_dwPushSwapObjCharID		= 0;
+	m_nPushSwapDirection		= -1;
+	m_ptPushSwapP0.x = m_ptPushSwapP0.y = 0;
+	m_ptPushSwapB0.x = m_ptPushSwapB0.y = 0;
+	m_dwLastTimePushSwapSend	= 0;
 	m_nMoveSpeedAccum			= 0;
 	m_dwLastPlayerMoveStepTime	= 0;
 	m_dwLastPlayerMoveTurnTime	= 0;
@@ -555,6 +562,22 @@ void CStateProcMAP::ResetMapEventCheckSendState(void)
 	m_bSendCheckMapEvent = FALSE;
 }
 
+void CStateProcMAP::OnPushSwapRejected(DWORD dwObjCharID)
+{
+	// S5: 入れ替わり中のボールがRES_PUSHで却下された時の後始末(親レビュー指摘)。
+	// 呼び出し元(MainFrameRecvProcCHAR.cpp)は却下時に確定座標へSetPos済み、
+	// m_bPushPredictingもFALSE済みなので、ここでは入れ替わり状態(m_bPushSwapActive
+	// 等)だけを片付ける(bClearOwnership=FALSE。所有者クリアは呼び出し元に委ねる
+	// 必要はなく、既にm_bPushPredicting=FALSEなので二重処理にならない)。
+	if (m_bPushSwapActive == FALSE) {
+		return;
+	}
+	if (m_dwPushSwapObjCharID != dwObjCharID) {
+		return;
+	}
+	DiscardPushSwapState(FALSE, "reject");
+}
+
 void CStateProcMAP::ResetPlayerMoveSyncState(void)
 {
 	if (m_pPlayerChar) {
@@ -574,6 +597,7 @@ void CStateProcMAP::ResetPlayerMoveSyncState(void)
 	m_bNeedIdleMapEventCheck = FALSE;
 	m_bSendCheckMapEvent = FALSE;
 	EndPushPredict(FALSE);	// S3b: マップ切替等では最終送信せずローカル予測状態だけ破棄する
+	DiscardPushSwapState(TRUE, "map");	// S5: マップ切替は入れ替わりの一時停止では済まないので、ここで明示的に手放す(親レビュー指摘)
 }
 
 
@@ -795,6 +819,14 @@ BOOL CStateProcMAP::TimerProc(void)
 	// 一瞬の入力揺れで予測がちらつく)。300msを超えたら停止とみなし、予測を終える。
 	if (m_bPushSyncActive && (timeGetTime() - m_dwLastTimePushContact > 300)) {
 		EndPushPredict(FALSE);
+	}
+	// S5: 入れ替わり中の一時停止(接触喪失/キー解放)は上のEndPushPredictでは
+	// 手放さない(m_bPushSwapActiveを保つ)ので、そのままだと押し合いを離れた人が
+	// いつまでも専有し続けてしまう。サーバーは最後のSWAP受信から2000msで
+	// 入れ替わりを打ち切るので、それより先にクライアント側も手放す
+	// (docs/push-object-redesign.md 2章7項。親レビュー指摘)。
+	if (m_bPushSwapActive && (timeGetTime() - m_dwLastTimePushSwapSend > 1800)) {
+		DiscardPushSwapState(TRUE, "timeout");
 	}
 
 	dwTime = timeGetTime() - m_dwLastTimeKeepAlive;
@@ -2909,7 +2941,7 @@ void CStateProcMAP::OnMgrDrawEND_FADEIN(DWORD dwPara)
 // 即時送信)だけ SboDbgLog へ出す。ブラウザのコンソールで "[PushDbg]" で検索できる。
 #define PUSH_CLIENT_DEBUG_LOG 0
 
-void CStateProcMAP::SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *pInfoObj, BOOL bRelease)
+void CStateProcMAP::SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *pInfoObj, BOOL bRelease, int nPushType)
 {
 	CPacketCHAR_REQ_PUSH PacketReqPush;
 	POINT ptObjTarget, ptSelf;
@@ -2922,41 +2954,67 @@ void CStateProcMAP::SendReqPush(DWORD dwObjCharID, int nPushDir, CInfoCharCli *p
 	ptSelf.x = m_pPlayerChar->m_nMapX;
 	ptSelf.y = m_pPlayerChar->m_nMapY;
 
-	PacketReqPush.Make(dwObjCharID, nPushDir, PUSHTYPE_PUSH, ptObjTarget, ptSelf, timeGetTime(), bRelease);
+	// S5: 入れ替わり中はPUSHTYPE_SWAPで送る(docs/push-object-redesign.md 2章7項)
+	PacketReqPush.Make(dwObjCharID, nPushDir, nPushType, ptObjTarget, ptSelf, timeGetTime(), bRelease);
 	m_pSock->Send(&PacketReqPush);
+
+#if PUSH_CLIENT_DEBUG_LOG
+	SboDbgLog("[PushDbg]SEND t:%d d:%d tgt:%d,%d self:%d,%d rel:%d swapAct:%d",
+		nPushType, nPushDir, ptObjTarget.x, ptObjTarget.y, ptSelf.x, ptSelf.y, bRelease ? 1 : 0, m_bPushSwapActive ? 1 : 0);
+#endif
 
 	m_dwLastTimePushSyncSend = timeGetTime();
 	// S3b: 接触喪失時の即時送信(MoveProc)が同じ座標で重複送信しないための記録
 	m_nLastPushSyncSentX = ptObjTarget.x;
 	m_nLastPushSyncSentY = ptObjTarget.y;
 	m_bLastPushSyncSentValid = TRUE;
+	if (nPushType == PUSHTYPE_SWAP) {
+		// S5: 一時停止中も入れ替わり状態を保つため、最後にSWAPを送った時刻を別に
+		// 記録する(1800ms音信不通なら手放す。親レビュー指摘)
+		m_dwLastTimePushSwapSend = timeGetTime();
+	}
 }
 
 void CStateProcMAP::EndPushPredict(BOOL bSendFinal)
 {
 	PCInfoCharCli pInfoObj;
+	BOOL bSwapObj;
 
 	if (m_bPushSyncActive == FALSE) {
 		return;
 	}
 	pInfoObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(m_dwPushSyncObjCharID);
+	// S5: 対象が入れ替わり中のボール本体かどうか。親レビュー指摘: キーを離した時や
+	// 接触喪失300msのタイムアウトはあくまで「一時停止」であって「手放し」ではない。
+	// ここでは押し送信の状態(m_bPushSyncActive等)だけ片付け、入れ替わり状態
+	// (m_bPushSwapActive等)とボールのm_bPushPredicting/所有者は保ったままにする
+	// (受信更新に乱されず、同じ向きで再開したら続きから入れ替われるように)。
+	// 入れ替わり状態を実際に消すのはDiscardPushSwapState(完了/向き変更/マップ切替/
+	// 却下/1800msタイムアウト)だけの役目にする。
+	bSwapObj = m_bPushSwapActive && (m_dwPushSwapObjCharID == m_dwPushSyncObjCharID);
 	if (bSendFinal && (pInfoObj != NULL)) {
+		int nPushType;
+
+		// S5: 入れ替わり中に止まった(=本人が動くのをやめた)場合もSWAPで送る
+		nPushType = bSwapObj ? PUSHTYPE_SWAP : PUSHTYPE_PUSH;
 		// 離す直前の最新座標をすぐ反映させる(最大100ms分の送信間引きを打ち切る)。
 		// S4: 離した印(bRelease=TRUE)を付け、サーバーが150msタイムアウトを待たず
 		// 即停止できるようにする(docs/push-object-redesign.md S4)。
-		SendReqPush(m_dwPushSyncObjCharID, m_nPushSyncDirection, pInfoObj, TRUE);
+		SendReqPush(m_dwPushSyncObjCharID, m_nPushSyncDirection, pInfoObj, TRUE, nPushType);
 	}
 	if ((pInfoObj != NULL) && m_pPlayerChar && (pInfoObj->m_dwPushPredictOwnerCharID == m_pPlayerChar->m_dwCharID)) {
 #if PUSH_CLIENT_DEBUG_LOG
-		SboDbgLog("[PushDbg][予測終了][obj:%u][pos:%d,%d][bSendFinal:%d]",
-			pInfoObj->m_dwCharID, pInfoObj->m_nMapX, pInfoObj->m_nMapY, bSendFinal ? 1 : 0);
+		SboDbgLog("[PushDbg][予測終了][obj:%u][pos:%d,%d][bSendFinal:%d][swap一時停止:%d]",
+			pInfoObj->m_dwCharID, pInfoObj->m_nMapX, pInfoObj->m_nMapY, bSendFinal ? 1 : 0, bSwapObj ? 1 : 0);
 #endif
-		pInfoObj->m_bPushPredicting = FALSE;
-		// S4: 予測を終えた時刻を記録する。直後(1000ms以内)に届く自分の押し更新は
-		// DRで動かすと行き過ぎた予測分がもう一度戻る動きに見えるため、
-		// RecvProcCHAR_MOVE_CORE 側でこの時刻を見て一時的に直接座標合わせへ戻す
-		// (docs/push-object-redesign.md S4)。
-		pInfoObj->m_dwPushPredictEndTime = SDL_GetTicks();
+		if (!bSwapObj) {
+			pInfoObj->m_bPushPredicting = FALSE;
+			// S4: 予測を終えた時刻を記録する。直後(1000ms以内)に届く自分の押し更新は
+			// DRで動かすと行き過ぎた予測分がもう一度戻る動きに見えるため、
+			// RecvProcCHAR_MOVE_CORE 側でこの時刻を見て一時的に直接座標合わせへ戻す
+			// (docs/push-object-redesign.md S4)。
+			pInfoObj->m_dwPushPredictEndTime = SDL_GetTicks();
+		}
 		// 追従用の経由点が万一残っていれば破棄する。押せる物は
 		// RecvProcCHAR_MOVE_CORE 側で既にキューへ乗せない扱いにしているため
 		// 通常は空だが、予測を終える境目で古い点が再生されないよう防御的に消す
@@ -2974,6 +3032,32 @@ void CStateProcMAP::EndPushPredict(BOOL bSendFinal)
 	m_dwLastTimePushContact = 0;
 	m_bLastPushSyncSentValid = FALSE;
 	m_bPushReleaseSent = FALSE;
+}
+
+void CStateProcMAP::DiscardPushSwapState(BOOL bClearOwnership, LPCSTR pszReason)
+{
+	PCInfoCharCli pInfoObj;
+
+	// S5: 入れ替わり状態を実際に消す唯一の場所(完了/向き変更/マップ切替/
+	// RES_PUSH却下/1800ms無応答タイムアウト)。親レビュー指摘。
+	if (m_bPushSwapActive == FALSE) {
+		return;
+	}
+#if PUSH_CLIENT_DEBUG_LOG
+	SboDbgLog("[PushDbg]SWAPEND why:%s", (pszReason != NULL) ? pszReason : "");
+#endif
+	if (bClearOwnership) {
+		pInfoObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(m_dwPushSwapObjCharID);
+		if ((pInfoObj != NULL) && m_pPlayerChar && (pInfoObj->m_dwPushPredictOwnerCharID == m_pPlayerChar->m_dwCharID)) {
+			pInfoObj->m_bPushPredicting = FALSE;
+			pInfoObj->m_dwPushPredictEndTime = SDL_GetTicks();
+			pInfoObj->m_dwPushPredictOwnerCharID = 0;
+		}
+	}
+	m_bPushSwapActive = FALSE;
+	m_dwPushSwapObjCharID = 0;
+	m_nPushSwapDirection = -1;
+	m_dwLastTimePushSwapSend = 0;
 }
 
 BOOL CStateProcMAP::TryPushObject(PCInfoMapBase pMap, DWORD dwObjCharID, int nPushDir)
@@ -3045,8 +3129,163 @@ BOOL CStateProcMAP::TryPushObject(PCInfoMapBase pMap, DWORD dwObjCharID, int nPu
 	return TRUE;
 }
 
-BOOL CStateProcMAP::TryMoveOrPushDirection(PCInfoMapBase pMap, int nDirection, int nPushDir, DWORD &dwPushObjCharIDOut)
+// S5: ボールとの入れ替わり開始を試す(docs/push-object-redesign.md 2章7項)。
+// pInfoObj(BALL)の1px先がTryPushObjectで塞がっていた時に呼ばれる。開始前に
+// ボールの逆向き(-nDirection)の経路を、本人の当たり幅ぶん1pxずつマップ・
+// 本人/ボール以外の全キャラで空いているか確認し、空いていれば入れ替わり状態を
+// 初期化してTRUEを返す。塞がっていればFALSEを返し、何も変更しない。
+BOOL CStateProcMAP::TryStartPushSwap(PCInfoMapBase pMap, CInfoCharCli *pInfoObj, int nDirection)
 {
+	static const int anPosX[] = {0, 0, -1, 1};
+	static const int anPosY[] = {-1, 1, 0, 0};
+	static const int anOppositeDir[] = {1, 0, 3, 2};
+	RECT rcSelf, rcMoveTo;
+	int nWidth, i, nOppositeDir;
+	int nSaveX, nSaveY;
+	BOOL bMapFree, bAreaFree;
+
+	if ((pMap == NULL) || (m_pPlayerChar == NULL) || (pInfoObj == NULL)) {
+		return FALSE;
+	}
+	if ((nDirection < 0) || (nDirection > 3)) {
+		return FALSE;
+	}
+	// 他の人が押し予測中(専有)なら、こちらでは入れ替わりを始めない
+	if (pInfoObj->m_bPushPredicting && (pInfoObj->m_dwPushPredictOwnerCharID != m_pPlayerChar->m_dwCharID)) {
+		return FALSE;
+	}
+	nOppositeDir = anOppositeDir[nDirection];
+
+	// 本人の当たり幅(d軸方向)ぶん、ボールの逆向きの経路を1pxずつ確認する
+	m_pPlayerChar->GetCollisionRect(rcSelf);
+	// 当たり矩形は端を含む(横x..x+31、縦y-15..y)ので +1 して実際の幅(32/16px)にする。
+	// +1しないと入れ替わり完了後もキャラとボールが重なったまま残る。
+	nWidth = (nDirection <= 1) ? (rcSelf.bottom - rcSelf.top + 1) : (rcSelf.right - rcSelf.left + 1);
+	if (nWidth <= 0) {
+		return FALSE;
+	}
+
+	nSaveX = pInfoObj->m_nMapX;
+	nSaveY = pInfoObj->m_nMapY;
+	for (i = 0; i < nWidth; i ++) {
+		bMapFree = m_pLibInfoChar->CanMoveDirection(pMap, pInfoObj, nOppositeDir);
+		if (!bMapFree) {
+			pInfoObj->m_nMapX = nSaveX;
+			pInfoObj->m_nMapY = nSaveY;
+			return FALSE;
+		}
+		pInfoObj->m_nMapX += anPosX[nOppositeDir];
+		pInfoObj->m_nMapY += anPosY[nOppositeDir];
+		pInfoObj->GetCollisionRect(rcMoveTo);
+		// 本人・ボール自身以外の全キャラと当たらないか(サーバーと共用のIsPushAreaFree)
+		bAreaFree = m_pLibInfoChar->IsPushAreaFree(m_pPlayerChar, pInfoObj, pInfoObj->m_dwMapID, rcMoveTo);
+		if (!bAreaFree) {
+			pInfoObj->m_nMapX = nSaveX;
+			pInfoObj->m_nMapY = nSaveY;
+			return FALSE;
+		}
+	}
+	pInfoObj->m_nMapX = nSaveX;
+	pInfoObj->m_nMapY = nSaveY;
+
+	// 親レビュー指摘: 壁際まで押した最後の数pxがまだ100ms間引き中で未送信だと、
+	// サーバー側のボールが壁の手前に残ったままで「入れ替わり先が空いている」と
+	// 誤判定されCanStartSwapが偽になる。入れ替わりを始める前に、ボールの現在地
+	// (=B0)を通常PUSHで1回送っておく(TCPなのでPUSH→SWAPの順で処理される)。
+	// 直前と同じ座標を送信済みなら省略する。
+	{
+		BOOL bFlush;
+
+		bFlush = !m_bLastPushSyncSentValid ||
+			(m_nLastPushSyncSentX != pInfoObj->m_nMapX) || (m_nLastPushSyncSentY != pInfoObj->m_nMapY);
+		if (bFlush) {
+			SendReqPush(pInfoObj->m_dwCharID, nDirection, pInfoObj, FALSE, PUSHTYPE_PUSH);
+		}
+#if PUSH_CLIENT_DEBUG_LOG
+		SboDbgLog("[PushDbg]SWAPSTART P0:%d,%d B0:%d,%d d:%d w:%d flush:%d",
+			m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY, pInfoObj->m_nMapX, pInfoObj->m_nMapY,
+			nDirection, nWidth, bFlush ? 1 : 0);
+#endif
+	}
+
+	// 二重駆動防止: DR中だった場合は先に止める(座標はそのまま)
+	if (pInfoObj->m_bPredictedMove) {
+		pInfoObj->m_bPredictedMove = FALSE;
+		pInfoObj->m_nPredictDirection = -1;
+	}
+
+	m_bPushSwapActive = TRUE;
+	m_dwPushSwapObjCharID = pInfoObj->m_dwCharID;
+	m_nPushSwapDirection = nDirection;
+	// 1800msの放置判定(最後にSWAPを送った時刻)の基準をここで取り直す。
+	// 前回の入れ替わりを手放した時の0のままだと、開始した次のフレームで
+	// 即座に「放置」と判定されて打ち切られ、入れ替わりが始まらない。
+	m_dwLastTimePushSwapSend = timeGetTime();
+	m_ptPushSwapP0.x = m_pPlayerChar->m_nMapX;
+	m_ptPushSwapP0.y = m_pPlayerChar->m_nMapY;
+	m_ptPushSwapB0.x = pInfoObj->m_nMapX;
+	m_ptPushSwapB0.y = pInfoObj->m_nMapY;
+
+	// ボールの向きは逆向き(-d)にしておく。RecvProcCHAR_MOVE_CORE側の押し予測の
+	// 遅延判定(m_nDirectionを使う)と整合させるため(親からの指示事項)
+	pInfoObj->SetDirection(nOppositeDir);
+	if (pInfoObj->m_nMoveState != CHARMOVESTATE_MOVE) {
+		pInfoObj->ChgMoveState(CHARMOVESTATE_MOVE);
+	}
+	pInfoObj->m_bPushPredicting = TRUE;
+	pInfoObj->m_dwPushPredictOwnerCharID = m_pPlayerChar->m_dwCharID;
+
+	return TRUE;
+}
+
+void CStateProcMAP::EndPushSwapOnDirectionChange(int nNewPushDir)
+{
+	PCInfoCharCli pInfoObj;
+
+	if (m_bPushSwapActive == FALSE) {
+		return;
+	}
+	pInfoObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(m_dwPushSwapObjCharID);
+	if ((pInfoObj != NULL) && (m_pPlayerChar != NULL) && (m_pSock != NULL)) {
+		CPacketCHAR_REQ_PUSH PacketReqPush;
+		POINT ptObjTarget, ptSelf;
+
+		ptObjTarget.x = pInfoObj->m_nMapX;
+		ptObjTarget.y = pInfoObj->m_nMapY;
+		ptSelf.x = m_pPlayerChar->m_nMapX;
+		ptSelf.y = m_pPlayerChar->m_nMapY;
+		// 新しい向きへSWAP要求を1回送る(サーバーが2倍速で自走させる。docs 2章7項)
+		PacketReqPush.Make(m_dwPushSwapObjCharID, nNewPushDir, PUSHTYPE_SWAP, ptObjTarget, ptSelf, timeGetTime(), FALSE);
+		m_pSock->Send(&PacketReqPush);
+
+#if PUSH_CLIENT_DEBUG_LOG
+		SboDbgLog("[PushDbg]SEND t:%d d:%d tgt:%d,%d self:%d,%d rel:%d swapAct:%d",
+			PUSHTYPE_SWAP, nNewPushDir, ptObjTarget.x, ptObjTarget.y, ptSelf.x, ptSelf.y, 0, m_bPushSwapActive ? 1 : 0);
+#endif
+
+		if (pInfoObj->m_dwPushPredictOwnerCharID == m_pPlayerChar->m_dwCharID) {
+			pInfoObj->m_bPushPredicting = FALSE;
+			// 以後の自走(eject)は、押している本人の画面ではDRを使わず、届いた座標へ
+			// 直接合わせる(RecvProcCHAR_MOVE_CORE の「予測終了直後1000msは直接合わせる」
+			// 例外を使うため、所有者は残したまま終了時刻を入れる)。DRだと止まる時に
+			// 先読みで行き過ぎた分だけ本人の方へ引き戻され、歩き続けている本人と
+			// 重なって押せなくなる(重なった相手は押す判定から外れるため)。
+			pInfoObj->m_dwPushPredictEndTime = SDL_GetTicks();
+		}
+	}
+	// 向き変更は入れ替わりの正式な終わり(eject)。所有権は上で既に手放しているので
+	// bClearOwnership=FALSEで入れ替わり状態(m_bPushSwapActive等)だけ片付ける。
+	DiscardPushSwapState(FALSE, "dirchg");
+	// 押し送信管理(m_bPushSyncActive等)もここで片付ける(親レビュー指摘: 片付け
+	// ないと古い向きのまま接触喪失送信が出る)。
+	EndPushPredict(FALSE);
+}
+
+BOOL CStateProcMAP::TryMoveOrPushDirection(PCInfoMapBase pMap, int nDirection, int nPushDir, int nMovePixel, DWORD &dwPushObjCharIDOut)
+{
+	static const int anOppositeDir[] = {1, 0, 3, 2};
+	static const int anPosX[] = {0, 0, -1, 1};
+	static const int anPosY[] = {-1, 1, 0, 0};
 	BOOL bResult;
 	DWORD dwObjCharID;
 
@@ -3055,6 +3294,58 @@ BOOL CStateProcMAP::TryMoveOrPushDirection(PCInfoMapBase pMap, int nDirection, i
 	if (bResult) {
 		return TRUE;
 	}
+
+	// S5: 入れ替わり継続中は、本人とそのボールの当たり判定をしない仕様
+	// (docs/push-object-redesign.md 2章7項)。GetPushBlockCharID(Common/LibInfo/
+	// LibInfoCharBase.cpp)は既に重なっている相手を除外するため、重なった時点で
+	// 検出漏れし継続できなくなる(親レビュー指摘)。GetPushBlockCharIDに頼らず、
+	// ここでボールが逆向きへ今回の移動量(nMovePixel)ぶん進めるか直接確認する。
+	if (m_bPushSwapActive && (nDirection == m_nPushSwapDirection)) {
+		PCInfoCharCli pInfoSwapObj;
+		int nOppositeDir, i, nSaveX, nSaveY, nSteps;
+		BOOL bFree;
+
+		pInfoSwapObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(m_dwPushSwapObjCharID);
+		if (pInfoSwapObj == NULL) {
+			return TRUE;
+		}
+		nOppositeDir = anOppositeDir[m_nPushSwapDirection];
+		nSteps = (nMovePixel > 0) ? nMovePixel : 1;
+
+		// MoveProcが1回に複数pxまとめて進めても判定がずれないよう、実際に進む
+		// 距離ぶん1pxずつ経路を確認する(途中の1pxだけ塞がっているケースを見逃さない)
+		nSaveX = pInfoSwapObj->m_nMapX;
+		nSaveY = pInfoSwapObj->m_nMapY;
+		bFree = TRUE;
+		for (i = 0; i < nSteps; i ++) {
+			RECT rcMoveTo;
+			BOOL bMapFree, bAreaFree;
+
+			bMapFree = m_pLibInfoChar->CanMoveDirection(pMap, pInfoSwapObj, nOppositeDir);
+			if (!bMapFree) {
+				bFree = FALSE;
+				break;
+			}
+			pInfoSwapObj->m_nMapX += anPosX[nOppositeDir];
+			pInfoSwapObj->m_nMapY += anPosY[nOppositeDir];
+			pInfoSwapObj->GetCollisionRect(rcMoveTo);
+			bAreaFree = m_pLibInfoChar->IsPushAreaFree(m_pPlayerChar, pInfoSwapObj, pInfoSwapObj->m_dwMapID, rcMoveTo);
+			if (!bAreaFree) {
+				bFree = FALSE;
+				break;
+			}
+		}
+		pInfoSwapObj->m_nMapX = nSaveX;
+		pInfoSwapObj->m_nMapY = nSaveY;
+
+		if (!bFree) {
+			// 割り込み等で塞がった: 二人とも止める
+			return TRUE;
+		}
+		dwPushObjCharIDOut = pInfoSwapObj->m_dwCharID;
+		return FALSE;
+	}
+
 	dwObjCharID = m_pLibInfoChar->GetPushBlockCharID(m_pPlayerChar, nDirection);
 	if (dwObjCharID == 0) {
 		return FALSE;
@@ -3064,8 +3355,22 @@ BOOL CStateProcMAP::TryMoveOrPushDirection(PCInfoMapBase pMap, int nDirection, i
 	if (nDirection != nPushDir) {
 		return TRUE;
 	}
+	// 入れ替わり中(上のnDirection==m_nPushSwapDirectionブロックでは無い軸、または
+	// 既に別のボールで入れ替わり中)は、新たな押しを始めず固い物として扱う
+	if (m_bPushSwapActive) {
+		return TRUE;
+	}
 	if (TryPushObject(pMap, dwObjCharID, nPushDir) == FALSE) {
-		// マップ/他キャラで塞がっていて押せない: プレイヤーもその軸では進めない(TODO(S5): 入れ替わり)
+		PCInfoCharCli pInfoObj;
+
+		// マップ/他キャラで塞がっていて押せない: BALLなら入れ替わり開始を試す(S5)。
+		// それ以外(岩・箱、または開始失敗)は今まで通りプレイヤーもその軸では進めない。
+		pInfoObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(dwObjCharID);
+		if ((pInfoObj != NULL) && (pInfoObj->m_nMoveType == CHARMOVETYPE_BALL) &&
+			TryStartPushSwap(pMap, pInfoObj, nDirection)) {
+			dwPushObjCharIDOut = dwObjCharID;
+			return FALSE;
+		}
 		return TRUE;
 	}
 	dwPushObjCharIDOut = dwObjCharID;
@@ -3328,10 +3633,15 @@ BOOL CStateProcMAP::MoveProc(
 		int nPadFacing = pMgrKeyInput ? pMgrKeyInput->GetBrowserPadFacing() : -1;
 		nPushDir = (nPadFacing >= 0) ? nPadFacing : m_pPlayerChar->GetDrawDirection(nDirection);
 	}
+	// S5: 入れ替わり中に本人が向きを変えたら、入れ替わりを終える
+	// (docs/push-object-redesign.md 2章7項。以後はサーバーが2倍速で自走させる)
+	if (m_bPushSwapActive && (m_nPushSwapDirection != nPushDir)) {
+		EndPushSwapOnDirectionChange(nPushDir);
+	}
 
 	if (anDirection.size() == 1) {
 		/* ぶつかる？(通常キャラのブロック判定 + 押せる物なら押し予測を試みる) */
-		bResult = TryMoveOrPushDirection(pMap, nDirection, nPushDir, dwPushObjCharID);
+		bResult = TryMoveOrPushDirection(pMap, nDirection, nPushDir, nMovePixel, dwPushObjCharID);
 		if (bResult) {
 			bRet = TRUE;
 			goto Exit;
@@ -3350,13 +3660,13 @@ BOOL CStateProcMAP::MoveProc(
 		BOOL bResult0, bResult1;
 		DWORD dwPushObjCharID0, dwPushObjCharID1;
 
-		bResult = TryMoveOrPushDirection(pMap, nDirection, nPushDir, dwPushObjCharID);
+		bResult = TryMoveOrPushDirection(pMap, nDirection, nPushDir, nMovePixel, dwPushObjCharID);
 		if (bResult) {
 			dwPushObjCharID = 0;
 			dwPushObjCharID0 = 0;
 			dwPushObjCharID1 = 0;
-			bResult0 = TryMoveOrPushDirection(pMap, anDirection[0], nPushDir, dwPushObjCharID0);
-			bResult1 = TryMoveOrPushDirection(pMap, anDirection[1], nPushDir, dwPushObjCharID1);
+			bResult0 = TryMoveOrPushDirection(pMap, anDirection[0], nPushDir, nMovePixel, dwPushObjCharID0);
+			bResult1 = TryMoveOrPushDirection(pMap, anDirection[1], nPushDir, nMovePixel, dwPushObjCharID1);
 
 			if (bResult0 && bResult1) {
 				// 両軸ともブロック: 斜めはおろかどちらの軸へも進めない
@@ -3411,6 +3721,60 @@ BOOL CStateProcMAP::MoveProc(
 	m_pPlayerChar->SetPos(x + xx, y + yy);
 	m_pPlayerChar->ChgMoveState(nState);
 
+	// S5: 入れ替わり中は、本人が動いたd軸方向の量(打ち切りnShift)ぶんだけ
+	// ボールをB0から-d方向へ動かす(docs/push-object-redesign.md 2章7項)。
+	// d軸以外(横方向)はB0のまま変えない。斜め移動の横方向成分をそのまま
+	// 反映すると横ずれとしてサーバーに却下される。また移動量が本人の幅を
+	// 超えてもnShiftをnWidthで打ち切ることで、幅超過による却下も防ぐ
+	// (親レビュー指摘。サーバーも同じ打ち切りで判定する)。
+	if (m_bPushSwapActive && (dwPushObjCharID == m_dwPushSwapObjCharID)) {
+		PCInfoCharCli pInfoSwapObj;
+
+		pInfoSwapObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(m_dwPushSwapObjCharID);
+		if (pInfoSwapObj != NULL) {
+			static const int anOppositeDir[] = {1, 0, 3, 2};
+			static const int anPosX[] = {0, 0, -1, 1};
+			static const int anPosY[] = {-1, 1, 0, 0};
+			int nNewBallX, nNewBallY, nWidth, nMoved, nShift, nOppositeDir;
+			RECT rcSelf;
+
+			m_pPlayerChar->GetCollisionRect(rcSelf);
+			// 当たり矩形は端を含むので +1 して実際の幅にする(TryStartPushSwapと同じ)
+			nWidth = (m_nPushSwapDirection <= 1) ? (rcSelf.bottom - rcSelf.top + 1) : (rcSelf.right - rcSelf.left + 1);
+			nMoved = (m_nPushSwapDirection <= 1) ?
+				abs(m_pPlayerChar->m_nMapY - m_ptPushSwapP0.y) : abs(m_pPlayerChar->m_nMapX - m_ptPushSwapP0.x);
+			nShift = min(nMoved, nWidth);
+			nOppositeDir = anOppositeDir[m_nPushSwapDirection];
+			nNewBallX = m_ptPushSwapB0.x + anPosX[nOppositeDir] * nShift;
+			nNewBallY = m_ptPushSwapB0.y + anPosY[nOppositeDir] * nShift;
+			pInfoSwapObj->SetPos(nNewBallX, nNewBallY);
+
+			if (nMoved >= nWidth) {
+				// 本人の幅ぶん進んで入れ替わり完了。状態を先に消すと、後段の通常
+				// 送信管理がPUSH種別で送ってしまい、サーバーに却下されてボールが
+				// 引き戻される(親レビュー指摘)。最後のボール位置をSWAPの離した印
+				// 付きで1回送ってから、EndPushPredict(FALSE)でまとめて片付ける
+				// (ForceStop・m_dwPushPredictEndTime設定・押し送信/入れ替わり状態の
+				// 破棄を行う)。開始と完了が同フレームになる(本人の幅が今回の移動量
+				// 以下)場合、後段の通常送信管理がまだ今回のボールでm_bPushSyncActive
+				// を立てていないことがあるため、EndPushPredictが必ず後始末できるよう
+				// ここで先に立てておく。
+				m_bPushSyncActive = TRUE;
+				m_dwPushSyncObjCharID = m_dwPushSwapObjCharID;
+				m_nPushSyncDirection = nPushDir;
+				SendReqPush(m_dwPushSwapObjCharID, nPushDir, pInfoSwapObj, TRUE, PUSHTYPE_SWAP);
+				EndPushPredict(FALSE);
+				// EndPushPredictは一時停止と区別が付かないため入れ替わり状態を消さない
+				// (親レビュー指摘)。ここは本当の完了なので所有権ごと明示的に手放す。
+				DiscardPushSwapState(TRUE, "done");
+				// 後段(3662行付近)の通常送信管理が、入れ替わり完了済みのこのボールを
+				// 「まだ押している」として直後にPUSH種別で送り直さないよう、
+				// 今回分は押し対象なしにしておく(このボールは既に本人の後ろにいる)
+				dwPushObjCharID = 0;
+			}
+		}
+	}
+
 	if (nDirection <= 1) {
 		/* 重なり調整 */
 		m_pLibInfoChar->SortY();
@@ -3434,12 +3798,15 @@ BOOL CStateProcMAP::MoveProc(
 		pInfoObj = (PCInfoCharCli)m_pLibInfoChar->GetPtr(dwPushObjCharID);
 		if (pInfoObj != NULL) {
 			BOOL bPushChanged;
+			int nPushType;
 
 			bPushChanged = (m_bPushSyncActive == FALSE) ||
 				(m_dwPushSyncObjCharID != dwPushObjCharID) ||
 				(m_nPushSyncDirection != nPushDir);
+			// S5: 入れ替わり中はSWAPで送る
+			nPushType = (m_bPushSwapActive && (m_dwPushSwapObjCharID == dwPushObjCharID)) ? PUSHTYPE_SWAP : PUSHTYPE_PUSH;
 			if (bPushChanged || (timeGetTime() - m_dwLastTimePushSyncSend >= 100)) {
-				SendReqPush(dwPushObjCharID, nPushDir, pInfoObj);
+				SendReqPush(dwPushObjCharID, nPushDir, pInfoObj, FALSE, nPushType);
 			}
 			m_bPushSyncActive = TRUE;
 			m_dwPushSyncObjCharID = dwPushObjCharID;
@@ -3469,11 +3836,15 @@ BOOL CStateProcMAP::MoveProc(
 			// (docs/push-object-redesign.md S4)。毎フレーム重複送信しないよう
 			// m_bPushReleaseSent で1回に絞る。
 			if (!bAlreadySent || !m_bPushReleaseSent) {
+				int nPushType;
+
+				// S5: 入れ替わり中に接触を失った(=止まった)場合もSWAPで送る
+				nPushType = (m_bPushSwapActive && (m_dwPushSwapObjCharID == m_dwPushSyncObjCharID)) ? PUSHTYPE_SWAP : PUSHTYPE_PUSH;
 #if PUSH_CLIENT_DEBUG_LOG
 				SboDbgLog("[PushDbg][接触喪失即送信][obj:%u][pos:%d,%d][dir:%d]",
 					pInfoObj->m_dwCharID, pInfoObj->m_nMapX, pInfoObj->m_nMapY, m_nPushSyncDirection);
 #endif
-				SendReqPush(m_dwPushSyncObjCharID, m_nPushSyncDirection, pInfoObj, TRUE);
+				SendReqPush(m_dwPushSyncObjCharID, m_nPushSyncDirection, pInfoObj, TRUE, nPushType);
 				m_bPushReleaseSent = TRUE;
 			}
 		}

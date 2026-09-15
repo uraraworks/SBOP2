@@ -23,6 +23,10 @@
 #include "InfoCharCli.h"
 #include "LayerMap.h"
 
+// S5入れ替わり調査用の診断ログ。StateProcMAP.cpp/MainFrameRecvProcCHAR.cppと同名の
+// フラグ。原因が分かったら0に戻す。ブラウザのコンソールで "[PushDbg]" で検索できる。
+#define PUSH_CLIENT_DEBUG_LOG 0
+
 static BOOL IsCharInPlayableRange(PCInfoCharCli pInfoChar)
 {
 	PCLayerMap pLayerMap;
@@ -331,6 +335,13 @@ int CInfoCharCli::SetPos(int x, int y, BOOL bBack/*FALSE*/)
 	if (nDeltaMax < abs(nDeltaY)) {
 		nDeltaMax = abs(nDeltaY);
 	}
+#if PUSH_CLIENT_DEBUG_LOG
+	// S5調査用: 押せる物(m_bPush)が1回のSetPosで16pxを超えて動いたらワープとして記録
+	if (m_bPush && (nDeltaMax > 16)) {
+		SboDbgLog("[PushDbg]JUMP obj:%u from:%d,%d to:%d,%d predMove:%d pushPred:%d",
+			m_dwCharID, m_nMapX, m_nMapY, x, y, m_bPredictedMove ? 1 : 0, m_bPushPredicting ? 1 : 0);
+	}
+#endif
 	GetDrawMapPosDouble(dDrawX, dDrawY, dwNowTime);
 	nRet = CInfoCharBase::SetPos(x, y, bBack);
 	if ((nDeltaMax <= 0) || bBack || (nDeltaMax > MAPPARTSSIZE)) {
@@ -1603,6 +1614,14 @@ void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecv
 	}
 	m_nPredictSyncX = x;
 	m_nPredictSyncY = y;
+#if PUSH_CLIENT_DEBUG_LOG
+	// S5調査用: 押せる物(m_bPush)のDR(推測航法)開始パラメータを記録
+	if (m_bPush) {
+		SboDbgLog("[PushDbg]DR obj:%u spd:%d lead:%u base:%d,%d sync:%d,%d prevRecvAge:%u",
+			m_dwCharID, m_nPredictSpeed, m_dwPredictLeadLimitMs, x, y,
+			nPrevSyncX, nPrevSyncY, (dwPrevRecvTime != 0) ? (dwNowTime - dwPrevRecvTime) : 0);
+	}
+#endif
 	DeleteAllMovePosQue();
 	m_ptMove.x = 0;
 	m_ptMove.y = 0;

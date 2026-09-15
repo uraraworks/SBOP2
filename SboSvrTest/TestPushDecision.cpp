@@ -686,6 +686,32 @@ TEST(PushDecision_入れ替わり_合計移動量が本人の幅に達したら�
 	CHECK(result.bShouldEnd);
 }
 
+TEST(PushDecision_入れ替わり_本人が幅を少し超えて進んでもB0マイナス幅の目標なら受理して終了)
+{
+	// 本人は1フレームに数px進むため、入れ替わりが終わる要求では本人の移動量が
+	// 本人の幅をわずかに超えることがある。クライアントはボール目標をB0から
+	// 「本人の幅」で打ち切って送ってくるので、サーバーも同じ打ち切りで判定し、
+	// 却下せず受理・終了扱いにする(REASON_SWAP_TOO_FARにはしない)。
+	POINT_PX ptP0 = { 84, 100 };
+	POINT_PX ptB0 = { 100, 100 };
+	SWAP_STATE state = StartSwap(1, ptP0, ptB0, DIR_RIGHT);
+	RECT_PX rcObjAtB0 = MakeRect(ptB0.x, ptB0.y, OBJ_SIZE);
+
+	// 本人の幅(16px)を4px超えて20px進んだ。ボール目標はB0から幅(16px)で
+	// 打ち切った84(=100-16)。
+	POINT_PX ptSelfNow = { 104, 100 };
+	POINT_PX ptExpectedObj = { 84, 100 };
+
+	SWAP_UPDATE_RESULT result = UpdateSwap(
+		state, 1, ptSelfNow, DIR_RIGHT, ptExpectedObj, rcObjAtB0, SELF_SIZE, AlwaysFree);
+
+	CHECK(result.bAccepted);
+	CHECK(result.bShouldEnd);
+	CHECK(result.ptAcceptedObj.x == 84);
+	CHECK(result.ptAcceptedObj.y == 100);
+	CHECK(result.eReason == REASON_NONE);
+}
+
 TEST(PushDecision_入れ替わり_向き変更で終了)
 {
 	POINT_PX ptP0 = { 84, 100 };
@@ -701,4 +727,66 @@ TEST(PushDecision_入れ替わり_向き変更で終了)
 		state, 1, ptSelfNow, DIR_DOWN, ptExpectedObj, rcObjAtB0, SELF_SIZE, AlwaysFree);
 
 	CHECK(result.bShouldEnd);
+}
+
+// ---- 自走(eject): 入れ替わり終了(向き変更)後、専有者と重なったボールを転がす ----
+
+TEST(PushDecision_自走_専有者と重ならなくなった所で止まる)
+{
+	// ボールは専有者(本人)の右側に重なっている状態から右へ自走する。
+	// 専有者の矩形は x:[100,116)。ボールがx:[112,128)から右へ進み、
+	// 専有者の右端116を超えて重ならなくなった時点(ボール左端>=116)で止まるはず。
+	RECT_PX rcObjStart = MakeRect(112, 100, OBJ_SIZE);   // x:[112,128)
+	RECT_PX rcOwner = MakeRect(100, 100, SELF_SIZE);     // x:[100,116)
+
+	bool bSeparated = false;
+	int nMoved = ResolveEjectDistance(rcObjStart, DIR_RIGHT, /*nMaxDistance=*/20, rcOwner, AlwaysFree, bSeparated);
+
+	// 重なりが解けるのはボールが4px進んで左端が116になった時(x:[116,132)は
+	// 専有者のx:[100,116)と重ならない)。
+	CHECK(bSeparated);
+	CHECK(nMoved == 4);
+}
+
+TEST(PushDecision_自走_塞がれば途中で止まる)
+{
+	RECT_PX rcObjStart = MakeRect(112, 100, OBJ_SIZE);
+	RECT_PX rcOwner = MakeRect(100, 100, SELF_SIZE);
+	// 2px進んだ所(ボールがx:[115,131)になる時)で障害物に塞がれ、重なりが
+	// 解ける4pxに達する前に止まる。
+	RECT_PX rcBlocker = MakeRect(130, 100, OBJ_SIZE);
+	auto isFree = [&](const RECT_PX &rcMoveTo) -> bool {
+		return !BlockedByRect(rcMoveTo, rcBlocker);
+	};
+
+	bool bSeparated = false;
+	int nMoved = ResolveEjectDistance(rcObjStart, DIR_RIGHT, 20, rcOwner, isFree, bSeparated);
+
+	CHECK(!bSeparated);
+	CHECK(nMoved == 2);
+}
+
+TEST(PushDecision_自走_最初から塞がっていれば0)
+{
+	RECT_PX rcObjStart = MakeRect(112, 100, OBJ_SIZE);
+	RECT_PX rcOwner = MakeRect(100, 100, SELF_SIZE);
+	auto isBlocked = [](const RECT_PX &) -> bool { return false; };
+
+	bool bSeparated = false;
+	int nMoved = ResolveEjectDistance(rcObjStart, DIR_RIGHT, 20, rcOwner, isBlocked, bSeparated);
+
+	CHECK(!bSeparated);
+	CHECK(nMoved == 0);
+}
+
+TEST(PushDecision_自走_最大距離が0なら0)
+{
+	RECT_PX rcObjStart = MakeRect(112, 100, OBJ_SIZE);
+	RECT_PX rcOwner = MakeRect(100, 100, SELF_SIZE);
+
+	bool bSeparated = false;
+	int nMoved = ResolveEjectDistance(rcObjStart, DIR_RIGHT, 0, rcOwner, AlwaysFree, bSeparated);
+
+	CHECK(!bSeparated);
+	CHECK(nMoved == 0);
 }

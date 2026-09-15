@@ -549,6 +549,12 @@ void CMainFrame::RecvProcCHAR_RES_PUSH(PBYTE pData)
 		return;
 	}
 
+#if PUSH_CLIENT_DEBUG_LOG
+	SboDbgLog("[PushDbg]RES acc:%d pos:%d,%d cur:%d,%d pred:%d",
+		Packet.m_bAccepted ? 1 : 0, Packet.m_ptObj.x, Packet.m_ptObj.y,
+		pInfoObj->m_nMapX, pInfoObj->m_nMapY, pInfoObj->m_bPushPredicting ? 1 : 0);
+#endif
+
 	if (Packet.m_bAccepted) {
 		if (pInfoObj->m_bPushPredicting) {
 			// 予測中: そのまま継続する。差が大きい時だけ確定座標へ即補正する
@@ -585,6 +591,11 @@ void CMainFrame::RecvProcCHAR_RES_PUSH(PBYTE pData)
 #endif
 		pInfoObj->SetPos(Packet.m_ptObj.x, Packet.m_ptObj.y);
 		pInfoObj->m_bPushPredicting = FALSE;
+		// S5: 入れ替わり中のボールが却下されたら、こちらの入れ替わり状態も
+		// あわせて手放す(親レビュー指摘。放置すると専有したまま止まる)。
+		if ((m_nGameState == GAMESTATE_MAP) && (m_pStateProc != NULL)) {
+			((CStateProcMAP *)m_pStateProc)->OnPushSwapRejected(Packet.m_dwObjCharID);
+		}
 	}
 }
 
@@ -674,11 +685,21 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 		}
 		if (bForceStop && (nPushDiffMax <= PUSH_STOP_SNAP_TOLERANCE_PX)) {
 			// 差が小さい停止通知: 予測を終えてそのまま受け入れる(下の通常処理へ進む)
+#if PUSH_CLIENT_DEBUG_LOG
+			SboDbgLog("[PushDbg]RECV obj:%u stop:%d pkt:%d,%d cur:%d,%d dir:%d path:%s",
+				pInfoChar->m_dwCharID, bForceStop ? 1 : 0, nPacketPosX, nPacketPosY,
+				pInfoChar->m_nMapX, pInfoChar->m_nMapY, nDirection, "pred-giveup");
+#endif
 			pInfoChar->m_bPushPredicting = FALSE;
 		} else if (bLagBehindPush) {
 			// サーバーが受理した分しか動かしていないだけの正常な遅延: 予測を優先し、
 			// このパケットは無視する(ぴくぴく戻りを防ぐ)。
 			// 万一追従用の経由点が溜まっていれば、後で再生されないようここで捨てる。
+#if PUSH_CLIENT_DEBUG_LOG
+			SboDbgLog("[PushDbg]RECV obj:%u stop:%d pkt:%d,%d cur:%d,%d dir:%d path:%s",
+				pInfoChar->m_dwCharID, bForceStop ? 1 : 0, nPacketPosX, nPacketPosY,
+				pInfoChar->m_nMapX, pInfoChar->m_nMapY, nDirection, "pred-ignore");
+#endif
 			if (pInfoChar->m_apMovePosQue.size() > 0) {
 				pInfoChar->DeleteAllMovePosQue();
 			}
@@ -686,6 +707,11 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 		} else {
 			// 押す向き以外のずれ、または遅れが大きすぎる: 予測を諦めてサーバーに従う
 			// (下の通常処理へ進む)
+#if PUSH_CLIENT_DEBUG_LOG
+			SboDbgLog("[PushDbg]RECV obj:%u stop:%d pkt:%d,%d cur:%d,%d dir:%d path:%s",
+				pInfoChar->m_dwCharID, bForceStop ? 1 : 0, nPacketPosX, nPacketPosY,
+				pInfoChar->m_nMapX, pInfoChar->m_nMapY, nDirection, "pred-giveup");
+#endif
 			pInfoChar->m_bPushPredicting = FALSE;
 		}
 	}
@@ -777,6 +803,11 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 			// 押している本人の画面で、ローカル予測(m_bPushPredicting)を終えた直後。
 			// この間にDRへ切り替えると、予測で行き過ぎていた分だけ一度戻ってから
 			// 進むように見えてしまうため、従来どおり届いた座標へ直接合わせる。
+#if PUSH_CLIENT_DEBUG_LOG
+			SboDbgLog("[PushDbg]RECV obj:%u stop:%d pkt:%d,%d cur:%d,%d dir:%d path:%s",
+				pInfoChar->m_dwCharID, bForceStop ? 1 : 0, nPacketPosX, nPacketPosY,
+				pInfoChar->m_nMapX, pInfoChar->m_nMapY, nDirection, "direct");
+#endif
 			pInfoChar->m_dwPredictRecvTime = dwRecvTime;
 			pInfoChar->m_nPredictSyncX = nPacketPosX;
 			pInfoChar->m_nPredictSyncY = nPacketPosY;
@@ -792,6 +823,11 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 			pInfoChar->m_bRedraw = TRUE;
 		} else if (bForceStop) {
 			// 停止通知: DRを止め、届いた座標で確実に STAND へ止める
+#if PUSH_CLIENT_DEBUG_LOG
+			SboDbgLog("[PushDbg]RECV obj:%u stop:%d pkt:%d,%d cur:%d,%d dir:%d path:%s",
+				pInfoChar->m_dwCharID, bForceStop ? 1 : 0, nPacketPosX, nPacketPosY,
+				pInfoChar->m_nMapX, pInfoChar->m_nMapY, nDirection, "stop");
+#endif
 			pInfoChar->StopPredictedMove(nPacketPosX, nPacketPosY);
 			pInfoChar->SetDirection(nDirection);
 			pInfoChar->ForceStopMoveState(nStateStand);
@@ -801,6 +837,11 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 			// 位置変化: NPCと違い外挿(DR)で先読み表示する。StartPredictedMove は
 			// 直前の m_dwPredictRecvTime / m_nPredictSyncX/Y から実速度を測るため、
 			// 呼ぶ前にこれらを上書きしてはいけない。
+#if PUSH_CLIENT_DEBUG_LOG
+			SboDbgLog("[PushDbg]RECV obj:%u stop:%d pkt:%d,%d cur:%d,%d dir:%d path:%s",
+				pInfoChar->m_dwCharID, bForceStop ? 1 : 0, nPacketPosX, nPacketPosY,
+				pInfoChar->m_nMapX, pInfoChar->m_nMapY, nDirection, "dr");
+#endif
 			pInfoChar->SetDirection(nDirection);
 			// PC の位置同期受信(同ファイル184〜209行付近)と同じく、先に確定座標へ
 			// 合わせてから先読みを始める。表示位置から先読みし直すだけだと遅れが
@@ -815,6 +856,11 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 			pInfoChar->m_bRedraw = TRUE;
 		} else if (bDirectionChanged) {
 			// 向きだけ変化
+#if PUSH_CLIENT_DEBUG_LOG
+			SboDbgLog("[PushDbg]RECV obj:%u stop:%d pkt:%d,%d cur:%d,%d dir:%d path:%s",
+				pInfoChar->m_dwCharID, bForceStop ? 1 : 0, nPacketPosX, nPacketPosY,
+				pInfoChar->m_nMapX, pInfoChar->m_nMapY, nDirection, "dirOnly");
+#endif
 			pInfoChar->SetDirection(nDirection);
 			nState = -1;
 			pInfoChar->m_bRedraw = TRUE;
@@ -1127,7 +1173,12 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData)
 
 			nStopX = pInfoChar->m_nMapX;
 			nStopY = pInfoChar->m_nMapY;
-			if (pInfoChar->m_nPredictSyncX != 0 || pInfoChar->m_nPredictSyncY != 0) {
+			// 押せる物(m_bPush)は確定位置(m_nPredictSyncX/Y)を押しや停止のたびに
+			// 更新しないため、ここで戻すと前に押し終えた古い位置へワープする
+			// (入れ替わり後に2キャラ分ほど飛んだ不具合)。押せる物の停止位置は
+			// MOVE_STOP が運ぶので、今の位置のまま止める。
+			if (!pInfoChar->m_bPush &&
+				(pInfoChar->m_nPredictSyncX != 0 || pInfoChar->m_nPredictSyncY != 0)) {
 				/*
 				   Web 版では短い移動の MOVE_STOP が欠けることがある。
 				   その場合でも直近の POS_SYNC/MOVE_* で受けた確定位置へ戻して止めると、

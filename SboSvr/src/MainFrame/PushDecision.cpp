@@ -56,6 +56,14 @@ namespace
 		if (b2 <= a1) return a1 - b2;
 		return 0;
 	}
+
+	/// 矩形 a,b が重なっているか(隣接するだけ、すき間0は重なりに含めない)。
+	/// ResolveEjectDistance の「専有者と重ならなくなった」判定に使う。
+	bool RectsOverlap(const RECT_PX &a, const RECT_PX &b)
+	{
+		return (a.nLeft < b.nRight) && (b.nLeft < a.nRight) &&
+			(a.nTop < b.nBottom) && (b.nTop < a.nBottom);
+	}
 }
 
 CLIENT_TIME_RESULT CheckClientTime(
@@ -346,10 +354,11 @@ SWAP_UPDATE_RESULT UpdateSwap(
 	}
 
 	if (nDirNow != state.nDir) {
-		// 向き変更を検出したら入れ替わりを終了する。
-		// TODO(S5): 終了後、重なりが解けるまでボールを本人の2倍速で
-		// 本人の前へ転がす処理を実装する(docs/push-object-redesign.md 2章7項)。
-		// S2 ではここで終了を通知するだけに留める。
+		// 向き変更を検出したら入れ替わりを終了する(bAccepted=falseのまま)。
+		// 呼び出し側(RecvProcCHAR_REQ_PUSH)はこの組み合わせ(bShouldEnd=true &&
+		// bAccepted=false)を見て、重なりが解けるまでボールを本人の2倍速で転がす
+		// 「自走(eject)」を開始する(docs/push-object-redesign.md 2章7項)。
+		// eject の1px単位の前進計算は ResolveEjectDistance() が受け持つ。
 		result.bShouldEnd = true;
 		return result;
 	}
@@ -357,17 +366,37 @@ SWAP_UPDATE_RESULT UpdateSwap(
 	int nAxisDx, nAxisDy;
 	DirVector(state.nDir, nAxisDx, nAxisDy);
 
-	// P0 からの本人の移動量
+	// P0 からの本人の移動量(d軸成分)。本人は1フレームに数px進むため、入れ替わりが
+	// 終わる要求では本人の移動量が本人の幅をわずかに超えることがある。クライアントは
+	// ボールの下げ幅を本人の幅で打ち切って送ってくるため、サーバーも同じ打ち切りで
+	// 判定する(min(移動量, 幅))。REASON_SWAP_TOO_FAR は、この打ち切り後の期待値とは
+	// 別に、要求されたボール目標自体がB0から幅を超えて下がっている場合にのみ使う
+	// (本人の移動量そのものが幅を大きく超えるものは、本人座標の妥当性・速度の検証で
+	// 別途弾かれる前提)。
 	int nMovedX = ptSelfNow.x - state.ptP0.x;
 	int nMovedY = ptSelfNow.y - state.ptP0.y;
+	int nMovedAxis = (nAxisDx != 0) ? nMovedX : nMovedY;
 
-	// 目標: B0 - (P - P0) の d 軸成分。横方向は B0 のまま不変。
+	// 要求されたボール目標がB0からd軸方向へどれだけ下がっているか(符号はnMovedAxisと同じ向き)。
+	int nReqAxisDist = (nAxisDx != 0) ? (state.ptB0.x - ptRequestedObj.x) : (state.ptB0.y - ptRequestedObj.y);
+	if (Abs(nReqAxisDist) > nSelfWidthAlongDir) {
+		result.eReason = REASON_SWAP_TOO_FAR;
+		return result;
+	}
+
+	// 本人の移動量を本人の幅で打ち切ったもの(符号はnMovedAxisのまま、大きさだけ制限)。
+	int nMovedClamped = nMovedAxis;
+	if (Abs(nMovedClamped) > nSelfWidthAlongDir) {
+		nMovedClamped = (nMovedAxis > 0) ? nSelfWidthAlongDir : -nSelfWidthAlongDir;
+	}
+
+	// 目標: B0 - min(P - P0, 幅) の d 軸成分。横方向は B0 のまま不変。
 	int nExpectedObjX = state.ptB0.x;
 	int nExpectedObjY = state.ptB0.y;
 	if (nAxisDx != 0) {
-		nExpectedObjX = state.ptB0.x - nMovedX;
+		nExpectedObjX = state.ptB0.x - nMovedClamped;
 	} else {
-		nExpectedObjY = state.ptB0.y - nMovedY;
+		nExpectedObjY = state.ptB0.y - nMovedClamped;
 	}
 
 	if (ptRequestedObj.x != nExpectedObjX || ptRequestedObj.y != nExpectedObjY) {
@@ -382,20 +411,15 @@ SWAP_UPDATE_RESULT UpdateSwap(
 		return result;
 	}
 
-	int nTotalMoved = Abs(nMovedX) + Abs(nMovedY);
-	if (nTotalMoved > nSelfWidthAlongDir) {
-		result.eReason = REASON_SWAP_TOO_FAR;
-		return result;
-	}
-
 	// 経路(本人からボールの現在位置までの1px)が空いているか。
 	// ここでは「ボールを B0 から目標まで1pxずつ、-d方向へ動かせるか」を確認する。
+	// 歩数は打ち切り後の移動量(nMovedClamped)を使う(幅を超える分は進めないため)。
 	int nRetreatDir = OppositeDir(state.nDir);
 	int rdx, rdy;
 	DirVector(nRetreatDir, rdx, rdy);
 
 	POINT_PX ptCur = state.ptB0;
-	int nSteps = Abs(nTotalMoved);
+	int nSteps = Abs(nMovedClamped);
 	for (int i = 0; i < nSteps; ++i) {
 		ptCur.x += rdx;
 		ptCur.y += rdy;
@@ -409,9 +433,11 @@ SWAP_UPDATE_RESULT UpdateSwap(
 		}
 	}
 
-	// 終了条件: 本人が障害物にぶつかりきる(合計移動量が最大値に達した)、
+	// 終了条件: 本人が障害物にぶつかりきる(打ち切り後の移動量が最大値に達した)、
 	// またはボールが本人の後ろへ抜けきった(同条件)場合、この更新で終了とする。
-	if (nTotalMoved >= nSelfWidthAlongDir) {
+	// 本人の生の移動量が幅をわずかに超えた場合もnMovedClampedは幅で頭打ちに
+	// なるため、ここで正しく終了扱いになる。
+	if (Abs(nMovedClamped) >= nSelfWidthAlongDir) {
 		result.bShouldEnd = true;
 	}
 
@@ -419,6 +445,43 @@ SWAP_UPDATE_RESULT UpdateSwap(
 	result.ptAcceptedObj = ptRequestedObj;
 	result.eReason = REASON_NONE;
 	return result;
+}
+
+int ResolveEjectDistance(
+	const RECT_PX &rcObjStart,
+	int nDir,
+	int nMaxDistance,
+	const RECT_PX &rcOwner,
+	const IsPositionFreeFunc &isFree,
+	bool &bSeparated)
+{
+	bSeparated = false;
+
+	if (nMaxDistance <= 0) {
+		return 0;
+	}
+
+	int dx, dy;
+	DirVector(nDir, dx, dy);
+
+	RECT_PX rcCur = rcObjStart;
+	int nMoved = 0;
+
+	for (; nMoved < nMaxDistance; ++nMoved) {
+		RECT_PX rcNext = Offset(rcCur, dx, dy);
+		if (!isFree || !isFree(rcNext)) {
+			break; // 塞がっている。途中まで進めて終了(bSeparatedはfalseのまま)。
+		}
+		rcCur = rcNext;
+		if (!RectsOverlap(rcCur, rcOwner)) {
+			// 専有者と重ならなくなった。この1pxぶんも進めた上で自走終了。
+			bSeparated = true;
+			++nMoved;
+			break;
+		}
+	}
+
+	return nMoved;
 }
 
 }
