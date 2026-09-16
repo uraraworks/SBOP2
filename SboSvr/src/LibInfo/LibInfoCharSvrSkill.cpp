@@ -273,7 +273,6 @@ BOOL CLibInfoCharSvr::UseSkillFISHING(CInfoCharSvr *pInfoChar, CInfoSkillBase *p
 {
 	BOOL bRet, bResult;
 	DWORD dwMotionType;
-	POINT ptPos;
 	PCInfoMapBase pInfoMap;
 
 	bRet = FALSE;
@@ -288,9 +287,8 @@ BOOL CLibInfoCharSvr::UseSkillFISHING(CInfoCharSvr *pInfoChar, CInfoSkillBase *p
 	if (pInfoMap == NULL) {
 		goto Exit;
 	}
-	// 1歩前のパーツ属性をチェック
-	pInfoChar->GetFrontMapPos(ptPos);
-	bResult = pInfoMap->IsFlg(ptPos.x, ptPos.y, BIT_PARTSHIT_FISHING);
+	// 1歩前のパーツ属性をチェック(docs/battle-redesign.md S4。クライアントのX釣り判定と共通の関数)
+	bResult = pInfoChar->IsFacingFishingSpot(pInfoMap);
 	if (bResult == FALSE) {
 		goto Exit;
 	}

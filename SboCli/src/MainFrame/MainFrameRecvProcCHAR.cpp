@@ -1528,7 +1528,7 @@ void CMainFrame::RecvProcCHAR_SET_EFCBALLOON(PBYTE pData)
 
 void CMainFrame::RecvProcCHAR_SET_MOTION(PBYTE pData)
 {
-	PCInfoCharCli pInfoChar;
+	PCInfoCharCli pInfoChar, pInfoCharPlayer;
 	CPacketCHAR_PARA1 Packet;
 
 	Packet.Set(pData);
@@ -1542,6 +1542,15 @@ void CMainFrame::RecvProcCHAR_SET_MOTION(PBYTE pData)
 	if (Packet.m_dwPara == -1) {
 		m_pLibInfoChar->RenewMotionInfo(pInfoChar);
 	} else {
+		/* docs/battle-redesign.md S4: 釣りは自キャラがXキー押下時にローカルで即座に
+		   割り込みモーションを開始済み(StateProcMAP::StartLocalFishing)。既に割り込み
+		   再生中の自キャラへこのエコーを反映するとモーションが途中でリセットされ、
+		   トリガーコマを再度踏んで釣り要求を二重送信する恐れがあるためスキップする
+		   (アタリ/釣り上げ時のモーション変更は再生完了後に届くため影響しない) */
+		pInfoCharPlayer = m_pMgrData->GetPlayerChar();
+		if ((pInfoChar == pInfoCharPlayer) && pInfoChar->m_bMotionInterrupt) {
+			return;
+		}
 		m_pLibInfoChar->SetMotionInfo(pInfoChar, CHARMOTIONID_INTERRUUPT, Packet.m_dwPara);
 		pInfoChar->InitMotionInfo(CHARMOTIONID_INTERRUUPT);
 	}

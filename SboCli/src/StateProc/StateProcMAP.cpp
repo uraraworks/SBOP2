@@ -7,6 +7,7 @@
 #include "StdAfx.h"
 #include "LibInfoMapBase.h"
 #include "LibInfoItem.h"
+#include "InfoItemTypeBase.h"
 #include "LibInfoMapParts.h"
 #include "ParamUtil.h"
 #include "InfoMapBase.h"
@@ -1802,6 +1803,58 @@ BOOL CStateProcMAP::StartLocalAtack(void)
 
 
 
+BOOL CStateProcMAP::IsFishingAvailable(void)
+{
+	/* 釣り竿装備＋正面が水タイルかを判定する(docs/battle-redesign.md S4)。
+	   水タイル判定はCInfoCharBase::IsFacingFishingSpot()でサーバー
+	   (RecvProcCHAR_PROC_FISHING/UseSkillFISHING)と共通の判定を使う */
+	DWORD dwMotionType;
+
+	if ((m_pPlayerChar == NULL) || (m_pMap == NULL)) {
+		return FALSE;
+	}
+	dwMotionType = m_pLibInfoItem->GetMotionIDAtack(m_pPlayerChar->m_dwEquipItemIDArmsRight);
+	if ((dwMotionType & INFOITEMARMS_MOTION_FISHING) == 0) {
+		return FALSE;
+	}
+	return m_pPlayerChar->IsFacingFishingSpot(m_pMap);
+}
+
+
+
+BOOL CStateProcMAP::StartLocalFishing(void)
+{
+	/* 釣りをローカルで即時開始する(docs/battle-redesign.md S4)。攻撃と違い戦闘状態
+	   (BATTLE系のm_nMoveState)へは遷移させず、割り込みモーション(CHARMOTIONID_INTERRUUPT)
+	   で釣りモーションだけ再生する。モーション中の所定コマでCInfoCharCli::MotionProcが
+	   CHARMOTIONPROCID_FISHINGを検知しSBOCOMMANDID_SUB_CHAR_PROC_FISHINGを送る(既存の仕組み)。
+	   移動中の見た目を止めるためMOVE_STOPのみここで送る。押しっぱなし連続は起こさない
+	   (m_bAtackKeyAutoRepeatは立てない。呼び出し元のOnXが押した瞬間のみ呼ぶ) */
+	int anDirection[] = {0, 1, 2, 3, 0, 1, 1, 0};
+	CPacketCHAR_MOVE_STOP PacketCHAR_MOVE_STOP;
+
+	PacketCHAR_MOVE_STOP.Make(
+			m_pPlayerChar->m_dwMapID,
+			m_pPlayerChar->m_dwCharID,
+			anDirection[m_pPlayerChar->m_nDirection],
+			m_pPlayerChar->m_nMapX,
+			m_pPlayerChar->m_nMapY,
+			FALSE,
+			1,
+			timeGetTime());
+	m_pSock->Send(&PacketCHAR_MOVE_STOP);
+	m_bMoveSyncActive = FALSE;
+	m_nMoveSyncDirection = -1;
+	m_dwLastTimeMoveSyncSend = 0;
+
+	m_pLibInfoChar->SetMotionInfo(m_pPlayerChar, CHARMOTIONID_INTERRUUPT, CHARMOTIONLISTID_FISHING_UP);
+	m_pPlayerChar->InitMotionInfo(CHARMOTIONID_INTERRUUPT);
+
+	return TRUE;
+}
+
+
+
 BOOL CStateProcMAP::IsKeyInputEnable(void)
 {
 	BOOL bRet;
@@ -2127,8 +2180,8 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 	switch (m_pPlayerChar->m_nMoveState) {
 	case CHARMOVESTATE_STAND:			// 立ち
 	case CHARMOVESTATE_BATTLE:			// 戦闘中(静止)
-		/* docs/battle-redesign.md S3: 押した瞬間の正面判定で
-		   a.攻撃(敵優先) → b.会話 → c.拾い → d.空振り攻撃 → e.従来どおり(付いて行き解除)
+		/* docs/battle-redesign.md S3/S4: 押した瞬間の正面判定で
+		   a.攻撃(敵優先) → b.会話 → c.釣り → d.拾い → e.空振り攻撃 → f.従来どおり(付いて行き解除)
 		   の順に決定する。STAND/BATTLE(静止)は同じ優先順で扱う */
 
 		/* a. 戦闘可能マップで正面に攻撃できる敵がいれば最優先で攻撃する
@@ -2149,7 +2202,14 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 			break;
 		}
 
-		/* c. 足元にアイテムがあれば拾う(戦闘状態(BATTLE静止)でも拾える) */
+		/* c. 釣り竿装備で正面が水なら釣る(docs/battle-redesign.md S4。戦闘状態には
+		   遷移させない。押しっぱなし連続は起こらない(m_bAtackKeyAutoRepeatを立てないため)) */
+		if (IsFishingAvailable()) {
+			StartLocalFishing();
+			break;
+		}
+
+		/* d. 足元にアイテムがあれば拾う(戦闘状態(BATTLE静止)でも拾える) */
 		{
 			RECT rcFeet;
 			/* 足元の当たり判定矩形を HALF_TILE 広げてアイテムを探す（向き非依存） */
@@ -2167,13 +2227,13 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 			}
 		}
 
-		/* d. 会話・拾いが無ければ、戦闘可能マップなら空振り攻撃で戦闘状態へ自動遷移する(S2) */
+		/* e. 会話・釣り・拾いが無ければ、戦闘可能マップなら空振り攻撃で戦闘状態へ自動遷移する(S2) */
 		if (m_pMap && m_pMap->IsEnableBattle()) {
 			StartLocalAtack();
 			break;
 		}
 
-		/* e. それ以外は従来どおり付いて行き解除 */
+		/* f. それ以外は従来どおり付いて行き解除 */
 		if ((m_pPlayerChar->m_dwFrontCharID) || (m_pPlayerChar->m_dwTailCharID)) {
 			PacketCHAR_REQ_TAIL.Make(m_pPlayerChar->m_dwCharID, 0, FALSE);
 			m_pSock->Send(&PacketCHAR_REQ_TAIL);

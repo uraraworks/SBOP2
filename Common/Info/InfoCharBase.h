@@ -11,6 +11,8 @@
 #include "InfoBase.h"
 #include "InfoMotion.h"
 
+class CInfoMapBase;
+
 // モーション種別ID
 enum {
 	CHARMOTIONID_STAND = 0,	// 立ち
@@ -91,6 +93,7 @@ public:
 	BOOL	IsLogin(void);	// ログイン中か判定
 	BOOL	IsStateBattle(void);	// 戦闘モードか判定
 	BOOL	IsStateMove(void);	// 移動中か判定
+	BOOL	IsFacingFishingSpot(CInfoMapBase *pInfoMap);	// 正面が釣り場(水)タイルか判定(釣り竿装備チェックは呼び出し側。docs/battle-redesign.md S4。クライアント・サーバー共通で判定を揃える)
 	BOOL	IsViewArea(DWORD dwMapID, POINT *pptPos);	// 見える範囲か判定
 	BOOL	IsNPC(void);	// NPCか判定
 	BOOL	CheckSessionID(DWORD dwSessionID);	// セッションIDをチェック

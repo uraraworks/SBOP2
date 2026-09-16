@@ -1938,7 +1938,6 @@ void CMainFrame::RecvProcCHAR_PROC_FISHING(PBYTE pData, DWORD dwSessionID)
 {
 	BOOL bResult, bRet;
 	int nProcState;
-	POINT ptPos;
 	PCInfoCharSvr pInfoChar;
 	PCInfoMapBase pInfoMap;
 	CPacketCHAR_PARA1 Packet;
@@ -1960,23 +1959,23 @@ void CMainFrame::RecvProcCHAR_PROC_FISHING(PBYTE pData, DWORD dwSessionID)
 	if (pInfoMap == NULL) {
 		goto Exit;
 	}
-	pInfoChar->GetFrontMapPos(ptPos);
-	bResult = pInfoMap->IsFlg(ptPos.x, ptPos.y, BIT_PARTSHIT_FISHING);
+	// docs/battle-redesign.md S4: クライアントのX釣り判定と共通の関数(戦闘状態であることは問わない)
+	bResult = pInfoChar->IsFacingFishingSpot(pInfoMap);
 	if (bResult == FALSE) {
 		goto Exit;
 	}
 	nProcState = CHARPROCSTATEID_FISHING;
 	pInfoChar->AddProcInfo(CHARPROCID_FISHING, 2000, Packet.m_dwPara);
+	// 釣りモーションを他プレイヤーにも見せる(docs/battle-redesign.md S4。
+	// 自キャラはStateProcMAP::StartLocalFishingでローカル再生済みのため、
+	// このエコーはRecvProcCHAR_SET_MOTIONの自キャラ二重再生ガードで無視される)
+	pInfoChar->SetMotion(CHARMOTIONLISTID_FISHING_UP);
 
 	bRet = TRUE;
 Exit:
-	if (pInfoChar && (bRet == FALSE)) {
-		bResult = pInfoChar->IsEnableBattle();
-		if (bResult) {
-			pInfoChar->SetMoveState(CHARMOVESTATE_BATTLE);
-		}
+	if (pInfoChar) {
+		pInfoChar->SetProcState(nProcState);
 	}
-	pInfoChar->SetProcState(nProcState);
 }
 
 void CMainFrame::RecvProcCHAR_REQ_CHECKMAPEVENT(PBYTE pData, DWORD dwSessionID)

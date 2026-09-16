@@ -7,6 +7,8 @@
 #include "StdAfx.h"
 #include "InfoCharBase.h"
 #include "AtackTargetDecision.h"
+#include "InfoMapBase.h"
+#include "InfoMapParts.h"
 
 // ヘッダ情報
 static LPCSTR s_aszName[] = {
@@ -1131,6 +1133,17 @@ BOOL CInfoCharBase::IsStateBattle(void)
 	bRet = TRUE;
 Exit:
 	return bRet;
+}
+
+BOOL CInfoCharBase::IsFacingFishingSpot(CInfoMapBase *pInfoMap)
+{
+	POINT ptPos;
+
+	if (pInfoMap == NULL) {
+		return FALSE;
+	}
+	GetFrontMapPos(ptPos);
+	return pInfoMap->IsFlg(ptPos.x, ptPos.y, BIT_PARTSHIT_FISHING);
 }
 
 BOOL CInfoCharBase::IsStateMove(void)

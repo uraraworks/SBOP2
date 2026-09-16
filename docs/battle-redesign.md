@@ -54,8 +54,8 @@
 | S1 | 改造クライアント対策としてサーバー側の攻撃検証を先に固める（仕様変更と独立に有効） | サーバーの攻撃間隔・戦闘可能マップチェック・PvP判定・攻撃対象判定のホワイトリスト化（`AttackDecision.h/.cpp` に純粋関数として切り出し、`RecvProcBATTLE_REQ_ATACK`/`AtackImple` から利用） | 未検証だった間隔・マップ・対象がサーバーで拒否できる | `SboSvrTest` にテスト追加（新テストは必ず一度落ちることを確認してから直す） |
 | S2 | ゲージ・溜め攻撃を廃止し即攻撃＋押しっぱなし連続にする | `m_wAtackGauge`/`TimerProcGauge`/溜め攻撃周りの削除、`OnTab`・スマホ「戦闘」ボタン削除、戦闘状態の自動遷移、攻撃の往復2回をクライアント即モーション＋送信1回に（クライアント予測） | Tab無しで敵に攻撃が当たり連打できる、戦闘モードへの明示切替が不要 | 手元サーバー＋ブラウザ版で連続攻撃・自動遷移・復帰を確認 |
 | S3 | X・Z を状況依存の1ボタンにする | `OnX`/`OnXChar`/`OnZ` の判定順（敵優先）の実装 | 正面の敵/会話NPC/水/何もなしで意図した動作になる | 実機確認済み（2026-09-16）。会話は別要因（NPCのセリフがDBに無い）、付いて行きは既存回帰のため別作業 |
-| S4 | 釣りを攻撃から切り離す | 釣り竿装備＋正面水＋X の専用経路に分離 | 戦闘可能マップでも竿装備時は釣りが優先して起きる | 水際・戦闘可能マップの両方で確認 |
-| S5 | 被弾減速とHPバーのフェード表示、攻撃での追従解除 | 移動速度チェックの整合、`LayerMap` のHP表示、追従解除処理 | 被弾後に減速し時間で戻る、HPバーがフェードイン/アウトする、攻撃で追従が切れる | 被弾・放置・攻撃の各シナリオで確認 |
+| S4 | 釣りを攻撃から切り離す | 釣り竿装備＋正面水＋X の専用経路に分離 | 戦闘可能マップでも竿装備時は釣りが優先して起きる | 実装済み(2026-09-16)。**実機確認済み（2026-09-16）** |
+| S5 | 被弾減速とHPバーのフェード表示、攻撃での追従解除 | 移動速度チェックの整合、`LayerMap` のHP表示、追従解除処理 | 被弾後に減速し時間で戻る、HPバーがフェードイン/アウトする、攻撃で追従が切れる | 被弾・放置・攻撃の各シナリオで確認 ※付いて行く機能の修理（7章3件目）が前提 |
 | 後段 | スキル詠唱時間・クールダウン、弓バランス、PvPマップ設定、戦闘BGMの扱い | 未着手 | — | — |
 
 ### S1 実装メモ
@@ -97,6 +97,20 @@
 
 ---
 
+### S4 実装メモ（実装済み・実機確認待ち、2026-09-16）
+
+- 判定を共通化: `CInfoCharBase::IsFacingFishingSpot(CInfoMapBase*)`(`Common/Info/InfoCharBase.h/.cpp`)を新設し、`GetFrontMapPos`+`IsFlg(BIT_PARTSHIT_FISHING)`のタイル判定をクライアント(`CStateProcMAP::IsFishingAvailable`)とサーバー(`RecvProcCHAR_PROC_FISHING`/`UseSkillFISHING`)の3箇所で共用にした。竿装備チェック(`GetMotionIDAtack`+`INFOITEMARMS_MOTION_FISHING`)は各呼び出し側に残した(既存箇所ごとに`m_pLibInfoItem`の持ち方が違うため)。
+- 釣りを戦闘状態から完全に切り離した: 攻撃で使っていた`CHARMOVESTATE_BATTLEATACK`遷移をやめ、既存の割り込みモーション機構(`CHARMOTIONID_INTERRUUPT`。スキル発動の釣り`UseSkillFISHING`が元から使っていたのと同じ経路)だけで釣りモーションを再生する。`CStateProcMAP::StartLocalFishing()`(新設)が`m_pLibInfoChar->SetMotionInfo(pChar, CHARMOTIONID_INTERRUUPT, CHARMOTIONLISTID_FISHING_UP)`+`InitMotionInfo(CHARMOTIONID_INTERRUUPT)`をローカルで即時実行し、`m_nMoveState`(STAND/BATTLEのまま)には触れない。モーション中の所定コマで`CInfoCharCli::MotionProc`が`CHARMOTIONPROCID_FISHING`を検知して`SBOCOMMANDID_SUB_CHAR_PROC_FISHING`を送る流れ自体は既存のまま(モーション種別に依らずコマのProcIDだけで発火するため無改造で使えた)。
+- 移動ブロックは元から`m_nProcState==CHARPROCSTATEID_FISHING`だけで判定していた(`CInfoCharBase::IsEnableMove`)ため、`m_nMoveState`を変えなくても釣り中の移動・再攻撃は従来通り止まる(確認済み、コード変更不要)。
+- 押しっぱなし連打防止: `StartLocalFishing`は`m_bAtackKeyAutoRepeat`を立てない(`OnX`側で毎回FALSEにしている既存処理に乗るだけ)。`OnX`はbDown==TRUEの立ち上がりでしか呼ばれないため、押しっぱなし自体でも再発火しない。
+- サーバー`RecvProcCHAR_PROC_FISHING`(`MainFrameRecvProcCHAR.cpp`): 受理条件は元から`pInfoChar->IsEnableBattle()`(付いて行い中/気絶中のみ拒否。名前に反して「戦闘状態か」は見ていない)+水タイルのみで、マップの戦闘可否も見ていなかった。したがって「戦闘状態であること」を外す変更は実質不要だったが、成功時に`pInfoChar->SetMotion(CHARMOTIONLISTID_FISHING_UP)`を追加し、他プレイヤーにも釣りモーションが見えるようにした(以前はBATTLEATACK経由のCHAR_STATE配信に便乗していたため、外した分の代替が必要だった)。失敗時に`SetMoveState(CHARMOVESTATE_BATTLE)`へ強制していた後始末コードは、攻撃経路を通らなくなったため意味がなくなり削除した。
+- 自キャラの二重再生対策: `RecvProcCHAR_SET_MOTION`(`MainFrameRecvProcCHAR.cpp`)に、自キャラが既に割り込みモーション再生中(`m_bMotionInterrupt`)なら上記のSET_MOTIONエコーを無視するガードを追加した(`StartLocalAtack`のBATTLEATACKエコー無視と同じ考え方)。追加しないと、ローカルで再生開始した直後にサーバーからの同一モーションのエコーが届いてアニメが再初期化され、トリガーコマを再度踏んでFISHING要求を二重送信する恐れがあった。アタリ/釣り上げ時のモーション変更(`SetMotion(FISHING_HIT_UP)`等)はキャスト後の待ち中(`m_bMotionInterrupt`は既にFALSE)に届くため、このガードの影響を受けない。
+- 優先順位: `OnX`の判定順を a.攻撃(敵優先) → b.会話 → **c.釣り(新設)** → d.足元アイテム拾い → e.空振り攻撃 → f.付いて行い解除、に変更(釣りは会話より低優先、足元アイテムより高優先。docs仕様通り)。
+- 5.の確認結果(釣り竿装備で敵を攻撃した場合): 敵が正面にいれば優先順位aが最初に成立し`StartLocalAtack()`を呼ぶが、`CLibInfoCharCli::SetMotionInfo`の既存ロジックが竿装備(`INFOITEMARMS_MOTION_FISHING`)を検出して攻撃モーションスロット(`CHARMOTIONID_ATACK`)の中身をFISHING_UPに差し替えてしまうため、再生されるモーションのコマが`CHARMOTIONPROCID_FISHING`を発火し、`BATTLE_REQ_ATACK`は送られずダメージも発生しない(水タイルでなければ釣り要求もサーバーで弾かれ、見た目だけ空振りする)。これはS1〜S3から不変の既存挙動(竿は攻撃モーションとして常にFISHING_UPを使う設計)であり、今回のS4変更(釣り優先度cの追加)が新たに引き起こしたものではない。ダメージ0のまま動作は継続し、クラッシュや無限ループ等の破綻はないため、本タスクでは変更しなかった(竿を武器として使えるようにするかは別途仕様判断が必要)。
+- 未確認/判断した点: 他プレイヤーから見た釣りモーションの伝搬(`SetMotion`のブロードキャスト追加)は自前の動作確認のみで、実機での2クライアント確認は未実施。`RecvProcCHAR_PROC_FISHING`はCheckSessionIDを呼んでいない(セッション検証漏れ)が、これはS4着手前から存在する既存の欠落であり本タスクの範囲外として変更していない。
+
+---
+
 ## 5. リスク・注意点
 
 - `m_nMoveState` の BATTLE 系は移動同期に絡む。`MoveStateDecision` 系テストを壊さないこと。
@@ -112,3 +126,33 @@
 - 弓の引き撃ち対策（攻撃後停止時間の具体的な値）。
 - スキル詠唱時間・クールダウンの具体的な数値と実装場所。
 - 釣りのアタリ・合わせを操作化するかどうか。
+
+---
+
+## 7. 別作業として切り出した課題
+
+### 7.1 ブラウザ版に会話イベント窓を移植する
+
+- 現象: セリフが "@" の NPC（会話イベント）に話しかけても、ブラウザ版では何も表示されない。
+- 原因: `WindowTEXTMSG.cpp` が `tools/build-sbocli-browser-title.ps1` の `$sources` に無く、`SboCli/src/Mgr/MgrWindow.cpp` の非Win32代替実装のうち会話イベント版 `MakeWindowTEXTMSG(..., CInfoTalkEvent*)` が空関数（521-526 付近）。文字列版（515-520 付近）は `MakeWindowMSG` 経由で表示されるが NPC 名を捨てている。クライアントの `OnMainFrameRENEWTALKEVENT`（`SboCli/src/StateProc/StateProcMAP.cpp` 4535 付近）もこれを呼ぶため無反応。サーバー側の受信処理は存在する（`SboSvr/src/MainFrame/MainFrameRecvProcCHAR.cpp` 2067 付近）。
+- やること: ネイティブ版の会話イベント窓を読み、ブラウザ版で動くよう移植（ビルド対象追加または代替実装の置き換え）。普通のセリフ窓で NPC 名が出ない件も同時に検討。
+
+### 7.2 NPC のセリフを DB に復活させる
+
+- 現象: どの NPC に X で話しかけても何も起きない（ブラウザ版・ネイティブ版とも）。
+- 原因: SQLite の `sys_char` に `Talk` 列が存在しない（列は81個あるが会話文の列だけ無い。`SboSvr/src/SaveLoad/SaveLoadInfoChar.cpp` の列一覧にも無い）。SQLite 正規化移行のときに `m_strTalk` が落ちたと見られる。全 NPC の `m_strTalk` が空になり、`OnXChar`（`StateProcMAP.cpp` 4573-4589 付近）が「セリフが空」で何もせず終了する。`sys_talk_event` は親2行のみ、`sys_talk_event_event` は0行。
+- 代表的な NPC（いずれもセリフ空）: MapID 11 道場「クウ」(CharID 1477)、12 長老の家「セト」(1478)、13 カフェ「プカ」(1564)、8 武器防具屋「ミル」(1567)、21 おしゃれ屋「ラミ」(1559)。
+- やること: `Talk` 列を戻し保存・読み込みで往復させる（既存DBは起動時に自動で列追加。文字コードはUTF-8）。復元元は SBOP2 の git 履歴の旧 `.dat`、または `C:\Users\masakazu\MyProject\sbo2003\Release\SBODATA\SboDataCharInfo.dat`（元祖SBO、2MB、旧形式・CP932の可能性）。SBOP2 側の旧 `.dat` は現存しない。復元できない場合はセリフを創作せず、管理画面から編集できるようにする方向で相談する。
+
+### 7.3 付いて行く機能が動かない回帰を直す
+
+- 現象: Z で付いて行く状態にはなる（自分が動けなくなる）が、相手が動いても追従しない。自分の画面でも他人の画面でも動かない。
+- 原因: サーバーは前キャラ移動時に追従キャラの座標を更新して `m_bChgPos`/`m_bChgUpdatePos` を立てるだけ（`SboSvr/src/MainFrame/MainFrameRecvProcCHAR.cpp` 866-894 付近、`SboSvr/src/LibInfo/LibInfoCharSvr.cpp` 1953-1985 付近）。送信を担う `ProcChgPos`（`LibInfoCharSvr.cpp` 2405-2480 付近、呼出 2107 付近）が Web版移動同期改修で NPC 限定になった（旧実装は `git show fffcbb4^` 参照）。PC の移動中継は受信パケットの送り主本人しか転送しない（`MainFrameRecvProcCHAR.cpp` 930-1006 付近）ため、自分では動かない追従キャラの分は誰にも届かない。該当コミットは fffcbb4(2026-03-09)/5ce309a(2026-04-20) で S1〜S3 より前の回帰。
+- やること: 追従キャラ（PC）の座標変更を送る経路を復活させる（Dead Reckoning・予測移動・速度超過判定と喧嘩しない設計にする）。あわせて追従解除処理（`LibInfoCharSvr.cpp` 520-528 付近）の NULL チェック後の無条件参照（前キャラがログアウト済みだとサーバーが落ちうる）を直す。
+- 注意: S5 の「攻撃したら付いて行くを解除」はこの修理が終わってから確認する。
+
+### 7.4 釣り竿を装備したまま攻撃すると釣りモーションになる
+
+- 現象: 釣り竿を装備した状態で、水辺以外で X を押すと、空振り攻撃のつもりが釣りモーション（3.5秒）が再生され、その間操作できない。敵を攻撃しても攻撃が発生しない。
+- 原因: SetMotionInfo（SboCli/src/LibInfo/LibInfoCharCli.cpp 273付近）が攻撃モーションを FISHING_* に差し替えるため。S1〜S4 より前からの既存挙動。
+- やること: 「釣り竿装備中は攻撃しない（空振りも出さない）」か「素手の打撃モーションで弱い攻撃にする」かを決めて実装する。ユーザーと方針を相談してから着手すること。

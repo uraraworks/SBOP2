@@ -47,6 +47,8 @@ protected:
 	void  TimerProcAtackRepeat(void);                                                          // 時間処理(Xキー押しっぱなしの連続攻撃。docs/battle-redesign.md S2)
 	void  TimerProcAtackAutoOff(void);                                                         // 時間処理(無操作で戦闘状態を自動解除。docs/battle-redesign.md S2)
 	BOOL  StartLocalAtack(void);                                                               // 攻撃モーションをローカルで即時開始する(docs/battle-redesign.md S2)
+	BOOL  IsFishingAvailable(void);                                                            // 釣り竿装備＋正面が水タイルかを判定(docs/battle-redesign.md S4)
+	BOOL  StartLocalFishing(void);                                                             // 釣りをローカルで即時開始する。戦闘状態には遷移させない(docs/battle-redesign.md S4)
 	BOOL  IsKeyInputEnable(void);                                                              // キー入力を許可するか判定
 	BOOL  OnUp(BOOL bDown);                                                                    // キーハンドラ(↑)
 	BOOL  OnDown(BOOL bDown);                                                                  // キーハンドラ(↓)
