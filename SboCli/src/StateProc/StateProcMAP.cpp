@@ -1729,6 +1729,12 @@ void CStateProcMAP::TimerProcAtackRepeat(void)
 		m_bAtackKeyAutoRepeat = FALSE;
 		return;
 	}
+	if (IsWeaponFishingRod()) {
+		/* 押しっぱなし継続中に釣り竿へ持ち替えた場合、釣り竿は武器ではないため
+		   連続攻撃を止める(docs/battle-redesign.md 7章: 釣り竿装備中は攻撃しない) */
+		m_bAtackKeyAutoRepeat = FALSE;
+		return;
+	}
 
 	StartLocalAtack();
 }
@@ -1803,18 +1809,32 @@ BOOL CStateProcMAP::StartLocalAtack(void)
 
 
 
+BOOL CStateProcMAP::IsWeaponFishingRod(void)
+{
+	/* 右手装備が釣り竿かを判定する(docs/battle-redesign.md 7章: 釣り竿装備中は攻撃しない)。
+	   「釣り竿は武器ではない」方針のため、装備中は攻撃(敵への攻撃・空振り攻撃の
+	   両方)へ進ませないための共通判定として使う。判定自体はSetMotionInfo
+	   (LibInfoCharCli.cpp)やIsFishingAvailableと同じGetMotionIDAtackのフラグを見る */
+	DWORD dwMotionType;
+
+	if (m_pPlayerChar == NULL) {
+		return FALSE;
+	}
+	dwMotionType = m_pLibInfoItem->GetMotionIDAtack(m_pPlayerChar->m_dwEquipItemIDArmsRight);
+	return (dwMotionType & INFOITEMARMS_MOTION_FISHING) ? TRUE : FALSE;
+}
+
+
+
 BOOL CStateProcMAP::IsFishingAvailable(void)
 {
 	/* 釣り竿装備＋正面が水タイルかを判定する(docs/battle-redesign.md S4)。
 	   水タイル判定はCInfoCharBase::IsFacingFishingSpot()でサーバー
 	   (RecvProcCHAR_PROC_FISHING/UseSkillFISHING)と共通の判定を使う */
-	DWORD dwMotionType;
-
 	if ((m_pPlayerChar == NULL) || (m_pMap == NULL)) {
 		return FALSE;
 	}
-	dwMotionType = m_pLibInfoItem->GetMotionIDAtack(m_pPlayerChar->m_dwEquipItemIDArmsRight);
-	if ((dwMotionType & INFOITEMARMS_MOTION_FISHING) == 0) {
+	if (IsWeaponFishingRod() == FALSE) {
 		return FALSE;
 	}
 	return m_pPlayerChar->IsFacingFishingSpot(m_pMap);
@@ -2186,8 +2206,10 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 
 		/* a. 戦闘可能マップで正面に攻撃できる敵がいれば最優先で攻撃する
 		   (敵がm_strTalkを持っていても敵優先。連続攻撃中に会話へ化けないよう
-		   押しっぱなし中の再判定はTimerProcAtackRepeat側でBATTLE静止時のみ行う) */
-		if (m_pMap && m_pMap->IsEnableBattle()) {
+		   押しっぱなし中の再判定はTimerProcAtackRepeat側でBATTLE静止時のみ行う)
+		   ただし釣り竿は武器ではないため、装備中は敵が正面にいても攻撃しない
+		   (docs/battle-redesign.md 7章: 釣り竿装備中は攻撃しない) */
+		if ((m_pMap && m_pMap->IsEnableBattle()) && (IsWeaponFishingRod() == FALSE)) {
 			dwEnemyCharID = GetFrontEnemyCharID(m_pPlayerChar->m_dwCharID, m_pPlayerChar->m_nDirection);
 			if (dwEnemyCharID != 0) {
 				StartLocalAtack();
@@ -2227,8 +2249,9 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 			}
 		}
 
-		/* e. 会話・釣り・拾いが無ければ、戦闘可能マップなら空振り攻撃で戦闘状態へ自動遷移する(S2) */
-		if (m_pMap && m_pMap->IsEnableBattle()) {
+		/* e. 会話・釣り・拾いが無ければ、戦闘可能マップなら空振り攻撃で戦闘状態へ自動遷移する(S2)。
+		   釣り竿装備中は武器扱いしないため空振り攻撃も出さない(docs/battle-redesign.md 7章: 釣り竿装備中は攻撃しない) */
+		if ((m_pMap && m_pMap->IsEnableBattle()) && (IsWeaponFishingRod() == FALSE)) {
 			StartLocalAtack();
 			break;
 		}
