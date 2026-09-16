@@ -249,6 +249,18 @@ if (-not (Test-Path $stageGameDir)) {
 }
 Copy-Item (Join-Path $browserOutDir "sbocli-title.*") $stageGameDir -Force
 
+# webroot/game/BGM (個別配信のBGM .ogg。無いと再生時404になるので必ず同期する)
+$browserBgmDir = Join-Path $browserOutDir "BGM"
+if (Test-Path $browserBgmDir) {
+    $stageBgmDir = Join-Path $stageGameDir "BGM"
+    if (-not (Test-Path $stageBgmDir)) {
+        New-Item -ItemType Directory -Force -Path $stageBgmDir | Out-Null
+    }
+    Copy-Item (Join-Path $browserBgmDir "*.*") $stageBgmDir -Force
+} else {
+    Write-Warning "BGM ディレクトリが見つかりません: $browserBgmDir (out/browser-title に BGM が無い?)"
+}
+
 # wss 書換シムを sbocli-title.html の <title>…</title> 直後に注入
 # (HTTPS 配信時に WASM が組み立てる ws://host:port を同一オリジンの
 #  wss://<host>/__sbop2bridge__ に書き換える。IIS が 443 で受けて 18081 にプロキシ)
