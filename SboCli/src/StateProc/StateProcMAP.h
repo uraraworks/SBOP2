@@ -108,6 +108,8 @@ protected:
 	void  AddSystemMsg(BOOL bAddLog, LPCSTR pszMsg, COLORREF cl);                              // システムメッセージを追加
 	void  DefenseOff(void);                                                                    // 防御解除
 	DWORD GetTalkCharID(DWORD dwCharID, int nDirection);                                       // 会話できるキャラIDを取得
+	BOOL  IsEnemyChar(CInfoCharCli *pInfoChar);                                                // NPCで攻撃対象になり得るか判定(docs/battle-redesign.md S3。PCはPvPマップ設定ができるまで敵扱いしない)
+	DWORD GetFrontEnemyCharID(DWORD dwCharID, int nDirection);                                 // 攻撃の届く範囲の正面にいる敵キャラIDを取得(docs/battle-redesign.md S3)
 	void  ProcAutoWalkToEvent(void);                                                           // イベントタイルへの自動歩行処理
 	void  ResetPlayerMoveSyncState(void);                                                      // 自キャラ移動同期状態をリセット
 
@@ -133,6 +135,7 @@ protected:
 	      m_dwLastKeyInput,        // 最後にキー入力した時間
 	      m_dwLastAtackTime;       // 最後に攻撃を開始した時間(無操作5秒でBATTLE解除に使う。docs/battle-redesign.md S2)
 	BOOL  m_bAtackKeyAutoRepeat;   // 今回のXキー押下が攻撃で始まったか(押しっぱなし連続攻撃の対象か。docs/battle-redesign.md S2)
+	BOOL  m_bZKeyDefenseActive;   // 今回のZキー押下が防御を開始したか(離した時にDefenseOffするか付いて行い要求を送るかの判定に使う。docs/battle-redesign.md S3)
 	BOOL  m_bMoveSyncActive;       // Dead Reckoning送信中か
 	int   m_nMoveSyncDirection;    // 最後に送信した移動方向
 	// S3b: 押し予測(REQ_PUSH)送信状態。docs/push-object-redesign.md 4章

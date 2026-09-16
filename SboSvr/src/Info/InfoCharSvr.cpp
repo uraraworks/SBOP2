@@ -584,23 +584,10 @@ BOOL CInfoCharSvr::IsAtackTarget(void)
 	if (m_bStatusInvincible) {
 		goto Exit;
 	}
-	// ホワイトリスト化(docs/battle-redesign.md S1)。PC・戦闘1・戦闘2・
-	// 被弾アニメーションのみを対象にする。容姿コピー(STYLECOPY_PUT/GET)は
-	// 会話で動く仕掛けで攻撃対象外、矢等(MOVEATACK)も対象外(親付きの攻撃側であり
-	// 的にはしない)。この関数は敵NPCのAI索敵・スキル対象探索でも使われるため、
-	// PCも対象に残す(PvP可否はAtackImple側のAttackDecision::IsPvpAttackBlocked()で判定する)。
-	switch (m_nMoveType) {
-	case CHARMOVETYPE_PC:		// プレイヤーキャラ
-	case CHARMOVETYPE_BATTLE1:	// 戦闘1
-	case CHARMOVETYPE_BATTLE2:	// 戦闘2
-	case CHARMOVETYPE_ATACKANIME:	// 攻撃受けるとアニメーション
-		break;
-	default:
-		bRet = FALSE;
-		goto Exit;
-	}
+	// ホワイトリスト判定(PC/BATTLE1/BATTLE2/ATACKANIME)はdocs/battle-redesign.md S3で
+	// Commonの CInfoCharBase::IsAtackTarget() へ移動した(挙動は変えない)。PvP可否は
+	// AtackImple側のAttackDecision::IsPvpAttackBlocked()で判定する。
 
-	bRet = TRUE;
 Exit:
 	return bRet;
 }

@@ -6,6 +6,7 @@
 
 #include "StdAfx.h"
 #include "InfoCharBase.h"
+#include "AtackTargetDecision.h"
 
 // ヘッダ情報
 static LPCSTR s_aszName[] = {
@@ -2233,6 +2234,15 @@ BOOL CInfoCharBase::IsAtackTarget(void)
 	bRet = FALSE;
 
 	if (m_dwHP == 0) {
+		goto Exit;
+	}
+
+	// ホワイトリスト化(docs/battle-redesign.md S1でサーバーに実装、S3でCommonへ移動)。
+	// 判定本体はAtackTargetDecision::IsAtackTargetMoveType()(純粋関数、SboSvrTestで
+	// 単体テスト可能)に切り出した。この関数は敵NPCのAI索敵・スキル対象探索(サーバー)・
+	// 敵検出(クライアントのX/Zキー判定)の両方から使われるため、PCも対象に残す
+	// (PvP可否・PC同士の除外は呼び出し側で判定する。クライアントは別途IsNPC()でPCを除外する)。
+	if (AtackTargetDecision::IsAtackTargetMoveType(m_nMoveType) == false) {
 		goto Exit;
 	}
 

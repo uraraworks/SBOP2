@@ -106,6 +106,7 @@
     <ClCompile Include="TestMoveStateDecision.cpp" />
     <ClCompile Include="TestPushDecision.cpp" />
     <ClCompile Include="TestAttackDecision.cpp" />
+    <ClCompile Include="TestAtackTargetDecision.cpp" />
     <ClCompile Include="TestProxyIpRegistry.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\ProxyIpRegistry.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\ProxyHeaderParser.cpp" />
@@ -114,6 +115,7 @@
     <ClCompile Include="..\SboSvr\src\MainFrame\MoveStateDecision.cpp" />
     <ClCompile Include="..\SboSvr\src\MainFrame\PushDecision.cpp" />
     <ClCompile Include="..\SboSvr\src\MainFrame\AttackDecision.cpp" />
+    <ClCompile Include="..\Common\Info\AtackTargetDecision.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\JsonUtils.cpp" />
     <ClCompile Include="..\SboSvr\src\Platform\SvrPlatform.cpp" />
     <ClCompile Include="..\Common\Platform\PlatformPath.cpp">

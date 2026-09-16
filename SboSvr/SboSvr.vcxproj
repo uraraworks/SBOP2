@@ -180,6 +180,9 @@
     <ClCompile Include="..\Common\Info\InfoAnime.cpp" />
     <ClCompile Include="..\Common\Info\InfoBase.cpp" />
     <ClCompile Include="..\Common\Info\InfoCharBase.cpp" />
+    <ClCompile Include="..\Common\Info\AtackTargetDecision.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\Common\Info\InfoDisable.cpp" />
     <ClCompile Include="..\Common\Info\InfoEfcBalloon.cpp" />
     <ClCompile Include="..\Common\Info\InfoEffect.cpp" />
@@ -388,6 +391,7 @@
     <ClInclude Include="..\Common\Info\InfoAnime.h" />
     <ClInclude Include="..\Common\Info\InfoBase.h" />
     <ClInclude Include="..\common\Info\InfoCharBase.h" />
+    <ClInclude Include="..\Common\Info\AtackTargetDecision.h" />
     <ClInclude Include="..\Common\Info\InfoDisable.h" />
     <ClInclude Include="..\Common\Info\InfoEfcBalloon.h" />
     <ClInclude Include="..\Common\Info\InfoEffect.h" />

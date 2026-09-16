@@ -53,7 +53,7 @@
 |---|---|---|---|---|
 | S1 | 改造クライアント対策としてサーバー側の攻撃検証を先に固める（仕様変更と独立に有効） | サーバーの攻撃間隔・戦闘可能マップチェック・PvP判定・攻撃対象判定のホワイトリスト化（`AttackDecision.h/.cpp` に純粋関数として切り出し、`RecvProcBATTLE_REQ_ATACK`/`AtackImple` から利用） | 未検証だった間隔・マップ・対象がサーバーで拒否できる | `SboSvrTest` にテスト追加（新テストは必ず一度落ちることを確認してから直す） |
 | S2 | ゲージ・溜め攻撃を廃止し即攻撃＋押しっぱなし連続にする | `m_wAtackGauge`/`TimerProcGauge`/溜め攻撃周りの削除、`OnTab`・スマホ「戦闘」ボタン削除、戦闘状態の自動遷移、攻撃の往復2回をクライアント即モーション＋送信1回に（クライアント予測） | Tab無しで敵に攻撃が当たり連打できる、戦闘モードへの明示切替が不要 | 手元サーバー＋ブラウザ版で連続攻撃・自動遷移・復帰を確認 |
-| S3 | X・Z を状況依存の1ボタンにする | `OnX`/`OnXChar`/`OnZ` の判定順（敵優先）の実装 | 正面の敵/会話NPC/水/何もなしで意図した動作になる | 敵と会話NPCが同時にいる配置で優先順を確認 |
+| S3 | X・Z を状況依存の1ボタンにする | `OnX`/`OnXChar`/`OnZ` の判定順（敵優先）の実装 | 正面の敵/会話NPC/水/何もなしで意図した動作になる | 実機確認済み（2026-09-16）。会話は別要因（NPCのセリフがDBに無い）、付いて行きは既存回帰のため別作業 |
 | S4 | 釣りを攻撃から切り離す | 釣り竿装備＋正面水＋X の専用経路に分離 | 戦闘可能マップでも竿装備時は釣りが優先して起きる | 水際・戦闘可能マップの両方で確認 |
 | S5 | 被弾減速とHPバーのフェード表示、攻撃での追従解除 | 移動速度チェックの整合、`LayerMap` のHP表示、追従解除処理 | 被弾後に減速し時間で戻る、HPバーがフェードイン/アウトする、攻撃で追従が切れる | 被弾・放置・攻撃の各シナリオで確認 |
 | 後段 | スキル詠唱時間・クールダウン、弓バランス、PvPマップ設定、戦闘BGMの扱い | 未着手 | — | — |
@@ -82,6 +82,18 @@
 - 廃止した箇所: `TimerProcGauge`・`OnX`のゲージ判定・被弾時ゲージ減少(`OnWindowMsg`の`MAINFRAMEMSG_DAMAGE`)・`LayerMap::DrawGauge`のアタック/ガードゲージ描画・溜め攻撃(`TimerProcChargeAtack`・`m_dwStartChargeTime`・`OnX`/`OnZ`/`OnTab`の`m_bChargeAtack`分岐・`CInfoCharCli::ChgMoveState`/`MotionProc`/`TimerProcMove`/`GetMotionInfo`の`m_bChargeAtack`分岐・`CMainFrame::ChgMoveState`の溜め時2倍待ち)・`OnTab`本体（no-opのスタブ化）・スマホパッドの`padTab`ボタン（`tools/emscripten/sbocli-title.shell.html`、空きマスとして`.pad-slot-empty`に置換）。`SBOCOMMANDID_SUB_CHAR_STATE_CHARGE`の送信元が無くなったため、クライアントの受信ハンドラ(`RecvProcCHAR_STATE_CHARGE`)とサーバー側・`Common`の`m_bChargeAtack`/`m_wAtackGauge`/`m_wDefenseGauge`フィールド自体は実害がないため残した（`SboSvr`/`Common`は本タスクの対象外）。
 - BGM: `OnTab`が唯一`CMainFrame::ChgMoveState(TRUE)`(BGM切替あり)を呼んでいた呼び出し元だったため、OnTab削除に伴い戦闘BGMへの切替は自動的に発生しなくなった（想定通り。個別の分岐削除はしていない）。
 - 未確定/判断した点: 「付いて行き中は従来メッセージ」は元のOnTabの文言をそのまま使わず「付いて行っている時は攻撃できません」に変更した（Tab→攻撃に主語を合わせた）。また、付いて行い中でも従来通りREQ_TAIL(0,FALSE)で追従解除は行う（メッセージ表示と両立、追従解除機能自体は壊さない判断）。連続攻撃の一時停止条件はBATTLE_DEFENSE中を含め「BATTLE状態でなければ何もしない」という単純な条件に統一し、防御解除後に再開したくない場合を考慮して`OnZ`の防御開始時に明示的に`m_bAtackKeyAutoRepeat=FALSE`にした。
+
+### S3 実装メモ（完了、2026-09-16）
+
+- 攻撃対象の判定を共通化: `CInfoCharBase::IsAtackTarget()`(`Common/Info/InfoCharBase.cpp`)へホワイトリスト判定(PC/BATTLE1/BATTLE2/ATACKANIME)を移動した。サーバーの`CInfoCharSvr::IsAtackTarget()`はこれを呼んだ後に無敵チェックを足すだけに簡略化(挙動は変えていない)。クライアントは`CInfoCharCli`がオーバーライドしないため基底のこの判定をそのまま使う。PCも判定には残るため、クライアント側は別途`IsNPC()`でPCを除外する(`CStateProcMAP::IsEnemyChar`)。
+- 攻撃の届く範囲での正面キャラ検出を共通化: `CLibInfoCharBase::GetFrontCharIDTarget()`(`Common/LibInfo/LibInfoCharBase.h/.cpp`)を新設し、サーバーの`CLibInfoCharSvr::GetFrontCharIDTarget`と同じジオメトリ(1歩前の当たり矩形+24pxリーチ、斜めは`GetDrawDirection`で上下左右に分解)にした。サーバー版は`m_paInfoLogin`(ログイン中の全キャラ、PC+NPC)を、新設した基底実装は`m_paInfo`(クライアントが知っているキャラ)を走査する点だけが違う。サーバーは既存の独自実装で上書きするため挙動は変わらない。
+- クライアントの敵判定: `CStateProcMAP::IsEnemyChar(pInfoChar)`(NPCかつ`IsAtackTarget()`)と`GetFrontEnemyCharID(dwCharID, nDirection)`(`GetFrontCharIDTarget`+`IsEnemyChar`)を新設(`StateProcMAP.cpp`)。
+- `OnX`: STAND/BATTLE(静止)を1つのcaseにまとめ、押した瞬間の判定順を a.戦闘可能マップで正面に敵がいれば攻撃 → b.正面に会話できるNPCがいれば会話(`GetTalkCharID`→`OnXChar`) → c.足元にアイテムがあれば拾う(戦闘中でも拾えるようにした) → d.戦闘可能マップなら空振り攻撃 → e.それ以外は従来どおり付いて行い解除、の順にした。押しっぱなし連続攻撃(`m_bAtackKeyAutoRepeat`)はa/dで始まった押下のみで従来どおり。
+- `GetTalkCharID`: 見つけた相手が`IsEnemyChar()`なら0(会話対象なし)を返すようにし、敵は`m_strTalk`を持っていても会話しないようにした(実際にはOnX側の判定順で敵が先に処理されるため通常は到達しないが、`GetFrontCharIDTarget`(リーチ矩形)と`GetFrontCharID`/`GetHitCharID`(1マス)は判定基準が異なるため保険として両方の戻り値に適用)。
+- カウンター越し会話の座標不具合を修正: `GetTalkCharID`のカウンター越しループで`ptFrontMapPos.x = nPosX[nDirection]`のように代入になっていて現在位置を失っていた箇所を、隣の`ptFrontPos`と同様に`+=`(加算)に修正した。カウンターが連続する配置でだけ症状が出るため実機で気付きにくいバグだった。
+- `OnZ`: 離した時の挙動を「押した瞬間の判定」で決めるよう`m_bZKeyDefenseActive`フラグを新設(押した瞬間に防御を開始したかを記録)。押した瞬間は 付いて行き中/座り中/気絶中(`m_dwFrontCharID`及びSTAND/BATTLE以外の`m_nMoveState`)なら不可、正面がPC(`IsNPC()==FALSE`)なら何もしない(離した時にPvPマップ未実装のため従来どおり付いて行い要求を送る)、それ以外は戦闘可能マップなら STAND/BATTLE から自動でBATTLE_DEFENSEへ遷移。離した時は`m_bZKeyDefenseActive`を見て`DefenseOff()`か付いて行い要求かを選ぶ(現在の`m_nMoveState`でなく押した瞬間の意図で決めることで、保持中に状態が変わっても意図がぶれないようにした)。防御開始時も`m_dwLastAtackTime`を更新し、5秒無操作の自動解除タイマーに「最後の戦闘行動」として含めた。`TimerProc`内の別経路(Z押しっぱなし検出でOnZ(TRUE)を毎フレーム呼ぶ処理、防御中のリリース検出でDefenseOff()を直接呼ぶ処理)は変更していない(既存のガード条件だけで両立する)。
+- スマホパッドのA/B表記: `SBOP2_NotifyBattleModeChange`(EM_JS)の判定基準を自キャラの`m_nMoveState`(戦闘系状態)から`m_pMap->IsEnableBattle()`(戦闘可能マップかどうか)に変更した(`StateProcMAP.cpp`のTimerProc、`sbocli-title.shell.html`のコメントも追従)。戦闘モード切替(Tab)がS2で廃止済みのため「状態に関わらずA=防御/B=攻撃」という仕様に合わせた。関数名・EM_JS名・JS側の変数名(`padIsBattleMode`)はそのまま残し、コメントだけ更新した。
+- 未確定/判断した点: 会話イベント(@)専用の窓(`SBOCOMMANDID_SUB_CHAR_REQ_TALKEVENT`)はブラウザ版で未移植の可能性がある(S2時点で確認できなかった)。本タスクでは`OnXChar`の会話イベント分岐自体には手を入れておらず、別作業として切り出す。
 
 ---
 

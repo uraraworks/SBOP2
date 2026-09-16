@@ -528,6 +528,91 @@ Exit:
 	return dwRet;
 }
 
+DWORD CLibInfoCharBase::GetFrontCharIDTarget(
+	DWORD dwCharID,	// [in] 攻撃するキャラID
+	int nDirection/*=-1*/,			// [in] 向き
+	int nXType/*=0*/,				// [in] 未使用(サーバー版(CLibInfoCharSvr)との互換のため残す)
+	PARRAYDWORD padwCharID/*=NULL*/)	// [out] 対象キャラIDを全て取得
+{
+	// docs/battle-redesign.md S3: サーバーのCLibInfoCharSvr::GetFrontCharIDTargetと同じ
+	// 判定(1歩前・斜めは上下左右に分解した攻撃の届く範囲)にして、クライアントの敵検出
+	// (OnX/OnZ)とサーバーの攻撃対象決定を揃える。サーバーは専用実装(m_paInfoLoginを走査)で
+	// 上書きするため、ここはクライアント(m_paInfoを走査)からのみ使われる想定。
+	int i, nCount, nDirectionBack, nDrawDirection;
+	DWORD dwRet;
+	RECT rcFrontRect, rcTmp;
+	PCInfoCharBase pInfoCharSrc, pInfoCharTmp;
+	// 隙間最大16px + Dead Reckoningの座標ズレ分のマージンを見て24px（サーバー版と同じ調整つまみ）。
+	const int nAttackReach = 24;
+
+	dwRet = 0;
+
+	pInfoCharSrc = (PCInfoCharBase)GetPtr(dwCharID);
+	if (pInfoCharSrc == NULL) {
+		goto Exit;
+	}
+	if (nDirection == -1) {
+		nDirection = pInfoCharSrc->m_nDirection;
+	}
+	nDirectionBack = pInfoCharSrc->m_nDirection;
+	pInfoCharSrc->m_nDirection = nDirection;
+	pInfoCharSrc->GetCollisionRectOnce(rcFrontRect);
+	pInfoCharSrc->m_nDirection = nDirectionBack;
+	nDrawDirection = pInfoCharSrc->GetDrawDirection(nDirection);
+	switch (nDrawDirection) {
+	case 0:
+		rcFrontRect.top -= nAttackReach;
+		break;
+	case 1:
+		rcFrontRect.bottom += nAttackReach;
+		break;
+	case 2:
+		rcFrontRect.left -= nAttackReach;
+		break;
+	case 3:
+		rcFrontRect.right += nAttackReach;
+		break;
+	}
+
+	nCount = m_paInfo->size();
+	for (i = 0; i < nCount; i ++) {
+		pInfoCharTmp = m_paInfo->at(i);
+		if (pInfoCharSrc == pInfoCharTmp) {
+			continue;
+		}
+		if (pInfoCharSrc->m_dwMapID != pInfoCharTmp->m_dwMapID) {
+			continue;
+		}
+		if (pInfoCharTmp->m_dwCharID == pInfoCharSrc->m_dwParentCharID) {
+			continue;
+		}
+		if (pInfoCharTmp->m_dwParentCharID != 0) {
+			if (pInfoCharTmp->m_dwParentCharID == pInfoCharSrc->m_dwParentCharID) {
+				continue;
+			}
+		}
+		if (pInfoCharTmp->IsAtackTarget() == FALSE) {
+			continue;
+		}
+
+		// 被弾判定は全身矩形で行い、縦方向の当たり範囲を敵の全身に合わせる
+		pInfoCharTmp->GetPosRect(rcTmp);
+		if (!((rcFrontRect.left <= rcTmp.right) && (rcTmp.left <= rcFrontRect.right) &&
+			(rcFrontRect.top <= rcTmp.bottom) && (rcTmp.top <= rcFrontRect.bottom))) {
+			continue;
+		}
+
+		dwRet = pInfoCharTmp->m_dwCharID;
+		if (padwCharID == NULL) {
+			break;
+		}
+		padwCharID->push_back(dwRet);
+	}
+
+Exit:
+	return dwRet;
+}
+
 BOOL CLibInfoCharBase::IsPushBlockChar(PCInfoCharBase pChar, int nDirection)
 {
 	return GetPushBlockCharID(pChar, nDirection) != 0;

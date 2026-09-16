@@ -213,6 +213,9 @@
     <ClCompile Include="..\common\Info\InfoCharBase.cpp">
       <Filter>Source Files\Common\Info</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\Info\AtackTargetDecision.cpp">
+      <Filter>Source Files\Common\Info</Filter>
+    </ClCompile>
     <ClCompile Include="..\Common\Info\InfoDisable.cpp">
       <Filter>Source Files\Common\Info</Filter>
     </ClCompile>
@@ -708,6 +711,9 @@
       <Filter>Header Files\Common No. 1\Info No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\common\Info\InfoCharBase.h">
+      <Filter>Header Files\Common No. 1\Info No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Info\AtackTargetDecision.h">
       <Filter>Header Files\Common No. 1\Info No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\Info\InfoDisable.h">

@@ -264,6 +264,7 @@ $sources = @(
     # Info
     "Common/Info/InfoAccount.cpp",
     "Common/Info/InfoCharBase.cpp",
+    "Common/Info/AtackTargetDecision.cpp",
     "SboCli/src/Info/InfoCharCli.cpp",
     # LibInfo
     "Common/LibInfo/LibInfoAccount.cpp",

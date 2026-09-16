@@ -269,6 +269,9 @@
     <ClCompile Include="..\Common\Info\InfoAccount.cpp" />
     <ClCompile Include="..\Common\Info\InfoEfcBalloon.cpp" />
     <ClCompile Include="..\Common\Info\InfoCharBase.cpp" />
+    <ClCompile Include="..\Common\Info\AtackTargetDecision.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\Common\Info\InfoDisable.cpp" />
     <ClCompile Include="..\Common\Info\InfoEffect.cpp" />
     <ClCompile Include="..\Common\Info\InfoFileList.cpp" />

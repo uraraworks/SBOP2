@@ -104,9 +104,11 @@ EM_JS(void, SBOP2_PostAdminPickupParts, (unsigned int mapId, int cellX, int cell
 	}
 });
 
-// 自キャラが戦闘モードか（CHARMOVESTATE_BATTLE系）の変化を JS へ通知する。
+// 現在のマップが戦闘可能マップ(IsEnableBattle())かどうかの変化を JS へ通知する。
 // JS 側 (sbocli-title.shell.html) の window.sbop2OnBattleModeChange(bool) がバーチャルパッドの
-// ボタン表記（戦闘モード中: 盾/剣 ⇔ それ以外: ✕/○）を切り替える。
+// ボタン表記（戦闘可能マップ中: 盾/剣 ⇔ それ以外: ✕/○）を切り替える。
+// docs/battle-redesign.md S3: 戦闘モード切替(Tab)廃止に伴い、自キャラの状態でなく
+// マップの戦闘可否だけで判定する(状態に関わらずA=防御/B=攻撃を表示するため)。
 EM_JS(void, SBOP2_NotifyBattleModeChange, (int bBattle), {
 	if (typeof window.sbop2OnBattleModeChange === 'function') {
 		window.sbop2OnBattleModeChange(!!bBattle);
@@ -296,6 +298,7 @@ CStateProcMAP::CStateProcMAP()
 	m_dwLastTimeMoveSyncSend = 0;
 	m_dwLastAtackTime		= 0;
 	m_bAtackKeyAutoRepeat	= FALSE;
+	m_bZKeyDefenseActive	= FALSE;
 	m_bMoveSyncActive			= FALSE;
 	m_nMoveSyncDirection		= -1;
 	m_bPushSyncActive			= FALSE;
@@ -780,22 +783,10 @@ BOOL CStateProcMAP::TimerProc(void)
 	m_pPlayerChar = m_pMgrData->GetPlayerChar();
 
 	{
-		// 自キャラの戦闘モード状態（サーバーからの状態変更・気絶・マップ移動等でも追従するよう毎フレーム判定）が
-		// 変化した時だけ JS へ通知する
-		BOOL bIsBattleMode = FALSE;
-		if (m_pPlayerChar) {
-			switch (m_pPlayerChar->m_nMoveState) {
-			case CHARMOVESTATE_BATTLE:
-			case CHARMOVESTATE_BATTLEMOVE:
-			case CHARMOVESTATE_BATTLEATACK:
-			case CHARMOVESTATE_BATTLEATACK_WAIT:
-			case CHARMOVESTATE_BATTLE_DEFENSE:
-				bIsBattleMode = TRUE;
-				break;
-			default:
-				break;
-			}
-		}
+		// docs/battle-redesign.md S3: 戦闘モード切替(Tab)は既に廃止済みで「戦闘状態か」という
+		// 概念はもう無いため、パッドのA/B表記は自キャラの状態でなく「戦闘可能マップかどうか」
+		// (m_pMap->IsEnableBattle())だけで決める(マップ切替等でも追従するよう毎フレーム判定)
+		BOOL bIsBattleMode = (m_pMap && m_pMap->IsEnableBattle()) ? TRUE : FALSE;
 		if ((int)bIsBattleMode != m_nLastNotifiedBattleMode) {
 			m_nLastNotifiedBattleMode = (int)bIsBattleMode;
 			SBOP2_NotifyBattleModeChange(bIsBattleMode);
@@ -2092,7 +2083,7 @@ Exit:
 BOOL CStateProcMAP::OnX(BOOL bDown)
 {
 	BOOL bRet, bResult;
-	DWORD dwFrontCharID;
+	DWORD dwFrontCharID, dwEnemyCharID;
 	PCInfoItem pInfoItem;
 	CPacketCHAR_REQ_PUTGET PacketCHAR_REQ_PUTGET;
 	CPacketCHAR_REQ_TAIL PacketCHAR_REQ_TAIL;
@@ -2135,12 +2126,30 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 
 	switch (m_pPlayerChar->m_nMoveState) {
 	case CHARMOVESTATE_STAND:			// 立ち
+	case CHARMOVESTATE_BATTLE:			// 戦闘中(静止)
+		/* docs/battle-redesign.md S3: 押した瞬間の正面判定で
+		   a.攻撃(敵優先) → b.会話 → c.拾い → d.空振り攻撃 → e.従来どおり(付いて行き解除)
+		   の順に決定する。STAND/BATTLE(静止)は同じ優先順で扱う */
+
+		/* a. 戦闘可能マップで正面に攻撃できる敵がいれば最優先で攻撃する
+		   (敵がm_strTalkを持っていても敵優先。連続攻撃中に会話へ化けないよう
+		   押しっぱなし中の再判定はTimerProcAtackRepeat側でBATTLE静止時のみ行う) */
+		if (m_pMap && m_pMap->IsEnableBattle()) {
+			dwEnemyCharID = GetFrontEnemyCharID(m_pPlayerChar->m_dwCharID, m_pPlayerChar->m_nDirection);
+			if (dwEnemyCharID != 0) {
+				StartLocalAtack();
+				break;
+			}
+		}
+
+		/* b. 正面に話せる相手(敵以外のNPC)がいれば会話する */
 		dwFrontCharID = GetTalkCharID(m_pPlayerChar->m_dwCharID, m_pPlayerChar->m_nDirection);
 		bResult = OnXChar(dwFrontCharID);
 		if (bResult) {
 			break;
 		}
 
+		/* c. 足元にアイテムがあれば拾う(戦闘状態(BATTLE静止)でも拾える) */
 		{
 			RECT rcFeet;
 			/* 足元の当たり判定矩形を HALF_TILE 広げてアイテムを探す（向き非依存） */
@@ -2158,21 +2167,16 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 			}
 		}
 
-		/* 会話・拾いが無ければ、戦闘可能マップなら即攻撃して戦闘状態へ自動遷移する(S2) */
+		/* d. 会話・拾いが無ければ、戦闘可能マップなら空振り攻撃で戦闘状態へ自動遷移する(S2) */
 		if (m_pMap && m_pMap->IsEnableBattle()) {
 			StartLocalAtack();
 			break;
 		}
 
+		/* e. それ以外は従来どおり付いて行き解除 */
 		if ((m_pPlayerChar->m_dwFrontCharID) || (m_pPlayerChar->m_dwTailCharID)) {
 			PacketCHAR_REQ_TAIL.Make(m_pPlayerChar->m_dwCharID, 0, FALSE);
 			m_pSock->Send(&PacketCHAR_REQ_TAIL);
-		}
-		break;
-
-	case CHARMOVESTATE_BATTLE:			// 戦闘中(静止)
-		if (m_pMap && m_pMap->IsEnableBattle()) {
-			StartLocalAtack();
 		}
 		break;
 
@@ -2189,8 +2193,9 @@ Exit:
 
 BOOL CStateProcMAP::OnZ(BOOL bDown)
 {
-	BOOL bRet, bResult, bStateBattle;
+	BOOL bRet, bResult;
 	DWORD dwCharID;
+	PCInfoCharCli pInfoCharFront;
 	CPacketCHAR_REQ_TAIL PacketCHAR_REQ_TAIL;
 	CPacketCHAR_STATE Packet;
 
@@ -2204,38 +2209,63 @@ BOOL CStateProcMAP::OnZ(BOOL bDown)
 		goto Exit;
 	}
 	m_dwLastKeyInput = timeGetTime();
-	bStateBattle = m_pPlayerChar->IsStateBattle();
-	if (bDown) {
-		if (bStateBattle == FALSE) {
-			goto Exit;
-		}
-		bResult = m_pPlayerChar->IsChgWait();
-		if (bResult) {
-			goto Exit;
-		}
-		if (m_pPlayerChar->m_nMoveState != CHARMOVESTATE_BATTLE) {
-			goto Exit;
-		}
-		Packet.Make(m_pPlayerChar->m_dwCharID, CHARMOVESTATE_BATTLE_DEFENSE);
-		m_pSock->Send(&Packet);
-		m_pPlayerChar->SetChgWait(TRUE);
-		bRet = TRUE;
 
-		/* 防御中は押しっぱなし連続攻撃を止める(docs/battle-redesign.md S2) */
-		m_bAtackKeyAutoRepeat = FALSE;
+	if (bDown == FALSE) {
+		/* docs/battle-redesign.md S3: 離した時は押した瞬間の判定(m_bZKeyDefenseActive)に
+		   従って防御解除するか付いて行い要求を送るか決める(現在の状態でなく押下時の判定を使う。
+		   戦闘状態の自動タイムアウト等で押下中に状態が変わっても意図が変わらないようにするため) */
+		if (m_bZKeyDefenseActive) {
+			m_bZKeyDefenseActive = FALSE;
+			DefenseOff();
+		} else {
+			dwCharID = m_pLibInfoChar->GetFrontCharID(m_pPlayerChar->m_dwCharID, m_pPlayerChar->m_nDirection);
+			PacketCHAR_REQ_TAIL.Make(m_pPlayerChar->m_dwCharID, dwCharID, TRUE);
+			m_pSock->Send(&PacketCHAR_REQ_TAIL);
+		}
+		bRet = TRUE;
 		goto Exit;
 	}
 
-	if (bStateBattle == FALSE) {
-		dwCharID = m_pLibInfoChar->GetFrontCharID(m_pPlayerChar->m_dwCharID, m_pPlayerChar->m_nDirection);
-		PacketCHAR_REQ_TAIL.Make(m_pPlayerChar->m_dwCharID, dwCharID, TRUE);
-		m_pSock->Send(&PacketCHAR_REQ_TAIL);
-	} else {
-		/* 防御解除 */
-		DefenseOff();
+	/* 押した瞬間: 付いて行き中・座り中・気絶中は不可 */
+	if (m_pPlayerChar->m_dwFrontCharID) {
+		goto Exit;
+	}
+	switch (m_pPlayerChar->m_nMoveState) {
+	case CHARMOVESTATE_STAND:		// 立ち
+	case CHARMOVESTATE_BATTLE:		// 戦闘中(静止)
+		break;
+	default:
+		/* 座り中・気絶中・攻撃モーション中・既に防御中等はここで弾く */
+		goto Exit;
+	}
+	bResult = m_pPlayerChar->IsChgWait();
+	if (bResult) {
+		goto Exit;
 	}
 
+	/* 正面にPCがいれば防御でなく付いて行き優先(PvPマップ設定は未実装のため常にPC優先。
+	   離した時にGetFrontCharIDで改めて対象を取り直してREQ_TAILを送る) */
+	dwCharID = m_pLibInfoChar->GetFrontCharID(m_pPlayerChar->m_dwCharID, m_pPlayerChar->m_nDirection);
+	pInfoCharFront = (PCInfoCharCli)m_pLibInfoChar->GetPtr(dwCharID);
+	if ((pInfoCharFront != NULL) && (pInfoCharFront->IsNPC() == FALSE)) {
+		goto Exit;
+	}
+
+	/* それ以外は戦闘可能マップなら防御開始(STAND/BATTLEから自動で戦闘状態へ入る) */
+	if ((m_pMap == NULL) || (m_pMap->IsEnableBattle() == FALSE)) {
+		goto Exit;
+	}
+
+	Packet.Make(m_pPlayerChar->m_dwCharID, CHARMOVESTATE_BATTLE_DEFENSE);
+	m_pSock->Send(&Packet);
+	m_pPlayerChar->SetChgWait(TRUE);
+	m_bZKeyDefenseActive = TRUE;
+	/* 防御開始も「最後の戦闘行動」として自動解除タイマーを更新する(docs/battle-redesign.md S3) */
+	m_dwLastAtackTime = timeGetTime();
+	/* 防御中は押しっぱなし連続攻撃を止める(docs/battle-redesign.md S2) */
+	m_bAtackKeyAutoRepeat = FALSE;
 	bRet = TRUE;
+
 Exit:
 	return bRet;
 }
@@ -4599,6 +4629,45 @@ void CStateProcMAP::DefenseOff(void)
 
 
 
+BOOL CStateProcMAP::IsEnemyChar(PCInfoCharCli pInfoChar)
+{
+	/* docs/battle-redesign.md S3: 敵 = NPCで、攻撃対象の移動種別ホワイトリスト
+	   (CInfoCharBase::IsAtackTarget、PC/BATTLE1/BATTLE2/ATACKANIME)に合致し、HP≧1。
+	   PCはPvPマップ設定ができるまで敵扱いしない(常にIsNPC()==FALSEで除外される) */
+	if (pInfoChar == NULL) {
+		return FALSE;
+	}
+	if (pInfoChar->IsNPC() == FALSE) {
+		return FALSE;
+	}
+	if (pInfoChar->IsAtackTarget() == FALSE) {
+		return FALSE;
+	}
+	return TRUE;
+}
+
+
+
+DWORD CStateProcMAP::GetFrontEnemyCharID(DWORD dwCharID, int nDirection)
+{
+	/* docs/battle-redesign.md S3: 攻撃の届く範囲(サーバーのGetFrontCharIDTargetと同じ、
+	   斜めは上下左右に分解)で正面の敵を探す */
+	DWORD dwTargetCharID;
+	PCInfoCharCli pInfoChar;
+
+	dwTargetCharID = m_pLibInfoChar->GetFrontCharIDTarget(dwCharID, nDirection);
+	if (dwTargetCharID == 0) {
+		return 0;
+	}
+	pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(dwTargetCharID);
+	if (IsEnemyChar(pInfoChar) == FALSE) {
+		return 0;
+	}
+	return dwTargetCharID;
+}
+
+
+
 DWORD CStateProcMAP::GetTalkCharID(DWORD dwCharID, int nDirection)
 {
 	BOOL bContinue;
@@ -4612,6 +4681,12 @@ DWORD CStateProcMAP::GetTalkCharID(DWORD dwCharID, int nDirection)
 
 	dwRet = m_pLibInfoChar->GetFrontCharID(dwCharID);
 	if (dwRet != 0) {
+		/* docs/battle-redesign.md S3: 敵は会話の対象にしない(敵優先はOnX側の判定順で
+		   保証済みだが、GetFrontCharIDTarget(攻撃の届く範囲)とGetFrontCharID(1マス)は
+		   判定基準が違うため、ここでも念のため敵を除外する) */
+		if (IsEnemyChar((PCInfoCharCli)m_pLibInfoChar->GetPtr(dwRet))) {
+			return 0;
+		}
 		return dwRet;
 	}
 	pInfoChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(dwCharID);
@@ -4643,12 +4718,18 @@ DWORD CStateProcMAP::GetTalkCharID(DWORD dwCharID, int nDirection)
 		if (bContinue == FALSE) {
 			break;
 		}
-		ptFrontMapPos.x = nPosX[nDirection];
-		ptFrontMapPos.y = nPosY[nDirection];
+		/* カウンター越しに奥へ1マス進める。従来は代入(=)になっていて現在位置を失っていた
+		   不具合を修正し、他の書き方(ptFrontPos)と同様に加算(+=)にする
+		   (docs/battle-redesign.md S3。カウンター越し会話の座標不具合) */
+		ptFrontMapPos.x += nPosX[nDirection];
+		ptFrontMapPos.y += nPosY[nDirection];
 		ptFrontPos.x += (nPosX[nDirection] * 2);
 		ptFrontPos.y += (nPosY[nDirection] * 2);
 	}
 	dwRet = m_pLibInfoChar->GetHitCharID(dwCharID, ptFrontPos.x, ptFrontPos.y);
+	if (IsEnemyChar((PCInfoCharCli)m_pLibInfoChar->GetPtr(dwRet))) {
+		return 0;
+	}
 
 	return dwRet;
 }

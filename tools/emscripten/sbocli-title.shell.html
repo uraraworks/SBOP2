@@ -951,7 +951,9 @@
           <div class="pad-stick-knob" id="padStickKnob"></div>
         </div>
         <!-- A/B/Space/座る/向き固定 ボタン(旧Tab枠は空き)（右側グリッド 3列×2段）。
-             A(Z)/B(X) の表記は戦闘モード/ウィンドウ開閉に応じて JS (sbop2OnBattleModeChange / sbop2OnWindowStateChange) が切り替える。 -->
+             A(Z)/B(X) の表記は戦闘可能マップかどうか/ウィンドウ開閉に応じて JS
+             (sbop2OnBattleModeChange / sbop2OnWindowStateChange) が切り替える
+             (docs/battle-redesign.md S3。自キャラの状態でなくマップの戦闘可否で判定する)。 -->
         <div class="pad-buttons">
           <button id="padA" type="button">
             <span class="pad-btn-icon">✕</span><span class="pad-btn-label">戻る</span><span class="pad-btn-key">Z</span>
@@ -2155,9 +2157,11 @@
       }
 
       // ---- ボタン表記の役割化 ----
-      // 戦闘モード中(かつウィンドウ非表示): Z=防御/X=攻撃、それ以外(普段のモード or ウィンドウ表示中): Z=戻る/X=決定。
+      // 戦闘可能マップ中(かつウィンドウ非表示): Z=防御/X=攻撃、それ以外(戦闘不可マップ or ウィンドウ表示中): Z=戻る/X=決定。
+      // 自キャラが実際に戦闘状態かどうかは見ない(docs/battle-redesign.md S3。戦闘可能マップなら
+      // 状態に関わらずA=防御/B=攻撃を表示する)。
       // MgrWindow::SetActive() の変化時に EM_JS SBOP2_NotifyWindowStateChange (ウィンドウ開閉) が、
-      // CStateProcMAP::TimerProc() の変化時に EM_JS SBOP2_NotifyBattleModeChange (戦闘モード) が呼ぶ。
+      // CStateProcMAP::TimerProc() の変化時に EM_JS SBOP2_NotifyBattleModeChange (戦闘可能マップかどうか) が呼ぶ。
       // 2つの状態を保持し、1つの描画関数 (updatePadButtonLabels) にまとめて表記を決める。
       var padAIcon  = pad.querySelector('#padA .pad-btn-icon');
       var padALabel = pad.querySelector('#padA .pad-btn-label');

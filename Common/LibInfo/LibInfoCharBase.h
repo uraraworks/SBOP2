@@ -48,6 +48,7 @@ public:
 	BOOL	IsScreenInside(PCInfoCharBase pCharBase, PCInfoCharBase pCharTarget);	// 画面内にいるかチェック
 
 	virtual	DWORD	GetFrontCharID(DWORD dwCharID, int nDirection = -1);	// 一歩前のキャラIDを取得
+	virtual	DWORD	GetFrontCharIDTarget(DWORD dwCharID, int nDirection = -1, int nXType = 0, PARRAYDWORD padwCharID = NULL);	// 攻撃の届く範囲の一歩前キャラIDを取得(斜めは上下左右に分解。docs/battle-redesign.md S3。サーバー(CLibInfoCharSvr)は専用実装で上書きする)
 	virtual	DWORD	GetHitCharID(DWORD dwCharIDBase, int x, int y);	// 指定座標に当たるキャラIDを取得
 	virtual	void	SetPtr(DWORD dwCharID, PCInfoCharBase pChar);	// キャラ情報を更新
 			PCInfoBase	GetPtr(int nNo);	// キャラ情報を取得

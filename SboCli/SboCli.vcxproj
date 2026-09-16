@@ -218,6 +218,9 @@ xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul&#x0D;&#x0A;mt.exe -nologo -manife
     <ClCompile Include="..\Common\Info\InfoAnime.cpp" />
     <ClCompile Include="..\Common\Info\InfoBase.cpp" />
     <ClCompile Include="..\common\Info\InfoCharBase.cpp" />
+    <ClCompile Include="..\common\Info\AtackTargetDecision.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\Common\Info\InfoDisable.cpp" />
     <ClCompile Include="..\Common\Info\InfoEfcBalloon.cpp" />
     <ClCompile Include="..\Common\Info\InfoEffect.cpp" />
@@ -422,6 +425,7 @@ xcopy /y /d /i "font" "$(OutDir)font" 2&gt;nul&#x0D;&#x0A;mt.exe -nologo -manife
     <ClInclude Include="..\Common\Info\InfoAnime.h" />
     <ClInclude Include="..\Common\Info\InfoBase.h" />
     <ClInclude Include="..\common\Info\InfoCharBase.h" />
+    <ClInclude Include="..\common\Info\AtackTargetDecision.h" />
     <ClInclude Include="..\Common\Info\InfoDisable.h" />
     <ClInclude Include="..\Common\Info\InfoEfcBalloon.h" />
     <ClInclude Include="..\Common\Info\InfoEffect.h" />
