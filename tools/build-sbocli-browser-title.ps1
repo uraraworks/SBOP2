@@ -648,8 +648,12 @@ try {
     )
 
     # (2) プレースホルダをアセットハッシュ表＋表示バージョン情報の埋め込みJSに置換する
+    # .data の展開後実サイズ（バイト）。ローディング表示の分母に使う
+    # （file_packager の setStatus total は .data.br の圧縮後 Content-Length なので使えない）。
+    $dataSizeBytes = (Get-Item $dataFile).Length
     $injectJs = 'window.__SBOP2_ASSET_HASHES__={"sbocli-title.wasm":"' + $wasmHash + '","sbocli-title.data":"' + $dataHash + '"};' +
-        'window.SBOP2_BUILD={display:"' + $displayVersion + '",build:"' + $buildStamp + '"};'
+        'window.SBOP2_BUILD={display:"' + $displayVersion + '",build:"' + $buildStamp + '"};' +
+        'window.__SBOP2_DATA_SIZE__=' + $dataSizeBytes + ';'
     # JSコメントはHTML圧縮時に消えるため、保持されるmeta要素を置換する。
     $placeholder = '<meta\s+name\s*=\s*["'']?sbop2-build-inject["'']?\s*/?>'
     if ([regex]::IsMatch($htmlText, $placeholder)) {
