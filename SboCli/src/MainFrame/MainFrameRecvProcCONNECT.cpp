@@ -20,11 +20,16 @@
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/em_js.h>
 
-EM_JS(void, SBOP2_RequestWebAdminSession, (const char *pszAccount, const char *pszPassword), {
-	if (typeof window.SBOP2RequestWebAdminSession !== 'function') {
-		return;
+// ブラウザ版: 端末トークンが無効と返された。ログインコード方式(docs/login-code-auth-plan.md)の
+// 端末情報を localStorage から消し、再入力してもらうためアカウントページへ移動する。
+EM_JS(void, SBOP2_HandleTokenExpired, (), {
+	try {
+		window.localStorage.removeItem('sbop2_device_token');
+		window.localStorage.removeItem('sbop2_device_account');
+	} catch (e) {
+		/* ignore */
 	}
-	window.SBOP2RequestWebAdminSession(UTF8ToString(pszAccount), UTF8ToString(pszPassword));
+	window.location.href = '/account/?reason=expired';
 });
 #endif
 
@@ -51,9 +56,6 @@ void CMainFrame::RecvProcCONNECT_RES_LOGIN(PBYTE pData)
 		// 入力内容とチェック状態を保存
 		pWindow = m_pMgrWindow->GetLoginWindow();
 		if (pWindow) {
-#if defined(__EMSCRIPTEN__)
-			SBOP2_RequestWebAdminSession(pWindow->GetAccount(), pWindow->GetPassword());
-#endif
 			pWindow->Save();
 		}
 
@@ -80,6 +82,14 @@ void CMainFrame::RecvProcCONNECT_RES_LOGIN(PBYTE pData)
 		m_pMgrData->SetDisableLogin(TRUE);
 		m_pMgrData->SaveIniData();
 		PushSDLQuitEvent();
+		break;
+
+	case LOGINRES_NG_TOKEN: // 端末トークン無効
+#if defined(__EMSCRIPTEN__)
+		SBOP2_HandleTokenExpired();
+#else
+		DisConnectProc(DISCONNECTID_LOGIN);
+#endif
 		break;
 	}
 }

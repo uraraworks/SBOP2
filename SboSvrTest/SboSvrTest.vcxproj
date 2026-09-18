@@ -49,7 +49,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.\;..\SboSvr\src;..\SboSvr\src\Web;..\SboSvr\src\Web\Handlers;..\Common;..\Common\myLib;..\Common\Lib;..\SboSockLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\SboSvr\src;..\SboSvr\src\Web;..\SboSvr\src\Web\Handlers;..\Common;..\Common\myLib;..\Common\Lib;..\Common\Packet;..\Common\Packet\CONNECT;..\SboSockLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
@@ -74,7 +74,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.\;..\SboSvr\src;..\SboSvr\src\Web;..\SboSvr\src\Web\Handlers;..\Common;..\Common\myLib;..\Common\Lib;..\SboSockLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\SboSvr\src;..\SboSvr\src\Web;..\SboSvr\src\Web\Handlers;..\Common;..\Common\myLib;..\Common\Lib;..\Common\Packet;..\Common\Packet\CONNECT;..\SboSockLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
@@ -111,6 +111,11 @@
     <ClCompile Include="TestLoginCode.cpp" />
     <ClCompile Include="TestAccountAuthStore.cpp" />
     <ClCompile Include="TestIpRateLimiter.cpp" />
+    <ClCompile Include="TestPacketConnectLoginToken.cpp" />
+    <ClCompile Include="..\Common\Packet\PacketBase.cpp" />
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN_TOKEN.cpp" />
+    <ClCompile Include="..\Common\SBOGlobal.cpp" />
+    <ClCompile Include="..\Common\myLib\myString.cpp" />
     <ClCompile Include="..\SboSvr\src\Account\LoginCode.cpp" />
     <ClCompile Include="..\SboSvr\src\Account\AccountAuthStore.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\IpRateLimiter.cpp" />

@@ -20,14 +20,74 @@
 #include "MainFrame.h"
 #include "PasswordHash.h"
 #include "../Web/ProxyIpRegistry.h"
+#include "Account/LoginCode.h"
+#include "Account/AccountAuthStore.h"
 
 void CMainFrame::RecvProcCONNECT(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID)
 {
 	switch (byCmdSub) {
 	case SBOCOMMANDID_SUB_CONNECT_REQ_LOGIN:	RecvProcCONNECT_REQ_LOGIN(pData, dwSessionID);	break;	// ログイン要求
+	case SBOCOMMANDID_SUB_CONNECT_REQ_LOGIN_TOKEN:	RecvProcCONNECT_REQ_LOGIN_TOKEN(pData, dwSessionID);	break;	// 端末トークンログイン要求
 	case SBOCOMMANDID_SUB_CONNECT_REQ_PLAY:	RecvProcCONNECT_REQ_PLAY(pData, dwSessionID);	break;	// ゲーム開始要求
 	case SBOCOMMANDID_SUB_CONNECT_KEEPALIVE:	RecvProcCONNECT_KEEPALIVE(pData, dwSessionID);	break;	// 生存確認通知
 	}
+}
+
+/// @brief アカウントが確定した後のログイン共通処理。
+/// @details 既存の RecvProcCONNECT_REQ_LOGIN から、アカウント特定(新規作成含む)より
+///          後ろの処理(拒否判定・ログイン済み判定・成功時の更新・CHAR_MOTION/RES_LOGIN送信)
+///          を切り出したもの。順序・副作用(拒否時のIP追加、ログ内容)は元のコードのまま。
+void CMainFrame::CompleteLogin(
+	DWORD dwSessionID,			// [in] セッションID
+	CInfoAccount *pInfoAccount,	// [in] 確定済みのアカウント(非NULL)
+	int nResult,				// [in] ここまでの結果(通常はLOGINRES_OK)
+	BOOL bDisable,				// [in] MAC/IPでの拒否判定結果
+	DWORD dwAddr,				// [in] IPアドレス(ネットワークバイトオーダー)
+	unsigned int nAddrHost,		// [in] ↑をホストバイトオーダーへ直したもの
+	LPCSTR pszMacAddr)			// [in] ログ表示用のMACアドレス文字列
+{
+	PCInfoAccount pInfo = (PCInfoAccount)pInfoAccount;
+	CPacketCONNECT_RES_LOGIN PacketRes;
+	CPacketCHAR_MOTION PacketCHAR_MOTION;
+
+	if (nResult == LOGINRES_OK) {
+		// 拒否？
+		if (bDisable || pInfo->m_bDisable) {
+			nResult = LOGINRES_NG_DISABLE;
+			m_pLog->Write("ログイン拒否 dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
+					dwSessionID,
+					(nAddrHost >> 24) & 0xFF, (nAddrHost >> 16) & 0xFF, (nAddrHost >> 8) & 0xFF, nAddrHost & 0xFF,
+					pszMacAddr,
+					pInfo->m_strAccount.GetUtf8Pointer());
+			// IPアドレスで拒否しておく
+			m_pLibInfoDisable->AddIP(dwAddr);
+		// 使用中？
+		} else if (pInfo->m_dwSessionID != 0) {
+			nResult = LOGINRES_NG_LOGIN;
+		} else {
+			time_t timeTmp;
+
+			pInfo->m_dwLoginCount ++;
+			pInfo->m_dwSessionID = dwSessionID;
+			time(&timeTmp);
+			pInfo->m_dwTimeLastLogin = (DWORD)timeTmp;
+			pInfo->m_strLastMacAddr	= pszMacAddr;
+			// m_dwIPはホストバイトオーダーで保持する(ServerSessionsHandler/
+			// CharacterItemHandlerの表示ロジックがホストバイトオーダー前提のため)
+			pInfo->m_dwIP = nAddrHost;
+
+			m_pLog->Write("ログイン dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
+					dwSessionID,
+					(nAddrHost >> 24) & 0xFF, (nAddrHost >> 16) & 0xFF, (nAddrHost >> 8) & 0xFF, nAddrHost & 0xFF,
+					pszMacAddr,
+					pInfo->m_strAccount.GetUtf8Pointer());
+		}
+		PacketCHAR_MOTION.Make(0, 0, m_pLibInfoMotion);
+		m_pSock->SendTo(dwSessionID, &PacketCHAR_MOTION);
+	}
+
+	PacketRes.Make(nResult, pInfo->m_dwAccountID);
+	m_pSock->SendTo(dwSessionID, &PacketRes);
 }
 
 void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
@@ -134,44 +194,78 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 		}
 	}
 
-	if (nResult == LOGINRES_OK) {
-		// 拒否？
-		if (bDisable || pInfoAccount->m_bDisable) {
-			nResult = LOGINRES_NG_DISABLE;
-			m_pLog->Write("ログイン拒否 dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
-					dwSessionID,
-					(nAddrHost >> 24) & 0xFF, (nAddrHost >> 16) & 0xFF, (nAddrHost >> 8) & 0xFF, nAddrHost & 0xFF,
-					strTmp.GetUtf8Pointer(),
-					pInfoAccount->m_strAccount.GetUtf8Pointer());
-			// IPアドレスで拒否しておく
-			m_pLibInfoDisable->AddIP(dwAddr);
-		// 使用中？
-		} else if (pInfoAccount->m_dwSessionID != 0) {
-			nResult = LOGINRES_NG_LOGIN;
-		} else {
-			time_t timeTmp;
+	CompleteLogin(dwSessionID, (CInfoAccount *)pInfoAccount, nResult, bDisable, dwAddr, nAddrHost, strTmp.GetUtf8Pointer());
+}
 
-			pInfoAccount->m_dwLoginCount ++;
-			pInfoAccount->m_dwSessionID = dwSessionID;
-			time(&timeTmp);
-			pInfoAccount->m_dwTimeLastLogin = (DWORD)timeTmp;
-			pInfoAccount->m_strLastMacAddr	= strTmp;
-			// m_dwIPはホストバイトオーダーで保持する(ServerSessionsHandler/
-			// CharacterItemHandlerの表示ロジックがホストバイトオーダー前提のため)
-			pInfoAccount->m_dwIP = nAddrHost;
+void CMainFrame::RecvProcCONNECT_REQ_LOGIN_TOKEN(PBYTE pData, DWORD dwSessionID)
+{
+	int nResult;
+	BOOL bDisable;
+	PCInfoAccount pInfoAccount;
+	CPacketCONNECT_REQ_LOGIN_TOKEN Packet;
+	CPacketCONNECT_RES_LOGIN PacketRes;
+	CmyString strTmp;
+	DWORD dwAddr;			// IPアドレス(ネットワークバイトオーダー)
+	unsigned int nAddrHost;	// ↑をホストバイトオーダーへ直したもの(オクテット取り出し用)
+	unsigned int dwAccountID;
+	std::string strTokenUtf8;
 
-			m_pLog->Write("ログイン dwSessionID:%u [%d.%d.%d.%d][%s][%s]",
-					dwSessionID,
-					(nAddrHost >> 24) & 0xFF, (nAddrHost >> 16) & 0xFF, (nAddrHost >> 8) & 0xFF, nAddrHost & 0xFF,
-					strTmp.GetUtf8Pointer(),
-					pInfoAccount->m_strAccount.GetUtf8Pointer());
+	Packet.Set(pData);
+
+	nResult = LOGINRES_NG_TOKEN;
+	pInfoAccount = NULL;
+
+	// トークンをログに出さない。形式(16進64文字)を先に検証し、
+	// 不正な入力ではDBを引かない。
+	strTokenUtf8 = (LPCSTR)Packet.m_strDeviceToken.GetUtf8Pointer();
+	if ((strTokenUtf8.size() == LoginCode::kDeviceTokenBytes * 2) &&
+	    (strTokenUtf8.find_first_not_of("0123456789abcdefABCDEF") == std::string::npos)) {
+		CAccountAuthStore Store;
+		std::string strTokenHash = LoginCode::HashDeviceToken(strTokenUtf8);
+		dwAccountID = 0;
+		if (Store.TouchDevice(strTokenHash, (long)time(NULL), dwAccountID)) {
+			pInfoAccount = m_pLibInfoAccount->GetPtr((DWORD)dwAccountID);
+			if (pInfoAccount != NULL) {
+				nResult = LOGINRES_OK;
+			}
 		}
-		PacketCHAR_MOTION.Make(0, 0, m_pLibInfoMotion);
-		m_pSock->SendTo(dwSessionID, &PacketCHAR_MOTION);
 	}
 
-	PacketRes.Make(nResult, pInfoAccount->m_dwAccountID);
-	m_pSock->SendTo(dwSessionID, &PacketRes);
+	if (pInfoAccount == NULL) {
+		// アカウントが見つからない場合はここで打ち切る(REQ_LOGINと異なり自動作成はしない)
+		m_pLog->Write("端末トークンログイン失敗 dwSessionID:%u", dwSessionID);
+		PacketRes.Make(LOGINRES_NG_TOKEN, 0);
+		m_pSock->SendTo(dwSessionID, &PacketRes);
+		return;
+	}
+
+	// IN_ADDR.S_un はWindows固有のメンバ名のため使わず、生の DWORD で扱う
+	dwAddr = m_pSock->GetIPAddress(dwSessionID);
+
+	// ブラウザ版はWebSocketBridgeが同一プロセス内で127.0.0.1として繋ぎ直すため、
+	// ここで見えるIPは常にloopbackになってしまう。loopbackの場合に限り、
+	// ブリッジが登録した「接続元ポート→実IP」対応表を引いて実IPに差し替える。
+	if (ProxyIpRegistry::IsLoopbackIPv4(dwAddr)) {
+		DWORD dwPeerPort = m_pSock->GetPeerPort(dwSessionID);
+		unsigned long dwRealIp = 0;
+		if ((dwPeerPort != 0) &&
+		    ProxyIpRegistry::Lookup(static_cast<unsigned short>(dwPeerPort), dwRealIp)) {
+			dwAddr = dwRealIp;
+		}
+	}
+
+	nAddrHost = ntohl(dwAddr);
+
+	// MACアドレスは既存のREQ_LOGINと同じくダミー扱い(トークンログインでは意味を持たない)
+	strTmp.Format(
+		"%02X-%02X-%02X-%02X-%02X-%02X",
+		Packet.m_byMacAddr[0], Packet.m_byMacAddr[1], Packet.m_byMacAddr[2],
+		Packet.m_byMacAddr[3], Packet.m_byMacAddr[4], Packet.m_byMacAddr[5]);
+	// 拒否されているか判定(REQ_LOGINと同じ判定)
+	bDisable = m_pLibInfoDisable->IsDisable((LPCSTR)strTmp);
+	bDisable |= m_pLibInfoDisable->IsDisableIP(dwAddr);
+
+	CompleteLogin(dwSessionID, (CInfoAccount *)pInfoAccount, nResult, bDisable, dwAddr, nAddrHost, strTmp.GetUtf8Pointer());
 }
 
 void CMainFrame::RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID)

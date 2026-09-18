@@ -14,6 +14,34 @@
 #include "MgrWindow.h"
 #include "MainFrame.h"
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/em_js.h>
+
+namespace {
+
+// ブラウザ版: localStorage の端末トークン(sbop2_device_token)を読み出す。
+// 無ければ空文字を返す。戻り値は Emscripten ヒープ上の malloc バッファ(呼び出し元が free すること)。
+// トークンの値は SDL_Log 等に出さないこと。
+EM_JS(char *, SBOP2_ReadDeviceTokenFromBrowser, (), {
+	var token = "";
+	try {
+		token = window.localStorage.getItem("sbop2_device_token") || "";
+	} catch (e) {
+		token = "";
+	}
+	var nLen = lengthBytesUTF8(token) + 1;
+	var pBuf = _malloc(nLen);
+	stringToUTF8(token, pBuf, nLen);
+	return pBuf;
+});
+
+// ブラウザ版: 端末トークンが無いのでアカウントページへ移動する。
+EM_JS(void, SBOP2_GoToAccountPage, (), {
+	window.location.href = '/account/';
+});
+
+}
+#endif // __EMSCRIPTEN__
 
 void CMainFrame::RecvProcVERSION(BYTE byCmdSub, PBYTE pData)
 {
@@ -41,6 +69,24 @@ void CMainFrame::RecvProcVERSION_RES_VERSIONCHECK(PBYTE pData)
 		if (pWindow == NULL) {
 			break;
 		}
+#if defined(__EMSCRIPTEN__)
+		// ブラウザ版: ログインコード方式。端末トークンがあれば REQ_LOGIN_TOKEN を送る。
+		// 無ければアカウントページへ移動する(旧 REQ_LOGIN は送らない)。
+		{
+			CPacketCONNECT_REQ_LOGIN_TOKEN PacketLOGIN_TOKEN;
+			char *pszDeviceToken = SBOP2_ReadDeviceTokenFromBrowser();
+			if ((pszDeviceToken != NULL) && (pszDeviceToken[0] != '\0')) {
+				ZeroMemory(abyTmp, sizeof(abyTmp));
+				PacketLOGIN_TOKEN.Make(pszDeviceToken, abyTmp);
+				m_pSock->Send(&PacketLOGIN_TOKEN);
+			} else {
+				SBOP2_GoToAccountPage();
+			}
+			if (pszDeviceToken != NULL) {
+				free(pszDeviceToken);
+			}
+		}
+#else
 		nCount = MacAddr.GetCount();
 		for (int i = 0; i < nCount; i++) {
 			ZeroMemory(abyTmp, sizeof(abyTmp));
@@ -51,6 +97,7 @@ void CMainFrame::RecvProcVERSION_RES_VERSIONCHECK(PBYTE pData)
 		}
 		PacketLOGIN.Make(pWindow->GetAccount(), pWindow->GetPassword(), abyTmp);
 		m_pSock->Send(&PacketLOGIN);
+#endif
 		break;
 
 	case VERSIONCHECKRES_NG_VERSION: // バージョン不一致

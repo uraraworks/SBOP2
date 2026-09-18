@@ -427,6 +427,21 @@
     safeSet(ACCOUNT_KEY, account);
   }
 
+  // 新しいトークンを保存する前に、それまでのトークンがあれば失効させる(別アカウントへの切り替え)。
+  // 失効に失敗しても(通信エラー等)そのまま新しいトークンの保存へ進む。
+  function switchDeviceToken(token, account) {
+    var oldToken = safeGet(TOKEN_KEY);
+    function finish() {
+      saveDeviceToken(token, account);
+      window.location.href = '/';
+    }
+    if (oldToken && oldToken !== token) {
+      apiPost('/api/account/logout', { deviceToken: oldToken }).catch(function () { /* ignore */ }).then(finish);
+    } else {
+      finish();
+    }
+  }
+
   // ============================================================
   // パスワード自動生成
   // ============================================================
@@ -592,8 +607,7 @@
     apiPost('/api/account/redeem', { code: state.issuedCode, label: buildDeviceLabel() })
       .then(function (result) {
         if (result.ok && result.data && result.data.deviceToken) {
-          saveDeviceToken(result.data.deviceToken, result.data.account);
-          window.location.href = '/';
+          switchDeviceToken(result.data.deviceToken, result.data.account);
         } else {
           showMessage(errorMessageFor(result.status, result.data), 'warn');
           playBtn.disabled = !savedCheck.checked;
@@ -621,8 +635,7 @@
       .then(function (result) {
         submitBtn.disabled = false;
         if (result.ok && result.data && result.data.deviceToken) {
-          saveDeviceToken(result.data.deviceToken, result.data.account);
-          window.location.href = '/';
+          switchDeviceToken(result.data.deviceToken, result.data.account);
         } else {
           showMessage(errorMessageFor(result.status, result.data), 'warn');
         }
@@ -742,6 +755,7 @@
 
   function init() {
     var params = new URLSearchParams(window.location.search);
+    var isSwitchMode = params.get('mode') === 'switch';
     if (params.get('reason') === 'expired') {
       showMessage('ログインコードが無効になりました。もう一度入力してください。', 'warn');
     }
@@ -755,7 +769,13 @@
     apiPost('/api/account/me', { deviceToken: token })
       .then(function (result) {
         if (result.ok && result.data && result.data.account) {
-          showLoggedIn(result.data.account);
+          if (isSwitchMode) {
+            // ログイン中でもコード入力タブを表示し、切り替え操作をできるようにする。
+            showSection(authView);
+            showMessage('現在「' + result.data.account + '」としてログイン中です。別のアカウントのコードを入力すると、この端末のログインが切り替わります。', 'info');
+          } else {
+            showLoggedIn(result.data.account);
+          }
         } else {
           if (result.status === 401) {
             safeRemove(TOKEN_KEY);

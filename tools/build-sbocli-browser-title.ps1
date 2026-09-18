@@ -252,6 +252,7 @@ $sources = @(
     "Common/Packet/CONNECT/PacketCONNECT_REQ_PLAY.cpp",
     "Common/Packet/CONNECT/PacketCONNECT_RES_PLAY.cpp",
     "Common/Packet/CONNECT/PacketCONNECT_KEEPALIVE.cpp",
+    "Common/Packet/CONNECT/PacketCONNECT_REQ_LOGIN_TOKEN.cpp",
     # Packet (ACCOUNT)
     "Common/Packet/ACCOUNT/PacketACCOUNT_REQ_ACCOUNTINFO.cpp",
     "Common/Packet/ACCOUNT/PacketACCOUNT_RES_ACCOUNTINFO.cpp",

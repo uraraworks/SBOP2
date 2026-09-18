@@ -32,12 +32,16 @@ public:
 	virtual BOOL	TimerProc(void);
 
 	void	SetFocusIndex(int nIndex);
-	void	UpdateBrowserDom(const RECT &rcAccount, const RECT &rcPassword, const RECT &rcCheck, const RECT &rcConnect);
+	void	UpdateBrowserDom(void);
 	void	HideBrowserDom(void);
 	void	SetAccountFromBrowser(LPCSTR pszText);
 	void	SetPasswordFromBrowser(LPCSTR pszText);
 	void	SetSavePasswordFromBrowser(BOOL bCheck);
 	void	SubmitFromBrowser(void);
+	// ログインコード方式(docs/login-code-auth-plan.md): JS 側が /api/account/me の結果を
+	// 見て、端末トークンが有効かどうかをここへ通知する。無効なまま接続要求が来たときは
+	// OnConnect() 側で弾く(旧「アカウント名が空なら何もしない」判定の置き換え)。
+	void	SetHasTokenFromBrowser(BOOL bHasToken);
 
 public:
 	CmyString	m_strAccount,
@@ -53,10 +57,12 @@ private:
 	};
 	BOOL	m_bEnabled;
 	BOOL	m_bSavePassword;
+	BOOL	m_bHasToken;	// 端末トークンが有効か(JS からの通知。既定は FALSE)
 	int		m_nFocusIndex;
 
 	void	MakeWindow(void);
 	void	OnConnect(void);
+	void	UpdateWindowSizeForToken(void);	// トークン有無に応じてウィンドウの見た目のサイズを調整
 } CWindowLOGINBrowser, *PCWindowLOGINBrowser;
 
 #endif // __EMSCRIPTEN__

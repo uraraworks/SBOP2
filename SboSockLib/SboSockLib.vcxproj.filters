@@ -377,6 +377,9 @@
     <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN.cpp">
       <Filter>Source Files\Common\Packet\CONNECT</Filter>
     </ClCompile>
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN_TOKEN.cpp">
+      <Filter>Source Files\Common\Packet\CONNECT</Filter>
+    </ClCompile>
     <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_PLAY.cpp">
       <Filter>Source Files\Common\Packet\CONNECT</Filter>
     </ClCompile>
@@ -695,6 +698,9 @@
       <Filter>Header Files\Common No. 1\Packet No. 1\CONNECT No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN.h">
+      <Filter>Header Files\Common No. 1\Packet No. 1\CONNECT No. 1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN_TOKEN.h">
       <Filter>Header Files\Common No. 1\Packet No. 1\CONNECT No. 1</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_PLAY.h">

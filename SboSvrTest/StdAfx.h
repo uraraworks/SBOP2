@@ -21,3 +21,11 @@
 // GlobalDefine.h が map を前提にしているため、SboSvr と同じ形で用意する
 #include <map>
 using namespace std;
+
+// Common/Packet 配下のパケットクラス(PacketBase.cpp 等)や SBOGlobal.cpp が
+// SAFE_DELETE_ARRAY マクロ・CmyString・CopyMemoryRenew 等を前提にしているため、
+// SboSvr の StdAfx.h と同じ並びでここに読み込んでおく(このプロジェクトはPCH
+// 無効のため、単なるヘッダインクルードとして働く)。
+#include "GlobalDefine.h"
+#include "myString.h"
+#include "SBOGlobal.h"

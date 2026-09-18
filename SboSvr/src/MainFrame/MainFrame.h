@@ -32,6 +32,7 @@ class CLibInfoSystem;
 class CLibInfoSkill;
 class CLibInfoTalkEvent;
 class CInfoCharBase;
+class CInfoAccount;
 
 // ソケット通知の種別
 
@@ -154,8 +155,14 @@ private:
 	// 受信処理(MainFrameRecvProcCONNECT.cpp)
 	void	RecvProcCONNECT(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	// 接続系
 	void	RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID);	// ログイン要求
+	void	RecvProcCONNECT_REQ_LOGIN_TOKEN(PBYTE pData, DWORD dwSessionID);	// 端末トークンログイン要求
 	void	RecvProcCONNECT_REQ_PLAY(PBYTE pData, DWORD dwSessionID);	// ゲーム開始要求
 	void	RecvProcCONNECT_KEEPALIVE(PBYTE pData, DWORD dwSessionID);	// 生存確認通知
+	// アカウントが確定した後のログイン共通処理(REQ_LOGIN / REQ_LOGIN_TOKEN で共有)。
+	// 呼び出し時点の nResult が LOGINRES_OK のときだけ拒否/ログイン済み/成功判定を行い、
+	// 最後に必ず CHAR_MOTION(成功時のみ)と RES_LOGIN を送る。
+	void	CompleteLogin(DWORD dwSessionID, CInfoAccount *pInfoAccount, int nResult,
+				BOOL bDisable, DWORD dwAddr, unsigned int nAddrHost, LPCSTR pszMacAddr);
 
 	// 受信処理(MainFrameRecvProcACCOUNT.cpp)
 	void	RecvProcACCOUNT(BYTE byCmdSub, PBYTE pData, DWORD dwSessionID);	// アカウント系

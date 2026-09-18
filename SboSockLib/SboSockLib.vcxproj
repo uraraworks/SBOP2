@@ -203,6 +203,7 @@
     <ClCompile Include="..\Common\Packet\CHAR\PacketCHAR_TEXTEFFECT.cpp" />
     <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_KEEPALIVE.cpp" />
     <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN.cpp" />
+    <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN_TOKEN.cpp" />
     <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_PLAY.cpp" />
     <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_LOGIN.cpp" />
     <ClCompile Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_PLAY.cpp" />
@@ -435,6 +436,7 @@
     <ClInclude Include="..\Common\Packet\Command.h" />
     <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_KEEPALIVE.h" />
     <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN.h" />
+    <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_LOGIN_TOKEN.h" />
     <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_REQ_PLAY.h" />
     <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_LOGIN.h" />
     <ClInclude Include="..\Common\Packet\CONNECT\PacketCONNECT_RES_PLAY.h" />

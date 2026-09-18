@@ -212,6 +212,54 @@
       pointer-events: none;
     }
 
+    /* ---- ログインコード方式(docs/login-code-auth-plan.md)への移行 ----
+       旧ID/PW入力欄は削除せず残す(S4で削除予定)が、非表示・操作不可にする。 */
+    #loginLabelAccount, #loginLabelPassword, #loginAccount, #loginPassword, #loginSaveWrap, #loginConnect {
+      display: none !important;
+    }
+
+    .login-action-area {
+      position: absolute;
+      inset: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .login-action-button {
+      pointer-events: auto;
+      margin: 0;
+      min-height: 34px;
+      border: 1px solid #9b6a38;
+      border-radius: 6px;
+      background: linear-gradient(#fff0cf, #e7be80);
+      color: #111;
+      font: 13px/1.2 "Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", sans-serif;
+      cursor: pointer;
+    }
+
+    .login-action-primary {
+      min-height: 42px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .login-action-button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .login-hint-text {
+      pointer-events: none;
+      font-size: 11px;
+      line-height: 1.5;
+      color: #111;
+      text-align: center;
+      text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
     .login-label {
       position: absolute;
       left: 0;
@@ -950,6 +998,15 @@
               <span>パスワードを記録する</span>
             </label>
             <button id="loginConnect" class="login-button" type="button">接続</button>
+
+            <!-- ログインコード方式(docs/login-code-auth-plan.md)のボタン群。
+                 文言・表示/非表示は JS (/api/account/me の結果)が制御する。 -->
+            <div id="loginActionArea" class="login-action-area">
+              <button id="loginPrimaryButton" class="login-action-button login-action-primary" type="button">はじめる</button>
+              <div id="loginHintText" class="login-hint-text">ログインコードをお持ちの方・はじめての方はこちら</div>
+              <button id="loginSwitchButton" class="login-action-button" type="button" hidden>別のアカウントで遊ぶ</button>
+              <button id="loginManageButton" class="login-action-button" type="button" hidden>アカウント管理</button>
+            </div>
           </div>
         </div>
         <div id="charNameOverlay" class="login-overlay" hidden>
@@ -1167,6 +1224,10 @@
     const loginSaveWrap = document.getElementById('loginSaveWrap');
     const loginSaveInput = document.getElementById('loginSave');
     const loginConnectButton = document.getElementById('loginConnect');
+    const loginPrimaryButton = document.getElementById('loginPrimaryButton');
+    const loginHintText = document.getElementById('loginHintText');
+    const loginSwitchButton = document.getElementById('loginSwitchButton');
+    const loginManageButton = document.getElementById('loginManageButton');
     const charNameOverlay = document.getElementById('charNameOverlay');
     const charNamePanel = document.getElementById('charNamePanel');
     const charNameInput = document.getElementById('charNameInput');
@@ -1459,16 +1520,92 @@
       Module.ccall(name, null, argTypes, args);
     }
 
-    function focusLoginControl(focusIndex) {
-      if (focusIndex === 0 && document.activeElement !== loginAccountInput) {
-        loginAccountInput.focus({ preventScroll: true });
-      } else if (focusIndex === 1 && document.activeElement !== loginPasswordInput) {
-        loginPasswordInput.focus({ preventScroll: true });
-      } else if (focusIndex === 2 && document.activeElement !== loginSaveInput) {
-        loginSaveInput.focus({ preventScroll: true });
-      } else if (focusIndex === 3 && document.activeElement !== loginConnectButton) {
-        loginConnectButton.focus({ preventScroll: true });
+    // ログインコード方式(docs/login-code-auth-plan.md)のタイトルパネル。
+    // 端末トークンの有無・アカウント名は /api/account/me の結果で決まる(sbop2CheckDeviceToken)。
+    let sbop2LoginHasToken = false;
+    let loginOverlayShown = false;
+
+    function sbop2SetLoginButtonsForToken(hasToken, accountName) {
+      if (hasToken) {
+        loginPrimaryButton.textContent = accountName ? (accountName + ' としてはじめる') : 'はじめる';
+        loginHintText.hidden = true;
+        loginSwitchButton.hidden = false;
+        loginManageButton.hidden = false;
+      } else {
+        loginPrimaryButton.textContent = 'はじめる';
+        loginHintText.hidden = false;
+        loginSwitchButton.hidden = true;
+        loginManageButton.hidden = true;
       }
+    }
+
+    loginPrimaryButton.addEventListener('click', () => {
+      if (sbop2LoginHasToken) {
+        // C++ 側が「トークンなし」のままだと OnConnect が何もしないので、直前に伝える。
+        callLoginBridge('SBOP2_BrowserLoginSetHasToken', ['number'], [1]);
+        callLoginBridge('SBOP2_BrowserLoginConnect', [], []);
+      } else {
+        window.location.href = '/account/';
+      }
+    });
+    loginSwitchButton.addEventListener('click', () => {
+      window.location.href = '/account/?mode=switch';
+    });
+    loginManageButton.addEventListener('click', () => {
+      window.location.href = '/account/';
+    });
+
+    // ページ読込時(ランタイム初期化後)に一度だけ呼ぶ。通信エラー時は表示を変えない。
+    function sbop2CheckDeviceToken() {
+      let token = null;
+      let storedAccount = null;
+      try {
+        token = window.localStorage.getItem('sbop2_device_token');
+        storedAccount = window.localStorage.getItem('sbop2_device_account');
+      } catch (e) {
+        token = null;
+        storedAccount = null;
+      }
+
+      if (!token) {
+        sbop2LoginHasToken = false;
+        sbop2SetLoginButtonsForToken(false, '');
+        callLoginBridge('SBOP2_BrowserLoginSetHasToken', ['number'], [0]);
+        return;
+      }
+
+      // トークンがある前提でいったん表示する(通信中・通信エラー時もこの表示を維持する)。
+      sbop2LoginHasToken = true;
+      sbop2SetLoginButtonsForToken(true, storedAccount || '');
+      callLoginBridge('SBOP2_BrowserLoginSetHasToken', ['number'], [1]);
+
+      fetch('/api/account/me', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deviceToken: token })
+      }).then((response) => {
+        if (response.status === 401) {
+          try {
+            window.localStorage.removeItem('sbop2_device_token');
+            window.localStorage.removeItem('sbop2_device_account');
+          } catch (e) { /* ignore */ }
+          sbop2LoginHasToken = false;
+          sbop2SetLoginButtonsForToken(false, '');
+          callLoginBridge('SBOP2_BrowserLoginSetHasToken', ['number'], [0]);
+          return null;
+        }
+        return response.ok ? response.json() : null;
+      }).then((data) => {
+        if (!data || !data.account) {
+          return;
+        }
+        try {
+          window.localStorage.setItem('sbop2_device_account', data.account);
+        } catch (e) { /* ignore */ }
+        sbop2SetLoginButtonsForToken(true, data.account);
+      }).catch(() => {
+        // 通信エラー時は表示を変えない(既に「トークンあり」表示のまま)。
+      });
     }
 
     window.SBOP2HideLoginOverlay = function() {
@@ -1478,12 +1615,21 @@
         focusGameInput(true);
       }
       loginOverlay.hidden = true;
+      loginOverlayShown = false;
     };
 
     window.SBOP2UpdateLoginOverlay = function(state) {
       if (!state || !state.visible) {
         window.SBOP2HideLoginOverlay();
         return;
+      }
+
+      // sbop2CheckDeviceToken はログインウィンドウ生成前に走ることがあり、その時点の
+      // SetHasToken 通知は C++ 側で捨てられる。ウィンドウが描画を始めたら改めて伝える。
+      // (描画中の再入を避けるため次のタスクで呼ぶ)
+      if (state.hasToken !== sbop2LoginHasToken) {
+        const hasToken = sbop2LoginHasToken;
+        setTimeout(() => callLoginBridge('SBOP2_BrowserLoginSetHasToken', ['number'], [hasToken ? 1 : 0]), 0);
       }
 
       const canvasRect = canvasElement.getBoundingClientRect();
@@ -1493,59 +1639,23 @@
       loginOverlay.hidden = false;
       const overlayOffsetX = Math.round(-22 * scaleX);
       const overlayOffsetY = Math.round(-22 * scaleY);
-      const fontSizeLabel = Math.max(11, Math.round(12 * scaleY));
-      const fontSizeInput = Math.max(11, Math.round(12 * scaleY));
-      const fontSizeCheck = Math.max(10, Math.round(11 * scaleY));
-      const fontSizeButton = Math.max(11, Math.round(12 * scaleY));
 
       loginPanel.style.left = ((state.windowX * scaleX) + overlayOffsetX) + 'px';
       loginPanel.style.top = ((state.windowY * scaleY) + overlayOffsetY) + 'px';
       loginPanel.style.width = (state.windowW * scaleX) + 'px';
       loginPanel.style.height = (state.windowH * scaleY) + 'px';
 
-      loginLabelAccount.style.left = Math.round(18 * scaleX) + 'px';
-      loginLabelAccount.style.top = Math.round(6 * scaleY) + 'px';
-      loginLabelPassword.style.left = Math.round(18 * scaleX) + 'px';
-      loginLabelPassword.style.top = Math.round(32 * scaleY) + 'px';
-      loginLabelAccount.style.fontSize = fontSizeLabel + 'px';
-      loginLabelPassword.style.fontSize = fontSizeLabel + 'px';
+      loginPrimaryButton.disabled = !state.enabled;
+      loginSwitchButton.disabled = !state.enabled;
+      loginManageButton.disabled = !state.enabled;
 
-      loginAccountInput.style.left = Math.round((state.accountX - state.windowX - 8) * scaleX) + 'px';
-      loginAccountInput.style.top = Math.round((state.accountY - state.windowY - 12) * scaleY) + 'px';
-      loginAccountInput.style.width = (state.accountW * scaleX) + 'px';
-      loginAccountInput.style.height = (state.accountH * scaleY) + 'px';
-      loginAccountInput.style.fontSize = fontSizeInput + 'px';
-
-      loginPasswordInput.style.left = Math.round((state.passwordX - state.windowX - 8) * scaleX) + 'px';
-      loginPasswordInput.style.top = Math.round((state.passwordY - state.windowY - 12) * scaleY) + 'px';
-      loginPasswordInput.style.width = (state.passwordW * scaleX) + 'px';
-      loginPasswordInput.style.height = (state.passwordH * scaleY) + 'px';
-      loginPasswordInput.style.fontSize = fontSizeInput + 'px';
-
-      loginSaveWrap.style.left = Math.round((state.checkX - state.windowX - 4) * scaleX) + 'px';
-      loginSaveWrap.style.top = Math.round((state.checkY - state.windowY - 10) * scaleY) + 'px';
-      loginSaveWrap.style.fontSize = fontSizeCheck + 'px';
-
-      loginConnectButton.style.left = Math.round((state.buttonX - state.windowX - 10) * scaleX) + 'px';
-      loginConnectButton.style.top = Math.round((state.buttonY - state.windowY - 10) * scaleY) + 'px';
-      loginConnectButton.style.width = (state.buttonW * scaleX) + 'px';
-      loginConnectButton.style.height = (state.buttonH * scaleY) + 'px';
-      loginConnectButton.style.fontSize = fontSizeButton + 'px';
-
-      if (loginAccountInput.value !== state.account) {
-        loginAccountInput.value = state.account;
+      // 表示された直後の1回だけ主ボタンへフォーカスする(以後は毎回奪わない)。
+      if (!loginOverlayShown) {
+        loginOverlayShown = true;
+        if (state.enabled) {
+          loginPrimaryButton.focus({ preventScroll: true });
+        }
       }
-      if (loginPasswordInput.value !== state.password) {
-        loginPasswordInput.value = state.password;
-      }
-      loginSaveInput.checked = !!state.savePassword;
-
-      loginAccountInput.disabled = !state.enabled;
-      loginPasswordInput.disabled = !state.enabled;
-      loginSaveInput.disabled = !state.enabled;
-      loginConnectButton.disabled = !state.enabled;
-
-      focusLoginControl(state.focusIndex);
     };
 
     let charNameOverlayShown = false;
@@ -1632,7 +1742,6 @@
     });
     loginConnectButton.addEventListener('click', () => {
       callLoginBridge('SBOP2_BrowserLoginConnect', [], []);
-      window.SBOP2RequestWebAdminSession(loginAccountInput.value, loginPasswordInput.value);
     });
 
     for (const element of [loginAccountInput, loginPasswordInput]) {
@@ -1640,7 +1749,6 @@
         if (event.key === 'Enter') {
           event.preventDefault();
           callLoginBridge('SBOP2_BrowserLoginConnect', [], []);
-          window.SBOP2RequestWebAdminSession(loginAccountInput.value, loginPasswordInput.value);
         }
       });
     }
@@ -2065,6 +2173,7 @@
         ensurePumpFallback();
         updateCanvasProbe();
         markStartOverlayReady();
+        sbop2CheckDeviceToken();
         // ?admin=1 埋め込み時: postMessage が届く前に初期値(-1=未接続)を 0(free モード)にして枠を有効化
         try {
           if (new URLSearchParams(window.location.search).get('admin') === '1') {

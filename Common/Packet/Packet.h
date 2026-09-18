@@ -19,6 +19,7 @@
 #include "CONNECT/PacketCONNECT_REQ_PLAY.h"	// ゲーム開始要求
 #include "CONNECT/PacketCONNECT_RES_PLAY.h"	// ゲーム開始応答
 #include "CONNECT/PacketCONNECT_KEEPALIVE.h"	// 生存確認通知
+#include "CONNECT/PacketCONNECT_REQ_LOGIN_TOKEN.h"	// 端末トークンログイン要求
 #include "ACCOUNT/PacketACCOUNT_REQ_ACCOUNTINFO.h"	// アカウント系:アカウント情報要求
 #include "ACCOUNT/PacketACCOUNT_RES_ACCOUNTINFO.h"	// アカウント情報応答
 #include "ACCOUNT/PacketACCOUNT_REQ_MAKECHAR.h"	// キャラ作成要求
