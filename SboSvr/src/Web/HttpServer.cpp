@@ -179,22 +179,33 @@ std::string ExtractHostName(const char *pszHost)
 class CRedirectHandler : public IApiHandler
 {
 public:
-        explicit CRedirectHandler(const std::string &location)
-                : m_location(location)
+        // bPreserveQuery: true の場合、リクエストのクエリ文字列(? 以降)を
+        // そのまま Location に付け足す(/account?reason=expired -> /account/?reason=expired 等)。
+        explicit CRedirectHandler(const std::string &location, bool bPreserveQuery = false)
+                : m_location(location), m_bPreserveQuery(bPreserveQuery)
         {
         }
 
-        virtual void Handle(const HttpRequest &, HttpResponse &response)
+        virtual void Handle(const HttpRequest &request, HttpResponse &response)
         {
+                std::string strLocation = m_location;
+                if (m_bPreserveQuery) {
+                        size_t nQueryPos = request.path.find('?');
+                        if (nQueryPos != std::string::npos) {
+                                strLocation += request.path.substr(nQueryPos);
+                        }
+                }
+
                 response.statusLine = "HTTP/1.1 302 Found";
                 response.body.clear();
-                response.SetHeader("Location", m_location);
+                response.SetHeader("Location", strLocation);
                 response.SetHeader("Content-Type", "text/plain; charset=utf-8");
                 response.SetHeader("Content-Length", "0");
         }
 
 private:
         std::string m_location;
+        bool m_bPreserveQuery;
 };
 
 class CPlayerRootRedirectHandler : public IApiHandler
@@ -1458,6 +1469,16 @@ void CHttpServer::RegisterDefaultHandlers()
 
                 std::unique_ptr<IApiHandler> adminStaticHandler(new CStaticFileHandler(webRoot, L"index.html", "/admin/"));
                 m_router.RegisterPrefix("GET", "/admin/", std::move(adminStaticHandler));
+
+                // ログインコード方式のアカウントページ(docs/login-code-auth-plan.md S2)。
+                // /account?reason=expired のようにクエリ文字列を伴う場合があるため、
+                // リダイレクトではそれを保持したまま /account/ へ渡す。
+                std::unique_ptr<IApiHandler> accountRedirectHandler(new CRedirectHandler("/account/", true));
+                m_router.Register("GET", "/account", std::move(accountRedirectHandler));
+
+                std::unique_ptr<IApiHandler> accountStaticHandler(
+                    new CStaticFileHandler(webRoot + L"\\account", L"index.html", "/account/"));
+                m_router.RegisterPrefix("GET", "/account/", std::move(accountStaticHandler));
         }
 
         m_bHandlersRegistered = true;

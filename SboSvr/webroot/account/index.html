@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>SBOP2 アカウント</title>
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f5efe4;
+    --bg-glow: #fbf5ea;
+    --panel: #fffaf2;
+    --text: #4a3b2c;
+    --subtle: #6b5844;
+    --accent: #a85940;
+    --accent-text: #fffaf2;
+    --border: #e2d5bf;
+    --danger-bg: #fbe4de;
+    --danger-border: #d98a72;
+    --danger-text: #8a3223;
+    --ok-bg: #e9f1de;
+    --ok-border: #9ec27f;
+    --ok-text: #3f6a2b;
+    --info-bg: #f3e9d6;
+    --info-border: #cbb488;
+    --info-text: #6b4f2b;
+    --field-bg: #fffefb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at top, var(--bg-glow) 0%, var(--bg) 45%),
+      var(--bg);
+    color: var(--text);
+    font-family: "Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", "Segoe UI", sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 20px 12px 60px;
+  }
+  .wrap {
+    width: 100%;
+    max-width: 480px;
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+  h1 {
+    font-size: 18px;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    margin: 6px 0 0;
+    text-align: center;
+  }
+  .brand-sub {
+    text-align: center;
+    color: var(--subtle);
+    font-size: 12px;
+    margin: 0 0 6px;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 20px 60px rgba(120, 96, 60, 0.12);
+  }
+  .message {
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .message.info { background: var(--info-bg); border: 1px solid var(--info-border); color: var(--info-text); }
+  .message.warn { background: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger-text); }
+  .message.ok { background: var(--ok-bg); border: 1px solid var(--ok-border); color: var(--ok-text); }
+  .tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    flex: 1 1 auto;
+    min-width: 96px;
+    background: var(--field-bg);
+    border: 1px solid var(--border);
+    color: var(--subtle);
+    border-radius: 10px;
+    padding: 10px 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .tab-btn.active {
+    background: #f1ded1;
+    border-color: var(--accent);
+    color: var(--text);
+    font-weight: 700;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    color: var(--subtle);
+    margin: 10px 0 4px;
+  }
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    background: var(--field-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font: 16px/1.3 "Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", sans-serif;
+    padding: 10px 12px;
+    outline: none;
+  }
+  input:focus { border-color: var(--accent); }
+  .code-input {
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: Consolas, monospace;
+  }
+  .field-note {
+    font-size: 11px;
+    color: var(--subtle);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .row input { flex: 1 1 auto; }
+  button {
+    font: 14px/1 "Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", sans-serif;
+    cursor: pointer;
+  }
+  .btn {
+    border: 1px solid var(--border);
+    background: var(--field-bg);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary {
+    width: 100%;
+    margin-top: 14px;
+    background: var(--accent);
+    border: none;
+    color: var(--accent-text);
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 12px;
+  }
+  .btn-primary:disabled {
+    opacity: 1;
+    cursor: not-allowed;
+    background: #ddd0bd;
+    color: #8a7a63;
+  }
+  .btn-small {
+    padding: 8px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .warn-box {
+    background: var(--info-bg);
+    border: 1px solid var(--info-border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: var(--info-text);
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  .code-display {
+    font-family: Consolas, "SF Mono", Menlo, monospace;
+    font-size: 26px;
+    letter-spacing: 0.06em;
+    text-align: center;
+    background: var(--field-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 8px;
+    margin: 10px 0;
+    user-select: all;
+    word-break: break-all;
+    color: var(--text);
+  }
+  .code-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 10px 0;
+  }
+  .save-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text);
+    margin-top: 12px;
+  }
+  .save-check input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+  }
+  .save-check label {
+    display: inline;
+    margin: 0;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .account-name {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  a.link-btn {
+    display: block;
+    text-align: center;
+    color: var(--accent);
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>SBOP2 アカウント</h1>
+  <p class="brand-sub">ログインコードでこの端末を登録します</p>
+
+  <div id="message" class="message info" hidden></div>
+
+  <section id="loggedInView" class="panel" hidden>
+    <p><span id="loggedInAccountName" class="account-name"></span> としてログイン中です。</p>
+    <button id="startGameBtn" class="btn-primary" type="button">ゲームをはじめる</button>
+    <button id="logoutBtn" class="btn btn-small" type="button" style="width:100%; margin-top:10px;">この端末からログアウト</button>
+  </section>
+
+  <section id="authView" class="panel">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="code" type="button">コードを入力</button>
+      <button class="tab-btn" data-tab="register" type="button">新規登録</button>
+      <button class="tab-btn" data-tab="login" type="button">ID・PWでログイン</button>
+    </div>
+
+    <div id="tab-code" class="tab-panel">
+      <form id="codeForm" autocomplete="off">
+        <label for="codeInput">ログインコード</label>
+        <input id="codeInput" class="code-input" type="text" inputmode="text"
+               autocomplete="off" autocapitalize="characters" spellcheck="false"
+               placeholder="例: K7QM-3XRA-9PWD-HT2F" required>
+        <div class="field-note">ハイフンや空白、小文字が混ざっていても構いません。</div>
+        <button class="btn-primary" type="submit">この端末を登録</button>
+      </form>
+    </div>
+
+    <div id="tab-register" class="tab-panel" hidden>
+      <form id="registerForm" autocomplete="off">
+        <label for="registerName">アカウント名</label>
+        <input id="registerName" type="text" autocomplete="username" autocapitalize="off"
+               spellcheck="false" required>
+        <div class="field-note">半角英数記号（! ～ ~）のみ使えます。大文字・小文字は区別されず、小文字として扱われます。</div>
+
+        <label for="registerPassword">パスワード</label>
+        <div class="row">
+          <input id="registerPassword" type="password" autocomplete="new-password" spellcheck="false" required>
+          <button id="registerGenerateBtn" class="btn btn-small" type="button">自動で作る</button>
+        </div>
+        <div class="field-note">「自動で作る」を押すと、紛らわしい文字を除いたパスワードを作成します。</div>
+
+        <button id="registerSubmitBtn" class="btn-primary" type="submit">登録してコードを発行</button>
+      </form>
+    </div>
+
+    <div id="tab-login" class="tab-panel" hidden>
+      <form id="loginForm" autocomplete="on">
+        <label for="loginName">アカウント名</label>
+        <input id="loginName" type="text" autocomplete="username" autocapitalize="off" spellcheck="false" required>
+
+        <label for="loginPassword">パスワード</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" spellcheck="false" required>
+
+        <div class="warn-box">再発行すると、今までのコードと他の端末のログインは無効になります。</div>
+
+        <button id="loginSubmitBtn" class="btn-primary" type="submit">コードを再発行</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="codeIssuedView" class="panel" hidden>
+    <h1 style="font-size:15px; text-align:left; margin-top:0;">ログインコードが発行されました</h1>
+    <div id="issuedCodeDisplay" class="code-display"></div>
+    <div class="code-actions">
+      <button id="saveFileBtn" class="btn btn-small" type="button">📄 ファイルで保存</button>
+      <button id="shareBtn" class="btn btn-small" type="button" hidden>📤 共有</button>
+      <button id="copyBtn" class="btn btn-small" type="button">📋 コピー</button>
+    </div>
+    <div class="warn-box">このコードはパスワードと同じです。他の人に見せないでください。なくした場合は、IDとパスワードで再発行できます(再発行すると古いコードは使えなくなります)。</div>
+    <div class="save-check">
+      <input id="savedCheck" type="checkbox">
+      <label for="savedCheck">保存しました</label>
+    </div>
+    <button id="playBtn" class="btn-primary" type="button" disabled>この端末で遊ぶ</button>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var TOKEN_KEY = 'sbop2_device_token';
+  var ACCOUNT_KEY = 'sbop2_device_account';
+
+  var state = {
+    issuedCode: '',
+    issuedName: '',
+    issuedPassword: null
+  };
+
+  var messageEl = document.getElementById('message');
+  var loggedInView = document.getElementById('loggedInView');
+  var loggedInAccountName = document.getElementById('loggedInAccountName');
+  var authView = document.getElementById('authView');
+  var codeIssuedView = document.getElementById('codeIssuedView');
+
+  function safeGet(key) {
+    try { return window.localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function safeSet(key, value) {
+    try { window.localStorage.setItem(key, value); } catch (e) { /* ignore */ }
+  }
+  function safeRemove(key) {
+    try { window.localStorage.removeItem(key); } catch (e) { /* ignore */ }
+  }
+
+  function showMessage(text, type) {
+    messageEl.textContent = text;
+    messageEl.className = 'message ' + (type || 'info');
+    messageEl.hidden = false;
+  }
+  function clearMessage() {
+    messageEl.hidden = true;
+  }
+
+  function showSection(el) {
+    loggedInView.hidden = (el !== loggedInView);
+    authView.hidden = (el !== authView);
+    codeIssuedView.hidden = (el !== codeIssuedView);
+  }
+
+  // ============================================================
+  // API 呼び出し
+  // ============================================================
+
+  function apiPost(path, body) {
+    return fetch(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body || {})
+    }).then(function (res) {
+      return res.json().catch(function () { return null; }).then(function (data) {
+        return { ok: res.ok, status: res.status, data: data };
+      });
+    });
+  }
+
+  function errorMessageFor(status, data) {
+    var err = data && data.error;
+    if (status === 429) {
+      var secs = (data && typeof data.retryAfterSeconds === 'number') ? data.retryAfterSeconds : 60;
+      var mins = Math.max(1, Math.ceil(secs / 60));
+      return '試行回数が多すぎます。' + mins + '分後にもう一度お試しください。';
+    }
+    switch (err) {
+      case 'invalid_account_name':
+        return 'アカウント名に使用できない文字が含まれています(半角英数記号のみ)。';
+      case 'invalid_password':
+        return 'パスワードを確認してください(空欄や使用できない文字は使えません)。';
+      case 'account_exists':
+        return 'そのアカウント名は既に使われています。';
+      case 'unauthorized':
+        return 'アカウント名またはパスワードが違います。';
+      case 'invalid_code':
+        return 'ログインコードが正しくありません。';
+      case 'invalid_token':
+        return 'ログイン情報が無効です。もう一度お試しください。';
+      case 'invalid_request':
+        return '入力内容を確認してください。';
+      case 'backend_unavailable':
+        return 'サーバーが混み合っています。しばらくしてからお試しください。';
+      default:
+        return '通信エラーが発生しました。しばらくしてからお試しください。';
+    }
+  }
+
+  // ============================================================
+  // 端末情報
+  // ============================================================
+
+  function buildDeviceLabel() {
+    var ua = navigator.userAgent || '';
+    var device = 'その他の端末';
+    if (/iPhone/.test(ua)) { device = 'iPhone'; }
+    else if (/iPad/.test(ua)) { device = 'iPad'; }
+    else if (/Android/.test(ua)) { device = 'Android'; }
+    else if (/Windows/.test(ua)) { device = 'Windows'; }
+    else if (/Macintosh|Mac OS X/.test(ua)) { device = 'Mac'; }
+
+    var browser = '';
+    if (/Edg\//.test(ua)) { browser = 'Edge'; }
+    else if (/OPR\//.test(ua)) { browser = 'Opera'; }
+    else if (/CriOS\//.test(ua)) { browser = 'Chrome'; }
+    else if (/Chrome\//.test(ua)) { browser = 'Chrome'; }
+    else if (/Firefox\//.test(ua)) { browser = 'Firefox'; }
+    else if (/Safari\//.test(ua)) { browser = 'Safari'; }
+
+    return browser ? (device + ' ' + browser) : device;
+  }
+
+  function saveDeviceToken(token, account) {
+    safeSet(TOKEN_KEY, token);
+    safeSet(ACCOUNT_KEY, account);
+  }
+
+  // ============================================================
+  // パスワード自動生成
+  // ============================================================
+
+  function generatePassword(length) {
+    // 紛らわしい文字(0/O, 1/l/I)を除いた英数字
+    var chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+    var n = length || 12;
+    var bytes = new Uint8Array(n);
+    window.crypto.getRandomValues(bytes);
+    var out = '';
+    for (var i = 0; i < n; i++) {
+      out += chars.charAt(bytes[i] % chars.length);
+    }
+    return out;
+  }
+
+  // ============================================================
+  // タブ切り替え
+  // ============================================================
+
+  var tabButtons = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
+  var tabPanels = {
+    code: document.getElementById('tab-code'),
+    register: document.getElementById('tab-register'),
+    login: document.getElementById('tab-login')
+  };
+
+  function activateTab(name) {
+    tabButtons.forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-tab') === name);
+    });
+    Object.keys(tabPanels).forEach(function (key) {
+      tabPanels[key].hidden = (key !== name);
+    });
+    clearMessage();
+  }
+
+  tabButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      activateTab(btn.getAttribute('data-tab'));
+    });
+  });
+
+  // ============================================================
+  // コード発行後の画面
+  // ============================================================
+
+  var issuedCodeDisplay = document.getElementById('issuedCodeDisplay');
+  var saveFileBtn = document.getElementById('saveFileBtn');
+  var shareBtn = document.getElementById('shareBtn');
+  var copyBtn = document.getElementById('copyBtn');
+  var savedCheck = document.getElementById('savedCheck');
+  var playBtn = document.getElementById('playBtn');
+
+  function buildFileContent(name, password, code) {
+    var now = new Date();
+    var pad = function (v) { return (v < 10 ? '0' : '') + v; };
+    var dateStr = now.getFullYear() + '/' + pad(now.getMonth() + 1) + '/' + pad(now.getDate()) +
+      ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+    var lines = [];
+    lines.push('SBOP2 ログインコード');
+    lines.push('');
+    lines.push('アカウント名: ' + name);
+    if (password) {
+      lines.push('パスワード: ' + password);
+    }
+    lines.push('ログインコード: ' + code);
+    lines.push('発行日時: ' + dateStr);
+    lines.push('遊ぶ場所: ' + window.location.origin + '/');
+    lines.push('');
+    lines.push('■ 使い方');
+    lines.push('1. 上の「遊ぶ場所」のURLをブラウザで開く');
+    lines.push('2. 「アカウント管理」→「コードを入力」からログインコードを入力する');
+    lines.push('3. この端末が登録され、次回からは自動でログインできます');
+    lines.push('');
+    lines.push('※ このコードはパスワードと同じです。他の人に見せないでください。');
+    lines.push('※ なくした場合は、IDとパスワードで再発行できます(再発行すると古いコードは使えなくなります)。');
+    return lines.join('\r\n');
+  }
+
+  function currentFileName() {
+    return 'SBOP2_ログインコード_' + state.issuedName + '.txt';
+  }
+
+  function updateShareAvailability() {
+    shareBtn.hidden = true;
+    try {
+      if (!navigator.canShare || typeof File !== 'function') {
+        return;
+      }
+      var content = buildFileContent(state.issuedName, state.issuedPassword, state.issuedCode);
+      var file = new File([content], currentFileName(), { type: 'text/plain' });
+      if (navigator.canShare({ files: [file] })) {
+        shareBtn.hidden = false;
+      }
+    } catch (e) {
+      shareBtn.hidden = true;
+    }
+  }
+
+  function selectCodeText() {
+    try {
+      var range = document.createRange();
+      range.selectNodeContents(issuedCodeDisplay);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } catch (e) { /* ignore */ }
+  }
+
+  function showCodeIssued(name, password, code) {
+    state.issuedName = name;
+    state.issuedPassword = password || null;
+    state.issuedCode = code;
+    issuedCodeDisplay.textContent = code;
+    savedCheck.checked = false;
+    playBtn.disabled = true;
+    updateShareAvailability();
+    clearMessage();
+    showSection(codeIssuedView);
+  }
+
+  saveFileBtn.addEventListener('click', function () {
+    var content = buildFileContent(state.issuedName, state.issuedPassword, state.issuedCode);
+    var blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = currentFileName();
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  });
+
+  shareBtn.addEventListener('click', function () {
+    try {
+      var content = buildFileContent(state.issuedName, state.issuedPassword, state.issuedCode);
+      var file = new File([content], currentFileName(), { type: 'text/plain' });
+      navigator.share({ files: [file], title: 'SBOP2 ログインコード' }).catch(function () { /* ユーザーがキャンセルした場合等 */ });
+    } catch (e) { /* ignore */ }
+  });
+
+  copyBtn.addEventListener('click', function () {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(state.issuedCode).then(function () {
+        showMessage('コードをコピーしました。', 'ok');
+      }).catch(function () {
+        selectCodeText();
+      });
+    } else {
+      selectCodeText();
+    }
+  });
+
+  savedCheck.addEventListener('change', function () {
+    playBtn.disabled = !savedCheck.checked;
+  });
+
+  playBtn.addEventListener('click', function () {
+    playBtn.disabled = true;
+    apiPost('/api/account/redeem', { code: state.issuedCode, label: buildDeviceLabel() })
+      .then(function (result) {
+        if (result.ok && result.data && result.data.deviceToken) {
+          saveDeviceToken(result.data.deviceToken, result.data.account);
+          window.location.href = '/';
+        } else {
+          showMessage(errorMessageFor(result.status, result.data), 'warn');
+          playBtn.disabled = !savedCheck.checked;
+        }
+      })
+      .catch(function () {
+        showMessage('通信エラーが発生しました。しばらくしてからお試しください。', 'warn');
+        playBtn.disabled = !savedCheck.checked;
+      });
+  });
+
+  // ============================================================
+  // コード入力フォーム
+  // ============================================================
+
+  var codeForm = document.getElementById('codeForm');
+  var codeInput = document.getElementById('codeInput');
+
+  codeForm.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    clearMessage();
+    var submitBtn = codeForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    apiPost('/api/account/redeem', { code: codeInput.value, label: buildDeviceLabel() })
+      .then(function (result) {
+        submitBtn.disabled = false;
+        if (result.ok && result.data && result.data.deviceToken) {
+          saveDeviceToken(result.data.deviceToken, result.data.account);
+          window.location.href = '/';
+        } else {
+          showMessage(errorMessageFor(result.status, result.data), 'warn');
+        }
+      })
+      .catch(function () {
+        submitBtn.disabled = false;
+        showMessage('通信エラーが発生しました。しばらくしてからお試しください。', 'warn');
+      });
+  });
+
+  // ============================================================
+  // 新規登録フォーム
+  // ============================================================
+
+  var registerForm = document.getElementById('registerForm');
+  var registerName = document.getElementById('registerName');
+  var registerPassword = document.getElementById('registerPassword');
+  var registerGenerateBtn = document.getElementById('registerGenerateBtn');
+  var registerSubmitBtn = document.getElementById('registerSubmitBtn');
+
+  registerGenerateBtn.addEventListener('click', function () {
+    var pw = generatePassword(12);
+    registerPassword.value = pw;
+    registerPassword.type = 'text';
+  });
+
+  registerForm.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    clearMessage();
+    var name = registerName.value.trim();
+    var password = registerPassword.value;
+    if (!name || !password) {
+      showMessage('アカウント名とパスワードを入力してください。', 'warn');
+      return;
+    }
+    registerSubmitBtn.disabled = true;
+    apiPost('/api/account/register', { account: name, password: password })
+      .then(function (result) {
+        registerSubmitBtn.disabled = false;
+        if (result.ok && result.data && result.data.code) {
+          showCodeIssued(name.toLowerCase(), password, result.data.code);
+        } else {
+          showMessage(errorMessageFor(result.status, result.data), 'warn');
+        }
+      })
+      .catch(function () {
+        registerSubmitBtn.disabled = false;
+        showMessage('通信エラーが発生しました。しばらくしてからお試しください。', 'warn');
+      });
+  });
+
+  // ============================================================
+  // ID・PWでログイン(コード再発行)フォーム
+  // ============================================================
+
+  var loginForm = document.getElementById('loginForm');
+  var loginName = document.getElementById('loginName');
+  var loginPassword = document.getElementById('loginPassword');
+  var loginSubmitBtn = document.getElementById('loginSubmitBtn');
+
+  loginForm.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    clearMessage();
+    var name = loginName.value.trim();
+    var password = loginPassword.value;
+    if (!name || !password) {
+      showMessage('アカウント名とパスワードを入力してください。', 'warn');
+      return;
+    }
+    loginSubmitBtn.disabled = true;
+    apiPost('/api/account/issue-code', { account: name, password: password })
+      .then(function (result) {
+        loginSubmitBtn.disabled = false;
+        if (result.ok && result.data && result.data.code) {
+          showCodeIssued(name.toLowerCase(), null, result.data.code);
+        } else {
+          showMessage(errorMessageFor(result.status, result.data), 'warn');
+        }
+      })
+      .catch(function () {
+        loginSubmitBtn.disabled = false;
+        showMessage('通信エラーが発生しました。しばらくしてからお試しください。', 'warn');
+      });
+  });
+
+  // ============================================================
+  // ログイン中(端末トークンあり)の表示
+  // ============================================================
+
+  var startGameBtn = document.getElementById('startGameBtn');
+  var logoutBtn = document.getElementById('logoutBtn');
+
+  startGameBtn.addEventListener('click', function () {
+    window.location.href = '/';
+  });
+
+  logoutBtn.addEventListener('click', function () {
+    logoutBtn.disabled = true;
+    var token = safeGet(TOKEN_KEY);
+    apiPost('/api/account/logout', { deviceToken: token || '' })
+      .catch(function () { /* 失敗してもローカルの端末情報は消す */ })
+      .then(function () {
+        safeRemove(TOKEN_KEY);
+        safeRemove(ACCOUNT_KEY);
+        window.location.reload();
+      });
+  });
+
+  function showLoggedIn(accountName) {
+    loggedInAccountName.textContent = accountName;
+    showSection(loggedInView);
+  }
+
+  // ============================================================
+  // 初期化
+  // ============================================================
+
+  function init() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('reason') === 'expired') {
+      showMessage('ログインコードが無効になりました。もう一度入力してください。', 'warn');
+    }
+
+    var token = safeGet(TOKEN_KEY);
+    if (!token) {
+      showSection(authView);
+      return;
+    }
+
+    apiPost('/api/account/me', { deviceToken: token })
+      .then(function (result) {
+        if (result.ok && result.data && result.data.account) {
+          showLoggedIn(result.data.account);
+        } else {
+          if (result.status === 401) {
+            safeRemove(TOKEN_KEY);
+            safeRemove(ACCOUNT_KEY);
+          }
+          showSection(authView);
+        }
+      })
+      .catch(function () {
+        // 通信エラー時はトークンを消さず、いったん入力画面を出す
+        showSection(authView);
+      });
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
