@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#08182f">
   <title>サーバー情報・遊び方｜スクラップブックオンライン ページ.2</title>
-  <meta name="description" content="スクラップブックオンライン ページ.2の公式プレイガイド。サーバー稼働状況と、ログインからキャラクター作成、ゲーム開始までの手順を案内します。">
+  <meta name="description" content="スクラップブックオンライン ページ.2の公式プレイガイド。サーバー稼働状況と、アカウント登録・ログインコードの受け取りからキャラクター作成、ゲーム開始までの手順を案内します。">
   <meta property="og:title" content="サーバー情報・遊び方｜スクラップブックオンライン ページ.2">
   <meta property="og:description" content="サーバーの稼働状況を確認して、ブラウザから冒険を始めよう。">
   <meta property="og:image" content="img/hero-banner.png">
@@ -86,7 +86,7 @@
     .step:nth-child(even) { grid-template-columns: 1fr minmax(280px, 46%); }
     .step:nth-child(even) .step-image { order: 2; }
     .step-image { display: grid; place-items: center; min-height: 270px; margin: 0; padding: 18px; overflow: hidden; background: #10233e; border-radius: 10px; }
-    .step-image img { max-height: 400px; width: auto; image-rendering: pixelated; filter: drop-shadow(0 12px 22px rgba(0,0,0,.24)); }
+    .step-image img { max-height: 400px; width: auto; height: auto; image-rendering: pixelated; filter: drop-shadow(0 12px 22px rgba(0,0,0,.24)); }
     .step-copy { position: relative; }
     .step-number { display: inline-grid; place-items: center; width: 42px; height: 42px; margin-bottom: 18px; color: white; background: var(--blue); border-radius: 50%; font: 900 15px/1 var(--mono); }
     .step-copy h3 { margin: 0 0 12px; font-size: clamp(22px, 3vw, 30px); letter-spacing: -.035em; }
@@ -151,7 +151,7 @@
       <div class="wrap hero-copy">
         <p class="eyebrow">Official play guide</p>
         <h1><span class="line">冒険を始めるのは、</span><span class="line">むずかしくありません。</span></h1>
-        <p class="hero-lead">アカウントの入力からキャラクター作成、最初のマップへ降り立つまでを、実際のゲーム画面で順番に案内します。</p>
+        <p class="hero-lead">アカウント登録とログインコードの受け取りから、キャラクター作成、最初のマップへ降り立つまでを、実際のゲーム画面で順番に案内します。</p>
       </div>
     </section>
 
@@ -192,7 +192,7 @@
         <div class="guide-intro">
           <div>
             <p class="eyebrow">Getting started</p>
-            <h2 class="section-title" id="guide-heading"><span class="line">ゲーム開始まで、</span><span class="line">7つのステップ。</span></h2>
+            <h2 class="section-title" id="guide-heading"><span class="line">ゲーム開始まで、</span><span class="line">8つのステップ。</span></h2>
           </div>
           <p>ゲームを起動したら、画面の案内に沿って進みます。キャラクターは1つのアカウントにつき3人まで作成できます。</p>
         </div>
@@ -200,45 +200,50 @@
         <aside class="account-note">
           <span class="account-note-icon" aria-hidden="true">!</span>
           <div>
-            <strong>新規登録のための別ページはありません</strong>
-            <p>以前遊んだことがある方は、既存のアカウント名とパスワードを入力してください。初めての方は、使いたいアカウント名とパスワードを入力して「接続」を押すと、その内容で新しいアカウントが自動登録されます。パスワードは忘れないように保管してください。</p>
+            <strong>初回だけアカウントページで手続きが必要です</strong>
+            <p>初めての方は、タイトル画面の「はじめる」からアカウントページ（/account/）へ進み、アカウント名とパスワードで新規登録するとログインコードが発行されます。以前遊んでいたことがある方は、同じアカウントページの「ID・PWでログイン」から、当時のアカウント名とパスワードでログインコードを発行できます。以降は端末に記憶されるので、入力は不要になります。</p>
           </div>
         </aside>
 
         <div class="steps">
           <article class="step">
-            <figure class="step-image"><img src="img/1.png" alt="アカウントとパスワードを入力するログイン画面" width="438" height="358"></figure>
-            <div class="step-copy"><span class="step-number">01</span><h3>アカウントを入力して接続</h3><p>アカウント名とパスワードを入力し、「接続」を押します。初めて使うアカウント名なら、そのまま新規登録されます。</p><p class="step-tip">同じアカウント名がすでに登録されている場合は、そのアカウントの正しいパスワードが必要です。</p></div>
+            <figure class="step-image"><img src="img/account.png" alt="ログインコードを発行したアカウントページ" width="400" height="460"></figure>
+            <div class="step-copy"><span class="step-number">01</span><h3>アカウントを登録してログインコードを受け取る</h3><p>タイトル画面の「はじめる」からアカウントページへ進みます。初めての方は「新規登録」でアカウント名とパスワードを決めます。パスワードは「自動で作る」ボタンで生成することもできます。以前遊んでいたことがある方は「ID・PWでログイン」から、当時のアカウント名とパスワードでログインコードを発行できます。</p><p class="step-tip">発行されたログインコードはパスワードと同じ大切な情報です。「ファイルで保存」「共有」「コピー」のいずれかで保存し、「保存しました」にチェックを入れてから「この端末で遊ぶ」を押します。なくしてしまっても、アカウント名とパスワードがあれば再発行できます。</p></div>
+          </article>
+
+          <article class="step">
+            <figure class="step-image"><img src="img/title-start.png" alt="「としてはじめる」ボタンが表示されたタイトル画面" width="480" height="453"></figure>
+            <div class="step-copy"><span class="step-number">02</span><h3>タイトル画面で「はじめる」</h3><p>一度ログインコードを保存した端末では、次回からタイトル画面に表示される「（アカウント名）としてはじめる」を押すだけで、入力なしにゲームへ入れます。</p><p class="step-tip">別の端末で遊ぶときは、アカウントページで「コードを入力」を選び、保存しておいたログインコードを入力してください。</p></div>
           </article>
 
           <article class="step">
             <figure class="step-image"><img src="img/2.png" alt="新規作成を選ぶキャラクター選択画面" width="494" height="487"></figure>
-            <div class="step-copy"><span class="step-number">02</span><h3>「新規作成」を選ぶ</h3><p>キャラクター選択画面が開きます。まだキャラクターがいない枠を使って、左上のメニューから「新規作成」を選びます。</p><p class="step-tip">画面左下の案内どおり、方向キーで移動、Xキーで決定、Zキーで取消ができます。</p></div>
+            <div class="step-copy"><span class="step-number">03</span><h3>「新規作成」を選ぶ</h3><p>キャラクター選択画面が開きます。まだキャラクターがいない枠を使って、左上のメニューから「新規作成」を選びます。</p><p class="step-tip">画面左下の案内どおり、方向キーで移動、Xキーで決定、Zキーで取消ができます。</p></div>
           </article>
 
           <article class="step">
             <figure class="step-image"><img src="img/3.png" alt="新規キャラクター作成の種族選択画面" width="391" height="366"></figure>
-            <div class="step-copy"><span class="step-number">03</span><h3>種族を選ぶ</h3><p>キャラクターの種族を選択します。現在選べる項目を決定すると、次の画面へ進みます。</p></div>
+            <div class="step-copy"><span class="step-number">04</span><h3>種族を選ぶ</h3><p>キャラクターの種族を選択します。現在選べる項目を決定すると、次の画面へ進みます。</p></div>
           </article>
 
           <article class="step">
             <figure class="step-image"><img src="img/4.png" alt="性別と髪型を選ぶ容姿選択画面" width="384" height="360"></figure>
-            <div class="step-copy"><span class="step-number">04</span><h3>容姿を決める</h3><p>性別と髪型を選びます。右側のプレビューで見た目を確認し、決まったら「次へ」を選びます。</p></div>
+            <div class="step-copy"><span class="step-number">05</span><h3>容姿を決める</h3><p>性別と髪型を選びます。右側のプレビューで見た目を確認し、決まったら「次へ」を選びます。</p></div>
           </article>
 
           <article class="step">
             <figure class="step-image"><img src="img/5.png" alt="キャラクター名の入力画面" width="204" height="126"></figure>
-            <div class="step-copy"><span class="step-number">05</span><h3>キャラクター名をつける</h3><p>冒険で使うキャラクター名を入力して決定します。ほかのプレイヤーからも見える名前になります。</p></div>
+            <div class="step-copy"><span class="step-number">06</span><h3>キャラクター名をつける</h3><p>冒険で使うキャラクター名を入力して決定します。ほかのプレイヤーからも見える名前になります。</p></div>
           </article>
 
           <article class="step">
             <figure class="step-image"><img src="img/6.png" alt="作成したキャラクターが表示された選択画面" width="395" height="271"></figure>
-            <div class="step-copy"><span class="step-number">06</span><h3>作成したキャラクターを選ぶ</h3><p>キャラクター選択画面に戻ると、作成したキャラクターが空いていた枠に表示されます。そのキャラクターを選んで決定します。</p></div>
+            <div class="step-copy"><span class="step-number">07</span><h3>作成したキャラクターを選ぶ</h3><p>キャラクター選択画面に戻ると、作成したキャラクターが空いていた枠に表示されます。そのキャラクターを選んで決定します。</p></div>
           </article>
 
           <article class="step">
             <figure class="step-image"><img src="img/7.png" alt="最初のマップでゲームを開始した画面" width="260" height="252"></figure>
-            <div class="step-copy"><span class="step-number">07</span><h3>冒険スタート</h3><p>最初のマップに入ったらゲーム開始です。まずは周りを歩き、近くにいるキャラクターや世界を眺めてみてください。</p></div>
+            <div class="step-copy"><span class="step-number">08</span><h3>冒険スタート</h3><p>最初のマップに入ったらゲーム開始です。まずは周りを歩き、近くにいるキャラクターや世界を眺めてみてください。困ったときはESCキーで開くメニューの「アカウント管理」から設定を確認したり、「この端末からログアウト」で端末の記憶を消したりできます。</p></div>
           </article>
         </div>
 
