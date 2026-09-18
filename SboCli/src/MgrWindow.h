@@ -85,6 +85,10 @@ public:
 	ILoginWindow	*GetLoginWindow(void);				// ログインUIを取得
 	BOOL		IsKeyInput(void);						// キー処理の必要があるか判定
 
+	// デバッグ用(ブラウザ版 JS 連携): 開いているウィンドウの列挙
+	int			GetWindowCount(void) const;			// 開いているウィンドウ数を取得
+	CWindowBase	*GetWindowAt(int nIndex) const;			// 指定インデックスのウィンドウを取得(範囲外はNULL)
+
 	// ウィンドウ作成
 	void MakeWindowLOGIN(void);												// ログイン情報
 	void MakeWindowMSG(LPCSTR pszMsg, DWORD dwTime = 0, int nType = 0);		// メッセージ表示

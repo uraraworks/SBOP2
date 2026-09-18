@@ -98,6 +98,10 @@ public:
 	virtual BOOL IsQuit(void);
 	virtual void OnSDLDestroy(void);
 
+	// デバッグ用(ブラウザ版 JS 連携): 現在のゲーム状態/管理データを取得
+	int			GetGameState(void) const	{ return m_nGameState;	}
+	CMgrData	*GetMgrData(void) const		{ return m_pMgrData;	}
+
 private:
 	BOOL OnWin32Message(UINT message, WPARAM wParam, LPARAM lParam);
 	static void OnSocketNotifyThunk(void *pUserData, UINT uMsgOffset, WPARAM wParam, LPARAM lParam);

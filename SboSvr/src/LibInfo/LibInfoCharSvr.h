@@ -12,6 +12,7 @@
 
 class CMainFrame;
 class CMgrData;
+class CInfoAccount;
 class CInfoCharSvr;
 class CInfoSkillBase;
 class CLibInfoMapBase;
@@ -56,6 +57,29 @@ public:
 	void	MoveMapIn(CInfoCharSvr *pInfoChar);	// マップ内移動
 	void	MoveMapOut(CInfoCharSvr *pInfoChar);	// マップ外移動
 	void	SetInitStatus(CInfoCharSvr *pInfoChar, BOOL bInitPos=FALSE);	// ステータス初期値設定
+
+	/// @brief 名前検証込みでプレイヤーキャラクターを新規作成し、アカウントへ追加する。
+	///
+	/// MainFrameRecvProcACCOUNT.cpp の RecvProcACCOUNT_REQ_MAKECHAR(ゲームスレッド)と
+	/// /api/debug/fixture(HTTPスレッド、_DEBUG限定)で共用する。挙動は元のMAKECHAR処理と
+	/// 完全に同じにしてある(NameCheckには生の名前を、重複チェックには前後空白を除いた
+	/// 名前を渡す既存の非対称な扱いも含む)。
+	///
+	/// 呼び出し元スレッドを問わず安全に呼べるよう、内部で Enter()/Leave() を取る
+	/// (元のゲームスレッド側処理は無施錠だったが、HTTPスレッドから同じ CLibInfoCharSvr を
+	/// 触るこの共用化に合わせて追加した)。
+	///
+	/// @param strRawCharName 検証前の名前(NameCheck・保存に使う。末尾空白を含みうる)
+	/// @param strTrimmedCharName 前後空白を除いた名前(重複チェック IsUseName に使う)
+	/// @param nMoveType CHARMOVETYPE_*(通常は CHARMOVETYPE_PC)
+	/// @param nSex, wFamilyID, wGrpIDEye, wGrpIDEyeColor, wGrpIDHairType, wGrpIDHairColor, dwMotionTypeID: 容姿等の初期値
+	/// @param pInfoAccount 追加先アカウント(m_adwCharID に登録する)。NULLなら登録しない
+	/// @param outCharID 成功時、新しいキャラID(失敗時は0)
+	/// @return MAKECHARRES_OK / MAKECHARRES_NG_USE / MAKECHARRES_NG_SPACE
+	int	CreatePlayerCharacter(const CmyString &strRawCharName, const CmyString &strTrimmedCharName,
+		int nMoveType, int nSex, WORD wFamilyID, WORD wGrpIDEye, WORD wGrpIDEyeColor,
+		WORD wGrpIDHairType, WORD wGrpIDHairColor, DWORD dwMotionTypeID,
+		CInfoAccount *pInfoAccount, DWORD &outCharID);
 
 	PCInfoCharBase	AddNPC(CInfoCharBase *pInfoChar);	// NPCの追加
 	PCInfoBase	GetNew(int nType);	// 新規データを取得

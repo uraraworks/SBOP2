@@ -108,6 +108,7 @@
     <ClCompile Include="TestAttackDecision.cpp" />
     <ClCompile Include="TestAtackTargetDecision.cpp" />
     <ClCompile Include="TestProxyIpRegistry.cpp" />
+    <ClCompile Include="TestDebugFixtureGuard.cpp" />
     <ClCompile Include="TestLoginCode.cpp" />
     <ClCompile Include="TestAccountAuthStore.cpp" />
     <ClCompile Include="TestIpRateLimiter.cpp" />
@@ -126,6 +127,7 @@
     </ClCompile>
     <ClCompile Include="..\SboSvr\src\Web\ProxyIpRegistry.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\ProxyHeaderParser.cpp" />
+    <ClCompile Include="..\SboSvr\src\Web\DebugFixtureGuard.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\ProcessMetrics.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\SessionsJsonBuilder.cpp" />
     <ClCompile Include="..\SboSvr\src\MainFrame\MoveStateDecision.cpp" />

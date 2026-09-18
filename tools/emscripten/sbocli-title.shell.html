@@ -2996,6 +2996,222 @@
         }
       }
 
+      // ============================================================
+      // デバッグ自動操作用 API: window.sbop2Debug
+      // /debug 経由 または ?debug=1 の時のみ定義する(通常ルートでは未定義のまま)。
+      // Claude 等が javascript_tool から確実に操作・状態確認するためのもの。
+      // 詳細: docs/debug-automation.md
+      // ============================================================
+      if (document.body.classList.contains('debug-mode')) {
+        (function() {
+          const SBOP2_DEBUG_VK = {
+            up: 0x26, down: 0x28, left: 0x25, right: 0x27,
+            x: 0x58, z: 0x5A, esc: 0x1B, escape: 0x1B,
+            space: 0x20, enter: 0x0D, return: 0x0D, tab: 0x09, shift: 0x10
+          };
+
+          function resolveVk(key) {
+            if (typeof key === 'number') { return key; }
+            if (typeof key === 'string') {
+              const lower = key.toLowerCase();
+              if (Object.prototype.hasOwnProperty.call(SBOP2_DEBUG_VK, lower)) {
+                return SBOP2_DEBUG_VK[lower];
+              }
+              if (key.length === 1) {
+                return key.toUpperCase().charCodeAt(0);
+              }
+            }
+            throw new Error('sbop2Debug: unknown key "' + key + '"');
+          }
+
+          function sleep(ms) {
+            return new Promise(function(resolve) { setTimeout(resolve, ms); });
+          }
+
+          // 現在押しっぱなしにしている VK の集合(releaseAll用)
+          const heldVks = new Set();
+
+          function keyDown(key) {
+            const vk = resolveVk(key);
+            heldVks.add(vk);
+            browserInjectPadKey(vk, true);
+            return vk;
+          }
+          function keyUp(key) {
+            const vk = resolveVk(key);
+            heldVks.delete(vk);
+            browserInjectPadKey(vk, false);
+            return vk;
+          }
+
+          // 1回押して離す。既存の仮想パッド注入経路(SBOP2_BrowserSetPadKey)を
+          // down→holdMs待ち→up→250ms待ちの順で叩く(実機検証済みの間隔)。
+          async function press(key, holdMs) {
+            holdMs = (typeof holdMs === 'number') ? holdMs : 150;
+            keyDown(key);
+            await sleep(holdMs);
+            keyUp(key);
+            await sleep(250);
+          }
+
+          // 指定時間押しっぱなしにしてから離す(連続移動などに使う)。
+          async function hold(key, ms) {
+            keyDown(key);
+            await sleep(typeof ms === 'number' ? ms : 150);
+            keyUp(key);
+          }
+
+          // ['down','down','x'] や [{key:'x',holdMs:300,waitMs:500}, ...] を順番に実行する。
+          async function sequence(steps) {
+            if (!Array.isArray(steps)) { return; }
+            for (const step of steps) {
+              if (typeof step === 'string' || typeof step === 'number') {
+                await press(step);
+              } else if (step && typeof step === 'object') {
+                await press(step.key, step.holdMs);
+                if (step.waitMs) { await sleep(step.waitMs); }
+              }
+            }
+          }
+
+          // 押しっぱなしのキーが残らないよう全解放する。
+          function releaseAll() {
+            heldVks.forEach(function(vk) { browserInjectPadKey(vk, false); });
+            heldVks.clear();
+          }
+
+          // キャラ名入力欄へテキストを設定する(SBOP2_BrowserCharNameSetText ブリッジ)。
+          function setCharName(text) {
+            callCharNameBridge('SBOP2_BrowserCharNameSetText', ['string'], [text || '']);
+          }
+
+          // キャラ名入力を確定する(SBOP2_BrowserCharNameSubmit ブリッジ)。
+          function submitCharName() {
+            callCharNameBridge('SBOP2_BrowserCharNameSubmit', [], []);
+          }
+
+          // C++側 SBOP2_DebugGetStateJson() のJSONに、JS側で持っている直近チャット/
+          // システムメッセージのスナップショットを messages として合成して返す。
+          function state() {
+            if (!window.Module || typeof Module.ccall !== 'function') {
+              return null;
+            }
+            let jsonText = null;
+            try {
+              jsonText = Module.ccall('SBOP2_DebugGetStateJson', 'string', [], []);
+            } catch (e) {
+              console.warn('[sbop2Debug] state(): ccall failed', e);
+              return null;
+            }
+            let data = null;
+            try {
+              data = JSON.parse(jsonText);
+            } catch (e) {
+              console.warn('[sbop2Debug] state(): JSON parse failed', e, jsonText);
+              return null;
+            }
+            try {
+              data.messages = (typeof window.sbop2ChatLogGetSnapshot === 'function')
+                ? window.sbop2ChatLogGetSnapshot()
+                : null;
+            } catch (e) {
+              data.messages = null;
+            }
+            return data;
+          }
+
+          // state() をポーリングして条件成立を待つ。
+          // cond は関数(state=>bool)、または { gameState: 'MAP' } のような一致条件オブジェクト。
+          function waitFor(cond, timeoutMs) {
+            timeoutMs = (typeof timeoutMs === 'number') ? timeoutMs : 10000;
+            const test = (typeof cond === 'function') ? cond : function(s) {
+              if (!s) { return false; }
+              return Object.keys(cond).every(function(k) {
+                // {gameState:'MAP'} のように名前で指定されたら gameStateName と比べる
+                if (k === 'gameState' && typeof cond[k] === 'string') {
+                  return s.gameStateName === cond[k];
+                }
+                return s[k] === cond[k];
+              });
+            };
+            const startedAt = performance.now();
+            return new Promise(function(resolve, reject) {
+              (function poll() {
+                let s = null;
+                let ok = false;
+                try {
+                  s = state();
+                  ok = !!(s && test(s));
+                } catch (e) {
+                  ok = false;
+                }
+                if (ok) {
+                  resolve(s);
+                  return;
+                }
+                if (performance.now() - startedAt >= timeoutMs) {
+                  reject(new Error('sbop2Debug.waitFor: timeout after ' + timeoutMs + 'ms (last state=' + JSON.stringify(s) + ')'));
+                  return;
+                }
+                setTimeout(poll, 100);
+              })();
+            });
+          }
+
+          // 起動直後の「クリックしてスタート」オーバーレイを押す。
+          function clickStart() {
+            if (typeof startGame === 'function') {
+              startGame();
+              return true;
+            }
+            if (startOverlay) {
+              startOverlay.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+              return true;
+            }
+            return false;
+          }
+
+          // タイトル画面の主ボタン(端末トークンありなら「◯◯としてはじめる」)を押す。
+          // ログインウィンドウはフェードイン中の操作を捨てるため、パネル表示を待ってから押し、
+          // 画面が LOGIN のまま変わらなければ押し直す。接続が始まるか画面が変われば resolve。
+          async function startWithToken(timeoutMs) {
+            timeoutMs = (typeof timeoutMs === 'number') ? timeoutMs : 15000;
+            const startedAt = performance.now();
+            const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+            while (performance.now() - startedAt < timeoutMs) {
+              const ready = loginPrimaryButton && !loginOverlay.hidden && !loginPrimaryButton.disabled;
+              if (ready) {
+                loginPrimaryButton.click();
+                await sleep(1000);
+                const s = state();
+                // 押下が受け付けられると Enable(FALSE) でパネルが隠れ、やがて LOGINMENU へ進む
+                if ((s && s.gameStateName !== 'LOGIN') || loginOverlay.hidden) {
+                  return true;
+                }
+              } else {
+                await sleep(200);
+              }
+            }
+            throw new Error('sbop2Debug.startWithToken: timeout after ' + timeoutMs + 'ms');
+          }
+
+          window.sbop2Debug = {
+            press: press,
+            hold: hold,
+            sequence: sequence,
+            releaseAll: releaseAll,
+            setCharName: setCharName,
+            submitCharName: submitCharName,
+            state: state,
+            waitFor: waitFor,
+            clickStart: clickStart,
+            startWithToken: startWithToken
+          };
+
+          console.log('[sbop2Debug] ready (debug-mode)');
+        })();
+      }
+
     })();
   </script>
 

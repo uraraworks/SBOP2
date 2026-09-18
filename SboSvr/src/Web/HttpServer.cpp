@@ -51,6 +51,9 @@
 #include "Handlers/MapGenPatternHandler.h"
 #include "Handlers/MapGenPreviewHandler.h"
 #include "Handlers/AccountAuthHandler.h"
+#ifdef _DEBUG
+#include "Handlers/DebugFixtureHandler.h"
+#endif
 #include "AuditLog.h"
 #include "AuthProvider.h"
 #include "MgrData.h"
@@ -304,8 +307,15 @@ bool IsAuthApiPath(const std::string &path)
         // /api/account/* はログインコード方式の公開API(匿名で叩く)。
         // 管理画面のセッション認証ゲートの対象外にし、IP単位の試行回数制限は
         // 各ハンドラ側(CIpRateLimiter)で行う。
-        return (path == "/api/auth/me") || (path == "/api/auth/admin-login") || (path == "/api/auth/logout")
+        bool bResult = (path == "/api/auth/me") || (path == "/api/auth/admin-login") || (path == "/api/auth/logout")
                 || IsPathPrefix(path, "/api/account/");
+#ifdef _DEBUG
+        // /api/debug/fixture(テスト準備API)。_DEBUG限定かつ、実行時にも
+        // DebugFixtureGuard::IsAllowedRequest(loopbackからの直接リクエストのみ)で
+        // 絞り込まれるため、管理画面のセッション認証ゲート対象外にしてよい。
+        bResult = bResult || IsPathPrefix(path, "/api/debug/");
+#endif
+        return bResult;
 }
 
 /// @brief IPv4アドレス(ネットワークバイトオーダー)をドット区切り10進表記にする。
@@ -1047,6 +1057,13 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> accountLogoutHandler(new CAccountLogoutHandler(m_pMgrData));
         m_router.Register("POST", "/api/account/logout", std::move(accountLogoutHandler));
+
+#ifdef _DEBUG
+        // テスト準備API。Releaseビルドには存在しない(このブロックごと除外される)。
+        // 実行時の追加ガードは CDebugFixtureHandler::Handle 内の DebugFixtureGuard を参照。
+        std::unique_ptr<IApiHandler> debugFixtureHandler(new CDebugFixtureHandler(m_pMgrData));
+        m_router.Register("POST", "/api/debug/fixture", std::move(debugFixtureHandler));
+#endif
 
         std::unique_ptr<IApiHandler> rolesListHandler(new CAdminRolesListHandler(m_pMgrData));
         m_router.Register("GET", "/api/admin/roles", std::move(rolesListHandler));

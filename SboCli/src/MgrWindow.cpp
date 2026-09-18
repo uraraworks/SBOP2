@@ -199,6 +199,21 @@ ILoginWindow *CMgrWindow::GetLoginWindow(void)
 	return (pWindow != NULL) ? pWindow->GetLoginWindowInterface() : NULL;
 }
 
+
+int CMgrWindow::GetWindowCount(void) const
+{
+	return (int)m_paWindow->size();
+}
+
+
+CWindowBase *CMgrWindow::GetWindowAt(int nIndex) const
+{
+	if ((nIndex < 0) || (nIndex >= (int)m_paWindow->size())) {
+		return NULL;
+	}
+	return m_paWindow->at(nIndex);
+}
+
 BOOL CMgrWindow::IsKeyInput(void)
 {
 	return m_bKeyInput;
@@ -793,6 +808,21 @@ ILoginWindow *CMgrWindow::GetLoginWindow(void)
 	}
 
 	return pWindow->GetLoginWindowInterface();
+}
+
+
+int CMgrWindow::GetWindowCount(void) const
+{
+	return (int)m_paWindow->size();
+}
+
+
+CWindowBase *CMgrWindow::GetWindowAt(int nIndex) const
+{
+	if ((nIndex < 0) || (nIndex >= (int)m_paWindow->size())) {
+		return NULL;
+	}
+	return m_paWindow->at(nIndex);
 }
 
 

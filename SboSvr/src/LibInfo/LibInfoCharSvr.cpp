@@ -31,6 +31,7 @@
 #include "LibInfoCharSvr.h"
 #include "AttackDecision.h"
 #include "../Platform/SvrPlatform.h"
+#include "InfoAccount.h"
 
 namespace {
 
@@ -1320,6 +1321,72 @@ void CLibInfoCharSvr::SetInitStatus(CInfoCharSvr *pInfoChar, BOOL bInitPos/*FALS
 
 	pInfoChar->m_dwHP = min(pInfoChar->m_dwHP, pInfoChar->m_dwMaxHP);
 	pInfoChar->m_dwSP = min(pInfoChar->m_dwSP, pInfoChar->m_dwMaxSP);
+}
+
+int CLibInfoCharSvr::CreatePlayerCharacter(const CmyString &strRawCharName, const CmyString &strTrimmedCharName,
+	int nMoveType, int nSex, WORD wFamilyID, WORD wGrpIDEye, WORD wGrpIDEyeColor,
+	WORD wGrpIDHairType, WORD wGrpIDHairColor, DWORD dwMotionTypeID,
+	CInfoAccount *pInfoAccount, DWORD &outCharID)
+{
+	PCInfoCharBase pInfoChar;
+
+	outCharID = 0;
+
+	// 元のMAKECHAR処理と同じ非対称な検証: 重複チェックはトリム済み、
+	// 空白チェックは生の名前で行う。
+	if (IsUseName(strTrimmedCharName)) {
+		return MAKECHARRES_NG_USE;
+	}
+	if (!NameCheck(strRawCharName)) {
+		return MAKECHARRES_NG_SPACE;
+	}
+
+	// 元のゲームスレッド側処理は無施錠だったが、HTTPスレッドからも呼ばれる
+	// ようになったためここで排他を取る(既存のHTTPハンドラ群と同じ流儀)。
+	Enter();
+
+	pInfoChar = (PCInfoCharBase)GetNew(nMoveType);
+	SetInitStatus((PCInfoCharSvr)pInfoChar, TRUE);
+
+	pInfoChar->m_strCharName	= strRawCharName;
+	pInfoChar->m_nSex	= nSex;
+	pInfoChar->m_wFamilyID	= wFamilyID;
+	pInfoChar->m_wGrpIDEye	= wGrpIDEye;
+	pInfoChar->m_wGrpIDEyeColor	= wGrpIDEyeColor;
+	pInfoChar->m_wGrpIDHairType	= wGrpIDHairType;
+	pInfoChar->m_wGrpIDHairColor	= wGrpIDHairColor;
+	pInfoChar->m_dwMotionTypeID	= dwMotionTypeID;
+	if (strRawCharName == "春うらら") {
+		pInfoChar->m_wGrpIDSP = 1;
+		pInfoChar->m_clName	= RGB(255, 200, 100);
+		pInfoChar->m_clSpeak	= RGB(255, 200, 100);
+		pInfoChar->m_abyMark.push_back(2);
+	} else if (strRawCharName == "VeLTiNA") {
+		pInfoChar->m_wGrpIDSP = 2;
+		pInfoChar->m_clName	= RGB(255, 150, 150);
+		pInfoChar->m_clSpeak	= RGB(255, 150, 150);
+		pInfoChar->m_abyMark.push_back(3);
+	} else if (strRawCharName == "あやしいの") {
+		pInfoChar->m_wGrpIDSP = 3;
+	}
+	pInfoChar->m_abyMark.push_back(1);
+	// クローズ(#if 0)されている種族別の初期服装分岐は元のまま無効(常に0)にそろえる。
+	pInfoChar->m_wGrpIDCloth = 0;
+	pInfoChar->m_wGrpIDInitNPC	= pInfoChar->m_wGrpIDNPC;
+	pInfoChar->m_wGrpIDInitCloth	= pInfoChar->m_wGrpIDCloth;
+	pInfoChar->m_wGrpIDInitEye	= pInfoChar->m_wGrpIDEye;
+	pInfoChar->m_wGrpIDInitEyeColor	= pInfoChar->m_wGrpIDEyeColor;
+	pInfoChar->m_wGrpIDInitHairType	= pInfoChar->m_wGrpIDHairType;
+	pInfoChar->m_wGrpIDInitHairColor	= pInfoChar->m_wGrpIDHairColor;
+	pInfoChar->m_wGrpIDInitSP	= pInfoChar->m_wGrpIDSP;
+	outCharID = Add(pInfoChar);
+	if (pInfoAccount != NULL) {
+		pInfoAccount->m_adwCharID.push_back(outCharID);
+	}
+
+	Leave();
+
+	return MAKECHARRES_OK;
 }
 
 PCInfoCharBase CLibInfoCharSvr::AddNPC(CInfoCharBase *pInfoChar)

@@ -337,6 +337,9 @@
     <ClCompile Include="src\Web\SessionStore.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountAuthHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\DebugFixtureHandler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Web\IpRateLimiter.cpp" />
     <ClCompile Include="src\Web\Handlers\AdminRolesHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\SelectionHandler.cpp" />
@@ -375,6 +378,9 @@
     <ClCompile Include="src\Web\WebSocketBridge.cpp" />
     <ClCompile Include="src\Web\ProxyIpRegistry.cpp" />
     <ClCompile Include="src\Web\ProxyHeaderParser.cpp" />
+    <ClCompile Include="src\Web\DebugFixtureGuard.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Web\WebSocketProtocol.cpp" />
     <ClCompile Include="src\Web\AdminWsHub.cpp" />
     <ClCompile Include="src\Web\HttpTypes.cpp" />
@@ -511,6 +517,7 @@
     <ClInclude Include="src\Web\SessionsJsonBuilder.h" />
     <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h" />
     <ClInclude Include="src\Web\Handlers\AccountAuthHandler.h" />
+    <ClInclude Include="src\Web\Handlers\DebugFixtureHandler.h" />
     <ClInclude Include="src\Web\IpRateLimiter.h" />
     <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h" />
     <ClInclude Include="src\Web\Handlers\SelectionHandler.h" />
@@ -550,6 +557,7 @@
     <ClInclude Include="src\Web\WebSocketBridge.h" />
     <ClInclude Include="src\Web\ProxyIpRegistry.h" />
     <ClInclude Include="src\Web\ProxyHeaderParser.h" />
+    <ClInclude Include="src\Web\DebugFixtureGuard.h" />
     <ClInclude Include="src\Web\WebSocketProtocol.h" />
     <ClInclude Include="src\Web\AdminWsHub.h" />
     <ClInclude Include="src\Web\HttpTypes.h" />
