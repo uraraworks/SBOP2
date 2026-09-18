@@ -50,11 +50,14 @@
 #include "Handlers/SoundCatalogHandler.h"
 #include "Handlers/MapGenPatternHandler.h"
 #include "Handlers/MapGenPreviewHandler.h"
+#include "Handlers/AccountAuthHandler.h"
 #include "AuditLog.h"
 #include "AuthProvider.h"
 #include "MgrData.h"
 #include "TextOutput.h"
 #include "GlobalDefine.h"
+#include "ProxyHeaderParser.h"
+#include "ProxyIpRegistry.h"
 #include "../Platform/SvrPlatform.h"
 
 namespace
@@ -287,7 +290,45 @@ bool IsPathPrefix(const std::string &path, const char *pszPrefix)
 
 bool IsAuthApiPath(const std::string &path)
 {
-        return (path == "/api/auth/me") || (path == "/api/auth/admin-login") || (path == "/api/auth/logout");
+        // /api/account/* はログインコード方式の公開API(匿名で叩く)。
+        // 管理画面のセッション認証ゲートの対象外にし、IP単位の試行回数制限は
+        // 各ハンドラ側(CIpRateLimiter)で行う。
+        return (path == "/api/auth/me") || (path == "/api/auth/admin-login") || (path == "/api/auth/logout")
+                || IsPathPrefix(path, "/api/account/");
+}
+
+/// @brief IPv4アドレス(ネットワークバイトオーダー)をドット区切り10進表記にする。
+std::string FormatIPv4Dotted(unsigned long dwIpNet)
+{
+        unsigned int nHost = ntohl(dwIpNet);
+        char szBuf[16];
+        _snprintf_s(szBuf, sizeof(szBuf), _TRUNCATE, "%u.%u.%u.%u",
+                (nHost >> 24) & 0xFF, (nHost >> 16) & 0xFF, (nHost >> 8) & 0xFF, nHost & 0xFF);
+        return szBuf;
+}
+
+/// @brief 直接の接続元IPと(loopbackの場合のみ)X-Forwarded-Forの右端から、
+///        クライアントの実IPを解決する。WebSocketBridge経由(常にloopback)の
+///        MainFrame側と同じ信頼モデル(ProxyIpRegistry::IsLoopbackIPv4)にそろえる。
+std::string ResolveClientIp(SOCKET hClient, const std::string &rawRequest)
+{
+        sockaddr_in peerAddr;
+        memset(&peerAddr, 0, sizeof(peerAddr));
+        int nAddrLen = sizeof(peerAddr);
+        unsigned long dwIp = 0;
+
+        if (getpeername(hClient, reinterpret_cast<sockaddr *>(&peerAddr), &nAddrLen) == 0) {
+                dwIp = peerAddr.sin_addr.s_addr;
+        }
+
+        if (ProxyIpRegistry::IsLoopbackIPv4(dwIp)) {
+                unsigned long dwRealIp = 0;
+                if (ProxyHeaderParser::ExtractClientIp(rawRequest, dwRealIp)) {
+                        dwIp = dwRealIp;
+                }
+        }
+
+        return (dwIp != 0) ? FormatIPv4Dotted(dwIp) : std::string();
 }
 
 void SetUnauthorizedResponse(HttpResponse &response)
@@ -751,6 +792,7 @@ void CHttpServer::HandleClient(SOCKET hClient, bool &outTransferred)
                 shutdown(hClient, SD_BOTH);
                 return;
         }
+        httpRequest.clientIp = ResolveClientIp(hClient, request);
 
         HttpResponse httpResponse;
         if (IsPathPrefix(httpRequest.path, "/api/") && !IsAuthApiPath(httpRequest.path)) {
@@ -977,6 +1019,23 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> accountCreateHandler(new CAccountCreateHandler(m_pMgrData));
         m_router.Register("POST", "/api/accounts", std::move(accountCreateHandler));
+
+        // ログインコード方式の公開API(/api/account/*)。IsAuthApiPath で管理画面の
+        // セッション認証ゲート対象外にしてある(HttpServer.cpp 冒頭参照)。
+        std::unique_ptr<IApiHandler> accountRegisterHandler(new CAccountRegisterHandler(m_pMgrData));
+        m_router.Register("POST", "/api/account/register", std::move(accountRegisterHandler));
+
+        std::unique_ptr<IApiHandler> accountIssueCodeHandler(new CAccountIssueCodeHandler(m_pMgrData));
+        m_router.Register("POST", "/api/account/issue-code", std::move(accountIssueCodeHandler));
+
+        std::unique_ptr<IApiHandler> accountRedeemHandler(new CAccountRedeemHandler(m_pMgrData));
+        m_router.Register("POST", "/api/account/redeem", std::move(accountRedeemHandler));
+
+        std::unique_ptr<IApiHandler> accountMeHandler(new CAccountMeHandler(m_pMgrData));
+        m_router.Register("POST", "/api/account/me", std::move(accountMeHandler));
+
+        std::unique_ptr<IApiHandler> accountLogoutHandler(new CAccountLogoutHandler(m_pMgrData));
+        m_router.Register("POST", "/api/account/logout", std::move(accountLogoutHandler));
 
         std::unique_ptr<IApiHandler> rolesListHandler(new CAdminRolesListHandler(m_pMgrData));
         m_router.Register("GET", "/api/admin/roles", std::move(rolesListHandler));

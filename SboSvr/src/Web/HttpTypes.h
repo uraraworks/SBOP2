@@ -17,6 +17,11 @@ struct HttpRequest
         std::vector<HttpHeader> headers;
         std::string             body;
 
+        // クライアントの実IP(ドット区切り10進表記)。HttpServer::HandleClient が
+        // ParseHttpRequest 成功後に設定する。ループバック越し(WebSocketBridge等)
+        // では X-Forwarded-For の右端で差し替え済み。取得できなければ空文字列。
+        std::string             clientIp;
+
         const char *FindHeader(const char *pszName) const;
 };
 

@@ -32,7 +32,9 @@
 #include "LibInfoCharSVr.h"
 #include "MgrData.h"
 #include "PasswordHash.h"
+#include "Account/AccountAuthStore.h"
 #include <string>
+#include <vector>
 #include "Platform/SvrPlatform.h"
 
 CMgrData::CMgrData()
@@ -289,6 +291,39 @@ void CMgrData::Load(void)
 	m_pLibInfoTalkEvent->	DeleteAll();
 
 	SaveLoadInfoAccount.	Load((PCLibInfoBase)m_pLibInfoAccount);
+
+	// ログインコード方式: sys_account に存在しない AccountID の
+	// sys_account_code / sys_account_device 行を掃除する。
+	// register はメモリへの Add のみで、次の定期保存まで sys_account には
+	// 書かれないため、その間にサーバーが落ちると sys_account_code 側にだけ
+	// 行が残る。再起動後に同じ AccountID が別の新規アカウントへ割り当てられると、
+	// 古いコード/トークンで他人のアカウントに入れてしまうため、
+	// アカウント読込直後(=有効な AccountID が確定した直後)に必ず行う。
+	{
+		std::vector<unsigned int> validAccountIDs;
+		int nAccountTotalForPrune = m_pLibInfoAccount->GetCount();
+		for (int i = 0; i < nAccountTotalForPrune; i ++) {
+			PCInfoAccount pAccountForPrune = (PCInfoAccount)m_pLibInfoAccount->GetPtr(i);
+			if (pAccountForPrune != NULL) {
+				validAccountIDs.push_back((unsigned int)pAccountForPrune->m_dwAccountID);
+			}
+		}
+
+		CAccountAuthStore AuthStoreForPrune;
+		int nDeletedCodeRows = 0, nDeletedDeviceRows = 0;
+		if (!AuthStoreForPrune.PruneOrphanedAuth(validAccountIDs, &nDeletedCodeRows, &nDeletedDeviceRows)) {
+			if (m_pLog != NULL) {
+				m_pLog->Write("警告: ログインコードの孤児行掃除に失敗しました");
+			} else {
+				SboPlatform::WriteDebugLine("CMgrData: PruneOrphanedAuth failed\n");
+			}
+		} else if ((nDeletedCodeRows > 0) || (nDeletedDeviceRows > 0)) {
+			if (m_pLog != NULL) {
+				m_pLog->Write("ログインコードの孤児行を掃除しました(code:%d件 device:%d件)",
+					nDeletedCodeRows, nDeletedDeviceRows);
+			}
+		}
+	}
 
 	// アカウントパスワードの自動ハッシュ化移行(平文のままのものだけ対象。冪等)
 	{

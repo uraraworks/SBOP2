@@ -288,6 +288,8 @@
     <ClCompile Include="src\MainFrame\MainFrameRecvProcVERSION.cpp" />
     <ClCompile Include="src\MgrData.cpp" />
     <ClCompile Include="src\PasswordHash.cpp" />
+    <ClCompile Include="src\Account\LoginCode.cpp" />
+    <ClCompile Include="src\Account\AccountAuthStore.cpp" />
     <ClCompile Include="src\Platform\SvrPlatform.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -334,6 +336,8 @@
     <ClCompile Include="src\Web\AuthProvider.cpp" />
     <ClCompile Include="src\Web\SessionStore.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\AccountAuthHandler.cpp" />
+    <ClCompile Include="src\Web\IpRateLimiter.cpp" />
     <ClCompile Include="src\Web\Handlers\AdminRolesHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\SelectionHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\MapInfoHandler.cpp" />
@@ -467,6 +471,8 @@
     <ClInclude Include="src\MainFrame\PushDecision.h" />
     <ClInclude Include="src\MgrData.h" />
     <ClInclude Include="src\PasswordHash.h" />
+    <ClInclude Include="src\Account\LoginCode.h" />
+    <ClInclude Include="src\Account\AccountAuthStore.h" />
     <ClInclude Include="src\Platform\SvrPlatform.h" />
     <ClInclude Include="src\SaveLoad\SaveLoad.h" />
     <ClInclude Include="src\SaveLoad\SaveLoadInfoAccount.h" />
@@ -504,6 +510,8 @@
     <ClInclude Include="src\Web\ProcessMetrics.h" />
     <ClInclude Include="src\Web\SessionsJsonBuilder.h" />
     <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h" />
+    <ClInclude Include="src\Web\Handlers\AccountAuthHandler.h" />
+    <ClInclude Include="src\Web\IpRateLimiter.h" />
     <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h" />
     <ClInclude Include="src\Web\Handlers\SelectionHandler.h" />
     <ClInclude Include="src\Web\Handlers\MapInfoHandler.h" />

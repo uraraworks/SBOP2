@@ -108,6 +108,17 @@
     <ClCompile Include="TestAttackDecision.cpp" />
     <ClCompile Include="TestAtackTargetDecision.cpp" />
     <ClCompile Include="TestProxyIpRegistry.cpp" />
+    <ClCompile Include="TestLoginCode.cpp" />
+    <ClCompile Include="TestAccountAuthStore.cpp" />
+    <ClCompile Include="TestIpRateLimiter.cpp" />
+    <ClCompile Include="..\SboSvr\src\Account\LoginCode.cpp" />
+    <ClCompile Include="..\SboSvr\src\Account\AccountAuthStore.cpp" />
+    <ClCompile Include="..\SboSvr\src\Web\IpRateLimiter.cpp" />
+    <ClCompile Include="..\SboSvr\third_party\sqlite\sqlite3.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level1</WarningLevel>
+      <DisableSpecificWarnings>4244;4267;4996;4706;4090;4018;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
     <ClCompile Include="..\SboSvr\src\Web\ProxyIpRegistry.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\ProxyHeaderParser.cpp" />
     <ClCompile Include="..\SboSvr\src\Web\ProcessMetrics.cpp" />
