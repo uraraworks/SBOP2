@@ -42,23 +42,6 @@
 #include <emscripten/em_js.h>
 #include <emscripten/emscripten.h>
 
-// localStorage から指定キーの値を UTF-8 文字列として返す。
-// 存在しない場合は空文字列。戻り値は Emscripten ヒープ上の malloc バッファ（呼び出し元が free すること）。
-EM_JS(char*, sbop2_ls_get, (const char *key), {
-	var k = UTF8ToString(key);
-	var v = localStorage.getItem(k);
-	if (v === null) { v = ''; }
-	var len = lengthBytesUTF8(v) + 1;
-	var buf = _malloc(len);
-	stringToUTF8(v, buf, len);
-	return buf;
-});
-
-// localStorage に UTF-8 文字列を書き込む。
-EM_JS(void, sbop2_ls_set, (const char *key, const char *value), {
-	localStorage.setItem(UTF8ToString(key), UTF8ToString(value));
-});
-
 // localStorage から指定キーを削除する。
 EM_JS(void, sbop2_ls_remove, (const char *key), {
 	localStorage.removeItem(UTF8ToString(key));
@@ -291,23 +274,8 @@ void CMgrData::SaveIniData(void)
 
 #ifdef __EMSCRIPTEN__
 	{
-		// ブラウザ版: localStorage に保存
-		// アカウントID は SavePassword に関わらず常時保存（ネイティブ版と同じ）
-		std::string strAccountUtf8 = TStringToUtf8Std((LPCTSTR)m_strLastAccount);
-		sbop2_ls_set("sbop2_account", strAccountUtf8.c_str());
-
-		// SavePassword フラグを保存
-		sbop2_ls_set("sbop2_savepw", m_bSavePassword ? "1" : "0");
-
-		// パスワードは暗号化して保存（SavePassword=FALSE のときは空で書き、ネイティブの Save() と同じ挙動）
-		if (m_bSavePassword) {
-			ZeroMemory(szCrypt, sizeof(szCrypt));
-			std::string strPasswordUtf8 = TStringToUtf8Std((LPCTSTR)m_strLastPassword);
-			CryptUtil.CryptStr(strPasswordUtf8.c_str(), szCrypt, 10);
-			sbop2_ls_set("sbop2_password", szCrypt);
-		} else {
-			sbop2_ls_remove("sbop2_password");
-		}
+		// ログインコード方式(docs/login-code-auth-plan.md)へ移行済み。アカウント名・パスワードは
+		// 端末トークン(sbop2_device_token、JS 側管理)に置き換わったため、ここでは何も保存しない。
 		return;
 	}
 #endif // __EMSCRIPTEN__
@@ -817,31 +785,11 @@ void CMgrData::ReadIniData(void)
 				m_wServerPort = (WORD)nPort;
 			}
 		}
-		// localStorage からアカウント・パスワード・SavePassword を読み込む
-		{
-			char szDecrypted[128];
-
-			// SavePassword フラグ
-			char *pszSavePw = sbop2_ls_get("sbop2_savepw");
-			m_bSavePassword = (pszSavePw && pszSavePw[0] == '1') ? TRUE : FALSE;
-			free(pszSavePw);
-
-			// アカウントID（常時読み込み）
-			char *pszAccount = sbop2_ls_get("sbop2_account");
-			if (pszAccount && pszAccount[0] != '\0') {
-				m_strLastAccount = Utf8ToTString(pszAccount);
-			}
-			free(pszAccount);
-
-			// パスワード（暗号化済み16進文字列を復号）
-			char *pszEncPw = sbop2_ls_get("sbop2_password");
-			if (pszEncPw && pszEncPw[0] != '\0') {
-				ZeroMemory(szDecrypted, sizeof(szDecrypted));
-				CryptUtil.UnCryptStr(pszEncPw, szDecrypted, 10);
-				m_strLastPassword = Utf8ToTString(szDecrypted);
-			}
-			free(pszEncPw);
-		}
+		// ログインコード方式(docs/login-code-auth-plan.md)へ移行済み。旧方式で残っている
+		// アカウント名・パスワードの localStorage 値があれば、読み込まずに削除する。
+		sbop2_ls_remove("sbop2_account");
+		sbop2_ls_remove("sbop2_password");
+		sbop2_ls_remove("sbop2_savepw");
 #endif
 		return;
 	}

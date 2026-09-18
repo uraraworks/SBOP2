@@ -147,50 +147,16 @@ void CMainFrame::RecvProcCONNECT_REQ_LOGIN(PBYTE pData, DWORD dwSessionID)
 
 	// 未登録
 	} else {
-//		bResult = m_pLibInfoAccount->IsUseMacAddr ((LPCSTR)strTmp);
-//		if (bResult) {
-//			PacketRes.Make (LOGINRES_NG_MAC, 0);
-//			m_pSock->SendTo (dwSessionID, &PacketRes);
-//			return;
-//		}
-		{
-			CmyString strNewPassword;
-			std::string strHashed;
-
-			TrimViewString(strNewPassword, (LPCTSTR)Packet.m_strPassword);
-
-			// 新規作成時のみ文字種を検証する。既存アカウントの照合には
-			// 掛けないこと(過去に全角で登録された分を締め出すため)。
-			if (!PasswordHash::IsAcceptable(strNewPassword.GetUtf8Pointer())) {
-				nResult = LOGINRES_NG_PASSWORD;
-				m_pLog->Write("新規アカウント作成拒否(パスワードに使用できない文字) dwSessionID:%u", dwSessionID);
-				PacketRes.Make(nResult, 0);
-				m_pSock->SendTo(dwSessionID, &PacketRes);
-				return;
-			}
-
-			strHashed = PasswordHash::Hash(strNewPassword.GetUtf8Pointer());
-			if (strHashed.empty()) {
-				// ハッシュ化失敗。アカウントは作らずログインを拒否する
-				nResult = LOGINRES_NG_PASSWORD;
-				m_pLog->Write("新規アカウント作成失敗(パスワードハッシュ化エラー) dwSessionID:%u", dwSessionID);
-				PacketRes.Make(nResult, 0);
-				m_pSock->SendTo(dwSessionID, &PacketRes);
-				return;
-			}
-
-			nResult = LOGINRES_OK;
-			pInfoAccount = (PCInfoAccount)m_pLibInfoAccount->GetNew();
-			TrimViewString(pInfoAccount->m_strAccount, (LPCTSTR)Packet.m_strAccount);
-			pInfoAccount->m_strPassword = strHashed.c_str();
-			pInfoAccount->m_strMacAddr = strTmp;
-
-			// 管理者権限アカウント？
-			if (pInfoAccount->m_strAccount == m_pMgrData->GetAdminAccount()) {
-				pInfoAccount->m_nAdminLevel = ADMINLEVEL_ALL;
-			}
-
-			m_pLibInfoAccount->Add(pInfoAccount);
+		// ログインコード方式(docs/login-code-auth-plan.md S4)への移行に伴い、知らない名前での
+		// アカウント自動作成は廃止する(方針は LoginCode::ShouldAutoCreateAccountOnUnknownLogin()
+		// に切り出してあり、常に false。TestLoginCode.cpp でこの前提を検出する)。アカウントの
+		// 有無を区別させないため、登録済みでパスワード不一致の場合と同じ LOGINRES_NG_PASSWORD を
+		// 返す(旧「管理者名と一致したらADMINLEVEL_ALLを付与」処理もここで消える)。
+		if (!LoginCode::ShouldAutoCreateAccountOnUnknownLogin()) {
+			nResult = LOGINRES_NG_PASSWORD;
+			PacketRes.Make(nResult, 0);
+			m_pSock->SendTo(dwSessionID, &PacketRes);
+			return;
 		}
 	}
 

@@ -122,13 +122,19 @@
   - アカウント名は `/api/account/me` で取得する。
 - **ゲーム内の設定メニュー**に「アカウント管理」と「この端末からログアウト」を追加する。
 
-### S4: 後片付け
+### S4: 後片付け（実施済み・2026-09-18）
 
-- ゲーム内の ID＋PW 入力欄（DOM と `SBOP2_BrowserLogin*`）を削除する。
-- localStorage の `sbop2_password` と `sbop2_savepw` を削除する。起動時に古い値が残っていれば消す。
-- 知らない名前でログインしたときのアカウント自動作成を廃止する（`MainFrameRecvProcCONNECT.cpp:89-134`）。
-  - 旧 LOGIN パケットは、移行期間が終わったら受け付けないようにする。
-- `SBOP2RequestWebAdminSession` の呼び出しを廃止する。
+- ゲーム内の ID＋PW 入力欄を削除した。
+  - `tools/emscripten/sbocli-title.shell.html`: `#loginAccount` / `#loginPassword` / `#loginSaveWrap` / `#loginConnect` などの DOM 要素、それらを隠すだけだった CSS、対応する JS（フォーカス・input・change・Enter キーのイベント結線）を削除。
+  - `SboCli/src/Window/WindowLOGINBrowser.{h,cpp}`: `SBOP2_BrowserLoginSetAccount/SetPassword/SetSavePassword/SetFocus`（EMSCRIPTEN_KEEPALIVE 関数）、`SetAccountFromBrowser/SetPasswordFromBrowser/SetSavePasswordFromBrowser/SetFocusIndex`、`NormalizeLoginText`、`m_strAccount`/`m_strPassword`/`m_bSavePassword`/`m_nFocusIndex` を削除。`ILoginWindow`（ネイティブ版と共有）はそのままにし、`GetAccount()`/`GetPassword()` は互換のため空文字を返すだけにした（ブラウザ版はトークンログイン専用で、この2つは呼ばれない）。
+- localStorage の旧値を廃止した。
+  - `SboCli/src/MgrData.cpp`: `SaveIniData`/`ReadIniData` のブラウザ分岐から `sbop2_account`/`sbop2_password`/`sbop2_savepw` の読み書きを削除し、`ReadIniData` 起動時に3キーとも `removeItem` するようにした（未使用になった `sbop2_ls_get`/`sbop2_ls_set` も削除、`sbop2_ls_remove` のみ残す）。
+- 知らない名前でのアカウント自動作成を廃止した（`SboSvr/src/MainFrame/MainFrameRecvProcCONNECT.cpp` の `RecvProcCONNECT_REQ_LOGIN`）。
+  - 未登録名は作成せず、既存アカウントのパスワード不一致と同じ `LOGINRES_NG_PASSWORD` を返す（アカウントの有無を区別させない）。
+  - 判定を `LoginCode::ShouldAutoCreateAccountOnUnknownLogin()`（常に false、`SboSvr/src/Account/LoginCode.{h,cpp}`）に切り出し、`SboSvrTest/TestLoginCode.cpp` に「false であること」のテストを追加した。true に書き換えると当該テストが落ちることを確認済み。
+  - 自動作成に付随していた「管理者名と一致したら ADMINLEVEL_ALL を付与」処理も削除した。DB の `sys_account` を確認したところ管理者アカウント（`admin`, AdminLevel=1）は既に存在しており、影響はない。
+  - 既存アカウントの ID＋PW ログイン（`CPacketCONNECT_REQ_LOGIN` / `SBOCOMMANDID_SUB_CONNECT_REQ_LOGIN`）自体は、キャッシュに残った旧クライアントや移行期間のため引き続き受け付ける。受付停止は本番反映後に別途判断する。
+- `SBOP2RequestWebAdminSession` は呼び出し元が無かった（`SboSvr/webroot/app.js` は `postMessage` の受信側であり送信側ではない）ため、関数定義ごと `tools/emscripten/sbocli-title.shell.html` から削除した。
 
 ## 移行期間の扱い
 

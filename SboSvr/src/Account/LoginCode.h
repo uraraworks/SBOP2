@@ -52,9 +52,19 @@ namespace LoginCode
 	/// (生成時は小文字16進で統一されるため、正規化は不要)。
 	std::string	HashDeviceToken(const std::string &strToken);
 
+	/// @brief 知らない名前でのログイン要求(REQ_LOGIN)を受けたとき、アカウントを
+	/// 自動作成してよいかどうか。
+	///
+	/// ログインコード方式(docs/login-code-auth-plan.md S4)への移行に伴い false 固定。
+	/// アカウントは /api/account/register からのみ作る。MainFrameRecvProcCONNECT.cpp の
+	/// RecvProcCONNECT_REQ_LOGIN はこの値を見て、未登録名なら LOGINRES_NG_PASSWORD を返す
+	/// (アカウントの有無を区別させないため、パスワード不一致と同じ結果にする)。
+	/// この関数を true に変えるとテスト(TestLoginCode.cpp)が落ちる。
+	bool	ShouldAutoCreateAccountOnUnknownLogin(void);
+
 	/// @brief アカウント名として使える文字かどうかを判定する。
 	///
-	/// ゲーム側の自動作成(MainFrameRecvProcCONNECT.cpp)のパスワード検証と
+	/// アカウント登録API(/api/account/register)のパスワード検証と
 	/// 同じ条件(ASCII の表示可能文字 0x21〜0x7E のみ)にそろえる。
 	/// 全角文字・空白・制御文字は不可。
 	/// @param strName アカウント名(UTF-8想定)

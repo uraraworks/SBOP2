@@ -185,4 +185,11 @@ namespace LoginCode
 		}
 		return strResult;
 	}
+
+	bool	ShouldAutoCreateAccountOnUnknownLogin(void)
+	{
+		// ログインコード方式(docs/login-code-auth-plan.md S4)へ移行済み。
+		// 常に false。ここを true にする変更は TestLoginCode.cpp で検出する。
+		return false;
+	}
 }

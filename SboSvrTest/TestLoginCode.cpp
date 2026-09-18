@@ -232,3 +232,15 @@ TEST(アカウント名正規化_ASCII以外の記号は変更しない)
 {
 	CHECK(LoginCode::NormalizeAccountName("Player_01!") == "player_01!");
 }
+
+//////////////////////////////////////////////////////////////////////
+// 未登録名でのログイン自動作成廃止(docs/login-code-auth-plan.md S4)
+//////////////////////////////////////////////////////////////////////
+
+TEST(未登録名ログイン_自動作成は廃止済み)
+{
+	// MainFrameRecvProcCONNECT.cpp の RecvProcCONNECT_REQ_LOGIN は、この値が
+	// false であることを前提に「未登録なら LOGINRES_NG_PASSWORD」を返す。
+	// ここを true に戻すとこのテストが落ちる。
+	CHECK(LoginCode::ShouldAutoCreateAccountOnUnknownLogin() == false);
+}
