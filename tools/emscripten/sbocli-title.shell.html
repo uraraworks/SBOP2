@@ -1637,8 +1637,9 @@
       const scaleY = canvasRect.height / canvasElement.height;
 
       loginOverlay.hidden = false;
-      const overlayOffsetX = Math.round(-22 * scaleX);
-      const overlayOffsetY = Math.round(-22 * scaleY);
+      // canvas 上の実描画位置は C++ の報告座標より 32px 左上(ウィンドウ枠と DOM パネルを一致させる)
+      const overlayOffsetX = Math.round(-32 * scaleX);
+      const overlayOffsetY = Math.round(-32 * scaleY);
 
       loginPanel.style.left = ((state.windowX * scaleX) + overlayOffsetX) + 'px';
       loginPanel.style.top = ((state.windowY * scaleY) + overlayOffsetY) + 'px';

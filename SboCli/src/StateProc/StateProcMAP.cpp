@@ -116,6 +116,49 @@ EM_JS(void, SBOP2_NotifyBattleModeChange, (int bBattle), {
 	}
 });
 
+// システムメニュー「アカウント管理」: ゲームを続けたまま別タブでアカウントページを開く。
+// キー入力はゲームループの次フレームで処理されるため、ブラウザ(特に iOS Safari)が
+// ポップアップとしてブロックすることがある。noopener 指定だと成否が分からないので
+// 戻り値で判定し、ブロックされたら確認のうえこのタブで開く。
+EM_JS(void, SBOP2_OpenAccountPageInNewTab, (), {
+	var w = window.open('/account/', '_blank');
+	if (w) {
+		w.opener = null;
+		return;
+	}
+	if (window.confirm('新しいタブを開けませんでした。このタブでアカウントページを開きますか？（ゲームは終了します）')) {
+		window.location.href = '/account/';
+	}
+});
+
+// システムメニュー「この端末からログアウト」: JS confirm() で確認してから実行する。
+// はい: サーバーへの失効リクエスト(失敗しても続行)→端末側のトークンを消してタイトルへ戻す。
+// いいえ: 何もしない(ゲーム続行)。トークンの値は SDL_Log 等に出さないこと。
+EM_JS(void, SBOP2_ConfirmAndLogoutDevice, (), {
+	var msg = 'この端末からログアウトします。次に遊ぶときはログインコードの入力が必要です。よろしいですか？';
+	if (!window.confirm(msg)) {
+		return;
+	}
+	function finish() {
+		try {
+			window.localStorage.removeItem('sbop2_device_token');
+			window.localStorage.removeItem('sbop2_device_account');
+		} catch (e) { /* ignore */ }
+		window.location.href = '/';
+	}
+	var token = '';
+	try {
+		token = window.localStorage.getItem('sbop2_device_token') || '';
+	} catch (e) {
+		token = '';
+	}
+	fetch('/api/account/logout', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ deviceToken: token })
+	}).catch(function () { /* 失敗しても続行 */ }).then(finish);
+});
+
 static CMgrData *s_pMgrDataForAdminMode = NULL;
 
 /// アクティブな CStateProcMAP インスタンスへのグローバルポインタ（ブラウザ版のみ）
@@ -4023,6 +4066,14 @@ BOOL CStateProcMAP::OnWindowMsgSYSTEMMENU(DWORD dwPara)
 	case 1:		// オプション
 		m_pMgrWindow->MakeWindowOPTION();
 		break;
+#if defined(__EMSCRIPTEN__)
+	case 2:		// アカウント管理(ブラウザ版のみ)
+		SBOP2_OpenAccountPageInNewTab();
+		goto Exit;	// サブウィンドウを開かないのでシステムメニューを閉じる
+	case 3:		// この端末からログアウト(ブラウザ版のみ)
+		SBOP2_ConfirmAndLogoutDevice();
+		goto Exit;	// サブウィンドウを開かないのでシステムメニューを閉じる
+#endif
 	default:
 		goto Exit;
 	}

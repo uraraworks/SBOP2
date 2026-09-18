@@ -15,13 +15,22 @@
 
 CWindowSYSTEMMENU::CWindowSYSTEMMENU()
 {
+#if defined(__EMSCRIPTEN__)
+	m_nPosMax	= 3;
+#else
 	m_nPosMax	= 1;
+#endif
 	m_bInput	= TRUE;
 	m_nID	= WINDOWTYPE_SYSTEMMENU;
 	m_ptViewPos.x	= 8 * 5;
 	m_ptViewPos.y	= 16 * 3;
+#if defined(__EMSCRIPTEN__)
+	m_sizeWindow.cx	= 16 * 2 + 16 * 13;
+	m_sizeWindow.cy	= 16 * 2 + 16 * 4;
+#else
 	m_sizeWindow.cx	= 16 * 2 + 16 * 11;
 	m_sizeWindow.cy	= 16 * 2 + 16 * 2;
+#endif
 }
 
 
@@ -58,6 +67,10 @@ void CWindowSYSTEMMENU::Draw(PCImg32 pDst)
 	clText = RGB(1, 1, 1);
 	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("名前と発言色の設定"),	clText);
 	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("オプション"),	clText);
+#if defined(__EMSCRIPTEN__)
+	TextOut2(hDC, m_hFont, 32, 16 + 16 * 2, _T("アカウント管理"),	clText);
+	TextOut2(hDC, m_hFont, 32, 16 + 16 * 3, _T("この端末からログアウト"),	clText);
+#endif
 
 	m_pDib->Unlock();
 
