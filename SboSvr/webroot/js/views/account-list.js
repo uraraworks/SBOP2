@@ -8,27 +8,33 @@
  * search はアカウントID完全一致 / アカウント名部分一致 / 所持キャラ名部分一致 の
  * いずれかにヒットするフリーワード検索(旧 q + アカウントID欄を統合したもの)。
  * status: 未指定ならゴミ箱(status=trashed)を除外。"trashed" でゴミ箱のみ、
- *   "all" で全部。ゴミ箱の項目は trashReason / trashedAt(UNIX秒) を伴う。
+ *   "banned" で BAN 中のみ、"all" で全部。既定(未指定)ではゴミ箱を除くだけで
+ *   BAN 中のアカウントは通常の一覧に出る。
+ *   ゴミ箱/BAN の項目は理由・日時を伴うが、フィールド名は C++ 側で整理され得るため
+ *   item.statusReason ?? item.trashReason / item.statusChangedAt ?? item.trashedAt の
+ *   ように両対応で読む。
  * レスポンス: { total, offset, limit, items: [...] }
  * 各 item には disabled/online/adminLevel に加えて status("active"/"trashed"/"banned")
  * が付く。
  * (docs/web-admin-account-management-plan.md の S1 節を参照。
- *  ゴミ箱/完全削除の API はこの画面と並行実装中のため、まだ動かない前提で実装している)
+ *  ゴミ箱/完全削除/BAN の API はこの画面と並行実装中のため、まだ動かない前提で実装している)
  *
  * 絞り込み・ソート・ページングはすべてサーバー側で行う(list-toolbar は
  * サーバー側ページングモード。applyToRows は使わず setTotal のみで件数を反映)。
  * 状態は q/size/page/sort と個別フィルタを #account-list?... の URL クエリに
  * 保持し、mount 時に復元する(character-list.js と同じ作法)。
  *
- * ゴミ箱/完全削除:
+ * ゴミ箱/完全削除/BAN:
  *   POST   /api/accounts/{id}/trash    body {reason?} → 204
  *   DELETE /api/accounts/{id}/trash    ゴミ箱から戻す → 204
  *   DELETE /api/accounts/{id}          完全削除 → 204 (失敗時 409/403)
+ *   POST   /api/accounts/{id}/ban      body {reason?} → 204 (既にゴミ箱なら 409 already_trashed)
+ *   DELETE /api/accounts/{id}/ban      BAN 解除 → 204 (BAN 中でなければ 409 not_banned)
  *   一覧先頭にチェックボックス列を追加し、選択した複数件へまとめて適用する。
  *   確認は confirm()/prompt() を使わず、core/dom.js の armConfirmButton
  *   (二度押し確定)で画面内完結させる。編集ペインを別ウィンドウへポップアウト
  *   している間は confirm() が背後に隠れて「押しても何も起きない」既知の罠がある為。
- *   完全削除はゴミ箱送りより一段強い確認文言(対象件数を明示)にしている。
+ *   完全削除はゴミ箱送り/BAN より一段強い確認文言(対象件数を明示)にしている。
  */
 
 import { fetchJson } from "../core/api.js";
@@ -113,6 +119,7 @@ export function mount(container) {
             <select id="acct-filter-status">
               <option value="">通常(ゴミ箱を除く)</option>
               <option value="trashed">ゴミ箱</option>
+              <option value="banned">BAN中</option>
               <option value="all">すべて(ゴミ箱含む)</option>
             </select>
           </label>
@@ -141,8 +148,10 @@ export function mount(container) {
         <div class="filter-row" id="acct-bulk-toolbar">
           <span id="acct-bulk-count">0 件選択中</span>
           <span id="acct-bulk-normal-actions">
-            <input type="text" id="acct-bulk-reason" placeholder="ゴミ箱に入れる理由（任意）" style="width:16em" />
+            <input type="text" id="acct-bulk-reason" placeholder="理由（任意・ゴミ箱/BAN共通）" style="width:18em" />
             <button type="button" id="acct-bulk-trash-btn" class="button secondary" disabled>選択したアカウントをゴミ箱へ</button>
+            <button type="button" id="acct-bulk-ban-btn" class="button danger" disabled>選択したアカウントをBAN</button>
+            <button type="button" id="acct-bulk-unban-btn" class="button secondary" disabled>選択したアカウントのBANを解除</button>
           </span>
           <span id="acct-bulk-trash-actions">
             <button type="button" id="acct-bulk-restore-btn" class="button secondary" disabled>選択したアカウントを元に戻す</button>
@@ -178,6 +187,8 @@ export function mount(container) {
   const bulkTrashActionsEl   = container.querySelector("#acct-bulk-trash-actions");
   const bulkReasonInput      = container.querySelector("#acct-bulk-reason");
   const bulkTrashBtn         = container.querySelector("#acct-bulk-trash-btn");
+  const bulkBanBtn           = container.querySelector("#acct-bulk-ban-btn");
+  const bulkUnbanBtn         = container.querySelector("#acct-bulk-unban-btn");
   const bulkRestoreBtn       = container.querySelector("#acct-bulk-restore-btn");
   const bulkDeleteBtn        = container.querySelector("#acct-bulk-delete-btn");
 
@@ -217,14 +228,25 @@ export function mount(container) {
     return !!filterStatus && filterStatus.value === "trashed";
   }
 
-  function columnCount() {
-    // チェックボックス + ID/名前/状態/キャラ数/キャラ/作成日/最終ログイン/ログイン回数 + 操作
-    return 1 + 8 + (isTrashMode() ? 2 : 0) + 1;
+  function isBanMode() {
+    return !!filterStatus && filterStatus.value === "banned";
   }
 
-  // ゴミ箱表示中かどうかで見出し列とツールバーの見た目を切り替える
+  // ゴミ箱/BAN のどちらかを絞り込み表示している間は理由・日時列を出す
+  // (ゴミ箱理由/BAN理由はサーバー側で reason / statusChangedAt に整理され得るため
+  // 両方のフィールド名にフォールバックして読む)。
+  function showReasonColumns() {
+    return isTrashMode() || isBanMode();
+  }
+
+  function columnCount() {
+    // チェックボックス + ID/名前/状態/キャラ数/キャラ/作成日/最終ログイン/ログイン回数 + 操作
+    return 1 + 8 + (showReasonColumns() ? 2 : 0) + 1;
+  }
+
+  // ゴミ箱/BAN 表示中かどうかで見出し列とツールバーの見た目を切り替える
   function renderThead() {
-    const trash = isTrashMode();
+    const showReason = showReasonColumns();
     theadRow.innerHTML =
       `<th><input type="checkbox" id="acct-select-all" /></th>` +
       `<th>ID</th>` +
@@ -235,7 +257,7 @@ export function mount(container) {
       `<th>作成日</th>` +
       `<th>最終ログイン</th>` +
       `<th>ログイン回数</th>` +
-      (trash ? `<th>ゴミ箱理由</th><th>ゴミ箱に入れた日時</th>` : "") +
+      (showReason ? `<th>理由</th><th>状態変更日時</th>` : "") +
       `<th>操作</th>`;
 
     const selectAllCb = theadRow.querySelector("#acct-select-all");
@@ -267,6 +289,8 @@ export function mount(container) {
     if (bulkCountEl) { bulkCountEl.textContent = `${selectedIds.size} 件選択中`; }
     const hasSelection = selectedIds.size > 0;
     if (bulkTrashBtn)   { bulkTrashBtn.disabled   = !hasSelection; }
+    if (bulkBanBtn)     { bulkBanBtn.disabled     = !hasSelection; }
+    if (bulkUnbanBtn)   { bulkUnbanBtn.disabled   = !hasSelection; }
     if (bulkRestoreBtn) { bulkRestoreBtn.disabled = !hasSelection; }
     if (bulkDeleteBtn)  { bulkDeleteBtn.disabled  = !hasSelection; }
     // 全選択チェックボックスの状態を現在表示中の行に合わせる
@@ -338,7 +362,7 @@ export function mount(container) {
   function renderList(items) {
     if (!tableBody) { return; }
     tableBody.innerHTML = "";
-    const trash = isTrashMode();
+    const showReason = showReasonColumns();
     const colCount = columnCount();
 
     if (!items.length) {
@@ -372,8 +396,8 @@ export function mount(container) {
         `<td>${escapeHtml(formatUnixSeconds(a.timeMakeAccount))}</td>` +
         `<td>${escapeHtml(formatUnixSeconds(a.timeLastLogin))}</td>` +
         `<td>${escapeHtml(String(a.loginCount ?? ""))}</td>` +
-        (trash
-          ? `<td>${escapeHtml(a.trashReason || "-")}</td><td>${escapeHtml(formatUnixSeconds(a.trashedAt))}</td>`
+        (showReason
+          ? `<td>${escapeHtml((a.statusReason ?? a.reason ?? a.trashReason) || "-")}</td><td>${escapeHtml(formatUnixSeconds(a.statusChangedAt ?? a.trashedAt))}</td>`
           : "") +
         `<td><button type="button" class="button secondary" data-role-btn="${escapeHtml(String(a.accountId))}">ロール設定</button></td>`;
 
@@ -466,6 +490,22 @@ export function mount(container) {
   // 選択操作(ゴミ箱送り/復元/完全削除)
   // ----------------------------------------------------------------
 
+  // 現在テーブルに描画されているアカウントIDの集合。
+  function getVisibleAccountIds() {
+    return new Set(
+      Array.from(tableBody.querySelectorAll("[data-acct-checkbox]"))
+        .map((cb) => Number(cb.dataset.acctCheckbox))
+    );
+  }
+
+  // 一括操作の実行直前の保険: 選択中のIDのうち、現在画面に表示されている行の
+  // IDだけを対象にする。再読み込みで選択が残ってしまった場合でも、
+  // 表示されていないアカウント(別の絞り込み結果)には絶対に操作を飛ばさない。
+  function getSafeSelectedIds() {
+    const visible = getVisibleAccountIds();
+    return Array.from(selectedIds).filter((id) => visible.has(id));
+  }
+
   // 選択中の各IDに順番にリクエストを送り、成功/失敗件数をまとめる。
   async function runBulk(ids, requestFn) {
     const failures = [];
@@ -497,7 +537,7 @@ export function mount(container) {
   }
 
   async function executeBulkTrash() {
-    const ids = Array.from(selectedIds);
+    const ids = getSafeSelectedIds();
     if (!ids.length) { return; }
     const reason = bulkReasonInput ? bulkReasonInput.value.trim() : "";
     const { successCount, failures } = await runBulk(ids, (id) => fetchJson(`/api/accounts/${id}/trash`, {
@@ -510,8 +550,32 @@ export function mount(container) {
     load();
   }
 
+  async function executeBulkBan() {
+    const ids = getSafeSelectedIds();
+    if (!ids.length) { return; }
+    const reason = bulkReasonInput ? bulkReasonInput.value.trim() : "";
+    const { successCount, failures } = await runBulk(ids, (id) => fetchJson(`/api/accounts/${id}/ban`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason: reason || undefined }),
+    }));
+    reportBulkResult("BAN", successCount, failures);
+    if (bulkReasonInput) { bulkReasonInput.value = ""; }
+    load();
+  }
+
+  async function executeBulkUnban() {
+    const ids = getSafeSelectedIds();
+    if (!ids.length) { return; }
+    const { successCount, failures } = await runBulk(ids, (id) => fetchJson(`/api/accounts/${id}/ban`, {
+      method: "DELETE",
+    }));
+    reportBulkResult("BAN解除", successCount, failures);
+    load();
+  }
+
   async function executeBulkRestore() {
-    const ids = Array.from(selectedIds);
+    const ids = getSafeSelectedIds();
     if (!ids.length) { return; }
     const { successCount, failures } = await runBulk(ids, (id) => fetchJson(`/api/accounts/${id}/trash`, {
       method: "DELETE",
@@ -521,7 +585,7 @@ export function mount(container) {
   }
 
   async function executeBulkDelete() {
-    const ids = Array.from(selectedIds);
+    const ids = getSafeSelectedIds();
     if (!ids.length) { return; }
     const { successCount, failures } = await runBulk(ids, (id) => fetchJson(`/api/accounts/${id}`, {
       method: "DELETE",
@@ -537,6 +601,20 @@ export function mount(container) {
       armedLabel: "本当に実行？（もう一度押す）",
       message: () => `${selectedIds.size} 件をゴミ箱へ移動します。`,
       onConfirm: executeBulkTrash,
+    });
+  }
+  if (bulkBanBtn) {
+    armConfirmButton(bulkBanBtn, {
+      armedLabel: "本当にBAN？（もう一度押す）",
+      message: () => `${selectedIds.size} 件のアカウントをBANします。`,
+      onConfirm: executeBulkBan,
+    });
+  }
+  if (bulkUnbanBtn) {
+    armConfirmButton(bulkUnbanBtn, {
+      armedLabel: "本当にBAN解除？（もう一度押す）",
+      message: () => `${selectedIds.size} 件のアカウントのBANを解除します。`,
+      onConfirm: executeBulkUnban,
     });
   }
   if (bulkRestoreBtn) {

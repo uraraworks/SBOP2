@@ -52,6 +52,33 @@ void CAccountAdminStore::EnsureTables(sqlite3 *pDb)
 		"  PrevDisable    INTEGER"
 		");";
 	sqlite3_exec(pDb, pszSql, NULL, NULL, NULL);
+
+	// 開発環境の既存DBは列追加前に作成済みのため、CREATE TABLE IF NOT EXISTS
+	// だけでは PrevStatus/PrevReason 列が増えない。PRAGMA table_info で
+	// 既存列を調べ、無ければ ALTER TABLE で追加する(既存行は壊さない)。
+	bool bHasPrevStatus = false;
+	bool bHasPrevReason = false;
+	{
+		sqlite3_stmt *pStmt = NULL;
+		if (sqlite3_prepare_v2(pDb, "PRAGMA table_info(sys_account_admin);", -1, &pStmt, NULL) == SQLITE_OK) {
+			while (sqlite3_step(pStmt) == SQLITE_ROW) {
+				// カラム: cid, name, type, notnull, dflt_value, pk
+				const unsigned char *pszName = sqlite3_column_text(pStmt, 1);
+				if (pszName == NULL) continue;
+				std::string strName(reinterpret_cast<const char *>(pszName));
+				if (strName == "PrevStatus") bHasPrevStatus = true;
+				if (strName == "PrevReason") bHasPrevReason = true;
+			}
+			sqlite3_finalize(pStmt);
+		}
+	}
+
+	if (!bHasPrevStatus) {
+		sqlite3_exec(pDb, "ALTER TABLE sys_account_admin ADD COLUMN PrevStatus TEXT;", NULL, NULL, NULL);
+	}
+	if (!bHasPrevReason) {
+		sqlite3_exec(pDb, "ALTER TABLE sys_account_admin ADD COLUMN PrevReason TEXT;", NULL, NULL, NULL);
+	}
 }
 
 bool CAccountAdminStore::LoadAll(std::vector<AccountAdminRow> &outRows)
@@ -64,7 +91,8 @@ bool CAccountAdminStore::LoadAll(std::vector<AccountAdminRow> &outRows)
 	EnsureTables(pDb);
 
 	const char *pszSql =
-		"SELECT AccountID, Status, Reason, TimeChanged, ActorAccountID, PrevDisable"
+		"SELECT AccountID, Status, Reason, TimeChanged, ActorAccountID, PrevDisable,"
+		" PrevStatus, PrevReason"
 		" FROM sys_account_admin;";
 	sqlite3_stmt *pStmt = NULL;
 	if (sqlite3_prepare_v2(pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
@@ -82,6 +110,10 @@ bool CAccountAdminStore::LoadAll(std::vector<AccountAdminRow> &outRows)
 		row.lTimeChanged = (long)sqlite3_column_int(pStmt, 3);
 		row.dwActorAccountID = (unsigned int)sqlite3_column_int(pStmt, 4);
 		row.nPrevDisable = sqlite3_column_int(pStmt, 5);
+		const unsigned char *pszPrevStatus = sqlite3_column_text(pStmt, 6);
+		row.strPrevStatus = (pszPrevStatus != NULL) ? std::string(reinterpret_cast<const char *>(pszPrevStatus)) : std::string();
+		const unsigned char *pszPrevReason = sqlite3_column_text(pStmt, 7);
+		row.strPrevReason = (pszPrevReason != NULL) ? std::string(reinterpret_cast<const char *>(pszPrevReason)) : std::string();
 		outRows.push_back(row);
 	}
 
@@ -98,7 +130,8 @@ bool CAccountAdminStore::Get(unsigned int dwAccountID, AccountAdminRow &outRow)
 	EnsureTables(pDb);
 
 	const char *pszSql =
-		"SELECT AccountID, Status, Reason, TimeChanged, ActorAccountID, PrevDisable"
+		"SELECT AccountID, Status, Reason, TimeChanged, ActorAccountID, PrevDisable,"
+		" PrevStatus, PrevReason"
 		" FROM sys_account_admin WHERE AccountID=?;";
 	sqlite3_stmt *pStmt = NULL;
 	if (sqlite3_prepare_v2(pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
@@ -118,6 +151,10 @@ bool CAccountAdminStore::Get(unsigned int dwAccountID, AccountAdminRow &outRow)
 		outRow.lTimeChanged = (long)sqlite3_column_int(pStmt, 3);
 		outRow.dwActorAccountID = (unsigned int)sqlite3_column_int(pStmt, 4);
 		outRow.nPrevDisable = sqlite3_column_int(pStmt, 5);
+		const unsigned char *pszPrevStatus = sqlite3_column_text(pStmt, 6);
+		outRow.strPrevStatus = (pszPrevStatus != NULL) ? std::string(reinterpret_cast<const char *>(pszPrevStatus)) : std::string();
+		const unsigned char *pszPrevReason = sqlite3_column_text(pStmt, 7);
+		outRow.strPrevReason = (pszPrevReason != NULL) ? std::string(reinterpret_cast<const char *>(pszPrevReason)) : std::string();
 		bFound = true;
 	}
 
@@ -128,7 +165,8 @@ bool CAccountAdminStore::Get(unsigned int dwAccountID, AccountAdminRow &outRow)
 
 bool CAccountAdminStore::SetStatus(unsigned int dwAccountID, const std::string &strStatus,
 	const std::string &strReason, long lTimeChanged,
-	unsigned int dwActorAccountID, int nPrevDisable)
+	unsigned int dwActorAccountID, int nPrevDisable,
+	const std::string &strPrevStatus, const std::string &strPrevReason)
 {
 	sqlite3 *pDb = NULL;
 	if (!OpenDb(&pDb)) return false;
@@ -158,8 +196,9 @@ bool CAccountAdminStore::SetStatus(unsigned int dwAccountID, const std::string &
 
 	if (bOk) {
 		const char *pszIns =
-			"INSERT INTO sys_account_admin(AccountID, Status, Reason, TimeChanged, ActorAccountID, PrevDisable)"
-			" VALUES(?, ?, ?, ?, ?, ?);";
+			"INSERT INTO sys_account_admin(AccountID, Status, Reason, TimeChanged, ActorAccountID, PrevDisable,"
+			" PrevStatus, PrevReason)"
+			" VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
 		sqlite3_stmt *pStmt = NULL;
 		if (sqlite3_prepare_v2(pDb, pszIns, -1, &pStmt, NULL) == SQLITE_OK) {
 			sqlite3_bind_int(pStmt, 1, (int)dwAccountID);
@@ -172,6 +211,16 @@ bool CAccountAdminStore::SetStatus(unsigned int dwAccountID, const std::string &
 			sqlite3_bind_int(pStmt, 4, (int)lTimeChanged);
 			sqlite3_bind_int(pStmt, 5, (int)dwActorAccountID);
 			sqlite3_bind_int(pStmt, 6, nPrevDisable);
+			if (strPrevStatus.empty()) {
+				sqlite3_bind_null(pStmt, 7);
+			} else {
+				sqlite3_bind_text(pStmt, 7, strPrevStatus.c_str(), -1, SQLITE_TRANSIENT);
+			}
+			if (strPrevReason.empty()) {
+				sqlite3_bind_null(pStmt, 8);
+			} else {
+				sqlite3_bind_text(pStmt, 8, strPrevReason.c_str(), -1, SQLITE_TRANSIENT);
+			}
 			bOk = (sqlite3_step(pStmt) == SQLITE_DONE);
 			sqlite3_finalize(pStmt);
 		} else {

@@ -272,8 +272,8 @@ struct AccountRow
         bool bOnline;
         std::vector<std::string> charNames;
         std::string status;         // "active" / "trashed" / "banned"
-        std::string trashReason;
-        long trashedAt;             // status=="trashed" の場合のみ意味を持つ
+        std::string statusReason;   // status!="active" の場合のみ意味を持つ(理由)
+        long statusChangedAt;       // status!="active" の場合のみ意味を持つ(変更日時)
 };
 
 // sort パラメータで指定された項目の比較値を取得する
@@ -467,22 +467,27 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
 
                 // ゴミ箱/BAN状態
                 std::string accountStatus = "active";
-                std::string accountTrashReason;
-                long accountTrashedAt = 0;
+                std::string accountStatusReason;
+                long accountStatusChangedAt = 0;
                 {
                         std::map<DWORD, AccountAdminRow>::const_iterator itAdmin = adminRowById.find(pAcc->m_dwAccountID);
                         if (itAdmin != adminRowById.end()) {
                                 accountStatus = itAdmin->second.strStatus;
-                                if (accountStatus == "trashed") {
-                                        accountTrashReason = itAdmin->second.strReason;
-                                        accountTrashedAt = itAdmin->second.lTimeChanged;
+                                if (accountStatus != "active") {
+                                        accountStatusReason = itAdmin->second.strReason;
+                                        accountStatusChangedAt = itAdmin->second.lTimeChanged;
                                 }
                         }
                 }
 
-                // status: 未指定=ゴミ箱を除外 / "trashed"=ゴミ箱のみ / "all"=全部
+                // status: 未指定=ゴミ箱を除外(BAN中は含む) / "trashed"=ゴミ箱のみ
+                //         / "banned"=BAN中のみ / "all"=全部
                 if (statusParam == "trashed") {
                         if (accountStatus != "trashed") {
+                                continue;
+                        }
+                } else if (statusParam == "banned") {
+                        if (accountStatus != "banned") {
                                 continue;
                         }
                 } else if (statusParam != "all") {
@@ -591,8 +596,8 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
                 row.bOnline = bOnline;
                 row.charNames = charNames;
                 row.status = accountStatus;
-                row.trashReason = accountTrashReason;
-                row.trashedAt = accountTrashedAt;
+                row.statusReason = accountStatusReason;
+                row.statusChangedAt = accountStatusChangedAt;
                 filtered.push_back(row);
         }
 
@@ -672,9 +677,16 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
                 oss << "\"timeLastLogin\":" << pAcc->m_dwTimeLastLogin << ',';
                 oss << "\"loginCount\":" << pAcc->m_dwLoginCount << ',';
                 oss << "\"status\":\"" << JsonUtils::Escape(row.status) << "\"";
-                if (row.status == "trashed") {
-                        oss << ",\"trashReason\":\"" << JsonUtils::Escape(row.trashReason) << "\",";
-                        oss << "\"trashedAt\":" << row.trashedAt;
+                if (row.status != "active") {
+                        // statusReason/statusChangedAt: trashed/banned共通の中立な名前。
+                        // trashReason/trashedAt は既存のゴミ箱UIとの互換のため trashed の
+                        // 場合だけ併記する(値は同じ)。
+                        oss << ",\"statusReason\":\"" << JsonUtils::Escape(row.statusReason) << "\",";
+                        oss << "\"statusChangedAt\":" << row.statusChangedAt;
+                        if (row.status == "trashed") {
+                                oss << ",\"trashReason\":\"" << JsonUtils::Escape(row.statusReason) << "\",";
+                                oss << "\"trashedAt\":" << row.statusChangedAt;
+                        }
                 }
                 oss << '}';
         }

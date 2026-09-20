@@ -109,6 +109,30 @@
   `CLibInfoAccount::Delete` → `sys_account_admin` 行削除。すべて監査ログに残す。
 - 一覧に「ゴミ箱」タブを置き、まとめて完全削除できるようにする。
 
+## BAN (アカウント一覧から直接)
+
+既存の「ログイン拒否」(`PUT /api/characters/{id}/disabled`) はキャラ側の `m_dwAccountID` が
+ログイン中しか設定されないため、**オフラインのキャラには効かない**(`no_account_linked` で400)。
+つまり相手がログイン中しか BAN できなかった。これをアカウント側から塞ぐ。
+
+- `POST /api/accounts/{id}/ban` / `DELETE /api/accounts/{id}/ban`。`sys_account_admin` の
+  `Status='banned'` を使い、スキーマはゴミ箱と共用する
+- BAN とゴミ箱は排他。ゴミ箱の中身への BAN は 409 `already_trashed`
+- BAN 済みをゴミ箱に入れるのは許可し、`PrevStatus` / `PrevReason` に控える。
+  ゴミ箱から戻すと **BAN 中(理由も元のまま)に復帰する**
+- BAN 中のアカウントは通常の一覧に出す(ゴミ箱とは別扱い)
+
+### 安全ガード
+
+BAN・ゴミ箱・完全削除の3つは、対象が以下なら 409 で拒否する:
+
+- 実施者本人 → `cannot_target_self`
+- 管理者権限を持つアカウント → `cannot_target_admin`
+
+管理者を BAN すると管理APIが全て401になり、画面から復旧できなくなる(実際に踏んで
+SQLite を直接編集する羽目になった)。解除系(BAN解除・ゴミ箱から戻す)には**ガードをかけない**。
+復旧手段を塞がないため。管理者アカウントを整理したい場合は、先にロール設定で権限を外す。
+
 ## S3: ログインコード再発行(予定)
 
 - `POST /api/accounts/{id}/login-code` → 新コードを発行し、**レスポンスで1回だけ**平文を返す。
