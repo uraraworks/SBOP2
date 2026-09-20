@@ -18,6 +18,7 @@
 #include "Info/InfoAccount.h"
 #include "Info/InfoCharBase.h"
 #include "myLib/myString.h"
+#include "Account/AccountAdminStore.h"
 
 // ---------------------------------------------------------------------------
 // 内部ヘルパー
@@ -270,6 +271,9 @@ struct AccountRow
         int charCount;
         bool bOnline;
         std::vector<std::string> charNames;
+        std::string status;         // "active" / "trashed" / "banned"
+        std::string trashReason;
+        long trashedAt;             // status=="trashed" の場合のみ意味を持つ
 };
 
 // sort パラメータで指定された項目の比較値を取得する
@@ -378,6 +382,10 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
         int nMaxChars = -1;
         bool bHasMaxChars = TryGetQueryInt(request.path, "maxChars", nMaxChars);
 
+        // status: 未指定=ゴミ箱を除外 / "trashed"=ゴミ箱のみ / "all"=全部
+        std::string statusParam;
+        TryGetQueryString(request.path, "status", statusParam);
+
         std::string sortParam;
         TryGetQueryString(request.path, "sort", sortParam);
         bool bSortDescending = false;
@@ -427,6 +435,20 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
                 }
         }
 
+        // sys_account_admin (ゴミ箱/BAN状態) を先に読み込む。
+        // pAccountLib のロックとネストしないよう、Enter() の前に読み終える
+        // （charNameById 構築と同じ考え方。DB接続の busy_timeout がロック内に及ばないようにする）
+        std::map<DWORD, AccountAdminRow> adminRowById;
+        {
+                CAccountAdminStore AdminStore;
+                std::vector<AccountAdminRow> adminRows;
+                if (AdminStore.LoadAll(adminRows)) {
+                        for (size_t i = 0; i < adminRows.size(); ++i) {
+                                adminRowById[static_cast<DWORD>(adminRows[i].dwAccountID)] = adminRows[i];
+                        }
+                }
+        }
+
         // アカウントライブラリをロックして全件スキャン・フィルタリング
         pAccountLib->Enter();
 
@@ -442,6 +464,32 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
                 }
 
                 std::string accountName = ToUtf8String(pAcc->m_strAccount);
+
+                // ゴミ箱/BAN状態
+                std::string accountStatus = "active";
+                std::string accountTrashReason;
+                long accountTrashedAt = 0;
+                {
+                        std::map<DWORD, AccountAdminRow>::const_iterator itAdmin = adminRowById.find(pAcc->m_dwAccountID);
+                        if (itAdmin != adminRowById.end()) {
+                                accountStatus = itAdmin->second.strStatus;
+                                if (accountStatus == "trashed") {
+                                        accountTrashReason = itAdmin->second.strReason;
+                                        accountTrashedAt = itAdmin->second.lTimeChanged;
+                                }
+                        }
+                }
+
+                // status: 未指定=ゴミ箱を除外 / "trashed"=ゴミ箱のみ / "all"=全部
+                if (statusParam == "trashed") {
+                        if (accountStatus != "trashed") {
+                                continue;
+                        }
+                } else if (statusParam != "all") {
+                        if (accountStatus == "trashed") {
+                                continue;
+                        }
+                }
 
                 // q: アカウント名部分一致
                 if (!filterName.empty() && !NameContains(accountName, filterName)) {
@@ -542,6 +590,9 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
                 row.charCount = nCharCount;
                 row.bOnline = bOnline;
                 row.charNames = charNames;
+                row.status = accountStatus;
+                row.trashReason = accountTrashReason;
+                row.trashedAt = accountTrashedAt;
                 filtered.push_back(row);
         }
 
@@ -619,7 +670,12 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
                 oss << "\"currentCharId\":" << pAcc->m_dwCharID << ',';
                 oss << "\"timeMakeAccount\":" << pAcc->m_dwTimeMakeAccount << ',';
                 oss << "\"timeLastLogin\":" << pAcc->m_dwTimeLastLogin << ',';
-                oss << "\"loginCount\":" << pAcc->m_dwLoginCount;
+                oss << "\"loginCount\":" << pAcc->m_dwLoginCount << ',';
+                oss << "\"status\":\"" << JsonUtils::Escape(row.status) << "\"";
+                if (row.status == "trashed") {
+                        oss << ",\"trashReason\":\"" << JsonUtils::Escape(row.trashReason) << "\",";
+                        oss << "\"trashedAt\":" << row.trashedAt;
+                }
                 oss << '}';
         }
 

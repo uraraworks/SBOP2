@@ -33,6 +33,7 @@
 #include "MgrData.h"
 #include "PasswordHash.h"
 #include "Account/AccountAuthStore.h"
+#include "Account/AccountAdminStore.h"
 #include <string>
 #include <vector>
 #include "Platform/SvrPlatform.h"
@@ -322,6 +323,28 @@ void CMgrData::Load(void)
 				m_pLog->Write("ログインコードの孤児行を掃除しました(code:%d件 device:%d件)",
 					nDeletedCodeRows, nDeletedDeviceRows);
 			}
+		}
+	}
+
+	// ゴミ箱/BAN状態の反映: sys_account_admin に行がある(=trashed/banned)アカウントは
+	// ログイン拒否フラグを立てる。ログイン拒否はこのテーブルから派生させる設計であり、
+	// sys_account 側の m_bDisable は起動のたびにここで上書きされる。
+	{
+		CAccountAdminStore AdminStoreForLoad;
+		std::vector<AccountAdminRow> adminRows;
+		if (AdminStoreForLoad.LoadAll(adminRows)) {
+			for (size_t i = 0; i < adminRows.size(); i ++) {
+				const AccountAdminRow &row = adminRows[i];
+				if ((row.strStatus != "trashed") && (row.strStatus != "banned")) {
+					continue;
+				}
+				PCInfoAccount pAccountForAdmin = (PCInfoAccount)m_pLibInfoAccount->GetPtr((DWORD)row.dwAccountID);
+				if (pAccountForAdmin != NULL) {
+					pAccountForAdmin->m_bDisable = TRUE;
+				}
+			}
+		} else if (m_pLog != NULL) {
+			m_pLog->Write("警告: アカウントのゴミ箱/BAN状態の読込に失敗しました");
 		}
 	}
 

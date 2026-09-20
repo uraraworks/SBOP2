@@ -4,27 +4,38 @@
  *
  * API: GET /api/accounts?search=&lastLoginBefore=&lastLoginAfter=&
  *      neverLoggedIn=&createdBefore=&createdAfter=&disabled=&admin=&online=&
- *      minChars=&maxChars=&sort=&offset=&limit=
+ *      minChars=&maxChars=&sort=&offset=&limit=&status=
  * search はアカウントID完全一致 / アカウント名部分一致 / 所持キャラ名部分一致 の
  * いずれかにヒットするフリーワード検索(旧 q + アカウントID欄を統合したもの)。
+ * status: 未指定ならゴミ箱(status=trashed)を除外。"trashed" でゴミ箱のみ、
+ *   "all" で全部。ゴミ箱の項目は trashReason / trashedAt(UNIX秒) を伴う。
  * レスポンス: { total, offset, limit, items: [...] }
+ * 各 item には disabled/online/adminLevel に加えて status("active"/"trashed"/"banned")
+ * が付く。
  * (docs/web-admin-account-management-plan.md の S1 節を参照。
- *  API はこの画面と並行実装中のため、まだ動かない前提で実装している)
+ *  ゴミ箱/完全削除の API はこの画面と並行実装中のため、まだ動かない前提で実装している)
  *
  * 絞り込み・ソート・ページングはすべてサーバー側で行う(list-toolbar は
  * サーバー側ページングモード。applyToRows は使わず setTotal のみで件数を反映)。
  * 状態は q/size/page/sort と個別フィルタを #account-list?... の URL クエリに
  * 保持し、mount 時に復元する(character-list.js と同じ作法)。
  *
- * 各行の「ロール設定」ボタンで「管理者ロール設定」へアカウントIDを引き継ぐ。role-management.js は
- * アカウントID手入力の作りなので、router.js の setRouteParams と同じ仕組みで
- * #role-management?accountId=12 の形にして遷移する(role-management.js 側で
- * getRouteParams から初期値を読む)。
+ * ゴミ箱/完全削除:
+ *   POST   /api/accounts/{id}/trash    body {reason?} → 204
+ *   DELETE /api/accounts/{id}/trash    ゴミ箱から戻す → 204
+ *   DELETE /api/accounts/{id}          完全削除 → 204 (失敗時 409/403)
+ *   一覧先頭にチェックボックス列を追加し、選択した複数件へまとめて適用する。
+ *   確認は confirm()/prompt() を使わず、core/dom.js の armConfirmButton
+ *   (二度押し確定)で画面内完結させる。編集ペインを別ウィンドウへポップアウト
+ *   している間は confirm() が背後に隠れて「押しても何も起きない」既知の罠がある為。
+ *   完全削除はゴミ箱送りより一段強い確認文言(対象件数を明示)にしている。
  */
 
 import { fetchJson } from "../core/api.js";
 import { getRouteParams, setRouteParams } from "../core/router.js";
 import { createListToolbar } from "../components/list-toolbar.js";
+import { armConfirmButton } from "../core/dom.js";
+import { showToast } from "../components/toast.js";
 
 // ----------------------------------------------------------------
 // escapeHtml
@@ -98,6 +109,13 @@ export function mount(container) {
               <option value="1">ログイン拒否</option>
             </select>
           </label>
+          <label>表示:
+            <select id="acct-filter-status">
+              <option value="">通常(ゴミ箱を除く)</option>
+              <option value="trashed">ゴミ箱</option>
+              <option value="all">すべて(ゴミ箱含む)</option>
+            </select>
+          </label>
           <label><input type="checkbox" id="acct-filter-admin" /> 管理者のみ</label>
           <label><input type="checkbox" id="acct-filter-online" /> 接続中のみ</label>
           <label><input type="checkbox" id="acct-filter-never-login" /> 一度もログイン無し</label>
@@ -119,28 +137,31 @@ export function mount(container) {
           <button type="button" class="button secondary" data-preset="zeroChars">キャラ0件</button>
         </div>
         <div id="acct-list-toolbar"></div>
+        <!-- 選択操作(ゴミ箱送り/復元/完全削除)ツールバー -->
+        <div class="filter-row" id="acct-bulk-toolbar">
+          <span id="acct-bulk-count">0 件選択中</span>
+          <span id="acct-bulk-normal-actions">
+            <input type="text" id="acct-bulk-reason" placeholder="ゴミ箱に入れる理由（任意）" style="width:16em" />
+            <button type="button" id="acct-bulk-trash-btn" class="button secondary" disabled>選択したアカウントをゴミ箱へ</button>
+          </span>
+          <span id="acct-bulk-trash-actions">
+            <button type="button" id="acct-bulk-restore-btn" class="button secondary" disabled>選択したアカウントを元に戻す</button>
+            <button type="button" id="acct-bulk-delete-btn" class="button danger" disabled>選択したアカウントを完全に削除</button>
+          </span>
+        </div>
         <p id="acct-list-summary" class="result-message"></p>
         <p id="acct-list-feedback" class="form-feedback" aria-live="polite"></p>
         <!-- アカウント一覧テーブル -->
         <table class="data-table" id="acct-list-table">
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>名前</th>
-              <th>状態</th>
-              <th>キャラ数</th>
-              <th>キャラ</th>
-              <th>作成日</th>
-              <th>最終ログイン</th>
-              <th>ログイン回数</th>
-              <th>操作</th>
-            </tr>
+            <tr id="acct-list-thead-row"></tr>
           </thead>
           <tbody id="acct-list-table-body"></tbody>
         </table>
       </section>`;
 
   const filterDisabled    = container.querySelector("#acct-filter-disabled");
+  const filterStatus      = container.querySelector("#acct-filter-status");
   const filterAdmin       = container.querySelector("#acct-filter-admin");
   const filterOnline      = container.querySelector("#acct-filter-online");
   const filterNeverLogin  = container.querySelector("#acct-filter-never-login");
@@ -149,11 +170,22 @@ export function mount(container) {
   const filterMaxChars    = container.querySelector("#acct-filter-max-chars");
   const toolbarHost       = container.querySelector("#acct-list-toolbar");
   const presetRow         = container.querySelector("#acct-preset-row");
+  const theadRow          = container.querySelector("#acct-list-thead-row");
+
+  // 選択操作ツールバーの要素
+  const bulkCountEl          = container.querySelector("#acct-bulk-count");
+  const bulkNormalActionsEl  = container.querySelector("#acct-bulk-normal-actions");
+  const bulkTrashActionsEl   = container.querySelector("#acct-bulk-trash-actions");
+  const bulkReasonInput      = container.querySelector("#acct-bulk-reason");
+  const bulkTrashBtn         = container.querySelector("#acct-bulk-trash-btn");
+  const bulkRestoreBtn       = container.querySelector("#acct-bulk-restore-btn");
+  const bulkDeleteBtn        = container.querySelector("#acct-bulk-delete-btn");
 
   // URL クエリから初期状態を復元
   const routeParams = getRouteParams();
 
   if (filterDisabled)   { filterDisabled.value = routeParams.get("disabled") || ""; }
+  if (filterStatus)     { filterStatus.value = routeParams.get("status") || ""; }
   if (filterAdmin)      { filterAdmin.checked = routeParams.get("admin") === "1"; }
   if (filterOnline)     { filterOnline.checked = routeParams.get("online") === "1"; }
   if (filterNeverLogin) { filterNeverLogin.checked = routeParams.get("neverLoggedIn") === "1"; }
@@ -177,6 +209,73 @@ export function mount(container) {
     total: 0,
     isLoading: false,
   };
+
+  // 選択中のアカウントID(現在表示中の1ページ分のみ対象。再読み込みでクリアする)
+  const selectedIds = new Set();
+
+  function isTrashMode() {
+    return !!filterStatus && filterStatus.value === "trashed";
+  }
+
+  function columnCount() {
+    // チェックボックス + ID/名前/状態/キャラ数/キャラ/作成日/最終ログイン/ログイン回数 + 操作
+    return 1 + 8 + (isTrashMode() ? 2 : 0) + 1;
+  }
+
+  // ゴミ箱表示中かどうかで見出し列とツールバーの見た目を切り替える
+  function renderThead() {
+    const trash = isTrashMode();
+    theadRow.innerHTML =
+      `<th><input type="checkbox" id="acct-select-all" /></th>` +
+      `<th>ID</th>` +
+      `<th>名前</th>` +
+      `<th>状態</th>` +
+      `<th>キャラ数</th>` +
+      `<th>キャラ</th>` +
+      `<th>作成日</th>` +
+      `<th>最終ログイン</th>` +
+      `<th>ログイン回数</th>` +
+      (trash ? `<th>ゴミ箱理由</th><th>ゴミ箱に入れた日時</th>` : "") +
+      `<th>操作</th>`;
+
+    const selectAllCb = theadRow.querySelector("#acct-select-all");
+    if (selectAllCb) {
+      selectAllCb.addEventListener("change", () => {
+        const rowChecks = tableBody.querySelectorAll("[data-acct-checkbox]");
+        rowChecks.forEach((cb) => {
+          cb.checked = selectAllCb.checked;
+          const id = Number(cb.dataset.acctCheckbox);
+          if (selectAllCb.checked) { selectedIds.add(id); } else { selectedIds.delete(id); }
+        });
+        updateBulkUi();
+      });
+    }
+  }
+
+  function updateBulkModeVisibility() {
+    const trash = isTrashMode();
+    if (bulkNormalActionsEl) { bulkNormalActionsEl.style.display = trash ? "none" : ""; }
+    if (bulkTrashActionsEl)  { bulkTrashActionsEl.style.display  = trash ? "" : "none"; }
+  }
+
+  function clearSelection() {
+    selectedIds.clear();
+    updateBulkUi();
+  }
+
+  function updateBulkUi() {
+    if (bulkCountEl) { bulkCountEl.textContent = `${selectedIds.size} 件選択中`; }
+    const hasSelection = selectedIds.size > 0;
+    if (bulkTrashBtn)   { bulkTrashBtn.disabled   = !hasSelection; }
+    if (bulkRestoreBtn) { bulkRestoreBtn.disabled = !hasSelection; }
+    if (bulkDeleteBtn)  { bulkDeleteBtn.disabled  = !hasSelection; }
+    // 全選択チェックボックスの状態を現在表示中の行に合わせる
+    const selectAllCb = theadRow.querySelector("#acct-select-all");
+    if (selectAllCb) {
+      const rowChecks = Array.from(tableBody.querySelectorAll("[data-acct-checkbox]"));
+      selectAllCb.checked = rowChecks.length > 0 && rowChecks.every((cb) => cb.checked);
+    }
+  }
 
   function computeOffset() {
     const s = toolbar.getState();
@@ -226,6 +325,7 @@ export function mount(container) {
       size: s.pageSize && s.pageSize !== 20 ? s.pageSize : null,
       page: s.page && s.page !== 1 ? s.page : null,
       disabled: (filterDisabled && filterDisabled.value !== "") ? filterDisabled.value : null,
+      status: (filterStatus && filterStatus.value !== "") ? filterStatus.value : null,
       admin: (filterAdmin && filterAdmin.checked) ? "1" : null,
       online: (filterOnline && filterOnline.checked) ? "1" : null,
       neverLoggedIn: (filterNeverLogin && filterNeverLogin.checked) ? "1" : null,
@@ -238,11 +338,14 @@ export function mount(container) {
   function renderList(items) {
     if (!tableBody) { return; }
     tableBody.innerHTML = "";
+    const trash = isTrashMode();
+    const colCount = columnCount();
 
     if (!items.length) {
       const tr = document.createElement("tr");
-      tr.innerHTML = '<td colspan="9">データがありません</td>';
+      tr.innerHTML = `<td colspan="${colCount}">データがありません</td>`;
       tableBody.appendChild(tr);
+      updateBulkUi();
       return;
     }
 
@@ -254,10 +357,13 @@ export function mount(container) {
       statusParts.push(a.disabled ? "ログイン拒否" : "通常");
       if (a.online) { statusParts.push('<span class="badge">接続中</span>'); }
       if (a.adminLevel) { statusParts.push(`<span class="badge">管理者Lv${escapeHtml(String(a.adminLevel))}</span>`); }
+      if (a.status === "trashed") { statusParts.push('<span class="badge">ゴミ箱</span>'); }
+      if (a.status === "banned")  { statusParts.push('<span class="badge">BAN</span>'); }
 
       const charNamesInfo = formatCharNames(a.charNames);
 
       tr.innerHTML =
+        `<td><input type="checkbox" data-acct-checkbox="${escapeHtml(String(a.accountId))}" /></td>` +
         `<td>${escapeHtml(String(a.accountId ?? ""))}</td>` +
         `<td>${escapeHtml(String(a.account ?? ""))}</td>` +
         `<td>${statusParts.join(" ")}</td>` +
@@ -266,7 +372,19 @@ export function mount(container) {
         `<td>${escapeHtml(formatUnixSeconds(a.timeMakeAccount))}</td>` +
         `<td>${escapeHtml(formatUnixSeconds(a.timeLastLogin))}</td>` +
         `<td>${escapeHtml(String(a.loginCount ?? ""))}</td>` +
+        (trash
+          ? `<td>${escapeHtml(a.trashReason || "-")}</td><td>${escapeHtml(formatUnixSeconds(a.trashedAt))}</td>`
+          : "") +
         `<td><button type="button" class="button secondary" data-role-btn="${escapeHtml(String(a.accountId))}">ロール設定</button></td>`;
+
+      const checkbox = tr.querySelector("[data-acct-checkbox]");
+      if (checkbox) {
+        checkbox.addEventListener("change", () => {
+          const id = Number(checkbox.dataset.acctCheckbox);
+          if (checkbox.checked) { selectedIds.add(id); } else { selectedIds.delete(id); }
+          updateBulkUi();
+        });
+      }
 
       const roleBtn = tr.querySelector("[data-role-btn]");
       if (roleBtn) {
@@ -279,18 +397,24 @@ export function mount(container) {
       fragment.appendChild(tr);
     });
     tableBody.appendChild(fragment);
+    updateBulkUi();
   }
 
   async function load() {
     if (!tableBody || state.isLoading) { return; }
     state.isLoading = true;
+    clearSelection();
+    renderThead();
+    updateBulkModeVisibility();
+    const colCount = columnCount();
     if (feedbackEl) { feedbackEl.textContent = "読み込み中..."; }
-    if (tableBody) { tableBody.innerHTML = '<tr><td colspan="9">読み込み中...</td></tr>'; }
+    if (tableBody) { tableBody.innerHTML = `<tr><td colspan="${colCount}">読み込み中...</td></tr>`; }
 
     const s = toolbar.getState();
     const params = new URLSearchParams();
     if (s.q && s.q.trim()) { params.set("search", s.q.trim()); }
     if (filterDisabled && filterDisabled.value !== "") { params.set("disabled", filterDisabled.value); }
+    if (filterStatus && filterStatus.value !== "") { params.set("status", filterStatus.value); }
     if (filterAdmin && filterAdmin.checked) { params.set("admin", "1"); }
     if (filterOnline && filterOnline.checked) { params.set("online", "1"); }
     if (filterNeverLogin && filterNeverLogin.checked) { params.set("neverLoggedIn", "1"); }
@@ -307,7 +431,7 @@ export function mount(container) {
       if (!response.ok || !data || !Array.isArray(data.items)) {
         const msg = (data && data.error) ? data.error : "アカウント一覧の取得に失敗しました";
         if (feedbackEl) { feedbackEl.textContent = msg; }
-        if (tableBody) { tableBody.innerHTML = '<tr><td colspan="9">取得に失敗しました</td></tr>'; }
+        if (tableBody) { tableBody.innerHTML = `<tr><td colspan="${colCount}">取得に失敗しました</td></tr>`; }
         state.total = 0;
         toolbar.setTotal(0);
         return;
@@ -323,7 +447,7 @@ export function mount(container) {
       renderList(data.items);
     } catch {
       if (feedbackEl) { feedbackEl.textContent = "通信エラーが発生しました"; }
-      if (tableBody) { tableBody.innerHTML = '<tr><td colspan="9">通信エラーが発生しました</td></tr>'; }
+      if (tableBody) { tableBody.innerHTML = `<tr><td colspan="${colCount}">通信エラーが発生しました</td></tr>`; }
       state.total = 0;
       toolbar.setTotal(0);
     } finally {
@@ -338,11 +462,105 @@ export function mount(container) {
     load();
   }
 
+  // ----------------------------------------------------------------
+  // 選択操作(ゴミ箱送り/復元/完全削除)
+  // ----------------------------------------------------------------
+
+  // 選択中の各IDに順番にリクエストを送り、成功/失敗件数をまとめる。
+  async function runBulk(ids, requestFn) {
+    const failures = [];
+    let successCount = 0;
+    for (const id of ids) {
+      try {
+        const { response, data } = await requestFn(id);
+        if (response.ok) {
+          successCount++;
+        } else {
+          const reason = (data && data.error) ? data.error : `HTTP ${response.status}`;
+          failures.push({ id, reason });
+        }
+      } catch {
+        failures.push({ id, reason: "通信エラー" });
+      }
+    }
+    return { successCount, failures };
+  }
+
+  function reportBulkResult(actionLabel, successCount, failures) {
+    const total = successCount + failures.length;
+    if (!failures.length) {
+      showToast(`${actionLabel}: ${successCount}/${total} 件成功`, "success");
+      return;
+    }
+    const detail = failures.map((f) => `ID ${f.id}: ${f.reason}`).join("\n");
+    showToast(`${actionLabel}: ${successCount}/${total} 件成功（${failures.length} 件失敗）`, "error", { detail });
+  }
+
+  async function executeBulkTrash() {
+    const ids = Array.from(selectedIds);
+    if (!ids.length) { return; }
+    const reason = bulkReasonInput ? bulkReasonInput.value.trim() : "";
+    const { successCount, failures } = await runBulk(ids, (id) => fetchJson(`/api/accounts/${id}/trash`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason: reason || undefined }),
+    }));
+    reportBulkResult("ゴミ箱へ移動", successCount, failures);
+    if (bulkReasonInput) { bulkReasonInput.value = ""; }
+    load();
+  }
+
+  async function executeBulkRestore() {
+    const ids = Array.from(selectedIds);
+    if (!ids.length) { return; }
+    const { successCount, failures } = await runBulk(ids, (id) => fetchJson(`/api/accounts/${id}/trash`, {
+      method: "DELETE",
+    }));
+    reportBulkResult("復元", successCount, failures);
+    load();
+  }
+
+  async function executeBulkDelete() {
+    const ids = Array.from(selectedIds);
+    if (!ids.length) { return; }
+    const { successCount, failures } = await runBulk(ids, (id) => fetchJson(`/api/accounts/${id}`, {
+      method: "DELETE",
+    }));
+    reportBulkResult("完全削除", successCount, failures);
+    load();
+  }
+
+  // 確認は confirm()/prompt() を使わず二度押し確定(armConfirmButton)で完結させる。
+  // 完全削除はゴミ箱送りより一段強い確認文言(対象件数を明示)にする。
+  if (bulkTrashBtn) {
+    armConfirmButton(bulkTrashBtn, {
+      armedLabel: "本当に実行？（もう一度押す）",
+      message: () => `${selectedIds.size} 件をゴミ箱へ移動します。`,
+      onConfirm: executeBulkTrash,
+    });
+  }
+  if (bulkRestoreBtn) {
+    armConfirmButton(bulkRestoreBtn, {
+      armedLabel: "本当に元に戻す？（もう一度押す）",
+      message: () => `${selectedIds.size} 件をゴミ箱から元に戻します。`,
+      onConfirm: executeBulkRestore,
+    });
+  }
+  if (bulkDeleteBtn) {
+    armConfirmButton(bulkDeleteBtn, {
+      armedLabel: "本当に完全削除？（もう一度押す）",
+      timeoutMs: 6000,
+      message: () => `${selectedIds.size} 件のアカウントを完全に削除します。この操作は元に戻せません。`,
+      onConfirm: executeBulkDelete,
+    });
+  }
+
   // イベント登録
   if (searchBtn) { searchBtn.addEventListener("click", doSearch); }
   if (resetBtn) {
     resetBtn.addEventListener("click", () => {
       if (filterDisabled)   { filterDisabled.value = ""; }
+      if (filterStatus)     { filterStatus.value = ""; }
       if (filterAdmin)      { filterAdmin.checked = false; }
       if (filterOnline)     { filterOnline.checked = false; }
       if (filterNeverLogin) { filterNeverLogin.checked = false; }
@@ -360,7 +578,7 @@ export function mount(container) {
       load();
     });
   }
-  [filterDisabled, filterAdmin, filterOnline, filterNeverLogin, filterLoginBefore].forEach((el) => {
+  [filterDisabled, filterStatus, filterAdmin, filterOnline, filterNeverLogin, filterLoginBefore].forEach((el) => {
     if (el) { el.addEventListener("change", doSearch); }
   });
 
@@ -387,6 +605,11 @@ export function mount(container) {
       });
     });
   }
+
+  // 初回描画
+  renderThead();
+  updateBulkModeVisibility();
+  updateBulkUi();
 
   // 初回ロード
   load();

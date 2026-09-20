@@ -289,6 +289,7 @@
     <ClCompile Include="src\MgrData.cpp" />
     <ClCompile Include="src\PasswordHash.cpp" />
     <ClCompile Include="src\Account\LoginCode.cpp" />
+    <ClCompile Include="src\Account\AccountAdminStore.cpp" />
     <ClCompile Include="src\Account\AccountAuthStore.cpp" />
     <ClCompile Include="src\Platform\SvrPlatform.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -335,6 +336,7 @@
     </ClCompile>
     <ClCompile Include="src\Web\AuthProvider.cpp" />
     <ClCompile Include="src\Web\SessionStore.cpp" />
+    <ClCompile Include="src\Web\Handlers\AccountAdminHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountListHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountAuthHandler.cpp" />
@@ -479,6 +481,7 @@
     <ClInclude Include="src\MgrData.h" />
     <ClInclude Include="src\PasswordHash.h" />
     <ClInclude Include="src\Account\LoginCode.h" />
+    <ClInclude Include="src\Account\AccountAdminStore.h" />
     <ClInclude Include="src\Account\AccountAuthStore.h" />
     <ClInclude Include="src\Platform\SvrPlatform.h" />
     <ClInclude Include="src\SaveLoad\SaveLoad.h" />
@@ -516,6 +519,7 @@
     <ClInclude Include="src\Web\Handlers\ServerSessionsHandler.h" />
     <ClInclude Include="src\Web\ProcessMetrics.h" />
     <ClInclude Include="src\Web\SessionsJsonBuilder.h" />
+    <ClInclude Include="src\Web\Handlers\AccountAdminHandler.h" />
     <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h" />
     <ClInclude Include="src\Web\Handlers\AccountListHandler.h" />
     <ClInclude Include="src\Web\Handlers\AccountAuthHandler.h" />

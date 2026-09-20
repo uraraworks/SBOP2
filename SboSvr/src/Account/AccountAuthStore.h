@@ -49,6 +49,11 @@ public:
 	/// @retval true DB操作が成功した
 	bool	DeleteAllDevicesForAccount(unsigned int dwAccountID);
 
+	/// @brief 指定アカウントのログインコードを削除する(存在しなくてもエラーにしない)。
+	///        アカウント完全削除時に sys_account_code 側の行を消すために使う。
+	/// @retval true DB操作が成功した(該当行が無くてもtrue)
+	bool	DeleteCodeForAccount(unsigned int dwAccountID);
+
 	/// @brief sys_account に存在しない AccountID の sys_account_code /
 	///        sys_account_device 行を削除する(起動時のアカウント読込直後に呼ぶ想定)。
 	///

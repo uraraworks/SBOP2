@@ -275,6 +275,28 @@ bool CAccountAuthStore::DeleteAllDevicesForAccount(unsigned int dwAccountID)
 	return bOk;
 }
 
+bool CAccountAuthStore::DeleteCodeForAccount(unsigned int dwAccountID)
+{
+	sqlite3 *pDb = NULL;
+	if (!OpenDb(&pDb)) return false;
+
+	EnsureTables(pDb);
+
+	const char *pszSql = "DELETE FROM sys_account_code WHERE AccountID=?;";
+	sqlite3_stmt *pStmt = NULL;
+	if (sqlite3_prepare_v2(pDb, pszSql, -1, &pStmt, NULL) != SQLITE_OK) {
+		sqlite3_close(pDb);
+		return false;
+	}
+
+	sqlite3_bind_int(pStmt, 1, (int)dwAccountID);
+	bool bOk = (sqlite3_step(pStmt) == SQLITE_DONE);
+
+	sqlite3_finalize(pStmt);
+	sqlite3_close(pDb);
+	return bOk;
+}
+
 bool CAccountAuthStore::PruneOrphanedAuth(const std::vector<unsigned int> &validAccountIDs,
 	int *outDeletedCodeRows, int *outDeletedDeviceRows)
 {
