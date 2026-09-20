@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <map>
 #include <algorithm>
 #include <cstring>
 #include <cstdlib>
@@ -13,7 +14,9 @@
 #include "Web/JsonUtils.h"
 #include "MgrData.h"
 #include "LibInfo/LibInfoAccount.h"
+#include "LibInfo/LibInfoCharSvr.h"
 #include "Info/InfoAccount.h"
+#include "Info/InfoCharBase.h"
 #include "myLib/myString.h"
 
 // ---------------------------------------------------------------------------
@@ -238,6 +241,27 @@ bool NameContains(const std::string &accountName, const std::string &filter)
         return false;
 }
 
+// 入力文字列が数値（10進整数）かどうか判定する
+bool IsNumeric(const std::string &value)
+{
+        if (value.empty()) {
+                return false;
+        }
+        size_t nStart = 0;
+        if (value[0] == '+' || value[0] == '-') {
+                nStart = 1;
+        }
+        if (nStart >= value.size()) {
+                return false;
+        }
+        for (size_t i = nStart; i < value.size(); ++i) {
+                if (!std::isdigit(static_cast<unsigned char>(value[i]))) {
+                        return false;
+                }
+        }
+        return true;
+}
+
 // 検索結果 1 件分の作業用構造体
 struct AccountRow
 {
@@ -245,6 +269,7 @@ struct AccountRow
         std::string accountName;
         int charCount;
         bool bOnline;
+        std::vector<std::string> charNames;
 };
 
 // sort パラメータで指定された項目の比較値を取得する
@@ -317,6 +342,12 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
         int filterAccountId = -1;
         TryGetQueryInt(request.path, "accountId", filterAccountId);
 
+        // search: アカウントID完全一致 / アカウント名部分一致 / 所持キャラ名部分一致 の OR 条件
+        std::string filterSearch;
+        TryGetQueryString(request.path, "search", filterSearch);
+        bool bSearchNumeric = IsNumeric(filterSearch);
+        long lSearchId = bSearchNumeric ? std::strtol(filterSearch.c_str(), NULL, 10) : 0;
+
         int nLastLoginBefore = -1;
         bool bHasLastLoginBefore = TryGetQueryInt(request.path, "lastLoginBefore", nLastLoginBefore);
 
@@ -373,6 +404,26 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
                 int tmp = 0;
                 if (TryGetQueryInt(request.path, "offset", tmp) && tmp >= 0) {
                         nOffset = tmp;
+                }
+        }
+
+        // charID → キャラ名 のマップを構築する
+        // pAccountLib のロックとネストしないよう、pAccountLib->Enter() の前に構築を済ませる
+        // （CharacterListHandler.cpp の charToAccount 構築と同じ考え方）
+        std::map<DWORD, std::string> charNameById;
+        {
+                CLibInfoCharSvr *pCharLib = m_pMgrData->GetLibInfoChar();
+                if (pCharLib != NULL) {
+                        pCharLib->Enter();
+                        int nCharTotal = pCharLib->GetCount();
+                        for (int i = 0; i < nCharTotal; ++i) {
+                                const CInfoCharBase *pChar = static_cast<const CInfoCharBase *>(pCharLib->GetPtr(i));
+                                if (pChar == NULL) {
+                                        continue;
+                                }
+                                charNameById[pChar->m_dwCharID] = ToUtf8String(pChar->m_strCharName);
+                        }
+                        pCharLib->Leave();
                 }
         }
 
@@ -453,11 +504,44 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
                         continue;
                 }
 
+                // 所持キャラ名一覧（charIds と同じ順序）
+                std::vector<std::string> charNames;
+                int nCharTableCount = static_cast<int>(pAcc->m_adwCharID.size());
+                charNames.reserve(static_cast<size_t>(nCharTableCount));
+                for (int j = 0; j < nCharTableCount; ++j) {
+                        DWORD dwCharID = pAcc->m_adwCharID[static_cast<size_t>(j)];
+                        std::map<DWORD, std::string>::const_iterator it = charNameById.find(dwCharID);
+                        charNames.push_back((it != charNameById.end()) ? it->second : std::string());
+                }
+
+                // search: アカウントID完全一致 / アカウント名部分一致 / キャラ名部分一致（OR）
+                if (!filterSearch.empty()) {
+                        bool bMatched = false;
+                        if (bSearchNumeric && (static_cast<long>(pAcc->m_dwAccountID) == lSearchId)) {
+                                bMatched = true;
+                        }
+                        if (!bMatched && NameContains(accountName, filterSearch)) {
+                                bMatched = true;
+                        }
+                        if (!bMatched) {
+                                for (size_t j = 0; j < charNames.size(); ++j) {
+                                        if (NameContains(charNames[j], filterSearch)) {
+                                                bMatched = true;
+                                                break;
+                                        }
+                                }
+                        }
+                        if (!bMatched) {
+                                continue;
+                        }
+                }
+
                 AccountRow row;
                 row.pAccount = pAcc;
                 row.accountName = accountName;
                 row.charCount = nCharCount;
                 row.bOnline = bOnline;
+                row.charNames = charNames;
                 filtered.push_back(row);
         }
 
@@ -520,6 +604,15 @@ void CAccountListHandler::Handle(const HttpRequest &request, HttpResponse &respo
                                 oss << ',';
                         }
                         oss << pAcc->m_adwCharID[static_cast<size_t>(j)];
+                }
+                oss << "],";
+
+                oss << "\"charNames\":[";
+                for (size_t j = 0; j < row.charNames.size(); ++j) {
+                        if (j != 0) {
+                                oss << ',';
+                        }
+                        oss << '"' << JsonUtils::Escape(row.charNames[j]) << '"';
                 }
                 oss << "],";
 

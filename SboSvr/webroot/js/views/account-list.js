@@ -2,9 +2,11 @@
  * views/account-list.js
  * アカウント一覧画面 (route: account-list)
  *
- * API: GET /api/accounts?q=&accountId=&lastLoginBefore=&lastLoginAfter=&
+ * API: GET /api/accounts?search=&lastLoginBefore=&lastLoginAfter=&
  *      neverLoggedIn=&createdBefore=&createdAfter=&disabled=&admin=&online=&
  *      minChars=&maxChars=&sort=&offset=&limit=
+ * search はアカウントID完全一致 / アカウント名部分一致 / 所持キャラ名部分一致 の
+ * いずれかにヒットするフリーワード検索(旧 q + アカウントID欄を統合したもの)。
  * レスポンス: { total, offset, limit, items: [...] }
  * (docs/web-admin-account-management-plan.md の S1 節を参照。
  *  API はこの画面と並行実装中のため、まだ動かない前提で実装している)
@@ -43,6 +45,17 @@ function formatUnixSeconds(sec) {
   return new Date(n * 1000).toLocaleString("ja-JP");
 }
 
+// 所持キャラ名一覧を表示用に整形する。長い場合は先頭3件のみ表示し「他N件」を付ける。
+// 全件は title 属性(ツールチップ)で確認できるようにする。
+function formatCharNames(charNames) {
+  const names = Array.isArray(charNames) ? charNames.filter((n) => n) : [];
+  if (!names.length) { return { text: "-", title: "" }; }
+  const MAX_SHOW = 3;
+  const shown = names.slice(0, MAX_SHOW).join("、");
+  const text = names.length > MAX_SHOW ? `${shown} 他${names.length - MAX_SHOW}件` : shown;
+  return { text, title: names.join("、") };
+}
+
 // よく使う条件のプリセット。適用時に他のフィルタはリセットする。
 const PRESETS = {
   inactive90: {
@@ -78,9 +91,6 @@ export function mount(container) {
         <h2>アカウント一覧</h2>
         <!-- フィルター入力欄 -->
         <div class="filter-row">
-          <label>アカウントID:
-            <input type="number" id="acct-filter-account-id" placeholder="例: 12" min="0" />
-          </label>
           <label>状態:
             <select id="acct-filter-disabled">
               <option value="">すべて</option>
@@ -119,6 +129,7 @@ export function mount(container) {
               <th>名前</th>
               <th>状態</th>
               <th>キャラ数</th>
+              <th>キャラ</th>
               <th>作成日</th>
               <th>最終ログイン</th>
               <th>ログイン回数</th>
@@ -129,7 +140,6 @@ export function mount(container) {
         </table>
       </section>`;
 
-  const filterAccId       = container.querySelector("#acct-filter-account-id");
   const filterDisabled    = container.querySelector("#acct-filter-disabled");
   const filterAdmin       = container.querySelector("#acct-filter-admin");
   const filterOnline      = container.querySelector("#acct-filter-online");
@@ -143,7 +153,6 @@ export function mount(container) {
   // URL クエリから初期状態を復元
   const routeParams = getRouteParams();
 
-  if (filterAccId)      { filterAccId.value = routeParams.get("accountId") || ""; }
   if (filterDisabled)   { filterDisabled.value = routeParams.get("disabled") || ""; }
   if (filterAdmin)      { filterAdmin.checked = routeParams.get("admin") === "1"; }
   if (filterOnline)     { filterOnline.checked = routeParams.get("online") === "1"; }
@@ -177,7 +186,7 @@ export function mount(container) {
   // 検索/表示件数/ページ/並び替え。サーバー側ページングのため applyToRows は使わず、
   // onChange のたびに API を叩き直す (setTotal でサーバーの総件数を反映)。
   const toolbar = createListToolbar({
-    placeholder: "アカウント名で検索",
+    placeholder: "アカウントID / アカウント名 / キャラ名",
     sortOptions: [
       { value: "accountId",  label: "ID順" },
       { value: "account",    label: "名前順" },
@@ -188,7 +197,7 @@ export function mount(container) {
     ],
     pageSizes: [20, 50, 100],
     initial: {
-      q: routeParams.get("q") || "",
+      q: routeParams.get("search") || "",
       sort: routeParams.get("sort") || "accountId",
       pageSize: Number(routeParams.get("size")) || 20,
       page: Number(routeParams.get("page")) || 1,
@@ -212,11 +221,10 @@ export function mount(container) {
   function persistRouteParams() {
     const s = toolbar.getState();
     setRouteParams({
-      q: s.q || null,
+      search: s.q || null,
       sort: s.sort && s.sort !== "accountId" ? s.sort : null,
       size: s.pageSize && s.pageSize !== 20 ? s.pageSize : null,
       page: s.page && s.page !== 1 ? s.page : null,
-      accountId: (filterAccId && filterAccId.value.trim()) ? filterAccId.value.trim() : null,
       disabled: (filterDisabled && filterDisabled.value !== "") ? filterDisabled.value : null,
       admin: (filterAdmin && filterAdmin.checked) ? "1" : null,
       online: (filterOnline && filterOnline.checked) ? "1" : null,
@@ -233,7 +241,7 @@ export function mount(container) {
 
     if (!items.length) {
       const tr = document.createElement("tr");
-      tr.innerHTML = '<td colspan="8">データがありません</td>';
+      tr.innerHTML = '<td colspan="9">データがありません</td>';
       tableBody.appendChild(tr);
       return;
     }
@@ -247,11 +255,14 @@ export function mount(container) {
       if (a.online) { statusParts.push('<span class="badge">接続中</span>'); }
       if (a.adminLevel) { statusParts.push(`<span class="badge">管理者Lv${escapeHtml(String(a.adminLevel))}</span>`); }
 
+      const charNamesInfo = formatCharNames(a.charNames);
+
       tr.innerHTML =
         `<td>${escapeHtml(String(a.accountId ?? ""))}</td>` +
         `<td>${escapeHtml(String(a.account ?? ""))}</td>` +
         `<td>${statusParts.join(" ")}</td>` +
         `<td>${escapeHtml(String(a.charCount ?? ""))}</td>` +
+        `<td title="${escapeHtml(charNamesInfo.title)}">${escapeHtml(charNamesInfo.text)}</td>` +
         `<td>${escapeHtml(formatUnixSeconds(a.timeMakeAccount))}</td>` +
         `<td>${escapeHtml(formatUnixSeconds(a.timeLastLogin))}</td>` +
         `<td>${escapeHtml(String(a.loginCount ?? ""))}</td>` +
@@ -274,12 +285,11 @@ export function mount(container) {
     if (!tableBody || state.isLoading) { return; }
     state.isLoading = true;
     if (feedbackEl) { feedbackEl.textContent = "読み込み中..."; }
-    if (tableBody) { tableBody.innerHTML = '<tr><td colspan="8">読み込み中...</td></tr>'; }
+    if (tableBody) { tableBody.innerHTML = '<tr><td colspan="9">読み込み中...</td></tr>'; }
 
     const s = toolbar.getState();
     const params = new URLSearchParams();
-    if (s.q && s.q.trim()) { params.set("q", s.q.trim()); }
-    if (filterAccId && filterAccId.value.trim()) { params.set("accountId", filterAccId.value.trim()); }
+    if (s.q && s.q.trim()) { params.set("search", s.q.trim()); }
     if (filterDisabled && filterDisabled.value !== "") { params.set("disabled", filterDisabled.value); }
     if (filterAdmin && filterAdmin.checked) { params.set("admin", "1"); }
     if (filterOnline && filterOnline.checked) { params.set("online", "1"); }
@@ -297,7 +307,7 @@ export function mount(container) {
       if (!response.ok || !data || !Array.isArray(data.items)) {
         const msg = (data && data.error) ? data.error : "アカウント一覧の取得に失敗しました";
         if (feedbackEl) { feedbackEl.textContent = msg; }
-        if (tableBody) { tableBody.innerHTML = '<tr><td colspan="8">取得に失敗しました</td></tr>'; }
+        if (tableBody) { tableBody.innerHTML = '<tr><td colspan="9">取得に失敗しました</td></tr>'; }
         state.total = 0;
         toolbar.setTotal(0);
         return;
@@ -313,7 +323,7 @@ export function mount(container) {
       renderList(data.items);
     } catch {
       if (feedbackEl) { feedbackEl.textContent = "通信エラーが発生しました"; }
-      if (tableBody) { tableBody.innerHTML = '<tr><td colspan="8">通信エラーが発生しました</td></tr>'; }
+      if (tableBody) { tableBody.innerHTML = '<tr><td colspan="9">通信エラーが発生しました</td></tr>'; }
       state.total = 0;
       toolbar.setTotal(0);
     } finally {
@@ -332,7 +342,6 @@ export function mount(container) {
   if (searchBtn) { searchBtn.addEventListener("click", doSearch); }
   if (resetBtn) {
     resetBtn.addEventListener("click", () => {
-      if (filterAccId)      { filterAccId.value = ""; }
       if (filterDisabled)   { filterDisabled.value = ""; }
       if (filterAdmin)      { filterAdmin.checked = false; }
       if (filterOnline)     { filterOnline.checked = false; }
@@ -351,11 +360,6 @@ export function mount(container) {
       load();
     });
   }
-  if (filterAccId) {
-    filterAccId.addEventListener("keydown", (ev) => {
-      if (ev.key === "Enter") { searchBtn && searchBtn.click(); }
-    });
-  }
   [filterDisabled, filterAdmin, filterOnline, filterNeverLogin, filterLoginBefore].forEach((el) => {
     if (el) { el.addEventListener("change", doSearch); }
   });
@@ -366,7 +370,6 @@ export function mount(container) {
       btn.addEventListener("click", () => {
         const preset = PRESETS[btn.dataset.preset];
         if (!preset) { return; }
-        if (filterAccId)      { filterAccId.value = ""; }
         if (filterDisabled)   { filterDisabled.value = ""; }
         if (filterAdmin)      { filterAdmin.checked = false; }
         if (filterOnline)     { filterOnline.checked = false; }
