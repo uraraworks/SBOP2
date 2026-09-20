@@ -336,6 +336,7 @@
     <ClCompile Include="src\Web\AuthProvider.cpp" />
     <ClCompile Include="src\Web\SessionStore.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountCreateHandler.cpp" />
+    <ClCompile Include="src\Web\Handlers\AccountListHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\AccountAuthHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\DebugFixtureHandler.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -516,6 +517,7 @@
     <ClInclude Include="src\Web\ProcessMetrics.h" />
     <ClInclude Include="src\Web\SessionsJsonBuilder.h" />
     <ClInclude Include="src\Web\Handlers\AccountCreateHandler.h" />
+    <ClInclude Include="src\Web\Handlers\AccountListHandler.h" />
     <ClInclude Include="src\Web\Handlers\AccountAuthHandler.h" />
     <ClInclude Include="src\Web\Handlers\DebugFixtureHandler.h" />
     <ClInclude Include="src\Web\IpRateLimiter.h" />

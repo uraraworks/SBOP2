@@ -19,6 +19,7 @@
 #include "Handlers/ServerInfoHandler.h"
 #include "Handlers/ServerSessionsHandler.h"
 #include "Handlers/AccountCreateHandler.h"
+#include "Handlers/AccountListHandler.h"
 #include "Handlers/AdminRolesHandler.h"
 #include "Handlers/MapInfoHandler.h"
 #include "Handlers/MapObjectHandler.h"
@@ -1040,6 +1041,10 @@ void CHttpServer::RegisterDefaultHandlers()
 
         std::unique_ptr<IApiHandler> accountCreateHandler(new CAccountCreateHandler(m_pMgrData));
         m_router.Register("POST", "/api/accounts", std::move(accountCreateHandler));
+
+        // アカウント一覧 + 検索 API
+        std::unique_ptr<IApiHandler> accountListHandler(new CAccountListHandler(m_pMgrData));
+        m_router.Register("GET", "/api/accounts", std::move(accountListHandler));
 
         // ログインコード方式の公開API(/api/account/*)。IsAuthApiPath で管理画面の
         // セッション認証ゲート対象外にしてある(HttpServer.cpp 冒頭参照)。

@@ -10,6 +10,7 @@
 import { fetchJson } from "../core/api.js";
 import { withBusy } from "../core/dom.js";
 import { showSuccessToast, showErrorToast } from "../components/toast.js";
+import { getRouteParams } from "../core/router.js";
 
 // ----------------------------------------------------------------
 // ロール UI ヘルパ
@@ -141,6 +142,15 @@ export async function mount(container) {
 
   cachedRoles = await loadRoles();
   refreshRoles();
+
+  // account-list.js からの遷移(#role-management?accountId=12)で
+  // アカウントID手入力を省略できるようにする
+  const routeParams = getRouteParams();
+  const accountIdFromRoute = routeParams.get("accountId");
+  if (accountIdFromRoute) {
+    const accountIdInput = container.querySelector("#role-account-id");
+    if (accountIdInput) { accountIdInput.value = accountIdFromRoute; }
+  }
 
   function buildRoleErrorMessage(status, data, text) {
     if (status === 400) { return "リクエスト形式が正しくありません"; }
