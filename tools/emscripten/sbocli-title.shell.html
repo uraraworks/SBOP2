@@ -589,6 +589,13 @@
       font-size: 16px;
       line-height: 1;
     }
+    /* 攻撃/防御アイコンは絵文字だと端末依存でフルカラーになり、白基調のパッドから浮くため
+       currentColor を継承する線画SVGを使う */
+    #virtualPad button .pad-btn-icon svg {
+      display: block;
+      width: 16px;
+      height: 16px;
+    }
     /* ボタン内役割ラベル(小さめ) */
     #virtualPad button .pad-btn-label {
       font-size: 9px;
@@ -2296,16 +2303,21 @@
       var padBLabel = pad.querySelector('#padB .pad-btn-label');
       var padIsWindowOpen = false;
       var padIsBattleMode = false;
+      // 防御(盾)/攻撃(交差した剣)アイコン。絵文字だと端末依存でフルカラー表示になり、
+      // 白基調のパッドから浮くため currentColor を継承する線画SVGにする。
+      var PAD_ICON_SHIELD_SVG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.8 L13.2 3.8 V8.2 C13.2 11 11 13.2 8 14.2 C5 13.2 2.8 11 2.8 8.2 V3.8 Z"/></svg>';
+      var PAD_ICON_SWORDS_SVG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3 L13 13"/><path d="M13 3 L3 13"/><path d="M10.5 12.5 L12.5 10.5"/><path d="M3.5 10.5 L5.5 12.5"/></svg>';
       function updatePadButtonLabels() {
         if (!padAIcon || !padALabel || !padBIcon || !padBLabel) {
           return;
         }
         if (padIsBattleMode && !padIsWindowOpen) {
-          padAIcon.textContent = '🛡';
+          padAIcon.innerHTML = PAD_ICON_SHIELD_SVG;
           padALabel.textContent = '防御';
-          padBIcon.textContent = '⚔';
+          padBIcon.innerHTML = PAD_ICON_SWORDS_SVG;
           padBLabel.textContent = '攻撃';
         } else {
+          // textContent への代入で innerHTML の SVG は確実に消える
           padAIcon.textContent = '✕';
           padALabel.textContent = '戻る';
           padBIcon.textContent = '○';
