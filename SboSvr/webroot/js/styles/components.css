@@ -3296,3 +3296,65 @@ body.sbop2-popup-editor #view-container {
   color: var(--color-accent);
   box-shadow: none;
 }
+
+/* ================================================================
+   マップパーツパレット共通 (map-paint.js createPalette / map-parts-edit.js renderPalette)
+   タイルを隙間なく並べ、ホバー/選択はレイアウトを動かさない outline で表現する。
+   ================================================================ */
+
+.mp-palette-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.parts-palette-grid {
+  display: grid;
+  gap: 0;
+}
+
+.mp-palette-item,
+.parts-palette-cell {
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  line-height: 0;
+  cursor: pointer;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+}
+
+.mp-palette-item canvas,
+.parts-palette-cell canvas {
+  display: block;
+  image-rendering: pixelated;
+}
+
+.mp-palette-item:hover,
+.parts-palette-cell:hover {
+  /* 明るい管理画面テーマでも確実に見えるようアクセント色そのものを使う
+     (--color-accent-border は淡すぎて背景に埋もれる) */
+  outline: 1px solid var(--color-accent);
+}
+
+.mp-palette-item.is-selected,
+.parts-palette-cell.is-selected {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+  background: var(--color-accent-soft);
+}
+
+/* 「最近使用」ストリップは今まで通り少し隙間を空けるが、ホバー矩形は共通ルールに従う */
+.mp-palette-recent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.mp-palette-recent .mp-palette-item--recent {
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+}

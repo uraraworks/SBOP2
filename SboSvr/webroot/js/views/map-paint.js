@@ -220,7 +220,6 @@ export function createPalette(options) {
   if (recentStorageKey) {
     recentGallery = document.createElement("div");
     recentGallery.className = "mp-palette-recent";
-    recentGallery.style.cssText = "display:flex;flex-wrap:wrap;gap:4px;padding:4px 0;border-bottom:1px solid var(--color-border,#333);";
     root.appendChild(recentGallery);
   }
 
@@ -365,11 +364,6 @@ export function createPalette(options) {
       // drawThumb はビューポートに入った時に遅延実行
       observer.observe(canvas);
       item.appendChild(canvas);
-
-      const label = document.createElement("span");
-      label.className = "mp-palette-item-label";
-      label.textContent = String(part.partsId);
-      item.appendChild(label);
 
       item.addEventListener("click", () => selectPart(part.partsId));
       gallery.appendChild(item);

@@ -530,8 +530,8 @@ function buildPartsUI(container, opts) {
   const paletteGrid = document.createElement("div");
   paletteGrid.className = "parts-palette-grid";
   paletteGrid.style.cssText =
-    "display:grid;grid-template-columns:repeat(auto-fill," + TILE_SIZE + "px);" +
-    "gap:4px;padding:8px;overflow-y:auto;flex:1;";
+    "grid-template-columns:repeat(auto-fill," + TILE_SIZE + "px);" +
+    "overflow-y:auto;flex:1;padding:8px;";
 
   const listFooter = document.createElement("div");
   listFooter.className = "ld-list-footer";
@@ -591,25 +591,16 @@ function buildPartsUI(container, opts) {
     _allItems.forEach((item) => {
       const cell = document.createElement("div");
       cell.className = "parts-palette-cell";
-      cell.style.cssText =
-        "width:" + TILE_SIZE + "px;height:" + (TILE_SIZE + 14) + "px;" +
-        "display:flex;flex-direction:column;align-items:center;" +
-        "cursor:pointer;border:1px solid transparent;border-radius:3px;" +
-        "padding:1px;box-sizing:border-box;";
+      cell.style.cssText = "width:" + TILE_SIZE + "px;height:" + TILE_SIZE + "px;";
       cell.title = `パーツ ${item.partsId}`;
       if (item === _selectedItem) {
-        cell.style.borderColor = "var(--color-accent, #4e9af1)";
-        cell.style.background = "var(--color-accent-subtle, rgba(78,154,241,0.15))";
+        cell.classList.add("is-selected");
       }
 
       const thumb = createCompositeThumb(item.grpIdBase, item.grpIdPile);
-      thumb.style.cssText = "width:" + TILE_SIZE + "px;height:" + TILE_SIZE + "px;image-rendering:pixelated;";
+      thumb.style.cssText = "width:" + TILE_SIZE + "px;height:" + TILE_SIZE + "px;";
 
-      const idLabel = document.createElement("span");
-      idLabel.textContent = item.partsId;
-      idLabel.style.cssText = "font-size:10px;line-height:14px;color:var(--color-muted,#888);";
-
-      cell.append(thumb, idLabel);
+      cell.appendChild(thumb);
       cell.addEventListener("click", () => selectItem(item));
       paletteGrid.appendChild(cell);
     });
