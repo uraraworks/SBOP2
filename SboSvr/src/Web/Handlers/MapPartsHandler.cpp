@@ -12,12 +12,16 @@
 #include "MgrData.h"
 #include "Web/AuthProvider.h"
 #include "Web/JsonUtils.h"
+#include "Web/AdminWsHub.h"
+#include "Web/MapPartsHistory.h"
 #include "Info/InfoMapParts.h"
+#include "Info/InfoMapBase.h"
 #include "LibInfo/LibInfoMapParts.h"
 #include "LibInfo/LibInfoMapBase.h"
 #include "UraraSockTCPSBO.h"
 #include "Packet/MAP/PacketMAP_MAPPARTS.h"
 #include "Packet/MAP/PacketMAP_DELETEPARTS.h"
+#include "Packet/MAP/PacketMAP_SETPARTS.h"
 #include "../../Platform/SvrPlatform.h"
 
 namespace
@@ -794,6 +798,201 @@ void CMapPartsDeleteHandler::Handle(const HttpRequest &request, HttpResponse &re
 
         std::ostringstream oss;
         oss << "{\"deleted\":" << dwPartsId << "}";
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
+}
+
+// --- マップパーツ配置の Undo/Redo 履歴 API ---
+
+namespace
+{
+// 履歴変化を管理画面の他クライアントへ WebSocket でブロードキャストする
+void BroadcastHistoryChanged()
+{
+        int nUndoCount = 0, nRedoCount = 0;
+        CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
+        CAdminWsHub::Instance().BroadcastJson(
+                std::string("{\"kind\":\"map_parts_history\",\"payload\":") +
+                CMapPartsHistory::BuildCountsJson(nUndoCount, nRedoCount) +
+                std::string("}"));
+}
+
+// Undo/Redo 共通の適用処理。dwPartsId を復元/再適用してゲーム側へブロードキャストする。
+void ApplyHistoryEntry(CMgrData *pMgrData, const CMapPartsHistory::Entry &entry, DWORD dwPartsId)
+{
+        CLibInfoMapBase *pMapLib = pMgrData->GetLibInfoMap();
+        CUraraSockTCPSBO *pSock = pMgrData->GetSock();
+        if (pMapLib == NULL || pSock == NULL) {
+                return;
+        }
+
+        PCInfoMapBase pInfoMap = (PCInfoMapBase)pMapLib->GetPtr(entry.mapId);
+        if (pInfoMap == NULL) {
+                return;
+        }
+
+        if (entry.pile) {
+                pInfoMap->SetPartsPile(entry.x, entry.y, dwPartsId);
+        } else {
+                pInfoMap->SetParts(entry.x, entry.y, dwPartsId);
+        }
+
+        CPacketMAP_SETPARTS packet;
+        packet.Make(entry.mapId, entry.x, entry.y, dwPartsId, entry.pile ? TRUE : FALSE);
+        pSock->SendTo(0, &packet);
+}
+}
+
+CMapPartsHistoryStatusHandler::CMapPartsHistoryStatusHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapPartsHistoryStatusHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        int nUndoCount = 0, nRedoCount = 0;
+        CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
+
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(CMapPartsHistory::BuildCountsJson(nUndoCount, nRedoCount));
+}
+
+CMapPartsHistoryUndoHandler::CMapPartsHistoryUndoHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapPartsHistoryUndoHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CMapPartsHistory::Entry entry;
+        if (!CMapPartsHistory::Instance().Undo(entry)) {
+                int nUndoCount = 0, nRedoCount = 0;
+                CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
+                std::ostringstream oss;
+                oss << "{\"applied\":false,\"reason\":\"empty\",\"undoCount\":" << nUndoCount
+                    << ",\"redoCount\":" << nRedoCount << "}";
+                response.statusLine = "HTTP/1.1 200 OK";
+                response.SetJsonBody(oss.str());
+                return;
+        }
+
+        CLibInfoMapBase *pMapLib = m_pMgrData->GetLibInfoMap();
+        if (pMapLib == NULL || pMapLib->GetPtr(entry.mapId) == NULL) {
+                int nUndoCount = 0, nRedoCount = 0;
+                CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
+                std::ostringstream oss;
+                oss << "{\"applied\":false,\"reason\":\"map_not_found\",\"undoCount\":" << nUndoCount
+                    << ",\"redoCount\":" << nRedoCount << "}";
+                response.statusLine = "HTTP/1.1 200 OK";
+                response.SetJsonBody(oss.str());
+                return;
+        }
+
+        // Undo: 変更前の値（oldPartsId）へ戻す
+        ApplyHistoryEntry(m_pMgrData, entry, entry.oldPartsId);
+
+        int nUndoCount = 0, nRedoCount = 0;
+        CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
+        BroadcastHistoryChanged();
+
+        std::ostringstream oss;
+        oss << "{\"applied\":true"
+            << ",\"mapId\":" << entry.mapId
+            << ",\"x\":" << entry.x
+            << ",\"y\":" << entry.y
+            << ",\"pile\":" << (entry.pile ? "true" : "false")
+            << ",\"partsId\":" << entry.oldPartsId
+            << ",\"undoCount\":" << nUndoCount
+            << ",\"redoCount\":" << nRedoCount
+            << "}";
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
+}
+
+CMapPartsHistoryRedoHandler::CMapPartsHistoryRedoHandler(CMgrData *pMgrData)
+        : m_pMgrData(pMgrData)
+{
+}
+
+void CMapPartsHistoryRedoHandler::Handle(const HttpRequest &request, HttpResponse &response)
+{
+        AuthProvider::AuthContext authContext;
+        AuthProvider::AuthStatus authStatus = AuthProvider::Authenticate(request, m_pMgrData, authContext);
+        if (authStatus == AuthProvider::AuthStatusBackendUnavailable) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        if (m_pMgrData == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        CMapPartsHistory::Entry entry;
+        if (!CMapPartsHistory::Instance().Redo(entry)) {
+                int nUndoCount = 0, nRedoCount = 0;
+                CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
+                std::ostringstream oss;
+                oss << "{\"applied\":false,\"reason\":\"empty\",\"undoCount\":" << nUndoCount
+                    << ",\"redoCount\":" << nRedoCount << "}";
+                response.statusLine = "HTTP/1.1 200 OK";
+                response.SetJsonBody(oss.str());
+                return;
+        }
+
+        CLibInfoMapBase *pMapLib = m_pMgrData->GetLibInfoMap();
+        if (pMapLib == NULL || pMapLib->GetPtr(entry.mapId) == NULL) {
+                int nUndoCount = 0, nRedoCount = 0;
+                CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
+                std::ostringstream oss;
+                oss << "{\"applied\":false,\"reason\":\"map_not_found\",\"undoCount\":" << nUndoCount
+                    << ",\"redoCount\":" << nRedoCount << "}";
+                response.statusLine = "HTTP/1.1 200 OK";
+                response.SetJsonBody(oss.str());
+                return;
+        }
+
+        // Redo: 変更後の値（newPartsId）を再適用する
+        ApplyHistoryEntry(m_pMgrData, entry, entry.newPartsId);
+
+        int nUndoCount = 0, nRedoCount = 0;
+        CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
+        BroadcastHistoryChanged();
+
+        std::ostringstream oss;
+        oss << "{\"applied\":true"
+            << ",\"mapId\":" << entry.mapId
+            << ",\"x\":" << entry.x
+            << ",\"y\":" << entry.y
+            << ",\"pile\":" << (entry.pile ? "true" : "false")
+            << ",\"partsId\":" << entry.newPartsId
+            << ",\"undoCount\":" << nUndoCount
+            << ",\"redoCount\":" << nRedoCount
+            << "}";
         response.statusLine = "HTTP/1.1 200 OK";
         response.SetJsonBody(oss.str());
 }

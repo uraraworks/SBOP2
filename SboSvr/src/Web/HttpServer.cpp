@@ -1159,6 +1159,16 @@ void CHttpServer::RegisterDefaultHandlers()
         std::unique_ptr<IApiHandler> mapPartsDeleteHandler(new CMapPartsDeleteHandler(m_pMgrData));
         m_router.Register("DELETE", "/api/maps/parts", std::move(mapPartsDeleteHandler));
 
+        // マップパーツ配置の Undo/Redo 履歴 API
+        std::unique_ptr<IApiHandler> mapPartsHistoryStatusHandler(new CMapPartsHistoryStatusHandler(m_pMgrData));
+        m_router.Register("GET", "/api/maps/parts/history", std::move(mapPartsHistoryStatusHandler));
+
+        std::unique_ptr<IApiHandler> mapPartsHistoryUndoHandler(new CMapPartsHistoryUndoHandler(m_pMgrData));
+        m_router.Register("POST", "/api/maps/parts/history/undo", std::move(mapPartsHistoryUndoHandler));
+
+        std::unique_ptr<IApiHandler> mapPartsHistoryRedoHandler(new CMapPartsHistoryRedoHandler(m_pMgrData));
+        m_router.Register("POST", "/api/maps/parts/history/redo", std::move(mapPartsHistoryRedoHandler));
+
         // マップ影カタログ API
         std::unique_ptr<IApiHandler> mapShadowListHandler(new CMapShadowListHandler(m_pMgrData));
         m_router.Register("GET", "/api/maps/shadows", std::move(mapShadowListHandler));

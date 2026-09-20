@@ -9,6 +9,8 @@
 #include "Command.h"
 #include "Packet.h"
 #include "Web/Handlers/SelectionHandler.h"
+#include "Web/AdminWsHub.h"
+#include "Web/MapPartsHistory.h"
 #include <ctime>
 #include <cstdio>
 #include "LibInfoMapBase.h"
@@ -303,11 +305,34 @@ void CMainFrame::RecvProcADMIN_MAP_SETPARTS(PBYTE pData, DWORD dwSessionID)
 	if (pInfoMap == NULL) {
 		return;
 	}
+
+	// 上書き前のパーツIDを取得しておく（Undo/Redo 履歴用。ここでしか知り得ない値）
+	DWORD dwOldPartsID;
+	if (Packet.m_bPile) {
+		dwOldPartsID = pInfoMap->GetPartsPile(Packet.m_ptPos.x, Packet.m_ptPos.y);
+	} else {
+		dwOldPartsID = pInfoMap->GetParts(Packet.m_ptPos.x, Packet.m_ptPos.y);
+	}
+
+	// 変化が無いなら無駄な履歴・無駄なブロードキャストをしない
+	if (dwOldPartsID == Packet.m_dwPartsID) {
+		return;
+	}
+
 	if (Packet.m_bPile) {
 		pInfoMap->SetPartsPile(Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_dwPartsID);
 	} else {
 		pInfoMap->SetParts(Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_dwPartsID);
 	}
+
+	// Undo/Redo 履歴に積む
+	CMapPartsHistory::Instance().Push(Packet.m_dwMapID, Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_bPile ? true : false, dwOldPartsID, Packet.m_dwPartsID);
+	int nUndoCount = 0, nRedoCount = 0;
+	CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
+	CAdminWsHub::Instance().BroadcastJson(
+		std::string("{\"kind\":\"map_parts_history\",\"payload\":") +
+		CMapPartsHistory::BuildCountsJson(nUndoCount, nRedoCount) +
+		std::string("}"));
 
 	PacketMAP_SETPARTS.Make(Packet.m_dwMapID, Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_dwPartsID, Packet.m_bPile);
 	SendToMapChar(Packet.m_dwMapID, &PacketMAP_SETPARTS);

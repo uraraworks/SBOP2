@@ -84,6 +84,10 @@ function ensureAdminWebSocket() {
       if (typeof window._mapWindowApplySelection === "function") {
         window._mapWindowApplySelection(msg.payload);
       }
+    } else if (msg.kind === "map_parts_history") {
+      console.debug("[admin-ws] map_parts_history", msg.payload);
+      // マップパーツ配置画面(map-parts-place.js)へ Undo/Redo 件数の更新を通知
+      window.dispatchEvent(new CustomEvent("sbop2_map_parts_history", { detail: msg.payload }));
     } else {
       console.debug("[admin-ws] 受信:", msg);
     }

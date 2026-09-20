@@ -100,3 +100,38 @@ public:
 private:
         CMgrData        *m_pMgrData;
 };
+
+// マップパーツ配置の Undo/Redo 履歴 API（CMapPartsHistory を参照/操作する）
+
+class CMapPartsHistoryStatusHandler : public IApiHandler
+{
+public:
+        CMapPartsHistoryStatusHandler(CMgrData *pMgrData);
+
+        void Handle(const HttpRequest &request, HttpResponse &response) override;
+
+private:
+        CMgrData        *m_pMgrData;
+};
+
+class CMapPartsHistoryUndoHandler : public IApiHandler
+{
+public:
+        CMapPartsHistoryUndoHandler(CMgrData *pMgrData);
+
+        void Handle(const HttpRequest &request, HttpResponse &response) override;
+
+private:
+        CMgrData        *m_pMgrData;
+};
+
+class CMapPartsHistoryRedoHandler : public IApiHandler
+{
+public:
+        CMapPartsHistoryRedoHandler(CMgrData *pMgrData);
+
+        void Handle(const HttpRequest &request, HttpResponse &response) override;
+
+private:
+        CMgrData        *m_pMgrData;
+};

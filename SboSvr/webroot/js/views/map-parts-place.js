@@ -10,6 +10,7 @@ import { fetchJson } from "../core/api.js";
 import { fetchMapPartsData } from "../data/map-parts-data.js";
 import { createPalette } from "./map-paint.js";
 import { openPartsDetail } from "./map-parts-edit.js";
+import { showErrorToast, showInfoToast } from "../components/toast.js";
 
 // ----------------------------------------------------------------
 // データ正規化
@@ -127,6 +128,21 @@ export function mount(container) {
     editBtn.title = "パーツを選択してから押してください";
     toolbar.appendChild(editBtn);
 
+    // 元に戻す/やり直すボタン(マップパーツ配置の Undo/Redo 履歴)
+    const undoBtn = document.createElement("button");
+    undoBtn.type = "button";
+    undoBtn.className = "button secondary";
+    undoBtn.textContent = "元に戻す";
+    undoBtn.disabled = true;
+    toolbar.appendChild(undoBtn);
+
+    const redoBtn = document.createElement("button");
+    redoBtn.type = "button";
+    redoBtn.className = "button secondary";
+    redoBtn.textContent = "やり直す";
+    redoBtn.disabled = true;
+    toolbar.appendChild(redoBtn);
+
     container.appendChild(toolbar);
 
     // ---- パレット領域(残り全体を占有) ----
@@ -238,9 +254,101 @@ export function mount(container) {
     }
     window.addEventListener("sbop2_pickup_parts", onPickupParts);
 
+    // ---- Undo/Redo 履歴 ----
+    // サーバー側 API (/api/maps/parts/history 系) は並行実装中のため、
+    // 取得や操作に失敗しても画面が壊れないよう、エラーは握り潰してボタンを無効化する。
+    let historyBusy = false;
+
+    function applyHistoryCounts(counts) {
+      const undoCount = Number(counts?.undoCount ?? 0) || 0;
+      const redoCount = Number(counts?.redoCount ?? 0) || 0;
+      undoBtn.disabled = historyBusy || undoCount <= 0;
+      redoBtn.disabled = historyBusy || redoCount <= 0;
+      undoBtn.textContent = undoCount > 0 ? `元に戻す (${undoCount})` : "元に戻す";
+      redoBtn.textContent = redoCount > 0 ? `やり直す (${redoCount})` : "やり直す";
+      undoBtn.title = "元に戻す (Ctrl+Z)";
+      redoBtn.title = "やり直す (Ctrl+Y)";
+    }
+
+    async function fetchHistoryCounts() {
+      try {
+        const { response, data } = await fetchJson("/api/maps/parts/history");
+        if (token !== _mountToken) return;
+        if (response.ok && data) {
+          applyHistoryCounts(data);
+        } else {
+          // API 未実装/失敗時はボタンを無効なままにする
+          undoBtn.disabled = true;
+          redoBtn.disabled = true;
+        }
+      } catch {
+        undoBtn.disabled = true;
+        redoBtn.disabled = true;
+      }
+    }
+
+    async function runHistoryAction(kind, button) {
+      if (historyBusy) return;
+      historyBusy = true;
+      undoBtn.disabled = true;
+      redoBtn.disabled = true;
+      try {
+        const { response, data } = await fetchJson(`/api/maps/parts/history/${kind}`, { method: "POST" });
+        if (token !== _mountToken) return;
+        historyBusy = false;
+        if (response.ok && data) {
+          if (data.applied === false) {
+            showInfoToast(data.reason === "map_not_found"
+              ? "対象マップが見つからないため操作を反映できませんでした"
+              : "元に戻せる操作がありません");
+          }
+          applyHistoryCounts(data);
+        } else {
+          showErrorToast("Undo/Redo に失敗しました");
+          applyHistoryCounts({});
+        }
+      } catch (err) {
+        historyBusy = false;
+        if (token !== _mountToken) return;
+        showErrorToast("Undo/Redo に失敗しました", err?.message || String(err));
+        applyHistoryCounts({});
+      }
+    }
+
+    undoBtn.addEventListener("click", () => runHistoryAction("undo", undoBtn));
+    redoBtn.addEventListener("click", () => runHistoryAction("redo", redoBtn));
+
+    function onHistoryPush(ev) {
+      applyHistoryCounts(ev.detail);
+    }
+    window.addEventListener("sbop2_map_parts_history", onHistoryPush);
+
+    // Ctrl+Z / Ctrl+Y (Ctrl+Shift+Z) ショートカット。input/textarea/select 入力中は無視する。
+    function onKeyDown(ev) {
+      const target = ev.target;
+      const tag = target && target.tagName ? target.tagName.toLowerCase() : "";
+      if (tag === "input" || tag === "textarea" || tag === "select" || (target && target.isContentEditable)) {
+        return;
+      }
+      if (!ev.ctrlKey) return;
+      const key = ev.key.toLowerCase();
+      if (key === "z" && !ev.shiftKey) {
+        ev.preventDefault();
+        if (!undoBtn.disabled) runHistoryAction("undo", undoBtn);
+      } else if (key === "y" || (key === "z" && ev.shiftKey)) {
+        ev.preventDefault();
+        if (!redoBtn.disabled) runHistoryAction("redo", redoBtn);
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+
+    fetchHistoryCounts();
+
     _destroyFn = () => {
       palette = null;
       window.removeEventListener("sbop2_pickup_parts", onPickupParts);
+      window.removeEventListener("sbop2_map_parts_history", onHistoryPush);
+      document.removeEventListener("keydown", onKeyDown);
       container.innerHTML = "";
       container.style.cssText = "";
     };

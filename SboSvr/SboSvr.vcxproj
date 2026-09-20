@@ -351,6 +351,7 @@
     <ClCompile Include="src\Web\Handlers\MapEventHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\TalkEventHandler.cpp" />
   <ClCompile Include="src\Web\Handlers\MapPartsHandler.cpp" />
+  <ClCompile Include="src\Web\MapPartsHistory.cpp" />
   <ClCompile Include="src\Web\Handlers\GrpDraftHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\SpriteSheetHandler.cpp" />
   <ClCompile Include="src\Web\Handlers\PublicAssetHandler.cpp" />
@@ -532,6 +533,7 @@
     <ClInclude Include="src\Web\Handlers\MapEventHandler.h" />
     <ClInclude Include="src\Web\Handlers\TalkEventHandler.h" />
   <ClInclude Include="src\Web\Handlers\MapPartsHandler.h" />
+  <ClInclude Include="src\Web\MapPartsHistory.h" />
   <ClInclude Include="src\Web\Handlers\GrpDraftHandler.h" />
     <ClInclude Include="src\Web\Handlers\SpriteSheetHandler.h" />
   <ClInclude Include="src\Web\Handlers\PublicAssetHandler.h" />
