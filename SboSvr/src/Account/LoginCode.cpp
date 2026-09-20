@@ -186,6 +186,27 @@ namespace LoginCode
 		return strResult;
 	}
 
+	std::string	GenerateAutoAccountName(void)
+	{
+		// 30bit(=6文字×5bit)ちょうどの乱数を使う(4バイト=32bitのうち末尾2bitは切り捨て)。
+		unsigned char pRandom[4];
+		if (!SboPlatform::GenerateRandomBytes(pRandom, sizeof(pRandom))) {
+			return std::string();
+		}
+		std::string strSuffix = EncodeCrockfordBase32(pRandom, sizeof(pRandom));
+		return std::string("player-") + NormalizeAccountName(strSuffix);
+	}
+
+	std::string	GenerateAutoPassword(void)
+	{
+		// 60bit(=12文字×5bit)ちょうどの乱数を使う(8バイト=64bitのうち末尾4bitは切り捨て)。
+		unsigned char pRandom[8];
+		if (!SboPlatform::GenerateRandomBytes(pRandom, sizeof(pRandom))) {
+			return std::string();
+		}
+		return EncodeCrockfordBase32(pRandom, sizeof(pRandom));
+	}
+
 	bool	ShouldAutoCreateAccountOnUnknownLogin(void)
 	{
 		// ログインコード方式(docs/login-code-auth-plan.md S4)へ移行済み。

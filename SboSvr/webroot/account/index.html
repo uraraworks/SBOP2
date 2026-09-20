@@ -260,7 +260,13 @@
     </div>
 
     <div id="tab-register" class="tab-panel" hidden>
-      <form id="registerForm" autocomplete="off">
+      <div id="registerQuick">
+        <div class="field-note">アカウント名・パスワードはおまかせで発行されます。あとから決めることもできます。</div>
+        <button id="registerQuickBtn" class="btn-primary" type="button">おまかせで登録してはじめる</button>
+        <a id="registerManualOpenBtn" class="link-btn" href="#" role="button">アカウント名とパスワードを自分で決める</a>
+      </div>
+
+      <form id="registerForm" autocomplete="off" hidden>
         <label for="registerName">アカウント名</label>
         <input id="registerName" type="text" autocomplete="username" autocapitalize="off"
                spellcheck="false" required>
@@ -274,6 +280,7 @@
         <div class="field-note">「自動で作る」を押すと、紛らわしい文字を除いたパスワードを作成します。</div>
 
         <button id="registerSubmitBtn" class="btn-primary" type="submit">登録してコードを発行</button>
+        <a id="registerManualCloseBtn" class="link-btn" href="#" role="button">おまかせ登録に戻る</a>
       </form>
     </div>
 
@@ -294,6 +301,10 @@
 
   <section id="codeIssuedView" class="panel" hidden>
     <h1 style="font-size:15px; text-align:left; margin-top:0;">ログインコードが発行されました</h1>
+    <div id="issuedCredRow" class="field-note" hidden>
+      アカウント名: <span id="issuedAccountName" class="account-name"></span><br>
+      パスワード: <span id="issuedPasswordText" class="account-name"></span>
+    </div>
     <div id="issuedCodeDisplay" class="code-display"></div>
     <div class="code-actions">
       <button id="saveFileBtn" class="btn btn-small" type="button">📄 ファイルで保存</button>
@@ -301,6 +312,7 @@
       <button id="copyBtn" class="btn btn-small" type="button">📋 コピー</button>
     </div>
     <div class="warn-box">このコードはパスワードと同じです。他の人に見せないでください。なくした場合は、IDとパスワードで再発行できます(再発行すると古いコードは使えなくなります)。</div>
+    <div class="field-note">アカウント名・パスワード・ログインコードの3つが、再発行に必要です。アカウント名はゲーム内で他の人に見える名前ではありません(見えるのはキャラクター名です)。</div>
     <div class="save-check">
       <input id="savedCheck" type="checkbox">
       <label for="savedCheck">保存しました</label>
@@ -477,6 +489,9 @@
     Object.keys(tabPanels).forEach(function (key) {
       tabPanels[key].hidden = (key !== name);
     });
+    if (name === 'register') {
+      showRegisterManual(false);
+    }
     clearMessage();
   }
 
@@ -490,6 +505,9 @@
   // コード発行後の画面
   // ============================================================
 
+  var issuedCredRow = document.getElementById('issuedCredRow');
+  var issuedAccountName = document.getElementById('issuedAccountName');
+  var issuedPasswordText = document.getElementById('issuedPasswordText');
   var issuedCodeDisplay = document.getElementById('issuedCodeDisplay');
   var saveFileBtn = document.getElementById('saveFileBtn');
   var shareBtn = document.getElementById('shareBtn');
@@ -557,6 +575,13 @@
     state.issuedName = name;
     state.issuedPassword = password || null;
     state.issuedCode = code;
+    if (password) {
+      issuedAccountName.textContent = name;
+      issuedPasswordText.textContent = password;
+      issuedCredRow.hidden = false;
+    } else {
+      issuedCredRow.hidden = true;
+    }
     issuedCodeDisplay.textContent = code;
     savedCheck.checked = false;
     playBtn.disabled = true;
@@ -650,16 +675,54 @@
   // 新規登録フォーム
   // ============================================================
 
+  var registerQuick = document.getElementById('registerQuick');
+  var registerQuickBtn = document.getElementById('registerQuickBtn');
+  var registerManualOpenBtn = document.getElementById('registerManualOpenBtn');
+  var registerManualCloseBtn = document.getElementById('registerManualCloseBtn');
   var registerForm = document.getElementById('registerForm');
   var registerName = document.getElementById('registerName');
   var registerPassword = document.getElementById('registerPassword');
   var registerGenerateBtn = document.getElementById('registerGenerateBtn');
   var registerSubmitBtn = document.getElementById('registerSubmitBtn');
 
+  function showRegisterManual(show) {
+    registerForm.hidden = !show;
+    registerQuick.hidden = show;
+    clearMessage();
+  }
+
+  registerManualOpenBtn.addEventListener('click', function (ev) {
+    ev.preventDefault();
+    showRegisterManual(true);
+  });
+
+  registerManualCloseBtn.addEventListener('click', function (ev) {
+    ev.preventDefault();
+    showRegisterManual(false);
+  });
+
   registerGenerateBtn.addEventListener('click', function () {
     var pw = generatePassword(12);
     registerPassword.value = pw;
     registerPassword.type = 'text';
+  });
+
+  registerQuickBtn.addEventListener('click', function () {
+    clearMessage();
+    registerQuickBtn.disabled = true;
+    apiPost('/api/account/register', {})
+      .then(function (result) {
+        registerQuickBtn.disabled = false;
+        if (result.ok && result.data && result.data.code && result.data.account) {
+          showCodeIssued(result.data.account, result.data.password || null, result.data.code);
+        } else {
+          showMessage(errorMessageFor(result.status, result.data), 'warn');
+        }
+      })
+      .catch(function () {
+        registerQuickBtn.disabled = false;
+        showMessage('通信エラーが発生しました。しばらくしてからお試しください。', 'warn');
+      });
   });
 
   registerForm.addEventListener('submit', function (ev) {

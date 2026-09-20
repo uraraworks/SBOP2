@@ -80,4 +80,20 @@ namespace LoginCode
 	/// ASCII 以外のバイトは変更しない(IsAcceptableAccountName で別途弾く)。
 	/// @param strName アカウント名(UTF-8想定)
 	std::string	NormalizeAccountName(const std::string &strName);
+
+	/// @brief おまかせ登録用に、アカウント名を自動生成する。
+	///
+	/// "player-" + 小文字英数字6文字(Crockford Base32由来。I,L,O,U を含まず
+	/// 紛らわしくない)。一意性は呼び出し側(CAccountRegisterHandler)が
+	/// CLibInfoAccount::GetPtr で確認し、衝突したら作り直すこと
+	/// (このモジュールはDBを見ないため、ここでは一意性を保証しない)。
+	/// @return 失敗時(乱数生成エラー)は空文字列。
+	std::string	GenerateAutoAccountName(void);
+
+	/// @brief おまかせ登録用に、パスワードを自動生成する。
+	///
+	/// 英数字12文字(Crockford Base32由来、大文字のみ・紛らわしい文字を含まない)。
+	/// PasswordHash::IsAcceptable を必ず満たす文字種にしてある。
+	/// @return 失敗時(乱数生成エラー)は空文字列。
+	std::string	GenerateAutoPassword(void);
 }

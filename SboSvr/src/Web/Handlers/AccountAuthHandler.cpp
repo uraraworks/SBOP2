@@ -37,6 +37,19 @@ namespace
 		return limiter;
 	}
 
+	// おまかせ登録で1クリック登録が可能になったための連打対策。上の失敗回数制限
+	// (5回失敗で300秒ロック)とは別物で、"成功"した登録の回数を IP 単位で数える。
+	// 1時間に10件を超える新規登録(成功)は 429 にする。CIpRateLimiter は失敗記録の
+	// 仕組みだが、"登録成功を1回記録する"用途にそのまま転用できるので使い回す。
+	const int kMaxRegisterSuccessPerHour = 10;
+	const long kRegisterSuccessWindowSeconds = 3600;
+
+	CIpRateLimiter &GetAccountRegisterSuccessLimiter(void)
+	{
+		static CIpRateLimiter limiter(kMaxRegisterSuccessPerHour, kRegisterSuccessWindowSeconds);
+		return limiter;
+	}
+
 	std::string TrimCopy(const std::string &strText)
 	{
 		size_t nStart = 0;
@@ -117,18 +130,26 @@ void CAccountRegisterHandler::Handle(const HttpRequest &request, HttpResponse &r
 		SetTooManyAttemptsResponse(response, nRetryAfterSeconds);
 		return;
 	}
+	// 連打対策: おまかせ登録で1クリック登録できるようになったため、成功回数も別途制限する。
+	if (GetAccountRegisterSuccessLimiter().IsLockedOut(strKey, now, nRetryAfterSeconds)) {
+		SetTooManyAttemptsResponse(response, nRetryAfterSeconds);
+		return;
+	}
 
-	std::string strAccount, strPassword;
-	if (!JsonUtils::TryGetString(request.body, "account", strAccount) ||
-	    !JsonUtils::TryGetString(request.body, "password", strPassword)) {
+	std::string strAccountInput, strPasswordInput;
+	bool bHasAccount = JsonUtils::TryGetString(request.body, "account", strAccountInput);
+	bool bHasPassword = JsonUtils::TryGetString(request.body, "password", strPasswordInput);
+	strAccountInput = TrimCopy(strAccountInput);
+
+	// account・password の両方が省略/空なら「おまかせ登録」(名前・パスワードをサーバーが
+	// 自動生成する)。片方だけの指定は不正(400)。両方指定なら従来どおりの動作。
+	bool bAccountEmpty = (!bHasAccount) || strAccountInput.empty();
+	bool bPasswordEmpty = (!bHasPassword) || strPasswordInput.empty();
+	bool bAutoGenerate = bAccountEmpty && bPasswordEmpty;
+	if (!bAutoGenerate && (bAccountEmpty || bPasswordEmpty)) {
 		SetErrorResponse(response, "HTTP/1.1 400 Bad Request", "invalid_request");
 		return;
 	}
-	strAccount = TrimCopy(strAccount);
-	// クライアント(WindowLOGINBrowser::NormalizeLoginText)はアカウント名を小文字化して
-	// 送るが、CLibInfoAccount::GetPtr(LPCSTR) は大小文字を区別する。検証・検索・保存の
-	// 前に必ず小文字化しておく(表記ゆれで別アカウント扱いになるのを防ぐ)。
-	strAccount = LoginCode::NormalizeAccountName(strAccount);
 
 	CLibInfoAccount *pAccountLib = m_pMgrData->GetLibInfoAccount();
 	if (pAccountLib == NULL) {
@@ -136,32 +157,74 @@ void CAccountRegisterHandler::Handle(const HttpRequest &request, HttpResponse &r
 		return;
 	}
 
-	// 名前の検証: ゲームの自動作成と同じ条件(ASCII 0x21〜0x7E)にそろえる。
-	if (!LoginCode::IsAcceptableAccountName(strAccount)) {
-		GetAccountApiLimiter().RecordFailure(strKey, now);
-		SetErrorResponse(response, "HTTP/1.1 400 Bad Request", "invalid_account_name");
-		return;
-	}
-	// パスワードの検証(空不可・ASCII表示可能文字のみ)
-	if (!PasswordHash::IsAcceptable(strPassword.c_str())) {
-		GetAccountApiLimiter().RecordFailure(strKey, now);
-		SetErrorResponse(response, "HTTP/1.1 400 Bad Request", "invalid_password");
-		return;
-	}
 	// 管理者名と同じ名前の登録は拒否する(管理者名側も小文字化してから比較する)
 	std::string strAdminNormalized = LoginCode::NormalizeAccountName((LPCSTR)m_pMgrData->GetAdminAccount());
-	if (strAccount == strAdminNormalized) {
-		SetErrorResponse(response, "HTTP/1.1 409 Conflict", "account_exists");
-		return;
+
+	std::string strAccount;
+	std::string strPassword;
+
+	if (!bAutoGenerate) {
+		// クライアント(WindowLOGINBrowser::NormalizeLoginText)はアカウント名を小文字化して
+		// 送るが、CLibInfoAccount::GetPtr(LPCSTR) は大小文字を区別する。検証・検索・保存の
+		// 前に必ず小文字化しておく(表記ゆれで別アカウント扱いになるのを防ぐ)。
+		strAccount = LoginCode::NormalizeAccountName(strAccountInput);
+		strPassword = strPasswordInput;
+
+		// 名前の検証: ゲームの自動作成と同じ条件(ASCII 0x21〜0x7E)にそろえる。
+		if (!LoginCode::IsAcceptableAccountName(strAccount)) {
+			GetAccountApiLimiter().RecordFailure(strKey, now);
+			SetErrorResponse(response, "HTTP/1.1 400 Bad Request", "invalid_account_name");
+			return;
+		}
+		// パスワードの検証(空不可・ASCII表示可能文字のみ)
+		if (!PasswordHash::IsAcceptable(strPassword.c_str())) {
+			GetAccountApiLimiter().RecordFailure(strKey, now);
+			SetErrorResponse(response, "HTTP/1.1 400 Bad Request", "invalid_password");
+			return;
+		}
+		if (strAccount == strAdminNormalized) {
+			SetErrorResponse(response, "HTTP/1.1 409 Conflict", "account_exists");
+			return;
+		}
+	} else {
+		// おまかせ登録: パスワードは1回生成すればよい(名前と違って一意性は不要)。
+		strPassword = LoginCode::GenerateAutoPassword();
+		if (strPassword.empty()) {
+			SetErrorResponse(response, "HTTP/1.1 500 Internal Server Error", "password_generate_failed");
+			return;
+		}
 	}
 
 	pAccountLib->Enter();
 
-	PCInfoAccount pExisting = pAccountLib->GetPtr(strAccount.c_str());
-	if (pExisting != NULL) {
-		pAccountLib->Leave();
-		SetErrorResponse(response, "HTTP/1.1 409 Conflict", "account_exists");
-		return;
+	if (bAutoGenerate) {
+		// 名前の一意性はサーバー側で担保する: 衝突したら排他内で作り直す(クライアントに
+		// 409 は返さない)。管理者名との衝突もここでまとめて弾く。
+		const int kMaxNameAttempts = 10;
+		bool bNameFound = false;
+		for (int i = 0; i < kMaxNameAttempts; ++i) {
+			std::string strCandidate = LoginCode::GenerateAutoAccountName();
+			if (strCandidate.empty() || (strCandidate == strAdminNormalized)) {
+				continue;
+			}
+			if (pAccountLib->GetPtr(strCandidate.c_str()) == NULL) {
+				strAccount = strCandidate;
+				bNameFound = true;
+				break;
+			}
+		}
+		if (!bNameFound) {
+			pAccountLib->Leave();
+			SetErrorResponse(response, "HTTP/1.1 500 Internal Server Error", "account_name_generate_failed");
+			return;
+		}
+	} else {
+		PCInfoAccount pExisting = pAccountLib->GetPtr(strAccount.c_str());
+		if (pExisting != NULL) {
+			pAccountLib->Leave();
+			SetErrorResponse(response, "HTTP/1.1 409 Conflict", "account_exists");
+			return;
+		}
 	}
 
 	std::string strHashedPassword = PasswordHash::Hash(strPassword.c_str());
@@ -215,12 +278,22 @@ void CAccountRegisterHandler::Handle(const HttpRequest &request, HttpResponse &r
 	}
 
 	GetAccountApiLimiter().ClearFailure(strKey);
+	// 成功回数を記録する(連打対策)。CIpRateLimiter は失敗記録の仕組みだが、
+	// "登録成功を1回記録する"用途にそのまま転用している(クラスコメント参照)。
+	GetAccountRegisterSuccessLimiter().RecordFailure(strKey, now);
 	if (m_pMgrData->GetLog() != NULL) {
 		m_pMgrData->GetLog()->Write("[AccountRegister] success account=%s", strResolvedAccount.c_str());
 	}
 
+	// おまかせ登録した名前・パスワードは、画面に出せるようここで応答に含める
+	// (自動生成した値はログに出さない。パスワードは平文のまま返す必要があるため
+	// ハッシュ化前の strPassword を使う)。
 	std::ostringstream oss;
-	oss << "{\"code\":\"" << JsonUtils::Escape(LoginCode::FormatCodeForDisplay(strCode)) << "\"}";
+	oss << "{\"account\":\"" << JsonUtils::Escape(strResolvedAccount) << "\"";
+	if (bAutoGenerate) {
+		oss << ",\"password\":\"" << JsonUtils::Escape(strPassword) << "\"";
+	}
+	oss << ",\"code\":\"" << JsonUtils::Escape(LoginCode::FormatCodeForDisplay(strCode)) << "\"}";
 	response.statusLine = "HTTP/1.1 201 Created";
 	response.SetJsonBody(oss.str());
 }

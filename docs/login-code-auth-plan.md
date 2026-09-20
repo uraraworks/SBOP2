@@ -136,6 +136,62 @@
   - 既存アカウントの ID＋PW ログイン（`CPacketCONNECT_REQ_LOGIN` / `SBOCOMMANDID_SUB_CONNECT_REQ_LOGIN`）自体は、キャッシュに残った旧クライアントや移行期間のため引き続き受け付ける。受付停止は本番反映後に別途判断する。
 - `SBOP2RequestWebAdminSession` は呼び出し元が無かった（`SboSvr/webroot/app.js` は `postMessage` の受信側であり送信側ではない）ため、関数定義ごと `tools/emscripten/sbocli-title.shell.html` から削除した。
 
+### S5: おまかせ登録（アカウント名・パスワードの自動生成）
+
+「アカウント名を考えるのが面倒」という利用者向けに、`POST /api/account/register` に
+アカウント名・パスワードをサーバー側で自動生成する経路を追加した
+（`SboSvr/src/Web/Handlers/AccountAuthHandler.cpp` の `CAccountRegisterHandler`）。
+
+**API 仕様（`POST /api/account/register`）**
+
+| account | password | 動作 |
+| --- | --- | --- |
+| 省略/空 | 省略/空 | おまかせ登録。両方をサーバーが自動生成する |
+| 指定あり | 指定あり | 従来どおり（後方互換） |
+| 片方だけ指定 | — | `400 invalid_request` |
+
+応答は `{"account":"...", "password":"...", "code":"..."}`。
+`password` フィールドは、おまかせ登録で自動生成したときだけ含める
+（利用者側で指定した場合は、応答に含めなくても本人が知っているため）。
+
+- **アカウント名の自動生成**: `player-` + 小文字英数字6文字。
+  文字は `LoginCode::GenerateAutoAccountName()`（`SboSvr/src/Account/LoginCode.{h,cpp}`）が
+  ログインコードと同じ Crockford Base32（I, L, O, U を含まない）を使って生成し、
+  `LoginCode::NormalizeAccountName()` で小文字化する。表示すると `player-7f3a2b` のような形になり、
+  タイトル画面には「player-7f3a2b としてはじめる」のように出せる。
+  - **一意性はサーバー側で担保する**。`CAccountRegisterHandler` が `pAccountLib->Enter()` の
+    排他区間内で最大10回まで生成をやり直し、`CLibInfoAccount::GetPtr` で衝突と管理者名との
+    一致を確認する。クライアントに 409 は返さない（10回とも衝突した場合のみ
+    `500 account_name_generate_failed`）。
+- **パスワードの自動生成**: `LoginCode::GenerateAutoPassword()` が英数字12文字
+  （Crockford Base32、大文字のみ）を `SboPlatform::GenerateRandomBytes` から生成する。
+  `PasswordHash::IsAcceptable` の条件（ASCII 0x21〜0x7E）を満たす文字種にしてあるので、
+  検証には通常のパスワードと同じ経路を通す。
+- **ログ**: 自動生成した名前・パスワードはログに出さない。アカウント名は、従来どおり
+  `[AccountRegister] success account=...` の1行だけ出す（自動生成かどうかに関わらず名前は出してよい）。
+
+**連打対策（登録の成功回数制限）**
+
+1クリックで登録できるようになったため、失敗回数制限（IP単位・5回失敗で300秒ロック、
+`CIpRateLimiter`）とは別に、**登録が成功した回数**も IP 単位で制限する。
+
+- 同一 IP から **1時間に10件を超える新規登録（成功）は `429 too_many_attempts`**
+  （`retryAfterSeconds` 付き）。
+- 実装は失敗回数制限と同じ `CIpRateLimiter` クラスを、"失敗"ではなく"登録成功"を記録する
+  用途にそのまま転用している。専用のインスタンス
+  `GetAccountRegisterSuccessLimiter()`（`AccountAuthHandler.cpp` 内、`CIpRateLimiter(10, 3600)`）
+  を新設し、失敗回数制限用のインスタンスとは完全に独立させた。
+- IP の取り方は既存の試行回数制限と同じ（`request.clientIp`）。
+
+**テスト**（`SboSvrTest`）
+
+- `TestLoginCode.cpp`: 自動生成アカウント名の形式（`player-`+6文字・使用文字種・紛らわしい
+  文字を含まないこと・登録API入口の検証を通ること）、自動生成パスワードの長さ・
+  `PasswordHash::IsAcceptable` を通ることを確認。
+- `TestIpRateLimiter.cpp`: 登録成功回数制限（10回まで許可・11回目で1時間ロック・
+  1時間経過で解除・失敗回数制限とは別インスタンスで独立していること）を確認。
+- いずれもテストを追加する際、意図的に実装を壊して当該テストが落ちることを確認済み。
+
 ## 移行期間の扱い
 
 - S1〜S3 の間は、旧方式（ゲーム内の ID＋PW）もそのまま使える。

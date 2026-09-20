@@ -10,6 +10,7 @@
 #include "StdAfx.h"
 #include "TestFramework.h"
 #include "Account/LoginCode.h"
+#include "PasswordHash.h"
 #include <string>
 #include <cstring>
 
@@ -243,4 +244,69 @@ TEST(未登録名ログイン_自動作成は廃止済み)
 	// false であることを前提に「未登録なら LOGINRES_NG_PASSWORD」を返す。
 	// ここを true に戻すとこのテストが落ちる。
 	CHECK(LoginCode::ShouldAutoCreateAccountOnUnknownLogin() == false);
+}
+
+//////////////////////////////////////////////////////////////////////
+// おまかせ登録: 自動生成の名前・パスワード
+//////////////////////////////////////////////////////////////////////
+
+TEST(自動生成アカウント名_形式はplayerハイフン英数字6文字)
+{
+	std::string strName = LoginCode::GenerateAutoAccountName();
+	CHECK(strName.empty() == false);
+	CHECK_EQ(13, (int)strName.size());	// "player-" 7文字 + 6文字
+	CHECK(strName.substr(0, 7) == "player-");
+
+	std::string strSuffix = strName.substr(7);
+	CHECK_EQ(6, (int)strSuffix.size());
+	for (size_t i = 0; i < strSuffix.size(); i ++) {
+		char c = strSuffix[i];
+		bool bDigit = (c >= '0') && (c <= '9');
+		bool bLower = (c >= 'a') && (c <= 'z');
+		CHECK(bDigit || bLower);
+	}
+	// 紛らわしい文字(I,L,O,Uの小文字)は使わない
+	CHECK(strSuffix.find('i') == std::string::npos);
+	CHECK(strSuffix.find('l') == std::string::npos);
+	CHECK(strSuffix.find('o') == std::string::npos);
+	CHECK(strSuffix.find('u') == std::string::npos);
+}
+
+TEST(自動生成アカウント名_登録API入口の検証を通る)
+{
+	std::string strName = LoginCode::GenerateAutoAccountName();
+	CHECK(LoginCode::IsAcceptableAccountName(strName) != false);
+	// 既に小文字化済みのはず(正規化しても変わらない)
+	CHECK(LoginCode::NormalizeAccountName(strName) == strName);
+}
+
+TEST(自動生成アカウント名_毎回変わる)
+{
+	std::string strA = LoginCode::GenerateAutoAccountName();
+	std::string strB = LoginCode::GenerateAutoAccountName();
+	CHECK(strA.empty() == false);
+	CHECK(strB.empty() == false);
+	CHECK(strA != strB);
+}
+
+TEST(自動生成パスワード_長さは12文字)
+{
+	std::string strPassword = LoginCode::GenerateAutoPassword();
+	CHECK(strPassword.empty() == false);
+	CHECK_EQ(12, (int)strPassword.size());
+}
+
+TEST(自動生成パスワード_PasswordHashの検証を通る)
+{
+	std::string strPassword = LoginCode::GenerateAutoPassword();
+	CHECK(PasswordHash::IsAcceptable(strPassword.c_str()) != false);
+}
+
+TEST(自動生成パスワード_毎回変わる)
+{
+	std::string strA = LoginCode::GenerateAutoPassword();
+	std::string strB = LoginCode::GenerateAutoPassword();
+	CHECK(strA.empty() == false);
+	CHECK(strB.empty() == false);
+	CHECK(strA != strB);
 }
