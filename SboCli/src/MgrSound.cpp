@@ -21,6 +21,11 @@
 #ifdef __EMSCRIPTEN__
 // ブラウザ版の BGM は .data に同梱せず、起動後に個別取得する。
 // 8 本で 8.4MB あり、同梱すると初回ロードがその分そのまま遅くなるため。
+//
+// 再生方式は2段構え:
+//   1. <audio> ストリーミング再生（対応ブラウザ）: ダウンロード完了を待たずに鳴り始める
+//   2. wget で丸ごと取得してPCMデコードするキャッシュ方式（1.が使えない古い環境向け）
+//      こちらも起動時にまとめて取るのはやめ、要求された曲だけ個別に取りに行く。
 namespace {
 
 struct BrowserBgmFile {
@@ -38,6 +43,11 @@ const BrowserBgmFile s_aBrowserBgmFiles[] = {
 	{ BGMID_HUYUNOMATI_FULL, "huyunomati_full.ogg" },
 	{ BGMID_OYAKODON_NAMI,   "oyakodon_nami.ogg"   },
 };
+
+const size_t s_nBrowserBgmFileCount = sizeof(s_aBrowserBgmFiles)/sizeof(s_aBrowserBgmFiles[0]);
+
+// フォールバック経路(wget)で要求済み/取得中かどうか。二重取得を避けるためのフラグ。
+bool s_abBrowserBgmRequested[sizeof(s_aBrowserBgmFiles)/sizeof(s_aBrowserBgmFiles[0])] = {};
 
 // コールバックからインスタンスへ戻るための参照。CMgrSound は 1 個しか作られない。
 CMgrSound *s_pBrowserMgrSound = NULL;
@@ -64,6 +74,17 @@ void BuildBgmUrl(char *pszDst, size_t nDstSize, const char *pszFile)
 	pszDst[nPos] = '\0';
 }
 
+// BGMID からファイル名を引く。見つからなければ NULL。
+const char *FindBrowserBgmFile(int nID)
+{
+	for (size_t i = 0; i < s_nBrowserBgmFileCount; i++) {
+		if (s_aBrowserBgmFiles[i].id == nID) {
+			return s_aBrowserBgmFiles[i].pszFile;
+		}
+	}
+	return NULL;
+}
+
 void BrowserBgmOnLoad(const char *pszFile)
 {
 	if (s_pBrowserMgrSound != NULL) {
@@ -76,7 +97,142 @@ void BrowserBgmOnError(const char *pszFile)
 	SDL_Log("BGM の取得に失敗しました: %s", (pszFile != NULL) ? pszFile : "(null)");
 }
 
+// フォールバック経路: 未取得なら取得を開始する。取得中/取得済みなら何もしない。
+void RequestBrowserBgmIfNeeded(int nID)
+{
+	for (size_t i = 0; i < s_nBrowserBgmFileCount; i++) {
+		if (s_aBrowserBgmFiles[i].id != nID) {
+			continue;
+		}
+		if (s_abBrowserBgmRequested[i]) {
+			return;
+		}
+		s_abBrowserBgmRequested[i] = true;
+
+		char szUrl[256];
+		char szPath[256];
+		BuildBgmUrl(szUrl, sizeof(szUrl), s_aBrowserBgmFiles[i].pszFile);
+		snprintf(szPath, sizeof(szPath), "/BGM/%s", s_aBrowserBgmFiles[i].pszFile);
+		emscripten_async_wget(szUrl, szPath, BrowserBgmOnLoad, BrowserBgmOnError);
+		return;
+	}
+}
+
 } // namespace
+
+// ── <audio> ストリーミング再生用 JS ブリッジ ──
+// 対応判定・生成・再生・停止・音量設定を EM_JS で実装し、window.sbop2BgmAudio を使い回す。
+
+// 対応環境かどうか(初回のみ判定してキャッシュする)。1=対応、0=非対応(古いiOS Safari等)
+EM_JS(int, Sbop2BgmCanUseAudioElement, (), {
+	if (window.sbop2BgmAudioSupported === undefined) {
+		try {
+			var a = new Audio();
+			window.sbop2BgmAudioSupported = (a.canPlayType('audio/ogg; codecs="vorbis"') !== '') ? 1 : 0;
+		} catch (e) {
+			window.sbop2BgmAudioSupported = 0;
+		}
+	}
+	return window.sbop2BgmAudioSupported;
+});
+
+// <audio> 要素を1個だけ生成して使い回す。unlock関数もここで生やす。
+EM_JS(void, Sbop2BgmEnsureElement, (), {
+	if (window.sbop2BgmAudio) {
+		return;
+	}
+	var audio = new Audio();
+	audio.loop = true;
+	audio.preload = 'auto';
+	window.sbop2BgmAudio = audio;
+	window.sbop2BgmPendingPlay = false;
+	window.sbop2BgmPlayRequestedAt = 0;
+
+	// 実際に鳴り始めたタイミングをC++へ通知する(計測ログ用)
+	audio.addEventListener('playing', function() {
+		if (window.sbop2BgmPlayRequestedAt) {
+			var elapsed = performance.now() - window.sbop2BgmPlayRequestedAt;
+			try {
+				Module.ccall('SBOP2_OnBgmPlaying', 'void', ['number'], [elapsed]);
+			} catch (e) {}
+			window.sbop2BgmPlayRequestedAt = 0;
+		}
+	});
+
+	// Autoplay Policy でブロックされた場合、次のユーザー操作(一度だけ)で再試行する
+	var retryPlay = function() {
+		if (window.sbop2BgmPendingPlay && window.sbop2BgmAudio) {
+			window.sbop2BgmPlayRequestedAt = performance.now();
+			window.sbop2BgmAudio.play().catch(function(e) {});
+			window.sbop2BgmPendingPlay = false;
+		}
+	};
+	window.addEventListener('pointerdown', retryPlay, { once: true });
+	window.addEventListener('keydown', retryPlay, { once: true });
+
+	// シェルHTML側の Click to Start から呼ばれる無音unlock(Autoplay Policy対策)
+	window.sbop2BgmUnlock = function() {
+		try {
+			var silentUrl = 'data:audio/wav;base64,UklGRiUAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQEAAACA';
+			var savedSrc = audio.src;
+			audio.src = silentUrl;
+			var p = audio.play();
+			if (p && p.then) {
+				p.then(function() {
+					audio.pause();
+					if (savedSrc) { audio.src = savedSrc; }
+				}).catch(function() {});
+			} else {
+				audio.pause();
+			}
+		} catch (e) {}
+	};
+});
+
+// 指定URLのBGMをストリーミング再生する。loop済み・音量設定込み。
+// 呼び出し前に Sbop2BgmEnsureElement() 済みであること(C++側で保証する)。
+EM_JS(void, Sbop2BgmPlay, (const char *pszUrl, double dVolume), {
+	var audio = window.sbop2BgmAudio;
+	if (!audio) {
+		return;
+	}
+	var url = UTF8ToString(pszUrl);
+	audio.loop = true;
+	audio.volume = dVolume;
+	audio.src = url;
+	window.sbop2BgmPlayRequestedAt = performance.now();
+	var playPromise = audio.play();
+	if (playPromise && playPromise.catch) {
+		playPromise.catch(function(e) {
+			// Autoplay Policy でブロックされた場合はユーザー操作を待って再試行する
+			window.sbop2BgmPendingPlay = true;
+		});
+	}
+});
+
+// 再生停止(pause + 先頭へ巻き戻し)
+EM_JS(void, Sbop2BgmStop, (), {
+	if (window.sbop2BgmAudio) {
+		try {
+			window.sbop2BgmAudio.pause();
+			window.sbop2BgmAudio.currentTime = 0;
+		} catch (e) {}
+	}
+	window.sbop2BgmPendingPlay = false;
+});
+
+// 音量設定(0.0〜1.0)
+EM_JS(void, Sbop2BgmSetVolume, (double dVolume), {
+	if (window.sbop2BgmAudio) {
+		window.sbop2BgmAudio.volume = dVolume;
+	}
+});
+
+// JS の 'playing' イベントから呼ばれる。PlayBGM 呼び出しからの経過時間を計測ログへ出す。
+extern "C" EMSCRIPTEN_KEEPALIVE void SBOP2_OnBgmPlaying(double dElapsedMs)
+{
+	SDL_Log("BGM再生開始まで %.0f ms (audio要素ストリーミング)", dElapsedMs);
+}
 #endif
 
 CMgrSound::CMgrSound()
@@ -119,19 +275,15 @@ BOOL CMgrSound::Create(void)
 	ReadSoundData();
 
 	// BGM は .data に同梱していないので、起動後に個別取得する。
-	// 取得できた順にデコードしてキャッシュへ入れ、鳴らすべきものなら再生を始める。
+	// 通常は <audio> ストリーミング再生を使うため事前取得は不要。
+	// canPlayType が使えない古い環境向けフォールバック(wget方式)の下準備だけしておく。
 	s_pBrowserMgrSound = this;
 	// emscripten_async_wget は書き込み先の親ディレクトリが無いと失敗する
 	EM_ASM({
 		try { FS.mkdirTree('/BGM'); } catch (e) {}
 	});
-	for (size_t i = 0; i < sizeof(s_aBrowserBgmFiles)/sizeof(s_aBrowserBgmFiles[0]); i++) {
-		char szUrl[256];
-		char szPath[256];
-		BuildBgmUrl(szUrl, sizeof(szUrl), s_aBrowserBgmFiles[i].pszFile);
-		snprintf(szPath, sizeof(szPath), "/BGM/%s", s_aBrowserBgmFiles[i].pszFile);
-		emscripten_async_wget(szUrl, szPath, BrowserBgmOnLoad, BrowserBgmOnError);
-	}
+	// unlock関数などをシェルHTML(Click to Start)から呼べるよう先に用意しておく
+	Sbop2BgmEnsureElement();
 #else
 	{
 		// BuildModuleRelativePath は TCHAR* を受け取るため TCHAR 配列を使用
@@ -234,7 +386,9 @@ void CMgrSound::OnBrowserBgmLoaded(const char *pszMemfsPath)
 	// 取得を待っている間に再生要求が来ていた場合はここで鳴らし始める
 	if (m_dwSoundID == (DWORD)nID) {
 		m_pDXAudio->StopBGM();
-		m_pDXAudio->PlayBGMCached(nID, TRUE, m_fBGMVolume);
+		if (m_pDXAudio->PlayBGMCached(nID, TRUE, m_fBGMVolume)) {
+			SDL_Log("BGM再生開始 (フォールバック取得完了): %s", pszMemfsPath);
+		}
 	}
 }
 #endif
@@ -244,8 +398,6 @@ void CMgrSound::PlayBGM(
 	int nNo,	// [in] BGMID
 	BOOL bPlay)	// [in] 既に同じIDのBGMが再生中の時はそのままにしておく
 {
-	char szTmp[MAX_PATH];
-
 	if (bPlay) {
 		if (m_dwSoundID == (DWORD)nNo) {
 			return;
@@ -253,22 +405,43 @@ void CMgrSound::PlayBGM(
 	}
 
 #ifdef __EMSCRIPTEN__
-	// Web版: キャッシュから即時再生（プリデコード済みの場合）
 	m_dwSoundID = (DWORD)nNo;
-	m_pDXAudio->StopBGM();
-	if (m_pDXAudio->PlayBGMCached(nNo, TRUE, m_fBGMVolume)) {
+
+	const char *pszFile = FindBrowserBgmFile(nNo);
+	if (pszFile == NULL) {
+		m_pDXAudio->StopBGM();
+		Sbop2BgmStop();
 		return;
 	}
-	// キャッシュヒットしなかった場合は既存のファイル再生にフォールバック
-	strcpy_s(szTmp, "/BGM/");
+
+	if (Sbop2BgmCanUseAudioElement()) {
+		// 対応環境: <audio> ストリーミング再生。ダウンロード完了を待たずに鳴り始める。
+		char szUrl[256];
+		BuildBgmUrl(szUrl, sizeof(szUrl), pszFile);
+		m_pDXAudio->StopBGM();
+		Sbop2BgmEnsureElement();
+		Sbop2BgmPlay(szUrl, (double)m_fBGMVolume);
+		return;
+	}
+
+	// 非対応環境向けフォールバック: プリデコードキャッシュから即時再生
+	Uint32 dwRequestTick = SDL_GetTicks();
+	m_pDXAudio->StopBGM();
+	if (m_pDXAudio->PlayBGMCached(nNo, TRUE, m_fBGMVolume)) {
+		SDL_Log("BGM再生開始まで %u ms (プリデコードキャッシュ)", SDL_GetTicks() - dwRequestTick);
+		return;
+	}
+	// キャッシュに無ければ要求曲だけ取得する（未取得の時だけ実際にwgetが走る）
+	RequestBrowserBgmIfNeeded(nNo);
+	return;
 #else
+	char szTmp[MAX_PATH];
 	{
 		TCHAR szBasePath[MAX_PATH];
 		BuildModuleRelativePath(szBasePath, _countof(szBasePath), _T("BGM\\"));
 		std::string strBasePath = TStringToAnsiStd(szBasePath);
 		strcpy_s(szTmp, strBasePath.c_str());
 	}
-#endif
 	switch (nNo) {
 //	case 0:
 //		strcat (szTmp, "v4.ogg");
@@ -320,6 +493,7 @@ void CMgrSound::PlayBGM(
 			return;
 		}
 	}
+#endif
 }
 
 
@@ -328,6 +502,9 @@ void CMgrSound::StopBGM(void)
 	m_dwSoundID = 0;
 
 	m_pDXAudio->StopBGM();
+#ifdef __EMSCRIPTEN__
+	Sbop2BgmStop();
+#endif
 }
 
 
@@ -351,6 +528,9 @@ void CMgrSound::SetBGMVolume(int nVolume)
 		break;
 	}
 	m_pDXAudio->SetBGMVolume(m_fBGMVolume);
+#ifdef __EMSCRIPTEN__
+	Sbop2BgmSetVolume((double)m_fBGMVolume);
+#endif
 }
 
 

@@ -1417,6 +1417,15 @@
         console.warn('[SBOP2] AudioContext resume error:', e);
       }
 
+      // BGM 用 <audio> 要素も同じユーザー操作のタイミングで unlock する（Autoplay Policy 対策）
+      try {
+        if (typeof window.sbop2BgmUnlock === 'function') {
+          window.sbop2BgmUnlock();
+        }
+      } catch (e) {
+        console.warn('[SBOP2] BGM unlock error:', e);
+      }
+
       // C++ 側が参照できるフラグをセット
       if (Module) {
         Module.sbop2UserActivated = true;
