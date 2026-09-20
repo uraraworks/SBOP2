@@ -19,6 +19,14 @@
  * (docs/web-admin-account-management-plan.md の S1 節を参照。
  *  ゴミ箱/完全削除/BAN の API はこの画面と並行実装中のため、まだ動かない前提で実装している)
  *
+ * ログインコード再発行:
+ *   POST /api/accounts/{id}/login-code → 200 { code: "ABCD-EFGH-IJKL-MNOP" }
+ *     409 account_disabled … ゴミ箱/BAN中は発行不可、403 … 権限不足
+ *   1件ずつのみ(取り違え事故防止のため一括操作にはしない)。確認は
+ *   armConfirmButton の二度押し確定を使う。発行結果(コード本体)は
+ *   API レスポンスにのみ現れ、サーバーにはハッシュしか残らないため
+ *   再表示手段が無い→ 画面上に大きく一度だけ表示し、再読み込みや画面遷移で消す。
+ *
  * 絞り込み・ソート・ページングはすべてサーバー側で行う(list-toolbar は
  * サーバー側ページングモード。applyToRows は使わず setTotal のみで件数を反映)。
  * 状態は q/size/page/sort と個別フィルタを #account-list?... の URL クエリに
@@ -160,6 +168,19 @@ export function mount(container) {
         </div>
         <p id="acct-list-summary" class="result-message"></p>
         <p id="acct-list-feedback" class="form-feedback" aria-live="polite"></p>
+        <!-- ログインコード再発行の結果表示。一覧の再読み込み/画面遷移で消える -->
+        <div id="acct-login-code-result" class="card" style="display:none; margin:0 0 1em; padding:1em; border:2px solid #c0392b; background:#fff5f5;">
+          <p style="margin:0 0 .5em;"><strong>ログインコードを再発行しました</strong>: <span id="acct-login-code-account"></span></p>
+          <p id="acct-login-code-value" style="font-size:1.8em; font-weight:bold; letter-spacing:.08em; margin:.3em 0; user-select:all;"></p>
+          <p style="margin:.5em 0;">
+            <button type="button" id="acct-login-code-copy-btn" class="button secondary">コードをコピー</button>
+            <button type="button" id="acct-login-code-close-btn" class="button secondary">閉じる</button>
+          </p>
+          <p style="color:#a94442; margin:.3em 0 0;">
+            【注意】このコードは今この場でしか表示されません。保存されるのはハッシュのみのため、後から再表示することはできません。<br />
+            【注意】再発行すると、このアカウントの既存のログインコードと、ログイン中の全端末が無効になります（本人が現在ログイン中でも切断されます）。
+          </p>
+        </div>
         <!-- アカウント一覧テーブル -->
         <table class="data-table" id="acct-list-table">
           <thead>
@@ -214,6 +235,13 @@ export function mount(container) {
   const summaryEl  = container.querySelector("#acct-list-summary");
   const feedbackEl = container.querySelector("#acct-list-feedback");
   const tableBody  = container.querySelector("#acct-list-table-body");
+
+  // ログインコード再発行の結果表示欄
+  const loginCodeResultEl  = container.querySelector("#acct-login-code-result");
+  const loginCodeAccountEl = container.querySelector("#acct-login-code-account");
+  const loginCodeValueEl   = container.querySelector("#acct-login-code-value");
+  const loginCodeCopyBtn   = container.querySelector("#acct-login-code-copy-btn");
+  const loginCodeCloseBtn  = container.querySelector("#acct-login-code-close-btn");
 
   const state = {
     offset: 0,
@@ -359,6 +387,67 @@ export function mount(container) {
     });
   }
 
+  // ----------------------------------------------------------------
+  // ログインコード再発行
+  // ----------------------------------------------------------------
+
+  function clearLoginCodeResult() {
+    if (loginCodeResultEl)  { loginCodeResultEl.style.display = "none"; }
+    if (loginCodeAccountEl) { loginCodeAccountEl.textContent = ""; }
+    if (loginCodeValueEl)   { loginCodeValueEl.textContent = ""; }
+  }
+
+  // 発行結果はこの画面上に一度だけ表示する(サーバーにはハッシュしか残らず
+  // 再表示手段が無いため)。取り違え防止のためアカウント名・IDを併記する。
+  function showLoginCodeResult(account, code) {
+    if (!loginCodeResultEl) { return; }
+    if (loginCodeAccountEl) {
+      loginCodeAccountEl.textContent = `${account.account ?? ""}（ID: ${account.accountId}）`;
+    }
+    if (loginCodeValueEl) { loginCodeValueEl.textContent = code; }
+    loginCodeResultEl.style.display = "";
+  }
+
+  if (loginCodeCopyBtn) {
+    loginCodeCopyBtn.addEventListener("click", async () => {
+      const code = loginCodeValueEl ? loginCodeValueEl.textContent : "";
+      if (!code) { return; }
+      try {
+        await navigator.clipboard.writeText(code);
+        showToast("コードをコピーしました", "success");
+      } catch {
+        showToast("コピーに失敗しました。表示されているコードを手動で選択してください", "error");
+      }
+    });
+  }
+  if (loginCodeCloseBtn) {
+    loginCodeCloseBtn.addEventListener("click", clearLoginCodeResult);
+  }
+
+  // 1件ずつのみ実行する(一括操作にすると取り違えで他人のアカウントを
+  // 乗っ取れてしまうため)。確認は armConfirmButton 側で行う。
+  async function executeReissue(account) {
+    try {
+      const { response, data } = await fetchJson(`/api/accounts/${account.accountId}/login-code`, {
+        method: "POST",
+      });
+      if (!response.ok || !data || !data.code) {
+        let msg = "ログインコードの再発行に失敗しました";
+        if (response.status === 409) {
+          msg = "ゴミ箱かBAN中のアカウントには発行できません";
+        } else if (data && data.error) {
+          msg = data.error;
+        }
+        showToast(msg, "error");
+        return;
+      }
+      showLoginCodeResult(account, data.code);
+      showToast("ログインコードを再発行しました", "success");
+    } catch {
+      showToast("通信エラーが発生しました", "error");
+    }
+  }
+
   function renderList(items) {
     if (!tableBody) { return; }
     tableBody.innerHTML = "";
@@ -399,7 +488,10 @@ export function mount(container) {
         (showReason
           ? `<td>${escapeHtml((a.statusReason ?? a.reason ?? a.trashReason) || "-")}</td><td>${escapeHtml(formatUnixSeconds(a.statusChangedAt ?? a.trashedAt))}</td>`
           : "") +
-        `<td><button type="button" class="button secondary" data-role-btn="${escapeHtml(String(a.accountId))}">ロール設定</button></td>`;
+        `<td>` +
+          `<button type="button" class="button secondary" data-role-btn="${escapeHtml(String(a.accountId))}">ロール設定</button> ` +
+          `<button type="button" class="button secondary" data-reissue-btn="${escapeHtml(String(a.accountId))}">コード再発行</button>` +
+        `</td>`;
 
       const checkbox = tr.querySelector("[data-acct-checkbox]");
       if (checkbox) {
@@ -418,6 +510,15 @@ export function mount(container) {
           window.location.hash = `#role-management?accountId=${encodeURIComponent(a.accountId)}`;
         });
       }
+      const reissueBtn = tr.querySelector("[data-reissue-btn]");
+      if (reissueBtn) {
+        armConfirmButton(reissueBtn, {
+          armedLabel: "本当に再発行？（もう一度押す）",
+          message: () => `${a.account || ("ID " + a.accountId)} のログインコードを再発行します。既存コードとログイン中の全端末が無効になります。`,
+          onConfirm: () => executeReissue(a),
+        });
+      }
+
       fragment.appendChild(tr);
     });
     tableBody.appendChild(fragment);
@@ -428,6 +529,7 @@ export function mount(container) {
     if (!tableBody || state.isLoading) { return; }
     state.isLoading = true;
     clearSelection();
+    clearLoginCodeResult();
     renderThead();
     updateBulkModeVisibility();
     const colCount = columnCount();

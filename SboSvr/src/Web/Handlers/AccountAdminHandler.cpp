@@ -16,6 +16,8 @@
 #include "Info/InfoCharBase.h"
 #include "Account/AccountAdminStore.h"
 #include "Account/AccountAuthStore.h"
+#include "Account/LoginCode.h"
+#include "TextOutput.h"
 
 namespace
 {
@@ -156,6 +158,13 @@ void CAccountAdminHandler::Handle(const HttpRequest &request, HttpResponse &resp
                         HandleBan(request, response, dwAccountID, dwActorAccountID);
                 } else if (request.method == "DELETE") {
                         HandleUnban(request, response, dwAccountID);
+                } else {
+                        response.statusLine = "HTTP/1.1 404 Not Found";
+                        response.SetJsonBody("{\"error\":\"not_found\"}");
+                }
+        } else if (subResource == "login-code") {
+                if (request.method == "POST") {
+                        HandleIssueLoginCode(request, response, dwAccountID);
                 } else {
                         response.statusLine = "HTTP/1.1 404 Not Found";
                         response.SetJsonBody("{\"error\":\"not_found\"}");
@@ -506,6 +515,79 @@ void CAccountAdminHandler::HandleBan(const HttpRequest &request, HttpResponse &r
         response.statusLine = "HTTP/1.1 204 No Content";
         response.body = "";
         response.SetHeader("Content-Length", "0");
+}
+
+// ---------------------------------------------------------------------------
+// ログインコード再発行  POST /api/accounts/{id}/login-code
+// 平文コードはこのレスポンスで1回だけ返す(DBにはハッシュしか残らないため
+// 再表示する手段は無い)。CheckMutationGuard は使わない
+// (コードを無くした本人・他の管理者を救済できなくなるため、自分自身や
+// 管理者アカウントも対象にしてよい)。
+// ---------------------------------------------------------------------------
+
+void CAccountAdminHandler::HandleIssueLoginCode(const HttpRequest &request, HttpResponse &response, unsigned int dwAccountID)
+{
+        (void)request;
+
+        CLibInfoAccount *pAccountLib = m_pMgrData->GetLibInfoAccount();
+        if (pAccountLib == NULL) {
+                response.statusLine = "HTTP/1.1 503 Service Unavailable";
+                response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
+                return;
+        }
+
+        // ゴミ箱中/BAN中はログインできないアカウントなので、コードを発行しても
+        // 意味が無く渡された側が混乱する。409で拒否する。
+        CAccountAdminStore AdminStore;
+        AccountAdminRow adminRow;
+        if (AdminStore.Get(dwAccountID, adminRow)
+                && ((adminRow.strStatus == "trashed") || (adminRow.strStatus == "banned"))) {
+                response.statusLine = "HTTP/1.1 409 Conflict";
+                response.SetJsonBody("{\"error\":\"account_disabled\"}");
+                return;
+        }
+
+        pAccountLib->Enter();
+        PCInfoAccount pAcc = pAccountLib->GetPtr(static_cast<DWORD>(dwAccountID));
+        bool bFound = (pAcc != NULL);
+        pAccountLib->Leave();
+        if (!bFound) {
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"not_found\"}");
+                return;
+        }
+
+        std::string strCode = LoginCode::GenerateCode();
+        if (strCode.empty()) {
+                response.statusLine = "HTTP/1.1 500 Internal Server Error";
+                response.SetJsonBody("{\"error\":\"code_generate_failed\"}");
+                return;
+        }
+        std::string strCodeHash = LoginCode::HashCode(strCode);
+
+        time_t currentTime = time(NULL);
+        if (currentTime < 0) {
+                currentTime = 0;
+        }
+
+        CAccountAuthStore AuthStore;
+        // IssueCode は新コードの保存に加えて、そのアカウントの全端末トークンも
+        // 1トランザクションで失効させる(意図した挙動。既存端末は再ログインが必要になる)。
+        if (!AuthStore.IssueCode(dwAccountID, strCodeHash, static_cast<long>(currentTime))) {
+                response.statusLine = "HTTP/1.1 500 Internal Server Error";
+                response.SetJsonBody("{\"error\":\"code_store_failed\"}");
+                return;
+        }
+
+        // 平文コードは絶対にログへ出さない。出すのはアカウントIDと成否のみ。
+        if (m_pMgrData->GetLog() != NULL) {
+                m_pMgrData->GetLog()->Write("[AccountAdmin] login-code reissued account=%u", dwAccountID);
+        }
+
+        std::ostringstream oss;
+        oss << "{\"code\":\"" << JsonUtils::Escape(LoginCode::FormatCodeForDisplay(strCode)) << "\"}";
+        response.statusLine = "HTTP/1.1 200 OK";
+        response.SetJsonBody(oss.str());
 }
 
 // ---------------------------------------------------------------------------
