@@ -1384,6 +1384,23 @@ int CLibInfoCharSvr::CreatePlayerCharacter(const CmyString &strRawCharName, cons
 		pInfoAccount->m_adwCharID.push_back(outCharID);
 	}
 
+	// 新規キャラの初期装備は初心者用の服(TypeID=30)固定で設定
+	// （初期装備を持たせるデータ項目が sys_system の InitCharStatus に無いため暫定でハードコード。
+	//  チュートリアルマップを導入する際はここを見直すこと）
+	{
+		const DWORD dwInitClothItemTypeID = 30;
+		DWORD dwInitClothItemID = m_pLibInfoItem->MakeItem(0, NULL, dwInitClothItemTypeID);
+		if (dwInitClothItemID != 0) {
+			PCInfoItemTypeBase pInfoInitClothType = (PCInfoItemTypeBase)m_pLibInfoItemType->GetPtr(dwInitClothItemTypeID);
+			if (pInfoInitClothType != NULL) {
+				pInfoChar->m_adwItemID.push_back(dwInitClothItemID);
+				m_pLibInfoItem->Equip(pInfoChar, 0, dwInitClothItemID);
+				pInfoInitClothType->SetGrpID(&pInfoChar->m_wGrpIDCloth, &pInfoChar->m_wGrpIDSP);
+				pInfoChar->m_dwEquipItemIDCloth = dwInitClothItemID;
+			}
+		}
+	}
+
 	Leave();
 
 	return MAKECHARRES_OK;
