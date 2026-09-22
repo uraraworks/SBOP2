@@ -12,7 +12,6 @@ class CInfoAccount;
 class CWindowLOGINMENU;
 class CWindowSTATUS;
 class CWindowSTYLESELECT;
-class CWindowNAMEINPUT;
 class CWindowDELCONFIRM;
 class CInfoCharCli;
 
@@ -37,9 +36,7 @@ protected:
 	BOOL OnZ(BOOL bDown);                             // キーハンドラ(Z)
 	void OnMgrDrawEND_FADEOUT(DWORD dwPara);          // フェードアウト完了
 	void OnWindowMsgLOGINMENU(DWORD dwPara);          // メニューウィンドウからの通知
-	void OnWindowMsgFAMILYTYPE(DWORD dwPara);         // 種族選択ウィンドウからの通知
 	void OnWindowMsgSTYLESELECT(DWORD dwPara);        // 容姿選択ウィンドウからの通知
-	void OnWindowMsgNAMEINPUT(DWORD dwPara);           // 名前入力ウィンドウからの通知
 	void OnWindowMsgDELCONFIRM(DWORD dwPara);         // 削除確認ダイアログからの通知
 
 
@@ -53,7 +50,6 @@ protected:
 	CWindowLOGINMENU  *m_pWindowLOGINMENU;  // ログインメニューウィンドウ
 	CWindowSTATUS     *m_pWindowSTATUS;     // ステータスウィンドウ
 	CWindowSTYLESELECT *m_pWindowSTYLESELECT; // 容姿選択ウィンドウ
-	CWindowNAMEINPUT  *m_pWindowNAMEINPUT;  // 名前入力
 	CWindowDELCONFIRM *m_pWindowDELCONFIRM; // 削除確認ダイアログ
 
 	DWORD	m_dwDelCharID;	// 削除対象キャラID

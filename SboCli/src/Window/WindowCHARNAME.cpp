@@ -1,4 +1,4 @@
-/// @file WindowCHARNAME.cpp
+﻿/// @file WindowCHARNAME.cpp
 /// @brief キャラ名入力ウィンドウクラス 実装ファイル
 /// @author 年がら年中春うらら(URARA-works)
 /// @date 2006/11/08
@@ -105,6 +105,8 @@ CWindowCHARNAME::CWindowCHARNAME()
 	m_bInput	= TRUE;
 	m_bTextInputActive = FALSE;
 	m_dwSuppressSubmitUntil = 0;
+	m_bEmbedded	= FALSE;
+	m_bFocused	= FALSE;
 	m_nID	= WINDOWTYPE_CHARNAME;
 	m_ptViewPos.x	= 136 + 32;
 	m_ptViewPos.y	= 180;
@@ -142,6 +144,17 @@ void CWindowCHARNAME::Create(CMgrData *pMgrData)
 void CWindowCHARNAME::Draw(PCImg32 pDst)
 {
 	HDC hDC = NULL;
+
+	if (m_bEmbedded) {
+		// CMgrWindowはm_paWindowの配列順に描画し、親(STYLESELECT)がCHARNAMEより後にAddされるため
+		// 親が後から上に描画してしまい、ここでcanvasに描いても隠れてしまう。
+		// 埋め込み時のcanvas描画は親(CWindowSTYLESELECT::Draw)がGetName()/GetComposition()/IsFocused()を
+		// 使って行うので、ここでは入力ロジックとDOMオーバーレイの更新だけを行う。
+#if defined(__EMSCRIPTEN__)
+		UpdateBrowserDom();
+#endif
+		return;
+	}
 
 	if (m_dwTimeDrawStart == 0) {
 		DrawFrame();
@@ -192,9 +205,15 @@ Exit:
 
 void CWindowCHARNAME::SetActive(BOOL bActive)
 {
-	CWindowBase::SetActive(bActive);
+	if (m_bEmbedded) {
+		// 埋め込み時はCMgrWindowの最前面判定(m_bActive)を変更せず、
+		// 親(STYLESELECT)をアクティブなままにしてフォーカスだけを切り替える
+		m_bFocused = bActive;
+	} else {
+		CWindowBase::SetActive(bActive);
+	}
 #if defined(__EMSCRIPTEN__)
-	if (bActive && (!m_bDelete)) {
+	if (IsFocused() && (!m_bDelete)) {
 		g_pBrowserCharNameWindow = this;
 	} else if (g_pBrowserCharNameWindow == this) {
 		g_pBrowserCharNameWindow = NULL;
@@ -202,7 +221,7 @@ void CWindowCHARNAME::SetActive(BOOL bActive)
 #endif
 	UpdateSDLTextInput();
 #if defined(__EMSCRIPTEN__)
-	if (bActive && (!m_bDelete)) {
+	if (IsFocused() && (!m_bDelete)) {
 		UpdateBrowserDom();
 	} else {
 		HideBrowserDom();
@@ -212,9 +231,24 @@ void CWindowCHARNAME::SetActive(BOOL bActive)
 }
 
 
+void CWindowCHARNAME::SetEmbedded(int nScreenX, int nScreenY, int nWidth)
+{
+	m_bEmbedded	= TRUE;
+	m_bInput	= FALSE;	// CMgrWindow::SetActive()の一斉更新対象から外し、親をアクティブのままにする
+	m_bActive	= FALSE;	// CMgrWindowの最前面判定で親を覆い隠さないよう常にFALSEにしておく(フォーカスはm_bFocusedで管理)
+	m_ptViewPos.x	= nScreenX - 32;	// 他ウィンドウ同様、描画時に+32されるため逆算しておく
+	m_ptViewPos.y	= nScreenY - 32;
+	m_sizeWindow.cx	= nWidth;
+	m_sizeWindow.cy	= 14 + 4;
+	m_pDib->Create(m_sizeWindow.cx, m_sizeWindow.cy);
+	m_pDib->SetColorKey(0);
+	Redraw();
+}
+
+
 BOOL CWindowCHARNAME::HandleSDLKeyDown(UINT vk)
 {
-	if (!m_bActive) {
+	if (!IsFocused()) {
 		return FALSE;
 	}
 
@@ -245,6 +279,11 @@ BOOL CWindowCHARNAME::HandleSDLKeyDown(UINT vk)
 		return TRUE;
 
 	case VK_ESCAPE:
+		if (m_bEmbedded) {
+			// 埋め込み時はここで閉じず、親のZキャンセル処理に任せるためFALSEを返す
+			m_strComposition.Empty();
+			return FALSE;
+		}
 		m_bDelete = TRUE;
 		m_strComposition.Empty();
 		UpdateSDLTextInput();
@@ -261,7 +300,7 @@ BOOL CWindowCHARNAME::HandleSDLKeyDown(UINT vk)
 
 void CWindowCHARNAME::HandleSDLTextInput(LPCSTR pszText)
 {
-	if (!m_bActive) {
+	if (!IsFocused()) {
 		return;
 	}
 	m_strComposition.Empty();
@@ -271,7 +310,7 @@ void CWindowCHARNAME::HandleSDLTextInput(LPCSTR pszText)
 
 void CWindowCHARNAME::HandleSDLTextEditing(LPCSTR pszText)
 {
-	if (!m_bActive) {
+	if (!IsFocused()) {
 		return;
 	}
 	SetCompositionText(pszText);
@@ -280,7 +319,7 @@ void CWindowCHARNAME::HandleSDLTextEditing(LPCSTR pszText)
 
 void CWindowCHARNAME::SetCompositionTextFromBrowser(LPCSTR pszText)
 {
-	if (!m_bActive) {
+	if (!IsFocused()) {
 		return;
 	}
 	SetCompositionText(pszText);
@@ -289,7 +328,7 @@ void CWindowCHARNAME::SetCompositionTextFromBrowser(LPCSTR pszText)
 
 void CWindowCHARNAME::CommitTextFromBrowser(LPCSTR pszText)
 {
-	if (!m_bActive) {
+	if (!IsFocused()) {
 		return;
 	}
 	m_strComposition.Empty();
@@ -302,6 +341,11 @@ BOOL CWindowCHARNAME::HandleSDLMouseLeftButtonDown(int x, int y)
 {
 	RECT rcInput;
 
+	if (m_bEmbedded) {
+		// 埋め込み時はフォーカスを親(STYLESELECT)のカーソル位置と一致させておきたいので、
+		// ここで勝手にフォーカスを奪わず親のキー操作に任せる
+		return FALSE;
+	}
 	SetRect(&rcInput, m_ptViewPos.x + 32 + 16, m_ptViewPos.y + 32 + 48, m_ptViewPos.x + 32 + 16 + 8 * MAXLEN_CHARNAME, m_ptViewPos.y + 32 + 48 + 14);
 	if ((x >= rcInput.left) && (x < rcInput.right) && (y >= rcInput.top) && (y < rcInput.bottom)) {
 		SetActive(TRUE);
@@ -319,7 +363,7 @@ void CWindowCHARNAME::MakeWindow(void)
 
 void CWindowCHARNAME::UpdateSDLTextInput(void)
 {
-	if (m_bActive && (!m_bDelete)) {
+	if (IsFocused() && (!m_bDelete)) {
 		SDL_StartTextInput();
 		m_bTextInputActive = TRUE;
 	} else if (m_bTextInputActive) {
@@ -457,11 +501,13 @@ void CWindowCHARNAME::UpdateBrowserDom(void)
 {
 	const int nWindowX = m_ptViewPos.x + 32;
 	const int nWindowY = m_ptViewPos.y + 32;
-	const int nInputX = nWindowX + 16;
-	const int nInputY = nWindowY + 48;
-	const int nInputW = 8 * MAXLEN_CHARNAME;
+	// 埋め込み時は入力欄が DIB 全体（枠もラベルも無い）なので、通常時のオフセットを足してはいけない
+	const int nPadY = m_bEmbedded ? ((m_sizeWindow.cy - 14) / 2) : 0;
+	const int nInputX = m_bEmbedded ? (nWindowX + 2) : (nWindowX + 16);
+	const int nInputY = m_bEmbedded ? (nWindowY + ((nPadY > 0) ? nPadY : 0)) : (nWindowY + 48);
+	const int nInputW = m_bEmbedded ? m_sizeWindow.cx : (8 * MAXLEN_CHARNAME);
 	const int nInputH = 14;
-	const BOOL bVisible = (m_bActive && (!m_bDelete));
+	const BOOL bVisible = (IsFocused() && (!m_bDelete));
 	CString strTmp;
 	CmyString strView;
 

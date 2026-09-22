@@ -20,8 +20,6 @@
 #include "WindowCHARNAME.h"
 #include "WindowSEX.h"
 #include "WindowSTYLESELECT.h"
-#include "WindowNAMEINPUT.h"
-#include "WindowFAMILYTYPE.h"
 #include "WindowDELCONFIRM.h"
 #include "LayerCharSelect.h"
 #include "InfoCharCli.h"
@@ -52,7 +50,6 @@ CStateProcLOGINMENU::CStateProcLOGINMENU()
 	m_pWindowLOGINMENU = NULL;
 	m_pWindowSTATUS = NULL;
 	m_pWindowSTYLESELECT = NULL;
-	m_pWindowNAMEINPUT = NULL;
 	m_pWindowDELCONFIRM = NULL;
 
 	m_dwDelCharID = 0;
@@ -104,13 +101,11 @@ void CStateProcLOGINMENU::OnWindowMsg(int nType, DWORD dwPara)
 {
 	switch (nType) {
 	case WINDOWTYPE_LOGINMENU:   OnWindowMsgLOGINMENU(dwPara);   break; // メニュー
-	case WINDOWTYPE_FAMILYTYPE:  OnWindowMsgFAMILYTYPE(dwPara);  break; // 種族選択
 	case WINDOWTYPE_STYLESELECT: OnWindowMsgSTYLESELECT(dwPara); break; // 容姿選択
-	case WINDOWTYPE_NAMEINPUT:   OnWindowMsgNAMEINPUT(dwPara);   break; // 名前入力
 	case WINDOWTYPE_DELCONFIRM:  OnWindowMsgDELCONFIRM(dwPara);  break; // 削除確認
 
 	case WINDOWTYPE_CHARNAME: // キャラ名入力
-		m_pWindowNAMEINPUT->OnWindowMsg(nType, dwPara);
+		m_pWindowSTYLESELECT->OnWindowMsg(nType, dwPara);
 		break;
 	case WINDOWTYPE_SEX:       // 性別
 	case WINDOWTYPE_HAIRTYPE:  // 髪型選択
@@ -134,7 +129,9 @@ void CStateProcLOGINMENU::OnMainFrame(DWORD dwCommand, DWORD dwParam)
 			break;
 		default:
 			m_pMgrWindow->MakeWindowMSG("キャラクターを作成しました", 3000, 4);
-			m_pMgrWindow->Delete(WINDOWTYPE_NAMEINPUT);
+			m_pMgrWindow->Delete(WINDOWTYPE_CHARNAME);	// STYLESELECTに埋め込んだ名前入力窓も確実に片付ける
+			m_pMgrWindow->Delete(WINDOWTYPE_STYLESELECT);
+			m_pWindowSTYLESELECT = NULL;
 			m_pWindowLOGINMENU->SetPos(0);
 			break;
 		}
@@ -343,7 +340,10 @@ void CStateProcLOGINMENU::OnWindowMsgLOGINMENU(DWORD dwPara)
 		break;
 
 	case 1: // 新規作成
-		m_pMgrWindow->MakeWindowFAMILYTYPE();
+		m_pMgrWindow->MakeWindowSTYLESELECT();
+		m_pWindowSTYLESELECT = (PCWindowSTYLESELECT)m_pMgrWindow->GetWindow(WINDOWTYPE_STYLESELECT);
+		m_pInfoCharCli->m_wFamilyID = FAMILYTYPE_HUMAN;
+		m_pWindowSTYLESELECT->SetFamilyType(FAMILYTYPE_HUMAN);
 		break;
 
 	case 2: // キャラ削除
@@ -365,65 +365,23 @@ void CStateProcLOGINMENU::OnWindowMsgLOGINMENU(DWORD dwPara)
 	}
 }
 
-void CStateProcLOGINMENU::OnWindowMsgFAMILYTYPE(DWORD dwPara)
-{
-	PCWindowFAMILYTYPE pWindow;
-
-	switch (dwPara) {
-	case 0:
-		m_pMgrWindow->MakeWindowSTYLESELECT();
-		m_pWindowSTYLESELECT = (PCWindowSTYLESELECT)m_pMgrWindow->GetWindow(WINDOWTYPE_STYLESELECT);
-
-		pWindow = (PCWindowFAMILYTYPE)m_pMgrWindow->GetWindow(WINDOWTYPE_FAMILYTYPE);
-		if (pWindow) {
-			// 種族選択画面から来た
-			m_pInfoCharCli->m_wFamilyID = pWindow->GetType();
-			m_pMgrWindow->Delete(WINDOWTYPE_FAMILYTYPE);
-			m_pWindowSTYLESELECT->SetFamilyType(m_pInfoCharCli->m_wFamilyID);
-
-		} else {
-			// 容姿選択画面から戻ってきた
-			m_pWindowSTYLESELECT->SetInfoChar(m_pInfoCharCli);
-		}
-		break;
-	}
-}
-
 void CStateProcLOGINMENU::OnWindowMsgSTYLESELECT(DWORD dwPara)
-{
-	switch (dwPara) {
-	case 0:
-		m_pInfoCharCli->Copy(m_pWindowSTYLESELECT->m_pInfoCharCli);
-		m_pMgrWindow->Delete(WINDOWTYPE_STYLESELECT);
-		m_pMgrWindow->MakeWindowNAMEINPUT();
-		m_pWindowNAMEINPUT = (PCWindowNAMEINPUT)m_pMgrWindow->GetWindow(WINDOWTYPE_NAMEINPUT);
-		m_pWindowNAMEINPUT->m_pInfoCharCli->Copy(m_pInfoCharCli);
-		m_pWindowNAMEINPUT->m_pInfoCharCli->MakeCharGrp();
-		break;
-
-	case (DWORD)-1:
-		// キャンセルされたので前の画面に戻る
-		m_pMgrWindow->Delete(WINDOWTYPE_STYLESELECT);
-		m_pMgrData->PostWindowMessage(WINDOWTYPE_LOGINMENU, 1);
-		break;
-	}
-}
-
-void CStateProcLOGINMENU::OnWindowMsgNAMEINPUT(DWORD dwPara)
 {
 	CPacketACCOUNT_REQ_MAKECHAR Packet;
 
 	switch (dwPara) {
 	case 0:
-		m_pInfoCharCli->Copy(m_pWindowNAMEINPUT->m_pInfoCharCli);
+		m_pInfoCharCli->Copy(m_pWindowSTYLESELECT->m_pInfoCharCli);
 		Packet.Make(m_pMgrData->GetAccountID(), m_pInfoCharCli);
 		m_pSock->Send(&Packet);
 		break;
 
 	case (DWORD)-1:
-		// キャンセルされたので前の画面に戻る
-		m_pMgrWindow->Delete(WINDOWTYPE_NAMEINPUT);
-		m_pMgrData->PostWindowMessage(WINDOWTYPE_FAMILYTYPE, 0);
+		// キャンセルされたのでメニューに戻るだけ
+		// （ここで LOGINMENU の「新規作成」を再送すると作成画面が開き直してキャンセルできなくなる）
+		m_pMgrWindow->Delete(WINDOWTYPE_STYLESELECT);
+		m_pWindowSTYLESELECT = NULL;
+		m_pMgrKeyInput->Reset();
 		break;
 	}
 }

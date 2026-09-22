@@ -21,6 +21,7 @@ public:
 	void	Create(CMgrData *pMgrData);	// 作成
 	void	Draw(CImg32 *pDst);	// 描画
 	void	SetActive(BOOL bActive);	// アクティブか設定
+	void	SetEmbedded(int nScreenX, int nScreenY, int nWidth);	// 埋め込みモードに設定(親ウィンドウ内にインライン表示)
 	virtual BOOL	HandleSDLKeyDown(UINT vk);	// SDLキー押下を処理
 	virtual void	HandleSDLTextInput(LPCSTR pszText);	// SDLテキスト入力を処理
 	virtual void	HandleSDLTextEditing(LPCSTR pszText);	// SDLテキスト編集中を処理
@@ -29,6 +30,11 @@ public:
 	void	CommitTextFromBrowser(LPCSTR pszText);	// browser IME確定テキストを入力
 	void	SetNameFromBrowser(LPCSTR pszText);	// browser DOM入力欄の値でキャラ名を置換
 	void	SubmitFromBrowser(void);	// browser DOM入力欄からの確定
+	LPCTSTR	GetName(void) { return (LPCTSTR)m_strName; }	// 入力されたキャラ名を取得(親が埋め込み描画に使う)
+	LPCTSTR	GetComposition(void) { return (LPCTSTR)m_strComposition; }	// IME変換中の未確定文字列を取得(親が埋め込み描画に使う)
+			// 埋め込み時はCMgrWindowの最前面判定(m_bActive)を汚さず親を覆い隠さないため、
+			// フォーカス状態はm_bFocused(埋め込み時)/m_bActive(通常時)のどちらかで判定する
+			BOOL	IsFocused(void) { return m_bEmbedded ? m_bFocused : m_bActive; }
 
 
 private:
@@ -52,4 +58,6 @@ public:
 private:
 	DWORD	m_dwSuppressSubmitUntil;	// browser IME確定直後のEnter送信抑制期限
 	BOOL	m_bTextInputActive;	// SDLテキスト入力状態
+	BOOL	m_bEmbedded;	// 埋め込みモード(親ウィンドウ内にインライン表示)か
+	BOOL	m_bFocused;	// 埋め込みモード時のフォーカス状態(m_bActiveの代わり)
 } CWindowCHARNAME, *PCWindowCHARNAME;

@@ -17,6 +17,7 @@ class CWindowSEX;
 class CWindowHAIRTYPE;
 class CWindowHAIRCOLOR;
 class CWindowEYECOLOR;
+class CWindowCHARNAME;
 class CInfoCharCli;
 
 typedef class CWindowSTYLESELECT : public CWindowBase
@@ -31,6 +32,9 @@ public:
 	void	OnWindowMsg(int nType, DWORD dwPara);	// メッセージハンドラ(WM_WINDOWMSG)
 	void	Draw(CImg32 *pDst);	// 描画
 	BOOL	TimerProc(void);	// 時間処理
+	BOOL	HandleSDLKeyDown(UINT vk);	// SDLキー押下を処理(名前欄フォーカス時はCHARNAMEへ転送)
+	void	HandleSDLTextInput(LPCSTR pszText);	// SDLテキスト入力を処理(名前欄フォーカス時はCHARNAMEへ転送)
+	void	HandleSDLTextEditing(LPCSTR pszText);	// SDLテキスト編集中を処理(名前欄フォーカス時はCHARNAMEへ転送)
 
 
 private:
@@ -40,6 +44,7 @@ private:
 	BOOL	OnRight(void);	// キーハンドラ(→)
 	BOOL	OnX(BOOL bDown);	// キーハンドラ(X)
 	BOOL	OnZ(BOOL bDown);	// キーハンドラ(Y)
+	BOOL	TryRegist(void);	// 名前チェックの上で登録を試みる(名前欄Enter確定/登録項目Xから共通利用)
 
 
 public:
@@ -65,4 +70,7 @@ private:
 	CWindowHAIRTYPE	*m_pWindowHAIRTYPE;	// 髪型選択ウィンドウ
 	CWindowHAIRCOLOR	*m_pWindowHAIRCOLOR;	// 髪色選択ウィンドウ
 	CWindowEYECOLOR	*m_pWindowEYECOLOR;	// 目色選択ウィンドウ
+	CWindowCHARNAME	*m_pWindowCHARNAME;	// キャラ名入力ウィンドウ
+	CmyString	m_strNameDrawn;	// 前回描画時の子(CHARNAME)の確定文字列(TimerProcでの再描画判定用)
+	CmyString	m_strCompositionDrawn;	// 前回描画時の子(CHARNAME)のIME変換中文字列(TimerProcでの再描画判定用)
 } CWindowSTYLESELECT, *PCWindowSTYLESELECT;

@@ -28,7 +28,7 @@ typedef map<DWORD, PVOID>	MapIDPtr;
 
 #define MAXLEN_ACCOUNT			(10)								// 最大アカウント名長
 #define MAXLEN_PASSWORD			(10)								// 最大パスワード長
-#define MAXLEN_CHARNAME			(15)								// 最大キャラ名長
+#define MAXLEN_CHARNAME			(8)									// 最大キャラ名長(全角8文字。新規キャラ作成画面の名前欄に収まる長さ)
 #define URARASOCK_PRECHECK		(0x56BB3E5E)						// チェック用キーワード
 #define URARASOCK_MSGBASE		(WM_APP + 200)						// 通信ライブラリ通知メッセージ基準
 
