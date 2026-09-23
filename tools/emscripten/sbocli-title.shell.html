@@ -3064,6 +3064,20 @@
             return data;
           }
 
+          // 自キャラ以外のキャラの移動同期状態(座標・描画位置・直近受信)を返す。
+          // 他プレイヤーの見え方を毎フレーム計測する用途(C++側 SBOP2_DebugGetOthersJson)。
+          function others() {
+            if (!window.Module || typeof Module.ccall !== 'function') {
+              return null;
+            }
+            try {
+              return JSON.parse(Module.ccall('SBOP2_DebugGetOthersJson', 'string', [], []));
+            } catch (e) {
+              console.warn('[sbop2Debug] others(): failed', e);
+              return null;
+            }
+          }
+
           // state() をポーリングして条件成立を待つ。
           // cond は関数(state=>bool)、または { gameState: 'MAP' } のような一致条件オブジェクト。
           function waitFor(cond, timeoutMs) {
@@ -3147,6 +3161,7 @@
             setCharName: setCharName,
             submitCharName: submitCharName,
             state: state,
+            others: others,
             waitFor: waitFor,
             clickStart: clickStart,
             startWithToken: startWithToken

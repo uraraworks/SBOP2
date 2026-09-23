@@ -29,6 +29,50 @@
 // POS_SYNC(update) を予測移動として扱う最小変位(px)。前回同期からこの値未満しか
 // 動いていなければ、実際には移動していない静止キャラへの定期同期とみなす。
 #define PREDICT_MIN_MOVE_PIXELS 4
+// 他PCの MOVE_* 中継をこの時間(ms)以内に受けていれば、定期 POS_SYNC(update) を無視する。
+// 本人は移動中100ms間隔で送るため、多少の遅れを見込んで余裕を持たせる。
+#define MOVE_RELAY_FRESH_MS 400
+
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/emscripten.h>
+#include <string>
+#include <sstream>
+namespace {
+// デバッグ用: 他キャラの移動系パケット受信履歴(直近256件)。window.sbop2Debug.moveTrace() で読む。
+struct STMOVETRACE { DWORD dwTime; DWORD dwCharID; int nKind; int x; int y; int nDir; int nUpdate; };
+STMOVETRACE g_aMoveTrace[256];
+int g_nMoveTraceNext = 0;
+int g_nMoveTraceCount = 0;
+}
+// nKind: 1=MOVE_START 2=MOVE_DIR_CHANGE 3=MOVE_STOP 4=POS_SYNC 5=POS_SYNC(無視)
+static void DebugTraceMove(int nKind, DWORD dwCharID, int x, int y, int nDir, BOOL bUpdate)
+{
+	STMOVETRACE &st = g_aMoveTrace[g_nMoveTraceNext];
+	st.dwTime = SDL_GetTicks(); st.dwCharID = dwCharID; st.nKind = nKind;
+	st.x = x; st.y = y; st.nDir = nDir; st.nUpdate = bUpdate ? 1 : 0;
+	g_nMoveTraceNext = (g_nMoveTraceNext + 1) % 256;
+	if (g_nMoveTraceCount < 256) g_nMoveTraceCount++;
+}
+extern "C" EMSCRIPTEN_KEEPALIVE const char *SBOP2_DebugGetMoveTraceJson(int nClear)
+{
+	static std::string s_str;
+	std::ostringstream oss;
+	int nStart = (g_nMoveTraceNext - g_nMoveTraceCount + 256) % 256;
+	oss << "[";
+	for (int i = 0; i < g_nMoveTraceCount; i++) {
+		const STMOVETRACE &st = g_aMoveTrace[(nStart + i) % 256];
+		if (i > 0) oss << ",";
+		oss << "[" << st.dwTime << "," << st.dwCharID << "," << st.nKind << "," << st.x << "," << st.y << "," << st.nDir << "," << st.nUpdate << "]";
+	}
+	oss << "]";
+	if (nClear) { g_nMoveTraceCount = 0; }
+	s_str = oss.str();
+	return s_str.c_str();
+}
+#define DEBUG_TRACE_MOVE(k, id, x, y, d, u) DebugTraceMove((k), (id), (x), (y), (d), (u))
+#else
+#define DEBUG_TRACE_MOVE(k, id, x, y, d, u)
+#endif
 
 // S3b: RES_PUSH受理時、予測位置と確定座標の差がこの値を超えたら確定座標へ
 // 合わせ直す(docs/push-object-redesign.md 4章「予測中の表示と補正」)。
@@ -150,6 +194,23 @@ void CMainFrame::RecvProcCHAR_POS_SYNC(PBYTE pData)
 	if (pInfoChar == NULL) {
 		return;
 	}
+	/*
+	   他PCの移動中は、本人が100msごとに送る MOVE_* がサーバーからそのまま中継されて
+	   届く。サーバーはこれとは別に150msごとの定期 POS_SYNC(update) も送ってくるが、
+	   その座標は「サーバーが最後に受けた MOVE_* の位置」なので、先読み表示より古い。
+	   これを反映すると、差が小さければ古い位置へ SetPos して少し後ろに戻り、
+	   前回と同じ座標なら「動いていない」とみなして予測を止めて立たせてしまい、
+	   歩くたびに引っかかる・あとずさりする見え方になっていた。
+	   MOVE_* の中継が新しいうちは update 付きの POS_SYNC は捨て、MOVE_* に任せる
+	   (停止系の update=FALSE は従来どおり反映する)。
+	*/
+	if (Packet.m_bUpdate && !pInfoChar->IsNPC() && !pInfoChar->m_bPush &&
+		(pInfoChar->m_dwLastMoveRelayTime != 0) &&
+		(SDL_GetTicks() - pInfoChar->m_dwLastMoveRelayTime <= MOVE_RELAY_FRESH_MS)) {
+		DEBUG_TRACE_MOVE(5, Packet.m_dwCharID, Packet.m_pos.x, Packet.m_pos.y, Packet.m_nDirection, Packet.m_bUpdate);
+		return;
+	}
+	DEBUG_TRACE_MOVE(4, Packet.m_dwCharID, Packet.m_pos.x, Packet.m_pos.y, Packet.m_nDirection, Packet.m_bUpdate);
 	// 前回の確定同期座標（m_nPredictSyncX/Y は後段で今回パケット値に上書きされる）
 	nPrevSyncX = pInfoChar->m_nPredictSyncX;
 	nPrevSyncY = pInfoChar->m_nPredictSyncY;
@@ -483,6 +544,7 @@ void CMainFrame::RecvProcCHAR_MOVE_START(PBYTE pData)
 		Packet.m_dwCharID, Packet.m_nDirection,
 		Packet.m_pos.x, Packet.m_pos.y, Packet.m_bUpdate);
 #endif
+	DEBUG_TRACE_MOVE(1, Packet.m_dwCharID, Packet.m_pos.x, Packet.m_pos.y, Packet.m_nDirection, Packet.m_bUpdate);
 	RecvProcCHAR_MOVE_CORE(
 			Packet.m_dwCharID,
 			Packet.m_nDirection,
@@ -504,6 +566,7 @@ void CMainFrame::RecvProcCHAR_MOVE_DIR_CHANGE(PBYTE pData)
 		Packet.m_dwCharID, Packet.m_nDirection,
 		Packet.m_pos.x, Packet.m_pos.y, Packet.m_bUpdate);
 #endif
+	DEBUG_TRACE_MOVE(2, Packet.m_dwCharID, Packet.m_pos.x, Packet.m_pos.y, Packet.m_nDirection, Packet.m_bUpdate);
 	RecvProcCHAR_MOVE_CORE(
 			Packet.m_dwCharID,
 			Packet.m_nDirection,
@@ -525,6 +588,7 @@ void CMainFrame::RecvProcCHAR_MOVE_STOP(PBYTE pData)
 		Packet.m_dwCharID, Packet.m_nDirection,
 		Packet.m_pos.x, Packet.m_pos.y, Packet.m_bUpdate);
 #endif
+	DEBUG_TRACE_MOVE(3, Packet.m_dwCharID, Packet.m_pos.x, Packet.m_pos.y, Packet.m_nDirection, Packet.m_bUpdate);
 	RecvProcCHAR_MOVE_CORE(
 			Packet.m_dwCharID,
 			Packet.m_nDirection,
@@ -957,6 +1021,7 @@ void CMainFrame::RecvProcCHAR_MOVE_CORE(DWORD dwCharID, int nDirection, int nPac
 		// PC（他プレイヤー）: 従来の Dead Reckoning 予測を維持
 		// パケット頻度が低く外挿なしでは滑らかさが出ないため。
 		// ─────────────────────────────────────────────────────────────
+		pInfoChar->m_dwLastMoveRelayTime = SDL_GetTicks();
 		if (bForceStop) {
 			nStateStop = CHARMOVESTATE_STAND;
 			if (pInfoChar->IsStateBattle()) {

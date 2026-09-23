@@ -16,6 +16,7 @@
 #include "MgrWindow.h"
 #include "Window/WindowBase.h"
 #include "InfoCharCli.h"
+#include "LibInfoCharCli.h"
 
 // URL クエリ ?server=host:port で指定されたサーバーアドレスを取得する
 // 戻り値: 取得成功=1, 未設定=0
@@ -225,6 +226,57 @@ extern "C" EMSCRIPTEN_KEEPALIVE const char *SBOP2_DebugGetStateJson(void)
 	oss << "]";
 
 	oss << "}";
+
+	s_strJson = oss.str();
+	return s_strJson.c_str();
+}
+
+/// @brief デバッグ用: 自キャラ以外のキャラの移動同期状態をJSON配列(UTF-8)で取得する
+/// @details 他プレイヤーの見え方(カクつき・後退)を毎フレーム計測するための軽量版。
+///          window.sbop2Debug.others() から呼ぶ。戻り値は次回呼び出しまで有効な静的バッファ。
+extern "C" EMSCRIPTEN_KEEPALIVE const char *SBOP2_DebugGetOthersJson(void)
+{
+	static std::string s_strJson;
+	std::ostringstream oss;
+
+	CMainFrame *pMainFrame = g_pDebugMainFrame;
+	CMgrData *pMgrData = (pMainFrame != NULL) ? pMainFrame->GetMgrData() : NULL;
+	CInfoCharCli *pPlayer = (pMgrData != NULL) ? pMgrData->GetPlayerChar() : NULL;
+	CLibInfoCharCli *pLibInfoChar = (pMgrData != NULL) ? pMgrData->GetLibInfoChar() : NULL;
+
+	oss << "{\"t\":" << SDL_GetTicks() << ",\"chars\":[";
+	if (pLibInfoChar != NULL) {
+		int nCount = pLibInfoChar->GetCount();
+		bool bFirst = true;
+		for (int i = 0; i < nCount; ++i) {
+			CInfoCharCli *pChar = (CInfoCharCli *)pLibInfoChar->GetPtr(i);
+			if ((pChar == NULL) || (pChar == pPlayer)) {
+				continue;
+			}
+			POINT ptDraw;
+			pChar->GetDrawMapPos(ptDraw);
+			if (!bFirst) {
+				oss << ",";
+			}
+			bFirst = false;
+			oss << "{"
+				<< "\"id\":" << pChar->m_dwCharID << ","
+				<< "\"npc\":" << (pChar->IsNPC() ? 1 : 0) << ","
+				<< "\"x\":" << pChar->m_nMapX << ","
+				<< "\"y\":" << pChar->m_nMapY << ","
+				<< "\"dx\":" << ptDraw.x << ","
+				<< "\"dy\":" << ptDraw.y << ","
+				<< "\"dir\":" << pChar->m_nDirection << ","
+				<< "\"st\":" << pChar->m_nMoveState << ","
+				<< "\"pred\":" << (pChar->m_bPredictedMove ? 1 : 0) << ","
+				<< "\"sx\":" << pChar->m_nPredictSyncX << ","
+				<< "\"sy\":" << pChar->m_nPredictSyncY << ","
+				<< "\"rt\":" << pChar->m_dwPredictRecvTime << ","
+				<< "\"spd\":" << pChar->m_nPredictSpeed
+				<< "}";
+		}
+	}
+	oss << "]}";
 
 	s_strJson = oss.str();
 	return s_strJson.c_str();

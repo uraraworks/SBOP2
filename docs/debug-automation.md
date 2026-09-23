@@ -31,6 +31,7 @@
 | `waitFor(fn or cond, timeoutMs=10000)` | `fn`: `state=>bool` または `{gameState:'MAP'}` のような一致条件, `timeoutMs` | `Promise<state>` | 条件成立まで `state()` を100msごとにポーリングし、成立でresolve、タイムアウトでreject。 |
 | `clickStart()` | なし | `boolean` | 起動直後の「クリックしてスタート」オーバーレイを押す。 |
 | `startWithToken(timeoutMs=15000)` | `timeoutMs` | `Promise<boolean>` | タイトル画面の主ボタン(端末トークンありなら「◯◯としてはじめる」)を押す。 |
+| `others()` | なし | オブジェクト or `null` | 自キャラ以外のキャラの移動同期状態 `{t, chars:[{id,npc,x,y,dx,dy,dir,st,pred,sx,sy,rt,spd}]}` を返す。`x/y`=論理座標、`dx/dy`=描画補間後の座標、`sx/sy`=最後の確定同期座標、`rt`=その受信時刻(SDL_GetTicks)。他プレイヤーの見え方を毎フレーム計測する用途(`SBOP2_DebugGetOthersJson`)。 |
 
 `waitFor` の一致条件は `{gameState:'MAP'}` のように `gameStateName` を文字列名で指定できる
 (内部で `s.gameStateName === cond.gameState` として比較する)。それ以外のキーは `state()` の値と
@@ -173,3 +174,17 @@ d.state(); // activeWindow: SYSTEMMENU、windows[0].pos でカーソル位置
   遷移をまたぐ値(端末トークン等)は `localStorage` 経由で受け渡す。
 - `state().systemMessages` は空配列のことが多い。チャット内容は `messages`(ブラウザ側
   チャットログのスナップショット)側に入る。
+
+## 他プレイヤーの見え方を計測する(2人同時ログイン)
+
+- `/api/debug/fixture` でアカウントを2つ作り、同一オリジンのページに iframe を2つ並べて
+  それぞれログインさせる。端末トークンは `localStorage` 共有なので、**1つ目がマップに入ってから**
+  2つ目用のトークンに書き換えて読み込むこと(先に書き換えると両方同じアカウントになる)。
+- ブラウザ枠が非表示だと `requestAnimationFrame` が止まりゲームも進まない。計測中は枠を表示しておく。
+- 見る側で `others()` を毎フレーム取り、動かす側の `state().player` と比べると、遅れ・停止・後退が数値で出る。
+- 移動系パケットの受信履歴は `Module.ccall('SBOP2_DebugGetMoveTraceJson','string',['number'],[1])`
+  (引数1で読み出し後にクリア)。要素は `[受信時刻, charID, 種別, x, y, 向き, update]`、
+  種別は 1=MOVE_START 2=MOVE_DIR_CHANGE 3=MOVE_STOP 4=POS_SYNC 5=POS_SYNC(中継が新しいので無視)。
+- 1枚の枠で2ゲームを動かすと、枠自体のフレーム落ち(数十〜百数十ms)が混ざる。細かい数値は
+  本人側の停止(moverStall)と比べてノイズを差し引いて読む。
+

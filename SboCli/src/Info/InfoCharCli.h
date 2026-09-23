@@ -169,6 +169,7 @@ public:
 	DWORD	m_dwWaypointLastTime,	// ウェイポイント追従: 前回更新時刻
 			m_dwPredictRecvTime,	// 受信タイムスタンプ
 			m_dwPredictLeadLimitMs,	// 予測移動の先読み上限時間
+			m_dwLastMoveRelayTime,	// 他PCの MOVE_* 中継を最後に受信した時刻(POS_SYNC との競合回避用)
 			m_dwDrawMoveStartTime,	// 描画補間開始時刻
 			m_dwDrawMoveEndTime;	// 描画補間終了時刻
 	double	m_dDrawMoveStartX,	// 描画補間開始X

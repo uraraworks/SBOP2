@@ -937,14 +937,24 @@ void CMainFrame::RecvProcCHAR_MOVEPOS(PBYTE pData, DWORD dwSessionID)
 		//	nPacketPosY,
 		//	nDirection,
 		//	bUpdate ? 1 : 0);
+		// 受信時の Set() は各メンバーへ読み出すだけで送信用バッファ(m_pPacket)を作らない。
+		// そのまま SendTo すると中身が空で何も届かず、見る側は 150ms 間隔の定期
+		// POS_SYNC だけで先読みすることになって歩きがカクついていた。
+		// 中継する前に、サーバーが受理した座標で Make() し直して送信データを作る。
 		switch (nCmdSub) {
 		case SBOCOMMANDID_SUB_CHAR_MOVE_START:
+			PacketMoveStart.Make(pInfoChar->m_dwMapID, pInfoChar->m_dwCharID, nDirection,
+				nNextPosX, nNextPosY, bUpdate, nSpeedLevel, dwPacketTime);
 			pRelayPacket = &PacketMoveStart;
 			break;
 		case SBOCOMMANDID_SUB_CHAR_MOVE_DIR_CHANGE:
+			PacketMoveDirChange.Make(pInfoChar->m_dwMapID, pInfoChar->m_dwCharID, nDirection,
+				nNextPosX, nNextPosY, bUpdate, nSpeedLevel, dwPacketTime);
 			pRelayPacket = &PacketMoveDirChange;
 			break;
 		case SBOCOMMANDID_SUB_CHAR_MOVE_STOP:
+			PacketMoveStop.Make(pInfoChar->m_dwMapID, pInfoChar->m_dwCharID, nDirection,
+				nNextPosX, nNextPosY, bUpdate, nSpeedLevel, dwPacketTime);
 			pRelayPacket = &PacketMoveStop;
 			break;
 		}

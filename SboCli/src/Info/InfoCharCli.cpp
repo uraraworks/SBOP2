@@ -95,6 +95,12 @@ static int ClampPredictMovePixelsPerSec(int nSpeed)
 // この時間(ms)以上、新しい同期(受信)が来なければ、停止パケットが欠落したとみなして
 // 予測移動を打ち切り、最後の確定同期位置へスナップする（先読み暴走の自己修復）。
 #define PREDICT_STALE_STOP_MS 500
+// 他プレイヤーの先読み上限(ms)。本人は100msごとに送ってくるので、1〜2回分の
+// 遅れ・欠けまでは歩き続けて見せ、それ以上は止まったとみなして先読みをやめる。
+#define PREDICT_PC_LEAD_LIMIT_MS 250
+// 予測移動中の描画補間で、目標へ追いつく速さの倍率(%)。100%だと歩行速度で
+// 動き続ける目標に永遠に追いつけないため、少しだけ速く寄せる。
+#define PREDICT_DRAW_CATCHUP_PERCENT 125
 
 static DWORD GetPredictLeadLimitMs(PCInfoCharCli pInfoChar)
 {
@@ -242,6 +248,7 @@ CInfoCharCli::CInfoCharCli()
 	m_nDrawDirectionOverride = -1;
 	m_dwPredictRecvTime	= 0;
 	m_dwPredictLeadLimitMs	= 240;
+	m_dwLastMoveRelayTime	= 0;
 	m_dwDrawMoveStartTime	= 0;
 	m_dwDrawMoveEndTime	= 0;
 	m_dDrawMoveStartX	= 0.0;
@@ -558,6 +565,9 @@ DWORD CInfoCharCli::GetDrawMoveDuration(double dSrcX, double dSrcY, double dDstX
 
 	if (m_bPredictedMove && (m_nPredictSpeed > 0)) {
 		nMoveSpeed = m_nPredictSpeed;
+		if (!IsNPC() && !m_bPush) {
+			nMoveSpeed = m_nPredictSpeed * PREDICT_DRAW_CATCHUP_PERCENT / 100;
+		}
 		dwDuration = max((DWORD)ceil(dDeltaMax * 1000.0 / (double)nMoveSpeed), (DWORD)1);
 		return dwDuration;
 	}
@@ -1603,6 +1613,34 @@ void CInfoCharCli::StartPredictedMove(int nDirection, int x, int y, DWORD dwRecv
 	m_ptMove.x = 0;
 	m_ptMove.y = 0;
 	SetDirection(nDirection);
+
+	if (!IsNPC() && !m_bPush) {
+		/*
+		   他プレイヤー: 本人は移動中100msごとに MOVE_* を送ってくるので、
+		   「受信した確定座標＋受信からの経過時間×歩行速度」をそのまま目標にする。
+		   以前は今の表示位置を起点に先読みし直していたため、一度ついた遅れが
+		   縮まらず(本人より20〜35px遅れ、32px離れると一気に飛ぶ)、受信間隔の
+		   ばらつきで測った速度が遅く出るとさらに置いていかれていた。
+		   速度は計測値でなく本人と同じ歩行速度を使い、表示は SetPos の描画補間
+		   (GetDrawMoveDuration の追いつき係数)で目標へ滑らかに寄せる。
+		   先読みしすぎて目標が後ろになった分は ClampPredictedMoveForward で
+		   後ろへは戻さず、目標が追いつくのを待つ。
+		*/
+		m_nPredictSpeed = GetPredictMovePixelsPerSec(this);
+		m_dwPredictLeadLimitMs = PREDICT_PC_LEAD_LIMIT_MS;
+		nDeltaMax = abs(x - m_nMapX);
+		if (nDeltaMax < abs(y - m_nMapY)) {
+			nDeltaMax = abs(y - m_nMapY);
+		}
+		if (nDeltaMax >= MAPPARTSSIZE * 2) {
+			// 大きくずれている(見失っていた・ワープ等)ときだけ即座に合わせる
+			SetPos(x, y);
+		}
+		m_nPredictBaseX = x;
+		m_nPredictBaseY = y;
+		m_dwPredictRecvTime = dwNowTime;
+		return;
+	}
 
 	/*
 	   連続移動中に毎回 SetPos すると m_dwLastTimeMove が更新され、
