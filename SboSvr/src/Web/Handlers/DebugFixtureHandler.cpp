@@ -292,11 +292,13 @@ void CDebugFixtureHandler::Handle(const HttpRequest &request, HttpResponse &resp
 		TrimViewString(strTrimmedCharName, (LPCTSTR)strRawCharName);
 
 		// 容姿は初期値相当の固定値(見た目はテストの本質ではないため)。
+		// モーション種別は通常のキャラ作成(WindowSTYLESELECT)と同じ 2 にする。
+		// 0 だとプレイヤー用のモーションが引けず、歩くと2x2や敵の絵になっていた。
 		int nMakeResult = pCharLib->CreatePlayerCharacter(
 			strRawCharName, strTrimmedCharName,
 			CHARMOVETYPE_PC, SEX_MALE, FAMILYTYPE_HUMAN,
 			/*wGrpIDEye*/1, /*wGrpIDEyeColor*/1, /*wGrpIDHairType*/1, /*wGrpIDHairColor*/1,
-			/*dwMotionTypeID*/0, NULL, dwCharID);
+			/*dwMotionTypeID*/2, NULL, dwCharID);
 
 		if (nMakeResult != MAKECHARRES_OK) {
 			const char *pszError = (nMakeResult == MAKECHARRES_NG_USE) ? "char_name_exists" : "invalid_char_name";
