@@ -2453,8 +2453,11 @@
           var cy = rect.top + rect.height / 2;
           var dx = clientX - cx;
           var dy = clientY - cy;
-          var maxR = rect.width * 0.5;       // ノブ移動の最大半径
-          var deadzone = rect.width * 0.18;  // デッドゾーン半径
+          // ノブ移動の最大半径。ノブが外周からはみ出さない範囲(ベース内径 - ノブ半径)に収め、
+          // 親指を中心に置いたまま押し具合だけで上下左右を切り替えられるようにする
+          var baseR = stick.clientWidth / 2;
+          var maxR = Math.max(baseR - knob.offsetWidth / 2, rect.width * 0.2);
+          var deadzone = maxR * 0.35;        // デッドゾーン半径(可動域に比例)
           // ノブ表示は最大半径でクランプ
           var dist = Math.sqrt(dx * dx + dy * dy);
           var kx = dx, ky = dy;
