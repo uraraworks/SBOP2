@@ -91,9 +91,10 @@ CWindowTEXTMSG::CWindowTEXTMSG()
 	m_nSpaceHeight	= 16 * 3;
 
 	m_nID	= WINDOWTYPE_TEXTMSG;
+	m_bInput	= TRUE;
 	m_ptViewPos.x	= 16;
 	m_sizeWindow.cx	= 16 * 2 + 16 * 26;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 5 + m_nSpaceHeight;
+	m_sizeWindow.cy	= 16 * 2 + TEXT_LINE_HEIGHT * 5 + m_nSpaceHeight;
 	m_ptViewPos.y	= SCRSIZEY - 16 - m_sizeWindow.cy;
 
 	m_bSkip	= FALSE;
@@ -146,19 +147,17 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 		goto Exit;
 	}
 
-	sizeWindow = m_sizeWindow;
-	// 初期化
-	switch (m_nState) {
-	case STATE_TEXT:	// メッセージ表示
-		break;
-	case STATE_MENU:	// 項目選択
-		sizeWindow.cx /= 2;
-		break;
+	// 選択肢表示中は、必要なら本文枠と選択肢枠が両方入るようウィンドウを拡張する
+	if (m_nState == STATE_MENU) {
+		EnsureMenuSpace();
 	}
+
+	sizeWindow = m_sizeWindow;
 
 	m_pDib->FillRect(0, 0, m_pDib->Width(), m_pDib->Height(), RGB(0, 0, 0));
 	switch (m_nState) {
 	case STATE_TEXT:	// メッセージ表示
+	case STATE_MENU:	// 項目選択(本文枠・本文・名前枠はSTATE_TEXTと共通)
 		if ((m_ptDraw.x == 0) && (m_ptDraw.y == 0)) {
 			break;
 		}
@@ -172,57 +171,111 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 			nTmp ++;
 		}
 		if (nTmp > 0) {
-			cx = m_pDibTitle->Width() + 8 * 2;
+			// 名前枠の幅はSTATE_MENU側と同じ+16*2に揃える(+8*2だと右8pxが枠線にかぶり、
+			// 不透明化した枠線がm_pDibTitleの縁取りを上書きしてしまう)
+			cx = m_pDibTitle->Width() + 16 * 2;
 			cy = 16 * (2 + nTmp);
 			x = sizeWindow.cx / 2 - cx / 2;
-			y = (2 - nTmp) * 16;
+			// 名前枠の下端が本文枠の上端から16px下に来るよう、m_nSpaceHeight基準で位置決めする
+			y = m_nSpaceHeight - 16 * (nTmp + 1);
 			DrawFrame(x, y, cx, cy, m_nType);
-			m_pDib->Blt(x + 16, y + 16, m_pDibTitle->Width(), m_pDibTitle->Height(), m_pDibTitle, 0, 0, TRUE);
+			// 名前枠の下線(枠線8px)を上書きしないよう、貼り付け高さを枠内側に収める
+			m_pDib->Blt(x + 16, y + 16, m_pDibTitle->Width(), min(m_pDibTitle->Height(), cy - 16 - 8), m_pDibTitle, 0, 0, TRUE);
 		}
 
 		m_pDib->Blt(16, 16 + m_nSpaceHeight, m_pDibText->Width(), m_pDibText->Height(), m_pDibText, 0, 0, TRUE);
-		break;
-	case STATE_MENU:	// 項目選択
-		sizeWindow.cy = m_astrMenu.size() * 16 + 32;
-		DrawFrame(0, m_nSpaceHeight, sizeWindow.cx, sizeWindow.cy, m_nType);
 
-		nTmp = 0;
-		if (m_strTitle.IsEmpty() == FALSE) {
-			nTmp ++;
+		// 選択肢枠は本文枠・名前枠の上に重ねて最後に描く
+		if (m_nState == STATE_MENU) {
+			DrawMenuBox(sizeWindow);
 		}
-		if (m_strName.IsEmpty() == FALSE) {
-			nTmp ++;
-		}
-		if (nTmp > 0) {
-			cx = m_pDibTitle->Width()  + 16 * 2;
-			cy = 16 * (2 + nTmp);
-			x = sizeWindow.cx / 2 - cx / 2;
-			y = (2 - nTmp) * 16;
-			DrawFrame(x, y, cx, cy, m_nType);
-			m_pDib->Blt(x + 16, y + 16, m_pDibTitle->Width(), m_pDibTitle->Height(), m_pDibTitle, 0, 0, TRUE);
-		}
-		{
-			int i, nCount;
-			HDC hDC;
-			COLORREF clText;
-
-			clText	= RGB(1, 1, 1);
-			hDC	= m_pDib->Lock();
-
-			nCount = m_astrMenu.size();
-			for (i = 0; i < nCount; i ++) {
-				TextOut2(hDC, m_hFont16Normal, 32, y + cy + i * 16, (LPCTSTR)m_astrMenu[i], clText);
-			}
-
-			m_pDib->Unlock();
-		}
-		DrawCursor(8, y + cy + 16 * m_nPos);
 		break;
 	}
 
 	m_dwTimeDrawStart = timeGetTime();
 Exit:
 	pDst->Blt(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, TRUE);
+}
+
+
+// 選択肢枠の幅・高さを計算(最長項目の実測幅+カーソル分+余白、幅は16の倍数に切り上げ)
+void CWindowTEXTMSG::ComputeMenuBoxSize(int *pnWidth, int *pnHeight)
+{
+	int i, nCount, nWidthMax, textW, textH;
+
+	nCount = m_astrMenu.size();
+
+	nWidthMax = 0;
+	for (i = 0; i < nCount; i ++) {
+		textW = textH = 0;
+		SdlFontGetTextExtent((void*)m_hFont16Normal, (LPCTSTR)m_astrMenu[i], m_astrMenu[i].GetLength(), &textW, &textH);
+		if (textW > nWidthMax) {
+			nWidthMax = textW;
+		}
+	}
+
+	*pnWidth = nWidthMax + 24 + 16 * 2;
+	*pnWidth = ((*pnWidth + 15) / 16) * 16;
+	*pnHeight = nCount * 16 + 32;
+}
+
+
+// 選択肢枠が入るよう、必要ならm_nSpaceHeightを増やしてウィンドウを拡張する(下端位置は維持)
+void CWindowTEXTMSG::EnsureMenuSpace(void)
+{
+	int nMenuWidth, nMenuHeight, nNeedSpaceHeight, nDelta;
+
+	if (m_astrMenu.size() <= 0) {
+		return;
+	}
+
+	ComputeMenuBoxSize(&nMenuWidth, &nMenuHeight);
+
+	// 選択肢枠の下端は本文枠の上端から16px下。上端が0px以上に収まる余白を確保する
+	nNeedSpaceHeight = nMenuHeight - 16;
+	if (nNeedSpaceHeight <= m_nSpaceHeight) {
+		return;
+	}
+
+	nDelta = nNeedSpaceHeight - m_nSpaceHeight;
+	m_nSpaceHeight = nNeedSpaceHeight;
+	m_sizeWindow.cy += nDelta;
+	m_ptViewPos.y = SCRSIZEY - 16 - m_sizeWindow.cy;
+
+	m_pDib->Destroy();
+	m_pDib->Create(m_sizeWindow.cx, m_sizeWindow.cy);
+	m_pDib->SetColorKey(0);
+}
+
+
+// 選択肢枠(本文枠の右上に重ねる)を描画
+void CWindowTEXTMSG::DrawMenuBox(const SIZE &sizeWindow)
+{
+	int i, nCount, nMenuWidth, nMenuHeight, x, y;
+	HDC hDC;
+	COLORREF clText;
+
+	nCount = m_astrMenu.size();
+	if (nCount <= 0) {
+		return;
+	}
+
+	ComputeMenuBoxSize(&nMenuWidth, &nMenuHeight);
+
+	// 右端を本文枠の右端に、下端を本文枠の上端から16px下に揃える(名前枠と同じ重なり具合)
+	x = sizeWindow.cx - nMenuWidth;
+	y = m_nSpaceHeight + 16 - nMenuHeight;
+
+	DrawFrame(x, y, nMenuWidth, nMenuHeight, m_nType);
+
+	clText	= RGB(1, 1, 1);
+	hDC	= m_pDib->Lock();
+	for (i = 0; i < nCount; i ++) {
+		TextOut2(hDC, m_hFont16Normal, x + 32, y + 16 + i * 16, (LPCTSTR)m_astrMenu[i], clText);
+	}
+	m_pDib->Unlock();
+
+	DrawCursor(x + 8, y + 16 + 16 * m_nPos);
 }
 
 
@@ -396,12 +449,24 @@ void CWindowTEXTMSG::SetTitle(LPCSTR pszTitle)
 
 void CWindowTEXTMSG::SetName(LPCSTR pszName)
 {
-	int nLen;
+	int nWidthTitle, nWidthName, nWidth, nHeightTmp;
 
 	m_strName = pszName;
-	nLen = max(m_strName.GetLength(), 6);
+
+	nWidthTitle = 0;
+	nHeightTmp = 0;
+	if (m_strTitle.GetLength() > 0) {
+		SdlFontGetTextExtent((void*)m_hFont16, (LPCTSTR)m_strTitle, m_strTitle.GetLength(), &nWidthTitle, &nHeightTmp);
+	}
+	nWidthName = 0;
+	if (m_strName.GetLength() > 0) {
+		SdlFontGetTextExtent((void*)m_hFont16, (LPCTSTR)m_strName, m_strName.GetLength(), &nWidthName, &nHeightTmp);
+	}
+	nWidth = max(nWidthTitle, nWidthName) + 8;
+	nWidth = max(nWidth, 16 * 6);
+
 	m_pDibTitle->Destroy();
-	m_pDibTitle->Create(8 * nLen + 8, 16 * 2);
+	m_pDibTitle->Create(nWidth, 16 * 2);
 	RenewTitle();
 	Redraw();
 }
@@ -414,7 +479,9 @@ void CWindowTEXTMSG::SetMsg(LPCSTR pszMsg)
 	m_dwLastProc	= timeGetTime();
 	m_strMsg	= pszMsg;
 
-	m_pDibText->FillRect(0, 0, m_pDibText->Width(), m_pDibText->Height(), RGB(0, 0, 0));
+	// 背景を黒(RGB(0,0,0))で塗るとカラーキー0透過でSDL_ttfの縁取り・アンチエイリアスの
+	// 暗いピクセルまで透明になってしまうため、枠の背景色で塗る
+	m_pDibText->FillRect(0, 0, m_pDibText->Width(), m_pDibText->Height(), GetFrameBackColor(m_nType));
 }
 
 
@@ -531,8 +598,9 @@ BOOL CWindowTEXTMSG::OnX(BOOL bDown)
 		case STATE_MENU:	// 項目選択
 			m_pMgrSound->PlaySound(SOUNDID_OK_PI73);
 			m_nState = STATE_TEXT;
+			m_bSkip = FALSE;	// 選択確定時のX押下がSTATE_TEXT移行後のスキップに誤消費されないようにする
 			if (m_pInfoTalkEvent) {
-				PSTTALKEVENTMENUINFO pMenuInfo;	
+				PSTTALKEVENTMENUINFO pMenuInfo;
 				PCInfoTalkEventMENU pInfoTmp = (PCInfoTalkEventMENU)m_pInfoTalkEvent->GetPtr(m_nProcEventPage, m_nProcEventNo);
 				pMenuInfo = pInfoTmp->GetPtr(m_nPos);
 				m_nProcEventPage = pMenuInfo->nPage;
@@ -542,7 +610,10 @@ BOOL CWindowTEXTMSG::OnX(BOOL bDown)
 			break;
 		}
 	} else {
-		if (m_bInputWait == FALSE) {
+		// STATE_MENUでのX押下でスキップを立てると、直後の文章表示完了時の
+		// 最初のXリリースがスキップ解除に消費されウィンドウが閉じない(2回押し)ため、
+		// スキップ対象はSTATE_TEXTのときのみとする
+		if (m_nState == STATE_TEXT && m_bInputWait == FALSE) {
 			m_bSkip = TRUE;
 		}
 	}
@@ -595,29 +666,33 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 	}
 
 	cx = m_pDibText->Width();
-	cy = m_pDibText->Height() - 16;
+	cy = m_pDibText->Height() - TEXT_LINE_HEIGHT;
 
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDibText->Lock();
 
 	clText = RGB(1, 1, 1);
-	TextOut2(hDC, m_hFont16Normal, m_ptDraw.x, m_ptDraw.y, pszDraw, clText);
 
+	// "\r\n"は改行制御なので描画・幅計測はせず改行処理だけ行う
+	// (SDL_ttfが制御文字を豆腐等で描いてしまう可能性があるため)
 	if (strncmp(pszText, "\r\n", 2) == 0) {
 		m_ptDraw.x = cx;
-	}
+	} else {
+		TextOut2(hDC, m_hFont16Normal, m_ptDraw.x, m_ptDraw.y, pszDraw, clText);
 
-	// SdlFontGetTextExtent でフォント直接計測
-	int textW = 0, textH = 0;
-	SdlFontGetTextExtent((void*)m_hFont16Normal, pszDraw, (int)_tcslen(pszDraw), &textW, &textH);
-	m_ptDraw.x += textW;
+		// SdlFontGetTextExtent でフォント直接計測
+		int textW = 0, textH = 0;
+		SdlFontGetTextExtent((void*)m_hFont16Normal, pszDraw, (int)_tcslen(pszDraw), &textW, &textH);
+		m_ptDraw.x += textW;
+	}
 	if (m_ptDraw.x + 8 >= cx) {
 		m_ptDraw.x = 0;
-		m_ptDraw.y += 16;
+		m_ptDraw.y += TEXT_LINE_HEIGHT;
 		if (m_ptDraw.y >= cy) {
-			m_ptDraw.y -= 16;
-			m_pDibText->Blt(0, 0, cx, cy, m_pDibText, 0, 16);
-			m_pDibText->FillRect(0, cy, cx, 16, RGB(0, 0, 0));
+			m_ptDraw.y -= TEXT_LINE_HEIGHT;
+			m_pDibText->Blt(0, 0, cx, cy, m_pDibText, 0, TEXT_LINE_HEIGHT);
+			// 黒背景だとカラーキー透過で縁取り・ぼかしが消えるため枠の背景色で塗る
+			m_pDibText->FillRect(0, cy, cx, TEXT_LINE_HEIGHT, GetFrameBackColor(m_nType));
 		}
 	}
 
@@ -627,11 +702,12 @@ void CWindowTEXTMSG::DrawChar(LPCSTR pszText)
 
 void CWindowTEXTMSG::RenewTitle(void)
 {
-	int y;
+	int x, y, textW, textH;
 	HDC hDC;
 	COLORREF clText, clFrame;
 
-	m_pDibTitle->FillRect(0, 0, m_pDibTitle->Width(), m_pDibTitle->Height(), RGB(0, 0, 0));
+	// 黒背景だとカラーキー透過で名前の縁取りが消えるため枠の背景色で塗る
+	m_pDibTitle->FillRect(0, 0, m_pDibTitle->Width(), m_pDibTitle->Height(), GetFrameBackColor(m_nType));
 
 	hDC	= m_pDibTitle->Lock();
 
@@ -639,11 +715,23 @@ void CWindowTEXTMSG::RenewTitle(void)
 	clText  = RGB(255, 255, 255);
 	clFrame = RGB(1, 1, 1);
 	if (m_strTitle.GetLength() > 0) {
-		TextOut2(hDC, m_hFont16, 1, 1, (LPCTSTR)m_strTitle, clText, TRUE, clFrame);
+		textW = textH = 0;
+		SdlFontGetTextExtent((void*)m_hFont16, (LPCTSTR)m_strTitle, m_strTitle.GetLength(), &textW, &textH);
+		x = (m_pDibTitle->Width() - textW) / 2;
+		if (x < 1) {
+			x = 1;
+		}
+		TextOut2(hDC, m_hFont16, x, 1, (LPCTSTR)m_strTitle, clText, TRUE, clFrame);
 		y += 16;
 	}
 	if (m_strName.GetLength() > 0) {
-		TextOut2(hDC, m_hFont16, 1, y, (LPCTSTR)m_strName, clText, TRUE, clFrame);
+		textW = textH = 0;
+		SdlFontGetTextExtent((void*)m_hFont16, (LPCTSTR)m_strName, m_strName.GetLength(), &textW, &textH);
+		x = (m_pDibTitle->Width() - textW) / 2;
+		if (x < 1) {
+			x = 1;
+		}
+		TextOut2(hDC, m_hFont16, x, y, (LPCTSTR)m_strName, clText, TRUE, clFrame);
 	}
 
 	m_pDibTitle->Unlock();
@@ -653,7 +741,8 @@ void CWindowTEXTMSG::RenewTitle(void)
 void CWindowTEXTMSG::InitText(void)
 {
 	m_ptDraw.x = m_ptDraw.y = 0;
-	m_pDibText->FillRect(0, 0, m_pDibText->Width(), m_pDibText->Height(), RGB(0, 0, 0));
+	// 黒背景だとカラーキー透過で縁取り・ぼかしが消えるため枠の背景色で塗る
+	m_pDibText->FillRect(0, 0, m_pDibText->Width(), m_pDibText->Height(), GetFrameBackColor(m_nType));
 }
 
 
@@ -678,7 +767,7 @@ void CWindowTEXTMSG::MsgProc(void)
 	// メニュー？
 	if (_strnicmp(&pszTmp[nPos], "@menu", 5) == 0) {
 		while (1) {
-			nPos += (strTmp.GetLength() + 2);
+			nPos += ((int)strlen((LPCSTR)strTmp) + 2);	// GetLength()はワイド文字数なのでバイトオフセットにはstrlenを使う
 			if (nPos >= nLen) {
 				break;
 			}
@@ -689,7 +778,7 @@ void CWindowTEXTMSG::MsgProc(void)
 				continue;
 			}
 			if (pszTmp[0] == '}') {
-				nPos += (strTmp.GetLength() + 2);
+				nPos += ((int)strlen((LPCSTR)strTmp) + 2);
 				break;
 			}
 			strTmp2 = strTmp;
@@ -715,7 +804,7 @@ void CWindowTEXTMSG::MsgProc(void)
 		m_nProcPosTmp = 0;
 		m_strMsgTmp.Empty();
 		while (1) {
-			nPos += (strTmp.GetLength() + 2);
+			nPos += ((int)strlen((LPCSTR)strTmp) + 2);	// GetLength()はワイド文字数なのでバイトオフセットにはstrlenを使う
 			if (nPos >= nLen) {
 				break;
 			}
@@ -726,7 +815,7 @@ void CWindowTEXTMSG::MsgProc(void)
 				continue;
 			}
 			if (pszTmp[0] == '}') {
-				nPos += (strTmp.GetLength() + 2);
+				nPos += ((int)strlen((LPCSTR)strTmp) + 2);
 				break;
 			}
 			if (bSkip == FALSE) {
@@ -774,7 +863,7 @@ void CWindowTEXTMSG::TrimSpace(CmyString &strSrc)
 	strTmp = strSrc;
 	pszSrc = (LPCSTR)strTmp;
 
-        nLen = strSrc.GetLength();
+        nLen = (int)strlen(pszSrc);	// GetLength()はワイド文字数なのでバイトループ上限にはstrlenを使う
         for (i = 0; i < nLen;) {
                 ZeroMemory(szTmp, sizeof(szTmp));
                 CopyNextMessageChar(szTmp, _countof(szTmp), &pszSrc[i]);

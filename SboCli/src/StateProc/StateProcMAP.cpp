@@ -4717,7 +4717,9 @@ BOOL CStateProcMAP::OnXChar(DWORD dwCharID)
 			}
 		}
 		if (nLen > 0) {
-			m_pMgrWindow->MakeWindowTEXTMSG(NULL, (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)strTmp);
+			// strTmpは「@」1文字か空かの判定専用。改行や@menu/@select構文を保持するため
+			// ウィンドウには制御文字除去前の元の会話文字列を渡す
+			m_pMgrWindow->MakeWindowTEXTMSG(NULL, (LPCSTR)pInfoChar->m_strCharName, (LPCSTR)pInfoChar->m_strTalk);
 			break;
 		}
 		goto Exit;

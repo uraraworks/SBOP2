@@ -644,6 +644,29 @@ void CWindowBase::DrawBrowserRect(int x, int y, int cx, int cy, COLORREF ColorFi
 
 
 
+COLORREF CWindowBase::GetFrameBackColor(int nType)
+{
+	// DrawFrameのastFrameinfoから背景色だけ取り出したもの(範囲外は0番を使う)
+	COLORREF aclFrameBack[] = {
+		RGB(255, 235, 200),
+		RGB(255, 235, 200),
+		RGB(255, 235, 200),
+		RGB(255, 235, 200),
+		RGB(255, 211, 76),
+		RGB(255, 235, 200),
+		RGB(255, 235, 200),
+		RGB(196, 140, 81)
+	};
+	int nCount = sizeof(aclFrameBack) / sizeof(aclFrameBack[0]);
+
+	if ((nType < 0) || (nType >= nCount)) {
+		nType = 0;
+	}
+
+	return aclFrameBack[nType];
+}
+
+
 void CWindowBase::DrawFrame(int nType)
 {
 	DrawFrame(0, 0, m_sizeWindow.cx, m_sizeWindow.cy, nType);
@@ -654,26 +677,25 @@ void CWindowBase::DrawFrame(int x, int y, int cx, int cy, int nType, BOOL bRight
 {
 	typedef struct _FRAMEINFO {
 		POINT	pt;	// 左上の開始位置
-		COLORREF	cl;	// 背景色
 		int	nSize;	// 枠のサイズ
 		int	nPos;	// 表示位置補正
 	} FRAMEINFO, *PFRAMEINFO;
 	int i, nTmp, xx, yy, nSize, nPos;
 	COLORREF clTmp;
 	FRAMEINFO astFrameinfo[] = {
-		 0,	  0, RGB(255, 235, 200),	16, 32,
-		 0,	 48, RGB(255, 235, 200),	16, 32,
-		48,	 48, RGB(255, 235, 200),	16, 32,
-		96,	 48, RGB(255, 235, 200),	16, 32,
-		 0,	 96, RGB(255, 211, 76),	16, 32,
-		 0,	816, RGB(255, 235, 200),	 8, 40,
-		48,	816, RGB(255, 235, 200),	 8, 40,
-		96,	816, RGB(196, 140, 81),	 8, 40
+		 0,	  0,	16, 32,
+		 0,	 48,	16, 32,
+		48,	 48,	16, 32,
+		96,	 48,	16, 32,
+		 0,	 96,	16, 32,
+		 0,	816,	 8, 40,
+		48,	816,	 8, 40,
+		96,	816,	 8, 40
 	};
 
 	xx	= astFrameinfo[nType].pt.x;
 	yy	= astFrameinfo[nType].pt.y;
-	clTmp	= astFrameinfo[nType].cl;
+	clTmp	= GetFrameBackColor(nType);
 	nTmp	= (nType == 4) ? 3 : 0;
 	nSize	= astFrameinfo[nType].nSize;
 	nPos	= astFrameinfo[nType].nPos;

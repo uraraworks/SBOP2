@@ -69,6 +69,7 @@ protected:
 	void TextOut4(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF ColorFrame, COLORREF Color = RGB(255, 255, 255));	// 黒縁取りで文字描画
 	void DrawBrowserText(int x, int y, LPCTSTR pStr, COLORREF Color, int nFontSize = 16, BOOL bDraw = FALSE, COLORREF ColorFrame = RGB(10, 10, 10), BOOL bBold = TRUE);	// browser用テキスト重ね描画
 	void DrawBrowserRect(int x, int y, int cx, int cy, COLORREF ColorFill, BOOL bFill, COLORREF ColorStroke, BOOL bStroke, int nLineWidth = 1, BYTE byFillAlpha = 255, BYTE byStrokeAlpha = 255);	// browser用矩形重ね描画
+	COLORREF GetFrameBackColor(int nType);	// DrawFrameの背景色をnTypeから取得
 	void DrawFrame(int nType = 0);	// フレームを描画
 	void DrawFrame(int x, int y, int cx, int cy, int nType, BOOL bRightErace=FALSE);	// フレームを描画
 	void DrawFrame2(int x, int y, int cx, int cy, int nType, CImg32 *pDst=NULL, int nBottom=0);	// フレームを描画

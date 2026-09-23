@@ -531,6 +531,7 @@ $sources = @(
     "SboCli/src/Window/WindowACCOUNTINFO.cpp",
     "SboCli/src/Window/WindowSWOON.cpp",
     "SboCli/src/Window/WindowOPTION_VOLUMESET.cpp",
+    "SboCli/src/Window/WindowTEXTMSG.cpp",
     # Phase 12: リンクエラー解消用追加ファイル
     "Common/mt19937int.cpp",
     "Common/Info/InfoDisable.cpp",

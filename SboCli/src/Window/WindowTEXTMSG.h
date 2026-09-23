@@ -30,6 +30,10 @@ public:
 
 
 protected:
+	enum {
+		TEXT_LINE_HEIGHT = 20,	// 本文の行の高さ
+	};
+
 	BOOL OnUp(void);	// キーハンドラ(↑)
 	BOOL OnDown(void);	// キーハンドラ(↓)
 	BOOL OnLeft(void);	// キーハンドラ(←)
@@ -37,6 +41,9 @@ protected:
 	BOOL OnX(BOOL bDown);	// キーハンドラ(X)
 	BOOL OnZ(BOOL bDown);	// キーハンドラ(Z)
 	void DrawChar(LPCSTR pszText);	// １文字表示
+	void ComputeMenuBoxSize(int *pnWidth, int *pnHeight);	// 選択肢枠のサイズを計算
+	void EnsureMenuSpace(void);	// 選択肢枠が入る余白を確保(必要ならウィンドウを拡張)
+	void DrawMenuBox(const SIZE &sizeWindow);	// 選択肢枠を描画
 	void RenewTitle(void);	// 肩書と名前画像を更新
 	void InitText(void);	// メッセージ画像を初期化
 	void MsgProc(void);	// メッセージ解析処理

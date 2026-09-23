@@ -45,11 +45,11 @@
 #include "WindowCHAR_STATUS.h"
 #include "WindowSWOON.h"
 #include "WindowSKILLMENU.h"
+#include "WindowTEXTMSG.h"
 #if defined(_WIN32)
 #include "WindowACCOUNTINFO.h"
 #include "WindowCHAR_STATUS2.h"
 #include "WindowCHAR_STATUS3.h"
-#include "WindowTEXTMSG.h"
 #endif
 #include "MgrWindow.h"
 
@@ -529,15 +529,31 @@ void CMgrWindow::MakeWindowCHAR_STATUS4(void)
 }
 void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, LPCSTR pszMsg)
 {
-	(void)pszTitle;
-	(void)pszName;
-	MakeWindowMSG(pszMsg, 0, 0);
+	PCWindowTEXTMSG pWindowNew;
+
+	pWindowNew = new CWindowTEXTMSG;
+	pWindowNew->Create(m_pMgrData);
+	pWindowNew->SetTitle(pszTitle);
+	pWindowNew->SetName(pszName);
+	pWindowNew->SetMsg(pszMsg);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
 }
 void CMgrWindow::MakeWindowTEXTMSG(LPCSTR pszTitle, LPCSTR pszName, CInfoTalkEvent *pInfo)
 {
-	(void)pszTitle;
-	(void)pszName;
-	(void)pInfo;
+	PCWindowTEXTMSG pWindowNew;
+
+	pWindowNew = new CWindowTEXTMSG;
+	pWindowNew->Create(m_pMgrData);
+	pWindowNew->SetTitle(pszTitle);
+	pWindowNew->SetName(pszName);
+	pWindowNew->SetTalkEvent(pInfo);
+	m_paWindow->Add(pWindowNew);
+	SetActive();
+
+	m_bDraw = TRUE;
 }
 void CMgrWindow::MakeWindowSWOON(void)
 {
