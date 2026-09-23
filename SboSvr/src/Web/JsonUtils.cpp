@@ -15,6 +15,50 @@ size_t SkipWhitespace(const std::string &text, size_t pos)
         return pos;
 }
 
+// コードポイントを UTF-8 バイト列にエンコードして追加する
+void AppendUtf8CodePoint(std::string &out, unsigned int codePoint)
+{
+        if (codePoint <= 0x7F) {
+                out.push_back(static_cast<char>(codePoint));
+        } else if (codePoint <= 0x7FF) {
+                out.push_back(static_cast<char>(0xC0 | ((codePoint >> 6) & 0x1F)));
+                out.push_back(static_cast<char>(0x80 | (codePoint & 0x3F)));
+        } else if (codePoint <= 0xFFFF) {
+                out.push_back(static_cast<char>(0xE0 | ((codePoint >> 12) & 0x0F)));
+                out.push_back(static_cast<char>(0x80 | ((codePoint >> 6) & 0x3F)));
+                out.push_back(static_cast<char>(0x80 | (codePoint & 0x3F)));
+        } else {
+                out.push_back(static_cast<char>(0xF0 | ((codePoint >> 18) & 0x07)));
+                out.push_back(static_cast<char>(0x80 | ((codePoint >> 12) & 0x3F)));
+                out.push_back(static_cast<char>(0x80 | ((codePoint >> 6) & 0x3F)));
+                out.push_back(static_cast<char>(0x80 | (codePoint & 0x3F)));
+        }
+}
+
+// 4桁の16進数を読んでコードポイントを返す（失敗時は false）
+bool ParseHex4(const std::string &text, size_t pos, unsigned int &outValue)
+{
+        if (pos + 4 > text.size()) {
+                return false;
+        }
+        unsigned int value = 0;
+        for (size_t i = 0; i < 4; ++i) {
+                char ch = text[pos + i];
+                value <<= 4;
+                if (ch >= '0' && ch <= '9') {
+                        value |= static_cast<unsigned int>(ch - '0');
+                } else if (ch >= 'a' && ch <= 'f') {
+                        value |= static_cast<unsigned int>(ch - 'a' + 10);
+                } else if (ch >= 'A' && ch <= 'F') {
+                        value |= static_cast<unsigned int>(ch - 'A' + 10);
+                } else {
+                        return false;
+                }
+        }
+        outValue = value;
+        return true;
+}
+
 bool ExtractQuotedString(const std::string &text, size_t startPos, std::string &outValue, size_t *pNextPos)
 {
         outValue.clear();
@@ -22,16 +66,70 @@ bool ExtractQuotedString(const std::string &text, size_t startPos, std::string &
                 return false;
         }
         ++startPos;
-        bool bEscape = false;
         for (size_t i = startPos; i < text.size(); ++i) {
                 char ch = text[i];
-                if (bEscape) {
-                        outValue.push_back(ch);
-                        bEscape = false;
-                        continue;
-                }
                 if (ch == '\\') {
-                        bEscape = true;
+                        if (i + 1 >= text.size()) {
+                                outValue.clear();
+                                return false;
+                        }
+                        char nextCh = text[i + 1];
+                        switch (nextCh) {
+                        case '"':
+                                outValue.push_back('"');
+                                break;
+                        case '\\':
+                                outValue.push_back('\\');
+                                break;
+                        case '/':
+                                outValue.push_back('/');
+                                break;
+                        case 'b':
+                                outValue.push_back('\b');
+                                break;
+                        case 'f':
+                                outValue.push_back('\f');
+                                break;
+                        case 'n':
+                                outValue.push_back('\n');
+                                break;
+                        case 'r':
+                                outValue.push_back('\r');
+                                break;
+                        case 't':
+                                outValue.push_back('\t');
+                                break;
+                        case 'u':
+                                {
+                                        unsigned int codePoint = 0;
+                                        if (!ParseHex4(text, i + 2, codePoint)) {
+                                                outValue.clear();
+                                                return false;
+                                        }
+                                        // サロゲートペアの処理
+                                        if (codePoint >= 0xD800 && codePoint <= 0xDBFF &&
+                                            i + 6 + 6 <= text.size() &&
+                                            text[i + 6] == '\\' && text[i + 6 + 1] == 'u') {
+                                                unsigned int lowSurrogate = 0;
+                                                if (ParseHex4(text, i + 8, lowSurrogate) &&
+                                                    lowSurrogate >= 0xDC00 && lowSurrogate <= 0xDFFF) {
+                                                        unsigned int combined = 0x10000 +
+                                                                ((codePoint - 0xD800) << 10) +
+                                                                (lowSurrogate - 0xDC00);
+                                                        AppendUtf8CodePoint(outValue, combined);
+                                                        i += 11;
+                                                        continue;
+                                                }
+                                        }
+                                        AppendUtf8CodePoint(outValue, codePoint);
+                                        i += 5;
+                                        continue;
+                                }
+                        default:
+                                outValue.clear();
+                                return false;
+                        }
+                        ++i;
                         continue;
                 }
                 if (ch == '"') {

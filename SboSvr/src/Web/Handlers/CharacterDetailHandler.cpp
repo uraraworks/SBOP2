@@ -256,6 +256,7 @@ void CCharacterDetailHandler::Handle(const HttpRequest &request, HttpResponse &r
 
         // JSON レスポンスを構築する
         std::string charName = ToUtf8String(pChar->m_strCharName);
+        std::string charTalk = ToUtf8String(pChar->m_strTalk);
 
         std::ostringstream oss;
         oss << '{';
@@ -263,6 +264,7 @@ void CCharacterDetailHandler::Handle(const HttpRequest &request, HttpResponse &r
         // --- 基本情報 ---
         oss << "\"charId\":"    << pChar->m_dwCharID  << ',';
         oss << "\"charName\":\"" << JsonUtils::Escape(charName) << "\",";
+        oss << "\"talk\":\""    << JsonUtils::Escape(charTalk) << "\",";
         oss << "\"mapId\":"     << pChar->m_dwMapID   << ',';
         oss << "\"x\":"         << pChar->m_nMapX     << ',';
         oss << "\"y\":"         << pChar->m_nMapY     << ',';

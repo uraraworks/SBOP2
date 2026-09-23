@@ -102,6 +102,7 @@ public:
 	DWORD	GetNearCharID(DWORD dwCharID, SIZE &sizedistance);	// 近くにいる敵キャラIDを取得
 	void	SetPos(CInfoCharSvr *pInfoChar, DWORD dwMapID, int x, int y, BOOL bTail);	// キャラの座標を設定
 	void	ApplyAdminEditWarp(CInfoCharSvr *pInfoChar, DWORD dwNewMapID, int nNewX, int nNewY, int nNewDir);	// 管理画面によるキャラ位置編集を反映する
+	void	NotifyAdminEditCharInfo(CInfoCharSvr *pInfoChar);	// 管理画面による名前/会話等の編集を周囲・本人に反映する
 	void	RenewItemGrp(DWORD dwTypeID);	// 装備中のアイテム画像を更新
 	void	ProcAtack(CInfoCharSvr *pInfoChar);	// 攻撃処理
 

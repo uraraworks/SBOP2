@@ -25,6 +25,27 @@
 namespace
 {
 
+// 改行コードを "\r\n" に正規化する（単独の "\n" / "\r" もすべて "\r\n" にする）
+std::string NormalizeNewlines(const std::string &text)
+{
+        std::string result;
+        result.reserve(text.size());
+        for (size_t i = 0; i < text.size(); ++i) {
+                char ch = text[i];
+                if (ch == '\r') {
+                        result.append("\r\n");
+                        if (i + 1 < text.size() && text[i + 1] == '\n') {
+                                ++i;
+                        }
+                } else if (ch == '\n') {
+                        result.append("\r\n");
+                } else {
+                        result.push_back(ch);
+                }
+        }
+        return result;
+}
+
 // UTF-8 BOM を除去する
 std::string RemoveUtf8Bom(std::string text)
 {
@@ -221,6 +242,7 @@ std::string BuildBasicJson(const CInfoCharBase *pChar)
         oss << '{';
         oss << "\"charId\":"    << pChar->m_dwCharID  << ',';
         oss << "\"charName\":\"" << JsonUtils::Escape(ToUtf8String(pChar->m_strCharName)) << "\",";
+        oss << "\"talk\":\""    << JsonUtils::Escape(ToUtf8String(pChar->m_strTalk)) << "\",";
         oss << "\"mapId\":"     << pChar->m_dwMapID   << ',';
         oss << "\"x\":"         << pChar->m_nMapX     << ',';
         oss << "\"y\":"         << pChar->m_nMapY     << ',';
@@ -435,12 +457,31 @@ void CCharacterUpdateHandler::HandleBasic(const HttpRequest &request, HttpRespon
                 return;
         }
 
+        // 接続中クライアントへの再通知要否判定用に、変更前の値を退避しておく
+        CmyString oldCharName = pChar->m_strCharName;
+        CmyString oldTalk     = pChar->m_strTalk;
+        BOOL      bOldBlock   = pChar->m_bBlock;
+        BOOL      bOldPush    = pChar->m_bPush;
+        WORD      wOldFamilyID   = pChar->m_wFamilyID;
+        int       nOldGrpSize    = pChar->m_nGrpSize;
+        int       nOldSex        = pChar->m_nSex;
+        DWORD     dwOldMotionTypeID = pChar->m_dwMotionTypeID;
+        int       nOldMoveType   = pChar->m_nMoveType;
+
         // charName
         std::string strVal;
         if (JsonUtils::TryGetString(request.body, "charName", strVal)) {
                 CmyString newName;
                 if (SetStringFromUtf8(newName, strVal)) {
                         pChar->m_strCharName = newName;
+                }
+        }
+
+        // talk（会話文。改行は \r\n に正規化してから保存する）
+        if (JsonUtils::TryGetString(request.body, "talk", strVal)) {
+                CmyString newTalk;
+                if (SetStringFromUtf8(newTalk, NormalizeNewlines(strVal))) {
+                        pChar->m_strTalk = newTalk;
                 }
         }
 
@@ -491,6 +532,24 @@ void CCharacterUpdateHandler::HandleBasic(const HttpRequest &request, HttpRespon
         }
         if (JsonUtils::TryGetInt(request.body, "sex", nVal)) {
                 pChar->m_nSex = nVal;
+        }
+
+        // 表示系の値が実際に変わっていれば、周囲・本人へ最新キャラ情報を送り直す
+        // (ApplyAdminEditWarp が座標変更で既に送信済みでも、その後に familyId 等が
+        //  変わるケースがあるため、二重送信を許容してここでまとめて判定する)
+        BOOL bDisplayInfoChanged =
+                !(pChar->m_strCharName == static_cast<LPCTSTR>(oldCharName)) ||
+                !(pChar->m_strTalk == static_cast<LPCTSTR>(oldTalk)) ||
+                (pChar->m_bBlock != bOldBlock) ||
+                (pChar->m_bPush != bOldPush) ||
+                (pChar->m_wFamilyID != wOldFamilyID) ||
+                (pChar->m_nGrpSize != nOldGrpSize) ||
+                (pChar->m_nSex != nOldSex) ||
+                (pChar->m_dwMotionTypeID != dwOldMotionTypeID) ||
+                (pChar->m_nMoveType != nOldMoveType);
+        if (bDisplayInfoChanged) {
+                CInfoCharSvr *pInfoCharSvr = static_cast<CInfoCharSvr *>(pChar);
+                pCharLib->NotifyAdminEditCharInfo(pInfoCharSvr);
         }
 
         std::string json = BuildBasicJson(pChar);

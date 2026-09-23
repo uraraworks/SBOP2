@@ -2698,6 +2698,21 @@ void CLibInfoCharSvr::ApplyAdminEditWarp(CInfoCharSvr *pInfoChar, DWORD dwNewMap
 	}
 }
 
+void CLibInfoCharSvr::NotifyAdminEditCharInfo(CInfoCharSvr *pInfoChar)
+{
+	if (pInfoChar == NULL) return;
+
+	// 周囲AOIに最新キャラ情報をブロードキャスト(名前/会話等の表示系変更を反映)
+	CPacketCHAR_RES_CHARINFO PacketCHAR_RES_CHARINFO;
+	PacketCHAR_RES_CHARINFO.Make(pInfoChar);
+	m_pMainFrame->SendToScreenChar(pInfoChar, &PacketCHAR_RES_CHARINFO);
+
+	// 接続中PCなら本人にも最新情報を送る
+	if (pInfoChar->m_dwSessionID != 0) {
+		m_pSock->SendTo(pInfoChar->m_dwSessionID, &PacketCHAR_RES_CHARINFO);
+	}
+}
+
 void CLibInfoCharSvr::ProcChgPosRenew(CInfoCharSvr *pInfoChar)
 {
 	CPacketCHAR_MOVE_DIR_CHANGE Packet;

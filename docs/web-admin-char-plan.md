@@ -154,7 +154,7 @@ Response: { charId, charName, level, hp, maxHp, sp, maxSp, ..., equipment: {...}
 
 ### 基本情報・ステータス・装備・グラフィック更新
 ```
-PUT /api/characters/{charId}              → { charName, block, push, moveType, motionTypeId }
+PUT /api/characters/{charId}              → { charName, talk, block, push, moveType, motionTypeId }
 PUT /api/characters/{charId}/status       → { hp, maxHp, sp, maxSp, level, exp, stamina, ... }
 PUT /api/characters/{charId}/equipment    → { cloth, accesory1/2, armsRight/Left, head }
 PUT /api/characters/{charId}/graphics     → { npc, cloth, eye, eyeColor, ... (15 fields) }

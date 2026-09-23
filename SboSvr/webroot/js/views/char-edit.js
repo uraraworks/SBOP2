@@ -197,6 +197,16 @@ function mkTextFieldEl(labelText, maxlength) {
   return { wrap, inp };
 }
 
+function mkTextAreaFieldEl(labelText, rows) {
+  var { wrap, lbl } = mkField(labelText);
+  var inp = document.createElement("textarea");
+  inp.className = "form-input";
+  inp.rows = rows || 4;
+  lbl.appendChild(inp);
+  wrap.appendChild(inp);
+  return { wrap, inp };
+}
+
 function mkSpan(labelText) {
   var { wrap, lbl } = mkField(labelText);
   var span = mkEl("span", "form-value", "-");
@@ -297,6 +307,9 @@ function buildBasicTab() {
   var push  = mkCheckbox("プッシュ");
   grid.append(block.wrap, push.wrap);
 
+  var talk = mkTextAreaFieldEl("会話（Xで話しかけた時の文章。「@」1文字だけで会話イベント起動）", 6);
+  form.appendChild(talk.wrap);
+
   var actions = mkEl("div", "form-actions");
   var saveBtn = mkEl("button", "button primary", "保存");
   saveBtn.type = "submit";
@@ -310,6 +323,7 @@ function buildBasicTab() {
     moveStateSpan: moveStateSpan.span,
     isNpcSpan: isNpcSpan.span,
     charNameInp: charName.inp,
+    talkInp: talk.inp,
     mapIdInp: mapId.inp,
     xInp: x.inp,
     yInp: y.inp,
@@ -1425,6 +1439,7 @@ export function mount(container) {
     setText(basicTab.moveStateSpan, d.moveState);
     setText(basicTab.isNpcSpan,     d.isNpc ? "NPC" : "PC");
     if (basicTab.charNameInp) { basicTab.charNameInp.value = d.charName || ""; }
+    if (basicTab.talkInp) { basicTab.talkInp.value = d.talk || ""; }
     setNumInp(basicTab.mapIdInp,      d.mapId);
     setNumInp(basicTab.xInp,          d.x);
     setNumInp(basicTab.yInp,          d.y);
@@ -1483,6 +1498,7 @@ export function mount(container) {
 
     var body = {};
     body.charName    = basicTab.charNameInp.value;
+    body.talk        = basicTab.talkInp.value;
     var mapId2 = numVal(basicTab.mapIdInp);      if (mapId2 !== null) { body.mapId = mapId2; }
     var x2 = numVal(basicTab.xInp);             if (x2 !== null) { body.x = x2; }
     var y2 = numVal(basicTab.yInp);             if (y2 !== null) { body.y = y2; }

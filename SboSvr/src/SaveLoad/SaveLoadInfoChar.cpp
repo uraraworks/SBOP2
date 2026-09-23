@@ -10,7 +10,7 @@
 ///                  HP / MaxHP / SP / MaxSP / Exp / Level
 ///                  EquipItemIDCloth / EquipItemIDAcce1 / EquipItemIDAcce2
 ///                  EquipItemIDArmsRight / EquipItemIDArmsLeft / EquipItemIDHead
-///                  Block / Push / IsNPC / Sex / FamilyID / GrpSize / CharName
+///                  Block / Push / IsNPC / Sex / FamilyID / GrpSize / CharName / Talk
 ///      個別カラム(外見 GrpID 群 ×15):
 ///                  GrpIDNPC / GrpIDCloth / GrpIDEye / GrpIDEyeColor
 ///                  GrpIDHairType / GrpIDHairColor / GrpIDSP
@@ -43,6 +43,8 @@
 ///    EnsureTable() 冒頭で PRAGMA table_info(sys_char) を確認し、
 ///    旧 BLOB カラム (GrpIDData) が存在する場合は旧スキーマで全行を読み込み
 ///    メモリに復元 → DROP TABLE sys_char → 新 CREATE TABLE → 再書き込みする。
+///    また CREATE TABLE 後に Talk 列の有無を確認し、無ければ
+///    ALTER TABLE sys_char ADD COLUMN Talk TEXT DEFAULT '' で追加する。
 ///
 ///  派生クラス対応:
 ///    m_nMoveType カラムで型を識別し、読み込み時に GetNew(nMoveType) で
@@ -351,6 +353,7 @@ void CSaveLoadInfoChar::EnsureTable(void)
 		"  FamilyID               INTEGER,"				// m_wFamilyID
 		"  GrpSize                INTEGER,"				// m_nGrpSize
 		"  CharName               TEXT,"				// m_strCharName
+		"  Talk                   TEXT,"				// m_strTalk
 		// ---- 外見 GrpID 群 (×15) ----
 		"  GrpIDNPC               INTEGER,"				// m_wGrpIDNPC
 		"  GrpIDCloth             INTEGER,"				// m_wGrpIDCloth
@@ -416,6 +419,27 @@ void CSaveLoadInfoChar::EnsureTable(void)
 
 	sqlite3_exec(s_pDb, pszSql, NULL, NULL, NULL);
 
+	// ---- 既存テーブルへの Talk 列追加（旧スキーマからの増分マイグレーション） ----
+	{
+		bool bHasTalk = false;
+		sqlite3_stmt* pStmt = NULL;
+		if (sqlite3_prepare_v2(s_pDb, "PRAGMA table_info(sys_char);", -1, &pStmt, NULL) == SQLITE_OK) {
+			while (sqlite3_step(pStmt) == SQLITE_ROW) {
+				const char* pszColName = (const char*)sqlite3_column_text(pStmt, 1);
+				if (pszColName != NULL && strcmp(pszColName, "Talk") == 0) {
+					bHasTalk = true;
+					break;
+				}
+			}
+			sqlite3_finalize(pStmt);
+		}
+
+		if (!bHasTalk) {
+			sqlite3_exec(s_pDb, "ALTER TABLE sys_char ADD COLUMN Talk TEXT DEFAULT '';", NULL, NULL, NULL);
+			SboPlatform::WriteDebugLine("SaveLoadInfoChar: sys_char に Talk 列を追加\n");
+		}
+	}
+
 	// ---- サブテーブル: 所持アイテム ----
 	sqlite3_exec(s_pDb,
 		"CREATE TABLE IF NOT EXISTS sys_char_item("
@@ -457,7 +481,7 @@ void CSaveLoadInfoChar::SaveToNormalTable(void)
 		"  HP, MaxHP, SP, MaxSP, Exp, Level,"
 		"  EquipItemIDCloth, EquipItemIDAcce1, EquipItemIDAcce2,"
 		"  EquipItemIDArmsRight, EquipItemIDArmsLeft, EquipItemIDHead,"
-		"  Block, Push, IsNPC, Sex, FamilyID, GrpSize, CharName,"
+		"  Block, Push, IsNPC, Sex, FamilyID, GrpSize, CharName, Talk,"
 		// 外見 GrpID 群 ×15
 		"  GrpIDNPC, GrpIDCloth, GrpIDEye, GrpIDEyeColor,"
 		"  GrpIDHairType, GrpIDHairColor, GrpIDSP,"
@@ -482,17 +506,17 @@ void CSaveLoadInfoChar::SaveToNormalTable(void)
 		"  ?,?,?,?,?,?,?,"	//  1- 7: CharID〜MoveType
 		"  ?,?,?,?,?,?,"	//  8-13: HP〜Level
 		"  ?,?,?,?,?,?,"	// 14-19: EquipItemID 6個
-		"  ?,?,?,?,?,?,?,"	// 20-26: Block〜CharName
+		"  ?,?,?,?,?,?,?,?,"	// 20-27: Block〜CharName, Talk
 		// 外見 GrpID ×15
-		"  ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,"	// 27-41
+		"  ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,"	// 28-42
 		// ステータス ×20
-		"  ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,"	// 42-61
+		"  ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,"	// 43-62
 		// 初期 GrpID ×6
-		"  ?,?,?,?,?,?,"	// 62-67
+		"  ?,?,?,?,?,?,"	// 63-68
 		// 移動/検索 ×9
-		"  ?,?,?,?,?,?,?,?,?,"	// 68-76
+		"  ?,?,?,?,?,?,?,?,?,"	// 69-77
 		// NPC発生 ×6
-		"  ?,?,?,?,?,?"		// 77-82
+		"  ?,?,?,?,?,?"		// 78-83
 		");";
 
 	sqlite3_stmt* pStmtChar = NULL;
@@ -557,71 +581,75 @@ void CSaveLoadInfoChar::SaveToNormalTable(void)
 		LPCSTR pszName = pInfo->m_strCharName.GetUtf8Pointer();
 		sqlite3_bind_text(pStmtChar, 26, pszName, -1, SQLITE_TRANSIENT);
 
-		// 外見 GrpID 群 (27-41)
-		sqlite3_bind_int(pStmtChar, 27, (int)pInfo->m_wGrpIDNPC);
-		sqlite3_bind_int(pStmtChar, 28, (int)pInfo->m_wGrpIDCloth);
-		sqlite3_bind_int(pStmtChar, 29, (int)pInfo->m_wGrpIDEye);
-		sqlite3_bind_int(pStmtChar, 30, (int)pInfo->m_wGrpIDEyeColor);
-		sqlite3_bind_int(pStmtChar, 31, (int)pInfo->m_wGrpIDHairType);
-		sqlite3_bind_int(pStmtChar, 32, (int)pInfo->m_wGrpIDHairColor);
-		sqlite3_bind_int(pStmtChar, 33, (int)pInfo->m_wGrpIDSP);
-		sqlite3_bind_int(pStmtChar, 34, (int)pInfo->m_wGrpIDTmpMain);
-		sqlite3_bind_int(pStmtChar, 35, (int)pInfo->m_wGrpIDTmpSub);
-		sqlite3_bind_int(pStmtChar, 36, (int)pInfo->m_wGrpIDAcce);
-		sqlite3_bind_int(pStmtChar, 37, (int)pInfo->m_wGrpIDArmsMain);
-		sqlite3_bind_int(pStmtChar, 38, (int)pInfo->m_wGrpIDArmsSub);
-		sqlite3_bind_int(pStmtChar, 39, (int)pInfo->m_wGrpIDArmsLeftMain);
-		sqlite3_bind_int(pStmtChar, 40, (int)pInfo->m_wGrpIDArmsLeftSub);
-		sqlite3_bind_int(pStmtChar, 41, (int)pInfo->m_wGrpIDInitNPC);
+		// 会話データ (27)
+		LPCSTR pszTalk = pInfo->m_strTalk.GetUtf8Pointer();
+		sqlite3_bind_text(pStmtChar, 27, pszTalk, -1, SQLITE_TRANSIENT);
 
-		// ステータス能力値 (42-61)
-		sqlite3_bind_int(pStmtChar, 42, (int)pInfo->m_wStamina);
-		sqlite3_bind_int(pStmtChar, 43, (int)pInfo->m_wPower);
-		sqlite3_bind_int(pStmtChar, 44, (int)pInfo->m_wStrength);
-		sqlite3_bind_int(pStmtChar, 45, (int)pInfo->m_wMagic);
-		sqlite3_bind_int(pStmtChar, 46, (int)pInfo->m_wSkillful);
-		sqlite3_bind_int(pStmtChar, 47, (int)pInfo->m_wAbillityAT);
-		sqlite3_bind_int(pStmtChar, 48, (int)pInfo->m_wAbillityDF);
-		sqlite3_bind_int(pStmtChar, 49, (int)pInfo->m_wPAtack);
-		sqlite3_bind_int(pStmtChar, 50, (int)pInfo->m_wPDefense);
-		sqlite3_bind_int(pStmtChar, 51, (int)pInfo->m_wPMagic);
-		sqlite3_bind_int(pStmtChar, 52, (int)pInfo->m_wPMagicDefense);
-		sqlite3_bind_int(pStmtChar, 53, (int)pInfo->m_wPHitAverage);
-		sqlite3_bind_int(pStmtChar, 54, (int)pInfo->m_wPAvoidAverage);
-		sqlite3_bind_int(pStmtChar, 55, (int)pInfo->m_wPCriticalAverage);
-		sqlite3_bind_int(pStmtChar, 56, (int)pInfo->m_wAttrFire);
-		sqlite3_bind_int(pStmtChar, 57, (int)pInfo->m_wAttrWind);
-		sqlite3_bind_int(pStmtChar, 58, (int)pInfo->m_wAttrWater);
-		sqlite3_bind_int(pStmtChar, 59, (int)pInfo->m_wAttrEarth);
-		sqlite3_bind_int(pStmtChar, 60, (int)pInfo->m_wAttrLight);
-		sqlite3_bind_int(pStmtChar, 61, (int)pInfo->m_wAttrDark);
+		// 外見 GrpID 群 (28-42)
+		sqlite3_bind_int(pStmtChar, 28, (int)pInfo->m_wGrpIDNPC);
+		sqlite3_bind_int(pStmtChar, 29, (int)pInfo->m_wGrpIDCloth);
+		sqlite3_bind_int(pStmtChar, 30, (int)pInfo->m_wGrpIDEye);
+		sqlite3_bind_int(pStmtChar, 31, (int)pInfo->m_wGrpIDEyeColor);
+		sqlite3_bind_int(pStmtChar, 32, (int)pInfo->m_wGrpIDHairType);
+		sqlite3_bind_int(pStmtChar, 33, (int)pInfo->m_wGrpIDHairColor);
+		sqlite3_bind_int(pStmtChar, 34, (int)pInfo->m_wGrpIDSP);
+		sqlite3_bind_int(pStmtChar, 35, (int)pInfo->m_wGrpIDTmpMain);
+		sqlite3_bind_int(pStmtChar, 36, (int)pInfo->m_wGrpIDTmpSub);
+		sqlite3_bind_int(pStmtChar, 37, (int)pInfo->m_wGrpIDAcce);
+		sqlite3_bind_int(pStmtChar, 38, (int)pInfo->m_wGrpIDArmsMain);
+		sqlite3_bind_int(pStmtChar, 39, (int)pInfo->m_wGrpIDArmsSub);
+		sqlite3_bind_int(pStmtChar, 40, (int)pInfo->m_wGrpIDArmsLeftMain);
+		sqlite3_bind_int(pStmtChar, 41, (int)pInfo->m_wGrpIDArmsLeftSub);
+		sqlite3_bind_int(pStmtChar, 42, (int)pInfo->m_wGrpIDInitNPC);
 
-		// 初期外見 GrpID (62-67)
-		sqlite3_bind_int(pStmtChar, 62, (int)pInfo->m_wGrpIDInitCloth);
-		sqlite3_bind_int(pStmtChar, 63, (int)pInfo->m_wGrpIDInitEye);
-		sqlite3_bind_int(pStmtChar, 64, (int)pInfo->m_wGrpIDInitEyeColor);
-		sqlite3_bind_int(pStmtChar, 65, (int)pInfo->m_wGrpIDInitHairType);
-		sqlite3_bind_int(pStmtChar, 66, (int)pInfo->m_wGrpIDInitHairColor);
-		sqlite3_bind_int(pStmtChar, 67, (int)pInfo->m_wGrpIDInitSP);
+		// ステータス能力値 (43-62)
+		sqlite3_bind_int(pStmtChar, 43, (int)pInfo->m_wStamina);
+		sqlite3_bind_int(pStmtChar, 44, (int)pInfo->m_wPower);
+		sqlite3_bind_int(pStmtChar, 45, (int)pInfo->m_wStrength);
+		sqlite3_bind_int(pStmtChar, 46, (int)pInfo->m_wMagic);
+		sqlite3_bind_int(pStmtChar, 47, (int)pInfo->m_wSkillful);
+		sqlite3_bind_int(pStmtChar, 48, (int)pInfo->m_wAbillityAT);
+		sqlite3_bind_int(pStmtChar, 49, (int)pInfo->m_wAbillityDF);
+		sqlite3_bind_int(pStmtChar, 50, (int)pInfo->m_wPAtack);
+		sqlite3_bind_int(pStmtChar, 51, (int)pInfo->m_wPDefense);
+		sqlite3_bind_int(pStmtChar, 52, (int)pInfo->m_wPMagic);
+		sqlite3_bind_int(pStmtChar, 53, (int)pInfo->m_wPMagicDefense);
+		sqlite3_bind_int(pStmtChar, 54, (int)pInfo->m_wPHitAverage);
+		sqlite3_bind_int(pStmtChar, 55, (int)pInfo->m_wPAvoidAverage);
+		sqlite3_bind_int(pStmtChar, 56, (int)pInfo->m_wPCriticalAverage);
+		sqlite3_bind_int(pStmtChar, 57, (int)pInfo->m_wAttrFire);
+		sqlite3_bind_int(pStmtChar, 58, (int)pInfo->m_wAttrWind);
+		sqlite3_bind_int(pStmtChar, 59, (int)pInfo->m_wAttrWater);
+		sqlite3_bind_int(pStmtChar, 60, (int)pInfo->m_wAttrEarth);
+		sqlite3_bind_int(pStmtChar, 61, (int)pInfo->m_wAttrLight);
+		sqlite3_bind_int(pStmtChar, 62, (int)pInfo->m_wAttrDark);
 
-		// 移動/検索スカラ (68-76)
-		sqlite3_bind_int(pStmtChar, 68, pInfo->m_nMaxItemCount);
-		sqlite3_bind_int(pStmtChar, 69, pInfo->m_nDropItemAverage);
-		sqlite3_bind_int(pStmtChar, 70, pInfo->m_nMoveAverage);
-		sqlite3_bind_int(pStmtChar, 71, pInfo->m_nMoveAverageBattle);
-		sqlite3_bind_int(pStmtChar, 72, (int)pInfo->m_dwMoveWait);
-		sqlite3_bind_int(pStmtChar, 73, (int)pInfo->m_dwMoveWaitBattle);
-		sqlite3_bind_int(pStmtChar, 74, (int)pInfo->m_sizeSearchDistance.cx);
-		sqlite3_bind_int(pStmtChar, 75, (int)pInfo->m_sizeSearchDistance.cy);
-		sqlite3_bind_int(pStmtChar, 76, (int)pInfo->m_dwMotionTypeID);
+		// 初期外見 GrpID (63-68)
+		sqlite3_bind_int(pStmtChar, 63, (int)pInfo->m_wGrpIDInitCloth);
+		sqlite3_bind_int(pStmtChar, 64, (int)pInfo->m_wGrpIDInitEye);
+		sqlite3_bind_int(pStmtChar, 65, (int)pInfo->m_wGrpIDInitEyeColor);
+		sqlite3_bind_int(pStmtChar, 66, (int)pInfo->m_wGrpIDInitHairType);
+		sqlite3_bind_int(pStmtChar, 67, (int)pInfo->m_wGrpIDInitHairColor);
+		sqlite3_bind_int(pStmtChar, 68, (int)pInfo->m_wGrpIDInitSP);
 
-		// NPC発生情報 (77-82)
-		sqlite3_bind_int(pStmtChar, 77, (int)pInfo->m_dwPutCycle);
-		sqlite3_bind_int(pStmtChar, 78, pInfo->m_nPutMoveType);
-		sqlite3_bind_int(pStmtChar, 79, pInfo->m_nMaxPutCount);
-		sqlite3_bind_int(pStmtChar, 80, pInfo->m_nPutAverage);
-		sqlite3_bind_int(pStmtChar, 81, pInfo->m_ptPutArea.x);
-		sqlite3_bind_int(pStmtChar, 82, pInfo->m_ptPutArea.y);
+		// 移動/検索スカラ (69-77)
+		sqlite3_bind_int(pStmtChar, 69, pInfo->m_nMaxItemCount);
+		sqlite3_bind_int(pStmtChar, 70, pInfo->m_nDropItemAverage);
+		sqlite3_bind_int(pStmtChar, 71, pInfo->m_nMoveAverage);
+		sqlite3_bind_int(pStmtChar, 72, pInfo->m_nMoveAverageBattle);
+		sqlite3_bind_int(pStmtChar, 73, (int)pInfo->m_dwMoveWait);
+		sqlite3_bind_int(pStmtChar, 74, (int)pInfo->m_dwMoveWaitBattle);
+		sqlite3_bind_int(pStmtChar, 75, (int)pInfo->m_sizeSearchDistance.cx);
+		sqlite3_bind_int(pStmtChar, 76, (int)pInfo->m_sizeSearchDistance.cy);
+		sqlite3_bind_int(pStmtChar, 77, (int)pInfo->m_dwMotionTypeID);
+
+		// NPC発生情報 (78-83)
+		sqlite3_bind_int(pStmtChar, 78, (int)pInfo->m_dwPutCycle);
+		sqlite3_bind_int(pStmtChar, 79, pInfo->m_nPutMoveType);
+		sqlite3_bind_int(pStmtChar, 80, pInfo->m_nMaxPutCount);
+		sqlite3_bind_int(pStmtChar, 81, pInfo->m_nPutAverage);
+		sqlite3_bind_int(pStmtChar, 82, pInfo->m_ptPutArea.x);
+		sqlite3_bind_int(pStmtChar, 83, pInfo->m_ptPutArea.y);
 
 		sqlite3_step(pStmtChar);
 		sqlite3_reset(pStmtChar);
@@ -670,26 +698,26 @@ BOOL CSaveLoadInfoChar::LoadFromNormalTable(PCLibInfoBase pDst)
 		"  HP, MaxHP, SP, MaxSP, Exp, Level,"								// 7-12
 		"  EquipItemIDCloth, EquipItemIDAcce1, EquipItemIDAcce2,"			// 13-15
 		"  EquipItemIDArmsRight, EquipItemIDArmsLeft, EquipItemIDHead,"		// 16-18
-		"  Block, Push, IsNPC, Sex, FamilyID, GrpSize, CharName,"			// 19-25
-		// 外見 GrpID 群 ×15 (26-40)
+		"  Block, Push, IsNPC, Sex, FamilyID, GrpSize, CharName, Talk,"		// 19-26
+		// 外見 GrpID 群 ×15 (27-41)
 		"  GrpIDNPC, GrpIDCloth, GrpIDEye, GrpIDEyeColor,"
 		"  GrpIDHairType, GrpIDHairColor, GrpIDSP,"
 		"  GrpIDTmpMain, GrpIDTmpSub, GrpIDAcce,"
 		"  GrpIDArmsMain, GrpIDArmsSub, GrpIDArmsLeftMain, GrpIDArmsLeftSub,"
 		"  GrpIDInitNPC,"
-		// ステータス能力値 ×20 (41-60)
+		// ステータス能力値 ×20 (42-61)
 		"  Stamina, Power, Strength, Magic, Skillful,"
 		"  AbillityAT, AbillityDF,"
 		"  PAtack, PDefense, PMagic, PMagicDefense,"
 		"  PHitAverage, PAvoidAverage, PCriticalAverage,"
 		"  AttrFire, AttrWind, AttrWater, AttrEarth, AttrLight, AttrDark,"
-		// 初期 GrpID ×6 (61-66)
+		// 初期 GrpID ×6 (62-67)
 		"  GrpIDInitCloth, GrpIDInitEye, GrpIDInitEyeColor,"
 		"  GrpIDInitHairType, GrpIDInitHairColor, GrpIDInitSP,"
-		// 移動/検索スカラ ×9 (67-75)
+		// 移動/検索スカラ ×9 (68-76)
 		"  MaxItemCount, DropItemAverage, MoveAverage, MoveAverageBattle,"
 		"  MoveWait, MoveWaitBattle, SearchDistanceCX, SearchDistanceCY, MotionTypeID,"
-		// NPC発生情報 ×6 (76-81)
+		// NPC発生情報 ×6 (77-82)
 		"  PutCycle, PutMoveType, MaxPutCount, PutAverage, PutAreaX, PutAreaY"
 		" FROM sys_char;";
 
@@ -739,71 +767,74 @@ BOOL CSaveLoadInfoChar::LoadFromNormalTable(PCLibInfoBase pDst)
 		const char* pszName = (const char*)sqlite3_column_text(pStmt, 25);
 		if (pszName != NULL) pInfo->m_strCharName = (LPCTSTR)Utf8ToTString(pszName);
 
-		// 外見 GrpID 群 (26-40)
-		pInfo->m_wGrpIDNPC          = (WORD)sqlite3_column_int(pStmt, 26);
-		pInfo->m_wGrpIDCloth        = (WORD)sqlite3_column_int(pStmt, 27);
-		pInfo->m_wGrpIDEye          = (WORD)sqlite3_column_int(pStmt, 28);
-		pInfo->m_wGrpIDEyeColor     = (WORD)sqlite3_column_int(pStmt, 29);
-		pInfo->m_wGrpIDHairType     = (WORD)sqlite3_column_int(pStmt, 30);
-		pInfo->m_wGrpIDHairColor    = (WORD)sqlite3_column_int(pStmt, 31);
-		pInfo->m_wGrpIDSP           = (WORD)sqlite3_column_int(pStmt, 32);
-		pInfo->m_wGrpIDTmpMain      = (WORD)sqlite3_column_int(pStmt, 33);
-		pInfo->m_wGrpIDTmpSub       = (WORD)sqlite3_column_int(pStmt, 34);
-		pInfo->m_wGrpIDAcce         = (WORD)sqlite3_column_int(pStmt, 35);
-		pInfo->m_wGrpIDArmsMain     = (WORD)sqlite3_column_int(pStmt, 36);
-		pInfo->m_wGrpIDArmsSub      = (WORD)sqlite3_column_int(pStmt, 37);
-		pInfo->m_wGrpIDArmsLeftMain = (WORD)sqlite3_column_int(pStmt, 38);
-		pInfo->m_wGrpIDArmsLeftSub  = (WORD)sqlite3_column_int(pStmt, 39);
-		pInfo->m_wGrpIDInitNPC      = (WORD)sqlite3_column_int(pStmt, 40);
+		const char* pszTalk = (const char*)sqlite3_column_text(pStmt, 26);
+		pInfo->m_strTalk = (pszTalk != NULL) ? (LPCTSTR)Utf8ToTString(pszTalk) : _T("");
 
-		// ステータス能力値 (41-60)
-		pInfo->m_wStamina           = (WORD)sqlite3_column_int(pStmt, 41);
-		pInfo->m_wPower             = (WORD)sqlite3_column_int(pStmt, 42);
-		pInfo->m_wStrength          = (WORD)sqlite3_column_int(pStmt, 43);
-		pInfo->m_wMagic             = (WORD)sqlite3_column_int(pStmt, 44);
-		pInfo->m_wSkillful          = (WORD)sqlite3_column_int(pStmt, 45);
-		pInfo->m_wAbillityAT        = (WORD)sqlite3_column_int(pStmt, 46);
-		pInfo->m_wAbillityDF        = (WORD)sqlite3_column_int(pStmt, 47);
-		pInfo->m_wPAtack            = (WORD)sqlite3_column_int(pStmt, 48);
-		pInfo->m_wPDefense          = (WORD)sqlite3_column_int(pStmt, 49);
-		pInfo->m_wPMagic            = (WORD)sqlite3_column_int(pStmt, 50);
-		pInfo->m_wPMagicDefense     = (WORD)sqlite3_column_int(pStmt, 51);
-		pInfo->m_wPHitAverage       = (WORD)sqlite3_column_int(pStmt, 52);
-		pInfo->m_wPAvoidAverage     = (WORD)sqlite3_column_int(pStmt, 53);
-		pInfo->m_wPCriticalAverage  = (WORD)sqlite3_column_int(pStmt, 54);
-		pInfo->m_wAttrFire          = (WORD)sqlite3_column_int(pStmt, 55);
-		pInfo->m_wAttrWind          = (WORD)sqlite3_column_int(pStmt, 56);
-		pInfo->m_wAttrWater         = (WORD)sqlite3_column_int(pStmt, 57);
-		pInfo->m_wAttrEarth         = (WORD)sqlite3_column_int(pStmt, 58);
-		pInfo->m_wAttrLight         = (WORD)sqlite3_column_int(pStmt, 59);
-		pInfo->m_wAttrDark          = (WORD)sqlite3_column_int(pStmt, 60);
+		// 外見 GrpID 群 (27-41)
+		pInfo->m_wGrpIDNPC          = (WORD)sqlite3_column_int(pStmt, 27);
+		pInfo->m_wGrpIDCloth        = (WORD)sqlite3_column_int(pStmt, 28);
+		pInfo->m_wGrpIDEye          = (WORD)sqlite3_column_int(pStmt, 29);
+		pInfo->m_wGrpIDEyeColor     = (WORD)sqlite3_column_int(pStmt, 30);
+		pInfo->m_wGrpIDHairType     = (WORD)sqlite3_column_int(pStmt, 31);
+		pInfo->m_wGrpIDHairColor    = (WORD)sqlite3_column_int(pStmt, 32);
+		pInfo->m_wGrpIDSP           = (WORD)sqlite3_column_int(pStmt, 33);
+		pInfo->m_wGrpIDTmpMain      = (WORD)sqlite3_column_int(pStmt, 34);
+		pInfo->m_wGrpIDTmpSub       = (WORD)sqlite3_column_int(pStmt, 35);
+		pInfo->m_wGrpIDAcce         = (WORD)sqlite3_column_int(pStmt, 36);
+		pInfo->m_wGrpIDArmsMain     = (WORD)sqlite3_column_int(pStmt, 37);
+		pInfo->m_wGrpIDArmsSub      = (WORD)sqlite3_column_int(pStmt, 38);
+		pInfo->m_wGrpIDArmsLeftMain = (WORD)sqlite3_column_int(pStmt, 39);
+		pInfo->m_wGrpIDArmsLeftSub  = (WORD)sqlite3_column_int(pStmt, 40);
+		pInfo->m_wGrpIDInitNPC      = (WORD)sqlite3_column_int(pStmt, 41);
 
-		// 初期外見 GrpID (61-66)
-		pInfo->m_wGrpIDInitCloth    = (WORD)sqlite3_column_int(pStmt, 61);
-		pInfo->m_wGrpIDInitEye      = (WORD)sqlite3_column_int(pStmt, 62);
-		pInfo->m_wGrpIDInitEyeColor = (WORD)sqlite3_column_int(pStmt, 63);
-		pInfo->m_wGrpIDInitHairType = (WORD)sqlite3_column_int(pStmt, 64);
-		pInfo->m_wGrpIDInitHairColor= (WORD)sqlite3_column_int(pStmt, 65);
-		pInfo->m_wGrpIDInitSP       = (WORD)sqlite3_column_int(pStmt, 66);
+		// ステータス能力値 (42-61)
+		pInfo->m_wStamina           = (WORD)sqlite3_column_int(pStmt, 42);
+		pInfo->m_wPower             = (WORD)sqlite3_column_int(pStmt, 43);
+		pInfo->m_wStrength          = (WORD)sqlite3_column_int(pStmt, 44);
+		pInfo->m_wMagic             = (WORD)sqlite3_column_int(pStmt, 45);
+		pInfo->m_wSkillful          = (WORD)sqlite3_column_int(pStmt, 46);
+		pInfo->m_wAbillityAT        = (WORD)sqlite3_column_int(pStmt, 47);
+		pInfo->m_wAbillityDF        = (WORD)sqlite3_column_int(pStmt, 48);
+		pInfo->m_wPAtack            = (WORD)sqlite3_column_int(pStmt, 49);
+		pInfo->m_wPDefense          = (WORD)sqlite3_column_int(pStmt, 50);
+		pInfo->m_wPMagic            = (WORD)sqlite3_column_int(pStmt, 51);
+		pInfo->m_wPMagicDefense     = (WORD)sqlite3_column_int(pStmt, 52);
+		pInfo->m_wPHitAverage       = (WORD)sqlite3_column_int(pStmt, 53);
+		pInfo->m_wPAvoidAverage     = (WORD)sqlite3_column_int(pStmt, 54);
+		pInfo->m_wPCriticalAverage  = (WORD)sqlite3_column_int(pStmt, 55);
+		pInfo->m_wAttrFire          = (WORD)sqlite3_column_int(pStmt, 56);
+		pInfo->m_wAttrWind          = (WORD)sqlite3_column_int(pStmt, 57);
+		pInfo->m_wAttrWater         = (WORD)sqlite3_column_int(pStmt, 58);
+		pInfo->m_wAttrEarth         = (WORD)sqlite3_column_int(pStmt, 59);
+		pInfo->m_wAttrLight         = (WORD)sqlite3_column_int(pStmt, 60);
+		pInfo->m_wAttrDark          = (WORD)sqlite3_column_int(pStmt, 61);
 
-		// 移動/検索スカラ (67-75)
-		pInfo->m_nMaxItemCount         = sqlite3_column_int(pStmt, 67);
-		pInfo->m_nDropItemAverage      = sqlite3_column_int(pStmt, 68);
-		pInfo->m_nMoveAverage          = sqlite3_column_int(pStmt, 69);
-		pInfo->m_nMoveAverageBattle    = sqlite3_column_int(pStmt, 70);
-		pInfo->m_dwMoveWait            = (DWORD)sqlite3_column_int(pStmt, 71);
-		pInfo->m_dwMoveWaitBattle      = (DWORD)sqlite3_column_int(pStmt, 72);
-		pInfo->m_sizeSearchDistance.cx = (LONG)sqlite3_column_int(pStmt, 73);
-		pInfo->m_sizeSearchDistance.cy = (LONG)sqlite3_column_int(pStmt, 74);
-		pInfo->m_dwMotionTypeID        = (DWORD)sqlite3_column_int(pStmt, 75);
+		// 初期外見 GrpID (62-67)
+		pInfo->m_wGrpIDInitCloth    = (WORD)sqlite3_column_int(pStmt, 62);
+		pInfo->m_wGrpIDInitEye      = (WORD)sqlite3_column_int(pStmt, 63);
+		pInfo->m_wGrpIDInitEyeColor = (WORD)sqlite3_column_int(pStmt, 64);
+		pInfo->m_wGrpIDInitHairType = (WORD)sqlite3_column_int(pStmt, 65);
+		pInfo->m_wGrpIDInitHairColor= (WORD)sqlite3_column_int(pStmt, 66);
+		pInfo->m_wGrpIDInitSP       = (WORD)sqlite3_column_int(pStmt, 67);
 
-		// NPC発生情報 (76-81)
-		pInfo->m_dwPutCycle   = (DWORD)sqlite3_column_int(pStmt, 76);
-		pInfo->m_nPutMoveType = sqlite3_column_int(pStmt, 77);
-		pInfo->m_nMaxPutCount = sqlite3_column_int(pStmt, 78);
-		pInfo->m_nPutAverage  = sqlite3_column_int(pStmt, 79);
-		pInfo->m_ptPutArea.x  = sqlite3_column_int(pStmt, 80);
-		pInfo->m_ptPutArea.y  = sqlite3_column_int(pStmt, 81);
+		// 移動/検索スカラ (68-76)
+		pInfo->m_nMaxItemCount         = sqlite3_column_int(pStmt, 68);
+		pInfo->m_nDropItemAverage      = sqlite3_column_int(pStmt, 69);
+		pInfo->m_nMoveAverage          = sqlite3_column_int(pStmt, 70);
+		pInfo->m_nMoveAverageBattle    = sqlite3_column_int(pStmt, 71);
+		pInfo->m_dwMoveWait            = (DWORD)sqlite3_column_int(pStmt, 72);
+		pInfo->m_dwMoveWaitBattle      = (DWORD)sqlite3_column_int(pStmt, 73);
+		pInfo->m_sizeSearchDistance.cx = (LONG)sqlite3_column_int(pStmt, 74);
+		pInfo->m_sizeSearchDistance.cy = (LONG)sqlite3_column_int(pStmt, 75);
+		pInfo->m_dwMotionTypeID        = (DWORD)sqlite3_column_int(pStmt, 76);
+
+		// NPC発生情報 (77-82)
+		pInfo->m_dwPutCycle   = (DWORD)sqlite3_column_int(pStmt, 77);
+		pInfo->m_nPutMoveType = sqlite3_column_int(pStmt, 78);
+		pInfo->m_nMaxPutCount = sqlite3_column_int(pStmt, 79);
+		pInfo->m_nPutAverage  = sqlite3_column_int(pStmt, 80);
+		pInfo->m_ptPutArea.x  = sqlite3_column_int(pStmt, 81);
+		pInfo->m_ptPutArea.y  = sqlite3_column_int(pStmt, 82);
 
 		// ライブラリに追加（m_dwCharID が 0 でないので GetNewID() は呼ばれない）
 		pDst->Add(pInfo);
