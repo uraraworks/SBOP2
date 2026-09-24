@@ -641,7 +641,7 @@ BOOL CUraraSockTCPSelect::CreateWakeupSocket(void)
     addr.sin_port        = 0;   // 空きポートを OS に選ばせる
     addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
-    if (bind(m_sockWakeup, reinterpret_cast<LPSOCKADDR>(&addr), sizeof(addr)) == SOCKET_ERROR) {
+    if (::bind(m_sockWakeup, reinterpret_cast<LPSOCKADDR>(&addr), sizeof(addr)) == SOCKET_ERROR) {
         closesocket(m_sockWakeup);
         m_sockWakeup = INVALID_SOCKET;
         return FALSE;
@@ -869,7 +869,7 @@ BOOL CUraraSockTCPSelect::Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WO
     addr.sin_port        = htons(m_wPort);
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    if (bind(m_socket, reinterpret_cast<LPSOCKADDR>(&addr), sizeof(addr)) == SOCKET_ERROR) {
+    if (::bind(m_socket, reinterpret_cast<LPSOCKADDR>(&addr), sizeof(addr)) == SOCKET_ERROR) {
         closesocket(m_socket);
         m_socket = INVALID_SOCKET;
         return FALSE;

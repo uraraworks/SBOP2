@@ -1066,7 +1066,7 @@ BOOL CUraraSockTCPImpl::MainOnCreate(HWND hWnd, LPCREATESTRUCT)
         m_sockAddr.sin_family = AF_INET;
         m_sockAddr.sin_port = htons(m_wPort);
         m_sockAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-        if (bind(m_socket, reinterpret_cast<LPSOCKADDR>(&m_sockAddr), sizeof(m_sockAddr)) == SOCKET_ERROR) {
+        if (::bind(m_socket, reinterpret_cast<LPSOCKADDR>(&m_sockAddr), sizeof(m_sockAddr)) == SOCKET_ERROR) {
             return FALSE;
         }
         if (listen(m_socket, SOMAXCONN) == SOCKET_ERROR) {
