@@ -45,7 +45,7 @@
 
 - **`printf` はブラウザの devtools コンソールに出ない。** Emscripten では printf 出力がコンソールに流れないため、診断ログは `SboDbgLog`(=`SDL_Log` マクロ, `SboCli_priv.h:386`) を使う。コンソールは shell.html の `<textarea id="output">` にもミラーされる。
 
-- **`build-sbocli-browser-title.ps1` の `$sources` に .cpp のパスが直書きされている。** 共有ファイル（`Common/` や `SboCli/src/Platform/`）を移動・改名すると、ネイティブビルドとテストが全部通ってもブラウザ版だけ壊れる（実例: `SboCli/src/Platform/SjisConvert.cpp` → `Common/Platform/` 移動時に `SboCli.vcxproj` は直したがスクリプトを直し忘れ、`browser preflight failed: SboCli/src/Platform/SjisConvert.cpp` で落ちた）。共通コードやプラットフォーム層のファイルを動かしたら、必ずブラウザ版ビルドも回す。
+- **ブラウザ版のソース一覧は `.vcxproj` とは別管理（`tools/browser-sources.txt`）。** 共有ファイル（`Common/` や `SboCli/src/Platform/`）を移動・改名すると、ネイティブビルドとテストが全部通ってもブラウザ版だけ壊れる（実例: `SboCli/src/Platform/SjisConvert.cpp` → `Common/Platform/` 移動時に `SboCli.vcxproj` は直したがブラウザ版の一覧（当時はスクリプトに直書き）を直し忘れ、`browser preflight failed: SboCli/src/Platform/SjisConvert.cpp` で落ちた）。共通コードやプラットフォーム層のファイルを動かしたら、必ずブラウザ版ビルドも回す。
 
 - **cl.exe フォールバック用の Emscripten スタブは `tools/msvc-stubs/emscripten/` に置く（リポジトリルートの `emscripten/` に置くと `Get-IncludeArgs` 経由で em++ のインクルードパスにも入り本物のヘッダを shadow する）。** cl.exe は `_WIN32` を必ず定義するため `#if defined(_WIN32)...#else #include <emscripten/em_js.h>` を通れず `/FI` で em_js.h スタブを強制インクルードする。SDL_ttf.h は em++ では ports 供給だが cl.exe 分岐だけ `SDL2_ttf/include` を追加する必要がある。cl.exe の COFF `.obj` を `out/browser-preflight/` 直下に出すと em++ がリンク対象に拾ってしまうため `msvc-syntax-check/` サブディレクトリへ `.obj` 拡張子で退避する。
 

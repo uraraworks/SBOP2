@@ -1,15 +1,7 @@
 ﻿param(
     [string]$OutDir = "out/browser-preflight",
-    [string[]]$Sources = @(
-        "SboCli/src/BrowserMain.cpp",
-        "SboCli/src/Lib/Img32.cpp",
-        "SboCli/src/Layer/LayerLogo.cpp",
-        "SboCli/src/Layer/LayerCloud.cpp",
-        "SboCli/src/Layer/LayerTitle.cpp",
-        "SboCli/src/MgrSound.cpp",
-        "SboCli/src/MgrData.cpp",
-        "SboCli/src/MainFrame/MainFrame.cpp"
-    ),
+    # 未指定(空)の場合は tools/browser-sources.txt から全件読み込む
+    [string[]]$Sources = @(),
     # 差分ビルドを無効化して全ファイルを再コンパイルする
     [switch]$Force,
     [switch]$Rebuild  # -Force の別名（後方互換用）
@@ -24,6 +16,27 @@ $outPath = Join-Path $repoRoot $OutDir
 
 # -Rebuild は -Force の別名
 if ($Rebuild) { $Force = $true }
+
+function Get-BrowserSourceList {
+    param([string]$Path)
+    if (-not (Test-Path $Path)) {
+        throw "ブラウザ版ソース一覧ファイルが見つかりません: $Path"
+    }
+    $lines = Get-Content -Path $Path -Encoding utf8
+    $result = New-Object System.Collections.Generic.List[string]
+    foreach ($line in $lines) {
+        $trimmed = $line.Trim()
+        if ($trimmed -eq '') { continue }
+        if ($trimmed.StartsWith('#')) { continue }
+        $result.Add($trimmed)
+    }
+    return $result.ToArray()
+}
+
+if ($Sources.Count -eq 0) {
+    $sourcesListPath = Join-Path $scriptDir "browser-sources.txt"
+    $Sources = Get-BrowserSourceList -Path $sourcesListPath
+}
 
 function Resolve-Empp {
     $cmd = Get-Command em++ -ErrorAction SilentlyContinue
