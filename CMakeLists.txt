@@ -1,7 +1,8 @@
-# SboSvr の非Windows（Linux）ビルド定義
+# SboSvr / SboSvrTest の非Windows（Linux）ビルド定義
 #
 #   cmake -S . -B out/cmake-linux -DCMAKE_BUILD_TYPE=Release
 #   cmake --build out/cmake-linux -j
+#   ctest --test-dir out/cmake-linux --output-on-failure   （SboSvrTest を実行）
 #
 # Windows の正式ビルドは従来どおり SBO.sln（Visual Studio）で行う。
 # ここはクラウドセッション／ステージング用（docs/cloud-dev-staging-plan.md の S2）。
@@ -16,6 +17,8 @@
 
 cmake_minimum_required(VERSION 3.16)
 project(SBOP2 C CXX)
+
+enable_testing()
 
 if(WIN32)
 	message(FATAL_ERROR "Windows では SBO.sln（Visual Studio）でビルドしてください。")
@@ -117,3 +120,29 @@ target_include_directories(SboSvr PRIVATE
 )
 target_compile_definitions(SboSvr PRIVATE ${SBO_COMMON_DEFINES})
 target_link_libraries(SboSvr PRIVATE SboSockLib myLib ZLIB::ZLIB Threads::Threads ${CMAKE_DL_LIBS})
+
+# ---------------------------------------------------------------------------
+# SboSvrTest（テスト対象のソースを直接取り込む単体テスト exe）
+# ---------------------------------------------------------------------------
+sbo_read_vcxproj_sources(SBOSVRTEST_SOURCES ${SBO_ROOT}/SboSvrTest/SboSvrTest.vcxproj)
+# SboSvr と同じく、非Windows の TCharCompat.h が使う SJIS 変換の実体を足す
+list(APPEND SBOSVRTEST_SOURCES ${SBO_ROOT}/Common/Platform/SjisConvert.cpp)
+
+add_executable(SboSvrTest ${SBOSVRTEST_SOURCES})
+target_include_directories(SboSvrTest BEFORE PRIVATE ${SBO_ROOT}/SboSvrTest)
+# .vcxproj の AdditionalIncludeDirectories 相当
+target_include_directories(SboSvrTest PRIVATE
+	${SBO_ROOT}/SboSvr/src
+	${SBO_ROOT}/SboSvr/src/Web
+	${SBO_ROOT}/SboSvr/src/Web/Handlers
+	${SBO_ROOT}/Common
+	${SBO_ROOT}/Common/myLib
+	${SBO_ROOT}/Common/Lib
+	${SBO_ROOT}/Common/Packet
+	${SBO_ROOT}/Common/Packet/CONNECT
+	${SBO_ROOT}/SboSockLib
+)
+target_compile_definitions(SboSvrTest PRIVATE ${SBO_COMMON_DEFINES})
+target_link_libraries(SboSvrTest PRIVATE ZLIB::ZLIB Threads::Threads ${CMAKE_DL_LIBS})
+
+add_test(NAME SboSvrTest COMMAND SboSvrTest WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})

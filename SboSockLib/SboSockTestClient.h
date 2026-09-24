@@ -11,7 +11,8 @@
 
 #pragma once
 
-#ifdef _WIN32
+// Windows と POSIX(Linux) で使える。Emscripten(ブラウザ版)では使わない。
+#if !defined(__EMSCRIPTEN__)
 
 #include <vector>
 
@@ -69,4 +70,4 @@ private:
     CmyZlib *m_pZlib;
 };
 
-#endif // _WIN32
+#endif // !__EMSCRIPTEN__

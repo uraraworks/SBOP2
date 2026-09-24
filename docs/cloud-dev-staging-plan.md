@@ -112,4 +112,10 @@ Claude Code のクラウドセッション（GitHub 連携・Linux コンテナ�
   - webroot の解決（`ResolveWebRootPath` / `ResolveBrowserGamePath`）とパス連結を実行環境の区切り文字に寄せ、`StaticFileHandler` の非Windows 版ファイル読み込みを実装。あわせて `select` の第1引数・ソケットタイムアウト・`socklen_t` など、HTTP が Linux で応答しなかった原因を修正。
   - 確認: 空の DB で `--headless` 起動 → `/health` が `{"status":"ok","onlinePlayers":0}`、`/admin/`・`/account/` が webroot のファイルをそのまま返す（304 再検証・`..` 拒否も確認）→ `--stop` で DB 保存して正常終了。
   - 手順: `cmake -S . -B out/cmake-linux -DCMAKE_BUILD_TYPE=Release && cmake --build out/cmake-linux -j` → 実行ファイルと同じ場所に `webroot/`（`SboSvr/webroot` のコピー）と `SBODATA/`（`Release/SBODATA/*.dat`）を置いて `./SboSvr --headless`。必要パッケージは cmake・g++・zlib1g-dev。
-  - 残課題: Linux のゲーム用 TCP ポート（2006）はスタブで待ち受けないため、ブラウザ版からのゲーム接続は未対応（S5 の前に `UraraSockTCPSelect` の POSIX 化が要る）。Windows ビルドはこのセッションでは未確認。
+  - 残課題（S3 で解消）: Linux のゲーム用 TCP ポート（2006）がスタブで待ち受けなかった。Windows ビルドはこのセッションでは未確認。
+- S3 完了（S2 と同じ PR「Linux 対応」にまとめる方針）:
+  - `UraraSockTCPSelect` を POSIX 化（`std::thread`・`select` の最大 fd・`socklen_t`・`SO_REUSEADDR`・`MSG_NOSIGNAL`）し、Linux の `CUraraSockTCPSBO` は常に select 版を使う。ゲームポート 2006 が待ち受けるようになった。
+  - `SboSvrTest` を CMake に追加（ソース一覧は `.vcxproj` から）。テスト内の Win32 API は `SboSvrTest/TestPlatform.h` に寄せ、Linux で全306件成功。
+  - テストで見つかった Linux 固有の差を修正: ワイド書式 `%s` の意味の違いと 4096 文字制限（`CStringCompat.h`）、CP932 変換（iconv）、`StaticFileHandler` の日本語パス、SIGPIPE。
+  - `tools/test-sbosvr-linux-smoke.sh`（空 DB で起動 → HTTP・ゲームポート・`--stop` を確認）と `.github/workflows/linux.yml`（ubuntu でビルド・`ctest`・スモークテスト）を追加。
+  - 実機確認: 2006 に対してプリチェック → VERSION 往復・zlib 圧縮要求の展開・5本同時接続・不正な応答での切断がすべて期待どおり。`.dat` から入った日本語名（マップ名・アイテム名等）も正しく DB に入る。

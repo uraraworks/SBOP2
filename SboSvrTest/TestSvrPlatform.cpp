@@ -10,6 +10,7 @@
 #include "StdAfx.h"
 #include "TestFramework.h"
 #include "Platform/SvrPlatform.h"
+#include "TestPlatform.h"
 #include <string>
 #include <cstdio>
 #include <cstring>
@@ -22,12 +23,7 @@ namespace
 	public:
 		explicit CTempIni(const char *pszContent)
 		{
-			char szDir[MAX_PATH];
-			char szPath[MAX_PATH];
-
-			GetTempPathA(MAX_PATH, szDir);
-			GetTempFileNameA(szDir, "sbo", 0, szPath);
-			m_strPath = szPath;
+			m_strPath = SboTest::CreateTempFile("sbo");
 
 			if (pszContent != NULL) {
 				FILE *pFile = fopen(m_strPath.c_str(), "wb");
@@ -39,7 +35,7 @@ namespace
 		}
 		~CTempIni(void)
 		{
-			DeleteFileA(m_strPath.c_str());
+			SboTest::DeleteFileUtf8(m_strPath);
 		}
 		const char *Path(void) const { return m_strPath.c_str(); }
 
@@ -198,7 +194,7 @@ TEST(ini_書き換えても他セクションを壊さない)
 TEST(時刻_経過時間が進む)
 {
 	unsigned int a = SboPlatform::GetTickMs();
-	Sleep(50);
+	SboTest::SleepMs(50);
 	unsigned int b = SboPlatform::GetTickMs();
 
 	// 折り返しても差分は正しく出る
@@ -288,7 +284,8 @@ TEST(パス_実行ファイルの隣を指す)
 	CHECK(strDir[strDir.size() - 1] == SboPlatform::GetPathSeparator());
 
 	std::string strPath = SboPlatform::MakeExeRelativePath("SBODATA/x.db");
-	// 区切り文字が統一されている
-	CHECK(strPath.find('/') == std::string::npos);
+	// 区切り文字が統一されている(実行環境の区切り文字でない方が残っていない)
+	const char chOther = (SboPlatform::GetPathSeparator() == '/') ? '\\' : '/';
+	CHECK(strPath.find(chOther) == std::string::npos);
 	CHECK(strPath.find("SBODATA") != std::string::npos);
 }

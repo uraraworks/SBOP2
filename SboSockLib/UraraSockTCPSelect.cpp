@@ -18,14 +18,20 @@
 #include "StdAfx.h"
 #include "UraraSockTCPSelect.h"
 
-#ifdef _WIN32
+// Windows と POSIX(Linux) の両方で動く。Emscripten(ブラウザ版)では使わない。
+#if !defined(__EMSCRIPTEN__)
 
 #include "crc.h"
 #include "CWinsockStart.h"
 #include "myZlib/myZlib.h"
 #include <vector>
 #include <deque>
+#include <future>
 #include <mutex>
+#include <thread>
+#ifndef _WIN32
+#include <sys/select.h>
+#endif
 
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p)       do { if ((p) != NULL) { delete (p);     (p) = NULL; } } while (0)
@@ -43,6 +49,31 @@
 #define URARASOCKSEL_USEZLIBSIZE    (128)
 #define URARASOCKSEL_TIME_KEEPALIVE 60000
 #define URARASOCKSEL_SELECT_WAIT_US 50000   // 起床用ソケットがあるので長めでよい
+
+// accept / getsockname の長さ引数の型(Windows は int、POSIX は socklen_t)
+#ifdef _WIN32
+typedef int         URARASOCKSEL_SOCKLEN;
+#else
+typedef socklen_t   URARASOCKSEL_SOCKLEN;
+#endif
+
+// send のフラグ。POSIX では切断済みの相手へ送ると SIGPIPE でプロセスが
+// 落ちるため、MSG_NOSIGNAL でシグナルを止めてエラー(EPIPE)として受け取る。
+#if defined(_WIN32) || !defined(MSG_NOSIGNAL)
+#define URARASOCKSEL_SENDFLAGS      0
+#else
+#define URARASOCKSEL_SENDFLAGS      MSG_NOSIGNAL
+#endif
+
+/// 経過ミリ秒(GetTickCount 相当)
+static DWORD GetTickMsSel(void)
+{
+#ifdef _WIN32
+    return GetTickCount();
+#else
+    return timeGetTime();
+#endif
+}
 
 // フレームヘッダ(既存実装と同一レイアウト)
 
@@ -178,8 +209,7 @@ public:
     void  NotifyParent(UINT uMsgOffset, WPARAM wParam, LPARAM lParam);
 
 private:
-    static void __cdecl ThreadEntry(void *pParam);
-    void  ThreadMain(void);
+    void  ThreadMain(std::promise<void> *pReady);
 
     BOOL  CreateWakeupSocket(void);
     void  CloseWakeupSocket(void);
@@ -209,8 +239,7 @@ private:
     DWORD              m_dwConnectCount;
     DWORD              m_dwPreCheckKey;
 
-    HANDLE             m_hThread;
-    HANDLE             m_hReady;
+    std::thread        m_thread;        // select スレッド
     volatile BOOL      m_bStop;
     BOOL               m_bHosting;
 
@@ -274,7 +303,7 @@ BOOL CUraraSockTCPSelectSlot::Create(SOCKET socket, DWORD dwAddr, WORD wPeerPort
     m_dwAddr           = dwAddr;
     m_wPeerPort        = wPeerPort;
     m_dwSockID         = dwID;
-    m_dwTimeLastRecv   = GetTickCount();
+    m_dwTimeLastRecv   = GetTickMsSel();
     m_bPreCheck        = FALSE;
     m_dwPreCheck       = 0;
     m_dwSendPos        = 0;
@@ -286,7 +315,7 @@ BOOL CUraraSockTCPSelectSlot::Create(SOCKET socket, DWORD dwAddr, WORD wPeerPort
     m_dwRecvDataSize   = 0;
     m_dwThrowghPutSend = 0;
     m_dwThrowghPutRecv = 0;
-    m_dwTimeThrowghPut = GetTickCount();
+    m_dwTimeThrowghPut = GetTickMsSel();
 
     m_pRecvBuffer = new BYTE[URARASOCKSEL_RECVBUFSIZE];
     m_pRecvTmp    = new BYTE[sizeof(URARASOCKSEL_PACKETINFO)];
@@ -391,7 +420,7 @@ BOOL CUraraSockTCPSelectSlot::OnWritable(void)
         }
 
         int nSize = static_cast<int>(pBuf->size() - m_dwSendPos);
-        int nRet  = send(m_socket, reinterpret_cast<const char *>(&(*pBuf)[m_dwSendPos]), nSize, 0);
+        int nRet  = send(m_socket, reinterpret_cast<const char *>(&(*pBuf)[m_dwSendPos]), nSize, URARASOCKSEL_SENDFLAGS);
         if (nRet > 0) {
             m_dwSendDataSize += nRet;
             RenewThrowghPut();
@@ -428,7 +457,7 @@ BOOL CUraraSockTCPSelectSlot::OnReadable(CUraraSockTCPSelect *pOwner)
             dwRecvSize += nRet;
             m_dwRecvDataSize += nRet;
             RenewThrowghPut();
-            m_dwTimeLastRecv = GetTickCount();
+            m_dwTimeLastRecv = GetTickMsSel();
             continue;
         }
         if (nRet == 0) {
@@ -533,7 +562,7 @@ BOOL CUraraSockTCPSelectSlot::OnReadable(CUraraSockTCPSelect *pOwner)
 
 void CUraraSockTCPSelectSlot::RenewThrowghPut(void)
 {
-    DWORD dwTime = GetTickCount();
+    DWORD dwTime = GetTickMsSel();
 
     if (dwTime - m_dwTimeThrowghPut < 1000) {
         return;
@@ -557,8 +586,6 @@ CUraraSockTCPSelect::CUraraSockTCPSelect(void)
     , m_dwMaxConnectCount(0)
     , m_dwConnectCount(0)
     , m_dwPreCheckKey(0)
-    , m_hThread(NULL)
-    , m_hReady(NULL)
     , m_bStop(FALSE)
     , m_bHosting(FALSE)
     , m_pfNotify(NULL)
@@ -600,7 +627,7 @@ void CUraraSockTCPSelect::NotifyParent(UINT uMsgOffset, WPARAM wParam, LPARAM lP
 
 BOOL CUraraSockTCPSelect::CreateWakeupSocket(void)
 {
-    int nLen;
+    URARASOCKSEL_SOCKLEN nLen;
     u_long ulNonBlock = 1;
     SOCKADDR_IN addr;
 
@@ -825,6 +852,15 @@ BOOL CUraraSockTCPSelect::Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WO
     if (m_socket == INVALID_SOCKET) {
         return FALSE;
     }
+#ifndef _WIN32
+    // 再起動直後に TIME_WAIT の残る同じポートへ bind できるようにする。
+    // (Windows の SO_REUSEADDR は意味が違い、他プロセスとポートを共有できて
+    // しまうため付けない)
+    {
+        int nReuse = 1;
+        setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, &nReuse, sizeof(nReuse));
+    }
+#endif
     setsockopt(m_socket, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<const char *>(&nBuffer), sizeof(nBuffer));
     setsockopt(m_socket, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<const char *>(&nBuffer), sizeof(nBuffer));
 
@@ -854,20 +890,21 @@ BOOL CUraraSockTCPSelect::Host(HWND hWndParent, DWORD dwMsgBase, DWORD dwKey, WO
     m_pSlot = new CUraraSockTCPSelectSlot[m_dwMaxConnectCount];
 
     m_bStop  = FALSE;
-    m_hReady = CreateEvent(NULL, FALSE, FALSE, NULL);
-    m_hThread = reinterpret_cast<HANDLE>(_beginthread(ThreadEntry, 0, this));
-    if ((m_hThread == reinterpret_cast<HANDLE>(-1)) || (m_hThread == NULL)) {
-        CloseHandle(m_hReady);
-        m_hReady = NULL;
-        SAFE_DELETE_ARRAY(m_pSlot);
-        CloseWakeupSocket();
-        closesocket(m_socket);
-        m_socket = INVALID_SOCKET;
-        return FALSE;
+    {
+        // スレッドが走り出すまで待つ(従来の CreateEvent + WaitForSingleObject 相当)
+        std::promise<void> ready;
+        std::future<void> readyFuture = ready.get_future();
+        try {
+            m_thread = std::thread(&CUraraSockTCPSelect::ThreadMain, this, &ready);
+        } catch (...) {
+            SAFE_DELETE_ARRAY(m_pSlot);
+            CloseWakeupSocket();
+            closesocket(m_socket);
+            m_socket = INVALID_SOCKET;
+            return FALSE;
+        }
+        readyFuture.wait();
     }
-    WaitForSingleObject(m_hReady, INFINITE);
-    CloseHandle(m_hReady);
-    m_hReady = NULL;
 
     m_bHosting = TRUE;
     NotifyParent(WM_URARASOCK_HOST, 0, 0);
@@ -894,9 +931,9 @@ void CUraraSockTCPSelect::Destroy(void)
 
     m_bStop = TRUE;
     Wakeup();
-    if (m_hThread) {
-        WaitForSingleObject(m_hThread, 5000);
-        m_hThread = NULL;
+    // select の待ちは最大 URARASOCKSEL_SELECT_WAIT_US なので、すぐ抜けてくる
+    if (m_thread.joinable()) {
+        m_thread.join();
     }
 
     ClearCommands();
@@ -910,19 +947,9 @@ void CUraraSockTCPSelect::Destroy(void)
     m_bHosting = FALSE;
 }
 
-void CUraraSockTCPSelect::ThreadEntry(void *pParam)
+void CUraraSockTCPSelect::ThreadMain(std::promise<void> *pReady)
 {
-    CUraraSockTCPSelect *pThis = reinterpret_cast<CUraraSockTCPSelect *>(pParam);
-
-    if (pThis) {
-        pThis->ThreadMain();
-    }
-    _endthread();
-}
-
-void CUraraSockTCPSelect::ThreadMain(void)
-{
-    SetEvent(m_hReady);
+    pReady->set_value();
 
     while (m_bStop == FALSE) {
         fd_set fdRead;
@@ -932,10 +959,16 @@ void CUraraSockTCPSelect::ThreadMain(void)
 
         ProcCommands();
 
+        // select の第1引数は Windows では無視されるが、POSIX では
+        // 「監視する最大の fd + 1」が必要なので、登録しながら最大値を取る
+        int nMaxFd = 0;
+
         FD_ZERO(&fdRead);
         FD_ZERO(&fdWrite);
         FD_SET(m_socket, &fdRead);
         FD_SET(m_sockWakeup, &fdRead);
+        nMaxFd = (static_cast<int>(m_socket) > static_cast<int>(m_sockWakeup)) ?
+            static_cast<int>(m_socket) : static_cast<int>(m_sockWakeup);
 
         for (DWORD i = 0; i < m_dwMaxConnectCount; i ++) {
             if (m_pSlot[i].IsValid() == FALSE) {
@@ -945,13 +978,15 @@ void CUraraSockTCPSelect::ThreadMain(void)
             if (m_pSlot[i].HasSendData()) {
                 FD_SET(m_pSlot[i].m_socket, &fdWrite);
             }
+            if (static_cast<int>(m_pSlot[i].m_socket) > nMaxFd) {
+                nMaxFd = static_cast<int>(m_pSlot[i].m_socket);
+            }
         }
 
         tv.tv_sec  = 0;
         tv.tv_usec = URARASOCKSEL_SELECT_WAIT_US;
 
-        // 第1引数は Windows では無視される
-        nRet = select(0, &fdRead, &fdWrite, NULL, &tv);
+        nRet = select(nMaxFd + 1, &fdRead, &fdWrite, NULL, &tv);
         if (nRet == SOCKET_ERROR) {
             break;
         }
@@ -1001,7 +1036,7 @@ void CUraraSockTCPSelect::ThreadMain(void)
 void CUraraSockTCPSelect::OnAccept(void)
 {
     int nIndex = -1;
-    int nLen;
+    URARASOCKSEL_SOCKLEN nLen;
     SOCKADDR_IN addr;
     SOCKET hSocket;
     DWORD dwChallenge;
@@ -1034,7 +1069,7 @@ void CUraraSockTCPSelect::OnAccept(void)
     SetTcpNoDelay(hSocket);
 
     // プリチェックのチャレンジを送る
-    dwChallenge = GetTickCount();
+    dwChallenge = GetTickMsSel();
     m_pSlot[nIndex].m_dwPreCheck = dwChallenge;
     m_dwConnectCount ++;
 
@@ -1119,7 +1154,7 @@ void CUraraSockTCPSelect::CloseSlot(DWORD dwIndex)
 
 void CUraraSockTCPSelect::CheckKeepalive(void)
 {
-    DWORD dwTime = GetTickCount();
+    DWORD dwTime = GetTickMsSel();
 
     for (DWORD i = 0; i < m_dwMaxConnectCount; i ++) {
         if (m_pSlot[i].IsValid() == FALSE) {
@@ -1263,4 +1298,4 @@ CUraraSockTCP *GetUraraSockTCPSelect(void)
     return new CUraraSockTCPSelect();
 }
 
-#endif // _WIN32
+#endif // !__EMSCRIPTEN__

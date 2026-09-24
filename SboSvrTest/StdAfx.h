@@ -4,6 +4,8 @@
 
 #pragma once
 
+#ifdef _WIN32
+
 #include "../Common/rpcsal_fallback.h"
 
 #define WIN32_LEAN_AND_MEAN
@@ -17,6 +19,13 @@
 #include <winsock2.h>
 #include <windows.h>
 #include <tchar.h>
+
+#else
+
+// 非Windows（Linux の CMake ビルド）では SboSvr と同じ互換ヘッダを読む
+#include "../SboSvr/src/Platform/SvrCompat.h"
+
+#endif // _WIN32
 
 // GlobalDefine.h が map を前提にしているため、SboSvr と同じ形で用意する
 #include <map>

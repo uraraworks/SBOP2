@@ -5,10 +5,14 @@
 #include "StdAfx.h"
 #include "SboSockTestClient.h"
 
-#ifdef _WIN32
+// Windows と POSIX(Linux) の両方で動く。Emscripten(ブラウザ版)では使わない。
+#if !defined(__EMSCRIPTEN__)
 
 #include "crc.h"
 #include "myZlib/myZlib.h"
+#ifndef _WIN32
+#include <sys/select.h>
+#endif
 
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p)       do { if ((p) != NULL) { delete (p);     (p) = NULL; } } while (0)
@@ -19,6 +23,30 @@
 
 #define SBOSOCKTEST_USEZLIBSIZE (128)
 #define SBOSOCKTEST_MAXPACKET   (1024 * 1024)
+
+// getsockname の長さ引数の型(Windows は int、POSIX は socklen_t)
+#ifdef _WIN32
+typedef int         SBOSOCKTEST_SOCKLEN;
+#else
+typedef socklen_t   SBOSOCKTEST_SOCKLEN;
+#endif
+
+// POSIX では切断済みの相手へ送ると SIGPIPE で落ちるため MSG_NOSIGNAL を付ける
+#if defined(_WIN32) || !defined(MSG_NOSIGNAL)
+#define SBOSOCKTEST_SENDFLAGS   0
+#else
+#define SBOSOCKTEST_SENDFLAGS   MSG_NOSIGNAL
+#endif
+
+/// 経過ミリ秒(GetTickCount 相当)
+static DWORD GetTickMsTest(void)
+{
+#ifdef _WIN32
+    return GetTickCount();
+#else
+    return timeGetTime();
+#endif
+}
 
 typedef struct _SBOSOCKTEST_PACKETINFO
 {
@@ -50,7 +78,7 @@ BOOL CSboSockTestClient::IsConnected(void) const
 WORD CSboSockTestClient::GetLocalPort(void) const
 {
     SOCKADDR_IN addr;
-    int nLen = sizeof(addr);
+    SBOSOCKTEST_SOCKLEN nLen = sizeof(addr);
 
     if (m_socket == INVALID_SOCKET) {
         return 0;
@@ -84,7 +112,7 @@ BOOL CSboSockTestClient::SendAll(const BYTE *pBuf, DWORD dwSize)
 
     while (dwSent < dwSize) {
         int nRet = send(m_socket, reinterpret_cast<const char *>(pBuf + dwSent),
-                        static_cast<int>(dwSize - dwSent), 0);
+                        static_cast<int>(dwSize - dwSent), SBOSOCKTEST_SENDFLAGS);
         if (nRet <= 0) {
             return FALSE;
         }
@@ -96,13 +124,13 @@ BOOL CSboSockTestClient::SendAll(const BYTE *pBuf, DWORD dwSize)
 BOOL CSboSockTestClient::RecvExact(BYTE *pBuf, DWORD dwSize, int nTimeoutMs)
 {
     DWORD dwGot  = 0;
-    DWORD dwEnd  = GetTickCount() + nTimeoutMs;
+    DWORD dwEnd  = GetTickMsTest() + nTimeoutMs;
 
     while (dwGot < dwSize) {
         fd_set fdRead;
         timeval tv;
         int nRet;
-        DWORD dwNow = GetTickCount();
+        DWORD dwNow = GetTickMsTest();
 
         if (dwNow >= dwEnd) {
             return FALSE;
@@ -112,7 +140,7 @@ BOOL CSboSockTestClient::RecvExact(BYTE *pBuf, DWORD dwSize, int nTimeoutMs)
         tv.tv_sec  = 0;
         tv.tv_usec = 50000;
 
-        nRet = select(0, &fdRead, NULL, NULL, &tv);
+        nRet = select(static_cast<int>(m_socket) + 1, &fdRead, NULL, NULL, &tv);
         if (nRet == SOCKET_ERROR) {
             return FALSE;
         }
@@ -287,13 +315,13 @@ BOOL CSboSockTestClient::RecvPacket(std::vector<BYTE> *pvecOut, int nTimeoutMs)
 
 BOOL CSboSockTestClient::WaitForDisconnect(int nTimeoutMs)
 {
-    DWORD dwEnd = GetTickCount() + nTimeoutMs;
+    DWORD dwEnd = GetTickMsTest() + nTimeoutMs;
 
     if (m_socket == INVALID_SOCKET) {
         return TRUE;
     }
 
-    while (GetTickCount() < dwEnd) {
+    while (GetTickMsTest() < dwEnd) {
         fd_set fdRead;
         timeval tv;
         int nRet;
@@ -304,7 +332,7 @@ BOOL CSboSockTestClient::WaitForDisconnect(int nTimeoutMs)
         tv.tv_sec  = 0;
         tv.tv_usec = 50000;
 
-        nRet = select(0, &fdRead, NULL, NULL, &tv);
+        nRet = select(static_cast<int>(m_socket) + 1, &fdRead, NULL, NULL, &tv);
         if (nRet == SOCKET_ERROR) {
             return TRUE;
         }
@@ -321,4 +349,4 @@ BOOL CSboSockTestClient::WaitForDisconnect(int nTimeoutMs)
     return FALSE;
 }
 
-#endif // _WIN32
+#endif // !__EMSCRIPTEN__

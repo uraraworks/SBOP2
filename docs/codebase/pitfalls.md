@@ -70,8 +70,11 @@
 - **非Windows の `PlatformDefs.h` は `min`/`max` を関数形式マクロで定義する。** これより後に libstdc++ の `<algorithm>`・`<vector>`・`<deque>`・`<random>` などを読むと、`std::max(...)` や `__g.max()` がマクロ展開されて大量のエラーになる（em++/libc++ では表面化しなかった）。対処は「標準ヘッダを先に読む」こと。`SboSvr/src/Platform/SvrCompat.h` で主要な標準ヘッダを `PlatformDefs.h` より前に読み、`TCharCompat.h` は `CStringCompat.h`（標準ヘッダを読む）を先に include する順にしてある。新しい標準ヘッダを使って同じ系統のエラーが出たら、`SvrCompat.h` の一覧に足す。
 - **`.vcxproj` の `ClCompile` は大文字小文字が実ファイルと違うことがある（例: `..\common\crc.cpp`）。** Windows では通るが Linux では見つからない。`cmake/VcxprojSources.cmake` は1階層ずつ大文字小文字を無視して実名に直すので `.vcxproj` 側は直さなくてよい。一方ソース中の `#include` の綴り違い（例: `LibInfoCharSVr.h`）は自動では直らないので、見つけたらソースを直す。
 - **Winsock の書き方は POSIX でそのまま動かないものがある（コンパイルは通る）。** `select(0, ...)` は Windows では第1引数が無視されるが、POSIX では「最大 fd + 1」が必要で、0 のままだと永久にタイムアウトし HTTP が接続だけ受けて無応答になる。`SO_RCVTIMEO`/`SO_SNDTIMEO` に `DWORD`（ミリ秒）を渡すと POSIX では `timeval` との長さ不一致で失敗してタイムアウトが効かない（`SboPlatform::SetSocketTimeoutMs()` を使う）。`accept`/`getpeername` の長さは `socklen_t*`。
-- **Linux のゲーム用 TCP ポート（既定 2006）は、現状スタブ実装で待ち受けない。** `Common/UraraSockTCP.h` の非Windows 分岐が `CUraraSockTCPStub` を返し、`SboSockLib/UraraSockTCP*.cpp` は丸ごと `#ifdef _WIN32`。HTTP（18080）と WebSocket ブリッジ（18081）は動くが、ブリッジの接続先 2006 が無いのでゲーム接続はできない。
-- **Linux では `SjisConvert.cpp` の SJIS 変換が UTF-8 扱いのフォールバックになる。** 空 DB で起動すると CP932 の `.dat` から読むため、日本語名が化ける可能性がある。検証・ステージング用データは既存 DB（UTF-8）のコピーを使う。
+- **Linux のゲーム用 TCP ポート（既定 2006）は select 版（`SboSockLib/UraraSockTCPSelect.cpp`）で待ち受ける。** WSAAsyncSelect 版（`UraraSockTCP.cpp`）は Windows 専用のままで、`CUraraSockTCPSBO` が非Windows では常に select 版を選ぶ。`Common/UraraSockTCP.h` の `CUraraSockTCPStub` は何もしないスタブなので、非Windows でこれが返っていたら待ち受けていない。
+- **POSIX では切断済みの相手へ `send` すると SIGPIPE でプロセスごと落ちる（Windows には無い挙動）。** `SboSvr`/`SboSvrTest` の `main()` で `SIGPIPE` を無視し、select 版とテスト用クライアントは `MSG_NOSIGNAL` も付けている。新しくソケットを扱う exe を足す時は同じ対処が要る。
+- **非Windows のワイド書式 `%s`/`%c` は char 側を指す（MSVC は wchar_t 側）。** サーバーのコードは MSVC の意味で `Format(_T("%s"), (LPCTSTR)str)` と書いてあるため、Linux 向けには `CStringCompat.h` の `ConvertMsvcWideFormat()` が `%ls`/`%lc` に直してから `vswprintf` に渡す（Emscripten 版は対象外で、従来どおり `%ls` か連結で書く）。glibc の `vswprintf` も測定モードが無いので、同じ箇所で収まるまでバッファを広げて測っている。`CStringCompat` を経由しない `_stprintf` 系を直接使う箇所には効かないので注意。
+- **Linux の CP932 変換は glibc の iconv（`SjisConvert.cpp`）で行う。** 空 DB で起動した時に読む旧 `.dat`（CP932）の日本語名もこれで正しく入る。変換できないバイト/文字は `?` に置き換える。
+- **`CStaticFileHandler::ToUtf8()` は ASCII 以外を `?` にする表示用の関数。** ファイルパスの変換に使うと日本語ファイル名が開けない（実例: Linux 版 `StatFile` で使って「テスト.png」が 404）。パスには `WstringToUtf8()` を使う。
 
 ## サーバー
 

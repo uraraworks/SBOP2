@@ -21,6 +21,7 @@
 #include "TestFramework.h"
 #include "Handlers/StaticFileHandler.h"
 #include "HttpTypes.h"
+#include "TestPlatform.h"
 #include <cstdio>
 #include <string>
 
@@ -32,12 +33,7 @@ namespace
     public:
         explicit CTempFile(const char *pszContent)
         {
-            char szDir[MAX_PATH];
-            char szPath[MAX_PATH];
-
-            GetTempPathA(MAX_PATH, szDir);
-            GetTempFileNameA(szDir, "sfh", 0, szPath);
-            m_strPath = szPath;
+            m_strPath = SboTest::CreateTempFile("sfh");
 
             FILE *pFile = fopen(m_strPath.c_str(), "wb");
             if (pFile) {
@@ -49,7 +45,7 @@ namespace
         }
         ~CTempFile(void)
         {
-            DeleteFileA(m_strPath.c_str());
+            SboTest::DeleteFileUtf8(m_strPath);
         }
         const std::string &Path(void) const { return m_strPath; }
 
@@ -76,7 +72,7 @@ namespace
         }
         ~CTempSidecar(void)
         {
-            DeleteFileA(m_strPath.c_str());
+            SboTest::DeleteFileUtf8(m_strPath);
         }
 
     private:
@@ -117,23 +113,16 @@ namespace
             if (!m_strDir.empty()) {
                 wchar_t last = m_strDir[m_strDir.size() - 1];
                 if ((last != L'\\') && (last != L'/')) {
-                    m_strDir.push_back(L'\\');
+                    m_strDir.push_back(SboTest::PathSeparatorW());
                 }
             }
             m_strPath = m_strDir + strName;
 
-            HANDLE hFile = CreateFileW(m_strPath.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-            if (hFile != INVALID_HANDLE_VALUE) {
-                if (pszContent != NULL) {
-                    DWORD dwWritten = 0;
-                    WriteFile(hFile, pszContent, static_cast<DWORD>(strlen(pszContent)), &dwWritten, NULL);
-                }
-                CloseHandle(hFile);
-            }
+            SboTest::WriteFileW(m_strPath, pszContent);
         }
         ~CNamedTempFile(void)
         {
-            DeleteFileW(m_strPath.c_str());
+            SboTest::DeleteFileW(m_strPath);
         }
         const std::wstring &Dir(void) const { return m_strDir; }
 
@@ -144,9 +133,7 @@ namespace
 
     std::wstring GetTempDirW(void)
     {
-        wchar_t szDir[MAX_PATH];
-        GetTempPathW(MAX_PATH, szDir);
-        return std::wstring(szDir);
+        return SboTest::GetTempDirW();
     }
 }
 

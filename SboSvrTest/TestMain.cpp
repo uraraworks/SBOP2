@@ -5,6 +5,9 @@
 #include "StdAfx.h"
 #include "TestFramework.h"
 #include <string.h>
+#ifndef _WIN32
+#include <csignal>
+#endif
 
 CTestRegistry &CTestRegistry::Get(void)
 {
@@ -24,6 +27,9 @@ void CTestRegistry::Add(const char *pszName, PFTESTFUNC pfFunc)
 void CTestRegistry::Fail(const char *pszFile, int nLine, const char *pszMsg)
 {
     const char *pszShort = strrchr(pszFile, '\\');
+    if (pszShort == NULL) {
+        pszShort = strrchr(pszFile, '/');
+    }
 
     pszShort = (pszShort != NULL) ? (pszShort + 1) : pszFile;
     printf("    NG  %s(%d): %s\n", pszShort, nLine, pszMsg);
@@ -58,18 +64,25 @@ int CTestRegistry::RunAll(const char *pszFilter)
 
 int main(int argc, char **argv)
 {
-    WSADATA wsaData;
     const char *pszFilter = (argc > 1) ? argv[1] : NULL;
     int nRet;
 
+#ifdef _WIN32
+    WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         printf("WSAStartup に失敗しました\n");
         return 1;
     }
+#else
+    // 切断済みソケットへの send で SIGPIPE により落ちないようにする(SboSvr と同じ)
+    signal(SIGPIPE, SIG_IGN);
+#endif
 
     printf("=== SboSvr 通信層テスト ===\n");
     nRet = CTestRegistry::Get().RunAll(pszFilter);
 
+#ifdef _WIN32
     WSACleanup();
+#endif
     return nRet;
 }

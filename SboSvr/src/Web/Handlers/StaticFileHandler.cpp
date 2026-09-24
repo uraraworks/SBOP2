@@ -320,9 +320,10 @@ bool CStaticFileHandler::StatFile(const std::wstring &path, FileMetaInfo &outMet
         outMeta.mtime    = 0;
 
 #if !defined(_WIN32)
-        // パスは UTF-8 として扱う（Utf8ToWide() で組み立てたものを戻す）
+        // パスは UTF-8 として扱う（Utf8ToWide() で組み立てたものを戻す）。
+        // ToUtf8() は ASCII 以外を '?' にする表示用の関数なので、ここでは使わない。
         struct stat st;
-        if (stat(ToUtf8(path).c_str(), &st) != 0) {
+        if (stat(WstringToUtf8(path.c_str(), path.size()).c_str(), &st) != 0) {
                 return false;
         }
         // ディレクトリ等は配信しない（Windows 版は CreateFileW の失敗で弾かれる）
@@ -368,7 +369,7 @@ bool CStaticFileHandler::StatFile(const std::wstring &path, FileMetaInfo &outMet
 bool CStaticFileHandler::LoadFile(const std::wstring &path, std::string &outContent) const
 {
 #if !defined(_WIN32)
-        FILE *pFile = fopen(ToUtf8(path).c_str(), "rb");
+        FILE *pFile = fopen(WstringToUtf8(path.c_str(), path.size()).c_str(), "rb");
         if (pFile == NULL) {
                 return false;
         }
