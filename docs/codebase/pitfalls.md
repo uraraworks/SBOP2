@@ -75,6 +75,8 @@
 - **非Windows のワイド書式 `%s`/`%c` は char 側を指す（MSVC は wchar_t 側）。** サーバーのコードは MSVC の意味で `Format(_T("%s"), (LPCTSTR)str)` と書いてあるため、Linux 向けには `CStringCompat.h` の `ConvertMsvcWideFormat()` が `%ls`/`%lc` に直してから `vswprintf` に渡す（Emscripten 版は対象外で、従来どおり `%ls` か連結で書く）。glibc の `vswprintf` も測定モードが無いので、同じ箇所で収まるまでバッファを広げて測っている。`CStringCompat` を経由しない `_stprintf` 系を直接使う箇所には効かないので注意。
 - **Linux の CP932 変換は glibc の iconv（`SjisConvert.cpp`）で行う。** 空 DB で起動した時に読む旧 `.dat`（CP932）の日本語名もこれで正しく入る。変換できないバイト/文字は `?` に置き換える。
 - **`CStaticFileHandler::ToUtf8()` は ASCII 以外を `?` にする表示用の関数。** ファイルパスの変換に使うと日本語ファイル名が開けない（実例: Linux 版 `StatFile` で使って「テスト.png」が 404）。パスには `WstringToUtf8()` を使う。
+- **ブラウザ版の Linux ビルド（`tools/build-sbocli-browser-title.sh`）でも `#include` の大文字小文字が効く。** 実例: `LayerCloud.cpp` の `InfoCharCLI.h`（実名 `InfoCharCli.h`）。ps1 版のインクルードディレクトリ `Common/myLib/myZLib` も実名は `myZlib` なので、bash 版は実名で書いてある。
+- **クラウドセッションでは Emscripten ports（SDL2・SDL2_ttf・freetype・harfbuzz・zlib）のアーカイブ取得が 403 になる**（`github.com/.../archive/...`・`releases/download` は許可されず、`git clone` は通る）。初回ビルド前に `tools/emscripten/prefetch-ports-via-git.sh` で git から取り込んでおく。GitHub Actions や手元では不要。
 
 ## サーバー
 

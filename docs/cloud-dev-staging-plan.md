@@ -119,3 +119,9 @@ Claude Code のクラウドセッション（GitHub 連携・Linux コンテナ�
   - テストで見つかった Linux 固有の差を修正: ワイド書式 `%s` の意味の違いと 4096 文字制限（`CStringCompat.h`）、CP932 変換（iconv）、`StaticFileHandler` の日本語パス、SIGPIPE。
   - `tools/test-sbosvr-linux-smoke.sh`（空 DB で起動 → HTTP・ゲームポート・`--stop` を確認）と `.github/workflows/linux.yml`（ubuntu でビルド・`ctest`・スモークテスト）を追加。
   - 実機確認: 2006 に対してプリチェック → VERSION 往復・zlib 圧縮要求の展開・5本同時接続・不正な応答での切断がすべて期待どおり。`.dat` から入った日本語名（マップ名・アイテム名等）も正しく DB に入る。
+- S4 完了（同じ PR「Linux 対応」に追加）:
+  - `tools/build-sbocli-browser-title.sh` を追加。ps1 版（build + preflight）と同じフラグ・同じ `tools/browser-sources.txt` で、`.d` による差分コンパイル（並列）→ リンク → ハッシュ埋め込み → BGM コピー → `precompress.mjs` → webroot 同期まで行う。BGM（`Release/BGM`）が無くても警告だけで続行する。
+  - 使い方: `source <emsdk>/emsdk_env.sh` → `tools/build-sbocli-browser-title.sh`（`--force` で全再ビルド、`--jobs N`）。出力は ps1 版と同じ `out/browser-title/`。
+  - クラウドでは Emscripten ports のアーカイブ取得が塞がれているので、先に `tools/emscripten/prefetch-ports-via-git.sh` を実行する（git clone で取り込む）。
+  - Linux 固有の修正は `LayerCloud.cpp` の `#include` の大文字小文字だけ。
+  - 確認: emsdk（emcc 6.0.10）で 314 ファイルをコンパイル・リンク成功。ハッシュ・バージョン埋め込み、.br/.gz 生成、2回目は up-to-date でスキップ。Linux 版 SboSvr の `/game/` から html/js/wasm/data が br で配信されることも確認。ブラウザで実際に動かす確認は S5。

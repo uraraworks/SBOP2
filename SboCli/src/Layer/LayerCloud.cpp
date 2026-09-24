@@ -5,7 +5,7 @@
 /// @copyright Copyright(C)URARA-works 2005
 
 #include "StdAfx.h"
-#include "InfoCharCLI.h"
+#include "InfoCharCli.h"
 #include "MgrLayer.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
