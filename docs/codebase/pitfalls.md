@@ -77,6 +77,7 @@
 - **`CStaticFileHandler::ToUtf8()` は ASCII 以外を `?` にする表示用の関数。** ファイルパスの変換に使うと日本語ファイル名が開けない（実例: Linux 版 `StatFile` で使って「テスト.png」が 404）。パスには `WstringToUtf8()` を使う。
 - **ブラウザ版の Linux ビルド（`tools/build-sbocli-browser-title.sh`）でも `#include` の大文字小文字が効く。** 実例: `LayerCloud.cpp` の `InfoCharCLI.h`（実名 `InfoCharCli.h`）。ps1 版のインクルードディレクトリ `Common/myLib/myZLib` も実名は `myZlib` なので、bash 版は実名で書いてある。
 - **クラウドセッションでは Emscripten ports（SDL2・SDL2_ttf・freetype・harfbuzz・zlib）のアーカイブ取得が 403 になる**（`github.com/.../archive/...`・`releases/download` は許可されず、`git clone` は通る）。初回ビルド前に `tools/emscripten/prefetch-ports-via-git.sh` で git から取り込んでおく。GitHub Actions や手元では不要。
+- **Linux の CMake ビルドは既定で `_DEBUG` なし（`/api/debug/fixture` が入らない）。** 自動確認（`tools/test-browser-e2e-linux.sh`）には `-DSBO_DEBUG_API=ON` で別ディレクトリにビルドしたサーバーが要る。このオプションはステージング・本番に絶対に使わない。
 
 ## サーバー
 

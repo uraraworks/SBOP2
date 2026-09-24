@@ -11,7 +11,9 @@
 # - ソース一覧は各 .vcxproj の ClCompile を直接読む（cmake/VcxprojSources.cmake）。
 # - MainFrameWindow.cpp（ウィンドウ表示専用）は MainFrameWindowNone.cpp に差し替える。
 # - _DEBUG は付けない。CMake の Debug 構成も _DEBUG を自動定義しないので、
-#   デバッグ API（/api/debug/fixture）はどの構成でも入らない。
+#   デバッグ API（/api/debug/fixture）は既定では入らない。
+#   クラウド内の自動確認（S5）用に限り -DSBO_DEBUG_API=ON で _DEBUG 付きにできる
+#   （ステージング・本番には絶対に使わない。別のビルドディレクトリに分けること）。
 # - StdAfx.h はプロジェクトごとに別物なので、各ターゲットで
 #   「そのプロジェクトのディレクトリ」を include の先頭に置く。
 
@@ -40,7 +42,16 @@ find_package(Threads REQUIRED)
 set(SBO_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 # 旧コード由来の大量の警告でログが埋まらないよう、ここでは既定の警告レベルのままにする
-set(SBO_COMMON_DEFINES NDEBUG)
+option(SBO_DEBUG_API "_DEBUG を付けてデバッグ API（/api/debug/fixture）入りでビルドする。自動確認専用" OFF)
+if(SBO_DEBUG_API)
+	message(WARNING "SBO_DEBUG_API=ON: _DEBUG 付きでビルドします。ステージング・本番には使わないでください。")
+	set(SBO_COMMON_DEFINES _DEBUG)
+	# ソース一覧も .vcxproj の Debug 構成に合わせる（DebugFixture 系が入る）
+	set(SBO_VCXPROJ_CONFIG Debug)
+else()
+	set(SBO_COMMON_DEFINES NDEBUG)
+	set(SBO_VCXPROJ_CONFIG Release)
+endif()
 
 # Common 配下の include ディレクトリ（各 .vcxproj の AdditionalIncludeDirectories 相当）
 set(SBO_COMMON_INCLUDES

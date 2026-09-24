@@ -4,9 +4,10 @@
 # CMake 側に一覧を複製しないことで、Visual Studio でファイルを足しても
 # Linux ビルドが自動で追従する。
 #
-# 除外の判定は Release|Win32 構成の <ExcludedFromBuild> に合わせる。
-# Linux ビルドは _DEBUG を付けない前提なので、Release と同じく
+# 除外の判定は ${SBO_VCXPROJ_CONFIG}|Win32 構成（既定 Release）の <ExcludedFromBuild> に合わせる。
+# 通常の Linux ビルドは _DEBUG を付けない前提なので、Release と同じく
 # DebugFixtureHandler / DebugFixtureGuard などデバッグ専用ファイルは入らない。
+# SBO_DEBUG_API=ON の時だけ Debug 構成の一覧を使う（CMakeLists.txt 参照）。
 
 # sbo_read_vcxproj_sources(<出力変数> <.vcxprojのパス>)
 #   出力は絶対パスのリスト。.vcxproj に書かれたファイルが実在しない場合は
@@ -14,6 +15,12 @@
 function(sbo_read_vcxproj_sources out_var vcxproj)
 	get_filename_component(proj_dir "${vcxproj}" DIRECTORY)
 	file(STRINGS "${vcxproj}" lines)
+
+	if(SBO_VCXPROJ_CONFIG)
+		set(config "${SBO_VCXPROJ_CONFIG}")
+	else()
+		set(config "Release")
+	endif()
 
 	set(result "")
 	set(current "")
@@ -28,7 +35,7 @@ function(sbo_read_vcxproj_sources out_var vcxproj)
 				set(current "")
 			endif()
 		elseif(NOT current STREQUAL "")
-			if(line MATCHES "<ExcludedFromBuild Condition=\"[^\"]*Release\\|Win32[^\"]*\">[ \t]*true")
+			if(line MATCHES "<ExcludedFromBuild Condition=\"[^\"]*${config}\\|Win32[^\"]*\">[ \t]*true")
 				set(excluded TRUE)
 			elseif(line MATCHES "</ClCompile>")
 				_sbo_append_source(result "${proj_dir}" "${current}" ${excluded} "${vcxproj}")

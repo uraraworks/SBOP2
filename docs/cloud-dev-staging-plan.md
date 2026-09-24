@@ -125,3 +125,8 @@ Claude Code のクラウドセッション（GitHub 連携・Linux コンテナ�
   - クラウドでは Emscripten ports のアーカイブ取得が塞がれているので、先に `tools/emscripten/prefetch-ports-via-git.sh` を実行する（git clone で取り込む）。
   - Linux 固有の修正は `LayerCloud.cpp` の `#include` の大文字小文字だけ。
   - 確認: emsdk（emcc 6.0.10）で 314 ファイルをコンパイル・リンク成功。ハッシュ・バージョン埋め込み、.br/.gz 生成、2回目は up-to-date でスキップ。Linux 版 SboSvr の `/game/` から html/js/wasm/data が br で配信されることも確認。ブラウザで実際に動かす確認は S5。
+- S5 完了（同じ PR「Linux 対応」に追加）:
+  - `tools/test-browser-e2e-linux.sh` を追加。空 DB でサーバーを起動し、`out/browser-title` を `webroot/game` に置いて、Playwright（ヘッドレス Chromium・SwiftShader）で `/api/debug/fixture` → `/debug` → `sbop2Debug` でログイン → MAP → ESC メニューまで進め、`out/e2e/map.png`・`map-menu.png` を撮る。ブラウザのコンソールと 4xx の URL は `out/e2e/console.log` に残る。
+  - fixture は `_DEBUG` 限定なので、CMake に `-DSBO_DEBUG_API=ON`（既定 OFF）を追加した。ON の時だけ `_DEBUG` を付け、`.vcxproj` の Debug 構成のソース一覧（DebugFixture 系入り）を使う。**ステージング・本番のビルドには使わない**（ビルドディレクトリも `out/cmake-linux-debugapi` に分ける）。
+  - 手順: `cmake -S . -B out/cmake-linux-debugapi -DCMAKE_BUILD_TYPE=Release -DSBO_DEBUG_API=ON && cmake --build out/cmake-linux-debugapi -j --target SboSvr` → `tools/build-sbocli-browser-title.sh` → `tools/test-browser-e2e-linux.sh`。
+  - 確認: 起動から MAP まで約10秒、3回続けて成功。MAP に自キャラ・マップ名・チャット、ESC でシステムメニューが出ることをスクショで確認。404 は git 管理外の BGM（`hisyou.ogg`・`fairytale.ogg`）だけ。
