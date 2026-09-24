@@ -1,5 +1,5 @@
 ﻿#include "StdAfx.h"
-#if !defined(__EMSCRIPTEN__)
+#if defined(_WIN32)
 #include <tchar.h>
 #endif
 #include "myString.h"

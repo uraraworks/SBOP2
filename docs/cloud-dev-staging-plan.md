@@ -105,3 +105,11 @@ Claude Code のクラウドセッション（GitHub 連携・Linux コンテナ�
 - 計画作成。調査結果は上記。
 - S0 完了: 落とし穴を `docs/codebase/pitfalls.md` に集約し、`CLAUDE.md` から参照（公開リポジトリのため未修正のセキュリティ課題・本番情報・ローカル環境情報は除外）。
 - S1 完了: ブラウザ版のソース一覧を `tools/browser-sources.txt`（314件）に切り出し、ビルド/プリフライト両スクリプトが読む形に。旧配列と完全一致・実ビルド成功を確認。サーバー側は S2 で CMake が `.vcxproj` の `ClCompile` を直接読む方針（一覧を増やさない）。
+- S2 完了: ルートの `CMakeLists.txt` で myLib・SboSockLib・SboSvr（同梱 sqlite 含む）を Linux 向けにビルドできるようにした。
+  - ソース一覧は `cmake/VcxprojSources.cmake` が各 `.vcxproj` の `ClCompile` を直接読む（Release|Win32 の `ExcludedFromBuild` に従うのでデバッグ専用ファイルは入らない。大文字小文字の違いは自動で吸収）。
+  - Linux 側だけの差し替え: `MainFrameWindow.cpp` → `MainFrameWindowNone.cpp`、`Common/Platform/SjisConvert.cpp` を追加、myLib から SDL2 依存の `myThread.cpp`（SboSvr 未使用）を除外。
+  - `_DEBUG` は付けない（全ファイル `-DNDEBUG` のみ。`/api/debug/fixture` はバイナリに含まれない）。
+  - webroot の解決（`ResolveWebRootPath` / `ResolveBrowserGamePath`）とパス連結を実行環境の区切り文字に寄せ、`StaticFileHandler` の非Windows 版ファイル読み込みを実装。あわせて `select` の第1引数・ソケットタイムアウト・`socklen_t` など、HTTP が Linux で応答しなかった原因を修正。
+  - 確認: 空の DB で `--headless` 起動 → `/health` が `{"status":"ok","onlinePlayers":0}`、`/admin/`・`/account/` が webroot のファイルをそのまま返す（304 再検証・`..` 拒否も確認）→ `--stop` で DB 保存して正常終了。
+  - 手順: `cmake -S . -B out/cmake-linux -DCMAKE_BUILD_TYPE=Release && cmake --build out/cmake-linux -j` → 実行ファイルと同じ場所に `webroot/`（`SboSvr/webroot` のコピー）と `SBODATA/`（`Release/SBODATA/*.dat`）を置いて `./SboSvr --headless`。必要パッケージは cmake・g++・zlib1g-dev。
+  - 残課題: Linux のゲーム用 TCP ポート（2006）はスタブで待ち受けないため、ブラウザ版からのゲーム接続は未対応（S5 の前に `UraraSockTCPSelect` の POSIX 化が要る）。Windows ビルドはこのセッションでは未確認。

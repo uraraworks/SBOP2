@@ -9,8 +9,10 @@
 // 共有ヘッダなので自前で依存を取り込む。
 // 以前は SboCli の BrowserCompat.h が先に PlatformDefs.h 等を
 // include している前提だった。
-#include "PlatformDefs.h"
+// CStringCompat.h は標準ヘッダ（<vector> 等）を読むので、min/max をマクロ定義する
+// PlatformDefs.h より先に読む（逆順だと libstdc++ の std::max 等が壊れる）。
 #include "CStringCompat.h"
+#include "PlatformDefs.h"
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>

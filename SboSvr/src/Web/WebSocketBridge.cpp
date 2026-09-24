@@ -243,7 +243,8 @@ void CWebSocketBridge::ProcessLoop()
         tv.tv_sec  = 0;
         tv.tv_usec = 500000; // 500ms タイムアウト
 
-        int nReady = select(0, &readSet, NULL, NULL, &tv);
+        // 第1引数は Windows では無視されるが、POSIX では「最大の fd + 1」が必要
+        int nReady = select(static_cast<int>(m_hListen) + 1, &readSet, NULL, NULL, &tv);
         if (nReady == SOCKET_ERROR) {
             break;
         }
@@ -266,7 +267,11 @@ void CWebSocketBridge::HandleAccept()
     // HandleSession() 側で loopback の時だけ X-Forwarded-For 等のヘッダを見る。
     sockaddr_in peerAddr;
     ZeroMemory(&peerAddr, sizeof(peerAddr));
+#ifdef _WIN32
     int nAddrLen = sizeof(peerAddr);
+#else
+    socklen_t nAddrLen = sizeof(peerAddr);
+#endif
 
     SOCKET hWsClient = accept(m_hListen, reinterpret_cast<sockaddr *>(&peerAddr), &nAddrLen);
     if (hWsClient == INVALID_SOCKET) {
@@ -296,11 +301,8 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient, DWORD dwPeerIpNet)
     SboPlatform::WriteDebugLine("[WebSocketBridge] HandleSession: start\n");
 
     // ソケットのタイムアウトを設定
-    DWORD dwTimeout = kSessionTimeoutMs;
-    setsockopt(hWsClient, SOL_SOCKET, SO_RCVTIMEO,
-               reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
-    setsockopt(hWsClient, SOL_SOCKET, SO_SNDTIMEO,
-               reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
+    SboPlatform::SetSocketTimeoutMs(hWsClient, true, kSessionTimeoutMs);
+    SboPlatform::SetSocketTimeoutMs(hWsClient, false, kSessionTimeoutMs);
     SetTcpNoDelay(hWsClient);
 
     // 1. WebSocketハンドシェイク
@@ -365,7 +367,11 @@ void CWebSocketBridge::HandleSession(SOCKET hWsClient, DWORD dwPeerIpNet)
     {
         sockaddr_in localAddr;
         ZeroMemory(&localAddr, sizeof(localAddr));
+#ifdef _WIN32
         int nLocalAddrLen = sizeof(localAddr);
+#else
+        socklen_t nLocalAddrLen = sizeof(localAddr);
+#endif
         if (getsockname(hTcpSock, reinterpret_cast<sockaddr *>(&localAddr), &nLocalAddrLen) == 0) {
             unsigned short wLocalPort = ntohs(localAddr.sin_port);
             ipRegistrationGuard.RegisterPort(wLocalPort, dwRealIpNet);
@@ -643,7 +649,10 @@ void CWebSocketBridge::BridgeLoop(SOCKET hWsClient, SOCKET hTcpSock)
         tv.tv_sec  = 0;
         tv.tv_usec = 500000; // 500ms タイムアウト
 
-        int nReady = select(0, &readSet, NULL, NULL, &tv);
+        // 第1引数は Windows では無視されるが、POSIX では「最大の fd + 1」が必要
+        int nMaxFd = (static_cast<int>(hWsClient) > static_cast<int>(hTcpSock)) ?
+            static_cast<int>(hWsClient) : static_cast<int>(hTcpSock);
+        int nReady = select(nMaxFd + 1, &readSet, NULL, NULL, &tv);
         if (nReady == SOCKET_ERROR) {
             break;
         }

@@ -22,37 +22,12 @@
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
 #else
-// POSIX / Emscripten
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+// 非Windows（Linux の CMake ビルド）
+// SboSockLib はサーバー側（SboSvr / SboSvrTest）にリンクされるライブラリで、
+// Common 配下の Info / LibInfo も取り込むため、SboSvr と同じ互換ヘッダを読む。
+// （timeGetTime / SetRect / CreateDirectory などの補完と、ソケット定義を含む）
+#include "../SboSvr/src/Platform/SvrCompat.h"
 #include <netdb.h>
-#include <unistd.h>
-#include <errno.h>
-#include <cstring>
-#include <cstdint>
-#include <string>
-#include <vector>
-#include <cwchar>
-#include <cstdlib>
-#include <cstdio>
-
-// SDL2（PlatformDefs.h の CRITICAL_SECTION で必要）
-#include <SDL2/SDL.h>
-
-// プラットフォーム共通定義
-#include "PlatformDefs.h"
-#include "CStringCompat.h"
-#include "TCharCompat.h"
-
-// ソケット関連定義（PlatformDefs.h に無いもの）
-typedef int SOCKET;
-#define INVALID_SOCKET (-1)
-#define SOCKET_ERROR (-1)
-#define SD_BOTH SHUT_RDWR
-#define closesocket(s) close(s)
-
 #endif
 
 #include <map>

@@ -65,6 +65,14 @@
 
 - **SQLite DB（`SBODATA/SboData.db`）を稼働中にコピーすると、ファイルサイズが一致していても中身が全ゼロの破損ファイルになることがある。** `PRAGMA journal_mode=WAL; synchronous=NORMAL;`（`MgrData.cpp:193`）の DB をチェックポイント前に強制終了すると本体ファイルがゼロ化する。`OpenSboDb` が `sqlite3_exec` の戻り値を見ず、壊れた db でも true を返す（整合性チェック不在）ため、旧 CP932 の `.dat` seed へ静かにフォールバックし、半角は正常なのに日本語だけ文字化けする分かりにくい症状になる。切り分けは `head -c16` が `SQLite format 3` か・全ゼロ率を確認。コピー後はサイズ一致で安心せず中身（ヘッダ・非ゼロ）を検証すること。UTF-8 変換済み db に再度 SJIS→UTF8 変換をかけると二重エンコードで全壊するので、変換前に現エンコードを必ず確認する。
 
+## Linux（CMake）ビルド
+
+- **非Windows の `PlatformDefs.h` は `min`/`max` を関数形式マクロで定義する。** これより後に libstdc++ の `<algorithm>`・`<vector>`・`<deque>`・`<random>` などを読むと、`std::max(...)` や `__g.max()` がマクロ展開されて大量のエラーになる（em++/libc++ では表面化しなかった）。対処は「標準ヘッダを先に読む」こと。`SboSvr/src/Platform/SvrCompat.h` で主要な標準ヘッダを `PlatformDefs.h` より前に読み、`TCharCompat.h` は `CStringCompat.h`（標準ヘッダを読む）を先に include する順にしてある。新しい標準ヘッダを使って同じ系統のエラーが出たら、`SvrCompat.h` の一覧に足す。
+- **`.vcxproj` の `ClCompile` は大文字小文字が実ファイルと違うことがある（例: `..\common\crc.cpp`）。** Windows では通るが Linux では見つからない。`cmake/VcxprojSources.cmake` は1階層ずつ大文字小文字を無視して実名に直すので `.vcxproj` 側は直さなくてよい。一方ソース中の `#include` の綴り違い（例: `LibInfoCharSVr.h`）は自動では直らないので、見つけたらソースを直す。
+- **Winsock の書き方は POSIX でそのまま動かないものがある（コンパイルは通る）。** `select(0, ...)` は Windows では第1引数が無視されるが、POSIX では「最大 fd + 1」が必要で、0 のままだと永久にタイムアウトし HTTP が接続だけ受けて無応答になる。`SO_RCVTIMEO`/`SO_SNDTIMEO` に `DWORD`（ミリ秒）を渡すと POSIX では `timeval` との長さ不一致で失敗してタイムアウトが効かない（`SboPlatform::SetSocketTimeoutMs()` を使う）。`accept`/`getpeername` の長さは `socklen_t*`。
+- **Linux のゲーム用 TCP ポート（既定 2006）は、現状スタブ実装で待ち受けない。** `Common/UraraSockTCP.h` の非Windows 分岐が `CUraraSockTCPStub` を返し、`SboSockLib/UraraSockTCP*.cpp` は丸ごと `#ifdef _WIN32`。HTTP（18080）と WebSocket ブリッジ（18081）は動くが、ブリッジの接続先 2006 が無いのでゲーム接続はできない。
+- **Linux では `SjisConvert.cpp` の SJIS 変換が UTF-8 扱いのフォールバックになる。** 空 DB で起動すると CP932 の `.dat` から読むため、日本語名が化ける可能性がある。検証・ステージング用データは既存 DB（UTF-8）のコピーを使う。
+
 ## サーバー
 
 - **SboSvr は起動時に DB をメモリへ読み込み、停止時にメモリ内容を DB へ書き戻す。** 稼働中に SQLite ファイルを直接 UPDATE しても、サーバー停止時に旧値で上書きされて巻き戻る（実例: uraran 等の MoveWait を稼働中に修正しても停止時に旧値で上書きされた）。DB を直接編集する時は必ず先にサーバーを停止すること。書き戻し経路はウィンドウ版が `OnClose→TermServer→OnDestroy→m_pMgrData->Save()`（`MainFrameWindow.cpp`）、ヘッドレス版が `--stop`/Ctrl+C→ループ脱出→`TermServer()`→`m_pMgrData->Save()`（`MainFrame.cpp`）で、他に30分毎の定期保存 `TimerProcSave`（`MainFrame.cpp`）がある。ウィンドウが画面上に見えない場所で起動していると `WM_CLOSE` が `OnClose` に届かず保存されないことがある（`SboSvr.ini` の `[Pos]` 更新日時が止まっているのが証拠）。自動化から起動・停止する時はヘッドレスモード（`--headless` 起動、`SboSvr.exe --stop` で停止）を使うこと。DB の実体は `SboSvr\Debug\SBODATA\SboData.db`。

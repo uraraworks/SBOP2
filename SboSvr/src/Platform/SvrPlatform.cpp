@@ -33,7 +33,9 @@
 #include <fcntl.h>
 #include <sys/file.h>
 #include <sys/resource.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
 #endif
@@ -1188,6 +1190,23 @@ namespace SboPlatform
 		Sleep(uMs);
 #else
 		usleep(uMs * 1000);
+#endif
+	}
+
+	// ソケットの受信/送信タイムアウトを設定する
+
+	bool	SetSocketTimeoutMs(std::uintptr_t hSocket, bool bRecv, unsigned int uMs)
+	{
+		int nOptName = bRecv ? SO_RCVTIMEO : SO_SNDTIMEO;
+#ifdef _WIN32
+		DWORD dwTimeout = uMs;
+		return setsockopt(static_cast<SOCKET>(hSocket), SOL_SOCKET, nOptName,
+			reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout)) == 0;
+#else
+		struct timeval tv;
+		tv.tv_sec = uMs / 1000;
+		tv.tv_usec = (uMs % 1000) * 1000;
+		return setsockopt(static_cast<int>(hSocket), SOL_SOCKET, nOptName, &tv, sizeof(tv)) == 0;
 #endif
 	}
 }

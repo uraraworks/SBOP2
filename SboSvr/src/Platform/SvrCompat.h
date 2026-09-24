@@ -23,6 +23,33 @@
 #include <string>
 #include <vector>
 #include <map>
+// PlatformDefs.h が min/max を関数形式マクロで定義するため、それを使う標準ヘッダ
+// （libstdc++ の <algorithm> や <random> など）は必ずマクロ定義より先に読む。
+// 後から読むと std::max 等の宣言がマクロ展開されてコンパイルできない。
+#include <algorithm>
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <climits>
+#include <cmath>
+#include <condition_variable>
+#include <deque>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <limits>
+#include <list>
+#include <memory>
+#include <mutex>
+#include <numeric>
+#include <queue>
+#include <random>
+#include <set>
+#include <sstream>
+#include <thread>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
 
 // 共有の型定義と文字列クラス
 #include "../../../Common/Platform/PlatformDefs.h"

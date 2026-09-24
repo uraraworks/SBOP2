@@ -6,6 +6,7 @@
 
 // 共有ヘッダなので自前で依存を取り込む。
 // 以前は SboCli の BrowserCompat.h が先に include している前提だった。
+#include <algorithm> // std::copy_n
 #include <vector>
 #include <string>
 #include <cstdarg>

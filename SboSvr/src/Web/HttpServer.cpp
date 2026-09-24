@@ -67,6 +67,62 @@
 
 namespace
 {
+// ベースディレクトリに相対パスを連結する。相対パスは '/' 区切りで渡し、
+// 実行環境の区切り文字（Windows は '\\'、それ以外は '/'）へ置き換える。
+std::wstring JoinNativePath(const std::wstring &base, const std::wstring &relative)
+{
+        const wchar_t chSep = static_cast<wchar_t>(SboPlatform::GetPathSeparator());
+        std::wstring result = base;
+        if (!result.empty()) {
+                wchar_t last = result[result.size() - 1];
+                if ((last != L'\\') && (last != L'/')) {
+                        result.push_back(chSep);
+                }
+        }
+        for (size_t i = 0; i < relative.size(); ++i) {
+                result.push_back((relative[i] == L'/') ? chSep : relative[i]);
+        }
+        return result;
+}
+
+// パスがディレクトリとして存在するか
+bool IsDirectoryPath(const std::wstring &path)
+{
+#if defined(_WIN32)
+        DWORD dwAttributes = GetFileAttributesW(path.c_str());
+        if (dwAttributes == INVALID_FILE_ATTRIBUTES) {
+                return false;
+        }
+        return (dwAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+#else
+        struct stat st;
+        std::string strPath = WstringToUtf8(path.c_str(), path.size());
+        if (stat(strPath.c_str(), &st) != 0) {
+                return false;
+        }
+        return S_ISDIR(st.st_mode);
+#endif
+}
+
+// パスが通常ファイルとして存在するか
+bool IsRegularFilePath(const std::wstring &path)
+{
+#if defined(_WIN32)
+        DWORD dwAttributes = GetFileAttributesW(path.c_str());
+        if (dwAttributes == INVALID_FILE_ATTRIBUTES) {
+                return false;
+        }
+        return (dwAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
+#else
+        struct stat st;
+        std::string strPath = WstringToUtf8(path.c_str(), path.size());
+        if (stat(strPath.c_str(), &st) != 0) {
+                return false;
+        }
+        return S_ISREG(st.st_mode);
+#endif
+}
+
 const size_t kMaxHeaderSize = 8192;
 const size_t kMaxBodySize = 65536;
 // スプライト画像アップロード（PUT /api/assets/sprites/...）専用の上限。
@@ -337,7 +393,11 @@ std::string ResolveClientIp(SOCKET hClient, const std::string &rawRequest)
 {
         sockaddr_in peerAddr;
         memset(&peerAddr, 0, sizeof(peerAddr));
+#ifdef _WIN32
         int nAddrLen = sizeof(peerAddr);
+#else
+        socklen_t nAddrLen = sizeof(peerAddr);
+#endif
         unsigned long dwIp = 0;
 
         if (getpeername(hClient, reinterpret_cast<sockaddr *>(&peerAddr), &nAddrLen) == 0) {
@@ -569,7 +629,8 @@ void CHttpServer::ProcessLoop()
                 tv.tv_sec = 0;
                 tv.tv_usec = 500000;	// 500ms
 
-                int nReady = select(0, &readSet, NULL, NULL, &tv);
+                // 第1引数は Windows では無視されるが、POSIX では「最大の fd + 1」が必要
+                int nReady = select(static_cast<int>(m_hListen) + 1, &readSet, NULL, NULL, &tv);
                 if (nReady == SOCKET_ERROR) {
                         break;
                 }
@@ -614,9 +675,9 @@ void CHttpServer::HandleAccept()
                 return;
         }
 
-        DWORD dwTimeout = 5000;
-        setsockopt(hClient, SOL_SOCKET, SO_RCVTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
-        setsockopt(hClient, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
+        const unsigned int uTimeoutMs = 5000;
+        SboPlatform::SetSocketTimeoutMs(hClient, true, uTimeoutMs);
+        SboPlatform::SetSocketTimeoutMs(hClient, false, uTimeoutMs);
 
         // スレッド起動を試みる
         bool bLaunched = false;
@@ -1521,7 +1582,7 @@ void CHttpServer::RegisterDefaultHandlers()
                 m_router.Register("GET", "/account", std::move(accountRedirectHandler));
 
                 std::unique_ptr<IApiHandler> accountStaticHandler(
-                    new CStaticFileHandler(webRoot + L"\\account", L"index.html", "/account/"));
+                    new CStaticFileHandler(JoinNativePath(webRoot, L"account"), L"index.html", "/account/"));
                 m_router.RegisterPrefix("GET", "/account/", std::move(accountStaticHandler));
         }
 
@@ -1530,81 +1591,33 @@ void CHttpServer::RegisterDefaultHandlers()
 
 bool CHttpServer::ResolveWebRootPath(std::wstring &outPath) const
 {
-#if !defined(_WIN32)
-        (void)outPath;
-        return false;
-#else
-        wchar_t szModulePath[MAX_PATH];
-        DWORD dwLength = GetModuleFileNameW(NULL, szModulePath, MAX_PATH);
-        if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
-                return false;
-        }
-
-        wchar_t *pSlash = wcsrchr(szModulePath, L'\\');
-        if (pSlash == NULL) {
-                return false;
-        }
-        *(pSlash + 1) = L'\0';
-
-        std::wstring basePath = szModulePath;
-        basePath.append(L"webroot");
-
-        DWORD dwAttributes = GetFileAttributesW(basePath.c_str());
-        if (dwAttributes == INVALID_FILE_ATTRIBUTES) {
-                return false;
-        }
-        if ((dwAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+        // 実行ファイルと同じディレクトリの webroot を使う
+        std::wstring basePath = JoinNativePath(SboPlatform::GetExeDirectoryW(), L"webroot");
+        if (!IsDirectoryPath(basePath)) {
                 return false;
         }
 
         outPath = basePath;
         return true;
-#endif
 }
 
 bool CHttpServer::ResolveBrowserGamePath(std::wstring &outPath) const
 {
-#if !defined(_WIN32)
-        (void)outPath;
-        return false;
-#else
-        wchar_t szModulePath[MAX_PATH];
-        DWORD dwLength = GetModuleFileNameW(NULL, szModulePath, MAX_PATH);
-        if ((dwLength == 0) || (dwLength >= MAX_PATH)) {
-                return false;
-        }
+        const std::wstring exeDir = SboPlatform::GetExeDirectoryW();
 
-        wchar_t *pSlash = wcsrchr(szModulePath, L'\\');
-        if (pSlash == NULL) {
-                return false;
-        }
-        *(pSlash + 1) = L'\0';
-
+        // 候補は '/' 区切りで書き、JoinNativePath() で実行環境の区切り文字へ直す
         const wchar_t *pszCandidates[] = {
-                L"..\\..\\out\\browser-title",
-                L"..\\out\\browser-title",
-                L"webroot\\game"
+                L"../../out/browser-title",
+                L"../out/browser-title",
+                L"webroot/game"
         };
 
         for (size_t i = 0; i < (sizeof(pszCandidates) / sizeof(pszCandidates[0])); ++i) {
-                std::wstring gamePath = szModulePath;
-                gamePath.append(pszCandidates[i]);
-
-                DWORD dwAttributes = GetFileAttributesW(gamePath.c_str());
-                if (dwAttributes == INVALID_FILE_ATTRIBUTES) {
+                std::wstring gamePath = JoinNativePath(exeDir, pszCandidates[i]);
+                if (!IsDirectoryPath(gamePath)) {
                         continue;
                 }
-                if ((dwAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
-                        continue;
-                }
-
-                std::wstring htmlPath = gamePath;
-                wchar_t last = htmlPath[htmlPath.size() - 1];
-                if ((last != L'\\') && (last != L'/')) {
-                        htmlPath.push_back(L'\\');
-                }
-                htmlPath.append(L"sbocli-title.html");
-                if (GetFileAttributesW(htmlPath.c_str()) == INVALID_FILE_ATTRIBUTES) {
+                if (!IsRegularFilePath(JoinNativePath(gamePath, L"sbocli-title.html"))) {
                         continue;
                 }
 
@@ -1613,7 +1626,6 @@ bool CHttpServer::ResolveBrowserGamePath(std::wstring &outPath) const
         }
 
         return false;
-#endif
 }
 
 // ------------------------------------------------------------
