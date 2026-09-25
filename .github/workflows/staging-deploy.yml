@@ -1,0 +1,78 @@
+# ステージングへの自動デプロイ(docs/cloud-dev-staging-plan.md の S6)
+#
+# master への push と手動実行で動く。リポジトリ変数 SBOP2_STAGING_HOST が未設定の間は何もしない。
+# 必要な設定(Settings → Secrets and variables → Actions):
+#   変数 SBOP2_STAGING_HOST           ステージングのホスト名か IP
+#   変数 SBOP2_STAGING_USER           SSH ユーザー(docker を sudo なしで使えること)
+#   Secret SBOP2_STAGING_SSH_KEY      上のユーザーでログインできる SSH 秘密鍵
+#   Secret SBOP2_STAGING_KNOWN_HOSTS  ssh-keyscan <ホスト> の出力(なりすまし防止)
+#
+# ホスト側は ~/sbop2-staging/deploy/staging/staging.env を用意しておく(初回のみ。手順は計画書)。
+name: staging-deploy
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: staging-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: ${{ vars.SBOP2_STAGING_HOST != '' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.10
+          actions-cache-folder: emsdk-cache
+
+      - name: ブラウザ版をビルド
+        run: tools/build-sbocli-browser-title.sh --force
+
+      - name: wss シムを入れる
+        run: deploy/staging/prepare-browser.sh
+
+      - name: 配布物をまとめる
+        run: |
+          # ソース一式(git 管理のもの)+ ビルド済みブラウザ版
+          git archive --format=tar -o bundle.tar HEAD
+          tar -rf bundle.tar out/browser-title/sbocli-title.*
+          gzip -9 bundle.tar
+
+      - name: SSH の準備
+        env:
+          SSH_KEY: ${{ secrets.SBOP2_STAGING_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.SBOP2_STAGING_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_staging
+          chmod 600 ~/.ssh/id_staging
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: 転送してデプロイ
+        env:
+          TARGET: ${{ vars.SBOP2_STAGING_USER }}@${{ vars.SBOP2_STAGING_HOST }}
+        run: |
+          scp -i ~/.ssh/id_staging bundle.tar.gz "$TARGET:/tmp/sbop2-bundle.tar.gz"
+          # 新しいソースを展開し、ホストにだけある staging.env を引き継いでから入れ替える
+          ssh -i ~/.ssh/id_staging "$TARGET" 'set -euo pipefail
+            cd ~
+            rm -rf sbop2-staging.new
+            mkdir sbop2-staging.new
+            tar -xzf /tmp/sbop2-bundle.tar.gz -C sbop2-staging.new
+            rm -f /tmp/sbop2-bundle.tar.gz
+            if [ -f sbop2-staging/deploy/staging/staging.env ]; then
+              cp -p sbop2-staging/deploy/staging/staging.env sbop2-staging.new/deploy/staging/
+            fi
+            rm -rf sbop2-staging.old
+            if [ -d sbop2-staging ]; then mv sbop2-staging sbop2-staging.old; fi
+            mv sbop2-staging.new sbop2-staging
+            sbop2-staging/deploy/staging/deploy.sh'

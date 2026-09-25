@@ -1,0 +1,26 @@
+# SBOP2 ステージングの入口。TLS(Let's Encrypt 自動取得)・wss・Basic 認証を受け持つ。
+# 本番の IIS と同じく、ゲームの WebSocket は /__sbop2bridge__ で受けて 18081 に渡し、
+# それ以外は 18080(HTTP サーバー)に渡す。
+# Caddy は SboSvr と同じネットワーク名前空間で動くので、127.0.0.1 で届く
+# (SboSvr は直接の相手が loopback の時だけ X-Forwarded-For を信用する)。
+{$SBOP2_STAGING_DOMAIN} {
+	# ゲームの WebSocket。iPhone の Safari は WebSocket に Basic 認証の資格情報を
+	# 付けないため、ここだけ Basic 認証の外に置く(ゲーム自体のログインで守られる)。
+	@bridge path /__sbop2bridge__ /__sbop2bridge__/*
+	handle @bridge {
+		reverse_proxy 127.0.0.1:18081
+	}
+
+	handle {
+		basic_auth {
+			{$SBOP2_BASIC_USER} {$SBOP2_BASIC_HASH}
+		}
+		# SboSvr が事前圧縮版(.br/.gz)を返すので、Caddy 側では圧縮しない
+		reverse_proxy 127.0.0.1:18080
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

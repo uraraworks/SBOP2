@@ -1,0 +1,14 @@
+# ステージング用 Docker イメージ(deploy/staging/Dockerfile)のビルドコンテキスト。
+# 必要なものだけを許可リスト方式で送る(画像・音声の元データや out/ の中間ファイルを送らない)。
+*
+!CMakeLists.txt
+!cmake/
+!Common/
+!myLib/
+!SboSockLib/
+!SboSvr/
+!SboSvrTest/
+!Release/SBODATA/*.dat
+!out/browser-title/sbocli-title.*
+!out/browser-title/BGM/
+!deploy/staging/

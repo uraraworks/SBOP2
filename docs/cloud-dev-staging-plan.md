@@ -130,3 +130,14 @@ Claude Code のクラウドセッション（GitHub 連携・Linux コンテナ�
   - fixture は `_DEBUG` 限定なので、CMake に `-DSBO_DEBUG_API=ON`（既定 OFF）を追加した。ON の時だけ `_DEBUG` を付け、`.vcxproj` の Debug 構成のソース一覧（DebugFixture 系入り）を使う。**ステージング・本番のビルドには使わない**（ビルドディレクトリも `out/cmake-linux-debugapi` に分ける）。
   - 手順: `cmake -S . -B out/cmake-linux-debugapi -DCMAKE_BUILD_TYPE=Release -DSBO_DEBUG_API=ON && cmake --build out/cmake-linux-debugapi -j --target SboSvr` → `tools/build-sbocli-browser-title.sh` → `tools/test-browser-e2e-linux.sh`。
   - 確認: 起動から MAP まで約10秒、3回続けて成功。MAP に自キャラ・マップ名・チャット、ESC でシステムメニューが出ることをスクショで確認。404 は git 管理外の BGM（`hisyou.ogg`・`fairytale.ogg`）だけ。
+
+### 2026-09-25
+
+- S6 のリポジトリ側を用意（同じ PR「Linux 対応」に追加）。手順・構成は `deploy/staging/README.md`。
+  - `deploy/staging/`: Docker（SboSvr をイメージ内でビルドするのでホストが arm64 でも可）＋Caddy（Let's Encrypt・Basic 認証）。本番の IIS と同じく `/__sbop2bridge__` を 18081 に、それ以外を 18080 に渡す。公開は 80/443 だけ。
+  - ブラウザ版には本番と同じ wss 書換シムを `prepare-browser.sh` で入れる（`.br`/`.gz` も作り直して検証）。
+  - Basic 認証はサイト全体。ただし iPhone の Safari が WebSocket に資格情報を付けないので、`/__sbop2bridge__` だけ外した（ゲームのログインで守られる）。
+  - `sanitize-db.py`: 本番 DB からアカウント・端末トークン・コード・BAN 情報・拒否 MAC・プレイヤーキャラ（所持品・スキル）・画像編集者名と下書きを消し、`--admin` で管理者を1件作る。IP・メールは DB に保存されていない（ログにだけ出る）。
+  - `.github/workflows/staging-deploy.yml`: master への push／手動で、ブラウザ版ビルド → シム → 転送 → ホストで `deploy.sh`。リポジトリ変数 `SBOP2_STAGING_HOST` が無い間は何もしない。
+  - 確認（クラウド内の Docker）: イメージのビルド、`localhost` の自己署名 TLS 経由で Basic 認証（なし 401／あり 200）、`/` のリダイレクト、br 配信、`load-db.sh` での DB 入れ替え、Playwright で https＋wss 越しに MAP まで入れること、`deploy.sh`、`docker compose stop` で DB を保存して止まることを確認。`sanitize-db.py` は fixture で作ったアカウント2件入りの DB で、アカウント・PC が消え、作った管理者で `/api/auth/admin-login` が通る（消したアカウントは 401）ことを確認。
+  - 残り（手元側）: ホストの用意、ドメイン、GitHub の変数・Secret、`staging.env`、本番 DB のコピー。

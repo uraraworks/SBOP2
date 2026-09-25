@@ -79,6 +79,8 @@
 - **ブラウザ版の Linux ビルド（`tools/build-sbocli-browser-title.sh`）でも `#include` の大文字小文字が効く。** 実例: `LayerCloud.cpp` の `InfoCharCLI.h`（実名 `InfoCharCli.h`）。ps1 版のインクルードディレクトリ `Common/myLib/myZLib` も実名は `myZlib` なので、bash 版は実名で書いてある。
 - **クラウドセッションでは Emscripten ports（SDL2・SDL2_ttf・freetype・harfbuzz・zlib）のアーカイブ取得が 403 になる**（`github.com/.../archive/...`・`releases/download` は許可されず、`git clone` は通る）。初回ビルド前に `tools/emscripten/prefetch-ports-via-git.sh` で git から取り込んでおく。GitHub Actions や手元では不要。
 - **Linux の CMake ビルドは既定で `_DEBUG` なし（`/api/debug/fixture` が入らない）。** 自動確認（`tools/test-browser-e2e-linux.sh`）には `-DSBO_DEBUG_API=ON` で別ディレクトリにビルドしたサーバーが要る。このオプションはステージング・本番に絶対に使わない。
+- **ステージング（`deploy/staging`）の Docker Compose では、`env_file` の値も `$` が変数展開される。** bcrypt ハッシュ（`$2a$14$...`）が壊れるので、`staging.env` は `format: raw` で読んでいる（`.env` という名前にすると compose.yaml の展開用にも読まれて警告が出るので避けた）。
+- **ステージングの SboSvr は Caddy のネットワーク名前空間に入っている（`network_mode: service:caddy`）。** SboSvr を作り直すのは問題ないが、Caddy だけを作り直すと SboSvr のネットワークが切れる。その時は両方作り直す。
 
 ## サーバー
 
