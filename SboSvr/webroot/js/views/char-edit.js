@@ -401,6 +401,11 @@ function buildEquipTab() {
   fb.setAttribute("aria-live", "polite");
   panel.appendChild(fb);
 
+  // 値はアイテム種別IDではなく、アイテム一覧の ID(このキャラが持っているもの)。
+  // 保存するとゲーム内で装備したときと同じ処理が走り、見た目も変わる。0 で外す。
+  var note = mkEl("p", "field-note", "アイテム一覧の ID（このキャラが持っているアイテム）を入れてください。0 で外します。");
+  panel.appendChild(note);
+
   var form = mkEl("form", "edit-form");
   form.id = "ce-equip-form";
   panel.appendChild(form);
@@ -1573,7 +1578,8 @@ export function mount(container) {
     try {
       var { response, data } = await putJson("/api/characters/" + currentCharId + "/equipment", body);
       if (!response.ok) {
-        var msg = (data && data.error) ? data.error : "保存に失敗しました";
+        // サーバーは装備できない理由を日本語の message で返す
+        var msg = (data && (data.message || data.error)) ? (data.message || data.error) : "保存に失敗しました";
         setFb(equipTab.fb, "エラー: " + msg, "error");
         return;
       }
