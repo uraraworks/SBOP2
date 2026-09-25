@@ -91,12 +91,15 @@ Settings → Secrets and variables → Actions に次を登録する。
 |---|---|---|
 | Variable | `SBOP2_STAGING_HOST` | ホスト名か IP |
 | Variable | `SBOP2_STAGING_USER` | SSH ユーザー(docker グループに入っていること) |
-| Secret | `SBOP2_STAGING_SSH_KEY` | デプロイ専用の SSH 秘密鍵 |
+| Secret | `SBOP2_STAGING_SSH_KEY` | デプロイ専用の SSH 秘密鍵(`base64 -w0 <鍵ファイル>` の1行がおすすめ。そのままの形でもよい) |
 | Secret | `SBOP2_STAGING_KNOWN_HOSTS` | `ssh-keyscan <ホスト>` の出力 |
 
 デプロイ専用の鍵は手元で `ssh-keygen -t ed25519 -f sbop2-staging -N "" -C deploy` で作り、
 公開鍵をホストの `~/.ssh/authorized_keys` に足す(Google Cloud ではコンソールの「メタデータ → SSH 認証鍵」に
 登録すると、鍵のコメント部分の名前(ここでは `deploy`)のユーザーが作られる)。
+
+ブラウザの SSH 画面から鍵を `cat` してコピーすると、改行や行末の空白が崩れて
+`Load key ...: error in libcrypto` で失敗することがある。`base64 -w0` の1行ならコピーで崩れない。
 
 `SBOP2_STAGING_HOST` が未設定の間、ワークフローは何もしない。
 

@@ -4,7 +4,7 @@
 # 必要な設定(Settings → Secrets and variables → Actions):
 #   変数 SBOP2_STAGING_HOST           ステージングのホスト名か IP
 #   変数 SBOP2_STAGING_USER           SSH ユーザー(docker を sudo なしで使えること)
-#   Secret SBOP2_STAGING_SSH_KEY      上のユーザーでログインできる SSH 秘密鍵
+#   Secret SBOP2_STAGING_SSH_KEY      上のユーザーでログインできる SSH 秘密鍵(そのままか base64 -w0 の1行)
 #   Secret SBOP2_STAGING_KNOWN_HOSTS  ssh-keyscan <ホスト> の出力(なりすまし防止)
 #
 # ホスト側は ~/sbop2-staging/deploy/staging/staging.env を用意しておく(初回のみ。手順は deploy/staging/README.md)。
@@ -56,8 +56,16 @@ jobs:
           KNOWN_HOSTS: ${{ secrets.SBOP2_STAGING_KNOWN_HOSTS }}
         run: |
           install -m 700 -d ~/.ssh
-          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_staging
+          # 秘密鍵はそのままの形でも、base64 -w0 で1行にした形でもよい
+          # (ブラウザの SSH 画面からコピーすると改行や空白が崩れやすいため)。CR と行末の空白は取り除く。
+          key=$(printf '%s\n' "$SSH_KEY" | tr -d '\r' | sed 's/[[:space:]]*$//')
+          case "$key" in
+            -----BEGIN*) printf '%s\n' "$key" > ~/.ssh/id_staging ;;
+            *) printf '%s' "$key" | tr -d ' \n' | base64 -d > ~/.ssh/id_staging ;;
+          esac
           chmod 600 ~/.ssh/id_staging
+          # 鍵として読めるかをここで確かめる(読めない時は Secret の貼り方を見直す)
+          ssh-keygen -y -f ~/.ssh/id_staging > /dev/null
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
 
       - name: 転送してデプロイ
