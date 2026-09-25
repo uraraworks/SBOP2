@@ -142,3 +142,7 @@ Claude Code のクラウドセッション（GitHub 連携・Linux コンテナ�
   - 確認（クラウド内の Docker）: イメージのビルド、`localhost` の自己署名 TLS 経由で Basic 認証（なし 401／あり 200）、`/` のリダイレクト、br 配信、`load-db.sh` での DB 入れ替え、Playwright で https＋wss 越しに MAP まで入れること、`deploy.sh`、`docker compose stop` で DB を保存して止まることを確認。`sanitize-db.py` は fixture で作ったアカウント2件入りの DB で、アカウント・PC が消え、作った管理者で `/api/auth/admin-login` が通る（消したアカウントは 401）ことを確認。
   - 残り（手元側）: ホストの用意、ドメイン、GitHub の変数・Secret、`staging.env`、本番 DB のコピー。
 - ホストを Google Cloud の無料枠（e2-micro、メモリ 1GB）にしたので、SboSvr のイメージは Actions で作って `docker save` で送り、ホストでは `deploy.sh --image` で読み込むだけにした（ホストでの C++ ビルドをやめた）。ホストに置くのは `deploy/staging` だけ。VM の作り方は `deploy/staging/README.md`。
+- S6 完了: ステージングが https://136-109-105-232.sslip.io で動いた（GCP us-west1-a の e2-micro、静的 IP。ドメインは持たずに sslip.io で Let's Encrypt を取得）。
+  - Actions の staging-deploy でビルド → 転送 → `deploy.sh --image` → `/health` まで通った。つまずいたのは SSH だけ（秘密鍵のコピー崩れ、GCP が `authorized_keys` を書き直す）で、どちらも `docs/codebase/pitfalls.md` に記録。
+  - ブラウザからタイトル画面、`sanitize-db.py` で作った本番コピーの DB を `load-db.sh` で入れて、管理者でログインできることを確認（オーナー確認）。
+  - マージ前の試験のため作業ブランチの push でも動かしていたのは外した。以後は master への push で自動デプロイ。
