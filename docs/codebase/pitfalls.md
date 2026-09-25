@@ -81,6 +81,8 @@
 - **Linux の CMake ビルドは既定で `_DEBUG` なし（`/api/debug/fixture` が入らない）。** 自動確認（`tools/test-browser-e2e-linux.sh`）には `-DSBO_DEBUG_API=ON` で別ディレクトリにビルドしたサーバーが要る。このオプションはステージング・本番に絶対に使わない。
 - **ステージング（`deploy/staging`）の Docker Compose では、`env_file` の値も `$` が変数展開される。** bcrypt ハッシュ（`$2a$14$...`）が壊れるので、`staging.env` は `format: raw` で読んでいる（`.env` という名前にすると compose.yaml の展開用にも読まれて警告が出るので避けた）。
 - **ステージングの SboSvr は Caddy のネットワーク名前空間に入っている（`network_mode: service:caddy`）。** SboSvr を作り直すのは問題ないが、Caddy だけを作り直すと SboSvr のネットワークが切れる。その時は両方作り直す。
+- **Google Cloud の VM では `~/.ssh/authorized_keys` に手で足した鍵が消える。** ブラウザの SSH で入ると GCP のゲストエージェントがこのファイルを書き直し、自分で足したデプロイ鍵が消えて Actions の SSH が `Permission denied (publickey)` になった(2026-09-25)。デプロイ鍵は VM の「編集 → SSH 認証鍵」(メタデータ)に登録する。鍵の末尾のコメントがログインユーザー名になる。
+- **ブラウザの SSH 画面から秘密鍵を `cat` してコピーすると改行が崩れ、Actions で `Load key ...: error in libcrypto` になる。** `staging-deploy.yml` は `base64 -w0` の1行も受け付けるので、Secret にはその形で登録する。
 
 ## サーバー
 

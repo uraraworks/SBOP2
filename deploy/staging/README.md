@@ -94,9 +94,15 @@ Settings → Secrets and variables → Actions に次を登録する。
 | Secret | `SBOP2_STAGING_SSH_KEY` | デプロイ専用の SSH 秘密鍵(`base64 -w0 <鍵ファイル>` の1行がおすすめ。そのままの形でもよい) |
 | Secret | `SBOP2_STAGING_KNOWN_HOSTS` | `ssh-keyscan <ホスト>` の出力 |
 
-デプロイ専用の鍵は手元で `ssh-keygen -t ed25519 -f sbop2-staging -N "" -C deploy` で作り、
-公開鍵をホストの `~/.ssh/authorized_keys` に足す(Google Cloud ではコンソールの「メタデータ → SSH 認証鍵」に
-登録すると、鍵のコメント部分の名前(ここでは `deploy`)のユーザーが作られる)。
+デプロイ専用の鍵は `ssh-keygen -t ed25519 -f deploykey -N "" -C <SSHユーザー名>` で作る。
+公開鍵(`deploykey.pub`)の登録先はホストによって違う。
+
+- Google Cloud: コンソールの VM の「編集 → セキュリティとアクセス → SSH 認証鍵」に1行で登録する。
+  鍵の末尾(コメント)がログインユーザー名になる。**`~/.ssh/authorized_keys` に手で足すと、
+  ブラウザの SSH で入った時などに GCP のエージェントが書き直して消してしまう。**
+- ほかのホスト: `~/.ssh/authorized_keys` に足す。
+
+秘密鍵(`deploykey`)は Secret に登録したらホストから消す。
 
 ブラウザの SSH 画面から鍵を `cat` してコピーすると、改行や行末の空白が崩れて
 `Load key ...: error in libcrypto` で失敗することがある。`base64 -w0` の1行ならコピーで崩れない。
