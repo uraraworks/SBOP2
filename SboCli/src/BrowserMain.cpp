@@ -199,8 +199,15 @@ extern "C" EMSCRIPTEN_KEEPALIVE const char *SBOP2_DebugGetStateJson(void)
 			<< "\"mapID\":" << pPlayer->m_dwMapID << ","
 			<< "\"x\":" << pPlayer->m_nMapX << ","
 			<< "\"y\":" << pPlayer->m_nMapY << ","
-			<< "\"direction\":" << pPlayer->m_nDirection
-			<< "},";
+			<< "\"direction\":" << pPlayer->m_nDirection << ","
+			<< "\"charID\":" << pPlayer->m_dwCharID << ","
+			<< "\"equipCloth\":" << pPlayer->m_dwEquipItemIDCloth << ","
+			<< "\"equipArmsRight\":" << pPlayer->m_dwEquipItemIDArmsRight << ","
+			<< "\"items\":[";
+		for (size_t i = 0; i < pPlayer->m_adwItemID.size(); i ++) {
+			oss << (i ? "," : "") << pPlayer->m_adwItemID[i];
+		}
+		oss << "]},";
 	} else {
 		oss << "\"player\":null,";
 	}

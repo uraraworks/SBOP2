@@ -1623,6 +1623,8 @@ export function mount(container) {
   // fb: 結果を出す場所(アイテムタブ/装備タブ)
   async function doSetEquip(slotKey, itemId, fb) {
     if (!currentCharId) { return; }
+    // もう一方のタブに前回の結果が残っていると紛らわしいので消しておく
+    [equipTab.fb, itemsTab.fb].forEach(function (f) { if (f !== fb) { setFb(f, "", ""); } });
     setFb(fb, itemId ? "装備中..." : "外しています...", "");
     var body = {};
     body[slotKey] = itemId;

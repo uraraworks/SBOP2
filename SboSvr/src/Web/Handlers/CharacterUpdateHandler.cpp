@@ -777,6 +777,11 @@ void CCharacterUpdateHandler::HandleEquipment(const HttpRequest &request, HttpRe
                 pChar->m_dwEquipItemIDHead = static_cast<DWORD>(nVal);
         }
 
+        // Equip/UnEquip の通知(本人向け RES_CHARINFO)はメインループの画像変更処理に任せると
+        // 他の変更フラグが優先されて遅れたり、本人のセッションIDの画面にしか届かなかったりする。
+        // グラフィック更新と同じく、ここで周囲と本人へ最新のキャラ情報(装備欄・バッグ)を送る。
+        pCharLib->NotifyAdminEditCharInfo(pCharSvr);
+
         std::string json = BuildEquipmentJson(pChar);
         pCharLib->Leave();
 

@@ -69,14 +69,16 @@
 マップ画面にいる時の `player` の例:
 
 ```json
-"player": { "name": "てすと", "mapID": 1, "x": 10, "y": 12, "direction": 2 }
+"player": { "name": "てすと", "mapID": 1, "x": 10, "y": 12, "direction": 2,
+            "charID": 3, "equipCloth": 8, "equipArmsRight": 0, "items": [7] }
 ```
 
 - `gameState` / `gameStateName`: `SboCli/src/SboCli_priv.h` の `GAMESTATE_*`
   (LOGO/TITLE/LOGIN/DISCONNECT/INFO/LOGINMENU/MAP)。
 - `windows`: 開いているウィンドウ一覧(`WINDOWTYPE_*` のID/名前、アクティブ/表示フラグ、カーソル位置 `pos`)。
 - `activeWindow`: キー入力を受け付けているウィンドウ(無ければ `null`)。
-- `player`: マップ画面でのみ非 `null`。名前はUTF-8。
+- `player`: マップ画面でのみ非 `null`。名前はUTF-8。`equipCloth` / `equipArmsRight` は装備中のアイテムID、
+  `items` はバッグのアイテムID一覧(管理画面から装備を変えたときの反映確認用)。
 - `systemMessages`: C++側 `CMgrData` が保持するシステムメッセージの末尾5件(UTF-8)。
 - `messages`: ブラウザ側チャットログ(`window.sbop2ChatLogGetSnapshot()`)のスナップショットを
   `state()` 呼び出し時に合成したもの。取得できない場合は `null`。
