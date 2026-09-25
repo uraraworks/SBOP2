@@ -12,7 +12,8 @@ name: staging-deploy
 
 on:
   push:
-    branches: [master]
+    # claude/project-thread-qympff はマージ前の試験用(マージ時に外す)
+    branches: [master, claude/project-thread-qympff]
   workflow_dispatch:
 
 concurrency:
