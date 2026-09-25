@@ -262,6 +262,23 @@
   font-size: 0.85rem;
 }
 
+/* 編集フォームの格子(.form-grid)の1マスに入れたときは、ほかの欄(.form-field)と同じく
+   ラベルを上の行に出し、狭いマスでは折り返す。横一列のままだと隣のマスにはみ出して重なる */
+.form-grid > .entity-field,
+.form-grid > .sprite-field {
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.form-grid > .entity-field > .entity-field-label,
+.form-grid > .sprite-field > .sprite-field-label {
+  flex-basis: 100%;
+  white-space: normal;
+}
+.form-grid > .entity-field .button.small,
+.form-grid > .sprite-field .button.small {
+  white-space: nowrap;
+}
+
 .ep-backdrop {
   position: fixed;
   inset: 0;

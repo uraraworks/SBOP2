@@ -180,6 +180,9 @@ function buildDetailPane({ feedbackEl }) {
   // ゲーム画面でクリックして配置マップID・X/Y座標を指定する
   const posPickWrap = document.createElement("div");
   posPickWrap.className = "form-field";
+  // 狭い格子で文字が折り返さないよう1行ぶん使い、ボタンは文字幅にする
+  posPickWrap.style.gridColumn = "1 / -1";
+  posPickWrap.style.alignItems = "flex-start";
   const posPickBtn = document.createElement("button");
   posPickBtn.type = "button";
   posPickBtn.className = "button small";
