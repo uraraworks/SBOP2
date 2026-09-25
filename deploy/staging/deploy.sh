@@ -1,19 +1,32 @@
 #!/usr/bin/env bash
 # ステージングを最新にする(ステージングのホストで実行。GitHub Actions からも呼ぶ)。
 #
-#   deploy/staging/deploy.sh
+#   deploy/staging/deploy.sh --image <sbop2-staging.tar.gz>   Actions で作ったイメージを読み込んで入れ替える
+#   deploy/staging/deploy.sh                                  このホストでイメージを作って入れ替える
 #
-# 前提: このディレクトリに staging.env があり、../../out/browser-title に
-# wss シム入りのブラウザ版(prepare-browser.sh 済み)が置かれていること。
+# メモリの少ないホスト(Google Cloud の e2-micro など)では C++ のビルドが重いので、
+# GitHub Actions でイメージを作って送る(--image)。ホストで作る場合は、リポジトリ一式と
+# wss シム入りのブラウザ版(prepare-browser.sh 済みの out/browser-title)が要る。
+# どちらの場合も、このディレクトリに staging.env が必要。
 set -euo pipefail
 
 cd "$(dirname "$0")"
+IMAGE_TAR=""
+if [ "${1:-}" = "--image" ]; then
+	IMAGE_TAR="${2:?--image にはイメージのファイルを指定してください}"
+fi
 [ -f staging.env ] || { echo "staging.env がありません(staging.env.example をコピーして作成)" >&2; exit 1; }
-[ -f ../../out/browser-title/sbocli-title.html ] || { echo "ブラウザ版がありません: out/browser-title" >&2; exit 1; }
-grep -q '__SBOP2_WSS_SHIM__' ../../out/browser-title/sbocli-title.html || { echo "ブラウザ版に wss シムが入っていません(prepare-browser.sh)" >&2; exit 1; }
 
-# SboSvr のイメージを作り直して入れ替える。Caddy はそのまま(証明書も保持)
-docker compose build sbosvr
+if [ -n "$IMAGE_TAR" ]; then
+	echo "[deploy] イメージを読み込みます: $IMAGE_TAR"
+	gzip -dc "$IMAGE_TAR" | docker load
+else
+	[ -f ../../out/browser-title/sbocli-title.html ] || { echo "ブラウザ版がありません: out/browser-title" >&2; exit 1; }
+	grep -q '__SBOP2_WSS_SHIM__' ../../out/browser-title/sbocli-title.html || { echo "ブラウザ版に wss シムが入っていません(prepare-browser.sh)" >&2; exit 1; }
+	docker compose build sbosvr
+fi
+
+# SboSvr を新しいイメージで作り直す。Caddy はそのまま(証明書も保持)
 docker compose up -d
 docker image prune -f >/dev/null
 

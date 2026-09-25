@@ -18,7 +18,7 @@ Claude Code のクラウドセッション（GitHub 連携・Linux コンテナ�
   クラウドで立てたサーバーに手元ブラウザから直接繋ぐことはできない。確認はクラウド内のヘッドレスブラウザで行う。
 - クラウドセッションはこの PC のメモリ（`~/.claude/.../memory`）と `CLAUDE.local.md` を読めない。
   必要な知見はリポジトリ内（`docs/`・`AGENTS.md`・`CLAUDE.md`）に置く。
-- 本番 VPS は Windows Server。ステージングは別の Linux ホスト（Oracle Cloud Always Free 等の無料枠）に置く方針。
+- 本番 VPS は Windows Server。ステージングは別の Linux ホスト（無料枠）に置く方針。Oracle Cloud はアカウント作成が審査で通らなかったため、Google Cloud の無料枠（e2-micro）にした（2026-09-25）。
   本番 VPS 同居案は、Windows バイナリを作る仕組み（Actions の Windows ランナー）と本番への影響リスクがあるため見送り。
 - この PC には Linux ツールチェーン（WSL ディストリ・cmake・g++）が無いが、クラウドセッション自体が Linux ビルド環境になるため、
   手元に WSL を入れなくても S2 以降を進められる。
@@ -141,3 +141,4 @@ Claude Code のクラウドセッション（GitHub 連携・Linux コンテナ�
   - `.github/workflows/staging-deploy.yml`: master への push／手動で、ブラウザ版ビルド → シム → 転送 → ホストで `deploy.sh`。リポジトリ変数 `SBOP2_STAGING_HOST` が無い間は何もしない。
   - 確認（クラウド内の Docker）: イメージのビルド、`localhost` の自己署名 TLS 経由で Basic 認証（なし 401／あり 200）、`/` のリダイレクト、br 配信、`load-db.sh` での DB 入れ替え、Playwright で https＋wss 越しに MAP まで入れること、`deploy.sh`、`docker compose stop` で DB を保存して止まることを確認。`sanitize-db.py` は fixture で作ったアカウント2件入りの DB で、アカウント・PC が消え、作った管理者で `/api/auth/admin-login` が通る（消したアカウントは 401）ことを確認。
   - 残り（手元側）: ホストの用意、ドメイン、GitHub の変数・Secret、`staging.env`、本番 DB のコピー。
+- ホストを Google Cloud の無料枠（e2-micro、メモリ 1GB）にしたので、SboSvr のイメージは Actions で作って `docker save` で送り、ホストでは `deploy.sh --image` で読み込むだけにした（ホストでの C++ ビルドをやめた）。ホストに置くのは `deploy/staging` だけ。VM の作り方は `deploy/staging/README.md`。

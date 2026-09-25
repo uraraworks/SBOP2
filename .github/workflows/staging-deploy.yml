@@ -7,7 +7,7 @@
 #   Secret SBOP2_STAGING_SSH_KEY      上のユーザーでログインできる SSH 秘密鍵
 #   Secret SBOP2_STAGING_KNOWN_HOSTS  ssh-keyscan <ホスト> の出力(なりすまし防止)
 #
-# ホスト側は ~/sbop2-staging/deploy/staging/staging.env を用意しておく(初回のみ。手順は計画書)。
+# ホスト側は ~/sbop2-staging/deploy/staging/staging.env を用意しておく(初回のみ。手順は deploy/staging/README.md)。
 name: staging-deploy
 
 on:
@@ -40,12 +40,14 @@ jobs:
       - name: wss シムを入れる
         run: deploy/staging/prepare-browser.sh
 
-      - name: 配布物をまとめる
+      - name: イメージを作る
         run: |
-          # ソース一式(git 管理のもの)+ ビルド済みブラウザ版
-          git archive --format=tar -o bundle.tar HEAD
-          tar -rf bundle.tar out/browser-title/sbocli-title.*
-          gzip -9 bundle.tar
+          # メモリの少ないホストでは C++ のビルドが重いので、ここで作って送る。
+          # ランナー(x86_64)と同じ CPU のホストで動く(arm64 のホストなら deploy.sh をイメージ無しで使う)。
+          docker build -f deploy/staging/Dockerfile -t sbop2-staging .
+          docker save sbop2-staging | gzip > sbop2-staging.tar.gz
+          # ホストには deploy/staging だけを置く(compose.yaml・Caddyfile・スクリプト)
+          tar -czf deploy-files.tar.gz deploy/staging
 
       - name: SSH の準備
         env:
@@ -61,18 +63,14 @@ jobs:
         env:
           TARGET: ${{ vars.SBOP2_STAGING_USER }}@${{ vars.SBOP2_STAGING_HOST }}
         run: |
-          scp -i ~/.ssh/id_staging bundle.tar.gz "$TARGET:/tmp/sbop2-bundle.tar.gz"
-          # 新しいソースを展開し、ホストにだけある staging.env を引き継いでから入れ替える
+          scp -i ~/.ssh/id_staging sbop2-staging.tar.gz deploy-files.tar.gz "$TARGET:/tmp/"
+          # deploy/staging を新しくし(ホストにだけある staging.env は残す)、イメージを読み込んで入れ替える
           ssh -i ~/.ssh/id_staging "$TARGET" 'set -euo pipefail
-            cd ~
-            rm -rf sbop2-staging.new
-            mkdir sbop2-staging.new
-            tar -xzf /tmp/sbop2-bundle.tar.gz -C sbop2-staging.new
-            rm -f /tmp/sbop2-bundle.tar.gz
-            if [ -f sbop2-staging/deploy/staging/staging.env ]; then
-              cp -p sbop2-staging/deploy/staging/staging.env sbop2-staging.new/deploy/staging/
-            fi
-            rm -rf sbop2-staging.old
-            if [ -d sbop2-staging ]; then mv sbop2-staging sbop2-staging.old; fi
-            mv sbop2-staging.new sbop2-staging
-            sbop2-staging/deploy/staging/deploy.sh'
+            mkdir -p ~/sbop2-staging
+            cd ~/sbop2-staging
+            if [ -f deploy/staging/staging.env ]; then cp -p deploy/staging/staging.env /tmp/sbop2-staging.env; fi
+            rm -rf deploy
+            tar -xzf /tmp/deploy-files.tar.gz
+            if [ -f /tmp/sbop2-staging.env ]; then mv /tmp/sbop2-staging.env deploy/staging/staging.env; fi
+            deploy/staging/deploy.sh --image /tmp/sbop2-staging.tar.gz
+            rm -f /tmp/sbop2-staging.tar.gz /tmp/deploy-files.tar.gz'

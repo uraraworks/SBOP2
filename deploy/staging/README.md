@@ -21,38 +21,52 @@
 
 | ファイル | 役割 |
 |---|---|
-| `Dockerfile` | SboSvr をビルドし、webroot・ブラウザ版・`.dat` と一緒に入れる(ホストの CPU を問わない) |
+| `Dockerfile` | SboSvr をビルドし、webroot・ブラウザ版・`.dat` と一緒に入れる |
 | `compose.yaml` | Caddy と SboSvr の2つのコンテナ |
 | `Caddyfile` | TLS・Basic 認証・振り分け |
 | `staging.env.example` | ドメインと Basic 認証の設定の雛形 |
 | `prepare-browser.sh` | ブラウザ版に wss シムを入れ、`.br`/`.gz` を作り直す |
-| `deploy.sh` | ホストで SboSvr のイメージを作り直して入れ替える(Actions からも呼ぶ) |
+| `deploy.sh` | ホストで SboSvr のイメージを入れ替える(`--image` で Actions が作ったイメージを読み込む。無ければホストでビルド) |
 | `sanitize-db.py` | 本番 DB から個人情報を除いたコピーを作る |
 | `load-db.sh` | ホストでステージングの DB を入れ替える |
 | `../../.github/workflows/staging-deploy.yml` | master への push で自動デプロイ |
 
 ## 初回のセットアップ
 
-### 1. ホストを用意する
+### 1. ホストを用意する(Google Cloud の無料枠)
 
-例: Oracle Cloud Always Free の Ampere A1(arm64)+ Ubuntu 24.04。x86_64 でもそのまま動く。
+Compute Engine で VM を1台作る。無料枠の条件は変わることがあるので、作る前に公式の「Google Cloud の無料枠」の説明で確かめること。
+念のため「お支払い → 予算とアラート」で少額の予算アラートも作っておく。
+
+| 項目 | 設定 |
+|---|---|
+| リージョン | `us-west1`・`us-central1`・`us-east1` のどれか(無料枠は米国のこの3つだけ) |
+| マシンタイプ | `e2-micro` |
+| ブートディスク | Ubuntu 24.04 LTS(x86/64)、**標準永続ディスク**、30GB 以内(バランス永続ディスクは無料枠の対象外) |
+| ファイアウォール | 「HTTP トラフィックを許可」「HTTPS トラフィックを許可」にチェック |
+| 外部 IP | ドメインを向けるので、VPC ネットワーク → IP アドレスで「静的」に昇格しておく |
+
+メモリが 1GB しかないので、C++ のビルドはホストでは行わない(GitHub Actions でイメージを作って送る)。
+念のためスワップを作っておく。
 
 ```bash
-# Docker(公式の手順)
+sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile
+sudo mkswap /swapfile && sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
+
+Docker を入れる。
+
+```bash
 curl -fsSL https://get.docker.com | sudo sh
 sudo usermod -aG docker "$USER"   # 入り直すと sudo なしで docker が使える
 ```
 
-80/443 を開ける。Oracle Cloud は2か所ある。
+通信量について: 無料で外に出せるのは月 1GB 程度。ブラウザ版の初回読み込みは圧縮後で約 10MB あるので、
+キャッシュ無しの読み込みで月 100 回くらいが目安。Actions からの転送(ホストへの受信)は数えない。
 
-- VCN のセキュリティ・リスト(またはネットワーク・セキュリティ・グループ)に TCP 80/443 のイングレスを足す
-- Ubuntu イメージの iptables も既定で閉じているので開ける:
-
-```bash
-sudo iptables -I INPUT 6 -p tcp -m multiport --dports 80,443 -j ACCEPT
-sudo iptables -I INPUT 6 -p udp --dport 443 -j ACCEPT
-sudo netfilter-persistent save
-```
+ほかの Linux ホスト(国内 VPS など)でもそのまま使える。arm64 のホストでは Actions のイメージ(x86_64)が動かないので、
+ホストにリポジトリを置いて `deploy.sh` を引数なしで実行する(ホストでビルドする)。
 
 ### 2. ドメインを向ける
 
@@ -80,15 +94,17 @@ Settings → Secrets and variables → Actions に次を登録する。
 | Secret | `SBOP2_STAGING_SSH_KEY` | デプロイ専用の SSH 秘密鍵 |
 | Secret | `SBOP2_STAGING_KNOWN_HOSTS` | `ssh-keyscan <ホスト>` の出力 |
 
-デプロイ専用の鍵は手元で `ssh-keygen -t ed25519 -f sbop2-staging -N ""` で作り、
-公開鍵をホストの `~/.ssh/authorized_keys` に足す。
+デプロイ専用の鍵は手元で `ssh-keygen -t ed25519 -f sbop2-staging -N "" -C deploy` で作り、
+公開鍵をホストの `~/.ssh/authorized_keys` に足す(Google Cloud ではコンソールの「メタデータ → SSH 認証鍵」に
+登録すると、鍵のコメント部分の名前(ここでは `deploy`)のユーザーが作られる)。
 
 `SBOP2_STAGING_HOST` が未設定の間、ワークフローは何もしない。
 
 ### 5. 初回デプロイ
 
 Actions の「staging-deploy」を手動実行する(以後は master への push で自動)。
-ブラウザ版のビルド → wss シム → 転送 → `deploy.sh`(イメージ作成・起動・`/health` 確認)の順に進む。
+ブラウザ版のビルド → wss シム → イメージ作成 → 転送 → `deploy.sh --image`(読み込み・起動・`/health` 確認)の順に進む。
+ホストには `~/sbop2-staging/deploy/staging` だけが置かれる。
 
 ## DB を本番のコピーにする
 
