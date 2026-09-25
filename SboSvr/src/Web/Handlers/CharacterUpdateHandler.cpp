@@ -812,6 +812,10 @@ void CCharacterUpdateHandler::HandleGraphics(const HttpRequest &request, HttpRes
                 pChar->m_wGrpIDInitSP = static_cast<WORD>(nVal);
         }
 
+        // 見た目の変更はメモリを書き換えるだけではゲーム画面に届かないので、
+        // 周囲と本人へ最新のキャラ情報を送り直す(docs/codebase/pitfalls.md 参照)
+        pCharLib->NotifyAdminEditCharInfo(static_cast<CInfoCharSvr *>(pChar));
+
         std::string json = BuildGraphicsJson(pChar);
         pCharLib->Leave();
 

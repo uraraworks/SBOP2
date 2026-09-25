@@ -146,4 +146,6 @@
 
 - **`sbop2Debug` の hold/press 後にキーが押しっぱなしになり「キャラが固まった」ように見えることがある。** `releaseAll()` で解消する（ゲームの不具合と誤認しないこと）。テストNPCはマップ1のCharID 824「リナ」(1216,1312付近)。
 
-- **管理画面からの値変更はメモリだけ変わりクライアントに届かない。** `LibInfoCharSvr::NotifyAdminEditCharInfo` で `RES_CHARINFO` を再送する必要がある。
+- **管理画面からの値変更はメモリだけ変わりクライアントに届かない。** `LibInfoCharSvr::NotifyAdminEditCharInfo` で `RES_CHARINFO` を再送する必要がある。（`CharacterUpdateHandler` の基本情報とグラフィックは対応済み。ステータスなど他のタブも同じ落とし穴がある）
+
+- **Linux 版 SboSvr は管理画面の画像を実行ファイルの隣の `SboGrpData/res/` から配信する。** Windows 版は `SboGrpData.dll` の埋め込みリソースなので気付きにくい。配置先（ステージングの Docker イメージなど）に含め忘れると `/api/assets/sprites` が全カテゴリ 404 になり、グラフィック画面やサムネが空になる。
