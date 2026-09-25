@@ -1,0 +1,39 @@
+# SboSvr / SboSvrTest の Linux ビルドとテスト
+#
+# 手元での手順と同じことを ubuntu で行う（docs/cloud-dev-staging-plan.md の S3）。
+# Windows の正式ビルド（Visual Studio）はここでは扱わない。
+
+name: Linux ビルドとテスト
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 依存パッケージを入れる
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends cmake g++ zlib1g-dev
+
+      - name: CMake の構成
+        run: cmake -S . -B out/cmake-linux -DCMAKE_BUILD_TYPE=Release
+
+      - name: ビルド
+        run: cmake --build out/cmake-linux -j"$(nproc)"
+
+      - name: 単体テスト（SboSvrTest）
+        run: ctest --test-dir out/cmake-linux --output-on-failure
+
+      - name: スモークテスト（空の DB で起動して HTTP とゲームポートを確認）
+        run: tools/test-sbosvr-linux-smoke.sh out/cmake-linux/SboSvr

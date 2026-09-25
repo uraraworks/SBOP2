@@ -18,6 +18,12 @@ namespace
 {
 const unsigned long long kMaxStaticFileSize = 64ULL * 1024ULL * 1024ULL;
 
+// 実行環境のパス区切り文字（Windows は '\\'、それ以外は '/'）
+wchar_t NativeSeparatorW()
+{
+        return static_cast<wchar_t>(SboPlatform::GetPathSeparator());
+}
+
 // 曜日・月の英語短縮名（RFC 7231 HTTP-date 生成用）
 static const char* const kDayNames[7]   = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 static const char* const kMonthNames[12] = {
@@ -257,7 +263,7 @@ bool CStaticFileHandler::BuildFilePath(const std::string &requestPath, std::wstr
                 if (!base.empty()) {
                         wchar_t last = base[base.size() - 1];
                         if ((last != L'\\') && (last != L'/')) {
-                                base.push_back(L'\\');
+                                base.push_back(NativeSeparatorW());
                         }
                 }
                 outPath = base + defaultDoc;
@@ -279,9 +285,10 @@ bool CStaticFileHandler::BuildFilePath(const std::string &requestPath, std::wstr
         }
 
         std::string relativeWithNativeSep = relative;
+        const char chSep = SboPlatform::GetPathSeparator();
         for (size_t i = 0; i < relativeWithNativeSep.size(); ++i) {
                 if (relativeWithNativeSep[i] == '/') {
-                        relativeWithNativeSep[i] = '\\';
+                        relativeWithNativeSep[i] = chSep;
                 }
         }
 
@@ -294,7 +301,7 @@ bool CStaticFileHandler::BuildFilePath(const std::string &requestPath, std::wstr
         if (!base.empty()) {
                 wchar_t last = base[base.size() - 1];
                 if ((last != L'\\') && (last != L'/')) {
-                        base.push_back(L'\\');
+                        base.push_back(NativeSeparatorW());
                 }
         }
         outPath = base + wideRelative;
@@ -313,8 +320,27 @@ bool CStaticFileHandler::StatFile(const std::wstring &path, FileMetaInfo &outMet
         outMeta.mtime    = 0;
 
 #if !defined(_WIN32)
-        (void)path;
-        return false;
+        // パスは UTF-8 として扱う（Utf8ToWide() で組み立てたものを戻す）。
+        // ToUtf8() は ASCII 以外を '?' にする表示用の関数なので、ここでは使わない。
+        struct stat st;
+        if (stat(WstringToUtf8(path.c_str(), path.size()).c_str(), &st) != 0) {
+                return false;
+        }
+        // ディレクトリ等は配信しない（Windows 版は CreateFileW の失敗で弾かれる）
+        if (!S_ISREG(st.st_mode)) {
+                return false;
+        }
+        if (st.st_size < 0) {
+                return false;
+        }
+        if (static_cast<unsigned long long>(st.st_size) > kMaxStaticFileSize) {
+                return false;
+        }
+
+        outMeta.fileSize = static_cast<unsigned long long>(st.st_size);
+        outMeta.mtime    = st.st_mtime;
+        outMeta.valid    = true;
+        return true;
 #else
         // サイズ・mtime のみが要る軽量経路。stat() 系に統一しておくことで
         // FILETIME(100ns/Windows epoch)を触らずに済み、非Windows(stat()実装)
@@ -343,9 +369,40 @@ bool CStaticFileHandler::StatFile(const std::wstring &path, FileMetaInfo &outMet
 bool CStaticFileHandler::LoadFile(const std::wstring &path, std::string &outContent) const
 {
 #if !defined(_WIN32)
-        (void)path;
-        (void)outContent;
-        return false;
+        FILE *pFile = fopen(WstringToUtf8(path.c_str(), path.size()).c_str(), "rb");
+        if (pFile == NULL) {
+                return false;
+        }
+
+        struct stat st;
+        if ((fstat(fileno(pFile), &st) != 0) || !S_ISREG(st.st_mode) || (st.st_size < 0)) {
+                fclose(pFile);
+                return false;
+        }
+        if (static_cast<unsigned long long>(st.st_size) > kMaxStaticFileSize) {
+                fclose(pFile);
+                return false;
+        }
+
+        outContent.resize(static_cast<size_t>(st.st_size));
+        size_t nTotalRead = 0;
+        while (nTotalRead < outContent.size()) {
+                size_t nRead = fread(&outContent[nTotalRead], 1, outContent.size() - nTotalRead, pFile);
+                if (nRead == 0) {
+                        if (ferror(pFile)) {
+                                fclose(pFile);
+                                outContent.clear();
+                                return false;
+                        }
+                        break;
+                }
+                nTotalRead += nRead;
+        }
+        fclose(pFile);
+        if (nTotalRead != outContent.size()) {
+                outContent.resize(nTotalRead);
+        }
+        return true;
 #else
         HANDLE hFile = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         if (hFile == INVALID_HANDLE_VALUE) {

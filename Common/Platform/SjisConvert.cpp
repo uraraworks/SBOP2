@@ -235,15 +235,68 @@ std::string SjisBytesToUtf8(const char* pszSrc)
 }
 
 #else
-// !__EMSCRIPTEN__ かつ !_WIN32 の環境（Linux 等）向けのフォールバック
-// 現状このプロジェクトではそのような環境はないが念のため UTF-8 として扱う
+// !__EMSCRIPTEN__ かつ !_WIN32 の環境（Linux のサーバー）向けの実装。
+// glibc の iconv で CP932 と UTF-8 を相互変換する。空の DB で起動した時に
+// 読む旧 .dat（CP932）や、CP932 を明示した変換がここを通る。
+#include <iconv.h>
+#include <cerrno>
+#include <cstring>
+
+namespace
+{
+/// iconv で変換する。変換できないバイト/文字は pszReplace に置き換えて続行する
+/// （Windows の MultiByteToWideChar / WideCharToMultiByte が既定文字に置き換えるのに合わせる）。
+std::string IconvConvert(const char* pszTo, const char* pszFrom, const char* pSrc, size_t srcLen, const char* pszReplace)
+{
+    std::string strOut;
+    iconv_t cd = iconv_open(pszTo, pszFrom);
+    if (cd == reinterpret_cast<iconv_t>(-1)) {
+        return strOut;
+    }
+
+    char* pIn = const_cast<char*>(pSrc);
+    size_t inLeft = srcLen;
+    char buf[1024];
+    while (inLeft > 0) {
+        char* pOut = buf;
+        size_t outLeft = sizeof(buf);
+        size_t ret = iconv(cd, &pIn, &inLeft, &pOut, &outLeft);
+        strOut.append(buf, sizeof(buf) - outLeft);
+        if (ret != static_cast<size_t>(-1)) {
+            continue;
+        }
+        if (errno == E2BIG) {
+            continue;	// 出力バッファを空けて続ける
+        }
+        // EILSEQ / EINVAL: 変換できない1単位を置き換えて読み飛ばす
+        strOut.append(pszReplace);
+        size_t skip = 1;
+        if (strcmp(pszFrom, "UTF-8") == 0) {
+            // UTF-8 は1文字ぶん（先頭バイト＋継続バイト）を飛ばす
+            while ((skip < inLeft) && ((static_cast<unsigned char>(pIn[skip]) & 0xC0) == 0x80)) {
+                ++skip;
+            }
+        }
+        if (skip > inLeft) {
+            skip = inLeft;
+        }
+        pIn += skip;
+        inLeft -= skip;
+        iconv(cd, NULL, NULL, NULL, NULL);	// シフト状態を戻す
+    }
+    iconv_close(cd);
+    return strOut;
+}
+}
+
 std::wstring SjisToWstring(const char* pszSrc, int nSrcLen)
 {
     if (pszSrc == nullptr) {
         return std::wstring();
     }
     size_t srcLen = (nSrcLen < 0) ? strlen(pszSrc) : static_cast<size_t>(nSrcLen);
-    return Utf8ToWstring(pszSrc, srcLen);
+    std::string strUtf8 = IconvConvert("UTF-8", "CP932", pszSrc, srcLen, "?");
+    return Utf8ToWstring(strUtf8.c_str(), strUtf8.size());
 }
 
 std::string WstringToSjis(const wchar_t* pszSrc, int nSrcLen)
@@ -252,18 +305,17 @@ std::string WstringToSjis(const wchar_t* pszSrc, int nSrcLen)
         return std::string();
     }
     size_t srcLen = (nSrcLen < 0) ? wcslen(pszSrc) : static_cast<size_t>(nSrcLen);
-    return WstringToUtf8(pszSrc, srcLen);
+    std::string strUtf8 = WstringToUtf8(pszSrc, srcLen);
+    return IconvConvert("CP932", "UTF-8", strUtf8.c_str(), strUtf8.size(), "?");
 }
 
-/// SJIS バイト列を UTF-8 文字列に変換する（Linux 等フォールバック実装）
-/// このプロジェクトでは非 Win32/非 Emscripten 環境は想定外だが念のため
+/// SJIS バイト列を UTF-8 文字列に変換する（Linux 実装）
 std::string SjisBytesToUtf8(const char* pszSrc)
 {
     if (pszSrc == nullptr) {
         return std::string();
     }
-    // フォールバック: UTF-8 として扱う（実際には文字化けするがクラッシュを避ける）
-    return std::string(pszSrc);
+    return IconvConvert("UTF-8", "CP932", pszSrc, strlen(pszSrc), "?");
 }
 #endif // __EMSCRIPTEN__
 

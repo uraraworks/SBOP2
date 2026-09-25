@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <ctime>
 #include <string>
 #include <vector>
@@ -298,4 +299,14 @@ namespace SboPlatform
 	/// スリープに置き換える。Windows は Sleep()、非Windows は
 	/// usleep()/nanosleep() 相当を使う。
 	void	SleepMs(unsigned int uMs);
+
+	/// ソケットの受信/送信タイムアウトを設定する(SO_RCVTIMEO / SO_SNDTIMEO)
+	///
+	/// Windows は DWORD(ミリ秒)、POSIX は struct timeval を渡す必要があり、
+	/// DWORD のまま渡すと POSIX では長さ不一致で失敗してタイムアウトが効かない。
+	/// ソケットは SOCKET(Windows は UINT_PTR、POSIX は int)をそのまま渡せばよい。
+	///
+	/// @param bRecv	true なら受信(SO_RCVTIMEO)、false なら送信(SO_SNDTIMEO)
+	/// @return 設定できれば true
+	bool	SetSocketTimeoutMs(std::uintptr_t hSocket, bool bRecv, unsigned int uMs);
 }

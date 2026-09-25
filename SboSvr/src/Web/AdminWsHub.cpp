@@ -236,9 +236,7 @@ void CAdminWsHub::Shutdown()
 void CAdminWsHub::RunRecvLoop(SOCKET hSocket)
 {
     // タイムアウトを長めに設定（管理画面は長時間接続を維持する）
-    DWORD dwTimeout = 60000; // 60 秒
-    setsockopt(hSocket, SOL_SOCKET, SO_RCVTIMEO,
-               reinterpret_cast<const char *>(&dwTimeout), sizeof(dwTimeout));
+    SboPlatform::SetSocketTimeoutMs(hSocket, true, 60000); // 60 秒
 
     while (true) {
         // シャットダウン中なら抜ける

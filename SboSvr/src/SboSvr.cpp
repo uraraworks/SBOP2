@@ -80,8 +80,14 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszArg
 
 #else
 
+#include <csignal>
+
 int main(int nArgc, char **ppszArgv)
 {
+	// 切断済みの相手へ send すると SIGPIPE でプロセスごと落ちるため無視し、
+	// send の戻り値(EPIPE)で切断として扱う(Windows には無い挙動)
+	signal(SIGPIPE, SIG_IGN);
+
 	// 非Windows にはウィンドウが無いため hInstance 相当は使われない
 	// (MainLoopWindow 内でのウィンドウ生成にのみ使われる値のため NULL でよい)
 	return SboSvrMain(NULL, nArgc, ppszArgv);

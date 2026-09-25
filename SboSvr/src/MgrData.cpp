@@ -29,7 +29,7 @@
 #include "UraraSockTCPSBO.h"
 #include "SaveLoad.h"
 #include "SaveLoadInfoBase.h"
-#include "LibInfoCharSVr.h"
+#include "LibInfoCharSvr.h"
 #include "MgrData.h"
 #include "PasswordHash.h"
 #include "Account/AccountAuthStore.h"

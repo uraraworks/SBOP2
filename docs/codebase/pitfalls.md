@@ -65,6 +65,25 @@
 
 - **SQLite DB（`SBODATA/SboData.db`）を稼働中にコピーすると、ファイルサイズが一致していても中身が全ゼロの破損ファイルになることがある。** `PRAGMA journal_mode=WAL; synchronous=NORMAL;`（`MgrData.cpp:193`）の DB をチェックポイント前に強制終了すると本体ファイルがゼロ化する。`OpenSboDb` が `sqlite3_exec` の戻り値を見ず、壊れた db でも true を返す（整合性チェック不在）ため、旧 CP932 の `.dat` seed へ静かにフォールバックし、半角は正常なのに日本語だけ文字化けする分かりにくい症状になる。切り分けは `head -c16` が `SQLite format 3` か・全ゼロ率を確認。コピー後はサイズ一致で安心せず中身（ヘッダ・非ゼロ）を検証すること。UTF-8 変換済み db に再度 SJIS→UTF8 変換をかけると二重エンコードで全壊するので、変換前に現エンコードを必ず確認する。
 
+## Linux（CMake）ビルド
+
+- **非Windows の `PlatformDefs.h` は `min`/`max` を関数形式マクロで定義する。** これより後に libstdc++ の `<algorithm>`・`<vector>`・`<deque>`・`<random>` などを読むと、`std::max(...)` や `__g.max()` がマクロ展開されて大量のエラーになる（em++/libc++ では表面化しなかった）。対処は「標準ヘッダを先に読む」こと。`SboSvr/src/Platform/SvrCompat.h` で主要な標準ヘッダを `PlatformDefs.h` より前に読み、`TCharCompat.h` は `CStringCompat.h`（標準ヘッダを読む）を先に include する順にしてある。新しい標準ヘッダを使って同じ系統のエラーが出たら、`SvrCompat.h` の一覧に足す。
+- **`.vcxproj` の `ClCompile` は大文字小文字が実ファイルと違うことがある（例: `..\common\crc.cpp`）。** Windows では通るが Linux では見つからない。`cmake/VcxprojSources.cmake` は1階層ずつ大文字小文字を無視して実名に直すので `.vcxproj` 側は直さなくてよい。一方ソース中の `#include` の綴り違い（例: `LibInfoCharSVr.h`）は自動では直らないので、見つけたらソースを直す。
+- **Winsock の書き方は POSIX でそのまま動かないものがある（コンパイルは通る）。** `select(0, ...)` は Windows では第1引数が無視されるが、POSIX では「最大 fd + 1」が必要で、0 のままだと永久にタイムアウトし HTTP が接続だけ受けて無応答になる。`SO_RCVTIMEO`/`SO_SNDTIMEO` に `DWORD`（ミリ秒）を渡すと POSIX では `timeval` との長さ不一致で失敗してタイムアウトが効かない（`SboPlatform::SetSocketTimeoutMs()` を使う）。`accept`/`getpeername` の長さは `socklen_t*`。
+- **Linux のゲーム用 TCP ポート（既定 2006）は select 版（`SboSockLib/UraraSockTCPSelect.cpp`）で待ち受ける。** WSAAsyncSelect 版（`UraraSockTCP.cpp`）は Windows 専用のままで、`CUraraSockTCPSBO` が非Windows では常に select 版を選ぶ。`Common/UraraSockTCP.h` の `CUraraSockTCPStub` は何もしないスタブなので、非Windows でこれが返っていたら待ち受けていない。
+- **SboSockLib は `StdAfx.h` に `using namespace std;` があるので、`<functional>` 系（`<thread>`・`<future>` などから間接的にも読まれる）を足すとソケットの `bind(...)` が `std::bind` に化ける。** 第3引数の `sizeof(addr)` は `size_t` なので、Winsock の `bind(SOCKET, const sockaddr*, int)` よりテンプレートの `std::bind` の方が一致度が高く選ばれ、`== SOCKET_ERROR` の比較でコンパイルエラーになる（実例: `UraraSockTCPSelect.cpp` に `<thread>`/`<future>` を足した時、Windows だけで発生。Linux は `StdAfx.h` の別分岐を通るので CI では出なかった）。ソケット API の `bind` は `::bind(...)` と書く。
+- **POSIX では切断済みの相手へ `send` すると SIGPIPE でプロセスごと落ちる（Windows には無い挙動）。** `SboSvr`/`SboSvrTest` の `main()` で `SIGPIPE` を無視し、select 版とテスト用クライアントは `MSG_NOSIGNAL` も付けている。新しくソケットを扱う exe を足す時は同じ対処が要る。
+- **非Windows のワイド書式 `%s`/`%c` は char 側を指す（MSVC は wchar_t 側）。** サーバーのコードは MSVC の意味で `Format(_T("%s"), (LPCTSTR)str)` と書いてあるため、Linux 向けには `CStringCompat.h` の `ConvertMsvcWideFormat()` が `%ls`/`%lc` に直してから `vswprintf` に渡す（Emscripten 版は対象外で、従来どおり `%ls` か連結で書く）。glibc の `vswprintf` も測定モードが無いので、同じ箇所で収まるまでバッファを広げて測っている。`CStringCompat` を経由しない `_stprintf` 系を直接使う箇所には効かないので注意。
+- **Linux の CP932 変換は glibc の iconv（`SjisConvert.cpp`）で行う。** 空 DB で起動した時に読む旧 `.dat`（CP932）の日本語名もこれで正しく入る。変換できないバイト/文字は `?` に置き換える。
+- **`CStaticFileHandler::ToUtf8()` は ASCII 以外を `?` にする表示用の関数。** ファイルパスの変換に使うと日本語ファイル名が開けない（実例: Linux 版 `StatFile` で使って「テスト.png」が 404）。パスには `WstringToUtf8()` を使う。
+- **ブラウザ版の Linux ビルド（`tools/build-sbocli-browser-title.sh`）でも `#include` の大文字小文字が効く。** 実例: `LayerCloud.cpp` の `InfoCharCLI.h`（実名 `InfoCharCli.h`）。ps1 版のインクルードディレクトリ `Common/myLib/myZLib` も実名は `myZlib` なので、bash 版は実名で書いてある。
+- **クラウドセッションでは Emscripten ports（SDL2・SDL2_ttf・freetype・harfbuzz・zlib）のアーカイブ取得が 403 になる**（`github.com/.../archive/...`・`releases/download` は許可されず、`git clone` は通る）。初回ビルド前に `tools/emscripten/prefetch-ports-via-git.sh` で git から取り込んでおく。GitHub Actions や手元では不要。
+- **Linux の CMake ビルドは既定で `_DEBUG` なし（`/api/debug/fixture` が入らない）。** 自動確認（`tools/test-browser-e2e-linux.sh`）には `-DSBO_DEBUG_API=ON` で別ディレクトリにビルドしたサーバーが要る。このオプションはステージング・本番に絶対に使わない。
+- **ステージング（`deploy/staging`）の Docker Compose では、`env_file` の値も `$` が変数展開される。** bcrypt ハッシュ（`$2a$14$...`）が壊れるので、`staging.env` は `format: raw` で読んでいる（`.env` という名前にすると compose.yaml の展開用にも読まれて警告が出るので避けた）。
+- **ステージングの SboSvr は Caddy のネットワーク名前空間に入っている（`network_mode: service:caddy`）。** SboSvr を作り直すのは問題ないが、Caddy だけを作り直すと SboSvr のネットワークが切れる。その時は両方作り直す。
+- **Google Cloud の VM では `~/.ssh/authorized_keys` に手で足した鍵が消える。** ブラウザの SSH で入ると GCP のゲストエージェントがこのファイルを書き直し、自分で足したデプロイ鍵が消えて Actions の SSH が `Permission denied (publickey)` になった(2026-09-25)。デプロイ鍵は VM の「編集 → SSH 認証鍵」(メタデータ)に登録する。鍵の末尾のコメントがログインユーザー名になる。
+- **ブラウザの SSH 画面から秘密鍵を `cat` してコピーすると改行が崩れ、Actions で `Load key ...: error in libcrypto` になる。** `staging-deploy.yml` は `base64 -w0` の1行も受け付けるので、Secret にはその形で登録する。
+
 ## サーバー
 
 - **SboSvr は起動時に DB をメモリへ読み込み、停止時にメモリ内容を DB へ書き戻す。** 稼働中に SQLite ファイルを直接 UPDATE しても、サーバー停止時に旧値で上書きされて巻き戻る（実例: uraran 等の MoveWait を稼働中に修正しても停止時に旧値で上書きされた）。DB を直接編集する時は必ず先にサーバーを停止すること。書き戻し経路はウィンドウ版が `OnClose→TermServer→OnDestroy→m_pMgrData->Save()`（`MainFrameWindow.cpp`）、ヘッドレス版が `--stop`/Ctrl+C→ループ脱出→`TermServer()`→`m_pMgrData->Save()`（`MainFrame.cpp`）で、他に30分毎の定期保存 `TimerProcSave`（`MainFrame.cpp`）がある。ウィンドウが画面上に見えない場所で起動していると `WM_CLOSE` が `OnClose` に届かず保存されないことがある（`SboSvr.ini` の `[Pos]` 更新日時が止まっているのが証拠）。自動化から起動・停止する時はヘッドレスモード（`--headless` 起動、`SboSvr.exe --stop` で停止）を使うこと。DB の実体は `SboSvr\Debug\SBODATA\SboData.db`。

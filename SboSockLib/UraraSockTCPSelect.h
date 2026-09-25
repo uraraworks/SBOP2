@@ -12,9 +12,10 @@
 
 #include "UraraSockTCP.h"
 
-#ifdef _WIN32
+// Windows と POSIX(Linux) で使える。Emscripten(ブラウザ版)では使わない。
+#if !defined(__EMSCRIPTEN__)
 
 // select ベースの実装を取得する
 CUraraSockTCP *GetUraraSockTCPSelect(void);
 
-#endif // _WIN32
+#endif // !__EMSCRIPTEN__

@@ -166,6 +166,12 @@ await d.press('esc');
 d.state(); // activeWindow: SYSTEMMENU、windows[0].pos でカーソル位置
 ```
 
+### クラウド（Linux）で通しを自動実行する
+
+`tools/test-browser-e2e-linux.sh` が上の通し手順を Playwright で実行し、MAP と ESC メニューのスクショを
+`out/e2e/` に保存する。サーバーは `-DSBO_DEBUG_API=ON` でビルドしたもの（fixture 入り）を使う。
+手順は `docs/cloud-dev-staging-plan.md` の S5 を参照。
+
 ### 注意点
 
 - ブラウザ枠の `computer` によるキー入力は SDL の実キー受け口(`#sbop2ImeInput` 固定)には

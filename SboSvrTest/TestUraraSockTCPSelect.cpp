@@ -11,13 +11,16 @@
 #include "UraraSockTCPSelect.h"
 #include "SboSockTestClient.h"
 #include "GlobalDefine.h"
+#include "Platform/SvrPlatform.h"
+#include "TestPlatform.h"
+#include <mutex>
 #include <vector>
 
 #define TESTPORT_BASE   (24100)
 
 // 通知を受け取って記録する入れ物
 //
-// 通知はソケットスレッドから来るため、記録はクリティカルセクションで守る。
+// 通知はソケットスレッドから来るため、記録はミューテックスで守る。
 
 class CNotifyRecorder
 {
@@ -28,8 +31,8 @@ public:
         std::vector<BYTE> vecData;
     };
 
-    CNotifyRecorder(void)  { InitializeCriticalSection(&m_Crit); }
-    ~CNotifyRecorder(void) { DeleteCriticalSection(&m_Crit); }
+    CNotifyRecorder(void)  {}
+    ~CNotifyRecorder(void) {}
 
     static void Thunk(void *pUserData, UINT uMsgOffset, WPARAM wParam, LPARAM lParam)
     {
@@ -48,29 +51,28 @@ public:
             }
         }
 
-        EnterCriticalSection(&pThis->m_Crit);
+        std::lock_guard<std::mutex> lock(pThis->m_Crit);
         pThis->m_vecEvent.push_back(Event);
-        LeaveCriticalSection(&pThis->m_Crit);
     }
 
     /// 指定の通知が来るまで待つ
     BOOL Wait(UINT uMsgOffset, int nTimeoutMs, EVENT *pOut = NULL)
     {
-        DWORD dwEnd = GetTickCount() + nTimeoutMs;
+        DWORD dwEnd = SboPlatform::GetTickMs() + nTimeoutMs;
 
-        while (GetTickCount() < dwEnd) {
-            EnterCriticalSection(&m_Crit);
-            for (size_t i = 0; i < m_vecEvent.size(); i ++) {
-                if (m_vecEvent[i].uMsgOffset == uMsgOffset) {
-                    if (pOut) {
-                        *pOut = m_vecEvent[i];
+        while (SboPlatform::GetTickMs() < dwEnd) {
+            {
+                std::lock_guard<std::mutex> lock(m_Crit);
+                for (size_t i = 0; i < m_vecEvent.size(); i ++) {
+                    if (m_vecEvent[i].uMsgOffset == uMsgOffset) {
+                        if (pOut) {
+                            *pOut = m_vecEvent[i];
+                        }
+                        return TRUE;
                     }
-                    LeaveCriticalSection(&m_Crit);
-                    return TRUE;
                 }
             }
-            LeaveCriticalSection(&m_Crit);
-            Sleep(10);
+            SboTest::SleepMs(10);
         }
         return FALSE;
     }
@@ -79,25 +81,23 @@ public:
     {
         int nCount = 0;
 
-        EnterCriticalSection(&m_Crit);
+        std::lock_guard<std::mutex> lock(m_Crit);
         for (size_t i = 0; i < m_vecEvent.size(); i ++) {
             if (m_vecEvent[i].uMsgOffset == uMsgOffset) {
                 nCount ++;
             }
         }
-        LeaveCriticalSection(&m_Crit);
         return nCount;
     }
 
     void Clear(void)
     {
-        EnterCriticalSection(&m_Crit);
+        std::lock_guard<std::mutex> lock(m_Crit);
         m_vecEvent.clear();
-        LeaveCriticalSection(&m_Crit);
     }
 
 private:
-    CRITICAL_SECTION   m_Crit;
+    std::mutex         m_Crit;
     std::vector<EVENT> m_vecEvent;
 };
 

@@ -6,6 +6,7 @@
 
 // 共有ヘッダなので自前で依存を取り込む。
 // 以前は SboCli の BrowserCompat.h が先に include している前提だった。
+#include <algorithm> // std::copy_n
 #include <vector>
 #include <string>
 #include <cstdarg>
@@ -397,6 +398,30 @@ private:
 		} else {
 			nRet = _vsnwprintf_s(pszDst, nDstCount, _TRUNCATE, pszFormat, argCopy);
 		}
+#elif !defined(__EMSCRIPTEN__)
+		// Linux(glibc) のサーバー向け。
+		// - ワイド書式の %s / %c は、MSVC では wchar_t 文字列/文字だが POSIX では
+		//   char 側を指す。サーバーのコードは MSVC の意味で書かれているので %ls / %lc に直す。
+		// - vswprintf には「測定モード」が無く、収まらないと -1 を返すため、
+		//   サイズ計算時は収まるまで一時バッファを広げて測る（4096文字で切れないように）。
+		std::wstring strFormat = ConvertMsvcWideFormat(pszFormat);
+		int nRet;
+		if (pszDst == NULL || nDstCount == 0) {
+			std::vector<wchar_t> tmp(4096);
+			while (true) {
+				va_list argTry;
+				va_copy(argTry, argCopy);
+				nRet = vswprintf(tmp.data(), tmp.size(), strFormat.c_str(), argTry);
+				va_end(argTry);
+				// -1 は「収まらない」か「変換できない文字」。後者で無限に広げないよう上限を置く
+				if ((nRet >= 0) || (tmp.size() >= (16u * 1024u * 1024u))) {
+					break;
+				}
+				tmp.resize(tmp.size() * 2);
+			}
+		} else {
+			nRet = vswprintf(pszDst, nDstCount, strFormat.c_str(), argCopy);
+		}
 #else
 		// musl/Emscripten の vswprintf は vsnprintf と違い「測定モード」が無く、
 		// 出力がバッファに収まらないと -1 を返す。NULL/0 をそのまま渡すと常に -1 になり
@@ -413,6 +438,38 @@ private:
 		va_end(argCopy);
 		return nRet;
 	}
+
+#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+	// MSVC のワイド書式を POSIX のワイド書式へ直す。
+	// 長さ修飾子の無い %s / %c を %ls / %lc に、%hs / %hc を %s / %c にする
+	// （フラグ・幅・精度はそのまま残す）。
+	static std::wstring ConvertMsvcWideFormat(const wchar_t *pszFormat)
+	{
+		std::wstring strOut;
+		const wchar_t *p = pszFormat;
+		while (*p != L'\0') {
+			if (*p != L'%') {
+				strOut.push_back(*p++);
+				continue;
+			}
+			strOut.push_back(*p++);
+			if (*p == L'%') {
+				strOut.push_back(*p++);
+				continue;
+			}
+			// フラグ・幅・精度
+			while ((*p != L'\0') && (wcschr(L"-+ #0123456789.*", *p) != NULL)) {
+				strOut.push_back(*p++);
+			}
+			if ((*p == L'h') && ((p[1] == L's') || (p[1] == L'c'))) {
+				++p;	// %hs / %hc は POSIX の %s / %c(char 側)と同じ
+			} else if ((*p == L's') || (*p == L'c')) {
+				strOut.push_back(L'l');
+			}
+		}
+		return strOut;
+	}
+#endif
 
 private:
 	string_type m_data;

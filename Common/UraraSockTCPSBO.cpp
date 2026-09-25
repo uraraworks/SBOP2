@@ -6,7 +6,7 @@
 #include "StdAfx.h"
 #include "Packet/PacketBase.h"
 #include "UraraSockTCPSBO.h"
-#if defined(_WIN32) && !defined(__EMSCRIPTEN__)
+#if !defined(__EMSCRIPTEN__)
 #include "../SboSockLib/UraraSockTCPSelect.h"
 #endif
 
@@ -27,6 +27,9 @@ CUraraSockTCPSBO::CUraraSockTCPSBO(void)
 			m_pSock = GetUraraSockTCPSelect();
 		}
 	}
+#elif !defined(__EMSCRIPTEN__)
+	// 非Windows(Linux)のサーバーは WSAAsyncSelect 版が無いため、常に select 版を使う
+	m_pSock = GetUraraSockTCPSelect();
 #endif
 
 	// SboSockLib は static lib として直接リンクするため GetUraraSockTCP() を直接呼ぶ

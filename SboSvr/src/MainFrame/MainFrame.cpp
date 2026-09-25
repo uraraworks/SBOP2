@@ -344,7 +344,15 @@ void CMainFrame::WriteConsoleMessage(LPCTSTR pszFormat, ...)
 	_vsntprintf_s(szBuf, _countof(szBuf), _TRUNCATE, pszFormat, args);
 	va_end(args);
 
+#ifdef _WIN32
 	_ftprintf(stdout, _T("%s\n"), szBuf);
+#else
+	// 非Windows のワイド書式 %s は char* を期待するうえ、stdout は printf 系で
+	// バイト指向になっているため、UTF-8 に変換してバイト列のまま書き出す
+	std::string strUtf8 = WstringToUtf8(szBuf, _tcslen(szBuf));
+	fputs(strUtf8.c_str(), stdout);
+	fputc('\n', stdout);
+#endif
 	fflush(stdout);
 }
 

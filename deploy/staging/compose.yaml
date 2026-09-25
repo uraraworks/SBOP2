@@ -1,0 +1,47 @@
+# SBOP2 ステージング(docs/cloud-dev-staging-plan.md の S6)
+#
+#   cd deploy/staging && cp staging.env.example staging.env(値を埋める)
+#   docker compose up -d --build
+#
+# 公開するのは 80/443(Caddy)だけ。ゲームポート 2006・HTTP 18080・WebSocket 18081 は外に出さない。
+# SboSvr は Caddy のネットワーク名前空間に入るので、Caddy から 127.0.0.1 で届き、
+# SboSvr からは相手が loopback に見える(X-Forwarded-For を信用する条件)。
+# SboSvr だけ作り直しても(デプロイ・異常終了からの再起動)Caddy 側は影響を受けない。
+name: sbop2-staging
+
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    # .env ではなく staging.env にし、raw で読む(bcrypt ハッシュの $ を展開させない)
+    env_file:
+      - path: staging.env
+        format: raw
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+  sbosvr:
+    build:
+      context: ../..
+      dockerfile: deploy/staging/Dockerfile
+    image: sbop2-staging
+    restart: unless-stopped
+    init: true
+    network_mode: "service:caddy"
+    depends_on:
+      - caddy
+    # DB 保存に時間がかかっても強制終了されないよう長めに待つ
+    stop_grace_period: 60s
+    volumes:
+      - sbodata:/srv/sbop2/SBODATA
+
+volumes:
+  sbodata:
+  caddy_data:
+  caddy_config:
