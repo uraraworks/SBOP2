@@ -40,6 +40,9 @@ services:
     stop_grace_period: 60s
     volumes:
       - sbodata:/srv/sbop2/SBODATA
+      # BGM(Release/BGM/*.ogg)は git 管理外でイメージに入らないため、ホストの ~/sbop2-bgm を
+      # そのまま配信する。ファイルを置けばデプロイし直さなくても鳴る(無ければ 404 になるだけ)
+      - ${HOME}/sbop2-bgm:/srv/sbop2/webroot/game/BGM:ro
 
 volumes:
   sbodata:

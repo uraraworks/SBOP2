@@ -149,5 +149,7 @@ docker run --rm -v sbop2-staging_sbodata:/d -v "$PWD":/o ubuntu tar czf /o/sboda
 ## 注意
 
 - ステージングは `_DEBUG` なしでビルドする(`-DSBO_DEBUG_API=ON` は使わない)。
-- BGM(`Release/BGM`)は git 管理外なので、ステージングでは鳴らない(404 になるだけで動作には影響しない)。
+- BGM(`Release/BGM/*.ogg`)は git 管理外でイメージに入らない。ホストの `~/sbop2-bgm` を `webroot/game/BGM` としてマウントしているので、
+  そこへ ogg を置けば鳴る(置いた時点で反映。デプロイでは消えない)。手元の Windows から送る例:
+  `scp -i <鍵> Release\BGM\*.ogg <SSHユーザー>@<ホスト>:~/sbop2-bgm/`。置いていなければ 404 になるだけで動作には影響しない。
 - Caddy だけを作り直すと SboSvr のネットワークが切れるので、その時は `docker compose up -d --force-recreate` で両方作り直す。
