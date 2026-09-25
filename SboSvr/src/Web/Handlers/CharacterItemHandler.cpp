@@ -14,6 +14,10 @@
 #include "Info/InfoCharSvr.h"
 #include "LibInfo/LibInfoAccount.h"
 #include "Info/InfoAccount.h"
+#include "LibInfoItem.h"
+#include "InfoItem.h"
+#include "UraraSockTCPSBO.h"
+#include "PacketITEM_RES_ITEMINFO.h"
 
 // スキルスロット上限（専用フィールドが無いため実装上の固定値）
 static const int MAX_CHAR_SKILL_SLOTS = 64;
@@ -333,50 +337,65 @@ void CCharacterItemHandler::HandlePostItem(const HttpRequest &request, HttpRespo
                 return;
         }
 
-        int nMaxSlot = pChar->m_nMaxItemCount;
-        // m_nMaxItemCount が 0 以下の場合はデフォルト上限を使う
-        if (nMaxSlot <= 0) {
-                nMaxSlot = 64;
+        CLibInfoItem *pItemLib = m_pMgrData->GetLibInfoItem();
+        CInfoItem *pItem = (pItemLib != NULL)
+                ? static_cast<CInfoItem *>(pItemLib->GetPtr(static_cast<DWORD>(nItemId))) : NULL;
+        if (pItem == NULL) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 404 Not Found";
+                response.SetJsonBody("{\"error\":\"item_not_found\"}");
+                return;
         }
-
-        // 空きスロットを先頭から探す
-        int nFoundSlot = -1;
-        int nCurSize = pChar->m_adwItemID.GetSize();
-
-        for (int i = 0; i < nCurSize; ++i) {
-                if (pChar->m_adwItemID.GetAt(i) == 0) {
-                        nFoundSlot = i;
-                        break;
-                }
+        if (pChar->HaveItem(static_cast<DWORD>(nItemId))) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 409 Conflict";
+                response.SetJsonBody("{\"error\":\"already_owned\"}");
+                return;
         }
-
-        // 配列末尾に空き枠があれば拡張
-        if (nFoundSlot < 0 && nCurSize < nMaxSlot) {
-                nFoundSlot = nCurSize;
-        }
-
-        if (nFoundSlot < 0) {
+        if (!pChar->IsItemAdd()) {
                 pCharLib->Leave();
                 response.statusLine = "HTTP/1.1 409 Conflict";
                 response.SetJsonBody("{\"error\":\"item_slots_full\"}");
                 return;
         }
 
-        // スロットに書き込む（配列拡張が必要な場合）
-        if (nFoundSlot >= nCurSize) {
-                // 0 埋めで拡張してから末尾に追加
-                while (pChar->m_adwItemID.GetSize() < nFoundSlot) {
-                        pChar->m_adwItemID.Add(0);
+        // 他のキャラのバッグに入っていたら、そちらからは抜く
+        CInfoCharSvr *pOldOwner = NULL;
+        if (pItem->m_dwCharID != 0 && pItem->m_dwCharID != pChar->m_dwCharID) {
+                pOldOwner = static_cast<CInfoCharSvr *>(FindChar(pCharLib, static_cast<int>(pItem->m_dwCharID)));
+                if (pOldOwner != NULL) {
+                        pItemLib->DeleteItem(pItem->m_dwItemID, pOldOwner, TRUE);
                 }
-                pChar->m_adwItemID.Add(static_cast<DWORD>(nItemId));
-        } else {
-                pChar->m_adwItemID.SetAt(nFoundSlot, static_cast<DWORD>(nItemId));
         }
 
-        // CInfoCharBase* は m_bChgInfo を持たないが、実体は CInfoCharSvr* なのでキャストして設定
-        {
-                CInfoCharSvr *pSvr = static_cast<CInfoCharSvr *>(pChar);
-                if (pSvr != NULL) { pSvr->m_bChgInfo = TRUE; }
+        // ゲーム内で拾ったときと同じく、所有者・バッグ内の位置を設定してマップからは外す。
+        // バッグの一覧に ID を足すだけだと所有者IDが食い違い、クライアントが
+        // アイテム情報を捨ててしまう(装備しても装備欄に出ない)。
+        pItemLib->AddItem(pChar->m_dwCharID, pItem->m_dwItemID, &pChar->m_adwItemID);
+        if (!pChar->HaveItem(pItem->m_dwItemID)) {
+                pCharLib->Leave();
+                response.statusLine = "HTTP/1.1 409 Conflict";
+                response.SetJsonBody("{\"error\":\"item_slots_full\"}");
+                return;
+        }
+
+        int nFoundSlot = 0;
+        for (int i = 0; i < pChar->m_adwItemID.GetSize(); ++i) {
+                if (pChar->m_adwItemID.GetAt(i) == pItem->m_dwItemID) {
+                        nFoundSlot = i;
+                }
+        }
+
+        // アイテム情報と、関係するキャラの情報(バッグ)をゲームへ送る
+        CUraraSockTCPSBO *pSock = m_pMgrData->GetSock();
+        if (pSock != NULL) {
+                CPacketITEM_RES_ITEMINFO packet;
+                packet.Make(pItem);
+                pSock->SendTo(0, &packet);
+        }
+        pCharLib->NotifyAdminEditCharInfo(static_cast<CInfoCharSvr *>(pChar));
+        if (pOldOwner != NULL) {
+                pCharLib->NotifyAdminEditCharInfo(pOldOwner);
         }
 
         std::ostringstream oss;
@@ -419,12 +438,24 @@ void CCharacterItemHandler::HandleDeleteItem(const HttpRequest & /*request*/, Ht
                 return;
         }
 
-        // スロットを 0 クリア（空きスロットとして扱う）
-        pChar->m_adwItemID.SetAt(nSlot, 0);
-        // CInfoCharBase* は m_bChgInfo を持たないが、実体は CInfoCharSvr* なのでキャストして設定
+        // バッグから抜いて所有者も外す(ゲーム内の「捨てる」と同じ処理。マップには置かない)。
+        // 0 を書き込むだけだとゲームのバッグに ID 0 の枠が残り、所有者IDも残ってしまう。
         {
-                CInfoCharSvr *pSvr = static_cast<CInfoCharSvr *>(pChar);
-                if (pSvr != NULL) { pSvr->m_bChgInfo = TRUE; }
+                const DWORD dwItemId = pChar->m_adwItemID.GetAt(nSlot);
+                CLibInfoItem *pItemLib = m_pMgrData->GetLibInfoItem();
+                if (pItemLib != NULL && pItemLib->GetPtr(dwItemId) != NULL) {
+                        pItemLib->DeleteItem(dwItemId, pChar, TRUE);
+                        CUraraSockTCPSBO *pSock = m_pMgrData->GetSock();
+                        if (pSock != NULL) {
+                                CPacketITEM_RES_ITEMINFO packet;
+                                packet.Make(static_cast<CInfoItem *>(pItemLib->GetPtr(dwItemId)));
+                                pSock->SendTo(0, &packet);
+                        }
+                } else {
+                        // アイテム本体が無い ID はバッグから消すだけ
+                        pChar->m_adwItemID.RemoveAt(nSlot);
+                }
+                pCharLib->NotifyAdminEditCharInfo(static_cast<CInfoCharSvr *>(pChar));
         }
 
         pCharLib->Leave();

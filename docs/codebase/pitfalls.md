@@ -122,6 +122,8 @@
 
 - **管理画面 (`SboSvr/webroot`) の CSS でセレクタに `display: flex` 等を指定すると、ブラウザ既定の `[hidden] { display: none }` が詳細度で負け、JS で `el.hidden = true` にしても表示されたままになる。** 画像エディタのカテゴリグループ折りたたみで実際に発生（`items.hidden === true` かつ `getComputedStyle(items).display === "flex"`）。`hidden` 属性で出し入れする要素に `display` を指定したら、必ず直後に `セレクタ[hidden] { display: none; }` を書く。非表示切り替えを `style.display` で行っている既存箇所と混ぜないこと。
 
+- **キャラのバッグ(`m_adwItemID`)とアイテムの所有者ID(`CInfoItem::m_dwCharID`)は必ずそろえる。** クライアントは ITEM_RES_ITEMINFO を受けたとき、所有者キャラが見つからずマップにも無いアイテムを削除する（`CStateProcMAP::OnMainFrameRENEWITEMINFO`）。管理画面の「バッグに追加」が ID を足すだけで所有者を設定していなかったため、そのアイテムを装備するとサーバーが送り直したアイテム情報でクライアントから消え、見た目は変わるのに装備欄が空・バッグからも消える状態になった（ステージングで実際に発生）。バッグへの出し入れは `CLibInfoItem::AddItem` / `DeleteItem` を通し、装備時は `CLibInfoCharSvr::SetItemOwner` で所有者を補正している。
+
 ## 画像・データ
 
 - **画像の実体は `SboGrpData/res/` の PNG（`SboGrpData.dll` は .rc 埋め込みのフォールバックにすぎない）。** 読み込み経路は3系統: ネイティブ版 `MgrGrpData.cpp` の `Read()`/`Read256()`（ファイル優先→DLLフォールバック、`GetFileNameForResource()` の静的テーブルでリソース名→ファイル名解決）、ブラウザ版（`build-sbocli-browser-title.ps1` の `--preload-file res@/SboGrpData/res` で `.data` に同梱、コードパスはネイティブと同じ）、管理画面サーバ `SpriteSheetHandler.cpp` の `CGrpResourceProvider`（`LoadLibraryW`+`FindResourceW` で DLL から読む唯一の経路）。新しい画像種別を追加する時は3系統すべての対応表を揃える。

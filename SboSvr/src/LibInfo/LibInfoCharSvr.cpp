@@ -841,6 +841,24 @@ Exit:
 	return bRet;
 }
 
+void CLibInfoCharSvr::SetItemOwner(CInfoCharSvr *pChar, DWORD dwItemID)
+{
+	PCInfoItem pInfoItem;
+
+	if (dwItemID == 0) {
+		return;
+	}
+	pInfoItem = (PCInfoItem)m_pLibInfoItem->GetPtr(dwItemID);
+	if (pInfoItem == NULL) {
+		return;
+	}
+	pInfoItem->m_dwCharID	= pChar->m_dwCharID;
+	pInfoItem->m_dwMapID	= 0;
+	pInfoItem->m_ptPos.x	= 0;
+	pInfoItem->m_ptPos.y	= 0;
+}
+
+
 BOOL CLibInfoCharSvr::Equip(CInfoCharSvr *pChar, DWORD dwItemID)
 {
 	BOOL bRet, bResult;
@@ -899,6 +917,13 @@ BOOL CLibInfoCharSvr::Equip(CInfoCharSvr *pChar, DWORD dwItemID)
 	default:
 		goto Exit;
 	}
+
+	// 装備したアイテム・バッグに戻ったアイテムの所有者をこのキャラにそろえる。
+	// 管理画面などでバッグにだけ入れられたアイテムは所有者IDが食い違っていることがあり、
+	// クライアントは所有者が見つからないアイテム情報を受け取ると削除してしまう
+	// (CStateProcMAP::OnMainFrameRENEWITEMINFO)。そのままだと装備欄に表示されない。
+	SetItemOwner(pChar, dwEquipItemID);
+	SetItemOwner(pChar, dwEquipItemIDBack);
 
 	if (pChar->m_dwSessionID == 0) {
 		bRet = TRUE;
@@ -993,6 +1018,13 @@ BOOL CLibInfoCharSvr::UnEquip(CInfoCharSvr *pChar, DWORD dwItemID)
 	default:
 		goto Exit;
 	}
+
+	// 装備したアイテム・バッグに戻ったアイテムの所有者をこのキャラにそろえる。
+	// 管理画面などでバッグにだけ入れられたアイテムは所有者IDが食い違っていることがあり、
+	// クライアントは所有者が見つからないアイテム情報を受け取ると削除してしまう
+	// (CStateProcMAP::OnMainFrameRENEWITEMINFO)。そのままだと装備欄に表示されない。
+	SetItemOwner(pChar, dwEquipItemID);
+	SetItemOwner(pChar, dwEquipItemIDBack);
 
 	if (pChar->m_dwSessionID == 0) {
 		bRet = TRUE;
