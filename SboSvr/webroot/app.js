@@ -10,8 +10,27 @@ function updateAppViewportHeight() {
   const height = viewport && viewport.height ? viewport.height : window.innerHeight;
   if (height > 0) {
     document.documentElement.style.setProperty("--app-height", `${height}px`);
+    updateWorkspaceTop();
     syncAdminGameViewportHeight(height);
   }
+}
+
+// 編集本体(.workspace-body)の中身の上端をページ先頭からの距離で測り、
+// CSS 変数 --workspace-top に入れる。ヘッダーやタブバーの高さは文言や幅で変わるため、
+// 固定値で引くとゲーム画面の下端が見切れる(components.css 参照)。
+function updateWorkspaceTop() {
+  const body = document.querySelector(".workspace-body");
+  if (!body) {
+    return;
+  }
+  const rect = body.getBoundingClientRect();
+  if (rect.width === 0) {
+    return;
+  }
+  const paddingTop = parseFloat(getComputedStyle(body).paddingTop) || 0;
+  const top = Math.round(rect.top + window.scrollY + paddingTop);
+  document.documentElement.style.setProperty("--workspace-top", `${top}px`);
+  body.classList.add("has-measured-top");
 }
 
 function syncAdminGameViewportHeight(height = null) {
@@ -450,6 +469,8 @@ async function checkAdminAuthAndReveal() {
     const authorized = response.ok && data && data.authenticated && Number(data.adminLevel) > 0;
     document.body.classList.toggle("auth-pending", !authorized);
     document.body.classList.toggle("admin-authorized", authorized);
+    // ログイン前後でヘッダーの表示が切り替わるので、本体の上端を測り直す
+    updateWorkspaceTop();
     return authorized;
   } catch (error) {
     document.body.classList.add("auth-pending");
@@ -665,6 +686,13 @@ function initializeAdminWorkspace() {
 }
 
 window.addEventListener("load", async () => {
+  // タブバーは main.js が後から差し込み、ヘッダーは幅で折り返して高さが変わるため、
+  // 本体より上の要素の大きさが変わるたびに上端を測り直す
+  updateWorkspaceTop();
+  if (typeof ResizeObserver === "function") {
+    const topObserver = new ResizeObserver(() => updateWorkspaceTop());
+    document.querySelectorAll(".page-header, .workspace-tabs").forEach((el) => topObserver.observe(el));
+  }
   window.addEventListener("message", handleAdminGameMessage);
   initializeAdminGameFrame();
   if (adminGameFrame) {

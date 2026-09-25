@@ -1095,6 +1095,20 @@
   </div>
 
   <script>
+    // iPhone(Safari)では、ページの音は既定で「再生」扱いになり、本体の消音スイッチを
+    // 無視して BGM・効果音が鳴ってしまう。Audio Session API(iOS 17 以降)で「環境音」扱いに
+    // すると、消音スイッチに従い、他のアプリの音楽も止めない。音を鳴らす前に設定する必要がある。
+    // 非対応のブラウザには navigator.audioSession が無いので何もしない。
+    (function setAmbientAudioSession() {
+      try {
+        if (navigator.audioSession) {
+          navigator.audioSession.type = 'ambient';
+        }
+      } catch (e) {
+        console.warn('[SBOP2] audioSession 設定に失敗しました:', e);
+      }
+    })();
+
     // ビルドスクリプトが window.SBOP2_BUILD を埋め込んでいれば右下に控えめにバージョン表示する
     (function showVersionBadge() {
       try {

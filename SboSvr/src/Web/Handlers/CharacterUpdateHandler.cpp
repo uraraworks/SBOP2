@@ -14,6 +14,8 @@
 #include "LibInfo/LibInfoCharSvr.h"
 #include "Info/InfoCharBase.h"
 #include "Info/InfoCharSvr.h"
+#include "LibInfoItem.h"
+#include "InfoItemTypeBase.h"
 #include "myLib/myString.h"
 #include "LibInfo/LibInfoAccount.h"
 #include "Info/InfoAccount.h"
@@ -677,7 +679,8 @@ void CCharacterUpdateHandler::HandleStatus(const HttpRequest &request, HttpRespo
 void CCharacterUpdateHandler::HandleEquipment(const HttpRequest &request, HttpResponse &response, int nCharId)
 {
         CLibInfoCharSvr *pCharLib = m_pMgrData->GetLibInfoChar();
-        if (pCharLib == NULL) {
+        CLibInfoItem *pItemLib = m_pMgrData->GetLibInfoItem();
+        if (pCharLib == NULL || pItemLib == NULL) {
                 response.statusLine = "HTTP/1.1 503 Service Unavailable";
                 response.SetJsonBody("{\"error\":\"backend_unavailable\"}");
                 return;
@@ -692,27 +695,92 @@ void CCharacterUpdateHandler::HandleEquipment(const HttpRequest &request, HttpRe
                 response.SetJsonBody("{\"error\":\"not_found\"}");
                 return;
         }
+        CInfoCharSvr *pCharSvr = static_cast<CInfoCharSvr *>(pChar);
+
+        // 服・アクセサリ1・右手・左手は、ゲーム内で装備したときと同じ
+        // CLibInfoCharSvr::Equip / UnEquip を通す。値を書き換えるだけだと、
+        // アイテム側の装備状態や見た目(画像ID)が変わらず、ゲーム画面にも届かない。
+        // 値はアイテム種別IDではなく、キャラが持っているアイテムのID。
+        struct EquipSlot {
+                const char *pszKey;      // JSON のキー
+                const char *pszLabel;    // エラーメッセージ用の欄名
+                DWORD CInfoCharBase::*pMember;
+                DWORD dwItemType;        // この欄に装備できるアイテム種別
+        };
+        static const EquipSlot kSlots[] = {
+                { "cloth",     "服",          &CInfoCharBase::m_dwEquipItemIDCloth,     ITEMTYPEID_CLOTH  },
+                { "accesory1", "アクセサリ1", &CInfoCharBase::m_dwEquipItemIDAcce1,     ITEMTYPEID_ACCE   },
+                { "armsRight", "右手",        &CInfoCharBase::m_dwEquipItemIDArmsRight, ITEMTYPEID_ARMS   },
+                { "armsLeft",  "左手",        &CInfoCharBase::m_dwEquipItemIDArmsLeft,  ITEMTYPEID_SHIELD },
+        };
 
         int nVal = 0;
 
-        if (JsonUtils::TryGetInt(request.body, "cloth", nVal)) {
-                pChar->m_dwEquipItemIDCloth = static_cast<DWORD>(nVal);
+        // 先に全欄を検証し、1つでも装備できなければ何も変えずに返す
+        for (size_t i = 0; i < sizeof(kSlots) / sizeof(kSlots[0]); ++i) {
+                const EquipSlot &slot = kSlots[i];
+                if (!JsonUtils::TryGetInt(request.body, slot.pszKey, nVal) || nVal <= 0) {
+                        continue;
+                }
+                const DWORD dwItemID = static_cast<DWORD>(nVal);
+                if (dwItemID == pChar->*slot.pMember) {
+                        continue;
+                }
+                const char *pszError = NULL;
+                const char *pszReason = NULL;
+                if (pItemLib->GetPtr(dwItemID) == NULL) {
+                        pszError = "item_not_found";
+                        pszReason = "のアイテムが見つかりません";
+                } else if (!pChar->HaveItem(dwItemID)) {
+                        pszError = "item_not_owned";
+                        pszReason = "のアイテムをこのキャラが持っていません（先にアイテム一覧で所持キャラに設定してください）";
+                } else if (pItemLib->GetItemType(dwItemID) != slot.dwItemType) {
+                        pszError = "item_type_mismatch";
+                        pszReason = "のアイテムはこの欄に装備できる種類ではありません";
+                }
+                if (pszError != NULL) {
+                        pCharLib->Leave();
+                        std::ostringstream oss;
+                        oss << "{\"error\":\"" << pszError << "\",\"field\":\"" << slot.pszKey
+                            << "\",\"message\":\"" << slot.pszLabel << "：ID " << dwItemID << pszReason << "\"}";
+                        response.statusLine = "HTTP/1.1 400 Bad Request";
+                        response.SetJsonBody(oss.str());
+                        return;
+                }
         }
-        if (JsonUtils::TryGetInt(request.body, "accesory1", nVal)) {
-                pChar->m_dwEquipItemIDAcce1 = static_cast<DWORD>(nVal);
+
+        for (size_t i = 0; i < sizeof(kSlots) / sizeof(kSlots[0]); ++i) {
+                const EquipSlot &slot = kSlots[i];
+                if (!JsonUtils::TryGetInt(request.body, slot.pszKey, nVal)) {
+                        continue;
+                }
+                const DWORD dwItemID = (nVal > 0) ? static_cast<DWORD>(nVal) : 0;
+                const DWORD dwCurrent = pChar->*slot.pMember;
+                if (dwItemID == dwCurrent) {
+                        continue;
+                }
+                if (dwItemID == 0) {
+                        pCharLib->UnEquip(pCharSvr, dwCurrent);
+                        // 装備中のIDが壊れていて UnEquip が弾いた場合も欄は空にする
+                        pChar->*slot.pMember = 0;
+                } else {
+                        // Equip は付け替え(前の装備を外す)まで面倒を見る
+                        pCharLib->Equip(pCharSvr, dwItemID);
+                }
         }
+
+        // アクセサリ2・頭は Equip 側に対応する処理が無いので、従来どおり値だけ書き換える
         if (JsonUtils::TryGetInt(request.body, "accesory2", nVal)) {
                 pChar->m_dwEquipItemIDAcce2 = static_cast<DWORD>(nVal);
-        }
-        if (JsonUtils::TryGetInt(request.body, "armsRight", nVal)) {
-                pChar->m_dwEquipItemIDArmsRight = static_cast<DWORD>(nVal);
-        }
-        if (JsonUtils::TryGetInt(request.body, "armsLeft", nVal)) {
-                pChar->m_dwEquipItemIDArmsLeft = static_cast<DWORD>(nVal);
         }
         if (JsonUtils::TryGetInt(request.body, "head", nVal)) {
                 pChar->m_dwEquipItemIDHead = static_cast<DWORD>(nVal);
         }
+
+        // Equip/UnEquip の通知(本人向け RES_CHARINFO)はメインループの画像変更処理に任せると
+        // 他の変更フラグが優先されて遅れたり、本人のセッションIDの画面にしか届かなかったりする。
+        // グラフィック更新と同じく、ここで周囲と本人へ最新のキャラ情報(装備欄・バッグ)を送る。
+        pCharLib->NotifyAdminEditCharInfo(pCharSvr);
 
         std::string json = BuildEquipmentJson(pChar);
         pCharLib->Leave();
@@ -724,8 +792,6 @@ void CCharacterUpdateHandler::HandleEquipment(const HttpRequest &request, HttpRe
 // ---------------------------------------------------------------------------
 // グラフィック更新  PUT /api/characters/{charId}/graphics
 // ---------------------------------------------------------------------------
-// NOTE: グラフィック変更時の全クライアントへのパケット通知は未実装（保留）。
-//       設計書 docs/web-admin-char-plan.md §8 参照。
 
 void CCharacterUpdateHandler::HandleGraphics(const HttpRequest &request, HttpResponse &response, int nCharId)
 {
@@ -811,6 +877,10 @@ void CCharacterUpdateHandler::HandleGraphics(const HttpRequest &request, HttpRes
         if (JsonUtils::TryGetInt(request.body, "initSp", nVal)) {
                 pChar->m_wGrpIDInitSP = static_cast<WORD>(nVal);
         }
+
+        // 見た目の変更はメモリを書き換えるだけではゲーム画面に届かないので、
+        // 周囲と本人へ最新のキャラ情報を送り直す(docs/codebase/pitfalls.md 参照)
+        pCharLib->NotifyAdminEditCharInfo(static_cast<CInfoCharSvr *>(pChar));
 
         std::string json = BuildGraphicsJson(pChar);
         pCharLib->Leave();

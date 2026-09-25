@@ -33,6 +33,10 @@ COPY --from=build /build/SboSvr ./SboSvr
 COPY SboSvr/webroot ./webroot
 COPY out/browser-title/ ./webroot/game/
 COPY Release/SBODATA/ ./SBODATA/
+# 管理画面の画像(/api/assets/sprites)は Linux では実行ファイルの隣の SboGrpData/res/ の
+# PNG から配信する(Windows は SboGrpData.dll の埋め込みリソース)。無いとキャラの
+# グラフィック画面やアイテム種別のサムネが空になる。
+COPY SboGrpData/res/ ./SboGrpData/res/
 RUN chown -R sbo:sbo /srv/sbop2
 USER sbo
 # DB(SboData.db)・pid・ログは SBODATA/ に書かれるので、ここをボリュームにする。

@@ -1,5 +1,6 @@
 # ステージング用 Docker イメージ(deploy/staging/Dockerfile)のビルドコンテキスト。
-# 必要なものだけを許可リスト方式で送る(画像・音声の元データや out/ の中間ファイルを送らない)。
+# 必要なものだけを許可リスト方式で送る(音声などの元データや out/ の中間ファイルを送らない。
+# 画像は管理画面の配信に使う SboGrpData/res/ だけ送る)。
 *
 !CMakeLists.txt
 !cmake/
@@ -9,6 +10,7 @@
 !SboSvr/
 !SboSvrTest/
 !Release/SBODATA/*.dat
+!SboGrpData/res/
 !out/browser-title/sbocli-title.*
 !out/browser-title/BGM/
 !deploy/staging/

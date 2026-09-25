@@ -13,7 +13,7 @@
  * クエリ: ?drop=1 &charId=N &mapId=N
  *
  * レイアウト: list-detail 骨格
- *   左: アイテム一覧 (ID+名前+種別+アイコンサムネ、検索)
+ *   左: ゲーム画面に配置(種別を選んでゲーム画面をクリック) / アイテム一覧 (ID+名前+種別+アイコンサムネ、検索)
  *   右: 基本情報 / 画像(createSpriteField) / 効果音(sound-picker) / 配置・所有
  */
 
@@ -27,6 +27,12 @@ import { createEntityField, invalidateEntityCache } from "../components/entity-p
 import { createListToolbar } from "../components/list-toolbar.js";
 import { getRouteParams, setRouteParams } from "../core/router.js";
 import { registerSaveHandler } from "../core/save-shortcut.js";
+import { requestNextPick, cancelPendingPick } from "../core/game-pick.js";
+
+// ゲーム画面の 1 マスのピクセル数(MAPPARTSSIZE)。アイテムの posX/posY はピクセル単位、
+// ゲーム画面からの pick はマス単位(cellX/cellY)で届くため、この値を掛けて変換する。
+// (npc-add.js の CELL_PX と同じ扱い)
+const CELL_PX = 32;
 
 // ----------------------------------------------------------------
 // ユーティリティ
@@ -170,6 +176,36 @@ function buildDetailPane({ feedbackEl }) {
   const posXSpin     = addSpinField("X座標", -9999, 9999);
   const posYSpin     = addSpinField("Y座標", -9999, 9999);
   const posZSpin     = addSpinField("Z座標（高さ）", -9999, 9999);
+
+  // ゲーム画面でクリックして配置マップID・X/Y座標を指定する
+  const posPickWrap = document.createElement("div");
+  posPickWrap.className = "form-field";
+  // 狭い格子で文字が折り返さないよう1行ぶん使い、ボタンは文字幅にする
+  posPickWrap.style.gridColumn = "1 / -1";
+  posPickWrap.style.alignItems = "flex-start";
+  const posPickBtn = document.createElement("button");
+  posPickBtn.type = "button";
+  posPickBtn.className = "button small";
+  posPickBtn.textContent = "ゲーム画面でクリックして指定";
+  posPickWrap.appendChild(posPickBtn);
+  placeGrid.appendChild(posPickWrap);
+  posPickBtn.addEventListener("click", () => {
+    withBusy(posPickBtn, () => new Promise((resolve) => {
+      requestNextPick({
+        message: "アイテムを置く位置をゲーム画面でクリックしてください(Esc で中止)",
+        onPick: (pick) => {
+          if (pick.mapId > 0) {
+            mapIdField.setValue(pick.mapId);
+            posXSpin.setValue(pick.cellX * CELL_PX);
+            posYSpin.setValue(pick.cellY * CELL_PX);
+          }
+          resolve();
+        },
+        onCancel: () => resolve(),
+      });
+    }), { busyText: "クリック待ち…" });
+  });
+
   const charIdField = createEntityField({ type: "character", value: 0, label: "所持キャラID（0=未所持）" });
   placeGrid.appendChild(charIdField.element);
   const backPackXSpin = addSpinField("バックパックX", 0, 9999);
@@ -226,6 +262,120 @@ function buildDetailPane({ feedbackEl }) {
 }
 
 // ----------------------------------------------------------------
+// 左ペイン上部: ゲーム画面に配置
+//   1. アイテム種別を選ぶ
+//   2. 「クリックして配置」を押す
+//   3. ゲーム画面をクリックすると、そのマスに種別の初期値でアイテムを追加する
+//   「続けて配置」にチェックがあれば、Esc/中止を押すまで何個でも置ける。
+// ----------------------------------------------------------------
+
+function buildPlacePanel({ onPlaced }) {
+  const sec = document.createElement("section");
+  sec.className = "detail-section il-place-panel";
+  const h3 = document.createElement("h3");
+  h3.textContent = "ゲーム画面に配置";
+  sec.appendChild(h3);
+
+  const typeField = createEntityField({ type: "itemType", value: 0, label: "アイテム種別" });
+  sec.appendChild(typeField.element);
+
+  const row = document.createElement("div");
+  row.style.cssText = "display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem;margin-top:0.25rem;";
+  const placeBtn = document.createElement("button");
+  placeBtn.type = "button";
+  placeBtn.className = "button small primary";
+  const placeBtnLabel = "クリックして配置";
+  placeBtn.textContent = placeBtnLabel;
+  const continuousLbl = document.createElement("label");
+  const continuousCb = document.createElement("input");
+  continuousCb.type = "checkbox";
+  continuousLbl.append(continuousCb, " 続けて配置");
+  row.append(placeBtn, continuousLbl);
+  sec.appendChild(row);
+
+  const feedbackEl = document.createElement("p");
+  feedbackEl.className = "il-feedback result-message";
+  feedbackEl.setAttribute("role", "status");
+  feedbackEl.setAttribute("aria-live", "polite");
+  feedbackEl.style.display = "none";
+  sec.appendChild(feedbackEl);
+
+  let _waiting = false;
+
+  function setWaiting(waiting) {
+    _waiting = waiting;
+    placeBtn.disabled = waiting;
+    placeBtn.textContent = waiting ? "クリック待ち…" : placeBtnLabel;
+  }
+
+  function typeLabel(itemTypeId) {
+    const nameEl = typeField.element.querySelector(".entity-field-name");
+    const name = nameEl ? nameEl.textContent : "";
+    return name && name !== "未選択" ? name : ("種別 #" + itemTypeId);
+  }
+
+  async function placeAt(itemTypeId, pick) {
+    if (!(pick.mapId > 0)) {
+      showFeedback(feedbackEl, "マップ上をクリックしてください", "error");
+      return;
+    }
+    const payload = {
+      itemTypeId,
+      mapId: pick.mapId,
+      posX: pick.cellX * CELL_PX,
+      posY: pick.cellY * CELL_PX,
+    };
+    showFeedback(feedbackEl, "配置中…", "");
+    try {
+      const { response, data } = await fetchJson("/api/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        showFeedback(feedbackEl, "エラー: " + (data?.error ?? "HTTP " + response.status), "error");
+        return;
+      }
+      showFeedback(
+        feedbackEl,
+        "配置しました (ID=" + data?.itemId + " / マップ" + pick.mapId + " の (" + pick.cellX + "," + pick.cellY + "))",
+        "success"
+      );
+      invalidateEntityCache("item");
+      await onPlaced(data);
+    } catch (e) {
+      showFeedback(feedbackEl, "通信エラー: " + e.message, "error");
+    }
+  }
+
+  function startPlacing() {
+    const itemTypeId = typeField.getValue();
+    if (!(itemTypeId > 0)) {
+      showFeedback(feedbackEl, "先にアイテム種別を選んでください", "error");
+      return;
+    }
+    setWaiting(true);
+    requestNextPick({
+      message: "「" + typeLabel(itemTypeId) + "」を置く位置をゲーム画面でクリックしてください(Esc で中止)",
+      onPick: async (pick) => {
+        await placeAt(itemTypeId, pick);
+        // 続けて配置: 失敗してもクリック待ちに戻り、Esc/中止で抜ける
+        if (continuousCb.checked && _waiting && sec.isConnected) {
+          startPlacing();
+          return;
+        }
+        setWaiting(false);
+      },
+      onCancel: () => setWaiting(false),
+    });
+  }
+
+  placeBtn.addEventListener("click", startPlacing);
+
+  return { el: sec };
+}
+
+// ----------------------------------------------------------------
 // 左ペイン: 一覧 + フィルター
 // ----------------------------------------------------------------
 
@@ -236,9 +386,11 @@ const ITEM_SORTERS = {
   type: (a, b) => (a.itemTypeId ?? 0) - (b.itemTypeId ?? 0),
 };
 
-function buildLeftPane({ onSelect, onNew, onDelete, initialState, onStateChange }) {
+function buildLeftPane({ onSelect, onNew, onDelete, initialState, onStateChange, headerEl }) {
   const pane = document.createElement("div");
   pane.className = "ee-left";
+
+  if (headerEl) { pane.appendChild(headerEl); }
 
   // フィルター（サーバー側クエリ: drop/charId/mapId）
   const filterWrap = document.createElement("div");
@@ -588,7 +740,16 @@ export function mount(container) {
     showList();
   });
 
+  // ゲーム画面に配置パネル: 追加できたら一覧を読み直して新しいアイテムを選択状態にする
+  const placePanel = buildPlacePanel({
+    onPlaced: async (created) => {
+      await leftApi.reload();
+      if (created?.itemId) { leftApi.setSelectedId(created.itemId); }
+    },
+  });
+
   const leftApi = buildLeftPane({
+    headerEl: placePanel.el,
     onSelect: (it) => {
       detail.setItem(it);
       showFeedback(feedbackEl, "", "");
@@ -647,6 +808,8 @@ export function mount(container) {
   });
 
   _destroyFn = () => {
+    // クリック待ちのまま画面を作り直した場合に、古いパネルへ pick が届かないよう打ち切る
+    cancelPendingPick({ silent: true });
     container.innerHTML = "";
   };
 }

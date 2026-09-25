@@ -262,6 +262,23 @@
   font-size: 0.85rem;
 }
 
+/* 編集フォームの格子(.form-grid)の1マスに入れたときは、ほかの欄(.form-field)と同じく
+   ラベルを上の行に出し、狭いマスでは折り返す。横一列のままだと隣のマスにはみ出して重なる */
+.form-grid > .entity-field,
+.form-grid > .sprite-field {
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.form-grid > .entity-field > .entity-field-label,
+.form-grid > .sprite-field > .sprite-field-label {
+  flex-basis: 100%;
+  white-space: normal;
+}
+.form-grid > .entity-field .button.small,
+.form-grid > .sprite-field .button.small {
+  white-space: nowrap;
+}
+
 .ep-backdrop {
   position: fixed;
   inset: 0;
@@ -3025,6 +3042,22 @@ main {
 .workspace-body main,
 .persistent-game-panel {
   height: calc(100vh - 105px - var(--workspace-tabs-h, 0px));
+}
+
+/* 上の固定値(105px + タブバー)はヘッダーの実際の高さとずれやすく、
+   ゲーム画面パネルの下端が常に見切れていた。app.js の updateWorkspaceTop() が
+   実測した本体の上端(--workspace-top)があればそちらで高さを決める。
+   パネルは padding/border 込みの高さにしないと、その分だけ下にはみ出す。 */
+.persistent-game-panel {
+  box-sizing: border-box;
+}
+
+/* 狭い幅(940px 以下)は縦積みで高さ auto のままにする(下の @media と同じ境界) */
+@media (min-width: 941px) {
+  .workspace-body.has-measured-top main,
+  .workspace-body.has-measured-top .persistent-game-panel {
+    height: calc(var(--app-height, 100vh) - var(--workspace-top) - 1.5rem);
+  }
 }
 
 .workspace-tab-group {

@@ -517,12 +517,29 @@ void CItemUpdateHandler::Handle(const HttpRequest &request, HttpResponse &respon
                 return;
         }
 
+        // 所持キャラが変わったらバッグの中身も移す。所有者IDだけ変えると、ゲームの
+        // バッグに入らない・装備してもクライアントがアイテム情報を捨ててしまう、などの食い違いになる。
+        DWORD dwNewCharId = pInfo->m_dwCharID;
+        if (dwOldCharId != dwNewCharId) {
+                CLibInfoCharSvr *pCharLib = m_pMgrData->GetLibInfoChar();
+                CInfoCharSvr *pOldChar = (pCharLib != NULL && dwOldCharId != 0)
+                        ? static_cast<CInfoCharSvr *>(pCharLib->GetPtr(dwOldCharId)) : NULL;
+                CInfoCharSvr *pNewChar = (pCharLib != NULL && dwNewCharId != 0)
+                        ? static_cast<CInfoCharSvr *>(pCharLib->GetPtr(dwNewCharId)) : NULL;
+                if (pOldChar != NULL) {
+                        pInfo->m_dwCharID = dwOldCharId;
+                        pLib->DeleteItem(pInfo->m_dwItemID, pOldChar, TRUE);
+                        pInfo->m_dwCharID = dwNewCharId;
+                }
+                if (pNewChar != NULL && !pNewChar->HaveItem(pInfo->m_dwItemID)) {
+                        pLib->AddItem(dwNewCharId, pInfo->m_dwItemID, &pNewChar->m_adwItemID);
+                }
+        }
+
         // クライアントへ変更を通知
         CPacketITEM_RES_ITEMINFO packet;
         packet.Make(pInfo);
         pSock->SendTo(0, &packet);
-
-        DWORD dwNewCharId = pInfo->m_dwCharID;
 
         std::ostringstream oss;
         AppendItemJson(oss, pInfo, pLibType);

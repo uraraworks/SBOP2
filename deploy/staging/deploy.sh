@@ -26,6 +26,10 @@ else
 	docker compose build sbosvr
 fi
 
+# BGM の置き場(compose.yaml でマウント)。無いと docker が root 所有で作り、
+# sudo できないユーザーでは後からファイルを置けなくなるので先に作っておく
+mkdir -p "$HOME/sbop2-bgm"
+
 # SboSvr を新しいイメージで作り直す。Caddy はそのまま(証明書も保持)
 docker compose up -d
 docker image prune -f >/dev/null

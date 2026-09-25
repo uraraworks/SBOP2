@@ -12,6 +12,7 @@
 #include "MgrData.h"
 #include "Web/AuthProvider.h"
 #include "Web/JsonUtils.h"
+#include "SpriteSheetHandler.h"
 #include "Web/AdminWsHub.h"
 #include "Web/MapPartsHistory.h"
 #include "Info/InfoMapParts.h"
@@ -77,51 +78,28 @@ CMapPartsResourceProvider::~CMapPartsResourceProvider()
         m_sheetCache.clear();
 }
 
+// シート画像の取得は、スプライト配信(/api/assets/sprites, CGrpResourceProvider)の
+// "mapParts" カテゴリに任せる。以前はここで SboGrpData.dll のリソースだけを読んでいたため、
+// DLL が無い Linux(ステージング)ではマップパーツ配置画面のシートが 404 になり、
+// パーツ画像が表示されなかった(マップパーツ編集画面は /api/assets/sprites 経由なので表示されていた)。
+// CGrpResourceProvider は 画像ストア(DB) → ファイル(res/) → DLL の順に探し、
+// パレット0の透過化も同じように行う。画像エディタでの編集も反映される。
+static const char *kMapPartsCategoryKey = "mapParts";
+
 bool CMapPartsResourceProvider::IsAvailable()
 {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        // DLL 自体のロード可否は SboPlatform::LoadEmbeddedPng 内に集約されている。
-        // ここでは「1枚目のシートが取れるか」で代用する。
-        std::vector<unsigned char> dummy;
-        return SboPlatform::LoadEmbeddedPng("IDP_MAP_01", dummy);
+        return GetSheetCount() > 0;
 }
 
 bool CMapPartsResourceProvider::GetSheetPng(int sheetIndex, std::vector<unsigned char> &outData)
 {
         std::lock_guard<std::mutex> lock(m_mutex);
-
-        std::map<int, std::vector<unsigned char> >::const_iterator it = m_sheetCache.find(sheetIndex);
-        if (it != m_sheetCache.end()) {
-                outData = it->second;
-                return true;
-        }
-
-        if (!LoadSheetLocked(sheetIndex, outData)) {
-                return false;
-        }
-        m_sheetCache.insert(std::make_pair(sheetIndex, outData));
-        return true;
+        return LoadSheetLocked(sheetIndex, outData);
 }
 
 int CMapPartsResourceProvider::GetSheetCount()
 {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        if (m_sheetCount >= 0) {
-                return m_sheetCount;
-        }
-
-        int count = 0;
-        while (true) {
-                char szName[32] = {};
-                _snprintf_s(szName, _countof(szName), _TRUNCATE, "IDP_MAP_%02d", count + 1);
-                std::vector<unsigned char> dummy;
-                if (!SboPlatform::LoadEmbeddedPng(szName, dummy)) {
-                        break;
-                }
-                ++count;
-        }
-        m_sheetCount = count;
-        return m_sheetCount;
+        return CGrpResourceProvider::GetInstance().GetSheetCount(kMapPartsCategoryKey);
 }
 
 bool CMapPartsResourceProvider::LoadSheetLocked(int sheetIndex, std::vector<unsigned char> &outData)
@@ -129,71 +107,8 @@ bool CMapPartsResourceProvider::LoadSheetLocked(int sheetIndex, std::vector<unsi
         if (sheetIndex < 0) {
                 return false;
         }
-
-        char szName[32] = {};
-        _snprintf_s(szName, _countof(szName), _TRUNCATE, "IDP_MAP_%02d", sheetIndex + 1);
-        std::vector<unsigned char> rawPng;
-        if (!SboPlatform::LoadEmbeddedPng(szName, rawPng)) {
-                return false;
-        }
-
-        // --- パレットインデックス 0 を透過化して返す ---
-
-        // lodepng でパレット付き PNG としてデコード（元の色空間を維持）
-        lodepng::State state;
-        state.decoder.color_convert = 0; // 色変換しない（8bit パレットのまま取得）
-
-        std::vector<unsigned char> pixels;
-        unsigned int imgW = 0, imgH = 0;
-        unsigned int decErr = lodepng::decode(pixels, imgW, imgH, state, rawPng.data(), rawPng.size());
-        if (decErr != 0 ||
-            state.info_png.color.colortype != LCT_PALETTE ||
-            state.info_png.color.palettesize == 0)
-        {
-            // デコード失敗またはパレット形式でない → 元の PNG をそのまま返す
-            if (decErr != 0)
-            {
-                char szMsg[256];
-                _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
-                    "MapPartsHandler: lodepng decode failed (err=%u), using original PNG\n", decErr);
-                SboPlatform::WriteDebugLine(szMsg);
-            }
-            outData = std::move(rawPng);
-            return true;
-        }
-
-        // パレット先頭エントリ（インデックス 0）の α を 0（完全透過）に書き換える
-        // パレットは RGBA 各 1 byte 連続で格納: palette[idx*4 + 0..3] = R,G,B,A
-        //
-        // 注意: color_convert=0 でデコードすると info_raw が info_png.color の
-        // コピーになる。info_png.color.palette[3] だけ書き換えると info_raw と
-        // info_png.color のパレットが不一致になり lodepng_convert が走る。
-        // lodepng_convert の PALETTE→PALETTE 変換は α も含めた RGBA 完全一致で
-        // インデックスを探すため、α が異なると変換エラーになって元の PNG が
-        // フォールバック返却される（tRNS が出ない原因）。
-        // info_raw.palette[3] も同時に書き換えて両者を一致させることで
-        // エンコード時に変換不要パスを通り、tRNS が確実に出力される。
-        state.info_png.color.palette[3] = 0; // info_png: インデックス 0 の A を透過に
-        state.info_raw.palette[3]       = 0; // info_raw:  同上（両者を一致させる）
-        state.info_raw.colortype        = LCT_PALETTE;
-        state.info_raw.bitdepth         = 8;
-        state.encoder.auto_convert      = 0; // パレット PNG のままエンコード（色変換禁止）
-
-        std::vector<unsigned char> encodedPng;
-        unsigned int encErr = lodepng::encode(encodedPng, pixels, imgW, imgH, state);
-        if (encErr != 0)
-        {
-            // エンコード失敗 → 元の PNG をそのまま返す
-            char szMsg[256];
-            _snprintf_s(szMsg, _countof(szMsg), _TRUNCATE,
-                "MapPartsHandler: lodepng encode failed (err=%u), using original PNG\n", encErr);
-            SboPlatform::WriteDebugLine(szMsg);
-            outData = std::move(rawPng);
-            return true;
-        }
-
-        outData = std::move(encodedPng);
-        return true;
+        std::string etag;
+        return CGrpResourceProvider::GetInstance().GetSheetPng(kMapPartsCategoryKey, sheetIndex, outData, etag);
 }
 
 CMapPartsListHandler::CMapPartsListHandler(CMgrData *pMgrData, std::shared_ptr<CMapPartsResourceProvider> provider)

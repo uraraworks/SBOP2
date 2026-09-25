@@ -50,6 +50,7 @@ public:
 	BOOL	AtackImple(CInfoCharSvr *pChar, DWORD dwCharID);	// 攻撃実処理
 	BOOL	Equip(CInfoCharSvr *pChar, DWORD dwItemID);	// 装備
 	BOOL	UnEquip(CInfoCharSvr *pChar, DWORD dwItemID);	// 装備解除
+	void	SetItemOwner(CInfoCharSvr *pChar, DWORD dwItemID);	// アイテムの所有者をキャラにそろえる(マップ上の位置は消す)
 	BOOL	UseItem(CInfoCharSvr *pChar, DWORD dwItemID);	// アイテム使用
 	void	DragItem(CInfoCharSvr *pChar, DWORD dwItemID, POINT ptNewPos);	// アイテム位置変更
 	void	RenewGrpID(DWORD dwCharID);	// 装備画像IDを更新

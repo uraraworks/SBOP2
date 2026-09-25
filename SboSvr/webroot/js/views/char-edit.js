@@ -26,26 +26,63 @@ import { MOVE_TYPE_OPTIONS } from "../data/move-types.js";
 import { FAMILY_TYPE_OPTIONS } from "../data/family-types.js";
 
 // ----------------------------------------------------------------
-// アイテム情報マップキャッシュ (itemId → { name, iconGrpId })
+// アイテム情報マップキャッシュ (itemId → { name, iconGrpId, category })
+//   category はアイテム種別の分類(/api/item-types の itemTypeId)。
+//   1=服 2=アクセサリ 3=持ち物 4=盾(InfoItemTypeBase.h の ITEMTYPEID_*)
 // ----------------------------------------------------------------
 var _itemInfoMap = null;
 
-async function ensureItemInfoMap() {
-  if (_itemInfoMap !== null) { return; }
+// 分類 → 装備欄(PUT /api/characters/{id}/equipment のキー)
+var EQUIP_SLOT_BY_CATEGORY = { 1: "cloth", 2: "accesory1", 3: "armsRight", 4: "armsLeft" };
+
+// 装備タブに並べる欄。アクセサリ2・頭はゲーム側に装備処理が無いが、値は表示する
+var EQUIP_SLOTS = [
+  ["cloth", "服"], ["accesory1", "アクセサリ1"], ["accesory2", "アクセサリ2"],
+  ["armsRight", "右手"], ["armsLeft", "左手"], ["head", "頭"],
+];
+
+// force: アイテムを追加・装備した直後など、最新の一覧で作り直したい時に true
+async function ensureItemInfoMap(force) {
+  if (_itemInfoMap !== null && !force) { return; }
   try {
-    var { response, data } = await fetchJson("/api/items");
-    if (!response || !response.ok) {
+    var [itemsRes, typesRes] = await Promise.all([fetchJson("/api/items"), fetchJson("/api/item-types")]);
+    var categoryByType = new Map();
+    if (typesRes.response && typesRes.response.ok && typesRes.data && Array.isArray(typesRes.data.items)) {
+      typesRes.data.items.forEach(function (t) { categoryByType.set(t.typeId, t.itemTypeId); });
+    }
+    if (!itemsRes.response || !itemsRes.response.ok) {
       _itemInfoMap = new Map();
       return;
     }
+    var data = itemsRes.data;
     var list = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : []);
     _itemInfoMap = new Map();
     list.forEach(function (it) {
-      _itemInfoMap.set(it.itemId, { name: it.name || "", iconGrpId: it.iconGrpId || null });
+      _itemInfoMap.set(it.itemId, {
+        name: it.name || "",
+        iconGrpId: it.iconGrpId || null,
+        category: categoryByType.has(it.itemTypeId) ? categoryByType.get(it.itemTypeId) : null,
+      });
     });
   } catch (_) {
     _itemInfoMap = new Map(); // 失敗時は空 Map にして再試行ループを避ける
   }
+}
+
+// アイコン + [ID] 名前 の横並び表示を作る
+function mkItemLabel(itemId, size) {
+  var info = (_itemInfoMap && _itemInfoMap.get(itemId)) || null;
+  var wrap = mkEl("div");
+  wrap.style.display = "flex";
+  wrap.style.alignItems = "center";
+  wrap.style.gap = "6px";
+  if (info && info.iconGrpId) {
+    var thumb = createSpriteThumb({ categoryKey: "item", sub: info.iconGrpId, size: size || 20 });
+    wrap.appendChild(thumb.el);
+  }
+  var itemName = (info && info.name) ? info.name : "(名前なし)";
+  wrap.appendChild(mkEl("span", "", "[" + String(itemId) + "] " + itemName));
+  return wrap;
 }
 
 // ----------------------------------------------------------------
@@ -401,32 +438,34 @@ function buildEquipTab() {
   fb.setAttribute("aria-live", "polite");
   panel.appendChild(fb);
 
-  var form = mkEl("form", "edit-form");
-  form.id = "ce-equip-form";
-  panel.appendChild(form);
+  // 数値の直接入力はやめ、装備は「アイテム」タブの「装備」ボタン、
+  // 解除はここの「外す」ボタンから行う(どちらもゲーム内の装備処理を通す)。
+  // ゲームでは装備したアイテムは所持品(バッグ)から装備欄へ移る。
+  var note = mkEl("p", "field-note", "装備は「アイテム」タブの「装備」ボタンから行えます。外すとアイテムはバッグに戻ります。");
+  panel.appendChild(note);
 
-  var grid = mkEl("div", "form-grid");
-  form.appendChild(grid);
+  var table = mkEl("table", "data-table");
+  var thead = mkEl("thead");
+  thead.innerHTML = "<tr><th>欄</th><th>装備中のアイテム</th><th>操作</th></tr>";
+  // .data-table の min-width(520px)だと右ペインからはみ出して「外す」が隠れるため外す
+  table.style.minWidth = "0";
+  var tbody = mkEl("tbody");
+  table.append(thead, tbody);
+  panel.appendChild(table);
 
-  var fields = [
-    ["cloth","服"],["accesory1","アクセサリ1"],["accesory2","アクセサリ2"],
-    ["armsRight","右手"],["armsLeft","左手"],["head","頭"],
-  ];
-
-  var inputs = {};
-  fields.forEach(function (pair) {
-    var f = mkNumField(pair[1]);
-    grid.appendChild(f.wrap);
-    inputs[pair[0]] = f.inp;
+  var cells = {};
+  var opCells = {};
+  EQUIP_SLOTS.forEach(function (pair) {
+    var tr = mkEl("tr");
+    var td = mkEl("td");
+    var tdOp = mkEl("td");
+    tr.append(mkEl("td", "", pair[1]), td, tdOp);
+    tbody.appendChild(tr);
+    cells[pair[0]] = td;
+    opCells[pair[0]] = tdOp;
   });
 
-  var actions = mkEl("div", "form-actions");
-  var saveBtn = mkEl("button", "button primary", "保存");
-  saveBtn.type = "submit";
-  actions.appendChild(saveBtn);
-  form.appendChild(actions);
-
-  return { panel, fb, form, inputs };
+  return { panel, fb, cells, opCells };
 }
 
 // ----------------------------------------------------------------
@@ -1169,6 +1208,7 @@ function buildItemsTab() {
   var table = mkEl("table", "data-table");
   var thead = mkEl("thead");
   thead.innerHTML = "<tr><th>スロット</th><th>アイテム</th><th>操作</th></tr>";
+  table.style.minWidth = "0"; // 装備ボタンが右端で隠れないように(装備タブと同じ)
   var tbody = mkEl("tbody");
   tbody.innerHTML = "<tr><td colspan='3'>（データなし）</td></tr>";
   table.append(thead, tbody);
@@ -1397,6 +1437,7 @@ export function mount(container) {
   // 状態
   // ----------------------------------------------------------------
   var currentCharId = 0;
+  var currentEquipment = {};   // 表示中キャラの装備 (欄キー → アイテムID)
 
   // ----------------------------------------------------------------
   // データロード
@@ -1458,10 +1499,8 @@ export function mount(container) {
     }
 
     // 装備
-    if (d.equipment) {
-      var e = d.equipment;
-      Object.keys(equipTab.inputs).forEach(function (k) { setNumInp(equipTab.inputs[k], e[k]); });
-    }
+    currentEquipment = d.equipment || {};
+    renderEquipView();
 
     // グラフィック
     if (d.graphics) {
@@ -1557,33 +1596,56 @@ export function mount(container) {
   });
 
   // ----------------------------------------------------------------
-  // 装備 保存
+  // 装備(表示と、アイテムタブからの装備・解除)
   // ----------------------------------------------------------------
-  equipTab.form.addEventListener("submit", async function (ev) {
-    ev.preventDefault();
-    if (!currentCharId) { setFb(equipTab.fb, "先にキャラクターを表示してください", "error"); return; }
-    setFb(equipTab.fb, "保存中...", "");
-
-    var body = {};
-    Object.keys(equipTab.inputs).forEach(function (k) {
-      var v = numVal(equipTab.inputs[k]);
-      if (v !== null) { body[k] = v; }
+  async function renderEquipView() {
+    await ensureItemInfoMap();
+    var equipableSlots = Object.values(EQUIP_SLOT_BY_CATEGORY);
+    EQUIP_SLOTS.forEach(function (pair) {
+      var key = pair[0];
+      var td = equipTab.cells[key];
+      var tdOp = equipTab.opCells[key];
+      td.innerHTML = "";
+      tdOp.innerHTML = "";
+      var id = Number(currentEquipment[key]) || 0;
+      td.appendChild(id > 0 ? mkItemLabel(id, 24) : mkEl("span", "muted", "なし"));
+      // アクセサリ2・頭はゲーム側に装備処理が無いので外すボタンも出さない
+      if (id > 0 && equipableSlots.indexOf(key) >= 0) {
+        var btn = mkEl("button", "button btn-sm", "外す");
+        btn.type = "button";
+        btn.addEventListener("click", function () { doSetEquip(key, 0, equipTab.fb); });
+        tdOp.appendChild(btn);
+      }
     });
+  }
 
+  // itemId を slotKey の欄に装備する(0 なら外す)。サーバーはゲーム内の装備処理を通す
+  // fb: 結果を出す場所(アイテムタブ/装備タブ)
+  async function doSetEquip(slotKey, itemId, fb) {
+    if (!currentCharId) { return; }
+    // もう一方のタブに前回の結果が残っていると紛らわしいので消しておく
+    [equipTab.fb, itemsTab.fb].forEach(function (f) { if (f !== fb) { setFb(f, "", ""); } });
+    setFb(fb, itemId ? "装備中..." : "外しています...", "");
+    var body = {};
+    body[slotKey] = itemId;
     try {
       var { response, data } = await putJson("/api/characters/" + currentCharId + "/equipment", body);
       if (!response.ok) {
-        var msg = (data && data.error) ? data.error : "保存に失敗しました";
-        setFb(equipTab.fb, "エラー: " + msg, "error");
+        // サーバーは装備できない理由を日本語の message で返す
+        var msg = (data && (data.message || data.error)) ? (data.message || data.error) : "装備に失敗しました";
+        setFb(fb, "エラー: " + msg, "error");
         return;
       }
-      setFb(equipTab.fb, "保存しました", "success");
-      await doFetchChar(currentCharId);
+      currentEquipment = (data && data.equipment) ? data.equipment : data || currentEquipment;
+      setFb(fb, itemId ? "装備しました（装備タブに移りました）" : "外しました（バッグに戻りました）", "success");
+      renderEquipView();
+      await doFetchItems();
+      setFb(fb, itemId ? "装備しました（装備タブに移りました）" : "外しました（バッグに戻りました）", "success");
     } catch (err) {
-      console.error("char-edit equip save error", err);
-      setFb(equipTab.fb, "通信エラーが発生しました", "error");
+      console.error("char-edit equip error", err);
+      setFb(fb, "通信エラーが発生しました", "error");
     }
-  });
+  }
 
   // ----------------------------------------------------------------
   // グラフィック 保存
@@ -1690,8 +1752,8 @@ export function mount(container) {
         setFb(itemsTab.fb, "エラー: " + ((data && data.error) || "取得失敗"), "error");
         return;
       }
-      setFb(itemsTab.fb, "", "");
-      await ensureItemInfoMap();
+      // 追加・装備した直後の最新状態(名前・分類)で表示するため毎回作り直す
+      await ensureItemInfoMap(true);
       renderItems(data || []);
     } catch (err) {
       setFb(itemsTab.fb, "通信エラーが発生しました", "error");
@@ -1712,20 +1774,21 @@ export function mount(container) {
       // アイテム列: アイコン + [ID] 名前 を横並び (td 自体は table-cell のまま、
       // 内側 div を flex にして他列の vertical-align: middle と整合させる)
       var tdItem = mkEl("td");
-      var itemWrap = mkEl("div");
-      itemWrap.style.display = "flex";
-      itemWrap.style.alignItems = "center";
-      itemWrap.style.gap = "6px";
-      if (info && info.iconGrpId) {
-        var thumb = createSpriteThumb({ categoryKey: "item", sub: info.iconGrpId, size: 20 });
-        itemWrap.appendChild(thumb.el);
-      }
-      var itemName = (info && info.name) ? info.name : "(名前なし)";
-      var spanLabel = mkEl("span", "", "[" + String(item.itemId) + "] " + itemName);
-      itemWrap.appendChild(spanLabel);
+      var itemWrap = mkItemLabel(item.itemId, 20);
       tdItem.appendChild(itemWrap);
 
       var tdOp   = mkEl("td");
+      tdOp.style.whiteSpace = "nowrap";
+      // 装備できる分類(服/アクセサリ/持ち物/盾)なら 装備 ボタンを出す。
+      // 装備したアイテムはバッグから装備欄へ移るので、外すのは装備タブで行う
+      var slotKey = info ? EQUIP_SLOT_BY_CATEGORY[info.category] : null;
+      if (slotKey) {
+        var eqBtn = mkEl("button", "button btn-sm", "装備");
+        eqBtn.type = "button";
+        eqBtn.style.marginRight = "4px";
+        eqBtn.addEventListener("click", function () { doSetEquip(slotKey, item.itemId, itemsTab.fb); });
+        tdOp.appendChild(eqBtn);
+      }
       var delBtn = mkEl("button", "button danger btn-sm", "削除");
       delBtn.type = "button";
       delBtn.addEventListener("click", function () { doDeleteItem(item.slot); });
