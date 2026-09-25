@@ -45,7 +45,9 @@ const LIST_TYPE_CONFIG = {
     title: "アイテム種別を選択",
     listUrl: "/api/item-types",
     listKey: "items",
-    idField: "itemTypeId",
+    // 種別ごとに一意なのは typeId。itemTypeId は「武器/防具…」の分類番号で
+    // 複数の種別が同じ値を持つため、ID として使うと選択や API 呼び出しがずれる。
+    idField: "typeId",
     nameField: "name",
     searchPlaceholder: "ID や名前で絞り込み",
     thumb: (row) => (row.iconGrpId != null ? { categoryKey: "item", sub: row.iconGrpId } : null),
