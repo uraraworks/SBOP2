@@ -1,0 +1,48 @@
+# wiki/ の原稿を GitHub Wiki へ書き写す
+#
+# master への push(wiki/ に変更があった時)と手動実行で動く。
+# Wiki は wiki/ の内容で丸ごと上書きする(wiki/README.md は除く)。
+# Wiki の最初の1ページは GitHub の画面で作っておく必要がある(作るまで Wiki のリポジトリが無い)。
+name: wiki-sync
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'wiki/**'
+      - '.github/workflows/wiki-sync.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: wiki-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wiki のリポジトリを取得
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: git clone "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git" wiki-repo
+
+      - name: 原稿を書き写す
+        run: rsync -a --delete --exclude '.git' --exclude 'README.md' wiki/ wiki-repo/
+
+      - name: 変更があればコミットして push
+        working-directory: wiki-repo
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Wiki に変更はありません"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "wiki/ から反映 (${GITHUB_SHA::7})"
+          git push
