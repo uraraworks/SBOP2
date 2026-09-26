@@ -148,7 +148,8 @@ sbop2Debug.releaseAll();
 
 実装: `SboSvr/src/Web/Handlers/DebugWorldHandler.cpp`。`/api/debug/fixture` と同じく
 **Debug ビルド(`-DSBO_DEBUG_API=ON`)のみ**存在し、**127.0.0.1 からの直接リクエストのみ**受け付ける
-(それ以外は 404)。空の DB には敵がいないため、戦闘まわりの自動確認やスクショ撮影に使う。
+(それ以外は 404)。決まった場所・強さの敵をすぐ置けるので、戦闘まわりの自動確認やスクショ撮影に使う
+(本番の敵は `data/seed/SboData.db` にもいるが、湧く場所と時間がランダム)。
 
 ### `POST /api/debug/npc`（敵を1体置く）
 
