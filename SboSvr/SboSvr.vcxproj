@@ -343,6 +343,9 @@
     <ClCompile Include="src\Web\Handlers\DebugFixtureHandler.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\Web\Handlers\DebugWorldHandler.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\Web\IpRateLimiter.cpp" />
     <ClCompile Include="src\Web\Handlers\AdminRolesHandler.cpp" />
     <ClCompile Include="src\Web\Handlers\SelectionHandler.cpp" />
@@ -525,6 +528,7 @@
     <ClInclude Include="src\Web\Handlers\AccountListHandler.h" />
     <ClInclude Include="src\Web\Handlers\AccountAuthHandler.h" />
     <ClInclude Include="src\Web\Handlers\DebugFixtureHandler.h" />
+    <ClInclude Include="src\Web\Handlers\DebugWorldHandler.h" />
     <ClInclude Include="src\Web\IpRateLimiter.h" />
     <ClInclude Include="src\Web\Handlers\AdminRolesHandler.h" />
     <ClInclude Include="src\Web\Handlers\SelectionHandler.h" />

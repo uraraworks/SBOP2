@@ -144,6 +144,43 @@ sbop2Debug.releaseAll();
 - キャラ作成は `CLibInfoCharSvr::CreatePlayerCharacter`(`MAKECHAR` パケット経路と共用、
   排他も同じ)を使う。
 
+## 敵を置く・HP を変えるテスト準備 API
+
+実装: `SboSvr/src/Web/Handlers/DebugWorldHandler.cpp`。`/api/debug/fixture` と同じく
+**Debug ビルド(`-DSBO_DEBUG_API=ON`)のみ**存在し、**127.0.0.1 からの直接リクエストのみ**受け付ける
+(それ以外は 404)。空の DB には敵がいないため、戦闘まわりの自動確認やスクショ撮影に使う。
+
+### `POST /api/debug/npc`（敵を1体置く）
+
+| 項目 | 必須 | 既定 | 説明 |
+|---|---|---|---|
+| `mapId` / `x` / `y` | ✅ | | 置く場所。`x`/`y` は `state().player` の `x`/`y` と同じ単位(1マス=32) |
+| `charName` | | `DebugEnemy` | 表示名 |
+| `moveType` | | 9(戦闘1) | 移動種別。戦闘1は攻撃されると反撃してくる |
+| `grpIdNpc` | | 1 | NPC 画像の行番号(`SboGrpData/res/NPC/npc01.png` の上から何行目か。1 は青いスライム) |
+| `hp` | | 30 | HP(最大 HP も同じ値) |
+| `atack` / `defense` | | 10 / 0 | 攻撃力・防御力 |
+| `searchX` / `searchY` | | 0 | 索敵範囲(マス)。0 なら自分からは襲ってこない |
+
+成功すると 201 で `{charId, mapId, x, y, moveType, hp}` を返す。スポーナーが湧かせた敵と同じく
+`SetMap`・`SetLibInfoChar` 済みなので、移動・反撃・撃破の処理がそのまま動く。
+
+### `POST /api/debug/char-status`（HP / SP を変える）
+
+`{charId, hp?, sp?}` を渡すと、サーバー側の値だけを書き換える(最大値で頭打ち)。
+クライアントの表示は次にダメージなどでステータスが届いた時にそろう。
+fixture で作ったキャラは HP が低い(10)ので、戦闘を続けて試したい時は先に `hp: 300` などにしておく。
+`hp: 1` にして敵に殴られれば気絶メニューを試せる。
+
+```js
+const p = window.sbop2Debug.state().player;
+const post = (url, body) => fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+await post('/api/debug/char-status', { charId: p.charID, hp: 1 });
+await post('/api/debug/npc', { mapId: p.mapID, x: p.x, y: p.y + 32, hp: 500, atack: 5 }); // 1マス下に置く
+await window.sbop2Debug.press('down');    // 敵の方を向く
+window.sbop2Debug.hold('x', 8000);        // 攻撃し続ける → 反撃されて SWOON ウィンドウが開く
+```
+
 ### 実証済みの通し手順(起動〜マップ画面〜ESCメニューまで約13秒)
 
 ```js
@@ -172,6 +209,7 @@ d.state(); // activeWindow: SYSTEMMENU、windows[0].pos でカーソル位置
 
 `tools/test-browser-e2e-linux.sh` が上の通し手順を Playwright で実行し、MAP と ESC メニューのスクショを
 `out/e2e/` に保存する。サーバーは `-DSBO_DEBUG_API=ON` でビルドしたもの（fixture 入り）を使う。
+続けて `tools/e2e/browser-battle.cjs` が上の API で敵を置いて攻撃し、反撃で気絶メニューが出ることを確かめる。
 手順は `docs/cloud-dev-staging-plan.md` の S5 を参照。
 
 ### 注意点

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # クラウド(Linux)内でサーバー＋ブラウザ版を起動し、Playwright でログイン → MAP まで入ってスクショを撮る。
+# 続けて、テスト準備 API で敵を置いて戦い、気絶メニューが出るまでを確かめる。
 # docs/cloud-dev-staging-plan.md の S5。
 #
 # 事前準備:
@@ -61,6 +62,9 @@ status=0
 # プロキシ環境でも loopback へ直接つなぐ
 NO_PROXY="127.0.0.1,localhost" no_proxy="127.0.0.1,localhost" \
 	node "$ROOT/tools/e2e/browser-enter-map.cjs" "$HTTP" "$OUT_DIR" || status=$?
+# 敵を置いて戦い、反撃で気絶するまで(テスト準備 API /api/debug/npc・char-status を使う)
+NO_PROXY="127.0.0.1,localhost" no_proxy="127.0.0.1,localhost" \
+	node "$ROOT/tools/e2e/browser-battle.cjs" "$HTTP" "$OUT_DIR" || status=$?
 cp "$RUN_DIR/stdout.log" "$OUT_DIR/server-stdout.log" 2>/dev/null || true
 echo "スクショ・ログ: $OUT_DIR"
 exit $status
