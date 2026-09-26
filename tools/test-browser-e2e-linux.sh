@@ -13,6 +13,9 @@
 #   tools/test-browser-e2e-linux.sh [SboSvr 実行ファイル] [スクショ出力先]
 #     既定: out/cmake-linux-debugapi/SboSvr / out/e2e
 #
+# ワールドデータは data/seed/SboData.db(本番の敵・NPC・アイテム入り、プレイヤーデータなし)を使う。
+# SBO_E2E_EMPTY_DB=1 にすると、以前のように .dat だけから作った空の DB で動かす。
+#
 # ポートは既定値(ゲーム 2006 / HTTP 18080 / WebSocket 18081)を使う。
 set -euo pipefail
 
@@ -39,7 +42,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-# 実行ファイルの隣に webroot（game にブラウザ版）と SBODATA(.dat) を置く。DB は空から自動生成される
+# 実行ファイルの隣に webroot（game にブラウザ版）と SBODATA(.dat と seed の DB) を置く
 cp "$EXE" "$RUN_DIR/SboSvr"
 cp -r "$ROOT/SboSvr/webroot" "$RUN_DIR/webroot"
 mkdir -p "$RUN_DIR/webroot/game" "$RUN_DIR/SBODATA"
@@ -48,6 +51,9 @@ if [ -d "$GAME_DIR/BGM" ]; then
 	cp -r "$GAME_DIR/BGM" "$RUN_DIR/webroot/game/"
 fi
 cp "$ROOT"/Release/SBODATA/*.dat "$RUN_DIR/SBODATA/"
+if [ "${SBO_E2E_EMPTY_DB:-0}" != "1" ]; then
+	cp "$ROOT/data/seed/SboData.db" "$RUN_DIR/SBODATA/SboData.db"
+fi
 
 (cd "$RUN_DIR" && ./SboSvr --headless > "$RUN_DIR/stdout.log" 2>&1 &)
 for _ in $(seq 1 60); do

@@ -1,5 +1,5 @@
 // ブラウザ版で「敵を攻撃 → 反撃されて気絶」までを確かめる。
-// tools/test-browser-e2e-linux.sh から呼ばれる。空の DB には敵がいないため、
+// tools/test-browser-e2e-linux.sh から呼ばれる。湧く敵は場所と時間がランダムなので、
 // テスト準備 API(/api/debug/npc・/api/debug/char-status)で敵を置き、自キャラの HP を 1 にする。
 //
 //   node tools/e2e/browser-battle.cjs <http の URL> <スクショ出力ディレクトリ>
