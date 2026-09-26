@@ -1743,7 +1743,8 @@ export function mount(container) {
   // ----------------------------------------------------------------
   // 所持アイテム
   // ----------------------------------------------------------------
-  async function doFetchItems() {
+  // doneMsg: 読み込み後に出す完了メッセージ(追加・削除の直後など)。無ければ表示を消す
+  async function doFetchItems(doneMsg) {
     if (!currentCharId) { return; }
     setFb(itemsTab.fb, "読み込み中...", "");
     try {
@@ -1755,6 +1756,7 @@ export function mount(container) {
       // 追加・装備した直後の最新状態(名前・分類)で表示するため毎回作り直す
       await ensureItemInfoMap(true);
       renderItems(data || []);
+      setFb(itemsTab.fb, doneMsg || "", doneMsg ? "success" : "");
     } catch (err) {
       setFb(itemsTab.fb, "通信エラーが発生しました", "error");
     }
@@ -1805,8 +1807,7 @@ export function mount(container) {
         method: "DELETE", credentials: "same-origin"
       });
       if (res.status === 204) {
-        setFb(itemsTab.fb, "削除しました（スロット " + slot + "）", "success");
-        doFetchItems();
+        doFetchItems("削除しました（スロット " + slot + "）");
         return;
       }
       var data = null;
@@ -1837,8 +1838,7 @@ export function mount(container) {
         else { setFb(itemsTab.fb, "エラー: " + errCode, "error"); }
         return;
       }
-      setFb(itemsTab.fb, "追加しました（スロット " + data.slot + "）", "success");
-      doFetchItems();
+      doFetchItems("追加しました（スロット " + data.slot + "）");
     } catch (err) {
       setFb(itemsTab.fb, "通信エラーが発生しました", "error");
     }
