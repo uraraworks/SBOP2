@@ -55,6 +55,7 @@
 #include "Handlers/AccountAuthHandler.h"
 #ifdef _DEBUG
 #include "Handlers/DebugFixtureHandler.h"
+#include "Handlers/DebugWorldHandler.h"
 #endif
 #include "AuditLog.h"
 #include "AuthProvider.h"
@@ -1141,6 +1142,11 @@ void CHttpServer::RegisterDefaultHandlers()
         // 実行時の追加ガードは CDebugFixtureHandler::Handle 内の DebugFixtureGuard を参照。
         std::unique_ptr<IApiHandler> debugFixtureHandler(new CDebugFixtureHandler(m_pMgrData));
         m_router.Register("POST", "/api/debug/fixture", std::move(debugFixtureHandler));
+        // 敵を置く・HP を変える(E2E・スクショ用)。ガードは CDebugWorldHandler::Handle 内。
+        std::unique_ptr<IApiHandler> debugNpcHandler(new CDebugWorldHandler(m_pMgrData));
+        m_router.Register("POST", "/api/debug/npc", std::move(debugNpcHandler));
+        std::unique_ptr<IApiHandler> debugCharStatusHandler(new CDebugWorldHandler(m_pMgrData));
+        m_router.Register("POST", "/api/debug/char-status", std::move(debugCharStatusHandler));
 #endif
 
         std::unique_ptr<IApiHandler> rolesListHandler(new CAdminRolesListHandler(m_pMgrData));
