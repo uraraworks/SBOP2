@@ -98,6 +98,22 @@
       outline: none;
     }
 
+    /* 端数倍率のときだけ #canvas の真上に重ねる表示専用キャンバス(シャープ・バイリニア)。
+       クリック等は下の #canvas に通す */
+    #canvasSharp {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      pointer-events: none;
+      image-rendering: auto;
+    }
+    body.sharp-view:not(.mobile-pad):not(.admin-embed) #canvasSharp {
+      display: block;
+    }
+
     #sbop2ImeInput {
       position: absolute;
       left: 0;
@@ -669,6 +685,31 @@
       padding: 0 2px;
       line-height: 1;
     }
+    #chatPanelButtons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    #chatPopoutBtn {
+      background: none;
+      border: none;
+      color: var(--subtle);
+      font-size: 14px;
+      cursor: pointer;
+      padding: 0 2px;
+      line-height: 1;
+    }
+    #chatPopoutBtn:hover {
+      color: var(--text);
+    }
+    /* 管理者画面の埋め込み時は管理画面側に別ウィンドウ機能があるので出さない */
+    body.admin-embed #chatPopoutBtn {
+      display: none;
+    }
+    /* チャットを別ウィンドウで開いている間はページ内のチャット欄を隠す */
+    body.chat-popped #chatPanel {
+      display: none !important;
+    }
     #chatCollapseBtn:hover {
       color: var(--text);
     }
@@ -955,12 +996,105 @@
     body.mobile-pad.chat-sheet-open #virtualPad {
       display: none !important;
     }
+    /* ---- パッドなし表示（PC など）: 枠を出さず、ベージュの背景にゲーム画面を影付きで置く ----
+       モバイル全画面(mobile-pad)と管理者画面埋め込み(admin-embed)は対象外 */
+    body:not(.mobile-pad):not(.admin-embed) {
+      --page-bg: #efe6d2;
+      background: var(--page-bg);
+    }
+    body:not(.mobile-pad):not(.admin-embed) .panel.canvas-wrap {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      /* 影が切れないように余白を取り、はみ出しも許可する */
+      padding: 24px;
+      overflow: visible;
+    }
+    /* ヘッダー・ゲーム画面・フッターを縦に並べ、ゲーム画面は残りの高さの中央に置く */
+    body:not(.mobile-pad):not(.admin-embed) {
+      display: flex;
+      flex-direction: column;
+      place-items: stretch;
+    }
+    body:not(.mobile-pad):not(.admin-embed) .layout {
+      /* 幅はゲーム画面(.canvas-stage)の拡大サイズに合わせる */
+      flex: 1 1 auto;
+      width: auto;
+      justify-content: center;
+      align-content: center;
+    }
+    /* チャット欄はフッターに重ならないよう、その上に浮かせる */
+    body:not(.mobile-pad):not(.admin-embed) #chatPanel {
+      bottom: calc(var(--site-footer-h, 0px) + 16px);
+    }
+
+    /* ---- ヘッダー・フッター(パッドなし表示のみ。WebNP2 に合わせた見た目) ---- */
+    .site-header,
+    .site-footer {
+      display: none;
+    }
+    body:not(.mobile-pad):not(.admin-embed) .site-header,
+    body:not(.mobile-pad):not(.admin-embed) .site-footer {
+      display: block;
+    }
+    .site-header {
+      flex: 0 0 auto;
+      text-align: center;
+      background: #0c0c0c;
+      padding: 10px 16px;
+      box-shadow:
+        inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+        0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: #f2f2f2;
+      letter-spacing: 0.03em;
+    }
+    .site-header .site-tagline {
+      margin: 2px 0 0;
+      font-size: 11px;
+      color: #a8a8a8;
+    }
+    .site-footer {
+      flex: 0 0 auto;
+      width: 100%;
+      padding: 8px 16px;
+      font-size: 11px;
+      text-align: center;
+      color: #8c8c8c;
+      background: #1a1a1a;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .site-footer a {
+      color: #8c8c8c;
+    }
+    @media (max-height: 560px) {
+      .site-header { padding: 6px 10px; }
+      .site-header .site-tagline { display: none; }
+    }
+    body:not(.mobile-pad):not(.admin-embed) #canvas {
+      border: 0;
+      box-shadow:
+        0 2px 6px rgba(60, 45, 20, 0.22),
+        0 14px 36px rgba(60, 45, 20, 0.30);
+    }
+    body:not(.mobile-pad):not(.admin-embed) #sbop2VersionBadge {
+      color: rgba(60, 45, 20, 0.5) !important;
+    }
     /* デバッグ情報パネルは ?debug=1 のときのみ表示（通常ルートでは非表示） */
     body:not(.debug-mode) .debug-panel { display: none; }
   </style>
 </head>
 <body>
   <div id="sbop2VersionBadge" style="position:fixed;right:6px;bottom:4px;z-index:9999;font:11px/1.4 Consolas,monospace;color:rgba(255,255,255,.45);pointer-events:none;user-select:none;display:none;"></div>
+  <header class="site-header">
+    <h1>スクラップブックオンライン ページ.2</h1>
+    <p class="site-tagline">ブラウザで遊べる個人制作MMORPG</p>
+  </header>
   <main class="layout">
     <section class="panel header debug-panel">
       <div>SBOP2 browser title build</div>
@@ -975,6 +1109,7 @@
     <section class="panel canvas-wrap">
       <div class="canvas-stage">
         <canvas id="canvas" width="480" height="480" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
+        <canvas id="canvasSharp" aria-hidden="true"></canvas>
         <textarea id="sbop2ImeInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
         <!-- Click to Start オーバーレイ（Autoplay Policy 対策） -->
         <!-- 初期状態は loading クラス付き → 操作不可・読み込み中表示 -->
@@ -1047,6 +1182,13 @@
     </section>
   </main>
 
+  <footer class="site-footer">
+    <a href="https://www.urara-works.jp/" target="_blank" rel="noopener">© URARA-works</a> /
+    <a href="https://uraraworks.github.io/SBOP2/play.html" target="_blank" rel="noopener">遊び方</a> /
+    <a href="https://github.com/uraraworks/SBOP2/wiki" target="_blank" rel="noopener">Wiki</a> /
+    <a href="https://github.com/uraraworks/SBOP2" target="_blank" rel="noopener">GitHubで見る</a>
+  </footer>
+
   <!-- ============================================================
        チャット UI: PC 常設パネル（position:fixed, 右下）
        最初のログ到達まで非表示。mobile-pad 時は CSS で隠れる。
@@ -1054,7 +1196,10 @@
   <div id="chatPanel">
     <div id="chatPanelHeader">
       <span id="chatPanelTitle">チャット</span>
-      <button id="chatCollapseBtn" type="button" title="折りたたみ">▼</button>
+      <div id="chatPanelButtons">
+        <button id="chatPopoutBtn" type="button" title="別ウィンドウで開く">⧉</button>
+        <button id="chatCollapseBtn" type="button" title="折りたたみ">▼</button>
+      </div>
     </div>
     <div id="chatLogWrap"></div>
     <div id="chatInputRow">
@@ -1260,20 +1405,93 @@
       return !!(a && (a.id === 'chatInput' || a.id === 'chatSheetInput'));
     }
 
-    function updateIntegerGameScale() {
-      // mobile-pad ではキャンバス寸法は CSS 側の min()/@media(orientation) 分岐で決まり
-      // --game-scale は参照されない。PC 向け整数スケール計算は無駄なのでスキップする。
-      if (document.body.classList.contains('mobile-pad')) {
+    // ---- パッドなし表示(PC など)のゲーム画面拡大 ----
+    // WebNP2 の方式を参考に、ウィンドウに収まる最大サイズを求めてから
+    //   1) 物理ピクセルで整数倍に近ければ、そこへ吸着して最近傍(pixelated)でそのまま表示
+    //   2) そうでなければ端数倍のまま「シャープ・バイリニア」表示
+    //      (最近傍で整数倍まで拡大した中間バッファを #canvasSharp に描き、
+    //       CSS で表示サイズへわずかに縮小する。ドット境界の滲みが 1 物理 px 程度に収まる)
+    // とする。ゲーム画面の実解像度は 480x480 固定。
+    const GAME_NATIVE_SIZE = 480;
+    // ゲーム画面まわりの余白(.layout の padding 20px + .canvas-wrap の padding 24px を上下左右)
+    const GAME_VIEW_MARGIN = (20 + 24) * 2;
+    // 整数倍へ吸着してよい差(CSS px)。これ以内なら少し小さくなっても整数倍でくっきり表示する
+    const GAME_INTEGER_SNAP_PX = 16;
+    const canvasSharpElement = document.getElementById('canvasSharp');
+    const canvasSharpContext = canvasSharpElement ? canvasSharpElement.getContext('2d', { alpha: false }) : null;
+    let sharpViewActive = false;
+
+    function pickGameScale(availableCssPx, dpr) {
+      const fit = Math.max(availableCssPx, 1) / GAME_NATIVE_SIZE;
+      const deviceFit = fit * dpr;
+      const n = Math.floor(deviceFit + 1e-6);
+      if (n >= 1 && (deviceFit - n) * GAME_NATIVE_SIZE <= GAME_INTEGER_SNAP_PX * dpr) {
+        // 物理ピクセルでちょうど n 倍 → 最近傍だけでくっきり表示できる
+        return { scale: n / dpr, smooth: false };
+      }
+      return { scale: fit, smooth: true };
+    }
+
+    function setSharpView(active, cssSize, dpr) {
+      sharpViewActive = !!(active && canvasSharpContext);
+      document.body.classList.toggle('sharp-view', sharpViewActive);
+      if (!sharpViewActive) {
         return;
       }
-      const maxW = document.body.classList.contains('admin-embed')
-        ? window.innerWidth
-        : Math.min(window.innerWidth * 0.9, 480);
-      const maxH = document.body.classList.contains('admin-embed')
-        ? window.innerHeight
-        : Math.min(window.innerHeight * 0.9, 480);
-      const scale = Math.max(1, Math.floor(Math.min(maxW, maxH) / 480));
-      document.documentElement.style.setProperty('--game-scale', String(scale));
+      // 目標の物理 px 以上になる最小の整数倍まで最近傍で拡大しておく
+      const k = Math.max(1, Math.ceil((cssSize * dpr) / GAME_NATIVE_SIZE - 1e-6));
+      const bufSize = GAME_NATIVE_SIZE * k;
+      // width/height への代入は中身が消えるので、変わったときだけ代入する
+      if (canvasSharpElement.width !== bufSize || canvasSharpElement.height !== bufSize) {
+        canvasSharpElement.width = bufSize;
+        canvasSharpElement.height = bufSize;
+      }
+      presentSharpView();
+    }
+
+    function presentSharpView() {
+      if (!sharpViewActive || !canvasElement.width || !canvasElement.height) {
+        return;
+      }
+      canvasSharpContext.imageSmoothingEnabled = false;
+      canvasSharpContext.drawImage(
+        canvasElement,
+        0, 0, canvasElement.width, canvasElement.height,
+        0, 0, canvasSharpElement.width, canvasSharpElement.height);
+    }
+
+    // ゲーム側から「新しいフレームを描いた」通知は来ないので、表示中は毎フレーム写し直す
+    function sharpViewLoop() {
+      presentSharpView();
+      window.requestAnimationFrame(sharpViewLoop);
+    }
+    window.requestAnimationFrame(sharpViewLoop);
+
+    function updateIntegerGameScale() {
+      // mobile-pad ではキャンバス寸法は CSS 側の min()/@media(orientation) 分岐で決まり
+      // --game-scale は参照されない。PC 向け拡大計算は無駄なのでスキップする。
+      if (document.body.classList.contains('mobile-pad')) {
+        setSharpView(false);
+        return;
+      }
+      if (document.body.classList.contains('admin-embed')) {
+        setSharpView(false);
+        const embedScale = Math.max(1, Math.floor(Math.min(window.innerWidth, window.innerHeight) / GAME_NATIVE_SIZE));
+        document.documentElement.style.setProperty('--game-scale', String(embedScale));
+        return;
+      }
+      const dpr = window.devicePixelRatio > 0 ? window.devicePixelRatio : 1;
+      const headerElement = document.querySelector('.site-header');
+      const footerElement = document.querySelector('.site-footer');
+      const headerH = headerElement ? headerElement.offsetHeight : 0;
+      const footerH = footerElement ? footerElement.offsetHeight : 0;
+      document.documentElement.style.setProperty('--site-footer-h', footerH + 'px');
+      const available = Math.min(
+        window.innerWidth - GAME_VIEW_MARGIN,
+        window.innerHeight - headerH - footerH - GAME_VIEW_MARGIN);
+      const picked = pickGameScale(available, dpr);
+      document.documentElement.style.setProperty('--game-scale', String(picked.scale));
+      setSharpView(picked.smooth, GAME_NATIVE_SIZE * picked.scale, dpr);
     }
 
     function clearGameImeInput() {
@@ -2575,6 +2793,7 @@
       var chatInput      = document.getElementById('chatInput');
       var chatSendBtn    = document.getElementById('chatSendBtn');
       var chatCollapseBtn = document.getElementById('chatCollapseBtn');
+      var chatPopoutBtn  = document.getElementById('chatPopoutBtn');
       var chatMiniLog    = document.getElementById('chatMiniLog');
       var chatLogArea    = document.getElementById('chatLogArea');
       var chatOpenBtn    = document.getElementById('chatOpenBtn');
@@ -2743,6 +2962,9 @@
         chatLogs.push({ text: text, color: color });
         while (chatLogs.length > CHAT_LOG_MAX) { chatLogs.shift(); }
 
+        // ---- チャットを別ウィンドウで開いていれば、そちらにも追記 ----
+        appendPopupLine(text, color);
+
         // ---- 埋め込み時のみ: 親(管理画面)のチャットログ別ウィンドウへ配信 ----
         if (window.parent !== window) {
           window.parent.postMessage({ kind: 'sbop2_chat_log', text: text, color: color }, window.location.origin);
@@ -2793,9 +3015,131 @@
       }
 
       // ============================================================
+      // チャット別ウィンドウ(PC)
+      // ページ内のチャット欄と同じ内容(ログ＋入力欄)を別ウィンドウに出す。
+      // 開いている間はページ内のチャット欄を隠し(body.chat-popped)、閉じたら戻す。
+      // 別ウィンドウの要素・イベントはこのページ側のスクリプトから組み立てる。
+      // ============================================================
+      var chatPopup = null;
+      var chatPopupLog = null;
+      var chatPopupWatch = null;
+
+      function isChatPopupOpen() {
+        return !!chatPopup && !chatPopup.closed;
+      }
+
+      function appendPopupLine(text, color) {
+        if (!isChatPopupOpen() || !chatPopupLog) { return; }
+        var shouldFollow = isAtBottom(chatPopupLog);
+        var line = chatPopup.document.createElement('div');
+        line.className = 'chat-log-line';
+        line.textContent = text;
+        if (color) { line.style.color = color; }
+        chatPopupLog.appendChild(line);
+        while (chatPopupLog.children.length > CHAT_LOG_MAX) {
+          chatPopupLog.removeChild(chatPopupLog.firstChild);
+        }
+        if (shouldFollow) {
+          scrollToBottom(chatPopupLog);
+        }
+      }
+
+      var CHAT_POPUP_HTML =
+        '<!doctype html><html lang="ja"><head><meta charset="utf-8">' +
+        '<title>チャット - スクラップブックオンライン ページ.2</title>' +
+        '<style>' +
+        'html,body{height:100%;margin:0;}' +
+        'body{display:flex;flex-direction:column;background:#10141a;color:#e7edf5;' +
+        'font:14px/1.4 "Meiryo UI","Meiryo","Yu Gothic UI","Yu Gothic","Segoe UI",sans-serif;}' +
+        '#log{flex:1 1 auto;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:2px;}' +
+        '.chat-log-line{word-break:break-all;white-space:pre-wrap;}' +
+        '#row{flex:0 0 auto;display:flex;gap:6px;padding:8px;background:#18202a;border-top:1px solid #2d3947;}' +
+        '#input{flex:1;background:#0d1117;border:1px solid #2d3947;border-radius:6px;color:#e7edf5;' +
+        'font:14px/1 "Meiryo UI","Meiryo","Yu Gothic UI","Yu Gothic","Segoe UI",sans-serif;padding:6px 8px;outline:none;}' +
+        '#input:focus{border-color:#58c4dd;}' +
+        '#send{background:#58c4dd;border:none;border-radius:6px;color:#10141a;font:bold 13px/1 "Segoe UI",sans-serif;padding:6px 12px;cursor:pointer;}' +
+        '</style></head><body>' +
+        '<div id="log"></div>' +
+        '<div id="row"><input id="input" type="text" placeholder="メッセージを入力…" autocomplete="off" spellcheck="false">' +
+        '<button id="send" type="button">送信</button></div>' +
+        '</body></html>';
+
+      function openChatPopup() {
+        if (isChatPopupOpen()) { chatPopup.focus(); return; }
+        var popup = window.open('', 'sbop2-chat', 'popup=yes,width=440,height=560');
+        if (!popup) {
+          alert('ポップアップがブロックされました。このサイトのポップアップを許可してください。');
+          return;
+        }
+        // 同名のウィンドウが残っていても中身を作り直す
+        popup.document.open();
+        popup.document.write(CHAT_POPUP_HTML);
+        popup.document.close();
+        chatPopup = popup;
+        chatPopupLog = popup.document.getElementById('log');
+
+        // これまでのログを流し込む
+        for (var i = 0; i < chatLogs.length; i++) {
+          appendPopupLine(chatLogs[i].text, chatLogs[i].color);
+        }
+        scrollToBottom(chatPopupLog);
+
+        var popupInput = popup.document.getElementById('input');
+        var popupSend = popup.document.getElementById('send');
+        function sendFromPopup() {
+          submitChat(popupInput.value);
+          popupInput.value = '';
+          popupInput.focus();
+        }
+        popupSend.addEventListener('click', sendFromPopup);
+        popupInput.addEventListener('keydown', function(e) {
+          // IME 変換確定の Enter では送信しない
+          if (e.key === 'Enter' && !e.isComposing) {
+            e.preventDefault();
+            sendFromPopup();
+          }
+        });
+
+        document.body.classList.add('chat-popped');
+        popup.addEventListener('pagehide', function() {
+          // document.write 直後の pagehide を拾わないよう、実際に閉じたかで判定する
+          window.setTimeout(function() { if (!isChatPopupOpen()) { closeChatPopup(); } }, 0);
+        });
+        chatPopupWatch = window.setInterval(function() {
+          if (!isChatPopupOpen()) { closeChatPopup(); }
+        }, 500);
+        popup.focus();
+        popupInput.focus();
+      }
+
+      function closeChatPopup() {
+        if (chatPopupWatch) { window.clearInterval(chatPopupWatch); chatPopupWatch = null; }
+        var popup = chatPopup;
+        chatPopup = null;
+        chatPopupLog = null;
+        document.body.classList.remove('chat-popped');
+        if (popup && !popup.closed) {
+          try { popup.close(); } catch (e) { /* 既に閉じている */ }
+        }
+        scrollToBottom(chatLogWrap);
+      }
+
+      // ゲームのページを閉じたら別ウィンドウも閉じる
+      window.addEventListener('pagehide', function() {
+        if (isChatPopupOpen()) {
+          try { chatPopup.close(); } catch (e) { /* 無視 */ }
+        }
+      });
+
+      // ============================================================
       // PC チャットパネル UI
       // ============================================================
       if (!isTouch) {
+        // 別ウィンドウボタン
+        if (chatPopoutBtn) {
+          chatPopoutBtn.addEventListener('click', openChatPopup);
+        }
+
         // 折りたたみボタン
         if (chatCollapseBtn) {
           chatCollapseBtn.addEventListener('click', function() {
