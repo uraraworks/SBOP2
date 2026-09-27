@@ -324,6 +324,77 @@ BOOL CLibInfoCharBase::IsBlockChar(
 	return bRet;
 }
 
+BOOL CLibInfoCharBase::IsBlockCharOnePixel(
+	PCInfoCharBase pChar,	// [in] 判定元のキャラ情報
+	int nDirection)	// [in] 判定方向(0-7)
+{
+	// IsBlockChar は GetFrontPos(bMove=TRUE) で半タイル(16px)先を見ている。
+	// 16px ずつ動くサーバーの NPC には合っているが、1px ずつ動く自キャラに使うと
+	// 相手の手前 16px で止まる。縦は当たり矩形(GetCollisionRect)が足元の 16px 高
+	// なので、16px 手前で止まると見た目(32x32)がちょうど接するが、横は 16px の
+	// すき間が空き、縦と横で当たり判定が違うように見えていた。
+	// ここでは 1px 先で判定し、キャラ同士は見た目どおり 32x32 の四角で当てる
+	// (当たり矩形の上端を半タイル伸ばす)。これで縦の止まる位置は今まで通り、
+	// 横も見た目が接するところまで近づける。
+	// 対象は IsBlockChar(bNoBlockFlg=TRUE, bHitCheck=TRUE) と同じ:
+	// ぶつかり設定(m_bBlock)のあるキャラのみ、既に重なっている相手は抜け出せるよう対象外。
+	static const int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1};
+	static const int anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+	int i, nCount, nMapXBack, nMapYBack;
+	BOOL bRet;
+	PCInfoCharBase pInfoCharTmp;
+	RECT rcSrc, rcFront, rcTmp;
+
+	bRet = FALSE;
+	if ((nDirection < 0) || (nDirection > 7)) {
+		goto Exit;
+	}
+
+	pChar->GetCollisionRect(rcSrc);
+	nMapXBack = pChar->m_nMapX;
+	nMapYBack = pChar->m_nMapY;
+	pChar->m_nMapX = nMapXBack + anPosX[nDirection];
+	pChar->m_nMapY = nMapYBack + anPosY[nDirection];
+	pChar->GetCollisionRect(rcFront);
+	pChar->m_nMapX = nMapXBack;
+	pChar->m_nMapY = nMapYBack;
+	rcSrc.top -= HALF_TILE;
+	rcFront.top -= HALF_TILE;
+
+	nCount = m_paInfo->size();
+	for (i = 0; i < nCount; i ++) {
+		pInfoCharTmp = m_paInfo->at(i);
+		if (pChar == pInfoCharTmp) {
+			continue;
+		}
+		if (pInfoCharTmp->IsLogin() == FALSE) {
+			continue;
+		}
+		if (pChar->m_dwMapID != pInfoCharTmp->m_dwMapID) {
+			continue;
+		}
+		if (pInfoCharTmp->m_bBlock == FALSE) {
+			continue;
+		}
+		pInfoCharTmp->GetCollisionRect(rcTmp);
+		rcTmp.top -= HALF_TILE;
+		if (!((rcFront.left <= rcTmp.right) && (rcTmp.left <= rcFront.right) &&
+			(rcFront.top <= rcTmp.bottom) && (rcTmp.top <= rcFront.bottom))) {
+			continue;
+		}
+		if ((rcSrc.left <= rcTmp.right) && (rcTmp.left <= rcSrc.right) &&
+			(rcSrc.top <= rcTmp.bottom) && (rcTmp.top <= rcSrc.bottom)) {
+			// 現在位置で既に重なっている相手は、そこから抜け出せるように対象外にする
+			continue;
+		}
+		bRet = TRUE;
+		break;
+	}
+
+Exit:
+	return bRet;
+}
+
 BOOL CLibInfoCharBase::IsUseName(LPCSTR pszName)
 {
 	BOOL bRet;
