@@ -35,9 +35,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: mymindstorm/setup-emsdk@v14
+      - uses: mymindstorm/setup-emsdk@v16
         with:
           version: 6.0.10
           actions-cache-folder: emsdk-cache
@@ -46,7 +46,7 @@ jobs:
         run: tools/build-sbocli-browser-title.sh --force
 
       - name: ブラウザ版を次のジョブへ渡す
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: browser-title
           path: |
@@ -61,12 +61,12 @@ jobs:
     runs-on: windows-2022
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: タイムゾーンを日本時間にする（zip 名の日時を手元と合わせる）
         run: tzutil /s "Tokyo Standard Time"
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: browser-title
           path: out/browser-title
@@ -77,7 +77,7 @@ jobs:
 
       - name: ビルドログを保存（失敗時）
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: publish-build-log
           path: publish_build.log
@@ -93,7 +93,7 @@ jobs:
           "path=$($zip.FullName)" >> $env:GITHUB_OUTPUT
 
       - name: zip を成果物として保存
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.zip.outputs.name }}
           path: ${{ steps.zip.outputs.path }}
