@@ -1082,8 +1082,9 @@
         0 2px 6px rgba(60, 45, 20, 0.22),
         0 14px 36px rgba(60, 45, 20, 0.30);
     }
+    /* バッジは画面右下＝暗いフッターの上に重なるので、フッターの文字と同じ明るさにする */
     body:not(.mobile-pad):not(.admin-embed) #sbop2VersionBadge {
-      color: rgba(60, 45, 20, 0.5) !important;
+      color: #8c8c8c !important;
     }
     /* デバッグ情報パネルは ?debug=1 のときのみ表示（通常ルートでは非表示） */
     body:not(.debug-mode) .debug-panel { display: none; }
