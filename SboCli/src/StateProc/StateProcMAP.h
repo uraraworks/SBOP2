@@ -176,6 +176,13 @@ protected:
 	BOOL  m_bAutoWalkToEvent;      // イベントタイルへ自動歩行中
 	int   m_nAutoWalkTargetX,      // 自動歩行目標X（ピクセル）
 	      m_nAutoWalkTargetY;      // 自動歩行目標Y（ピクセル）
+	BOOL  m_bAutoWalkXFirst;       // 自動歩行で先にX軸をそろえるか（FALSE:先にY軸）
+	int   m_nAutoWalkBestDist,     // 自動歩行中にいちばん目標へ近づいた距離（縦横の和）
+	      m_nAutoWalkNoProgress;   // 自動歩行で目標へ近づけなかった連続ステップ数
+	DWORD m_dwAutoWalkStartTime;   // 自動歩行の開始時刻
+	BOOL  m_bAutoWalkGiveUp;       // 自動歩行を途中で打ち切ったか
+	int   m_nAutoWalkGiveUpX,      // 打ち切った位置X（ここから動くまで同じ自動歩行を始めない）
+	      m_nAutoWalkGiveUpY;      // 打ち切った位置Y
 
 	CAdminUiLoader  m_AdminUi;         // 管理者UIモジュール
 	CInfoCharCli   *m_pPlayerChar;     // 操作中のキャラ情報

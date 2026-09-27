@@ -374,6 +374,13 @@ CStateProcMAP::CStateProcMAP()
 	m_bAutoWalkToEvent	= FALSE;
 	m_nAutoWalkTargetX	= 0;
 	m_nAutoWalkTargetY	= 0;
+	m_bAutoWalkXFirst	= TRUE;
+	m_nAutoWalkBestDist	= 0;
+	m_nAutoWalkNoProgress	= 0;
+	m_dwAutoWalkStartTime	= 0;
+	m_bAutoWalkGiveUp	= FALSE;
+	m_nAutoWalkGiveUpX	= 0;
+	m_nAutoWalkGiveUpY	= 0;
 
 	m_pPlayerChar		= NULL;
 	m_pMap				= NULL;
@@ -641,6 +648,7 @@ void CStateProcMAP::ResetPlayerMoveSyncState(void)
 	m_dwLastPlayerMoveTurnTime = 0;
 	m_bHasPlayerMoveHeading = FALSE;
 	m_bAutoWalkToEvent = FALSE;
+	m_bAutoWalkGiveUp = FALSE;
 	m_bNeedIdleMapEventCheck = FALSE;
 	m_bSendCheckMapEvent = FALSE;
 	EndPushPredict(FALSE);	// S3b: マップ切替等では最終送信せずローカル予測状態だけ破棄する
@@ -648,10 +656,27 @@ void CStateProcMAP::ResetPlayerMoveSyncState(void)
 }
 
 
+// 自動歩行で目標へ近づけない歩みがこれだけ続いたら打ち切る
+#define AUTOWALK_NOPROGRESS_MAX	8
+// 自動歩行がこれ以上かかったら打ち切る(ms)
+#define AUTOWALK_TIMEOUT_MS		3000
+
 void CStateProcMAP::StartAutoWalkToEvent(int nTileX, int nTileY)
 {
 	int i, nCount;
 	PCInfoMapEventBase pEvent;
+
+	/* 前回この位置で自動歩行を打ち切ったばかりなら、プレイヤーが自分で動くまでは
+	   同じ自動歩行を始めない(打ち切り→再開始を繰り返して操作できなくなるのを防ぐ) */
+	if (m_bAutoWalkGiveUp && (m_pPlayerChar != NULL)) {
+		if ((m_pPlayerChar->m_nMapX == m_nAutoWalkGiveUpX) &&
+			(m_pPlayerChar->m_nMapY == m_nAutoWalkGiveUpY)) {
+			m_bNeedIdleMapEventCheck = FALSE;
+			ResetMapEventCheckSendState();
+			return;
+		}
+		m_bAutoWalkGiveUp = FALSE;
+	}
 
 	if ((m_pMap != NULL) && (m_pPlayerChar != NULL)) {
 		RECT rcChar, rcEvent;
@@ -733,6 +758,17 @@ void CStateProcMAP::StartAutoWalkToEvent(int nTileX, int nTileY)
 	// Y: ヒットボックス下端(Y)をタイル下端((nTileY+1)*32-1) に合わせる
 	m_nAutoWalkTargetX = nTileX * MAPPARTSSIZE;
 	m_nAutoWalkTargetY = nTileY * MAPPARTSSIZE + (MAPPARTSSIZE / 2) + ((HALF_TILE - 1) / 2);
+	/* 斜めに寄せると壁際の補正で目標を1px行き過ぎ、左右(上下)に行ったり来たりして
+	   止まらなくなることがある。進入方向と直角の軸を先にそろえてから、まっすぐ入る */
+	m_bAutoWalkXFirst = TRUE;
+	if ((m_pPlayerChar != NULL) &&
+		((m_pPlayerChar->m_nDirection == 2) || (m_pPlayerChar->m_nDirection == 3))) {
+		/* 左右から入ろうとしている時は先に高さ(Y)をそろえる */
+		m_bAutoWalkXFirst = FALSE;
+	}
+	m_nAutoWalkBestDist = 0x7FFFFFFF;
+	m_nAutoWalkNoProgress = 0;
+	m_dwAutoWalkStartTime = timeGetTime();
 	m_bAutoWalkToEvent = TRUE;
 	m_bNeedIdleMapEventCheck = FALSE;
 	m_bSendCheckMapEvent = FALSE;
@@ -742,7 +778,7 @@ void CStateProcMAP::StartAutoWalkToEvent(int nTileX, int nTileY)
 
 void CStateProcMAP::ProcAutoWalkToEvent(void)
 {
-	int i, nMoveStep, nMoveSpeedAccum, nDx, nDy, nDirection, nDistX, nDistY;
+	int i, nMoveStep, nMoveSpeedAccum, nDx, nDy, nDirection, nDistX, nDistY, nDist;
 	DWORD dwMoveStepTime;
 	BOOL bResult;
 
@@ -761,18 +797,6 @@ void CStateProcMAP::ProcAutoWalkToEvent(void)
 		return;
 	}
 
-	// 移動方向を決定
-	nDx = (nDistX > 0) ? 1 : (nDistX < 0 ? -1 : 0);
-	nDy = (nDistY > 0) ? 1 : (nDistY < 0 ? -1 : 0);
-	if      (nDy < 0 && nDx == 0) nDirection = 0;	// 上
-	else if (nDy > 0 && nDx == 0) nDirection = 1;	// 下
-	else if (nDy == 0 && nDx < 0) nDirection = 2;	// 左
-	else if (nDy == 0 && nDx > 0) nDirection = 3;	// 右
-	else if (nDy < 0 && nDx > 0)  nDirection = 4;	// 右上
-	else if (nDy > 0 && nDx > 0)  nDirection = 5;	// 右下
-	else if (nDy > 0 && nDx < 0)  nDirection = 6;	// 左下
-	else                           nDirection = 7;	// 左上
-
 	// 通常移動と同じ速度でステップ数を取得
 	nMoveSpeedAccum = m_nMoveSpeedAccum;
 	dwMoveStepTime  = m_dwLastPlayerMoveStepTime;
@@ -781,21 +805,32 @@ void CStateProcMAP::ProcAutoWalkToEvent(void)
 	m_dwLastPlayerMoveStepTime = dwMoveStepTime;
 
 	for (i = 0; i < nMoveStep; i++) {
-		int dx = nDx, dy = nDy;
 		BOOL bSyncSend;
+
 		nDistX = m_nAutoWalkTargetX - m_pPlayerChar->m_nMapX;
 		nDistY = m_nAutoWalkTargetY - m_pPlayerChar->m_nMapY;
-			// 目標に到達した軸は動かさない
-		if (dx != 0 && nDistX == 0) dx = 0;
-		if (dy != 0 && nDistY == 0) dy = 0;
-		if (dx == 0 && dy == 0) {
+		if (nDistX == 0 && nDistY == 0) {
 			break;
 		}
-		bSyncSend = ((m_pPlayerChar->m_nMapX + dx) == m_nAutoWalkTargetX) &&
-					((m_pPlayerChar->m_nMapY + dy) == m_nAutoWalkTargetY);
+		// 1歩ごとに今の位置から向きを決め直す(補正で行き過ぎても戻れるように)。
+		// 斜めには動かさず、先にそろえる軸 → もう一方の軸の順で1軸ずつ寄せる
+		nDx = 0;
+		nDy = 0;
+		if (m_bAutoWalkXFirst ? (nDistX != 0) : (nDistY == 0)) {
+			nDx = (nDistX > 0) ? 1 : -1;
+		} else {
+			nDy = (nDistY > 0) ? 1 : -1;
+		}
+		if      (nDy < 0) nDirection = 0;	// 上
+		else if (nDy > 0) nDirection = 1;	// 下
+		else if (nDx < 0) nDirection = 2;	// 左
+		else              nDirection = 3;	// 右
+
+		bSyncSend = ((m_pPlayerChar->m_nMapX + nDx) == m_nAutoWalkTargetX) &&
+					((m_pPlayerChar->m_nMapY + nDy) == m_nAutoWalkTargetY);
 
 		bResult = MoveProc(m_pPlayerChar->m_nMapX, m_pPlayerChar->m_nMapY,
-		                    dx, dy, nDirection, bSyncSend);
+		                    nDx, nDy, nDirection, bSyncSend);
 		if (!bResult) {
 				// 移動失敗: 現在位置でイベントチェックへ進む
 			m_bAutoWalkToEvent = FALSE;
@@ -807,6 +842,26 @@ void CStateProcMAP::ProcAutoWalkToEvent(void)
 		if (m_pPlayerChar->m_nMapX == m_nAutoWalkTargetX &&
 		    m_pPlayerChar->m_nMapY == m_nAutoWalkTargetY) {
 			m_bAutoWalkToEvent = FALSE;
+			m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
+			m_bSendCheckMapEvent = FALSE;
+			return;
+		}
+		// 目標へ近づけているか。移動できたと返っても補正で押し戻されて進まないことがあるので、
+		// 近づけない歩みが続く・時間がかかりすぎる場合は打ち切って操作を返す
+		nDist = abs(m_nAutoWalkTargetX - m_pPlayerChar->m_nMapX) + abs(m_nAutoWalkTargetY - m_pPlayerChar->m_nMapY);
+		if (nDist < m_nAutoWalkBestDist) {
+			m_nAutoWalkBestDist = nDist;
+			m_nAutoWalkNoProgress = 0;
+		} else {
+			m_nAutoWalkNoProgress ++;
+		}
+		if ((m_nAutoWalkNoProgress >= AUTOWALK_NOPROGRESS_MAX) ||
+			(timeGetTime() - m_dwAutoWalkStartTime >= AUTOWALK_TIMEOUT_MS)) {
+			// 打ち切った位置からプレイヤーが動くまで、同じ自動歩行を再開しない
+			m_bAutoWalkToEvent = FALSE;
+			m_bAutoWalkGiveUp = TRUE;
+			m_nAutoWalkGiveUpX = m_pPlayerChar->m_nMapX;
+			m_nAutoWalkGiveUpY = m_pPlayerChar->m_nMapY;
 			m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
 			m_bSendCheckMapEvent = FALSE;
 			return;
