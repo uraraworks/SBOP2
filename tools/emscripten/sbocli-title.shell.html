@@ -955,6 +955,30 @@
     body.mobile-pad.chat-sheet-open #virtualPad {
       display: none !important;
     }
+    /* ---- パッドなし表示（PC など）: 枠を出さず、ベージュの背景にゲーム画面を影付きで置く ----
+       モバイル全画面(mobile-pad)と管理者画面埋め込み(admin-embed)は対象外 */
+    body:not(.mobile-pad):not(.admin-embed) {
+      --page-bg: #efe6d2;
+      background: var(--page-bg);
+    }
+    body:not(.mobile-pad):not(.admin-embed) .panel.canvas-wrap {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      /* 影が切れないように余白を取り、はみ出しも許可する */
+      padding: 24px;
+      overflow: visible;
+    }
+    body:not(.mobile-pad):not(.admin-embed) #canvas {
+      border: 0;
+      box-shadow:
+        0 2px 6px rgba(60, 45, 20, 0.22),
+        0 14px 36px rgba(60, 45, 20, 0.30);
+    }
+    body:not(.mobile-pad):not(.admin-embed) #sbop2VersionBadge {
+      color: rgba(60, 45, 20, 0.5) !important;
+    }
     /* デバッグ情報パネルは ?debug=1 のときのみ表示（通常ルートでは非表示） */
     body:not(.debug-mode) .debug-panel { display: none; }
   </style>
