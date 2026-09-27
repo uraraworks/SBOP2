@@ -28,6 +28,8 @@ protected:
 	virtual BOOL TimerProcMOVE(DWORD dwTime);	// 時間処理(移動中)
 	virtual BOOL TimerProcBATTLE(DWORD dwTime);	// 時間処理(戦闘中)
 	virtual BOOL IsMoveDirection(int nDirection);	// 指定方向に進めるかチェック
+	int		GetFaceDirectionToTarget(void);	// ターゲットの方を向く4方向を取得(差の大きい軸で決める)
+	BOOL	IsTargetInReach(int nDirection);	// 指定方向を向いたとき攻撃がターゲットに届くか
 
 public:
 	DWORD	m_dwLastTiemAtack;	// 最後に攻撃した時間

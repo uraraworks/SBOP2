@@ -1,4 +1,4 @@
-# 実装・ビルドの落とし穴集
+﻿# 実装・ビルドの落とし穴集
 
 このファイルは過去に実際に踏んだ落とし穴の集約。新しい落とし穴を見つけたら該当節に追記する。
 関連箇所を触る前に一度確認すると、同じ調査を繰り返さずに済む。
@@ -103,6 +103,8 @@
 ## 移動・当たり判定
 
 - **`CLibInfoCharBase::IsBlockChar`（`Common/LibInfo/LibInfoCharBase.cpp`）は `GetFrontPos(bMove=TRUE)` で半タイル(16px)先を見る。16px ずつ動くサーバー NPC 用で、1px ずつ動く自キャラに使うと相手の 16px 手前で止まる。** 当たり矩形は足元の 32x16 なので、縦は 16px 手前で止まると見た目(32x32)がちょうど接するが、横は 16px のすき間が空き「縦と横で当たり判定が違う」ように見えた。自キャラの移動(`CStateProcMAP::TryMoveOrPushDirection`)は `IsBlockCharOnePixel` で 1px 先・キャラ同士は上へ半タイル伸ばした 32x32 で判定する（縦の止まる位置は従来どおり）。確認は `tools/e2e/browser-approach-enemy.cjs`。debug API で置いた NPC は自キャラが動くまでクライアントに届かないので、届く前に歩くと重なってしまう点に注意。
+- **重なっている相手をブロック判定から外すだけだと、サーバーが少し古いプレイヤー位置で敵を 16px 進めて重なったとき、お互いそのまますり抜ける。** `IsBlockChar`(bHitCheck)・`IsBlockCharOnePixel` とも、重なっている相手でも中心へ近づく向き(めり込む向き)だけは止め、離れる向きには抜け出せるようにしている。
+- **戦闘 NPC(`CInfoCharBATTLE1Svr::TimerProcBATTLE`)が攻撃を始める条件が `GetDistance` の `xx + yy == 1`(16px 単位の「隣のマス」)のままだと、1px 座標では横はぴったり接したときだけ、縦は接しても `yy == 2` で満たせず、反撃しないまま 5 秒で諦めていた。** 今は「差の大きい軸で相手を向いたとき `GetFrontCharIDTarget`(攻撃処理と同じ届く範囲)にターゲットが入るか」で判定する。`GetPosRect` が旧スケールの縦長矩形のままなので、距離に `GetDistance` を使う箇所は要注意。
 - **`CInfoCharBase::GetCollisionRect`（`Common/Info/InfoCharBase.cpp`）はピクセル単位移行済みだが、`CInfoCharBase::GetPosRect`（同ファイル）は旧スケールのまま（`top = m_nMapY - 2*(cy-1)` の縦長矩形）だった。** 敵ブロック判定 `IsBlockChar` は `GetCollisionRect` を使い正常なのに、押し相手検出 `CLibInfoCharBase::GetFrontCharIDPush`（`Common/LibInfo/LibInfoCharBase.cpp`）は `GetPosRect` を使っていて検出失敗し、押せるボールNPCがすり抜けた。修正は `GetFrontCharIDPush` を `GetCollisionRectOnce`/`GetCollisionRect` ベースに変更。座標系（旧16px/unit→ピクセル単位）を移行する時は、同じ「矩形取得」役割の関数を全て洗い出すこと。移植コメント「`GetPosRect()+/2` は px単位では不正確」のような警告が残る箇所は要注意サイン。
 
 - **`CLibInfoCharCli::IsMove` 内の `TrySlideMove`（壁際±8pxスライド）と斜めコーナー補正は `m_nMapX/Y` を直接書き換えて TRUE を返すが、`CStateProcMAP::MoveProc` は移動適用を入口で捕まえた古いローカル `x,y` 基準の `SetPos(x+xx, y+yy)` で行う。** 「補正後座標で判定通過→未検証の元座標で移動」というズレで、全方向ブロック（PartsType&1）のタイルへ横からめり込めた（マップ7 タイル(59,36) のランプ柱）。修正は `IsMove` が TRUE を返した直後に `x = m_nMapX; y = m_nMapY;` で基準座標を最新化する（`StateProcMAP.cpp MoveProc`）。斜め分岐(case4-7)の `GetFrontPos` が16px先に仮置きして横方向を検証する旧ハーフタイル移動の遺物も、実際の1px斜めステップの重なりを見逃す原因だったため `CanMoveDirection` による1px直接検証に置換した。全方向ブロックタイルからの脱出救済は「4方向どこからも進入できないタイルに重なっている場合」に限定すること（緩い条件だと `PartsType`=1487=UP|DOWN|LEFT のようなイス背もたれに正規に重なった状態で DOWN 方向の出口ブロックが誤って免除され、上から下へすり抜ける回帰を起こす）。

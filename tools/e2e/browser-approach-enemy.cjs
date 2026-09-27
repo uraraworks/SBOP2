@@ -105,12 +105,13 @@ function log(msg) { console.log(`[e2e-approach] ${msg}`); }
 
     const results = [];
     let cur = player;
-    // 4) 右と下に敵を置き、それぞれへ歩いて近づいて止まった位置を調べる。
+    // 4) 右と上に敵を置き、それぞれへ歩いて近づいて止まった位置を調べる。
+    //    (下は tools/test-browser-e2e-linux.sh で先に走る戦闘の確認が置いた敵がいるので使わない)
     //    キャラ同士は見た目どおり 32x32 で当たるので、ぴったり接すると縦横とも座標の差が 32 になる。
     const tries = [
       // 横は「以前の判定なら一歩も進めない距離(16px 空き)」に置く。縦は以前と同じ位置で止まること
       { name: '右から', key: 'right', back: 'left', dx: 48, dy: 0, axis: 'x', expect: 32 },
-      { name: '下から', key: 'down', back: 'up', dx: 0, dy: 64, axis: 'y', expect: 32 },
+      { name: '上から', key: 'up', back: 'down', dx: 0, dy: -64, axis: 'y', expect: -32 },
     ];
     for (const t of tries) {
       const ex = cur.x + t.dx;
@@ -130,7 +131,7 @@ function log(msg) { console.log(`[e2e-approach] ${msg}`); }
     }
 
     // 5) 敵が一歩で重なってきた状態(左に半分重なる)を作り、めり込む向き(左)には進めず、
-    //    離れる向き(上)には抜け出せること。以前は重なった相手を判定から外していたため、
+    //    離れる向き(上下のうち敵の中心から遠ざかる方)には抜け出せること。以前は重なった相手を判定から外していたため、
     //    そのまま左へすり抜けられた。
     {
       const npc = await placeEnemy(cur.mapID, cur.x - 16, cur.y, 'E2E敵overlap', ['up', 'down']);
@@ -138,11 +139,12 @@ function log(msg) { console.log(`[e2e-approach] ${msg}`); }
       const before = (await page.evaluate(() => window.sbop2Debug.state().player));
       const enemy = await enemyPos(npc.json.charId);
       const left = await walk('left', 1500);
-      const up = await walk('up', 300);
+      const escapeKey = (before.y < enemy.y) ? 'up' : 'down';
+      const escaped = await walk(escapeKey, 300);
       const overlapped = Math.abs(enemy.x - before.x) < 32 && Math.abs(enemy.y - before.y) < 32;
-      log(`重なった敵: 敵=(${enemy.x},${enemy.y}) 前=(${before.x},${before.y}) 左へ=(${left.x},${left.y}) 上へ=(${up.x},${up.y})`);
+      log(`重なった敵: 敵=(${enemy.x},${enemy.y}) 前=(${before.x},${before.y}) 左へ=(${left.x},${left.y}) ${escapeKey}へ=(${escaped.x},${escaped.y})`);
       await page.screenshot({ path: path.join(outDir, 'approach-overlap.png') });
-      results.push(overlapped && (left.x === before.x) && (up.y < left.y));
+      results.push(overlapped && (left.x === before.x) && (escaped.y !== left.y));
     }
     ok = results.every((r) => r);
   } catch (e) {
