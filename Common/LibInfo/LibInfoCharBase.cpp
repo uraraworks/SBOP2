@@ -262,6 +262,37 @@ void CLibInfoCharBase::SortY(void)
 	m_paInfo->Copy(&aTmp);
 }
 
+/**
+ * @brief 既に重なっている相手へ、さらにめり込む向きに進もうとしているか
+ *
+ * 重なっている相手を当たり判定から外すだけだと、敵が一歩で重なってきたときに
+ * お互いそのまま進めてすり抜けてしまう。相手の中心へ近づく向き(軸ごと)だけ
+ * 止めて、離れる向きには抜け出せるようにする。キャラの当たり矩形は同じ大きさ
+ * なので、中心の代わりに座標を比べる。
+ */
+static BOOL IsApproachOverlapChar(PCInfoCharBase pChar, PCInfoCharBase pTarget, int nDirection)
+{
+	static const int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1};
+	static const int anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+
+	if ((nDirection < 0) || (nDirection > 7)) {
+		return FALSE;
+	}
+	if ((anPosX[nDirection] > 0) && (pChar->m_nMapX < pTarget->m_nMapX)) {
+		return TRUE;
+	}
+	if ((anPosX[nDirection] < 0) && (pChar->m_nMapX > pTarget->m_nMapX)) {
+		return TRUE;
+	}
+	if ((anPosY[nDirection] > 0) && (pChar->m_nMapY < pTarget->m_nMapY)) {
+		return TRUE;
+	}
+	if ((anPosY[nDirection] < 0) && (pChar->m_nMapY > pTarget->m_nMapY)) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
 BOOL CLibInfoCharBase::IsBlockChar(
 	PCInfoCharBase pChar,	// [in] 判定元のキャラ情報
 	int nDirection,	// [in] 判定方向
@@ -312,8 +343,10 @@ BOOL CLibInfoCharBase::IsBlockChar(
 		if (bHitCheck) {
 			if ((rcSrc.left <= rcTmp.right) && (rcTmp.left <= rcSrc.right) &&
 				(rcSrc.top <= rcTmp.bottom) && (rcTmp.top <= rcSrc.bottom)) {
-				// 重なる場合は対象外
-				continue;
+				// 重なる場合は対象外。ただしさらにめり込む向きなら止める(すり抜け防止)
+				if (IsApproachOverlapChar(pChar, pInfoCharTmp, nDirection) == FALSE) {
+					continue;
+				}
 		}
 	}
 		bRet = TRUE;
@@ -337,7 +370,7 @@ BOOL CLibInfoCharBase::IsBlockCharOnePixel(
 	// (当たり矩形の上端を半タイル伸ばす)。これで縦の止まる位置は今まで通り、
 	// 横も見た目が接するところまで近づける。
 	// 対象は IsBlockChar(bNoBlockFlg=TRUE, bHitCheck=TRUE) と同じ:
-	// ぶつかり設定(m_bBlock)のあるキャラのみ、既に重なっている相手は抜け出せるよう対象外。
+	// ぶつかり設定(m_bBlock)のあるキャラのみ。既に重なっている相手は、抜け出す向きだけ通す。
 	static const int anPosX[] = {0, 0, -1, 1, 1, 1, -1, -1};
 	static const int anPosY[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 	int i, nCount, nMapXBack, nMapYBack;
@@ -384,8 +417,11 @@ BOOL CLibInfoCharBase::IsBlockCharOnePixel(
 		}
 		if ((rcSrc.left <= rcTmp.right) && (rcTmp.left <= rcSrc.right) &&
 			(rcSrc.top <= rcTmp.bottom) && (rcTmp.top <= rcSrc.bottom)) {
-			// 現在位置で既に重なっている相手は、そこから抜け出せるように対象外にする
-			continue;
+			// 現在位置で既に重なっている相手は、そこから抜け出す向きなら対象外にする。
+			// さらにめり込む向きは止める(敵が一歩で重なってきたときのすり抜け防止)
+			if (IsApproachOverlapChar(pChar, pInfoCharTmp, nDirection) == FALSE) {
+				continue;
+			}
 		}
 		bRet = TRUE;
 		break;

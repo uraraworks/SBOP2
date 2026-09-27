@@ -57,8 +57,7 @@ function log(msg) { console.log(`[e2e-approach] ${msg}`); }
     });
     log(`MAP に入った player=${JSON.stringify(player)}`);
 
-    // 3) 右と下に敵を置き、それぞれへ歩いて近づいて止まった位置を調べる。
-    //    キャラ同士は見た目どおり 32x32 で当たるので、ぴったり接すると縦横とも座標の差が 32 になる。
+    // 3) 敵を置いて歩くための道具
     const post = (url, body) => page.evaluate(async ([u, b]) => {
       const r = await fetch(u, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(b) });
       return { status: r.status, json: await r.json() };
@@ -73,45 +72,54 @@ function log(msg) { console.log(`[e2e-approach] ${msg}`); }
       return d.state().player;
     }, [key, ms]);
 
-    const results = [];
-    const tries = [
-      // 横は「以前の判定なら一歩も進めない距離(16px 空き)」に置く。縦は以前と同じ位置で止まること
-      { name: '右から', key: 'right', back: 'left', dx: 48, dy: 0, axis: 'x', expect: 32 },
-      { name: '下から', key: 'down', back: 'up', dx: 0, dy: 64, axis: 'y', expect: 32 },
-    ];
-    let cur = player;
-    for (const t of tries) {
-      const ex = cur.x + t.dx;
-      const ey = cur.y + t.dy;
-      const npc = await post('/api/debug/npc', { mapId: cur.mapID, x: ex, y: ey, charName: `E2E敵${t.key}`, hp: 500, atack: 0 });
+    // 敵を置き、クライアントに届くまで待つ(届く前に歩くと当たり判定が効かない)。
+    // 新しく置いた NPC は自キャラが動いたときに届くので、back の向きに少しずつ動いて待つ
+    // (back に配列を渡すと順番に使う。左右交互にすればその場からあまり動かない)
+    const placeEnemy = async (mapId, x, y, charName, back) => {
+      const npc = await post('/api/debug/npc', { mapId, x, y, charName, hp: 500, atack: 0 });
       if (npc.status !== 201) {
         throw new Error(`敵を置けなかった: ${JSON.stringify(npc)}`);
       }
-      // 置いた敵がクライアントに届くまで待つ(届く前に歩くと当たり判定が効かない)。
-      // 新しく置いた NPC は自キャラが動いたときに届くので、敵と逆向きに少しずつ動いて待つ
       let seen = false;
       for (let i = 0; (i < 30) && !seen; i ++) {
-        seen = await page.evaluate(async ([id, back]) => {
+        seen = await page.evaluate(async ([id, key]) => {
           const d = window.sbop2Debug;
           const o = d.others();
           if (((o && o.chars) || []).some((c) => c.id === id)) {
             return true;
           }
-          d.hold(back, 60);
+          d.hold(key, 60);
           await new Promise((r) => setTimeout(r, 400));
           return false;
-        }, [npc.json.charId, t.back]);
+        }, [npc.json.charId, Array.isArray(back) ? back[i % back.length] : back]);
       }
       if (!seen) {
         throw new Error(`置いた敵がクライアントに届かない: ${JSON.stringify(npc.json)}`);
       }
+      return npc;
+    };
+    const enemyPos = (id) => page.evaluate((i) => {
+      const o = window.sbop2Debug.others();
+      return ((o && o.chars) || []).find((c) => c.id === i);
+    }, id);
+
+    const results = [];
+    let cur = player;
+    // 4) 右と下に敵を置き、それぞれへ歩いて近づいて止まった位置を調べる。
+    //    キャラ同士は見た目どおり 32x32 で当たるので、ぴったり接すると縦横とも座標の差が 32 になる。
+    const tries = [
+      // 横は「以前の判定なら一歩も進めない距離(16px 空き)」に置く。縦は以前と同じ位置で止まること
+      { name: '右から', key: 'right', back: 'left', dx: 48, dy: 0, axis: 'x', expect: 32 },
+      { name: '下から', key: 'down', back: 'up', dx: 0, dy: 64, axis: 'y', expect: 32 },
+    ];
+    for (const t of tries) {
+      const ex = cur.x + t.dx;
+      const ey = cur.y + t.dy;
+      const npc = await placeEnemy(cur.mapID, ex, ey, `E2E敵${t.key}`, t.back);
       await page.waitForTimeout(500);
       cur = await walk(t.key, 2000);
       // 敵の実際の位置はクライアントが知っている座標で見る
-      const enemy = await page.evaluate((id) => {
-        const o = window.sbop2Debug.others();
-        return ((o && o.chars) || []).find((c) => c.id === id);
-      }, npc.json.charId);
+      const enemy = await enemyPos(npc.json.charId);
       if (!enemy) {
         throw new Error(`置いた敵が見えない: ${JSON.stringify(npc.json)}`);
       }
@@ -119,6 +127,22 @@ function log(msg) { console.log(`[e2e-approach] ${msg}`); }
       log(`${t.name}: 敵=(${enemy.x},${enemy.y}) 止まった位置=(${cur.x},${cur.y}) 差=${gap} (期待 ${t.expect})`);
       await page.screenshot({ path: path.join(outDir, `approach-${t.key}.png`) });
       results.push(gap === t.expect);
+    }
+
+    // 5) 敵が一歩で重なってきた状態(左に半分重なる)を作り、めり込む向き(左)には進めず、
+    //    離れる向き(上)には抜け出せること。以前は重なった相手を判定から外していたため、
+    //    そのまま左へすり抜けられた。
+    {
+      const npc = await placeEnemy(cur.mapID, cur.x - 16, cur.y, 'E2E敵overlap', ['up', 'down']);
+      await page.waitForTimeout(500);
+      const before = (await page.evaluate(() => window.sbop2Debug.state().player));
+      const enemy = await enemyPos(npc.json.charId);
+      const left = await walk('left', 1500);
+      const up = await walk('up', 300);
+      const overlapped = Math.abs(enemy.x - before.x) < 32 && Math.abs(enemy.y - before.y) < 32;
+      log(`重なった敵: 敵=(${enemy.x},${enemy.y}) 前=(${before.x},${before.y}) 左へ=(${left.x},${left.y}) 上へ=(${up.x},${up.y})`);
+      await page.screenshot({ path: path.join(outDir, 'approach-overlap.png') });
+      results.push(overlapped && (left.x === before.x) && (up.y < left.y));
     }
     ok = results.every((r) => r);
   } catch (e) {
