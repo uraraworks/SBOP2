@@ -98,6 +98,22 @@
       outline: none;
     }
 
+    /* 端数倍率のときだけ #canvas の真上に重ねる表示専用キャンバス(シャープ・バイリニア)。
+       クリック等は下の #canvas に通す */
+    #canvasSharp {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      pointer-events: none;
+      image-rendering: auto;
+    }
+    body.sharp-view:not(.mobile-pad):not(.admin-embed) #canvasSharp {
+      display: block;
+    }
+
     #sbop2ImeInput {
       position: absolute;
       left: 0;
@@ -970,6 +986,10 @@
       padding: 24px;
       overflow: visible;
     }
+    body:not(.mobile-pad):not(.admin-embed) .layout {
+      /* 幅はゲーム画面(.canvas-stage)の拡大サイズに合わせる */
+      width: auto;
+    }
     body:not(.mobile-pad):not(.admin-embed) #canvas {
       border: 0;
       box-shadow:
@@ -999,6 +1019,7 @@
     <section class="panel canvas-wrap">
       <div class="canvas-stage">
         <canvas id="canvas" width="480" height="480" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
+        <canvas id="canvasSharp" aria-hidden="true"></canvas>
         <textarea id="sbop2ImeInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
         <!-- Click to Start オーバーレイ（Autoplay Policy 対策） -->
         <!-- 初期状態は loading クラス付き → 操作不可・読み込み中表示 -->
@@ -1284,20 +1305,86 @@
       return !!(a && (a.id === 'chatInput' || a.id === 'chatSheetInput'));
     }
 
-    function updateIntegerGameScale() {
-      // mobile-pad ではキャンバス寸法は CSS 側の min()/@media(orientation) 分岐で決まり
-      // --game-scale は参照されない。PC 向け整数スケール計算は無駄なのでスキップする。
-      if (document.body.classList.contains('mobile-pad')) {
+    // ---- パッドなし表示(PC など)のゲーム画面拡大 ----
+    // WebNP2 の方式を参考に、ウィンドウに収まる最大サイズを求めてから
+    //   1) 物理ピクセルで整数倍に近ければ、そこへ吸着して最近傍(pixelated)でそのまま表示
+    //   2) そうでなければ端数倍のまま「シャープ・バイリニア」表示
+    //      (最近傍で整数倍まで拡大した中間バッファを #canvasSharp に描き、
+    //       CSS で表示サイズへわずかに縮小する。ドット境界の滲みが 1 物理 px 程度に収まる)
+    // とする。ゲーム画面の実解像度は 480x480 固定。
+    const GAME_NATIVE_SIZE = 480;
+    // ゲーム画面まわりの余白(.layout の padding 20px + .canvas-wrap の padding 24px を上下左右)
+    const GAME_VIEW_MARGIN = (20 + 24) * 2;
+    // 整数倍へ吸着してよい差(CSS px)。これ以内なら少し小さくなっても整数倍でくっきり表示する
+    const GAME_INTEGER_SNAP_PX = 16;
+    const canvasSharpElement = document.getElementById('canvasSharp');
+    const canvasSharpContext = canvasSharpElement ? canvasSharpElement.getContext('2d', { alpha: false }) : null;
+    let sharpViewActive = false;
+
+    function pickGameScale(availableCssPx, dpr) {
+      const fit = Math.max(availableCssPx, 1) / GAME_NATIVE_SIZE;
+      const deviceFit = fit * dpr;
+      const n = Math.floor(deviceFit + 1e-6);
+      if (n >= 1 && (deviceFit - n) * GAME_NATIVE_SIZE <= GAME_INTEGER_SNAP_PX * dpr) {
+        // 物理ピクセルでちょうど n 倍 → 最近傍だけでくっきり表示できる
+        return { scale: n / dpr, smooth: false };
+      }
+      return { scale: fit, smooth: true };
+    }
+
+    function setSharpView(active, cssSize, dpr) {
+      sharpViewActive = !!(active && canvasSharpContext);
+      document.body.classList.toggle('sharp-view', sharpViewActive);
+      if (!sharpViewActive) {
         return;
       }
-      const maxW = document.body.classList.contains('admin-embed')
-        ? window.innerWidth
-        : Math.min(window.innerWidth * 0.9, 480);
-      const maxH = document.body.classList.contains('admin-embed')
-        ? window.innerHeight
-        : Math.min(window.innerHeight * 0.9, 480);
-      const scale = Math.max(1, Math.floor(Math.min(maxW, maxH) / 480));
-      document.documentElement.style.setProperty('--game-scale', String(scale));
+      // 目標の物理 px 以上になる最小の整数倍まで最近傍で拡大しておく
+      const k = Math.max(1, Math.ceil((cssSize * dpr) / GAME_NATIVE_SIZE - 1e-6));
+      const bufSize = GAME_NATIVE_SIZE * k;
+      // width/height への代入は中身が消えるので、変わったときだけ代入する
+      if (canvasSharpElement.width !== bufSize || canvasSharpElement.height !== bufSize) {
+        canvasSharpElement.width = bufSize;
+        canvasSharpElement.height = bufSize;
+      }
+      presentSharpView();
+    }
+
+    function presentSharpView() {
+      if (!sharpViewActive || !canvasElement.width || !canvasElement.height) {
+        return;
+      }
+      canvasSharpContext.imageSmoothingEnabled = false;
+      canvasSharpContext.drawImage(
+        canvasElement,
+        0, 0, canvasElement.width, canvasElement.height,
+        0, 0, canvasSharpElement.width, canvasSharpElement.height);
+    }
+
+    // ゲーム側から「新しいフレームを描いた」通知は来ないので、表示中は毎フレーム写し直す
+    function sharpViewLoop() {
+      presentSharpView();
+      window.requestAnimationFrame(sharpViewLoop);
+    }
+    window.requestAnimationFrame(sharpViewLoop);
+
+    function updateIntegerGameScale() {
+      // mobile-pad ではキャンバス寸法は CSS 側の min()/@media(orientation) 分岐で決まり
+      // --game-scale は参照されない。PC 向け拡大計算は無駄なのでスキップする。
+      if (document.body.classList.contains('mobile-pad')) {
+        setSharpView(false);
+        return;
+      }
+      if (document.body.classList.contains('admin-embed')) {
+        setSharpView(false);
+        const embedScale = Math.max(1, Math.floor(Math.min(window.innerWidth, window.innerHeight) / GAME_NATIVE_SIZE));
+        document.documentElement.style.setProperty('--game-scale', String(embedScale));
+        return;
+      }
+      const dpr = window.devicePixelRatio > 0 ? window.devicePixelRatio : 1;
+      const available = Math.min(window.innerWidth, window.innerHeight) - GAME_VIEW_MARGIN;
+      const picked = pickGameScale(available, dpr);
+      document.documentElement.style.setProperty('--game-scale', String(picked.scale));
+      setSharpView(picked.smooth, GAME_NATIVE_SIZE * picked.scale, dpr);
     }
 
     function clearGameImeInput() {
