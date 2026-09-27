@@ -1,0 +1,100 @@
+# 本番 VPS デプロイ用の zip（publish.bat と同じもの）を GitHub Actions で作る
+#
+# 手元の Windows で publish.bat（= tools/publish.ps1）を実行したときと同じ
+# publish/SBOP2_Server_yyyyMMdd_HHmmss.zip を作り、Actions の成果物として保存する。
+# VPS への自動デプロイはしない（zip を落として、いつもの手順で展開する）。
+#
+#   1) ブラウザ版（Emscripten）は ubuntu でビルドする（staging-deploy.yml と同じやり方）。
+#      WASM は OS に関係なく同じものができるので、Windows に emsdk を入れる手間を省く。
+#   2) windows で tools/publish.ps1 -SkipBrowserBuild を実行し、
+#      SboSvr Release|Win32 のビルド〜zip 化まで手元と同じ処理を通す。
+#
+# 注意: BGM（Release/BGM/*.ogg）は git 管理外なので zip に入らない。
+#       VPS の既存フォルダへ上書き展開すれば、置いてある BGM はそのまま残る。
+
+name: windows-publish
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+  pull_request:
+    paths:
+      - .github/workflows/windows-publish.yml
+      - tools/publish.ps1
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-publish-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.10
+          actions-cache-folder: emsdk-cache
+
+      - name: ブラウザ版をビルド
+        run: tools/build-sbocli-browser-title.sh --force
+
+      - name: ブラウザ版を次のジョブへ渡す
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-title
+          path: |
+            out/browser-title
+            !out/browser-title/obj
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    needs: browser
+    # SBO.sln は PlatformToolset v143（VS 2022）なので、VS 2022 入りのイメージに固定する
+    runs-on: windows-2022
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: タイムゾーンを日本時間にする（zip 名の日時を手元と合わせる）
+        run: tzutil /s "Tokyo Standard Time"
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: browser-title
+          path: out/browser-title
+
+      - name: publish.ps1 で zip を作る
+        shell: pwsh
+        run: ./tools/publish.ps1 -SkipBrowserBuild
+
+      - name: ビルドログを保存（失敗時）
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-build-log
+          path: publish_build.log
+          if-no-files-found: ignore
+
+      - name: zip の名前を調べる
+        id: zip
+        shell: pwsh
+        run: |
+          $zip = Get-ChildItem publish -Filter 'SBOP2_Server_*.zip' | Select-Object -First 1
+          if (-not $zip) { throw "publish に zip がありません" }
+          "name=$($zip.BaseName)" >> $env:GITHUB_OUTPUT
+          "path=$($zip.FullName)" >> $env:GITHUB_OUTPUT
+
+      - name: zip を成果物として保存
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.zip.outputs.name }}
+          path: ${{ steps.zip.outputs.path }}
+          if-no-files-found: error
