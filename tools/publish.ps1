@@ -278,8 +278,18 @@ if (Test-Path $gameHtml) {
     $html = Get-Content $gameHtml -Raw -Encoding utf8
     if ($html -match [regex]::Escape($shimMarker)) {
         Write-Host "  wss シムは既に注入済み (skip)"
-    } elseif ($html -match '(?is)(</title>)') {
-        $html = [regex]::Replace($html, '(?is)(</title>)', "`$1`r`n$shim", 1)
+    } elseif ($html.IndexOf('</title>', [System.StringComparison]::OrdinalIgnoreCase) -ge 0) {
+        # 【注意】最初の </title> (head 内) の直後だけに入れる。
+        # [regex]::Replace(静的) の第4引数は置換回数ではなく RegexOptions なので、
+        # 以前は全ての </title> に注入していた。チャット別ウィンドウ用の JS 文字列内の
+        # </title> にもシム(</script> 入り)が入り、スクリプトが途中で切れて
+        # レイアウト崩れと JS のテキスト表示が起きた（2026-09-27 本番で発生）。
+        $titleEnd = $html.IndexOf('</title>', [System.StringComparison]::OrdinalIgnoreCase) + '</title>'.Length
+        $html = $html.Substring(0, $titleEnd) + "`r`n" + $shim + $html.Substring($titleEnd)
+        $shimCount = ([regex]::Matches($html, [regex]::Escape($shimMarker))).Count
+        if ($shimCount -ne 1) {
+            throw "wss シムの注入数が想定外です (count=$shimCount)"
+        }
         Set-Content -Path $gameHtml -Value $html -Encoding utf8 -NoNewline
         Write-Host "  wss 書換シムを注入: sbocli-title.html"
     } else {

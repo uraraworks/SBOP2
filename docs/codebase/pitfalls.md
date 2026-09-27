@@ -57,6 +57,8 @@
 
 - **`tools/publish.ps1` は staging 段階で `sbocli-title.html` に wss 書換シム（マーカー `/*__SBOP2_WSS_SHIM__*/`）を注入するが、事前圧縮版 `.br`/`.gz` はその前のブラウザビルドで作られている。** SboSvr は圧縮版を優先配信するため、放置すると本番ブラウザにシム無し HTML が届き HTTPS で wss 接続できない（2026-09-08 実発生、現地で `.br`/`.gz` を作り直して復旧）。対処: シム注入直後に stale な `.br`/`.gz` を削除→`tools/emscripten/precompress.mjs` で再生成→展開してマーカー有無を検証（`Test-CompressedContains`）。検証は `-SkipBrowserBuild -SkipServerBuild -NoZip -OutputDir <一時先>` で staging だけ回せる。
 
+- **PowerShell の静的 `[regex]::Replace(入力, パターン, 置換, 1)` の第4引数は置換回数ではなく `RegexOptions`（1 = IgnoreCase）。** `publish.ps1` の wss シム注入で「最初の `</title>` だけ」のつもりが全ての `</title>` に入り、チャット別ウィンドウ用 JS 文字列（`CHAT_POPUP_HTML`）内の `</title>` にもシムの `</script>` が入って本体スクリプトが途中で切れた。本番でチャット欄とビルド情報がフッターの下に出る・JS がテキスト表示される症状になった（2026-09-27）。ステージングはシム注入しないので再現しない。回数指定が要るときはインスタンスの `([regex]'...').Replace(s, r, 1)` か `IndexOf` で挿入し、注入後にマーカー数が1つか検証する。
+
 - **`SboSvr.vcxproj` は Release|Win32 が全体で `PrecompiledHeader=Use`、Debug は PCH 未使用。** StdAfx.h を include しない純粋関数ファイル（`MoveStateDecision`/`ProcessMetrics`/`SessionsJsonBuilder`）を追加すると Debug は通るが `publish.bat`（Release Rebuild）だけ `error C1010` で失敗し zip が作られない。対処: 該当 `<ClCompile>` に Debug/Release 両方の `PrecompiledHeader=NotUsing` を付ける（`#include "StdAfx.h"` を足すのは設計違反）。publish 失敗の調査はリポジトリ直下の `publish_build.log` を `error` で grep する。
 
 - **`SboSvr.vcxproj` の PostBuild（`webroot` を rmdir→再作成）と `publish.ps1` が `out/browser-title/sbocli-title.*` しかコピーせず `BGM/` を落としていた。** 本番でBGMが鳴らない原因（2026-09-16）。両方に BGM コピーを追加して修正。「DL進捗が100%を超える」表示は file_packager の total が `.data.br` の圧縮後 Content-Length で loaded が展開後バイトのため（表示だけの問題）。`webroot/game` 配下に新ディレクトリを足したら PostBuild と `publish.ps1` の両方のコピー対象を確認すること。
