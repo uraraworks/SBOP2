@@ -88,7 +88,15 @@ function log(msg) { console.log(`[e2e-battle] ${msg}`); }
     log(`気絶後のアクティブウィンドウ: ${swoon}`);
     await page.waitForTimeout(500);
     await page.screenshot({ path: path.join(outDir, 'battle-swoon.png') });
-    ok = swoon === 'SWOON';
+    // 反撃してきた敵は、上にいる自キャラの方(上=0)を向いていること。
+    // 以前は殴られて向きを変えても立ち止まっている NPC の向きが送られず、下を向いたまま反撃していた
+    const enemyDir = await page.evaluate((id) => {
+      const o = window.sbop2Debug.others();
+      const e = ((o && o.chars) || []).find((c) => c.id === id);
+      return e ? e.dir : null;
+    }, setup.npc.json.charId);
+    log(`反撃した敵の向き: ${enemyDir} (期待 0=上)`);
+    ok = (swoon === 'SWOON') && (enemyDir === 0);
   } catch (e) {
     log(`失敗: ${e.message}`);
     try {

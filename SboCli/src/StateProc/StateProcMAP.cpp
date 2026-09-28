@@ -3359,8 +3359,8 @@ BOOL CStateProcMAP::TryMoveOrPushDirection(PCInfoMapBase pMap, int nDirection, i
 	BOOL bResult;
 	DWORD dwObjCharID;
 
-	// 通常キャラのブロック判定(押せる物以外)
-	bResult = m_pLibInfoChar->IsBlockChar(m_pPlayerChar, nDirection, TRUE, TRUE);
+	// 通常キャラのブロック判定(押せる物以外)。自キャラは1pxずつ動くので1px先で判定する
+	bResult = m_pLibInfoChar->IsBlockCharOnePixel(m_pPlayerChar, nDirection);
 	if (bResult) {
 		return TRUE;
 	}

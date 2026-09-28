@@ -35,6 +35,7 @@ public:
 	void	DeleteAll(void);	// 全て削除
 	void	SortY(void);	// Y座標順にソート
 	BOOL	IsBlockChar(PCInfoCharBase pChar, int nDirection, BOOL bNoBlockFlg=TRUE, BOOL bHitCheck=FALSE);	// 一歩前でぶつかるかチェック
+	BOOL	IsBlockCharOnePixel(PCInfoCharBase pChar, int nDirection);	// 1px先でぶつかるキャラがいるかチェック(ドット移動する自キャラ用)
 	BOOL	IsPushBlockChar(PCInfoCharBase pChar, int nDirection);	// 押せるキャラに1px先でぶつかるかチェック(S1: 押せる物を固い物として扱う)
 	DWORD	GetPushBlockCharID(PCInfoCharBase pChar, int nDirection);	// 押せるキャラに1px先でぶつかるか調べ、相手のCharIDを返す(0:無し。S3bでクライアントの押し予測が使う)
 	BOOL	IsPushAreaFree(PCInfoCharBase pExclude1, PCInfoCharBase pExclude2, DWORD dwMapID, const RECT &rcMoveTo);	// 押せる物がそこへ進めるか(本人・押せる物自身を除く全キャラとの当たり判定。S3bでサーバーのIsPushCharAreaFreeと共用)

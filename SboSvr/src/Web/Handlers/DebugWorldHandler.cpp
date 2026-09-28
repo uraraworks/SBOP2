@@ -125,6 +125,9 @@ void CDebugWorldHandler::HandleNpc(const HttpRequest &request, HttpResponse &res
 	// 索敵範囲(タイル数)。0 なら自分から襲ってこず、攻撃された時だけ反撃する。
 	int nSearchX = GetIntOr(request.body, "searchX", 0, 0, 255);
 	int nSearchY = GetIntOr(request.body, "searchY", nSearchX, 0, 255);
+	// 移動確率(%)。0 ならその場から動かない。戦闘中の移動確率は省略時は移動確率と同じ。
+	int nMoveAverage = GetIntOr(request.body, "moveAverage", 0, 0, 100);
+	int nMoveAverageBattle = GetIntOr(request.body, "moveAverageBattle", nMoveAverage, 0, 100);
 
 	CLibInfoCharSvr *pCharLib = m_pMgrData->GetLibInfoChar();
 	CLibInfoMapBase *pMapLib = m_pMgrData->GetLibInfoMap();
@@ -156,6 +159,8 @@ void CDebugWorldHandler::HandleNpc(const HttpRequest &request, HttpResponse &res
 	infoTmp.m_wPHitAverage = 90;
 	infoTmp.m_sizeSearchDistance.cx = nSearchX;
 	infoTmp.m_sizeSearchDistance.cy = nSearchY;
+	infoTmp.m_nMoveAverage = nMoveAverage;
+	infoTmp.m_nMoveAverageBattle = nMoveAverageBattle;
 	switch (nMoveType) {
 	case CHARMOVETYPE_BATTLE1:
 	case CHARMOVETYPE_BATTLE2:

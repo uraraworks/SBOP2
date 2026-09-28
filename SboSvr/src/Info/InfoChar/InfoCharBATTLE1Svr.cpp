@@ -97,6 +97,10 @@ BOOL CInfoCharBATTLE1Svr::ProcHit(CInfoCharSvr *pInfoChar)
 		m_nDirection = anDirection[pInfoChar->m_nDirection];
 		SetTarget(pInfoChar);
 		m_bChgPos = TRUE;
+		// 立ち止まっている NPC は ProcChgPos では向きを送らないため、
+		// 向きを変えたことを ProcChgPosRenew で周りに知らせる
+		// (送らないと、見た目は元の向きのまま反撃してくる)
+		m_bChgPosRenew = TRUE;
 	}
 
 	return bRet;
@@ -199,7 +203,7 @@ Exit:
 BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 {
 	int nDirection, xx, yy, nMoveAverage;
-	BOOL bResult;
+	BOOL bResult, bReach;
 	DWORD dwTmp, dwMoveWait;
 	POINT ptPos;
 	SIZE sizeDistance;
@@ -252,7 +256,16 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 	m_pLibInfoCharSvr->GetDistance(sizeDistance, this, m_pInfoCharTarget);
 	xx = sizeDistance.cx;
 	yy = sizeDistance.cy;
-	if (xx + yy == 1) {
+	/*
+	   攻撃を始めるかは「相手の方を向いたとき攻撃が届くか」で決める。
+	   以前は GetDistance の xx + yy == 1 (16px 単位の頃の「隣のマス」)で見ていたが、
+	   1px 単位の座標では横はぴったり接したときだけ、縦は接しても yy が 2 になり
+	   満たせず、反撃してこないまま見失う(5 秒で諦める)ことが多かった。
+	   向きは差の大きい軸で 4 方向に決める(斜めの位置関係で上下を向いて空振りしないように)。
+	*/
+	nDirection = GetFaceDirectionToTarget();
+	bReach = IsTargetInReach(nDirection);
+	if (bReach) {
 		ptPos.x = -1;
 	}
 	if (m_sizeSearchDistance.cx > 0) {
@@ -263,10 +276,7 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 		}
 	}
 
-	if (xx + yy == 1) {
-		nDirection = GetDirection(m_ptTargetPos.x, m_ptTargetPos.y);
-		// 4方向に変換
-		nDirection = GetDrawDirection(nDirection);
+	if (bReach) {
 		if (m_nDirection != nDirection) {
 			m_nDirection = nDirection;
 			m_bChgPosRenew = TRUE;
@@ -306,6 +316,34 @@ BOOL CInfoCharBATTLE1Svr::TimerProcBATTLE(DWORD dwTime)
 
 Exit:
 	return TRUE;
+}
+
+int CInfoCharBATTLE1Svr::GetFaceDirectionToTarget(void)
+{
+	int dx, dy;
+
+	dx = m_pInfoCharTarget->m_nMapX - m_nMapX;
+	dy = m_pInfoCharTarget->m_nMapY - m_nMapY;
+	if (abs(dx) > abs(dy)) {
+		return (dx < 0) ? 2 : 3;
+	}
+	return (dy < 0) ? 0 : 1;
+}
+
+BOOL CInfoCharBATTLE1Svr::IsTargetInReach(int nDirection)
+{
+	int i, nCount;
+	ARRAYDWORD adwCharID;
+
+	// 攻撃処理(CLibInfoCharSvr::CharProcAtack)と同じ届く範囲で、ターゲットが入っているか
+	m_pLibInfoCharSvr->GetFrontCharIDTarget(m_dwCharID, nDirection, 1, &adwCharID);
+	nCount = adwCharID.size();
+	for (i = 0; i < nCount; i ++) {
+		if (adwCharID[i] == m_dwTargetCharID) {
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
 BOOL CInfoCharBATTLE1Svr::IsMoveDirection(int nDirection)
