@@ -97,6 +97,10 @@ BOOL CInfoCharBATTLE1Svr::ProcHit(CInfoCharSvr *pInfoChar)
 		m_nDirection = anDirection[pInfoChar->m_nDirection];
 		SetTarget(pInfoChar);
 		m_bChgPos = TRUE;
+		// 立ち止まっている NPC は ProcChgPos では向きを送らないため、
+		// 向きを変えたことを ProcChgPosRenew で周りに知らせる
+		// (送らないと、見た目は元の向きのまま反撃してくる)
+		m_bChgPosRenew = TRUE;
 	}
 
 	return bRet;
