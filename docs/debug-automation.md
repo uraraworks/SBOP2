@@ -1,4 +1,4 @@
-# ブラウザ版デバッグ自動操作 API (`window.sbop2Debug`)
+﻿# ブラウザ版デバッグ自動操作 API (`window.sbop2Debug`)
 
 > 目的: Claude がブラウザ枠の `javascript_tool` から、ブラウザ版ゲーム(Emscripten)を
 > 確実に操作・状態確認できるようにする。通常プレイのユーザーには影響しない。
@@ -162,6 +162,7 @@ sbop2Debug.releaseAll();
 | `hp` | | 30 | HP(最大 HP も同じ値) |
 | `atack` / `defense` | | 10 / 0 | 攻撃力・防御力 |
 | `searchX` / `searchY` | | 0 | 索敵範囲(マス)。0 なら自分からは襲ってこない |
+| `moveAverage` / `moveAverageBattle` | | 0 / `moveAverage` と同じ | 移動確率(%)と戦闘中の移動確率(%)。0 ならその場から動かない(追いかけてこない) |
 
 成功すると 201 で `{charId, mapId, x, y, moveType, hp}` を返す。スポーナーが湧かせた敵と同じく
 `SetMap`・`SetLibInfoChar` 済みなので、移動・反撃・撃破の処理がそのまま動く。

@@ -1210,6 +1210,29 @@ void CMainFrame::RecvProcCHAR_STATE(PBYTE pData)
 		return;
 	}
 
+	/*
+	   NPC のウェイポイント追従では、移動中に届いた「その場の向き変更」も
+	   キューに積んで到着時に反映している。下の停止処理でキューを捨てると、
+	   敵が近づいてきた直後に相手の方へ向き直ってから攻撃した場合に
+	   向き変更が失われ、移動してきた向きのまま攻撃して見えるため、
+	   状態を変える前に最後に届いた向きを反映しておく(攻撃モーションもこの向きで始める)。
+	*/
+	if (pInfoChar != pInfoCharPlayer) {
+		int i, nLastDirection;
+
+		nLastDirection = -1;
+		for (i = (int)pInfoChar->m_apMovePosQue.size() - 1; i >= 0; i --) {
+			if (pInfoChar->m_apMovePosQue[i]->nDirection >= 0) {
+				nLastDirection = pInfoChar->m_apMovePosQue[i]->nDirection;
+				break;
+			}
+		}
+		if ((nLastDirection >= 0) && (nLastDirection != pInfoChar->m_nDirection)) {
+			pInfoChar->SetDirection(nLastDirection);
+			pInfoChar->m_bRedraw = TRUE;
+		}
+	}
+
 	if (nState == CHARMOVESTATE_BATTLEATACK) {
 		/* docs/battle-redesign.md S2: 自キャラはXキー押下時にローカルで即座に攻撃モーションを
 		   開始済み(StateProcMAP::StartLocalAtack)。サーバーからのエコーで RenewMotionInfo を
