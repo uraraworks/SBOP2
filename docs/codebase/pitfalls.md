@@ -119,6 +119,8 @@
 
 - **`CLibInfoItem::MakeItem(dwMapID, pptPos, dwItemTypeID)`（`Common/LibInfo/LibInfoItem.cpp`）は `dwMapID > 0` の時だけ `m_dwMapID`/`m_ptPos` を設定する。** `MakeItem(0, ...)` を呼ぶと座標・マップが入らず地面アイテムとして可視化されない（`ITEM_RES_ITEMINFO` は送られるのでドロップSEだけ鳴る）。「釣りヒットで魚が足元に落ちない（SEだけ鳴る）」バグの原因だった（コミット `249642d`）。正しくは `DropItem` と同じく `MakeItem(pInfoChar->m_dwMapID, &ptPos, ...)` に実マップと足元座標(`m_nMapX/m_nMapY`)を渡す。地面アイテムの `m_ptPos` はピクセル単位で、クライアント描画(`LayerMap.cpp DrawItem`)もピクセル前提。
 
+- **移動中の攻撃キー(`CStateProcMAP::OnX`)は、以前は `MOVE`/`BATTLEMOVE` を弾いていたので、移動キーを押したままだと攻撃できなかった（バーチャルパッドでもキーボードでも同じ経路）。** 今は押した瞬間に `StopPlayerMove(FALSE)` でその場に止めてから判定する。止める時は `ChgMoveState` ではなく `ForceStopMoveState` を使うこと（移動中に立ち系を渡すとキューに積むだけで `MOVE` のまま残り、続く `IsEnableMove` で弾かれる）。また `CInfoCharCli::IsEnableMove` はタイルを跨いだ直後のマップイベント判定待ち(`m_bWaitCheckMapEvent`)の間 FALSE になるので、攻撃・会話の可否は `CInfoCharBase::IsEnableMove` で見る。攻撃キー押しっぱなしの連続攻撃中は `MoveProc` で歩き出さない。確認は `tools/e2e/browser-attack-while-moving.cjs`。なおヘッドレスの E2E では、歩いてタイルを跨ぐと判定の返事待ちのまま歩きが止まることがある（master でも同じ。原因は未調査）ので、長い距離を歩かせるテストは組みにくい。
+
 ## 管理画面 Web UI
 
 - **稼働中の SboSvr は `SboSvr/webroot` ではなく `SboSvr/Debug/webroot` のコピーを配信する。** コピーは `SboSvr.vcxproj` の PostBuildEvent（`rmdir`→`xcopy /E /I /Y /H webroot`→`out\browser-title\sbocli-title.*` を `webroot\game\` へ）でビルド時にだけ行われる。実例: 新設した `entity-picker.js`/`move-types.js` が404、`index.html` が古い版のまま配信された。JS/HTML の直接修正が「効かない」ように見えたら、ブラウザキャッシュより配信元の同期漏れを疑う。手動同期は `xcopy /E /I /Y /H "SboSvr\webroot\*.*" "SboSvr\Debug\webroot\"`（サーバー稼働中でも可、DBに影響なし）。同じ `rmdir` は `webroot\game`（ゲーム本体）まで消すので手動では使わないこと。確認は `fetch(url, {cache:'no-store'})` で配信内容を直接見ると早い。
