@@ -1036,51 +1036,7 @@ void CStateProcMAP::KeyProc(
 			bLeft = pMgrKeyInput->IsInput(VK_LEFT);
 			bRight = pMgrKeyInput->IsInput(VK_RIGHT);
 			if (!(bUp || bDownKey || bLeft || bRight)) {
-				int nStopState;
-
-				nStopState = CHARMOVESTATE_STAND;
-				if (m_pPlayerChar->IsStateBattle()) {
-					nStopState = CHARMOVESTATE_BATTLE;
-					if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
-						nStopState = CHARMOVESTATE_BATTLE_DEFENSE;
-					}
-				}
-				if (m_pPlayerChar->IsStateMove()) {
-					m_pPlayerChar->ChgMoveState(nStopState);
-				}
-				m_pPlayerChar->m_ptMove.x = 0;
-				m_pPlayerChar->m_ptMove.y = 0;
-				m_nMoveSpeedAccum = 0;
-				m_dwLastPlayerMoveStepTime = 0;
-				m_dwLastPlayerMoveTurnTime = 0;
-				m_bHasPlayerMoveHeading = FALSE;
-				m_pPlayerChar->ClearDrawDirectionOverride();
-
-				if (m_bMoveSyncActive) {
-					CPacketCHAR_MOVE_STOP PacketMoveStop;
-					PacketMoveStop.Make(
-						m_pPlayerChar->m_dwMapID,
-						m_pPlayerChar->m_dwCharID,
-						m_pPlayerChar->m_nDirection,
-							m_pPlayerChar->m_nMapX,
-							m_pPlayerChar->m_nMapY,
-						FALSE,
-						0,
-						timeGetTime());
-					m_pSock->Send(&PacketMoveStop);
-					m_bMoveSyncActive = FALSE;
-					m_nMoveSyncDirection = -1;
-					m_dwLastTimeMoveSyncSend = 0;
-				}
-				// S3b: 移動キーを全て離した＝押すのもやめたとみなし、最終座標を1回送ってから
-				// 予測を終える(docs/push-object-redesign.md 4章「送信」参照)。
-				EndPushPredict(TRUE);
-				if (!m_bAutoWalkToEvent) {
-					/* 接触位置で止まっただけでも、停止直後にイベント判定を要求する */
-					m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
-					m_bSendCheckMapEvent = FALSE;
-					m_bNeedIdleMapEventCheck = FALSE;
-				}
+				StopPlayerMove(TRUE);
 			}
 		}
 	}
@@ -1092,6 +1048,70 @@ void CStateProcMAP::KeyProc(
 	}
 
 	CStateProcBase::KeyProc(byCode, bDown);
+}
+
+
+
+void CStateProcMAP::StopPlayerMove(
+	BOOL bCheckMapEvent)	// [in] 停止直後にマップイベント判定を要求する
+{
+	/* 移動中の自キャラをその場で止める(移動キーを全て離した時と、移動中に攻撃キーを押した時)。
+	   移動中でなくても、移動の加速・向きの補正・押し予測などの状態は片付ける */
+	int nStopState;
+
+	if (m_pPlayerChar == NULL) {
+		return;
+	}
+
+	nStopState = CHARMOVESTATE_STAND;
+	if (m_pPlayerChar->IsStateBattle()) {
+		nStopState = CHARMOVESTATE_BATTLE;
+		if (m_pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE_DEFENSE) {
+			nStopState = CHARMOVESTATE_BATTLE_DEFENSE;
+		}
+	}
+	if (m_pPlayerChar->IsStateMove()) {
+		if (bCheckMapEvent) {
+			m_pPlayerChar->ChgMoveState(nStopState);
+		} else {
+			/* 攻撃などで止める時は、続けてすぐ状態を変えるので即座に止める
+			   (ChgMoveState は移動中に立ち系を渡すとキューに積むだけで、その場では MOVE のまま) */
+			m_pPlayerChar->ForceStopMoveState(nStopState);
+		}
+	}
+	m_pPlayerChar->m_ptMove.x = 0;
+	m_pPlayerChar->m_ptMove.y = 0;
+	m_nMoveSpeedAccum = 0;
+	m_dwLastPlayerMoveStepTime = 0;
+	m_dwLastPlayerMoveTurnTime = 0;
+	m_bHasPlayerMoveHeading = FALSE;
+	m_pPlayerChar->ClearDrawDirectionOverride();
+
+	if (m_bMoveSyncActive) {
+		CPacketCHAR_MOVE_STOP PacketMoveStop;
+		PacketMoveStop.Make(
+			m_pPlayerChar->m_dwMapID,
+			m_pPlayerChar->m_dwCharID,
+			m_pPlayerChar->m_nDirection,
+			m_pPlayerChar->m_nMapX,
+			m_pPlayerChar->m_nMapY,
+			FALSE,
+			0,
+			timeGetTime());
+		m_pSock->Send(&PacketMoveStop);
+		m_bMoveSyncActive = FALSE;
+		m_nMoveSyncDirection = -1;
+		m_dwLastTimeMoveSyncSend = 0;
+	}
+	// S3b: 移動キーを全て離した＝押すのもやめたとみなし、最終座標を1回送ってから
+	// 予測を終える(docs/push-object-redesign.md 4章「送信」参照)。
+	EndPushPredict(TRUE);
+	if (bCheckMapEvent && !m_bAutoWalkToEvent) {
+		/* 接触位置で止まっただけでも、停止直後にイベント判定を要求する */
+		m_pPlayerChar->m_bWaitCheckMapEvent = TRUE;
+		m_bSendCheckMapEvent = FALSE;
+		m_bNeedIdleMapEventCheck = FALSE;
+	}
 }
 
 
@@ -2281,7 +2301,19 @@ BOOL CStateProcMAP::OnX(BOOL bDown)
 	m_dwLastKeyInput = timeGetTime();
 	m_bAtackKeyAutoRepeat = FALSE;
 
-	bResult = m_pPlayerChar->IsEnableMove();
+	/* 移動中(移動キー押しっぱなし)に押されたら、攻撃・会話などを優先してその場で立ち止まる。
+	   付いて行き中・釣り中は従来どおり下の判定に任せる */
+	if (m_pPlayerChar->IsStateMove() &&
+		(m_pPlayerChar->m_dwFrontCharID == 0) &&
+		(m_pPlayerChar->m_nProcState != CHARPROCSTATEID_FISHING)) {
+		StopPlayerMove(FALSE);
+	}
+
+	/* タイルを跨いだ直後のマップイベント判定待ち(m_bWaitCheckMapEvent)の間も受け付ける。
+	   CInfoCharCli::IsEnableMove はこの待ちの間 FALSE になるため、歩いている最中は
+	   タイルを跨ぐたびにサーバーの返事が来るまで攻撃キーが効かなくなっていた。
+	   攻撃・会話はその場の動作なので、判定待ちでも止める理由はない */
+	bResult = m_pPlayerChar->CInfoCharBase::IsEnableMove();
 	if (bResult == FALSE) {
 		/* 付いて行き中(m_dwFrontCharID)・攻撃モーション中・気絶中・防御中等はここに来る。
 		   付いて行き中はOnTabの旧メッセージ相当を出す */
@@ -3519,6 +3551,12 @@ BOOL CStateProcMAP::MoveProc(
 	}
 	/* 誰かに付いて行っている？ */
 	if (m_pPlayerChar->m_dwFrontCharID) {
+		goto Exit;
+	}
+	/* 攻撃キー押しっぱなしの連続攻撃中は、移動キーも押されていても歩き出さず攻撃を優先する
+	   (攻撃モーションの合間に戦闘中(静止)へ戻った瞬間に歩き出して連続攻撃が途切れないように) */
+	if (m_bAtackKeyAutoRepeat && (pMgrKeyInput != NULL) && pMgrKeyInput->IsInput('X') &&
+		(m_pPlayerChar->m_nMoveState == CHARMOVESTATE_BATTLE)) {
 		goto Exit;
 	}
 	bResult = m_pPlayerChar->IsEnableMove();

@@ -23,6 +23,7 @@
 |---|---|---|---|
 | `press(key, holdMs=150)` | `key`: キー名 or 数値VK, `holdMs`: 押下時間(ms) | `Promise<void>` | 1回押して離す。down→holdMs待ち→up→250ms待ち(実機検証済みの間隔)。 |
 | `hold(key, ms)` | `key`, `ms`: 押しっぱなし時間 | `Promise<void>` | 指定時間押しっぱなしにしてから離す。 |
+| `keyDown(key)` / `keyUp(key)` | `key` | VK 番号 | 押す／離すだけを別々に行う。移動キーを押したまま攻撃キーを押す、のような同時押しに使う(`releaseAll()` で全部離せる)。 |
 | `sequence(steps)` | `steps`: `['down','down','x']` または `[{key,holdMs,waitMs}, ...]` | `Promise<void>` | 複数キーを順番に `press` する。`waitMs` があれば押した後に追加で待つ。 |
 | `releaseAll()` | なし | `void` | 押しっぱなしのキーを全解放する(操作を中断する時の後始末)。 |
 | `setCharName(text)` | `text`: 文字列 | `void` | キャラ名入力欄にテキストを設定する(`SBOP2_BrowserCharNameSetText`)。 |
@@ -69,13 +70,14 @@
 マップ画面にいる時の `player` の例:
 
 ```json
-"player": { "name": "てすと", "mapID": 1, "x": 10, "y": 12, "direction": 2,
+"player": { "name": "てすと", "mapID": 1, "x": 10, "y": 12, "direction": 2, "moveState": 0,
             "charID": 3, "equipCloth": 8, "equipArmsRight": 0, "items": [7] }
 ```
 
 - `gameState` / `gameStateName`: `SboCli/src/SboCli_priv.h` の `GAMESTATE_*`
   (LOGO/TITLE/LOGIN/DISCONNECT/INFO/LOGINMENU/MAP)。
 - `windows`: 開いているウィンドウ一覧(`WINDOWTYPE_*` のID/名前、アクティブ/表示フラグ、カーソル位置 `pos`)。
+- `player.moveState`: 自キャラの `CHARMOVESTATE_*`(`Common/Info/InfoCharBase.h`。0 立ち / 2 移動中 / 5 戦闘中 / 6 戦闘移動中 / 7 攻撃中 など)。
 - `activeWindow`: キー入力を受け付けているウィンドウ(無ければ `null`)。
 - `player`: マップ画面でのみ非 `null`。名前はUTF-8。`equipCloth` / `equipArmsRight` は装備中のアイテムID、
   `items` はバッグのアイテムID一覧(管理画面から装備を変えたときの反映確認用)。

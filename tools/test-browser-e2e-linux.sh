@@ -71,6 +71,9 @@ NO_PROXY="127.0.0.1,localhost" no_proxy="127.0.0.1,localhost" \
 # 敵を置いて戦い、反撃で気絶するまで(テスト準備 API /api/debug/npc・char-status を使う)
 NO_PROXY="127.0.0.1,localhost" no_proxy="127.0.0.1,localhost" \
 	node "$ROOT/tools/e2e/browser-battle.cjs" "$HTTP" "$OUT_DIR" || status=$?
+# 移動キーを押したまま攻撃キーを押すと、立ち止まって攻撃するか
+NO_PROXY="127.0.0.1,localhost" no_proxy="127.0.0.1,localhost" \
+	node "$ROOT/tools/e2e/browser-attack-while-moving.cjs" "$HTTP" "$OUT_DIR" || status=$?
 # 敵に横から・縦から歩いて近づき、どちらも見た目が接するところまで行けるか
 NO_PROXY="127.0.0.1,localhost" no_proxy="127.0.0.1,localhost" \
 	node "$ROOT/tools/e2e/browser-approach-enemy.cjs" "$HTTP" "$OUT_DIR" || status=$?

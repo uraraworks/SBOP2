@@ -200,6 +200,7 @@ extern "C" EMSCRIPTEN_KEEPALIVE const char *SBOP2_DebugGetStateJson(void)
 			<< "\"x\":" << pPlayer->m_nMapX << ","
 			<< "\"y\":" << pPlayer->m_nMapY << ","
 			<< "\"direction\":" << pPlayer->m_nDirection << ","
+			<< "\"moveState\":" << pPlayer->m_nMoveState << ","
 			<< "\"charID\":" << pPlayer->m_dwCharID << ","
 			<< "\"equipCloth\":" << pPlayer->m_dwEquipItemIDCloth << ","
 			<< "\"equipArmsRight\":" << pPlayer->m_dwEquipItemIDArmsRight << ","

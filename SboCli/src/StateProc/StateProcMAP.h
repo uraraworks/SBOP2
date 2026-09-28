@@ -46,6 +46,7 @@ protected:
 	void  TimerProcSleepTimer(void);                                                           // 時間処理(おひるねタイマー)
 	void  TimerProcAtackRepeat(void);                                                          // 時間処理(Xキー押しっぱなしの連続攻撃。docs/battle-redesign.md S2)
 	void  TimerProcAtackAutoOff(void);                                                         // 時間処理(無操作で戦闘状態を自動解除。docs/battle-redesign.md S2)
+	void  StopPlayerMove(BOOL bCheckMapEvent);                                                 // 移動中の自キャラをその場で止める(移動キーを離した時・移動中に攻撃キーを押した時)
 	BOOL  StartLocalAtack(void);                                                               // 攻撃モーションをローカルで即時開始する(docs/battle-redesign.md S2)
 	BOOL  IsWeaponFishingRod(void);                                                            // 右手装備が釣り竿か判定。釣り竿は武器扱いしないため攻撃分岐で使う(docs/battle-redesign.md 7章: 釣り竿装備中は攻撃しない)
 	BOOL  IsFishingAvailable(void);                                                            // 釣り竿装備＋正面が水タイルかを判定(docs/battle-redesign.md S4)
