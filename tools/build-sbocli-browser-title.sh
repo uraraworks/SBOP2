@@ -349,7 +349,8 @@ embed_cachebust() {
     version="$(sed -n 's/.*VERTEXT[[:space:]]*"\([^"]*\)".*/\1/p' "$REPO_ROOT/Common/SBOVersion.h" | head -n1)"
     [ -n "$version" ] || { warn "SBOVersion.h から VERTEXT を取得できませんでした。"; return 1; }
     # ビルド識別子はビルド日時(コミット有無に依存せず常に正直な値)
-    build_stamp="$(date '+%Y-%m-%d %H:%M')"
+    # Actions などの UTC 環境でも日本時間で出す。TZ=JST-9 は POSIX 形式なので tzdata が無くても効く。
+    build_stamp="$(TZ=JST-9 date '+%Y-%m-%d %H:%M') JST"
     data_size="$(wc -c < "$data" | tr -d ' ')"
 
     # 置換は node で行う(sed だと引用符のエスケープが崩れやすいため)
