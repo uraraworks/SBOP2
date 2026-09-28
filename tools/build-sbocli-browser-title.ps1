@@ -297,8 +297,9 @@ try {
     }
     $displayVersion = $versionMatch.Groups[1].Value
 
-    # ビルド識別子はビルド日時（コミット有無に依存せず常に正直な値）を用いる
-    $buildStamp = Get-Date -Format "yyyy-MM-dd HH:mm"
+    # ビルド識別子はビルド日時（コミット有無に依存せず常に正直な値）を用いる。
+    # PC のタイムゾーン設定に左右されないよう、UTC から日本時間（UTC+9、夏時間なし）に換算して JST を付ける
+    $buildStamp = [DateTime]::UtcNow.AddHours(9).ToString("yyyy-MM-dd HH:mm") + " JST"
 
     $htmlText = Get-Content -Path $htmlFile -Raw -Encoding UTF8
 
