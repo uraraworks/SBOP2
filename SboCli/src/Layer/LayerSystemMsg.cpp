@@ -12,8 +12,12 @@
 #include "Img32.h"
 #include "LayerSystemMsg.h"
 #include "myString.h"
+#include "../Platform/SdlFont.h"
 #include "../../../Common/Platform/SjisConvert.h"
 
+
+// 1 行の高さ（小さい文字 16px ＋縁取り上下 2px ずつ）
+#define SYSTEMMSG_LINE_H	(20)
 
 CLayerSystemMsg::CLayerSystemMsg()
 {
@@ -55,7 +59,8 @@ BOOL CLayerSystemMsg::TimerProc(void)
 	bRet = FALSE;
 
 	dwTmp = SDL_GetTicks() - m_dwLastTimeProc;
-	if (dwTmp < 50) {
+	// 文字のドットに合わせて 2px ずつ動かす（1px ずつだと格子からずれてにじんで見える）
+	if (dwTmp < 100) {
 		goto Exit;
 	}
 	m_dwLastTimeProc = SDL_GetTicks();
@@ -63,7 +68,7 @@ BOOL CLayerSystemMsg::TimerProc(void)
 	nCount = m_aSystemMsgInfo.size();
 	for (i = nCount - 1; i >= 0; i --) {
 		pInfo = m_aSystemMsgInfo[i];
-		pInfo->nPosY --;
+		pInfo->nPosY -= SdlFontPixelScale();
 		if (pInfo->nPosY > SCRSIZEY - (SCRSIZEY / 3)) {
 			continue;
 		}
@@ -77,7 +82,7 @@ Exit:
 
 void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 {
-	int i, nLen, nCount;
+	int i, nLen, nCount, nShift, nTextW, nTextH;
 	HDC hDCTmp;
 	PSYSTEMMSGINFO pInfo, pInfoTmp;
 
@@ -90,10 +95,11 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
 	if (nCount > 0) {
 		pInfoTmp = m_aSystemMsgInfo[nCount - 1];
 		// 追加すると既存のメッセージに重なる？
-		if (pInfo->nPosY <= pInfoTmp->nPosY + 14) {
+		if (pInfo->nPosY <= pInfoTmp->nPosY + SYSTEMMSG_LINE_H) {
+			nShift = SYSTEMMSG_LINE_H - (pInfo->nPosY - pInfoTmp->nPosY);
 			for (i = 0; i < nCount; i ++) {
 				pInfoTmp = m_aSystemMsgInfo[i];
-				pInfoTmp->nPosY -= 14;
+				pInfoTmp->nPosY -= nShift;
 			}
 		}
 	}
@@ -101,10 +107,16 @@ void CLayerSystemMsg::AddMsg(LPCSTR pszMsg, COLORREF cl)
         // pszMsg は CmyString::operator LPCSTR() 経由で UTF-8 として渡る
         CString strMsg = Utf8ToTString(pszMsg);
         nLen = strMsg.GetLength();
-        pInfo->pImg->Create(nLen * 14 + 1, 14);
+        // 縁取り（上下左右 1 ドット＝2px）が入る大きさで作る
+        nTextW = nTextH = 0;
+        SdlFontGetTextExtent((void *)m_hFont, (LPCTSTR)strMsg, nLen, &nTextW, &nTextH);
+        if (nTextW <= 0) {
+                nTextW = nLen * 16;
+        }
+        pInfo->pImg->Create(nTextW + 4, SYSTEMMSG_LINE_H);
 
 	hDCTmp = pInfo->pImg->Lock();
-        TextOut2(hDCTmp, m_hFont, 1, 1, strMsg, cl);
+        TextOut2(hDCTmp, m_hFont, 2, 2, strMsg, cl);
 
 	pInfo->pImg->Unlock();
 

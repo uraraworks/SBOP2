@@ -21,8 +21,8 @@ CWindowLOGINMENU::CWindowLOGINMENU()
 	m_nID	= WINDOWTYPE_LOGINMENU;
 	m_ptViewPos.x	= 40;
 	m_ptViewPos.y	= 48;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 6;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 4;
+	m_sizeWindow.cx	= WND_ALIGN8(32 + WND_CHAR_W * 5 + 16);
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 4;
 
 	m_abEnable[0] = FALSE;
 	m_abEnable[1] = FALSE;
@@ -88,17 +88,17 @@ void CWindowLOGINMENU::Draw(PCImg32 pDst)
 
 	clBack = RGB(1, 1, 1);
 	clText = (m_abEnable[0] == TRUE) ? RGB(1, 1, 1) : RGB(128, 128, 128);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("キャラ選択"), clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("キャラ選択"), clText);
 	clText = (m_abEnable[1] == TRUE) ? RGB(1, 1, 1) : RGB(128, 128, 128);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("新規作成"), clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(1), _T("新規作成"), clText);
 	clText = (m_abEnable[2] == TRUE) ? RGB(1, 1, 1) : RGB(128, 128, 128);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 2, _T("キャラ削除"), clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(2), _T("キャラ削除"), clText);
 	clText = (m_abEnable[3] == TRUE) ? RGB(1, 1, 1) : RGB(128, 128, 128);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 3, _T("戻る"), clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(3), _T("戻る"), clText);
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

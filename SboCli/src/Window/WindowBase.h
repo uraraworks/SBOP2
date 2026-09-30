@@ -16,6 +16,17 @@ class CMgrSound;
 class CMgrGrpData;
 class ILoginWindow;
 
+// ウィンドウ内の文字レイアウト
+// 文字はピクセルフォントを 2 倍で描く（SdlFont.cpp）。フォントの大きさは
+//   m_hFont / m_hFont16 / m_hFont16Normal → 中（PixelMplus10、全角 20px・高さ 20px）
+//   m_hFont12 / m_hFont12Bold / m_hFont14  → 小（美咲ゴシック第2、全角 16px・高さ 16px）
+#define WND_LINE_H		(24)						// メニュー 1 行の高さ（中の文字 20px + すき間、カーソル 24px と同じ）
+#define WND_LINE_Y(n)	(16 + WND_LINE_H * (n))		// メニュー n 行目の上端（カーソルの位置）
+#define WND_TEXT_Y(n)	(WND_LINE_Y(n) + 2)			// メニュー n 行目の文字の位置（行の中で上下中央）
+#define WND_CHAR_W		(20)						// 中の文字の全角 1 文字の幅
+#define WND_SMALL_CHAR_W	(16)					// 小の文字の全角 1 文字の幅
+#define WND_ALIGN8(v)	(((v) + 7) & ~7)			// 枠は 8px 単位で描くので、ウィンドウの大きさは 8 の倍数にそろえる
+
 typedef class CWindowBase
 {
 public:
@@ -75,6 +86,8 @@ protected:
 	void DrawFrame2(int x, int y, int cx, int cy, int nType, CImg32 *pDst=NULL, int nBottom=0);	// フレームを描画
 	void DrawFrame3(int x, int y, int cx, int cy, int nType);	// フレームを描画
 	void DrawCursor(int x, int y);	// カーソルを描画
+	void DrawGauge(int x, int y, int cx, int nPercent, COLORREF clFill);	// ゲージ（高さ 8px の溝と中身）を描画
+	void TextOutCenter(HDC hDC, HFONT hFont, int x, int cx, int y, LPCTSTR pStr, COLORREF Color);	// 幅 cx の中央にそろえて文字描画
 	void DrawInputFrame1(int x, int y, int cx, int cy, int nType);	// 入力欄用フレームを描画1
 	void DrawIconFrame(int x, int y);	// アイコン用フレームを描画
 

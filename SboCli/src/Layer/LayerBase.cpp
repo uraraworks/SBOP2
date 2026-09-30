@@ -99,14 +99,7 @@ void CLayerBase::TextOut2(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLO
 	ctx->currentFont = (void*)hFont;
 
 	// 縁取り 4 方向
-	ctx->textColor = (unsigned long)colorFrame;
-	SdlFontTextOut(hDC, x - SdlFontPixelScale(), y, pStr, nLen);
-	SdlFontTextOut(hDC, x + SdlFontPixelScale(), y, pStr, nLen);
-	SdlFontTextOut(hDC, x, y - SdlFontPixelScale(), pStr, nLen);
-	SdlFontTextOut(hDC, x, y + SdlFontPixelScale(), pStr, nLen);
-	// 本体
-	ctx->textColor = (unsigned long)color;
-	SdlFontTextOut(hDC, x, y, pStr, nLen);
+	SdlFontTextOutFramed(hDC, x, y, pStr, nLen, (unsigned long)color, (unsigned long)colorFrame, false);
 }
 
 
@@ -120,32 +113,62 @@ void CLayerBase::TextOut3(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLO
 	if (ctx == NULL) return;
 	ctx->currentFont = (void*)hFont;
 
-	// 縁取り 20 方向
-	ctx->textColor = (unsigned long)colorFrame;
-	SdlFontTextOut(hDC, x - 2, y, pStr, nLen);
-	SdlFontTextOut(hDC, x - 1, y, pStr, nLen);
-	SdlFontTextOut(hDC, x - 1, y - 2, pStr, nLen);
-	SdlFontTextOut(hDC, x - 2, y - 1, pStr, nLen);
-	SdlFontTextOut(hDC, x - 1, y - 1, pStr, nLen);
-	SdlFontTextOut(hDC, x - 2, y + 1, pStr, nLen);
-	SdlFontTextOut(hDC, x - 1, y + 1, pStr, nLen);
-	SdlFontTextOut(hDC, x - 1, y + 2, pStr, nLen);
+	// 縁取り 8 方向（太め）
+	SdlFontTextOutFramed(hDC, x, y, pStr, nLen, (unsigned long)color, (unsigned long)colorFrame, true);
+}
 
-	SdlFontTextOut(hDC, x + 2, y, pStr, nLen);
-	SdlFontTextOut(hDC, x + 1, y, pStr, nLen);
-	SdlFontTextOut(hDC, x + 1, y - 2, pStr, nLen);
-	SdlFontTextOut(hDC, x + 2, y - 1, pStr, nLen);
-	SdlFontTextOut(hDC, x + 1, y - 1, pStr, nLen);
-	SdlFontTextOut(hDC, x + 2, y + 1, pStr, nLen);
-	SdlFontTextOut(hDC, x + 1, y + 1, pStr, nLen);
-	SdlFontTextOut(hDC, x + 1, y + 2, pStr, nLen);
 
-	SdlFontTextOut(hDC, x, y - 2, pStr, nLen);
-	SdlFontTextOut(hDC, x, y - 1, pStr, nLen);
-	SdlFontTextOut(hDC, x, y + 2, pStr, nLen);
-	SdlFontTextOut(hDC, x, y + 1, pStr, nLen);
+// キーの絵の高さと、操作案内 1 行の高さ
+#define KEYCAP_H	(20)
 
-	// 本体
-	ctx->textColor = (unsigned long)color;
-	SdlFontTextOut(hDC, x, y, pStr, nLen);
+int CLayerBase::DrawKeyCap(CImg32 *pDst, int x, int y, LPCTSTR pszKey)
+{
+	int nTextW, nTextH, cx;
+	HDC hDC;
+
+	nTextW = nTextH = 0;
+	SdlFontGetTextExtent((void *)m_hFont, pszKey, lstrlen(pszKey), &nTextW, &nTextH);
+	cx = max(nTextW + 8, KEYCAP_H);
+
+	// 1 ドットの黒い縁（角は落とす）、上に明るい線、下に影
+	pDst->FillRect(x + 2, y, cx - 4, KEYCAP_H, RGB(20, 20, 20));
+	pDst->FillRect(x, y + 2, cx, KEYCAP_H - 4, RGB(20, 20, 20));
+	pDst->FillRect(x + 2, y + 2, cx - 4, KEYCAP_H - 4, RGB(70, 70, 70));
+	pDst->FillRect(x + 4, y + 2, cx - 8, 2, RGB(101, 101, 101));
+	pDst->FillRect(x + 2, y + KEYCAP_H - 4, cx - 4, 2, RGB(45, 45, 45));
+
+	hDC = pDst->Lock();
+	TextOut1(hDC, m_hFont, x + (((cx - nTextW) / 2) & ~1), y + 2, pszKey, RGB(255, 255, 255));
+	pDst->Unlock();
+
+	return cx;
+}
+
+
+// pszKeys はキーの名前を半角スペースで区切って並べる（例: "← ↑ ↓ →"）
+void CLayerBase::DrawKeyHelp(CImg32 *pDst, int x, int y, LPCTSTR pszKeys, LPCTSTR pszText)
+{
+	CString strKeys, strKey;
+	int nStart, nPos;
+	HDC hDC;
+
+	x &= ~1;
+	y &= ~1;
+	strKeys = pszKeys;
+	nStart = 0;
+	while (nStart < strKeys.GetLength()) {
+		nPos = strKeys.Find(_T(' '), nStart);
+		if (nPos < 0) {
+			nPos = strKeys.GetLength();
+		}
+		strKey = strKeys.Mid(nStart, nPos - nStart);
+		if (strKey.IsEmpty() == FALSE) {
+			x += DrawKeyCap(pDst, x, y, strKey) + 2;
+		}
+		nStart = nPos + 1;
+	}
+
+	hDC = pDst->Lock();
+	TextOut2(hDC, m_hFont, x + 2, y + 2, pszText, RGB(1, 1, 1), RGB(255, 255, 255));
+	pDst->Unlock();
 }

@@ -22,6 +22,8 @@ public:
 
 
 private:
+	void	DrawCell(HDC hDC, int x, int y, int cx, int cxLabel, LPCTSTR pszLabel, LPCTSTR pszValue);	// 見出し付きの欄を描画
+	void	DrawTab(HDC hDC, int x, int y, LPCTSTR pszTitle);	// 区切りの見出しを描画
 	BOOL	OnX(BOOL bDown);	// キーハンドラ(X)
 	BOOL	OnZ(BOOL bDown);	// キーハンドラ(Z)
 	BOOL	OnJ(BOOL bDown);	// キーハンドラ(J)

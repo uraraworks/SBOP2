@@ -55,7 +55,7 @@ void CWindowMSG::Draw(PCImg32 pDst)
 	hDC	= m_pDib->Lock();
 
 	if (m_strMsg.IsEmpty() == FALSE) {
-		TextOut2(hDC, m_hFont, 16, 16 + nTmp, m_strMsg, RGB(1, 1, 1));
+		TextOut2(hDC, m_hFont, 16, 14 + nTmp, m_strMsg, RGB(1, 1, 1));
 	}
 
 	m_pDib->Unlock();
@@ -105,8 +105,8 @@ void CWindowMSG::SetMsg(LPCSTR pszMsg, DWORD dwTime, int nType)
 	if (nTextWidth <= 0) {
 		nTextWidth = m_strMsg.GetLength() * 8;
 	}
-	m_sizeWindow.cx = 16 * 2 + nTextWidth;
-	m_ptViewPos.x	= SCRSIZEX / 2 - m_sizeWindow.cx / 2;
+	m_sizeWindow.cx = WND_ALIGN8(16 * 2 + nTextWidth);
+	m_ptViewPos.x	= (SCRSIZEX / 2 - m_sizeWindow.cx / 2) & ~1;
 
 	if (nType == 4) {
 		m_ptViewPos.y = SCRSIZEY - 72;

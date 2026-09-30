@@ -12,6 +12,7 @@
 #include "MgrWindow.h"
 #include "MgrSound.h"
 #include "WindowCHAR_STATUS.h"
+#include "../Platform/SdlFont.h"
 
 
 CWindowCHAR_STATUS::CWindowCHAR_STATUS()
@@ -20,9 +21,9 @@ CWindowCHAR_STATUS::CWindowCHAR_STATUS()
 	m_bInput	= TRUE;
 	m_nID	= WINDOWTYPE_CHAR_STATUS;
 	m_ptViewPos.x	= 8 * 2;
-	m_ptViewPos.y	= 16 * 3;
-	m_sizeWindow.cx	= 16 * 2 + 8 * 22;
-	m_sizeWindow.cy	= 16 * 2 + 8 * 41;
+	m_ptViewPos.y	= 8 * 3;
+	m_sizeWindow.cx	= 16 * 2 + 8 * 24;
+	m_sizeWindow.cy	= 16 * 2 + 8 * 50;
 }
 
 
@@ -41,11 +42,17 @@ void CWindowCHAR_STATUS::Create(CMgrData *pMgrData)
 }
 
 
+// 1 行の高さと行送り（小さい文字 16px + 上下 2px）
+#define CHARSTATUS_CELL_H	(20)
+#define CHARSTATUS_ROW_H	(22)
+// 2 列に並べるときの欄の幅と右列の位置
+#define CHARSTATUS_COL_W	(96)
+#define CHARSTATUS_COL2_X	(12 + CHARSTATUS_COL_W + 8)
+
 void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
 {
 	int nLevel, x, y;
 	HDC hDC;
-	COLORREF clText;
 	PCInfoCharCli pInfoChar;
 	CmyString strTmp;
 
@@ -55,208 +62,87 @@ void CWindowCHAR_STATUS::Draw(PCImg32 pDst)
 
 	pInfoChar = m_pMgrData->GetPlayerChar();
 
-	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
 
 	DrawFrame(5);
-	DrawFrame(12, 7, 80, 24, 7);
-	TextOut2(hDC, m_hFont12,12 + 5, 7 + 4, _T("キャラ情報(J)"), RGB(255, 255, 255));
-	y = 8 * 3;
-	DrawFrame(4, y, 200, 64, 6);
-	y += 6;
-	x = 12;
-	DrawFrame(x, y, 184, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("名前"), RGB(255, 255, 255));
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)pInfoChar->m_strCharName, RGB(1, 1, 1));
-	y += 18;
-	DrawFrame(x, y, 120, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("職業"), RGB(255, 255, 255));
-	x = 12 + 8 * 16;
-	DrawFrame(x, y, 56, 16, 6);
-	DrawFrame(x, y, 32, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("LV"), RGB(255, 255, 255));
-	strTmp.Format(_T("%d"), pInfoChar->m_wLevel);
-	TextOut2(hDC, m_hFont12,x + 27, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	y += 18;
-	x = 12;
-	DrawFrame(x, y, 184, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("所属"), RGB(255, 255, 255));
 
-	y = 8 * 11 + 7;
-	x = 12;
-	DrawFrame(x, y, 48, 24, 7);
-	TextOut2(hDC, m_hFont12,x + 5, y + 4, _T("基本値"), RGB(255, 255, 255));
-	y += 16;
-	DrawFrame(4, y, 200, 64, 6);
-	y += 6;
-	x = 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5 + 3, y + 2, _T("HP"), RGB(255, 255, 255));
+	// キャラ情報
+	DrawTab(hDC, 12, 6, _T("キャラ情報(J)"));
+	y = 24;
+	DrawFrame(4, y, m_sizeWindow.cx - 8, 80, 6);
+	y += 8;
+	DrawCell(hDC, 12, y, 200, 44, _T("名前"), (LPCTSTR)pInfoChar->m_strCharName);
+	y += CHARSTATUS_ROW_H;
+	DrawCell(hDC, 12, y, 128, 44, _T("職業"), _T(""));
+	strTmp.Format(_T("%d"), pInfoChar->m_wLevel);
+	DrawCell(hDC, 12 + 128 + 8, y, 64, 24, _T("LV"), (LPCTSTR)strTmp);
+	y += CHARSTATUS_ROW_H;
+	DrawCell(hDC, 12, y, 200, 44, _T("所属"), _T(""));
+
+	// 基本値
+	y = 110;
+	DrawTab(hDC, 12, y, _T("基本値"));
+	y += 18;
+	DrawFrame(4, y, m_sizeWindow.cx - 8, 80, 6);
+	y += 8;
 	strTmp.Format(_T("%d"), pInfoChar->m_dwMaxHP);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	x = 12 + 8 * 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5 + 3, y + 2, _T("MP"), RGB(255, 255, 255));
+	DrawCell(hDC, 12, y, CHARSTATUS_COL_W, 44, _T("HP"), (LPCTSTR)strTmp);
 	strTmp.Format(_T("%d"), pInfoChar->m_dwMaxSP);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	y += 18;
-	x = 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5 + 6, y + 2, _T("力"), RGB(255, 255, 255));
+	DrawCell(hDC, CHARSTATUS_COL2_X, y, CHARSTATUS_COL_W, 44, _T("MP"), (LPCTSTR)strTmp);
+	y += CHARSTATUS_ROW_H;
 	strTmp.Format(_T("%d"), pInfoChar->m_wPower);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	x = 12 + 8 * 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("魔力"), RGB(255, 255, 255));
+	DrawCell(hDC, 12, y, CHARSTATUS_COL_W, 44, _T("力"), (LPCTSTR)strTmp);
 	strTmp.Format(_T("%d"), pInfoChar->m_wMagic);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	y += 18;
-	x = 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("体力"), RGB(255, 255, 255));
+	DrawCell(hDC, CHARSTATUS_COL2_X, y, CHARSTATUS_COL_W, 44, _T("魔力"), (LPCTSTR)strTmp);
+	y += CHARSTATUS_ROW_H;
 	strTmp.Format(_T("%d"), pInfoChar->m_wStrength);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	x = 12 + 8 * 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("器用"), RGB(255, 255, 255));
+	DrawCell(hDC, 12, y, CHARSTATUS_COL_W, 44, _T("体力"), (LPCTSTR)strTmp);
 	strTmp.Format(_T("%d"), pInfoChar->m_wSkillful);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
+	DrawCell(hDC, CHARSTATUS_COL2_X, y, CHARSTATUS_COL_W, 44, _T("器用"), (LPCTSTR)strTmp);
 
-	y += 8 * 4;
-	x = 12;
-	DrawFrame(x, y, 64, 24, 7);
-	TextOut2(hDC, m_hFont12,x + 5, y + 4, _T("ステータス"), RGB(255, 255, 255));
-	y += 16;
-	DrawFrame(4, y, 200, 152, 6);
-	y += 6;
-	x = 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("攻撃"), RGB(255, 255, 255));
+	// ステータス
+	y = 214;
+	DrawTab(hDC, 12, y, _T("ステータス"));
+	y += 18;
+	DrawFrame(4, y, m_sizeWindow.cx - 8, 192, 6);
+	y += 8;
 	strTmp.Format(_T("%d"), pInfoChar->m_wPAtack);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	x = 12 + 8 * 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("防御"), RGB(255, 255, 255));
+	DrawCell(hDC, 12, y, CHARSTATUS_COL_W, 44, _T("攻撃"), (LPCTSTR)strTmp);
 	strTmp.Format(_T("%d"), pInfoChar->m_wPDefense);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	y += 18;
-	x = 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("攻術"), RGB(255, 255, 255));
+	DrawCell(hDC, CHARSTATUS_COL2_X, y, CHARSTATUS_COL_W, 44, _T("防御"), (LPCTSTR)strTmp);
+	y += CHARSTATUS_ROW_H;
 	strTmp.Format(_T("%d"), pInfoChar->m_wAbillityAT);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	x = 12 + 8 * 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("防術"), RGB(255, 255, 255));
+	DrawCell(hDC, 12, y, CHARSTATUS_COL_W, 44, _T("攻術"), (LPCTSTR)strTmp);
 	strTmp.Format(_T("%d"), pInfoChar->m_wAbillityDF);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	y += 18;
-	x = 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("魔攻"), RGB(255, 255, 255));
+	DrawCell(hDC, CHARSTATUS_COL2_X, y, CHARSTATUS_COL_W, 44, _T("防術"), (LPCTSTR)strTmp);
+	y += CHARSTATUS_ROW_H;
 	strTmp.Format(_T("%d"), pInfoChar->m_wPMagic);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	x = 12 + 8 * 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("魔防"), RGB(255, 255, 255));
+	DrawCell(hDC, 12, y, CHARSTATUS_COL_W, 44, _T("魔攻"), (LPCTSTR)strTmp);
 	strTmp.Format(_T("%d"), pInfoChar->m_wPMagicDefense);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	y += 18;
-	x = 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("命中"), RGB(255, 255, 255));
+	DrawCell(hDC, CHARSTATUS_COL2_X, y, CHARSTATUS_COL_W, 44, _T("魔防"), (LPCTSTR)strTmp);
+	y += CHARSTATUS_ROW_H;
 	strTmp.Format(_T("%d%%"), pInfoChar->m_wPHitAverage);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	x = 12 + 8 * 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("回避"), RGB(255, 255, 255));
+	DrawCell(hDC, 12, y, CHARSTATUS_COL_W, 44, _T("命中"), (LPCTSTR)strTmp);
 	strTmp.Format(_T("%d%%"), pInfoChar->m_wPAvoidAverage);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	y += 18;
-	x = 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5, y + 2, _T("必殺"), RGB(255, 255, 255));
+	DrawCell(hDC, CHARSTATUS_COL2_X, y, CHARSTATUS_COL_W, 44, _T("回避"), (LPCTSTR)strTmp);
+	y += CHARSTATUS_ROW_H;
 	strTmp.Format(_T("%d%%"), pInfoChar->m_wPCriticalAverage);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	y += 18;
-	x = 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5 + 6, y + 2, _T("火"), RGB(255, 255, 255));
+	DrawCell(hDC, 12, y, CHARSTATUS_COL_W, 44, _T("必殺"), (LPCTSTR)strTmp);
+	y += CHARSTATUS_ROW_H;
 	strTmp.Format(_T("%d%%"), pInfoChar->m_wAttrFire);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	x = 12 + 8 * 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5 + 6, y + 2, _T("水"), RGB(255, 255, 255));
+	DrawCell(hDC, 12, y, CHARSTATUS_COL_W, 44, _T("火"), (LPCTSTR)strTmp);
 	strTmp.Format(_T("%d%%"), pInfoChar->m_wAttrWater);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	y += 18;
-	x = 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5 + 6, y + 2, _T("風"), RGB(255, 255, 255));
+	DrawCell(hDC, CHARSTATUS_COL2_X, y, CHARSTATUS_COL_W, 44, _T("水"), (LPCTSTR)strTmp);
+	y += CHARSTATUS_ROW_H;
 	strTmp.Format(_T("%d%%"), pInfoChar->m_wAttrWind);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	x = 12 + 8 * 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5 + 6, y + 2, _T("土"), RGB(255, 255, 255));
+	DrawCell(hDC, 12, y, CHARSTATUS_COL_W, 44, _T("風"), (LPCTSTR)strTmp);
 	strTmp.Format(_T("%d%%"), pInfoChar->m_wAttrEarth);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	y += 18;
-	x = 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5 + 6, y + 2, _T("光"), RGB(255, 255, 255));
+	DrawCell(hDC, CHARSTATUS_COL2_X, y, CHARSTATUS_COL_W, 44, _T("土"), (LPCTSTR)strTmp);
+	y += CHARSTATUS_ROW_H;
 	strTmp.Format(_T("%d%%"), pInfoChar->m_wAttrLight);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-	x = 12 + 8 * 12;
-	DrawFrame(x, y, 8 * 11, 16, 6);
-	DrawFrame(x, y, 40, 16, 7, TRUE);
-	TextOut2(hDC, m_hFont12,x + 5 + 6, y + 2, _T("闇"), RGB(255, 255, 255));
+	DrawCell(hDC, 12, y, CHARSTATUS_COL_W, 44, _T("光"), (LPCTSTR)strTmp);
 	strTmp.Format(_T("%d%%"), pInfoChar->m_wAttrDark);
-	TextOut2(hDC, m_hFont12,x + 35, y + 2, (LPCTSTR)strTmp, RGB(1, 1, 1));
-
-
-
-#if 0
-	y = 0;
-	TextOut2(hDC, m_hFont12,16, 12 + 12 * y, (LPCTSTR)pInfoChar->m_strCharName, clText);
-	y ++;
-	strTmp = "レベル";
-	TextOut2(hDC, m_hFont12,16, 16 + 12 * y, (LPCTSTR)strTmp, clText);
-	strTmp.Format(_T("%d"), pInfoChar->m_wLevel);
-	TextOut2(hDC, m_hFont12,16 + 12 * 7, 16 + 12 * y, (LPCTSTR)strTmp, clText);
-	y ++;
-	strTmp = "HP";
-	TextOut2(hDC, m_hFont12,16, 16 + 12 * y, (LPCTSTR)strTmp, clText);
-	strTmp.Format(_T("%d"), pInfoChar->m_dwHP);
-	TextOut2(hDC, m_hFont12,16 + 12 * 7, 16 + 12 * y, (LPCTSTR)strTmp, clText);
-	y ++;
-	strTmp = "SP";
-	TextOut2(hDC, m_hFont12,16, 16 + 12 * y, (LPCTSTR)strTmp, clText);
-	strTmp.Format(_T("%d"), pInfoChar->m_dwSP);
-	TextOut2(hDC, m_hFont12,16 + 12 * 7, 16 + 12 * y, (LPCTSTR)strTmp, clText);
-#endif
+	DrawCell(hDC, CHARSTATUS_COL2_X, y, CHARSTATUS_COL_W, 44, _T("闇"), (LPCTSTR)strTmp);
 
 	m_pDib->Unlock();
 
@@ -268,6 +154,36 @@ Exit:
 		nLevel = 60;
 	}
 	pDst->BltLevel(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, nLevel, TRUE);
+}
+
+
+void CWindowCHAR_STATUS::DrawCell(HDC hDC, int x, int y, int cx, int cxLabel, LPCTSTR pszLabel, LPCTSTR pszValue)
+{
+	int nTextW, nTextH;
+
+	DrawFrame(x, y, cx, CHARSTATUS_CELL_H, 6);
+	// 右端を消す描き方だと 8px 手前で切れて細い線が残るので、右も角丸で描く
+	DrawFrame(x, y, cxLabel, CHARSTATUS_CELL_H, 7);
+
+	// 見出しは欄の中央にそろえる（2 ドット単位）
+	nTextW = nTextH = 0;
+	SdlFontGetTextExtent((void *)m_hFont12, pszLabel, (int)_tcslen(pszLabel), &nTextW, &nTextH);
+	TextOut2(hDC, m_hFont12, x + ((cxLabel - nTextW) / 2 & ~1), y + 2, pszLabel, RGB(255, 255, 255));
+	if (pszValue[0] != 0) {
+		TextOut2(hDC, m_hFont12, x + cxLabel + 4, y + 2, pszValue, RGB(1, 1, 1));
+	}
+}
+
+
+void CWindowCHAR_STATUS::DrawTab(HDC hDC, int x, int y, LPCTSTR pszTitle)
+{
+	int nTextW, nTextH;
+
+	nTextW = nTextH = 0;
+	SdlFontGetTextExtent((void *)m_hFont12, pszTitle, (int)_tcslen(pszTitle), &nTextW, &nTextH);
+	DrawFrame(x, y, WND_ALIGN8(nTextW + 16), 24, 7);
+	// 見出しの文字は下の枠に隠れないよう上に寄せる
+	TextOut2(hDC, m_hFont12, x + 8, y + 2, pszTitle, RGB(255, 255, 255));
 }
 
 

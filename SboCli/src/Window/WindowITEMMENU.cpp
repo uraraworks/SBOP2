@@ -71,11 +71,11 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 
 	m_strName.Empty();
 	DrawFrame(5);
-	DrawFrame(11, 7, 32 + 4, 24, 7);
+	DrawFrame(10, 6, 48, 24, 7);
 	DrawFrame(4, 24, 120, 104, 6);
 	DrawFrame(146, 24, 48, 104, 6);
-	DrawFrame(11, 134, 104, 24, 7);
-	DrawFrame(4, 149, 208, 248, 6);
+	DrawFrame(10, 130, 104, 24, 7);
+	DrawFrame(4, 148, 208, 248, 6);
 
 	for (y = 0; y < 2; y ++) {
 		for (x = 0; x < 3; x ++) {
@@ -98,8 +98,8 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	DrawEquip(3, m_pPlayerChar->m_dwEquipItemIDArmsLeft);	// 盾
 
 	hDC	= m_pDib->Lock();
-	TextOut2(hDC, m_hFont12, 12 + 5, 7 + 4, _T("装備"), RGB(255, 255, 255));
-	TextOut2(hDC, m_hFont12, 12 + 5, 134 + 3, _T("バッグ(B)"), RGB(255, 255, 255));
+	TextOut2(hDC, m_hFont12, 10 + 8, 6 + 2, _T("装備"), RGB(255, 255, 255));
+	TextOut2(hDC, m_hFont12, 10 + 8, 130 + 2, _T("バッグ(B)"), RGB(255, 255, 255));
 
 	m_pDib->Unlock();
 
@@ -154,6 +154,8 @@ Exit:
 		GetDrawPos(m_nPos, x, y);
 		x = m_ptViewPos.x + 32 + x - 8;
 		y = m_ptViewPos.y + 32 + y - 24;
+		x &= ~1;
+		y &= ~1;
 
 		// SdlFontGetTextExtent でフォント直接計測
 		int textW = 0, textH = 0;

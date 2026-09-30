@@ -88,7 +88,8 @@ enum {
 
 CWindowTEXTMSG::CWindowTEXTMSG()
 {
-	m_nSpaceHeight	= 16 * 3;
+	// 名前枠（題名＋名前の 2 行）が上にはみ出さない高さ
+	m_nSpaceHeight	= 16 + TITLE_LINE_HEIGHT * 2;
 
 	m_nID	= WINDOWTYPE_TEXTMSG;
 	m_bInput	= TRUE;
@@ -132,7 +133,7 @@ void CWindowTEXTMSG::Create(CMgrData *pMgrData)
 	m_pDib->SetColorKey(0);
 
 	m_pDibTitle = new CImg32;
-	m_pDibTitle->Create(16 * 6, 16 * 2);
+	m_pDibTitle->Create(16 * 6, TITLE_LINE_HEIGHT * 2);
 	m_pDibText = new CImg32;
 	m_pDibText->Create(m_sizeWindow.cx - 16 * 2 + 2, m_sizeWindow.cy - 16 * 2 - m_nSpaceHeight + 2);
 }
@@ -174,10 +175,10 @@ void CWindowTEXTMSG::Draw(PCImg32 pDst)
 			// 名前枠の幅はSTATE_MENU側と同じ+16*2に揃える(+8*2だと右8pxが枠線にかぶり、
 			// 不透明化した枠線がm_pDibTitleの縁取りを上書きしてしまう)
 			cx = m_pDibTitle->Width() + 16 * 2;
-			cy = 16 * (2 + nTmp);
-			x = sizeWindow.cx / 2 - cx / 2;
+			cy = 16 * 2 + TITLE_LINE_HEIGHT * nTmp;
+			x = (sizeWindow.cx / 2 - cx / 2) & ~1;
 			// 名前枠の下端が本文枠の上端から16px下に来るよう、m_nSpaceHeight基準で位置決めする
-			y = m_nSpaceHeight - 16 * (nTmp + 1);
+			y = m_nSpaceHeight + 16 - cy;
 			DrawFrame(x, y, cx, cy, m_nType);
 			// 名前枠の下線(枠線8px)を上書きしないよう、貼り付け高さを枠内側に収める
 			m_pDib->Blt(x + 16, y + 16, m_pDibTitle->Width(), min(m_pDibTitle->Height(), cy - 16 - 8), m_pDibTitle, 0, 0, TRUE);
@@ -216,7 +217,7 @@ void CWindowTEXTMSG::ComputeMenuBoxSize(int *pnWidth, int *pnHeight)
 
 	*pnWidth = nWidthMax + 24 + 16 * 2;
 	*pnWidth = ((*pnWidth + 15) / 16) * 16;
-	*pnHeight = nCount * 16 + 32;
+	*pnHeight = nCount * WND_LINE_H + 32;
 }
 
 
@@ -271,11 +272,11 @@ void CWindowTEXTMSG::DrawMenuBox(const SIZE &sizeWindow)
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
 	for (i = 0; i < nCount; i ++) {
-		TextOut2(hDC, m_hFont16Normal, x + 32, y + 16 + i * 16, (LPCTSTR)m_astrMenu[i], clText);
+		TextOut2(hDC, m_hFont16Normal, x + 32, WND_TEXT_Y(i) + y, (LPCTSTR)m_astrMenu[i], clText);
 	}
 	m_pDib->Unlock();
 
-	DrawCursor(x + 8, y + 16 + 16 * m_nPos);
+	DrawCursor(x + 8, WND_LINE_Y(m_nPos) + y);
 }
 
 
@@ -466,7 +467,7 @@ void CWindowTEXTMSG::SetName(LPCSTR pszName)
 	nWidth = max(nWidth, 16 * 6);
 
 	m_pDibTitle->Destroy();
-	m_pDibTitle->Create(nWidth, 16 * 2);
+	m_pDibTitle->Create(nWidth, TITLE_LINE_HEIGHT * 2);
 	RenewTitle();
 	Redraw();
 }
@@ -711,25 +712,25 @@ void CWindowTEXTMSG::RenewTitle(void)
 
 	hDC	= m_pDibTitle->Lock();
 
-	y = 1;
+	y = 2;
 	clText  = RGB(255, 255, 255);
 	clFrame = RGB(1, 1, 1);
 	if (m_strTitle.GetLength() > 0) {
 		textW = textH = 0;
 		SdlFontGetTextExtent((void*)m_hFont16, (LPCTSTR)m_strTitle, m_strTitle.GetLength(), &textW, &textH);
 		x = (m_pDibTitle->Width() - textW) / 2;
-		if (x < 1) {
-			x = 1;
+		if (x < 2) {
+			x = 2;
 		}
-		TextOut2(hDC, m_hFont16, x, 1, (LPCTSTR)m_strTitle, clText, TRUE, clFrame);
-		y += 16;
+		TextOut2(hDC, m_hFont16, x, y, (LPCTSTR)m_strTitle, clText, TRUE, clFrame);
+		y += TITLE_LINE_HEIGHT;
 	}
 	if (m_strName.GetLength() > 0) {
 		textW = textH = 0;
 		SdlFontGetTextExtent((void*)m_hFont16, (LPCTSTR)m_strName, m_strName.GetLength(), &textW, &textH);
 		x = (m_pDibTitle->Width() - textW) / 2;
-		if (x < 1) {
-			x = 1;
+		if (x < 2) {
+			x = 2;
 		}
 		TextOut2(hDC, m_hFont16, x, y, (LPCTSTR)m_strName, clText, TRUE, clFrame);
 	}

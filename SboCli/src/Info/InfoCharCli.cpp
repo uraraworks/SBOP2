@@ -939,22 +939,22 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 	// 直接使って描画し、幅も文字数ベースで計算する。
 	LPCTSTR pszWide = (LPCTSTR)m_strCharName;
 	int nDrawLen = (pszWide != NULL) ? static_cast<int>(_tcslen(pszWide)) : 0;
-	// 幅は 12px/文字（Win32 の 2byte/文字 * 6px と同等）
-	int nNameW = nDrawLen * 12 + 2;
-	// 【試作】ピクセルフォント(2倍)は 1 文字 16px・縁取り 2px
-	const int k = SdlFontPixelScale();
-	if (k > 1) {
-		nNameW = nDrawLen * 16 + 4;
+	// 文字列の幅はフォントで実測する。縁取りの 1 ドット(2px)ぶんを左右上下に足す
+	const int nDot = SdlFontPixelScale();
+	int nTextW = 0, nTextH = 16;
+	if (nDrawLen > 0) {
+		SdlFontGetTextExtent((void*)m_hFont, pszWide, nDrawLen, &nTextW, &nTextH);
 	}
+	int nNameW = nTextW + nDot * 2;
 
 	m_pDibName = new CImg32;
-	m_pDibName->Create(nNameW + (nCount * 16), (k > 1) ? 20 : 16);
+	m_pDibName->Create(nNameW + (nCount * 16), max(nTextH + nDot * 2, 18));
 	m_pDibName->Clear();
 
 	hDCTmp = m_pDibName->Lock();
 
 	for (i = 0; i < nCount; i ++) {
-		m_pDibName->BltFrom256(x, 1, 16, 16, pDibSystem, 176 + (m_abyMark[i] - 1) * 16, 0, TRUE);
+		m_pDibName->BltFrom256(x, 2, 16, 16, pDibSystem, 176 + (m_abyMark[i] - 1) * 16, 0, TRUE);
 		x += 16;
 	}
 
@@ -962,15 +962,8 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 		SdlDCContext* ctx = SdlDCGet(hDCTmp);
 		if (ctx) {
 			ctx->currentFont = (void*)m_hFont;
-			// 縁取り 4 方向
-			ctx->textColor = (unsigned long)RGB(10, 10, 10);
-			SdlFontTextOut(hDCTmp, x + 0, 2 * k, pszWide, nDrawLen);
-			SdlFontTextOut(hDCTmp, x + 2 * k, 2 * k, pszWide, nDrawLen);
-			SdlFontTextOut(hDCTmp, x + k, k, pszWide, nDrawLen);
-			SdlFontTextOut(hDCTmp, x + k, 3 * k, pszWide, nDrawLen);
-			// 本体
-			ctx->textColor = (unsigned long)m_clName;
-			SdlFontTextOut(hDCTmp, x + k, 2 * k, pszWide, nDrawLen);
+			SdlFontTextOutFramed(hDCTmp, x + nDot, nDot, pszWide, nDrawLen,
+				(unsigned long)m_clName, (unsigned long)RGB(10, 10, 10), false);
 		}
 	}
 
@@ -1001,8 +994,11 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 
 	// 1 行あたり 10 全角文字（= 20 半角相当）なので wchar_t で 10 文字単位に分割する
 	const int CHARS_PER_LINE = 10;
+	// 1 行の高さは文字 16px + 縁取り上下 1 ドットずつ
+	const int nDot = SdlFontPixelScale();
+	const int nLineH = 16 + nDot * 2;
 
-	// 画像作成準備
+	// 画像作成準備（幅は全角 16px/文字 + 縁取り左右 1 ドットずつ）
 	nPos	= 0;
 	nLine	= 0;
 	nWidth	= (nLen > CHARS_PER_LINE) ? CHARS_PER_LINE : nLen;
@@ -1010,14 +1006,7 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 	nHeight = max(nHeight, 1);
 
 	m_pDibSpeak = new CImg32;
-	// 【試作】ピクセルフォント(2倍)は 1 文字 16px・1 行 18px
-	const int k = SdlFontPixelScale();
-	const int nLineH = (k > 1) ? 18 : 14;
-	if (k > 1) {
-		m_pDibSpeak->Create(nWidth * 16 + 4, nHeight * nLineH);
-	} else {
-		m_pDibSpeak->Create((nWidth * 2 + 1) * 6 + 2, nHeight * 14);
-	}
+	m_pDibSpeak->Create(nWidth * 16 + nDot * 2, nHeight * nLineH);
 	m_pDibSpeak->Clear();
 
 	hDCTmp = m_pDibSpeak->Lock();
@@ -1031,15 +1020,8 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 		SdlDCContext* ctx = SdlDCGet(hDCTmp);
 		if (ctx) {
 			ctx->currentFont = (void*)m_hFont;
-			// 縁取り 4 方向
-			ctx->textColor = (unsigned long)RGB(10, 10, 10);
-			SdlFontTextOut(hDCTmp, 0, k + nLine * nLineH, pLine, nChunk);
-			SdlFontTextOut(hDCTmp, 2 * k, k + nLine * nLineH, pLine, nChunk);
-			SdlFontTextOut(hDCTmp, k, 0 + nLine * nLineH, pLine, nChunk);
-			SdlFontTextOut(hDCTmp, k, 2 * k + nLine * nLineH, pLine, nChunk);
-			// 本体
-			ctx->textColor = (unsigned long)m_clSpeak;
-			SdlFontTextOut(hDCTmp, k, k + nLine * nLineH, pLine, nChunk);
+			SdlFontTextOutFramed(hDCTmp, nDot, nDot + nLine * nLineH, pLine, nChunk,
+				(unsigned long)m_clSpeak, (unsigned long)RGB(10, 10, 10), false);
 		}
 		nPos += nChunk;
 		nLine ++;

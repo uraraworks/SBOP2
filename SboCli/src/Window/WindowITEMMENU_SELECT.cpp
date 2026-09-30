@@ -22,8 +22,8 @@ CWindowITEMMENU_SELECT::CWindowITEMMENU_SELECT()
 	m_nID	= WINDOWTYPE_ITEMMENU_SELECT;
 	m_ptViewPos.x	= 80;
 	m_ptViewPos.y	= 112;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 6;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 1;
+	m_sizeWindow.cx	= WND_ALIGN8(32 + WND_CHAR_W * 5 + 16);
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 1;
 
 	m_nType	= -1;
 	m_pInfoItem	= NULL;
@@ -75,12 +75,12 @@ void CWindowITEMMENU_SELECT::Draw(PCImg32 pDst)
 		case ITEMMENU_SELECT_COMMAND_EQUIP_UNSET:	pszTmp = _T("装備を外す");	break;	// 装備を外す
 		case ITEMMENU_SELECT_COMMAND_USE:	pszTmp = _T("使う");	break;	// 使う
 		}
-		TextOut2(hDC, m_hFont, 32, 16 + 16 * i, pszTmp, clText);
+		TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(i), pszTmp, clText);
 	}
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:
@@ -128,7 +128,7 @@ void CWindowITEMMENU_SELECT::SetItemID(int nType, DWORD dwItemID)
 	if (nPosMaxBack != m_nPosMax) {
 		m_pDib->Destroy();
 		// サイズが変わったので画像再作成
-		m_sizeWindow.cy	= 16 * 2 + 16 * (m_nPosMax + 1);
+		m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * (m_nPosMax + 1);
 		m_pDib->Create(m_sizeWindow.cx, m_sizeWindow.cy);
 		m_pDib->SetColorKey(0);
 		m_dwTimeDrawStart = 0;

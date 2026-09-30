@@ -20,8 +20,8 @@ CWindowOPTION::CWindowOPTION()
 	m_nID	= WINDOWTYPE_OPTION;
 	m_ptViewPos.x	= 8 * 9;
 	m_ptViewPos.y	= 16 * 6;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 6;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 4;
+	m_sizeWindow.cx	= 32 + WND_CHAR_W * 4 + 16;
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 4;
 }
 
 
@@ -56,14 +56,14 @@ void CWindowOPTION::Draw(PCImg32 pDst)
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
 
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("表示設定"),	clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("音量設定"),	clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 2, _T("入力設定"),	clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 3, _T("動作設定"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("表示設定"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(1), _T("音量設定"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(2), _T("入力設定"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(3), _T("動作設定"),	clText);
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

@@ -20,8 +20,8 @@ CWindowOPTION_VIEWSET::CWindowOPTION_VIEWSET()
 	m_nID	= WINDOWTYPE_OPTION_VIEWSET;
 	m_ptViewPos.x	= 8 * 13;
 	m_ptViewPos.y	= 16 * 8;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 16 + 8;
-	m_sizeWindow.cy	= 16 * 2 + 16 * (m_nPosMax + 1);
+	m_sizeWindow.cx	= WND_ALIGN8(32 + 24 + WND_CHAR_W * 13 + 16);
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * (m_nPosMax + 1);
 }
 
 
@@ -66,23 +66,23 @@ void CWindowOPTION_VIEWSET::Draw(PCImg32 pDst)
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
 
-	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 0, _T("発言時にタスクバーチカチカ"),	clText);
-	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 1, _T("名前を表示する"),	clText);
-	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 2, _T("発言を表示する"),	clText);
-	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 3, _T("アイテムを表示する"),	clText);
-	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 4, _T("アイテム名を表示する"),	clText);
-	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 5, _T("ヘルプアイコンを表示する"),	clText);
-	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 6, _T("戦闘メッセージをログに残す"),	clText);
-	TextOut2(hDC, m_hFont, 32 + 24, 16 + 16 * 7, _T("60フレームで表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, WND_TEXT_Y(0), _T("発言時にタスクバーチカチカ"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, WND_TEXT_Y(1), _T("名前を表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, WND_TEXT_Y(2), _T("発言を表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, WND_TEXT_Y(3), _T("アイテムを表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, WND_TEXT_Y(4), _T("アイテム名を表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, WND_TEXT_Y(5), _T("ヘルプアイコンを表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, WND_TEXT_Y(6), _T("戦闘メッセージをログに残す"),	clText);
+	TextOut2(hDC, m_hFont, 32 + 24, WND_TEXT_Y(7), _T("60フレームで表示する"),	clText);
 
 	m_pDib->Unlock();
 
 	nCount = m_adwCheckTime.size();
 	for (i = 0; i < nCount; i ++) {
-		m_pDib->BltFrom256(32, 16 + 16 * i, 16, 16, m_pDibSystem, m_anCheck[i], 0, TRUE);
+		m_pDib->BltFrom256(32, WND_LINE_Y(i) + 4, 16, 16, m_pDibSystem, m_anCheck[i], 0, TRUE);
 	}
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:
