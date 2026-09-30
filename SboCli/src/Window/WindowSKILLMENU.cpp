@@ -89,7 +89,7 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 
 	for (y = 0; y < 5; y ++) {
 		for (x = 0; x < 5; x ++) {
-			DrawIconFrame(12 + 36 * x, 32 + 47 * y);
+			DrawIconFrame(12 + 36 * x, 32 + ICONFRAME_STEP_Y * y);
 		}
 	}
 
@@ -391,6 +391,6 @@ void CWindowSKILLMENU::GetDrawPos(
 	int &nDstX,	// [out] X座標
 	int &nDstY)
 {
-	nDstX = 13 + 36 * (nPos % 5);
-	nDstY = 33 + 47 * (nPos / 5);
+	nDstX = 14 + 36 * (nPos % 5);
+	nDstY = 34 + ICONFRAME_STEP_Y * (nPos / 5);
 }

@@ -79,15 +79,15 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 
 	for (y = 0; y < 2; y ++) {
 		for (x = 0; x < 3; x ++) {
-			DrawIconFrame(12 + 36 * x, 31 + 47 * y);
+			DrawIconFrame(12 + 36 * x, 30 + ICONFRAME_STEP_Y * y);
 		}
 	}
 	for (y = 0; y < 2; y ++) {
-		DrawIconFrame(153, 31 + 47 * y);
+		DrawIconFrame(152, 30 + ICONFRAME_STEP_Y * y);
 	}
 	for (y = 0; y < 5; y ++) {
 		for (x = 0; x < 5; x ++) {
-			DrawIconFrame(12 + 36 * x, 158 + 47 * y);
+			DrawIconFrame(12 + 36 * x, 158 + ICONFRAME_STEP_Y * y);
 		}
 	}
 
@@ -117,7 +117,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 		if ((m_ptDrag.x == x) && (m_ptDrag.y == y)) {
 			pIntoItemDrag = pInfoItem;
 		}
-		m_pMgrDraw->DrawItem(m_pDib, 12 + (x * 36), 159 + (y * 47), pInfoItem);
+		m_pMgrDraw->DrawItem(m_pDib, 14 + (x * 36), 160 + (y * ICONFRAME_STEP_Y), pInfoItem);
 		if (m_strName.IsEmpty() == FALSE) {
 			continue;
 		}
@@ -131,7 +131,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	if (pIntoItemDrag) {
 		x = (m_nPos - EQUIPTYPE_MAX) % 5;
 		y = (m_nPos - EQUIPTYPE_MAX) / 5;
-		m_pMgrDraw->DrawItem(m_pDib, 12 + (x * 36), 159 + (y * 47), pIntoItemDrag, 50);
+		m_pMgrDraw->DrawItem(m_pDib, 14 + (x * 36), 160 + (y * ICONFRAME_STEP_Y), pIntoItemDrag, 50);
 	}
 
 	GetDrawPos(m_nPos, x, y);
@@ -430,8 +430,8 @@ void CWindowITEMMENU::DrawEquip(
 	if (pInfoItem == NULL) {
 		return;
 	}
-	x = 12 + 36 * anDrawInfo[nType * 3 + 0];
-	y = 32 + 47 * anDrawInfo[nType * 3 + 1];
+	x = 14 + 36 * anDrawInfo[nType * 3 + 0];
+	y = 32 + ICONFRAME_STEP_Y * anDrawInfo[nType * 3 + 1];
 	m_pMgrDraw->DrawItem(m_pDib, x, y, pInfoItem);
 	if (m_nPos == anDrawInfo[nType * 3 + 2]) {
 		// 装備中のアイテムなのでアイテム名を更新
@@ -446,10 +446,10 @@ void CWindowITEMMENU::GetDrawPos(
 	int &nDstY)
 {
 	if (nPos < EQUIPTYPE_MAX) {
-		nDstX = 36 * (nPos % 3) + 12 + 1;
-		nDstY = 47 * (nPos / 3) + 32 + 1;
+		nDstX = 36 * (nPos % 3) + 14;
+		nDstY = ICONFRAME_STEP_Y * (nPos / 3) + 32;
 	} else {
-		nDstX = 36 * ((nPos - EQUIPTYPE_MAX) % 5) + 1 + 1;
-		nDstY = 47 * ((nPos - EQUIPTYPE_MAX) / 5) + 159 + 1;
+		nDstX = 36 * ((nPos - EQUIPTYPE_MAX) % 5) + 2;
+		nDstY = ICONFRAME_STEP_Y * ((nPos - EQUIPTYPE_MAX) / 5) + 160;
 	}
 }

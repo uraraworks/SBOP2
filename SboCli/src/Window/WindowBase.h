@@ -26,6 +26,7 @@ class ILoginWindow;
 #define WND_CHAR_W		(20)						// 中の文字の全角 1 文字の幅
 #define WND_SMALL_CHAR_W	(16)					// 小の文字の全角 1 文字の幅
 #define WND_ALIGN8(v)	(((v) + 7) & ~7)			// 枠は 8px 単位で描くので、ウィンドウの大きさは 8 の倍数にそろえる
+#define ICONFRAME_STEP_Y	(46)			// アイテム・スキルのマス（幅 36 × 高さ 46、中の 32x32 に絵を置く）を縦に並べる間隔
 
 typedef class CWindowBase
 {

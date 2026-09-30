@@ -834,5 +834,8 @@ void CWindowBase::DrawInputFrame1(int x, int y, int cx, int cy, int nType)
 
 void CWindowBase::DrawIconFrame(int x, int y)
 {
-	m_pDib->BltFrom256(x, y, 34, 45, m_pDibSystem, 0, 883, TRUE);
+	// 1 ドット = 2px の枠で描く（茶色の縁と下の帯、中は 32x32 の絵を置く場所）
+	m_pDib->FillRect(x + 2, y, 32, 46, RGB(196, 140, 81));
+	m_pDib->FillRect(x, y + 2, 36, 42, RGB(196, 140, 81));
+	m_pDib->FillRect(x + 2, y + 2, 32, 32, RGB(255, 235, 200));
 }

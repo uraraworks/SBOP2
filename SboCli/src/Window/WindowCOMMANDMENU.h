@@ -36,5 +36,6 @@ protected:
 
 protected:
 	int	m_nPosSub;	// サブメニューの位置
+	CImg32	*m_pDibSmall;	// 元の大きさで描く下書き（2 倍に拡大して表示する）
 	CmyString	m_strCommand;	// 選択中のコマンド
 } CWindowCOMMANDMENU, *PCWindowCOMMANDMENU;
