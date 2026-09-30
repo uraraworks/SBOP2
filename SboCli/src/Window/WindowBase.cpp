@@ -463,10 +463,10 @@ void CWindowBase::TextOut2(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COL
 	// 縁取りする？
 	if (bDraw) {
 		ctx->textColor = (unsigned long)ColorFrame;
-		SdlFontTextOut(hDC, x - 1, y, pStr, nLen);
-		SdlFontTextOut(hDC, x + 1, y, pStr, nLen);
-		SdlFontTextOut(hDC, x, y - 1, pStr, nLen);
-		SdlFontTextOut(hDC, x, y + 1, pStr, nLen);
+		SdlFontTextOut(hDC, x - SdlFontPixelScale(), y, pStr, nLen);
+		SdlFontTextOut(hDC, x + SdlFontPixelScale(), y, pStr, nLen);
+		SdlFontTextOut(hDC, x, y - SdlFontPixelScale(), pStr, nLen);
+		SdlFontTextOut(hDC, x, y + SdlFontPixelScale(), pStr, nLen);
 	}
 	// 本体
 	ctx->textColor = (unsigned long)Color;
@@ -492,10 +492,10 @@ void CWindowBase::TextOut3(HDC hDC, HFONT hFont, int x, int y, int cx, int cy, L
 
 	// 縁取り 4 方向
 	ctx->textColor = (unsigned long)RGB(10, 10, 10);
-	SdlFontTextOut(hDC, drawX - 1, drawY, pStr, nLen);
-	SdlFontTextOut(hDC, drawX + 1, drawY, pStr, nLen);
-	SdlFontTextOut(hDC, drawX, drawY - 1, pStr, nLen);
-	SdlFontTextOut(hDC, drawX, drawY + 1, pStr, nLen);
+	SdlFontTextOut(hDC, drawX - SdlFontPixelScale(), drawY, pStr, nLen);
+	SdlFontTextOut(hDC, drawX + SdlFontPixelScale(), drawY, pStr, nLen);
+	SdlFontTextOut(hDC, drawX, drawY - SdlFontPixelScale(), pStr, nLen);
+	SdlFontTextOut(hDC, drawX, drawY + SdlFontPixelScale(), pStr, nLen);
 	// 本体
 	ctx->textColor = (unsigned long)Color;
 	SdlFontTextOut(hDC, drawX, drawY, pStr, nLen);

@@ -100,10 +100,10 @@ void CLayerBase::TextOut2(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLO
 
 	// 縁取り 4 方向
 	ctx->textColor = (unsigned long)colorFrame;
-	SdlFontTextOut(hDC, x - 1, y, pStr, nLen);
-	SdlFontTextOut(hDC, x + 1, y, pStr, nLen);
-	SdlFontTextOut(hDC, x, y - 1, pStr, nLen);
-	SdlFontTextOut(hDC, x, y + 1, pStr, nLen);
+	SdlFontTextOut(hDC, x - SdlFontPixelScale(), y, pStr, nLen);
+	SdlFontTextOut(hDC, x + SdlFontPixelScale(), y, pStr, nLen);
+	SdlFontTextOut(hDC, x, y - SdlFontPixelScale(), pStr, nLen);
+	SdlFontTextOut(hDC, x, y + SdlFontPixelScale(), pStr, nLen);
 	// 本体
 	ctx->textColor = (unsigned long)color;
 	SdlFontTextOut(hDC, x, y, pStr, nLen);

@@ -941,9 +941,14 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 	int nDrawLen = (pszWide != NULL) ? static_cast<int>(_tcslen(pszWide)) : 0;
 	// 幅は 12px/文字（Win32 の 2byte/文字 * 6px と同等）
 	int nNameW = nDrawLen * 12 + 2;
+	// 【試作】ピクセルフォント(2倍)は 1 文字 16px・縁取り 2px
+	const int k = SdlFontPixelScale();
+	if (k > 1) {
+		nNameW = nDrawLen * 16 + 4;
+	}
 
 	m_pDibName = new CImg32;
-	m_pDibName->Create(nNameW + (nCount * 16), 16);
+	m_pDibName->Create(nNameW + (nCount * 16), (k > 1) ? 20 : 16);
 	m_pDibName->Clear();
 
 	hDCTmp = m_pDibName->Lock();
@@ -959,13 +964,13 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 			ctx->currentFont = (void*)m_hFont;
 			// 縁取り 4 方向
 			ctx->textColor = (unsigned long)RGB(10, 10, 10);
-			SdlFontTextOut(hDCTmp, x + 0, 2, pszWide, nDrawLen);
-			SdlFontTextOut(hDCTmp, x + 2, 2, pszWide, nDrawLen);
-			SdlFontTextOut(hDCTmp, x + 1, 1, pszWide, nDrawLen);
-			SdlFontTextOut(hDCTmp, x + 1, 3, pszWide, nDrawLen);
+			SdlFontTextOut(hDCTmp, x + 0, 2 * k, pszWide, nDrawLen);
+			SdlFontTextOut(hDCTmp, x + 2 * k, 2 * k, pszWide, nDrawLen);
+			SdlFontTextOut(hDCTmp, x + k, k, pszWide, nDrawLen);
+			SdlFontTextOut(hDCTmp, x + k, 3 * k, pszWide, nDrawLen);
 			// 本体
 			ctx->textColor = (unsigned long)m_clName;
-			SdlFontTextOut(hDCTmp, x + 1, 2, pszWide, nDrawLen);
+			SdlFontTextOut(hDCTmp, x + k, 2 * k, pszWide, nDrawLen);
 		}
 	}
 
@@ -1005,7 +1010,14 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 	nHeight = max(nHeight, 1);
 
 	m_pDibSpeak = new CImg32;
-	m_pDibSpeak->Create((nWidth * 2 + 1) * 6 + 2, nHeight * 14);
+	// 【試作】ピクセルフォント(2倍)は 1 文字 16px・1 行 18px
+	const int k = SdlFontPixelScale();
+	const int nLineH = (k > 1) ? 18 : 14;
+	if (k > 1) {
+		m_pDibSpeak->Create(nWidth * 16 + 4, nHeight * nLineH);
+	} else {
+		m_pDibSpeak->Create((nWidth * 2 + 1) * 6 + 2, nHeight * 14);
+	}
 	m_pDibSpeak->Clear();
 
 	hDCTmp = m_pDibSpeak->Lock();
@@ -1021,13 +1033,13 @@ void CInfoCharCli::SetSpeak(LPCSTR pszSpeak)
 			ctx->currentFont = (void*)m_hFont;
 			// 縁取り 4 方向
 			ctx->textColor = (unsigned long)RGB(10, 10, 10);
-			SdlFontTextOut(hDCTmp, 0, 1 + nLine * 14, pLine, nChunk);
-			SdlFontTextOut(hDCTmp, 2, 1 + nLine * 14, pLine, nChunk);
-			SdlFontTextOut(hDCTmp, 1, 0 + nLine * 14, pLine, nChunk);
-			SdlFontTextOut(hDCTmp, 1, 2 + nLine * 14, pLine, nChunk);
+			SdlFontTextOut(hDCTmp, 0, k + nLine * nLineH, pLine, nChunk);
+			SdlFontTextOut(hDCTmp, 2 * k, k + nLine * nLineH, pLine, nChunk);
+			SdlFontTextOut(hDCTmp, k, 0 + nLine * nLineH, pLine, nChunk);
+			SdlFontTextOut(hDCTmp, k, 2 * k + nLine * nLineH, pLine, nChunk);
 			// 本体
 			ctx->textColor = (unsigned long)m_clSpeak;
-			SdlFontTextOut(hDCTmp, 1, 1 + nLine * 14, pLine, nChunk);
+			SdlFontTextOut(hDCTmp, k, k + nLine * nLineH, pLine, nChunk);
 		}
 		nPos += nChunk;
 		nLine ++;

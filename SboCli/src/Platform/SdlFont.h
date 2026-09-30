@@ -40,6 +40,9 @@ SdlDCContext* SdlDCGet(void* hDC);
 bool SdlFontTextOut(void* hDC, int x, int y, const wchar_t* pStr, int nLen);
 bool SdlFontTextOutA(void* hDC, int x, int y, const char* pStr, int nLen);
 
+// 【試作】ピクセルフォントの拡大率（縁取りのずらし幅に使う）
+int SdlFontPixelScale();
+
 // テキストサイズ取得
 bool SdlFontGetTextExtent(void* hFont, const wchar_t* pStr, int nLen, int* pWidth, int* pHeight);
 

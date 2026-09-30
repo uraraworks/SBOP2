@@ -17,6 +17,9 @@
 #include <map>
 #include <string>
 #include <utility>
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
 
 // フォントエントリ
 struct SdlFontEntry {
@@ -24,7 +27,17 @@ struct SdlFontEntry {
     int height;       // 呼び出し側が要求したセル高（ピクセル）
     int yOffset;      // 描画時の Y シフト量（負値: 上に詰める）
     bool bold;
+    int scale;        // 【試作】ピクセルフォントの拡大率（1=等倍）
 };
+
+// 【試作】ピクセルフォントモード
+// 0=従来(Noto Sans), 1=美咲ゴシック第2を2倍, 2=美咲ゴシックを2倍, 3=PixelMplus12を等倍, 4/5=美咲とPixelMplusの組み合わせ(2倍)
+static int s_nPixelFontMode = 0;
+
+int SdlFontPixelScale()
+{
+    return (s_nPixelFontMode == 0 || s_nPixelFontMode == 3) ? 1 : 2;
+}
 
 // グローバル状態
 static bool s_bInitialized = false;
@@ -94,6 +107,31 @@ static SDL_Surface* SdlTextCacheGet(void* hFont, TTF_Font* pFont,
         return nullptr;
     }
 
+    // 【試作】ピクセルフォントはアンチエイリアスを消して整数倍に拡大する
+    if (s_nPixelFontMode != 0) {
+        auto itEntry = s_fontMap.find(hFont);
+        int nScale = (itEntry != s_fontMap.end()) ? itEntry->second.scale : 1;
+        SDL_Surface* pConv = SDL_ConvertSurfaceFormat(pSurf, SDL_PIXELFORMAT_ARGB8888, 0);
+        SDL_FreeSurface(pSurf);
+        if (!pConv) return nullptr;
+        SDL_Surface* pScaled = SDL_CreateRGBSurfaceWithFormat(0, pConv->w * nScale, pConv->h * nScale, 32, SDL_PIXELFORMAT_ARGB8888);
+        if (!pScaled) { SDL_FreeSurface(pConv); return nullptr; }
+        SDL_LockSurface(pConv);
+        SDL_LockSurface(pScaled);
+        for (int y = 0; y < pScaled->h; y++) {
+            Uint32* pDst = (Uint32*)((Uint8*)pScaled->pixels + y * pScaled->pitch);
+            const Uint32* pSrc = (const Uint32*)((const Uint8*)pConv->pixels + (y / nScale) * pConv->pitch);
+            for (int x = 0; x < pScaled->w; x++) {
+                Uint32 c = pSrc[x / nScale];
+                pDst[x] = ((c >> 24) >= 128) ? (c | 0xFF000000u) : 0;
+            }
+        }
+        SDL_UnlockSurface(pScaled);
+        SDL_UnlockSurface(pConv);
+        SDL_FreeSurface(pConv);
+        pSurf = pScaled;
+    }
+
     // 挿入前に上限判定する（この時点で pSurf はまだ表に入っていない）
     if (s_textCache.size() >= SDL_TEXT_CACHE_MAX) {
         SdlTextCacheClear();
@@ -127,6 +165,15 @@ bool SdlFontInit(const char* fontDir)
     }
     s_fontDir = fontDir ? fontDir : "";
     s_bInitialized = true;
+#if defined(__EMSCRIPTEN__)
+    // 【試作】URL の ?pixelfont=1/2/3 で切り替える
+    s_nPixelFontMode = EM_ASM_INT({
+        var m = /[?&]pixelfont=([0-9])/.exec(location.search);
+        return m ? parseInt(m[1], 10) : 0;
+    });
+#else
+    if (const char* pEnv = getenv("SBO_PIXELFONT")) s_nPixelFontMode = atoi(pEnv);
+#endif
     SDL_Log("SdlFontInit: initialized, fontDir=%s", s_fontDir.c_str());
     return true;
 }
@@ -169,8 +216,36 @@ void* SdlFontCreate(int height, bool bold)
     }
     path += bold ? "NotoSansCJKjp-Bold.otf" : "NotoSansCJKjp-Regular.otf";
 
+    // 【試作】ピクセルフォント: 美咲は 8px を 2 倍（32px 指定は 4 倍）、PixelMplus12 は 12px 等倍
+    int nScale = 1;
+    int nPt = height;
+    if (s_nPixelFontMode != 0) {
+        path = s_fontDir;
+        if (!path.empty() && path.back() != '/' && path.back() != '\\') path += "/";
+        // 4: 16px 以下は美咲第2、24px 以上は PixelMplus12 を 2 倍
+        // 5: 12/14px は美咲第2、16px は PixelMplus10、24px 以上は PixelMplus12 を 2 倍
+        const bool bMplus12 = (s_nPixelFontMode >= 4) && (height >= 24);
+        const bool bMplus10 = (s_nPixelFontMode == 5) && (height >= 16) && (height < 24);
+        if (s_nPixelFontMode == 3) {
+            path += bold ? "PixelMplus12-Bold.ttf" : "PixelMplus12-Regular.ttf";
+            nPt = (height >= 24) ? 24 : 12;
+        } else if (bMplus12) {
+            path += bold ? "PixelMplus12-Bold.ttf" : "PixelMplus12-Regular.ttf";
+            nPt = 12;
+            nScale = 2;
+        } else if (bMplus10) {
+            path += bold ? "PixelMplus10-Bold.ttf" : "PixelMplus10-Regular.ttf";
+            nPt = 10;
+            nScale = 2;
+        } else {
+            path += (s_nPixelFontMode == 2) ? "misaki_gothic.ttf" : "misaki_gothic_2nd.ttf";
+            nPt = 8;
+            nScale = (height >= 24) ? 4 : 2;
+        }
+    }
+
     // フォントを開く（heightはピクセルサイズ）
-    TTF_Font* pFont = TTF_OpenFont(path.c_str(), height);
+    TTF_Font* pFont = TTF_OpenFont(path.c_str(), nPt);
     if (!pFont) {
         SDL_Log("SdlFontCreate: TTF_OpenFont failed: %s (path=%s, height=%d)",
                 TTF_GetError(), path.c_str(), height);
@@ -179,7 +254,7 @@ void* SdlFontCreate(int height, bool bold)
 
     // Noto Sans CJK は TTF_FontHeight が ptsize より大きくなる場合がある。
     // ptsize は要求値のまま使い、はみ出し分は描画時に Y オフセットで吸収する。
-    int actualHeight = TTF_FontHeight(pFont);
+    int actualHeight = TTF_FontHeight(pFont) * nScale;
     // 上下中央寄せ: はみ出し分の半分を上、半分を下に逃がす
     // 例: height=16, actual=22 → yOffset=-3（上3px・下3pxにオーバーフロー）
     int yOffset = (actualHeight > height) ? ((height - actualHeight) / 2) : 0;
@@ -191,6 +266,7 @@ void* SdlFontCreate(int height, bool bold)
     entry.height = height;
     entry.yOffset = yOffset;
     entry.bold = bold;
+    entry.scale = nScale;
     s_fontMap[id] = entry;
     s_fontKeyMap[cacheKey] = id;
 
@@ -336,8 +412,14 @@ bool SdlFontTextOut(void* hDC, int x, int y, const wchar_t* pStr, int nLen)
     if (!pSurf) return false;
 
     // CImg32バッファに転送（yOffset でサーフェス底をセル底に合わせる）
+    int nDrawX = x, nDrawY = y + entry->yOffset;
+    if (entry->scale > 1) {
+        // 【試作】2倍ドットの格子にそろえる
+        nDrawX &= ~(entry->scale / 2 * 2 - 1);
+        nDrawY &= ~(entry->scale / 2 * 2 - 1);
+    }
     BlitSurfaceToBuffer(pSurf, ctx->pBits, ctx->stride,
-                         ctx->width, ctx->height, x, y + entry->yOffset);
+                         ctx->width, ctx->height, nDrawX, nDrawY);
 
     // pSurf はキャッシュが所有するため解放しない
     return true;
@@ -364,8 +446,14 @@ bool SdlFontTextOutA(void* hDC, int x, int y, const char* pStr, int nLen)
     if (!pSurf) return false;
 
     // CImg32バッファに転送（yOffset でサーフェス底をセル底に合わせる）
+    int nDrawX = x, nDrawY = y + entry->yOffset;
+    if (entry->scale > 1) {
+        // 【試作】2倍ドットの格子にそろえる
+        nDrawX &= ~(entry->scale / 2 * 2 - 1);
+        nDrawY &= ~(entry->scale / 2 * 2 - 1);
+    }
     BlitSurfaceToBuffer(pSurf, ctx->pBits, ctx->stride,
-                         ctx->width, ctx->height, x, y + entry->yOffset);
+                         ctx->width, ctx->height, nDrawX, nDrawY);
 
     // pSurf はキャッシュが所有するため解放しない
     return true;
@@ -382,7 +470,7 @@ bool SdlFontGetTextExtent(void* hFont, const wchar_t* pStr, int nLen, int* pWidt
     if (TTF_SizeUTF8(entry->pFont, utf8.c_str(), &w, &h) != 0) {
         return false;
     }
-    if (pWidth) *pWidth = w;
+    if (pWidth) *pWidth = w * entry->scale;
     // 呼び出し側のレイアウトとの整合のため、要求セル高を返す
     if (pHeight) *pHeight = entry->height;
     return true;
