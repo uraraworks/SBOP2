@@ -30,8 +30,8 @@ CWindowSKILLMENU::CWindowSKILLMENU()
 	m_nID	= WINDOWTYPE_SKILLMENU;
 	m_ptViewPos.x	= 24;
 	m_ptViewPos.y	= 112;
-	m_sizeWindow.cx	= 208;
-	m_sizeWindow.cy	= 280;
+	m_sizeWindow.cx	= 232;
+	m_sizeWindow.cy	= 296;
 
 	m_nType	= 0;
 	m_nMode	= 1;
@@ -85,11 +85,11 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 	}
 	m_pDib->Unlock();
 
-	DrawFrame(4, 24, 200, 248, 6);
+	DrawFrame(4, 24, 224, 264, 6);
 
 	for (y = 0; y < 5; y ++) {
 		for (x = 0; x < 5; x ++) {
-			DrawIconFrame(12 + 36 * x, 32 + ICONFRAME_STEP_Y * y);
+			DrawIconFrame(12 + ICONFRAME_STEP_X * x, 32 + ICONFRAME_STEP_Y * y);
 		}
 	}
 
@@ -391,6 +391,6 @@ void CWindowSKILLMENU::GetDrawPos(
 	int &nDstX,	// [out] X座標
 	int &nDstY)
 {
-	nDstX = 14 + 36 * (nPos % 5);
+	nDstX = 14 + ICONFRAME_STEP_X * (nPos % 5);
 	nDstY = 34 + ICONFRAME_STEP_Y * (nPos / 5);
 }

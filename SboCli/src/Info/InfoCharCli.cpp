@@ -948,14 +948,17 @@ void CInfoCharCli::SetName(LPCSTR pszName)
 	int nNameW = nTextW + nDot * 2;
 
 	m_pDibName = new CImg32;
-	m_pDibName->Create(nNameW + (nCount * 16), max(nTextH + nDot * 2, 18));
+	// マークは 1 ドット = 2px で描いた 20x20px の絵（system.png の (480,640) から横に並ぶ）
+	m_pDibName->Create(nNameW + (nCount * 20), max(nTextH + nDot * 2, 20));
 	m_pDibName->Clear();
 
 	hDCTmp = m_pDibName->Lock();
 
 	for (i = 0; i < nCount; i ++) {
-		m_pDibName->BltFrom256(x, 2, 16, 16, pDibSystem, 176 + (m_abyMark[i] - 1) * 16, 0, TRUE);
-		x += 16;
+		if ((m_abyMark[i] >= 1) && (m_abyMark[i] <= 6)) {
+			m_pDibName->BltFrom256(x, 0, 20, 20, pDibSystem, 480 + (m_abyMark[i] - 1) * 20, 640, TRUE);
+		}
+		x += 20;
 	}
 
 	if (pszWide != NULL && nDrawLen > 0) {
