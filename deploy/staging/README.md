@@ -31,6 +31,15 @@
 | `load-db.sh` | ホストでステージングの DB を入れ替える |
 | `../../.github/workflows/staging-deploy.yml` | master への push で自動デプロイ |
 
+## 他プロジェクトとの相乗り
+
+同じホストの別プロジェクト(例:GuildQuest)のステージングが、この Caddy(80/443)を共有できる。
+
+- `~/caddy-sites/`:他プロジェクトがサイト定義(`*.caddy`)を置く場所。Caddyfile が `import` する(`/etc/caddy/sites` に読み取り専用でマウント)
+- `staging-shared` ネットワーク:Caddy と他プロジェクトのコンテナをつなぐ。`deploy.sh` が作る
+- 他プロジェクトは自分のデプロイでサイト定義を置き、`docker exec sbop2-staging-caddy-1 caddy reload --config /etc/caddy/Caddyfile` で反映する
+- Caddy を作り直したら SboSvr も作り直す(下の「注意」の通り)
+
 ## 初回のセットアップ
 
 ### 1. ホストを用意する(Google Cloud の無料枠)
