@@ -290,6 +290,66 @@ extern "C" EMSCRIPTEN_KEEPALIVE const char *SBOP2_DebugGetOthersJson(void)
 	return s_strJson.c_str();
 }
 
+/// @brief デバッグ用: 名前を指定してウィンドウを開く（画面確認の自動化用）
+/// @details window.sbop2Debug.openWindow(name) から呼ぶ。名前は DebugWindowName() と同じ。
+///          'CLOSEALL' を渡すと開いているウィンドウをすべて閉じる。
+///          ウィンドウを開くだけで、サーバーへは何も送らない。
+/// @return 開いたら 1、対応していない名前なら 0
+extern "C" EMSCRIPTEN_KEEPALIVE int SBOP2_DebugOpenWindow(const char *pszName)
+{
+	CMainFrame *pMainFrame = g_pDebugMainFrame;
+	CMgrData *pMgrData = (pMainFrame != NULL) ? pMainFrame->GetMgrData() : NULL;
+	CMgrWindow *pMgrWindow = (pMgrData != NULL) ? pMgrData->GetMgrWindow() : NULL;
+	if ((pMgrWindow == NULL) || (pszName == NULL)) {
+		return 0;
+	}
+	std::string strName(pszName);
+	if (strName == "CLOSEALL") {
+		// 開いているウィンドウをすべて閉じる
+		pMgrWindow->DeleteAll();
+	} else if (strName == "MSG") {
+		pMgrWindow->MakeWindowMSG("これは確認用のメッセージです。\nふたつめの行です。");
+	} else if (strName == "TEXTMSG") {
+		pMgrWindow->MakeWindowTEXTMSG("お知らせ", "リナ", "こんにちは！スクラップブックオンラインの世界へようこそ。わからないことがあったら、なんでも聞いてね。");
+	} else if (strName == "LOGINMENU") {			pMgrWindow->MakeWindowLOGINMENU();
+	} else if (strName == "CHARNAME") {				pMgrWindow->MakeWindowCHARNAME();
+	} else if (strName == "SEX") {					pMgrWindow->MakeWindowSEX();
+	} else if (strName == "ACCOUNTINFO") {			pMgrWindow->MakeWindowACCOUNTINFO();
+	} else if (strName == "STATUS") {				pMgrWindow->MakeWindowSTATUS();
+	} else if (strName == "CHAT") {					pMgrWindow->MakeWindowCHAT();
+	} else if (strName == "FAMILYTYPE") {			pMgrWindow->MakeWindowFAMILYTYPE();
+	} else if (strName == "HAIRTYPE") {				pMgrWindow->MakeWindowHAIRTYPE();
+	} else if (strName == "HAIRCOLOR") {			pMgrWindow->MakeWindowHAIRCOLOR();
+	} else if (strName == "EYECOLOR") {				pMgrWindow->MakeWindowEYECOLOR();
+	} else if (strName == "STYLESELECT") {			pMgrWindow->MakeWindowSTYLESELECT();
+	} else if (strName == "NAMEINPUT") {			pMgrWindow->MakeWindowNAMEINPUT();
+	} else if (strName == "SYSTEMMENU") {			pMgrWindow->MakeWindowSYSTEMMENU();
+	} else if (strName == "SETCOLOR") {				pMgrWindow->MakeWindowSETCOLOR();
+	} else if (strName == "SETBGMVOLUME") {			pMgrWindow->MakeWindowSETBGMVOLUME();
+	} else if (strName == "SETSOUNDVOLUME") {		pMgrWindow->MakeWindowSETSOUNDVOLUME();
+	} else if (strName == "SETDRAWMODE") {			pMgrWindow->MakeWindowSETDRAWMODE();
+	} else if (strName == "ITEMMENU") {				pMgrWindow->MakeWindowITEMMENU();
+	} else if (strName == "OPTION") {				pMgrWindow->MakeWindowOPTION();
+	} else if (strName == "OPTION_VIEWSET") {		pMgrWindow->MakeWindowOPTION_VIEWSET();
+	} else if (strName == "OPTION_VOLUMESET") {		pMgrWindow->MakeWindowOPTION_VOLUMESET();
+	} else if (strName == "OPTION_INPUTSET") {		pMgrWindow->MakeWindowOPTION_INPUTSET();
+	} else if (strName == "OPTION_TASKBAR") {		pMgrWindow->MakeWindowOPTION_TASKBAR();
+	} else if (strName == "OPTION_INPUTSET_SETDEVICE") {	pMgrWindow->MakeWindowOPTION_INPUTSET_SETDEVICE();
+	} else if (strName == "OPTION_ACTIONSET") {		pMgrWindow->MakeWindowOPTION_ACTIONSET();
+	} else if (strName == "OPTION_ACTIONSET_SLEEPTIMER") {	pMgrWindow->MakeWindowOPTION_ACTIONSET_SLEEPTIMER();
+	} else if (strName == "COMMANDMENU") {			pMgrWindow->MakeWindowCOMMANDMENU();
+	} else if (strName == "CHAR_STATUS") {			pMgrWindow->MakeWindowCHAR_STATUS();
+	} else if (strName == "CHAR_STATUS4") {			pMgrWindow->MakeWindowCHAR_STATUS4();
+	} else if (strName == "SWOON") {				pMgrWindow->MakeWindowSWOON();
+	} else if (strName == "SKILLMENU") {			pMgrWindow->MakeWindowSKILLMENU();
+	} else if (strName == "PLACEINFORMATION") {		pMgrWindow->MakeWindowPLACEINFORMATION();
+	} else if (strName == "DELCONFIRM") {			pMgrWindow->MakeWindowDELCONFIRM();
+	} else {
+		return 0;
+	}
+	return 1;
+}
+
 int main(int argc, char **argv)
 {
 	UNREFERENCED_PARAMETER(argc);

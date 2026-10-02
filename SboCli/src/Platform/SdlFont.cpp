@@ -22,9 +22,19 @@
 struct SdlFontEntry {
     TTF_Font* pFont;
     int height;       // 呼び出し側が要求したセル高（ピクセル）
+    int drawHeight;   // 実際に描かれる文字の高さ（ピクセル、2 倍後）
     int yOffset;      // 描画時の Y シフト量（負値: 上に詰める）
     bool bold;
 };
+
+// ゲーム画面は 240x240 ドットの絵を 2 倍で表示している。文字も 1 ドット = 2x2 ピクセルで描き、
+// 描画位置も 2 ピクセル単位にそろえて、絵とドットの大きさを合わせる。
+static const int SDLFONT_DOT = 2;
+
+int SdlFontPixelScale()
+{
+    return SDLFONT_DOT;
+}
 
 // グローバル状態
 static bool s_bInitialized = false;
@@ -36,7 +46,7 @@ static uintptr_t s_nextDCId = 1;
 
 // フォントキャッシュ: (セル高, 太字) が同じなら同じハンドルを使い回す。
 // CWindowBase はコンストラクタで 6 個フォントを作るため、キャッシュが無いと
-// ウィンドウを開くたびに 16〜17MB の CJK フォントを開き直すことになる。
+// ウィンドウを開くたびにフォントファイルを開き直すことになる。
 static std::map<std::pair<int, bool>, void*> s_fontKeyMap;
 
 // テキスト描画結果キャッシュ
@@ -93,6 +103,31 @@ static SDL_Surface* SdlTextCacheGet(void* hFont, TTF_Font* pFont,
     if (!pSurf) {
         return nullptr;
     }
+
+    // アンチエイリアスの中間色を消し、1 ドットを SDLFONT_DOT 倍に拡大する
+    SDL_Surface* pConv = SDL_ConvertSurfaceFormat(pSurf, SDL_PIXELFORMAT_ARGB8888, 0);
+    SDL_FreeSurface(pSurf);
+    if (!pConv) return nullptr;
+    SDL_Surface* pScaled = SDL_CreateRGBSurfaceWithFormat(
+        0, pConv->w * SDLFONT_DOT, pConv->h * SDLFONT_DOT, 32, SDL_PIXELFORMAT_ARGB8888);
+    if (!pScaled) {
+        SDL_FreeSurface(pConv);
+        return nullptr;
+    }
+    SDL_LockSurface(pConv);
+    SDL_LockSurface(pScaled);
+    for (int y = 0; y < pScaled->h; y++) {
+        Uint32* pDst = (Uint32*)((Uint8*)pScaled->pixels + y * pScaled->pitch);
+        const Uint32* pSrc = (const Uint32*)((const Uint8*)pConv->pixels + (y / SDLFONT_DOT) * pConv->pitch);
+        for (int x = 0; x < pScaled->w; x++) {
+            Uint32 c = pSrc[x / SDLFONT_DOT];
+            pDst[x] = ((c >> 24) >= 128) ? (c | 0xFF000000u) : 0;
+        }
+    }
+    SDL_UnlockSurface(pScaled);
+    SDL_UnlockSurface(pConv);
+    SDL_FreeSurface(pConv);
+    pSurf = pScaled;
 
     // 挿入前に上限判定する（この時点で pSurf はまだ表に入っていない）
     if (s_textCache.size() >= SDL_TEXT_CACHE_MAX) {
@@ -162,33 +197,51 @@ void* SdlFontCreate(int height, bool bold)
         return cached->second;
     }
 
-    // フォントファイルパスを決定
+    // 要求サイズからピクセルフォントを選ぶ（いずれも 2 倍で描く）
+    //   14px 以下 → 小: 美咲ゴシック第2（8 ドット → 16px）
+    //   15〜23px  → 中: PixelMplus10（10 ドット → 20px）
+    //   24px 以上 → 大: PixelMplus12（12 ドット → 24px）
+    // 太字は 2 倍にすると潰れて読みにくいので、太字指定でも通常の太さで描く。
+    const char* pszFile;
+    int nPt;
+    if (height <= 14) {
+        pszFile = "misaki_gothic_2nd.ttf";
+        nPt = 8;
+    } else if (height < 24) {
+        pszFile = "PixelMplus10-Regular.ttf";
+        nPt = 10;
+    } else {
+        pszFile = "PixelMplus12-Regular.ttf";
+        nPt = 12;
+    }
     std::string path = s_fontDir;
     if (!path.empty() && path.back() != '/' && path.back() != '\\') {
         path += "/";
     }
-    path += bold ? "NotoSansCJKjp-Bold.otf" : "NotoSansCJKjp-Regular.otf";
+    path += pszFile;
 
-    // フォントを開く（heightはピクセルサイズ）
-    TTF_Font* pFont = TTF_OpenFont(path.c_str(), height);
+    TTF_Font* pFont = TTF_OpenFont(path.c_str(), nPt);
     if (!pFont) {
         SDL_Log("SdlFontCreate: TTF_OpenFont failed: %s (path=%s, height=%d)",
                 TTF_GetError(), path.c_str(), height);
         return nullptr;
     }
+    // ピクセルフォントのヒンティングで形が崩れないようにする
+    TTF_SetFontHinting(pFont, TTF_HINTING_MONO);
 
-    // Noto Sans CJK は TTF_FontHeight が ptsize より大きくなる場合がある。
-    // ptsize は要求値のまま使い、はみ出し分は描画時に Y オフセットで吸収する。
-    int actualHeight = TTF_FontHeight(pFont);
-    // 上下中央寄せ: はみ出し分の半分を上、半分を下に逃がす
-    // 例: height=16, actual=22 → yOffset=-3（上3px・下3pxにオーバーフロー）
-    int yOffset = (actualHeight > height) ? ((height - actualHeight) / 2) : 0;
+    // 文字の上端を描画位置にそろえる。要求より小さくなる大サイズだけ上下中央に寄せる。
+    int drawHeight = nPt * SDLFONT_DOT;
+    int yOffset = 0;
+    if (drawHeight < height) {
+        yOffset = ((height - drawHeight) / 2) & ~(SDLFONT_DOT - 1);
+    }
 
     // エントリ登録
     void* id = (void*)(s_nextFontId++);
     SdlFontEntry entry;
     entry.pFont = pFont;
     entry.height = height;
+    entry.drawHeight = drawHeight;
     entry.yOffset = yOffset;
     entry.bold = bold;
     s_fontMap[id] = entry;
@@ -336,11 +389,45 @@ bool SdlFontTextOut(void* hDC, int x, int y, const wchar_t* pStr, int nLen)
     if (!pSurf) return false;
 
     // CImg32バッファに転送（yOffset でサーフェス底をセル底に合わせる）
+    // 2 ピクセル = 1 ドットの格子にそろえる
+    int nDrawX = x & ~(SDLFONT_DOT - 1);
+    int nDrawY = (y + entry->yOffset) & ~(SDLFONT_DOT - 1);
     BlitSurfaceToBuffer(pSurf, ctx->pBits, ctx->stride,
-                         ctx->width, ctx->height, x, y + entry->yOffset);
+                         ctx->width, ctx->height, nDrawX, nDrawY);
 
     // pSurf はキャッシュが所有するため解放しない
     return true;
+}
+
+// 縁取り付きテキスト描画
+bool SdlFontTextOutFramed(void* hDC, int x, int y, const wchar_t* pStr, int nLen,
+                          unsigned long color, unsigned long colorFrame, bool bThick)
+{
+    SdlDCContext* ctx = SdlDCGet(hDC);
+    if (!ctx) return false;
+
+    // 美咲（8 ドット）は字画が詰まっているので、斜めまで縁取ると字がつぶれて読めなくなる。
+    // 太めの指定でも小さい文字は上下左右だけにする
+    if (bThick && ctx->currentFont) {
+        const SdlFontEntry* entry = GetFontEntry(ctx->currentFont);
+        if (entry && (entry->drawHeight <= 8 * SDLFONT_DOT)) {
+            bThick = false;
+        }
+    }
+
+    // 先に格子へそろえてから 1 ドットずつずらす（ずらし方が左右で偏らないように）
+    x &= ~(SDLFONT_DOT - 1);
+    y &= ~(SDLFONT_DOT - 1);
+    ctx->textColor = colorFrame;
+    for (int dy = -1; dy <= 1; dy++) {
+        for (int dx = -1; dx <= 1; dx++) {
+            if ((dx == 0) && (dy == 0)) continue;
+            if (!bThick && (dx != 0) && (dy != 0)) continue;
+            SdlFontTextOut(hDC, x + dx * SDLFONT_DOT, y + dy * SDLFONT_DOT, pStr, nLen);
+        }
+    }
+    ctx->textColor = color;
+    return SdlFontTextOut(hDC, x, y, pStr, nLen);
 }
 
 // テキスト描画（ANSI文字版）
@@ -364,8 +451,11 @@ bool SdlFontTextOutA(void* hDC, int x, int y, const char* pStr, int nLen)
     if (!pSurf) return false;
 
     // CImg32バッファに転送（yOffset でサーフェス底をセル底に合わせる）
+    // 2 ピクセル = 1 ドットの格子にそろえる
+    int nDrawX = x & ~(SDLFONT_DOT - 1);
+    int nDrawY = (y + entry->yOffset) & ~(SDLFONT_DOT - 1);
     BlitSurfaceToBuffer(pSurf, ctx->pBits, ctx->stride,
-                         ctx->width, ctx->height, x, y + entry->yOffset);
+                         ctx->width, ctx->height, nDrawX, nDrawY);
 
     // pSurf はキャッシュが所有するため解放しない
     return true;
@@ -382,9 +472,9 @@ bool SdlFontGetTextExtent(void* hFont, const wchar_t* pStr, int nLen, int* pWidt
     if (TTF_SizeUTF8(entry->pFont, utf8.c_str(), &w, &h) != 0) {
         return false;
     }
-    if (pWidth) *pWidth = w;
-    // 呼び出し側のレイアウトとの整合のため、要求セル高を返す
-    if (pHeight) *pHeight = entry->height;
+    if (pWidth) *pWidth = w * SDLFONT_DOT;
+    // 実際に描かれる文字の高さを返す
+    if (pHeight) *pHeight = entry->drawHeight;
     return true;
 }
 

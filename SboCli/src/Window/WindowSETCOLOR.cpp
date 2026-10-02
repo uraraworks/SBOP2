@@ -21,7 +21,7 @@ CWindowSETCOLOR::CWindowSETCOLOR()
 	m_ptViewPos.x	= 80;
 	m_ptViewPos.y	= 80;
 	m_sizeWindow.cx	= 16 * 2 + 16 * 4;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 7;
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 7;
 }
 
 
@@ -53,17 +53,17 @@ void CWindowSETCOLOR::Draw(PCImg32 pDst)
 
 	hDC	= m_pDib->Lock();
 
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("白"),	RGB(255, 255, 255), TRUE);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("赤"),	RGB(255, 200, 200), TRUE);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 2, _T("黄"),	RGB(255, 255, 200), TRUE);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 3, _T("緑"),	RGB(200, 255, 200), TRUE);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 4, _T("青緑"),	RGB(200, 255, 255), TRUE);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 5, _T("青"),	RGB(200, 200, 255), TRUE);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 6, _T("紫"),	RGB(255, 200, 255), TRUE);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("白"),	RGB(255, 255, 255), TRUE);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(1), _T("赤"),	RGB(255, 200, 200), TRUE);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(2), _T("黄"),	RGB(255, 255, 200), TRUE);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(3), _T("緑"),	RGB(200, 255, 200), TRUE);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(4), _T("青緑"),	RGB(200, 255, 255), TRUE);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(5), _T("青"),	RGB(200, 200, 255), TRUE);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(6), _T("紫"),	RGB(255, 200, 255), TRUE);
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

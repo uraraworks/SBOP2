@@ -21,7 +21,7 @@ CWindowOPTION_TASKBAR::CWindowOPTION_TASKBAR()
 	m_ptViewPos.x	= 160;
 	m_ptViewPos.y	= 180;
 	m_sizeWindow.cx	= 16 * 2 + 16 * 5;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 2;
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 2;
 }
 
 
@@ -56,12 +56,12 @@ void CWindowOPTION_TASKBAR::Draw(PCImg32 pDst)
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
 
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("ON"),	clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("OFF"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("ON"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(1), _T("OFF"),	clText);
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

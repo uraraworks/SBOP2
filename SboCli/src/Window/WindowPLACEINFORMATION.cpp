@@ -19,7 +19,7 @@ CWindowPLACEINFORMATION::CWindowPLACEINFORMATION()
 	m_ptViewPos.x	= 0;
 	m_ptViewPos.y	= 0;
 	m_sizeWindow.cx	= 480;
-	m_sizeWindow.cy	= 23;
+	m_sizeWindow.cy	= 24;
 }
 
 
@@ -57,15 +57,28 @@ void CWindowPLACEINFORMATION::Draw(PCImg32 pDst)
 		goto Exit;
 	}
 
-	m_pDib->BltFrom256(0, 0, m_sizeWindow.cx, m_sizeWindow.cy, m_pDibSystem, 0, 624, TRUE);
+	// 帯と欄は 2 ドット単位の枠で描き、アイコンだけ元の絵から貼る
+	m_pDib->FillRect(0, 0, m_sizeWindow.cx, m_sizeWindow.cy, RGB(0, 0, 0));
+	DrawFrame(0, 0, m_sizeWindow.cx, m_sizeWindow.cy, 5);
+	DrawFrame(2, 2, 192, 20, 6);
+	DrawFrame(2, 2, 40, 20, 7);
+	m_pDib->BltFrom256(198, 2, 16, 19, m_pDibSystem, 198, 626, TRUE);
+	m_pDib->BltFrom256(284, 2, 19, 19, m_pDibSystem, 285, 626, TRUE);
+	m_pDib->BltFrom256(374, 2, 17, 19, m_pDibSystem, 375, 626, TRUE);
+
+	nTmp = 0;
+	if (pInfoChar->m_dwMaxHP > 0) {
+		fTmp = (float)pInfoChar->m_dwHP * 100.0f / (float)pInfoChar->m_dwMaxHP;
+		nTmp = (int)fTmp;
+	}
+	DrawGauge(216, 10, 66, nTmp, RGB(255, 98, 20));
+	DrawGauge(304, 10, 68, 0, RGB(255, 98, 20));
+	DrawGauge(394, 10, 80, 0, RGB(255, 98, 20));
 
 	hDC	= m_pDib->Lock();
 
-	TextOut2(hDC, m_hFont12, 34, 6, (LPCTSTR)pInfoMap->m_strMapName, RGB(1, 1, 1));
-
-	fTmp = (float)pInfoChar->m_dwHP * 100.0f / (float)pInfoChar->m_dwMaxHP;
-	nTmp = (int)((float)65 * fTmp / 100.0f);
-	m_pDib->BltFrom256(216, 13, nTmp, 7, m_pDibSystem, 0, 758, TRUE);
+	TextOutCenter(hDC, m_hFont12, 2, 40, 4, _T("場所"), RGB(255, 255, 255));
+	TextOut2(hDC, m_hFont12, 46, 4, (LPCTSTR)pInfoMap->m_strMapName, RGB(1, 1, 1));
 
 	m_pDib->Unlock();
 

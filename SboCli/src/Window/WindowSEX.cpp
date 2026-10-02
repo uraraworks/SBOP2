@@ -56,8 +56,8 @@ void CWindowSEX::Draw(PCImg32 pDst)
 	hDC	= m_pDib->Lock();
 
 	TextOut4(hDC, m_hFont14, 48, 8, _T("性別"),	clText);
-	TextOut2(hDC, m_hFont14, 40, 16 + 16 * 1,	_T("♂ 男の子"),	clText);
-	TextOut2(hDC, m_hFont14, 40, 16 + 16 * 2 + 8,	_T("♀ 女の子"),	clText);
+	TextOut2(hDC, m_hFont14, 40, 32 + 4,	_T("♂ 男の子"),	clText);
+	TextOut2(hDC, m_hFont14, 40, 32 + 24 + 4,	_T("♀ 女の子"),	clText);
 
 	m_pDib->Unlock();
 

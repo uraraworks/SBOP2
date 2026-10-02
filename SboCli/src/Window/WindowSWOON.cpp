@@ -18,8 +18,8 @@ CWindowSWOON::CWindowSWOON()
 	m_nPosMax	= 1;
 	m_bInput	= TRUE;
 	m_nID	= WINDOWTYPE_SWOON;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 12;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 2;
+	m_sizeWindow.cx	= WND_ALIGN8(32 + WND_CHAR_W * 11 + 16);
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 2;
 
 	m_ptViewPos.x	= SCRSIZEX / 2 - m_sizeWindow.cx / 2;
 	m_ptViewPos.y	= SCRSIZEY / 2 - m_sizeWindow.cy / 2 - m_sizeWindow.cy - 32;
@@ -57,12 +57,12 @@ void CWindowSWOON::Draw(PCImg32 pDst)
 	hDC	= m_pDib->Lock();
 
 	clText = RGB(1, 1, 1);
-	TextOut2(hDC, m_hFont, 16 + 16, 16 + 16 * 0, _T("この場で助けを待つ"),	clText);
-	TextOut2(hDC, m_hFont, 16 + 15, 16 + 16 * 1, _T("記録した場所で復活する"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("この場で助けを待つ"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(1), _T("記録した場所で復活する"),	clText);
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

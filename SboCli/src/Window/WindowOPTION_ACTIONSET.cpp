@@ -20,8 +20,8 @@ CWindowOPTION_ACTIONSET::CWindowOPTION_ACTIONSET()
 	m_nID	= WINDOWTYPE_OPTION_ACTIONSET;
 	m_ptViewPos.x	= 8 * 13;
 	m_ptViewPos.y	= 16 * 11;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 12 + 8;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 1;
+	m_sizeWindow.cx	= WND_ALIGN8(32 + WND_CHAR_W * 11 + 16);
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 1;
 }
 
 
@@ -56,11 +56,11 @@ void CWindowOPTION_ACTIONSET::Draw(PCImg32 pDst)
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
 
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("おひるねタイマーの設定"), clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("おひるねタイマーの設定"), clText);
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

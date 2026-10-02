@@ -25,11 +25,11 @@ CWindowSYSTEMMENU::CWindowSYSTEMMENU()
 	m_ptViewPos.x	= 8 * 5;
 	m_ptViewPos.y	= 16 * 3;
 #if defined(__EMSCRIPTEN__)
-	m_sizeWindow.cx	= 16 * 2 + 16 * 13;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 4;
+	m_sizeWindow.cx	= WND_ALIGN8(32 + WND_CHAR_W * 11 + 16);
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 4;
 #else
-	m_sizeWindow.cx	= 16 * 2 + 16 * 11;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 2;
+	m_sizeWindow.cx	= WND_ALIGN8(32 + WND_CHAR_W * 9 + 16);
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 2;
 #endif
 }
 
@@ -65,16 +65,16 @@ void CWindowSYSTEMMENU::Draw(PCImg32 pDst)
 	hDC	= m_pDib->Lock();
 
 	clText = RGB(1, 1, 1);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("名前と発言色の設定"),	clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("オプション"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("名前と発言色の設定"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(1), _T("オプション"),	clText);
 #if defined(__EMSCRIPTEN__)
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 2, _T("アカウント管理"),	clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 3, _T("この端末からログアウト"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(2), _T("アカウント管理"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(3), _T("この端末からログアウト"),	clText);
 #endif
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:
