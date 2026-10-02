@@ -24,3 +24,8 @@
 		format console
 	}
 }
+
+# 同じホストの他プロジェクト(例:GuildQuest)のサイト定義。各プロジェクトが自分のデプロイで
+# ~/caddy-sites/*.caddy に置く(compose.yaml で /etc/caddy/sites にマウント)。
+# サイトブロックの外(トップレベル)に書くこと。1件も無くても Caddy はエラーにせず警告を出すだけ。
+import /etc/caddy/sites/*.caddy

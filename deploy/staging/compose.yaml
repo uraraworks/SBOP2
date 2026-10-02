@@ -17,12 +17,18 @@ services:
     env_file:
       - path: staging.env
         format: raw
+    # 同じホストの別プロジェクトのステージング(例:GuildQuest)が ~/caddy-sites/*.caddy に
+    # サイト定義を置き、staging-shared ネットワーク経由でこの Caddy から届くようにする
+    networks:
+      - default
+      - staging-shared
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${HOME}/caddy-sites:/etc/caddy/sites:ro
       - caddy_data:/data
       - caddy_config:/config
 
@@ -48,3 +54,10 @@ volumes:
   sbodata:
   caddy_data:
   caddy_config:
+
+networks:
+  default: {}
+  # 他プロジェクトのコンテナを Caddy から名前で引くための共有ネットワーク(deploy.sh が作る)
+  staging-shared:
+    external: true
+    name: staging-shared

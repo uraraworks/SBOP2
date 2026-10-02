@@ -30,6 +30,11 @@ fi
 # sudo できないユーザーでは後からファイルを置けなくなるので先に作っておく
 mkdir -p "$HOME/sbop2-bgm"
 
+# 他プロジェクトとの相乗り用(compose.yaml)。ネットワークが無いと compose が失敗し、
+# ~/caddy-sites が無いと docker が root 所有で作ってしまうので先に用意する
+docker network create staging-shared >/dev/null 2>&1 || true
+mkdir -p "$HOME/caddy-sites"
+
 # SboSvr を新しいイメージで作り直す。Caddy はそのまま(証明書も保持)
 docker compose up -d
 docker image prune -f >/dev/null
