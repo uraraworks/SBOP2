@@ -13,21 +13,35 @@ CMapPartsHistory &CMapPartsHistory::Instance()
 	return instance;
 }
 
-void CMapPartsHistory::Push(DWORD mapId, int x, int y, bool pile, DWORD oldPartsId, DWORD newPartsId)
+void CMapPartsHistory::Push(DWORD mapId, int x, int y, bool pile, DWORD oldPartsId, DWORD newPartsId, DWORD sessionId, DWORD strokeId)
 {
 	std::lock_guard<std::mutex> lock(m_mutex);
 
-	Entry entry;
-	entry.mapId = mapId;
-	entry.x = x;
-	entry.y = y;
-	entry.pile = pile;
-	entry.oldPartsId = oldPartsId;
-	entry.newPartsId = newPartsId;
+	Cell cell;
+	cell.x = x;
+	cell.y = y;
+	cell.oldPartsId = oldPartsId;
+	cell.newPartsId = newPartsId;
 
-	m_undoStack.push_back(entry);
 	// 新しい操作が積まれたら Redo 履歴は無効化する
 	m_redoStack.clear();
+
+	// 同じストロークの続きなら末尾エントリへ追記する
+	if (strokeId != 0 && !m_undoStack.empty()) {
+		Entry &last = m_undoStack.back();
+		if (last.strokeId == strokeId && last.sessionId == sessionId && last.mapId == mapId && last.pile == pile) {
+			last.cells.push_back(cell);
+			return;
+		}
+	}
+
+	Entry entry;
+	entry.mapId = mapId;
+	entry.pile = pile;
+	entry.sessionId = sessionId;
+	entry.strokeId = strokeId;
+	entry.cells.push_back(cell);
+	m_undoStack.push_back(entry);
 
 	// 上限を超えたら古いものから捨てる
 	if (m_undoStack.size() > kMaxHistory) {
@@ -51,7 +65,7 @@ bool CMapPartsHistory::Undo(Entry &outEntry)
 		m_redoStack.erase(m_redoStack.begin());
 	}
 
-	outEntry = entry;	// oldPartsId が復元すべき値
+	outEntry = entry;	// cells の逆順に oldPartsId を適用
 	return true;
 }
 
@@ -71,7 +85,7 @@ bool CMapPartsHistory::Redo(Entry &outEntry)
 		m_undoStack.erase(m_undoStack.begin());
 	}
 
-	outEntry = entry;	// newPartsId が再適用すべき値
+	outEntry = entry;	// cells の正順に newPartsId を適用
 	return true;
 }
 

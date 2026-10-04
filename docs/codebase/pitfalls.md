@@ -67,6 +67,8 @@
 
 - **SQLite DB（`SBODATA/SboData.db`）を稼働中にコピーすると、ファイルサイズが一致していても中身が全ゼロの破損ファイルになることがある。** `PRAGMA journal_mode=WAL; synchronous=NORMAL;`（`MgrData.cpp:193`）の DB をチェックポイント前に強制終了すると本体ファイルがゼロ化する。`OpenSboDb` が `sqlite3_exec` の戻り値を見ず、壊れた db でも true を返す（整合性チェック不在）ため、旧 CP932 の `.dat` seed へ静かにフォールバックし、半角は正常なのに日本語だけ文字化けする分かりにくい症状になる。切り分けは `head -c16` が `SQLite format 3` か・全ゼロ率を確認。コピー後はサイズ一致で安心せず中身（ヘッダ・非ゼロ）を検証すること。UTF-8 変換済み db に再度 SJIS→UTF8 変換をかけると二重エンコードで全壊するので、変換前に現エンコードを必ず確認する。
 
+- **`Common/Packet/` のパケット実装は `SboSockLib` にコンパイルされ、サーバーはその .lib をリンクする。** パケットにフィールドを足した後に `SboSvr.vcxproj` を `/p:BuildProjectReferences=false` でビルドすると、ヘッダは新しいのに `Set()`/コンストラクタは古い .lib のまま＝追加フィールドが未初期化のゴミ値になる（エラーも警告も出ない）。2026-10-04 にマップパーツのストロークIDがゴミ値で固定され、全配置が1件のUndoにまとまった。パケットを変えたら先に `SboSockLib.vcxproj`（Debug/Release とも）をビルドしてから SboSvr をリンクする。ブラウザ版は `out/browser-title/obj` で個別に再コンパイルされるので影響しない。
+
 ## Linux（CMake）ビルド
 
 - **非Windows の `PlatformDefs.h` は `min`/`max` を関数形式マクロで定義する。** これより後に libstdc++ の `<algorithm>`・`<vector>`・`<deque>`・`<random>` などを読むと、`std::max(...)` や `__g.max()` がマクロ展開されて大量のエラーになる（em++/libc++ では表面化しなかった）。対処は「標準ヘッダを先に読む」こと。`SboSvr/src/Platform/SvrCompat.h` で主要な標準ヘッダを `PlatformDefs.h` より前に読み、`TCharCompat.h` は `CStringCompat.h`（標準ヘッダを読む）を先に include する順にしてある。新しい標準ヘッダを使って同じ系統のエラーが出たら、`SvrCompat.h` の一覧に足す。

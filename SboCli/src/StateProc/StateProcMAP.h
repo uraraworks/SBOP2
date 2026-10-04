@@ -188,6 +188,11 @@ protected:
 	CAdminUiLoader  m_AdminUi;         // 管理者UIモジュール
 	CInfoCharCli   *m_pPlayerChar;     // 操作中のキャラ情報
 	CInfoMapBase   *m_pMap;            // 表示中のマップ情報
+	BOOL            m_bPartsDrag;      // パーツ配置ドラッグ中(Web管理画面 parts モード)
+	int             m_nPartsDragX;     // ドラッグで最後に塗ったセルX
+	int             m_nPartsDragY;     // ドラッグで最後に塗ったセルY
+	DWORD           m_dwPartsStrokeID; // ひと塗りのID(押下ごとに加算、0は欠番。Undoをまとめる用)
+	BOOL            PaintPartsCell(int nCellX, int nCellY, WORD wPartsID);	// 1セル配置(範囲外・同一パーツは無視)
 
 	CLibInfoCharCli *m_pLibInfoChar;   // キャラ情報ライブラリ
 	CLibInfoMapBase *m_pLibInfoMap;    // マップ情報ライブラリ

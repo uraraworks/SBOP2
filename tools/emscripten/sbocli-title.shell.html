@@ -2258,6 +2258,10 @@
         });
     }
 
+    // Web管理画面の postMessage 保持値とランタイム初期化済みフラグ
+    var sbop2RuntimeReady = false;
+    var sbop2PendingAdminMode = null;
+    var sbop2PendingAdminPartsId = null;
     var Module = {
       preRun: [function() {
         Module.addRunDependency('sbop2-grp-override');
@@ -2348,9 +2352,15 @@
         markStartOverlayReady();
         sbop2CheckDeviceToken();
         // ?admin=1 埋め込み時: postMessage が届く前に初期値(-1=未接続)を 0(free モード)にして枠を有効化
+        sbop2RuntimeReady = true;
         try {
           if (new URLSearchParams(window.location.search).get('admin') === '1') {
-            Module.ccall('SBOP2_SetWebAdminMode', null, ['number'], [0]);
+            // 初期化前に届いた保持済みモードがあればそれ、無ければ 0
+            Module.ccall('SBOP2_SetWebAdminMode', null, ['number'],
+              [sbop2PendingAdminMode !== null ? sbop2PendingAdminMode : 0]);
+            if (sbop2PendingAdminPartsId !== null) {
+              Module.ccall('SBOP2_SetWebAdminSelectedPartsID', null, ['number'], [sbop2PendingAdminPartsId]);
+            }
           }
         } catch (e) {
           console.warn('[SBOP2] admin mode init failed:', e);
@@ -2752,12 +2762,23 @@
     window.addEventListener("message", function(ev) {
       if (!ev.data || typeof ev.data !== "object") return;
       if (ev.data.kind === "sbop2_set_admin_mode") {
-        if (Module && Module.ccall) {
-          Module.ccall("SBOP2_SetWebAdminMode", null, ["number"], [Number(ev.data.mode) || 0]);
+        // ランタイム初期化前は値を保持し、onRuntimeInitialized で反映する
+        sbop2PendingAdminMode = Number(ev.data.mode) || 0;
+        if (sbop2RuntimeReady) {
+          try {
+            Module.ccall("SBOP2_SetWebAdminMode", null, ["number"], [sbop2PendingAdminMode]);
+          } catch (e) {
+            console.warn("[SBOP2] set admin mode failed:", e);
+          }
         }
       } else if (ev.data.kind === "sbop2_set_admin_parts_id") {
-        if (Module && Module.ccall) {
-          Module.ccall("SBOP2_SetWebAdminSelectedPartsID", null, ["number"], [Number(ev.data.partsId) || 0]);
+        sbop2PendingAdminPartsId = Number(ev.data.partsId) || 0;
+        if (sbop2RuntimeReady) {
+          try {
+            Module.ccall("SBOP2_SetWebAdminSelectedPartsID", null, ["number"], [sbop2PendingAdminPartsId]);
+          } catch (e) {
+            console.warn("[SBOP2] set admin parts id failed:", e);
+          }
         }
       } else if (ev.data.kind === "sbop2_admin_play_sound") {
         if (Module && Module.ccall) {

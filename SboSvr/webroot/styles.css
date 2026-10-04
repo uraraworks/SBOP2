@@ -1373,6 +1373,15 @@ main {
   .map-window-screen {
     min-height: 440px;
   }
+
+  /* 1列表示では親が高さを持たないので、パレット領域(中身が absolute)に高さを与える */
+  .view[data-view="map-parts-place"].is-active {
+    height: auto;
+  }
+
+  .view[data-view="map-parts-place"] .mpp-view-body {
+    min-height: 420px;
+  }
 }
 
 @media (max-width: 640px) {

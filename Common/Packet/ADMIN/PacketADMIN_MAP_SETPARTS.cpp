@@ -16,6 +16,7 @@ CPacketADMIN_MAP_SETPARTS::CPacketADMIN_MAP_SETPARTS()
 	m_ptPos.y	= 0;
 	m_dwMapID	= 0;
 	m_dwPartsID	= 0;
+	m_dwStrokeID	= 0;
 }
 
 CPacketADMIN_MAP_SETPARTS::~CPacketADMIN_MAP_SETPARTS()
@@ -27,7 +28,8 @@ void CPacketADMIN_MAP_SETPARTS::Make(
 	int x,	// [in] X座標
 	int y,	// [in] Y座標
 	DWORD dwPartsID,	// [in] パーツID
-	BOOL bPile)	// [in] 重ね合わせ用
+	BOOL bPile,	// [in] 重ね合わせ用
+	DWORD dwStrokeID)	// [in] ストロークID(0:単発)
 {
 	PBYTE pData, pDataTmp;
 	DWORD dwSize;
@@ -41,7 +43,8 @@ void CPacketADMIN_MAP_SETPARTS::Make(
 			 sizeof (ptPos)	+
 			 sizeof (dwMapID)	+
 			 sizeof (dwPartsID)	+
-			 sizeof (bPile);
+			 sizeof (bPile)	+
+			 sizeof (dwStrokeID);
 
 	pData = new BYTE[dwSize];
 	ZeroMemory(pData, dwSize);
@@ -55,6 +58,7 @@ void CPacketADMIN_MAP_SETPARTS::Make(
 	CopyMemoryRenew(pDataTmp, &ptPos,	sizeof (ptPos),	pDataTmp);	// 座標
 	CopyMemoryRenew(pDataTmp, &dwPartsID,	sizeof (dwPartsID),	pDataTmp);	// パーツID
 	CopyMemoryRenew(pDataTmp, &bPile,	sizeof (bPile),	pDataTmp);	// 重ね合わせ用
+	CopyMemoryRenew(pDataTmp, &dwStrokeID,	sizeof (dwStrokeID),	pDataTmp);	// ストロークID
 
 	RenewPacket(pData, dwSize);
 }
@@ -70,6 +74,7 @@ PBYTE CPacketADMIN_MAP_SETPARTS::Set(PBYTE pPacket)
 	CopyMemoryRenew(&m_ptPos,	pDataTmp, sizeof (m_ptPos),	pDataTmp);	// 座標
 	CopyMemoryRenew(&m_dwPartsID,	pDataTmp, sizeof (m_dwPartsID),	pDataTmp);	// パーツID
 	CopyMemoryRenew(&m_bPile,	pDataTmp, sizeof (m_bPile),	pDataTmp);	// 重ね合わせ用
+	CopyMemoryRenew(&m_dwStrokeID,	pDataTmp, sizeof (m_dwStrokeID),	pDataTmp);	// ストロークID
 
 	pRet = pDataTmp;
 	return pRet;
