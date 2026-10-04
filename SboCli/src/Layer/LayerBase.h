@@ -36,6 +36,8 @@ protected:
 	void TextOut1(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF color); // 文字描画
 	void TextOut2(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame = RGB(10, 10, 10)); // 縁取り文字描画
 	void TextOut3(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COLORREF color, COLORREF colorFrame = RGB(10, 10, 10)); // 縁取り文字描画
+	int DrawKeyCap(CImg32 *pDst, int x, int y, LPCTSTR pszKey); // キーの絵を描画して幅を返す
+	void DrawKeyHelp(CImg32 *pDst, int x, int y, LPCTSTR pszKeys, LPCTSTR pszText); // 操作案内を 1 行描画
 
 
 protected:

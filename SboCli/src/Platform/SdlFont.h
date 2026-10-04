@@ -1,5 +1,5 @@
 /// @file SdlFont.h
-/// @brief SDL_ttfベースのフォント管理・テキスト描画
+/// @brief SDL_ttfベースのフォント管理・テキスト描画（ピクセルフォントを 2 倍で描く）
 /// @date 2026/04/06
 
 #pragma once
@@ -39,6 +39,14 @@ SdlDCContext* SdlDCGet(void* hDC);
 // TextOut互換: DCコンテキストの現在フォント・色を使う
 bool SdlFontTextOut(void* hDC, int x, int y, const wchar_t* pStr, int nLen);
 bool SdlFontTextOutA(void* hDC, int x, int y, const char* pStr, int nLen);
+
+// 文字の 1 ドットの大きさ（ピクセル）。縁取りのずらし幅などに使う
+int SdlFontPixelScale();
+
+// 縁取り付きで描く（DC の現在フォントを使う）。縁は 1 ドット。
+// bThick=false: 上下左右の 4 方向、true: 斜めも含む 8 方向
+bool SdlFontTextOutFramed(void* hDC, int x, int y, const wchar_t* pStr, int nLen,
+                          unsigned long color, unsigned long colorFrame, bool bThick);
 
 // テキストサイズ取得
 bool SdlFontGetTextExtent(void* hFont, const wchar_t* pStr, int nLen, int* pWidth, int* pHeight);

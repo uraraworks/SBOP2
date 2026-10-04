@@ -20,8 +20,8 @@ CWindowSETDRAWMODE::CWindowSETDRAWMODE()
 	m_nID	= WINDOWTYPE_SETDRAWMODE;
 	m_ptViewPos.x	= 80;
 	m_ptViewPos.y	= 128;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 10;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 2;
+	m_sizeWindow.cx	= 32 + WND_CHAR_W * 8 + 16;
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 2;
 }
 
 
@@ -56,12 +56,12 @@ void CWindowSETDRAWMODE::Draw(PCImg32 pDst)
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
 
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("名前を表示する"),	clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("名前を表示しない"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("名前を表示する"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(1), _T("名前を表示しない"),	clText);
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

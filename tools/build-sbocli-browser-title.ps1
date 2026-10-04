@@ -27,6 +27,14 @@ if (-not (Test-Path (Join-Path $fontDir "NotoSansCJKjp-Regular.otf"))) {
     throw "サブセットフォントが見つかりません: $fontDir (tools/make-font-subset.py で生成してください)"
 }
 $bgmDir  = Join-Path $repoRoot "Release\BGM"
+# ゲーム内の文字はピクセルフォント(SboCli/font/*.ttf)で描く。小さいのでサブセット化せずそのまま入れる。
+$pixelFontDir = Join-Path $repoRoot "SboCli\font"
+$pixelFonts = @("misaki_gothic_2nd.ttf", "PixelMplus10-Regular.ttf", "PixelMplus12-Regular.ttf")
+foreach ($f in $pixelFonts) {
+    if (-not (Test-Path (Join-Path $pixelFontDir $f))) {
+        throw "ピクセルフォントが見つかりません: $(Join-Path $pixelFontDir $f)"
+    }
+}
 $wavDir  = Join-Path $repoRoot "SboSoundData\res\WAVE"
 
 function Get-BrowserSourceList {
@@ -261,6 +269,10 @@ $linkArgs = @(
     "--post-js", $eglSwapPost,
     "-o", (Join-Path $outPath "sbocli-title.html")
 ) + $objects
+# ピクセルフォントは 1 本ずつ /font 直下へ置く
+foreach ($f in $pixelFonts) {
+    $linkArgs += @("--preload-file", "$(Join-Path $pixelFontDir $f)@/font/$f")
+}
 
 Write-Host "[browser-link] linking sbocli-title.html"
 

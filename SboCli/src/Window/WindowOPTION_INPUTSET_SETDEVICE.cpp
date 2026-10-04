@@ -21,8 +21,8 @@ CWindowOPTION_INPUTSET_SETDEVICE::CWindowOPTION_INPUTSET_SETDEVICE()
 	m_nID	= WINDOWTYPE_OPTION_INPUTSET_SETDEVICE;
 	m_ptViewPos.x	= 8 * 17;
 	m_ptViewPos.y	= 16 * 12;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 16 + 12;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 0;
+	m_sizeWindow.cx	= 32 + WND_CHAR_W * 14;
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 0;
 
 	m_MgrKeyInput = NULL;
 }
@@ -78,16 +78,16 @@ void CWindowOPTION_INPUTSET_SETDEVICE::Draw(PCImg32 pDst)
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
 
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("使用しない"), clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("使用しない"), clText);
 
 	for (i = 0; i < m_nPosMax; i ++) {
 		m_MgrKeyInput->GetDeviceName(i, strTmp);
-		TextOut2(hDC, m_hFont, 32, 16 + 16 * (i + 1), strTmp, clText);
+		TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(i + 1), strTmp, clText);
 	}
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

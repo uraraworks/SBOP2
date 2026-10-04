@@ -39,7 +39,8 @@ void CLayerLoginMenu::Draw(PCImg32 pDst)
 	pDst->Blt(32, 32, m_pDibBack->Width(), m_pDibBack->Height(), m_pDibBack, 0, 0);
 	CLayerCloud::Draw(pDst);
 
-	pDst->BltFrom256(32, SCRSIZEY - 32, 112, 32, m_pDibSystem, 688,  80, TRUE);
-	pDst->BltFrom256(32, SCRSIZEY,       43, 16, m_pDibSystem, 688, 112, TRUE);
-	pDst->BltFrom256(32, SCRSIZEY + 16,  43, 16, m_pDibSystem, 688, 128, TRUE);
+	// 操作案内は絵ではなく文字で描く（1 行 22px）
+	DrawKeyHelp(pDst, 32 + 2, 32 + SCRSIZEY - 22 * 3, _T("← ↑ ↓ →"), _T("移動"));
+	DrawKeyHelp(pDst, 32 + 2, 32 + SCRSIZEY - 22 * 2, _T("X"), _T("決定"));
+	DrawKeyHelp(pDst, 32 + 2, 32 + SCRSIZEY - 22 * 1, _T("Z"), _T("取消"));
 }

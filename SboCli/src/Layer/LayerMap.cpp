@@ -733,15 +733,17 @@ void CLayerMap::RenewMapName(LPCTSTR pszMapName)
 	SdlFontGetTextExtent((void*)m_hFont32, strMapName, nLen, &textW, &textH);
 	SIZE sizeText = { textW, textH };
 
-	int nWidth = sizeText.cx + 8; // 余白
-	int nHeight = 40;
+	// 太めの縁取り(1 ドット)ぶんの余白を上下左右に取る
+	const int nDot = SdlFontPixelScale();
+	int nWidth = sizeText.cx + nDot * 2;
+	int nHeight = sizeText.cy + nDot * 2;
 
 	m_pDibMapName = new CImg32;
 	m_pDibMapName->Create(nWidth, nHeight);
 
 	hDCTmp = m_pDibMapName->Lock();
 
-	this->TextOut3(hDCTmp, m_hFont32, 1, 2, strMapName, RGB(255, 255, 255));
+	this->TextOut3(hDCTmp, m_hFont32, nDot, nDot, strMapName, RGB(255, 255, 255));
 
 	m_pDibMapName->Unlock();
 
@@ -1587,13 +1589,17 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 			if (xx + nWidth >= nMaxX) {
 				xx = nMaxX - nWidth;
 			}
-			yy = y + nHeight;
+			// 名前画像は縁取りで上下に 1 ドットずつ広いので、そのぶん上へずらす
+			yy = y + 16 - SdlFontPixelScale();
 			if (yy < 32) {
 				yy = 32;
 			}
 			if (yy + nHeight >= nMaxY) {
 				yy = nMaxY - nHeight;
 			}
+			// 文字のドットを絵のドットにそろえる
+			xx &= ~1;
+			yy &= ~1;
 			pDst->Blt(xx, yy, nWidth, nHeight, pChar->m_pDibName, 0, 0, TRUE);
 		}
 
@@ -1615,11 +1621,16 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 			if (yy + nHeight >= nMaxY) {
 				yy = nMaxY - nHeight;
 			}
+			xx &= ~1;
+			yy &= ~1;
 			pDst->Blt(xx, yy, nWidth, nHeight, pChar->m_pDibSpeak, 0, 0, TRUE);
 		}
 	}
 }
 
+
+// 操作案内 1 行の高さ（キーの絵 20px ＋すき間）
+#define KEYHELP_LINE_H	(22)
 
 void CLayerMap::DrawSystemIcon(PCImg32 pDst)
 {
@@ -1636,8 +1647,22 @@ void CLayerMap::DrawSystemIcon(PCImg32 pDst)
 	pDst->BltFrom256(SCRSIZEX - 32, nOffset + SCRSIZEY - 8, 32, 40, m_pDibSystem, 688 + 32 * 7, 0, TRUE); // 休憩
 	pDst->BltFrom256(SCRSIZEX,      nOffset + SCRSIZEY - 8, 32, 40, m_pDibSystem, 688 + 32 * 6, 0, TRUE); // システム
 	pDst->BltFrom256(64,            nOffset + SCRSIZEY - 8, 32, 32, m_pDibSystem, 688 + 64,    48, TRUE); // 視点
-	pDst->BltFrom256(32,            nOffset + SCRSIZEY - 40, 112, 32, m_pDibSystem, 688,        112, TRUE); // 説明
-	pDst->BltFrom256(32,            nOffset + SCRSIZEY - 8, 128, 36, m_pDibSystem, 688,         208, TRUE); // 説明
+
+	// 操作案内は絵ではなく文字で描く（文言を差し替えれば英語などにもできる）
+	{
+		static const LPCTSTR s_apszHelp[][2] = {
+			{_T("X"),	_T("決定/拾う/動作")},
+			{_T("Z"),	_T("取消/ついていく")},
+			{_T("Space"),	_T("メニューを開く")},
+			{_T("Enter"),	_T("発言窓を開く")},
+		};
+		int i, nCount;
+
+		nCount = sizeof(s_apszHelp) / sizeof(s_apszHelp[0]);
+		for (i = 0; i < nCount; i ++) {
+			DrawKeyHelp(pDst, 32 + 2, nOffset + 32 + SCRSIZEY - KEYHELP_LINE_H * (nCount - i), s_apszHelp[i][0], s_apszHelp[i][1]);
+		}
+	}
 
 	if (m_nViewIcon > 0) {
 		// 視点モード
@@ -1695,13 +1720,16 @@ void CLayerMap::DrawMapName(PCImg32 pDst)
 	cx = m_pDibMapName->Width();
 	cy = m_pDibMapName->Height();
 
+	// 文字のドットに合わせて 2px 単位に置き、マップ名はクローバーの縦の真ん中にそろえる
 	x = pDst->Width() / 2;
-	x -= (cx / 2);
+	x -= ((36 + cx) / 2);
+	x &= ~1;
 	y = pDst->Height() / 2 - 72;
-	y -= (cy / 2);
+	y -= (58 / 2);
+	y &= ~1;
 
 	pDst->BltAlphaFrom256(x, y, 50, 58, m_pDibSystem, 544, 320, 100 - m_nLevelMapName, TRUE);
-	pDst->BltAlpha(x + 32, y + 16, cx, cy, m_pDibMapName, 0, 0, 100 - m_nLevelMapName, TRUE);
+	pDst->BltAlpha(x + 36, y + (((58 - cy) / 2) & ~1), cx, cy, m_pDibMapName, 0, 0, 100 - m_nLevelMapName, TRUE);
 }
 
 

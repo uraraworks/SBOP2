@@ -19,7 +19,7 @@ CWindowDELCONFIRM::CWindowDELCONFIRM()
 	m_nID	= WINDOWTYPE_DELCONFIRM;
 	m_ptViewPos.x	= 88;
 	m_ptViewPos.y	= 160;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 8;
+	m_sizeWindow.cx	= WND_ALIGN8(48 + WND_SMALL_CHAR_W * 7 + 16);
 	m_sizeWindow.cy	= 16 * 2 + 8 * 9;
 
 	m_strMsg	= _T("削除しますか？");
@@ -55,8 +55,8 @@ void CWindowDELCONFIRM::Draw(PCImg32 pDst)
 	hDC	= m_pDib->Lock();
 
 	TextOut4(hDC, m_hFont14, 48, 8, (LPCTSTR)m_strMsg, clText);
-	TextOut2(hDC, m_hFont14, 40, 16 + 16 * 1,	_T("はい"),	clText);
-	TextOut2(hDC, m_hFont14, 40, 16 + 16 * 2 + 8,	_T("いいえ"),	clText);
+	TextOut2(hDC, m_hFont14, 40, 32 + 4,	_T("はい"),	clText);
+	TextOut2(hDC, m_hFont14, 40, 32 + 24 + 4,	_T("いいえ"),	clText);
 
 	m_pDib->Unlock();
 

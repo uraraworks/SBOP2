@@ -20,6 +20,9 @@ public:
 	void	Create(CMgrData *pMgrData);	// 作成
 	void	Draw(CImg32 *pDst);	// 描画
 
+private:
+	void	DrawNumberRight(HDC hDC, int xRight, int y, LPCTSTR pszText);	// 右端をそろえて数値を描画
+
 
 protected:
 } CWindowCHAR_STATUS4, *PCWindowCHAR_STATUS4;

@@ -21,7 +21,7 @@ CWindowSETBGMVOLUME::CWindowSETBGMVOLUME()
 	m_ptViewPos.x	= 80;
 	m_ptViewPos.y	= 96;
 	m_sizeWindow.cx	= 16 * 2 + 16 * 4;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 5;
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 5;
 }
 
 
@@ -58,15 +58,15 @@ void CWindowSETBGMVOLUME::Draw(PCImg32 pDst)
 	hDC	= m_pDib->Lock();
 
 	clText = RGB(1, 1, 1);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("無し"),	clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("１"),	clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 2, _T("２"),	clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 3, _T("３"),	clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 4, _T("４"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("無し"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(1), _T("１"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(2), _T("２"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(3), _T("３"),	clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(4), _T("４"),	clText);
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

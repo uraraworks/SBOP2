@@ -19,10 +19,10 @@ CWindowACCOUNTINFO::CWindowACCOUNTINFO()
 	m_nPos	= 0;
 	m_nPosMax	= 2;
 	m_nID	= WINDOWTYPE_ACCOUNTINFO;
-	m_ptViewPos.x	= 280;
+	m_ptViewPos.x	= 240;
 	m_ptViewPos.y	= 48;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 10;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 4;
+	m_sizeWindow.cx	= WND_ALIGN8(16 + WND_CHAR_W * 10 + 16);
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 4;
 }
 
 
@@ -64,11 +64,11 @@ void CWindowACCOUNTINFO::Draw(PCImg32 pDst)
 	hDC	= m_pDib->Lock();
 
 	strTmp.Format(_T("キャラ名:%s"), (LPCTSTR)pInfoChar->m_strCharName);
-	TextOut2(hDC, m_hFont, 16, 16 + 16 * 0, strTmp,	clText);
+	TextOut2(hDC, m_hFont, 16, WND_TEXT_Y(0), strTmp,	clText);
 	strTmp.Format(_T("アカウント作成日時:"));
-	TextOut2(hDC, m_hFont, 16, 16 + 16 * 1, strTmp,	clText);
-	TextOut2(hDC, m_hFont, 16, 16 + 16 * 2, _T("前回ログイン日時:"),	clText);
-	TextOut2(hDC, m_hFont, 16, 16 + 16 * 3, _T("ログイン回数:"),	clText);
+	TextOut2(hDC, m_hFont, 16, WND_TEXT_Y(1), strTmp,	clText);
+	TextOut2(hDC, m_hFont, 16, WND_TEXT_Y(2), _T("前回ログイン日時:"),	clText);
+	TextOut2(hDC, m_hFont, 16, WND_TEXT_Y(3), _T("ログイン回数:"),	clText);
 
 	m_pDib->Unlock();
 

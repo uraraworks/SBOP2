@@ -31,7 +31,8 @@ public:
 
 protected:
 	enum {
-		TEXT_LINE_HEIGHT = 20,	// 本文の行の高さ
+		TEXT_LINE_HEIGHT = 22,	// 本文の行の高さ（20px の文字＋行間 1 ドット）
+		TITLE_LINE_HEIGHT = WND_LINE_H,	// 名前枠の 1 行の高さ（縁取り込み）
 	};
 
 	BOOL OnUp(void);	// キーハンドラ(↑)

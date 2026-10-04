@@ -23,6 +23,8 @@
 
 - **UTF-8 完全移行後の前提（2026-06-23, `ad93086`/`2898e5a`/`56d6b41`/`a2de14c`）。** DB 保存・通信パケット・ログ出力の3経路はすべて UTF-8 に統一済み。`CmyString` の `operator LPCSTR()` は `GetUtf8Pointer()` を返すので `(LPCSTR)cmystr` は安全。クライアント/サーバのバイナリは同時更新が必須（古い CP932 クライアントと混在させない）。撤去済みシンボル（`GetLegacyAnsiPointer`/`GetLegacyStoreLength`/`TStringToLegacyAnsi`/`LegacyAnsiToTString`）は復活させないこと。クライアント側の描画/表示（`LayerSystemMsg`/`SdlFont`/`ImGuiMsgLog`/`GdiStubs`）にも「LPCSTR=SJIS」前提が残っていたため、`SjisToWstring`/`SjisBytesToUtf8`/CP_ACP 経路を UTF-8 直接処理に置換した。UTF-8化の影響範囲を見積もる時は `SboCli/src/Platform/` も必ず当たること。
 
+- **ソースは CRLF と LF、BOM あり／なしが混在している。** Python の `open(..., 'w')` やテキストモードの読み書きで一括置換すると、CRLF のファイルが LF に変わって全行差分になる（ピクセルフォント化の作業で `WindowTEXTMSG.h` などが実際に全行差分になった）。改行コードと BOM を保ったまま置換するか、置換後に `git diff --stat` で行数が膨らんでいないか確認する。
+
 ## ブラウザ版クライアント
 
 - **ブラウザ版の実質メイン画像ローダーは `CMgrGrpData::Load()`（`SboCli/src/MgrGrpData.cpp`）ではなく `LoadLocalTitleAssets()`（同ファイル、`MainFrame.cpp` からフォールバックで呼ばれる）。** ブラウザ版は `SDL_LoadObject("SboGrpData.dll")` に失敗して `Load()` が即 return するため、`LoadLocalTitleAssets()` が全画像をファイルから読む。**`Load()` に画像種別を追加しても `LoadLocalTitleAssets()` に同じロードループを足さないと、ネイティブでは出るのにブラウザ版だけ画像が欠落する**（`GetDibXxx` が NULL を返し描画が静かにスキップされるだけでクラッシュしない）。実例: 撃破時の煙エフェクト(`IDP_EFC_32_*`/`IDP_EFC_64_*`)、16px NPC シート(`IDP_NPC_01`/`IDP_NPC_02` → `m_paImgNPC`、得点NPC `CHARMOVETYPE_SCORE` 表示に必須)。未確認の欠落候補として `IDP_WEAPON_*` や吹き出し(balloon)も疑ってよい。診断は `SboDbgLog` で `GetEfcImg grpMain=4 pRetNull=1` のようなログを仕込むと特定できる。
@@ -148,6 +150,9 @@
 - **画像アセットを `SboData.db` に入れてはいけない。** 起動時にメモリへ丸ごと読み込み停止時に書き戻す設計のため、管理画面からの差し替えが停止時に消える。専用の `SboGrpData.db`（journal_mode=DELETE で -wal/-shm を作らない）に res_name キーで PNG を保存し、`SpriteSheetHandler` が DB→res/→DLL の3段フォールバックで配信する構成にした。公開口 `GET /assets/manifest`/`GET /assets/sprite/{resName}`（認証不要、`/api/` の外）から取得し、shell の `preRun` で MEMFS の `/grp_override/<resName>.png` へ書き込む。C++ `TryReadGrpOverride()` が `Read`/`Read256` の先頭で見る。`fetch` は `cache:'no-cache'`（`no-store`だとIf-None-Matchが送られず毎回フル取得になる）。
 
 - **エフェクト定義は SQLite の `sys_effect`（EffectID, Name, AnimeCount, Loop, GrpIDMain）と `sys_effect_anime`（EffectID, Slot, Wait×10ms/コマ, Level, GrpIDBase, GrpIDPile）。** コマ送りは `dwTime - m_dwLastAnime >= Wait*10`（`InfoEffect.cpp:375`）で進む。既知の主要ID: 1=打撃ヒット、2=気絶中(loop)、**5=消滅**（撃破時の消滅演出はこれ）、20=回復。演出の尺を調整する時はコード側の固定値ではなく DB の `Wait` 列を変更する。Windows から sqlite3 CLI 無しで照会する場合は OS 同梱の `winsqlite3.dll` を PowerShell `Add-Type` で P/Invoke（`sqlite3_open`/`prepare_v2`/`step`/`column_text`）するとリビルド不要で確認できる。
+
+- **ゲーム画面の文字・枠は「1 ドット = 2x2 ピクセル」の格子で描いている（2026-09-30 ピクセルフォント化）。** 文字は `SdlFont.cpp` がピクセルフォント（14px 以下=美咲ゴシック第2、15〜23px=PixelMplus10、24px 以上=PixelMplus12）を 2 倍で描き、座標を偶数にそろえる。自前で位置を計算する時も偶数座標・偶数サイズにしないと、1px ずれてにじんだり縁取りが片寄ったりする。文字幅は `SdlFontGetTextExtent` で測る（`文字数 * 6` のような固定幅の計算は幅が合わない）。美咲（8 ドット）に 8 方向の太い縁取りをすると字がつぶれるので、`TextOut4` は小さい文字だけ色を入れ替えた細い縁取りにしている。
+- **`system.png` の枠（DrawFrame 0〜7 番・DrawFrame2）は `tools/pixelart/system-2x.py` で 2 倍ドットに作り直したもの。** このスクリプトは外周 4px を 2 倍に引き伸ばすので、作り直した後の画像にもう一度かけると縁がさらに太くなる。やり直す時は元の画像（git の履歴）にかけること。上端の場所バー（`WindowPLACEINFORMATION`）と左上の HP/MP 表示（`WindowCHAR_STATUS4`）、左下の操作案内（`CLayerBase::DrawKeyHelp`）は絵を貼らずにコードで描いているので、`system.png` の該当箇所（y=624〜718、x=688〜 の操作案内）はもう使っていない。
 
 ## テスト・自動操作
 

@@ -14,23 +14,30 @@
 #include "WindowCOMMANDMENU.h"
 
 
+// 元の大きさ（2 倍にする前）のウィンドウサイズ
+#define COMMANDMENU_SMALL_CX	(186 + 24)
+#define COMMANDMENU_SMALL_CY	(126)
+
 CWindowCOMMANDMENU::CWindowCOMMANDMENU()
 {
 	m_nPos	= 2;
 	m_nPosMax	= 4;
 	m_bInput	= TRUE;
 	m_nID	= WINDOWTYPE_COMMANDMENU;
-	m_sizeWindow.cx	= 186 + 24;
-	m_sizeWindow.cy	= 125;
+	// 絵が 1 ドット単位の細かい絵なので、元の大きさで描いて 2 倍に拡大して表示する
+	m_sizeWindow.cx	= COMMANDMENU_SMALL_CX * 2;
+	m_sizeWindow.cy	= COMMANDMENU_SMALL_CY * 2;
 	m_ptViewPos.x	= SCRSIZEX - m_sizeWindow.cx;
 	m_ptViewPos.y	= SCRSIZEY - m_sizeWindow.cy;
 
 	m_nPosSub = 0;
+	m_pDibSmall = NULL;
 }
 
 
 CWindowCOMMANDMENU::~CWindowCOMMANDMENU()
 {
+	SAFE_DELETE(m_pDibSmall);
 }
 
 
@@ -41,6 +48,8 @@ void CWindowCOMMANDMENU::Create(CMgrData *pMgrData)
 	m_bActive = TRUE;
 	m_pDib->Create(m_sizeWindow.cx, m_sizeWindow.cy);
 	m_pDib->SetColorKey(0);
+	m_pDibSmall = new CImg32;
+	m_pDibSmall->Create(COMMANDMENU_SMALL_CX, COMMANDMENU_SMALL_CY);
 
 	RenewCommand();
 }
@@ -54,17 +63,19 @@ void CWindowCOMMANDMENU::Draw(PCImg32 pDst)
 		goto Exit;
 	}
 
-	m_pDib->FillRect(0, 0, m_sizeWindow.cx, m_sizeWindow.cy, 0);
-	m_pDib->BltFrom256(m_sizeWindow.cx - 186, m_sizeWindow.cy - 43, 186, 43, m_pDibSystem, 272, 786, TRUE);
+	m_pDibSmall->FillRect(0, 0, COMMANDMENU_SMALL_CX, COMMANDMENU_SMALL_CY, 0);
+	m_pDibSmall->BltFrom256(COMMANDMENU_SMALL_CX - 186, COMMANDMENU_SMALL_CY - 43, 186, 43, m_pDibSystem, 272, 786, TRUE);
 
 	x = 273 + m_nPos * 37;
 	y = 704;
-	m_pDib->BltFrom256(m_nPos * 37 + 25, 0, 36, 82, m_pDibSystem, x, y, TRUE);
+	m_pDibSmall->BltFrom256(m_nPos * 37 + 25, 0, 36, 82, m_pDibSystem, x, y, TRUE);
 
 	x = 24 + 3 + (m_nPos * 38);
-	y = m_sizeWindow.cy - 24;
+	y = COMMANDMENU_SMALL_CY - 24;
 	y -= ((m_nPosSub * 41) + 3);
-	m_pMgrDraw->DrawCursor(m_pDib, x - 16, y - 8, 1);
+	m_pMgrDraw->DrawCursor(m_pDibSmall, x - 16, y - 8, 1);
+
+	m_pDib->BltStretchNearest(0, 0, m_sizeWindow.cx, m_sizeWindow.cy, m_pDibSmall, 0, 0, COMMANDMENU_SMALL_CX, COMMANDMENU_SMALL_CY);
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

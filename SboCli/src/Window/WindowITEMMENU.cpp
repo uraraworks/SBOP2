@@ -17,6 +17,10 @@
 #include "WindowITEMMENU.h"
 
 
+// 装備欄とバッグのマスの上端
+#define ITEMMENU_EQUIP_Y	(32)
+#define ITEMMENU_BAG_Y	(168)
+
 CWindowITEMMENU::CWindowITEMMENU()
 {
 	m_ptDrag.x = m_ptDrag.y = -1;
@@ -24,10 +28,10 @@ CWindowITEMMENU::CWindowITEMMENU()
 	m_nPosMax	= EQUIPTYPE_MAX + 24;
 	m_bInput	= TRUE;
 	m_nID	= WINDOWTYPE_ITEMMENU;
-	m_ptViewPos.x	= 24;
-	m_ptViewPos.y	= 32;
-	m_sizeWindow.cx	= 8 * 27;
-	m_sizeWindow.cy	= 8 * 50;
+	m_ptViewPos.x	= 16;
+	m_ptViewPos.y	= 24;
+	m_sizeWindow.cx	= 8 * 29;
+	m_sizeWindow.cy	= 8 * 54;
 
 	m_dwSelectItemID = 0;
 	m_dwDragItemID	 = 0;
@@ -71,23 +75,24 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 
 	m_strName.Empty();
 	DrawFrame(5);
-	DrawFrame(11, 7, 32 + 4, 24, 7);
-	DrawFrame(4, 24, 120, 104, 6);
-	DrawFrame(146, 24, 48, 104, 6);
-	DrawFrame(11, 134, 104, 24, 7);
-	DrawFrame(4, 149, 208, 248, 6);
+	// マスのまわりに 8px の余白をとって並べる
+	DrawFrame(10, 6, 48, 24, 7);
+	DrawFrame(4, 24, 136, 112, 6);
+	DrawFrame(160, 24, 56, 112, 6);
+	DrawFrame(10, 142, 104, 24, 7);
+	DrawFrame(4, 160, 224, 264, 6);
 
 	for (y = 0; y < 2; y ++) {
 		for (x = 0; x < 3; x ++) {
-			DrawIconFrame(12 + 36 * x, 31 + 47 * y);
+			DrawIconFrame(12 + ICONFRAME_STEP_X * x, ITEMMENU_EQUIP_Y + ICONFRAME_STEP_Y * y);
 		}
 	}
 	for (y = 0; y < 2; y ++) {
-		DrawIconFrame(153, 31 + 47 * y);
+		DrawIconFrame(170, ITEMMENU_EQUIP_Y + ICONFRAME_STEP_Y * y);
 	}
 	for (y = 0; y < 5; y ++) {
 		for (x = 0; x < 5; x ++) {
-			DrawIconFrame(12 + 36 * x, 158 + 47 * y);
+			DrawIconFrame(12 + ICONFRAME_STEP_X * x, ITEMMENU_BAG_Y + ICONFRAME_STEP_Y * y);
 		}
 	}
 
@@ -98,8 +103,8 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	DrawEquip(3, m_pPlayerChar->m_dwEquipItemIDArmsLeft);	// 盾
 
 	hDC	= m_pDib->Lock();
-	TextOut2(hDC, m_hFont12, 12 + 5, 7 + 4, _T("装備"), RGB(255, 255, 255));
-	TextOut2(hDC, m_hFont12, 12 + 5, 134 + 3, _T("バッグ(B)"), RGB(255, 255, 255));
+	TextOut2(hDC, m_hFont12, 10 + 8, 6 + 2, _T("装備"), RGB(255, 255, 255));
+	TextOut2(hDC, m_hFont12, 10 + 8, 142 + 2, _T("バッグ(B)"), RGB(255, 255, 255));
 
 	m_pDib->Unlock();
 
@@ -117,7 +122,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 		if ((m_ptDrag.x == x) && (m_ptDrag.y == y)) {
 			pIntoItemDrag = pInfoItem;
 		}
-		m_pMgrDraw->DrawItem(m_pDib, 12 + (x * 36), 159 + (y * 47), pInfoItem);
+		m_pMgrDraw->DrawItem(m_pDib, 14 + (x * ICONFRAME_STEP_X), ITEMMENU_BAG_Y + 2 + (y * ICONFRAME_STEP_Y), pInfoItem);
 		if (m_strName.IsEmpty() == FALSE) {
 			continue;
 		}
@@ -131,7 +136,7 @@ void CWindowITEMMENU::Draw(PCImg32 pDst)
 	if (pIntoItemDrag) {
 		x = (m_nPos - EQUIPTYPE_MAX) % 5;
 		y = (m_nPos - EQUIPTYPE_MAX) / 5;
-		m_pMgrDraw->DrawItem(m_pDib, 12 + (x * 36), 159 + (y * 47), pIntoItemDrag, 50);
+		m_pMgrDraw->DrawItem(m_pDib, 14 + (x * ICONFRAME_STEP_X), ITEMMENU_BAG_Y + 2 + (y * ICONFRAME_STEP_Y), pIntoItemDrag, 50);
 	}
 
 	GetDrawPos(m_nPos, x, y);
@@ -154,6 +159,8 @@ Exit:
 		GetDrawPos(m_nPos, x, y);
 		x = m_ptViewPos.x + 32 + x - 8;
 		y = m_ptViewPos.y + 32 + y - 24;
+		x &= ~1;
+		y &= ~1;
 
 		// SdlFontGetTextExtent でフォント直接計測
 		int textW = 0, textH = 0;
@@ -428,8 +435,8 @@ void CWindowITEMMENU::DrawEquip(
 	if (pInfoItem == NULL) {
 		return;
 	}
-	x = 12 + 36 * anDrawInfo[nType * 3 + 0];
-	y = 32 + 47 * anDrawInfo[nType * 3 + 1];
+	x = 14 + ICONFRAME_STEP_X * anDrawInfo[nType * 3 + 0];
+	y = ITEMMENU_EQUIP_Y + 2 + ICONFRAME_STEP_Y * anDrawInfo[nType * 3 + 1];
 	m_pMgrDraw->DrawItem(m_pDib, x, y, pInfoItem);
 	if (m_nPos == anDrawInfo[nType * 3 + 2]) {
 		// 装備中のアイテムなのでアイテム名を更新
@@ -444,10 +451,10 @@ void CWindowITEMMENU::GetDrawPos(
 	int &nDstY)
 {
 	if (nPos < EQUIPTYPE_MAX) {
-		nDstX = 36 * (nPos % 3) + 12 + 1;
-		nDstY = 47 * (nPos / 3) + 32 + 1;
+		nDstX = ICONFRAME_STEP_X * (nPos % 3) + 14;
+		nDstY = ICONFRAME_STEP_Y * (nPos / 3) + ITEMMENU_EQUIP_Y + 2;
 	} else {
-		nDstX = 36 * ((nPos - EQUIPTYPE_MAX) % 5) + 1 + 1;
-		nDstY = 47 * ((nPos - EQUIPTYPE_MAX) / 5) + 159 + 1;
+		nDstX = ICONFRAME_STEP_X * ((nPos - EQUIPTYPE_MAX) % 5) + 14;
+		nDstY = ICONFRAME_STEP_Y * ((nPos - EQUIPTYPE_MAX) / 5) + ITEMMENU_BAG_Y + 2;
 	}
 }

@@ -49,6 +49,9 @@ RES_DIR="$REPO_ROOT/SboGrpData/res"
 # ブラウザ版はサブセット版フォントを使う(全部入りは 1 本 16〜17MB あり
 # 初回ロードを大きく圧迫するため)。再生成は tools/make-font-subset.py。
 FONT_DIR="$REPO_ROOT/SboCli/font/subset"
+# ゲーム内の文字はピクセルフォント(SboCli/font/*.ttf)で描く。小さいのでサブセット化せずそのまま入れる。
+PIXEL_FONT_DIR="$REPO_ROOT/SboCli/font"
+PIXEL_FONTS=(misaki_gothic_2nd.ttf PixelMplus10-Regular.ttf PixelMplus12-Regular.ttf)
 BGM_DIR="$REPO_ROOT/Release/BGM"
 WAV_DIR="$REPO_ROOT/SboSoundData/res/WAVE"
 HTML_OUT="$OUT_DIR/sbocli-title.html"
@@ -58,6 +61,9 @@ warn() { echo "[browser-build] 警告: $*" >&2; }
 die()  { echo "[browser-build] エラー: $*" >&2; exit 1; }
 
 [ -f "$FONT_DIR/NotoSansCJKjp-Regular.otf" ] || die "サブセットフォントが見つかりません: $FONT_DIR (tools/make-font-subset.py で生成してください)"
+for f in "${PIXEL_FONTS[@]}"; do
+    [ -f "$PIXEL_FONT_DIR/$f" ] || die "ピクセルフォントが見つかりません: $PIXEL_FONT_DIR/$f"
+done
 [ -f "$SOURCES_LIST" ] || die "ブラウザ版ソース一覧ファイルが見つかりません: $SOURCES_LIST"
 
 # 空行と # 行を除いたソース一覧(CRLF でも読めるよう \r を落とす)
@@ -322,6 +328,9 @@ LINK_ARGS=(
     --post-js "$EGL_SWAP_POST"
     -o "$HTML_OUT"
 )
+for f in "${PIXEL_FONTS[@]}"; do
+    LINK_ARGS+=(--preload-file "$PIXEL_FONT_DIR/$f@/font/$f")
+done
 
 log "linking sbocli-title.html"
 # コマンドライン長制限を避けるためレスポンスファイルを使う(ps1 版と同じ)

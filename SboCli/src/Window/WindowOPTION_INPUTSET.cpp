@@ -47,8 +47,8 @@ CWindowOPTION_INPUTSET::CWindowOPTION_INPUTSET()
 	m_nID	= WINDOWTYPE_OPTION_INPUTSET;
 	m_ptViewPos.x	= 8 * 13;
 	m_ptViewPos.y	= 16 * 10;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 16 + 8;
-	m_sizeWindow.cy	= 16 * 2 + 16 * (m_nPosMax + 1);
+	m_sizeWindow.cx	= 32 + WND_CHAR_W * 14;
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * (m_nPosMax + 1);
 }
 
 
@@ -84,17 +84,17 @@ void CWindowOPTION_INPUTSET::Draw(PCImg32 pDst)
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
 
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("使用するジョイパッドの設定"), clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("使用するジョイパッドの設定"), clText);
 
 	// ブラウザ版(wchar_t 版 vswprintf)では Format("...%s...") の %s が空になる方言差があるため、
 	// %s に依存せず文字列連結で組み立てる。
 	strPadLine = _T("バーチャルパッド: ");
 	strPadLine += (LPCTSTR)GetVirtualPadModeLabel();
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, (LPCTSTR)strPadLine, clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(1), (LPCTSTR)strPadLine, clText);
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

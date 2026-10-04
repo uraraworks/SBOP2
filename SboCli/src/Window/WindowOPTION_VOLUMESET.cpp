@@ -18,10 +18,10 @@ CWindowOPTION_VOLUMESET::CWindowOPTION_VOLUMESET()
 	m_nPosMax	= 1;
 	m_bInput	= TRUE;
 	m_nID	= WINDOWTYPE_OPTION_VOLUMESET;
-	m_ptViewPos.x	= 8 * 13;
+	m_ptViewPos.x	= 8 * 6;
 	m_ptViewPos.y	= 16 * 9;
-	m_sizeWindow.cx	= 16 * 2 + 16 * 21;
-	m_sizeWindow.cy	= 16 * 2 + 16 * 2;
+	m_sizeWindow.cx	= 32 + 72 + 48 + 44 * 5 + 30 + 22;	// 枠は 8px 単位で描くので 8 の倍数にする
+	m_sizeWindow.cy	= 16 * 2 + WND_LINE_H * 2;
 }
 
 
@@ -60,21 +60,21 @@ void CWindowOPTION_VOLUMESET::Draw(PCImg32 pDst)
 	clText	= RGB(1, 1, 1);
 	hDC	= m_pDib->Lock();
 
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 0, _T("BGM"), clText);
-	TextOut2(hDC, m_hFont, 32, 16 + 16 * 1, _T("効果音"), clText);
-	TextOut2(hDC, m_hFont, 32 + 72, 16 + 16 * 0, _T("MIN"), clText);
-	TextOut2(hDC, m_hFont, 32 + 72, 16 + 16 * 1, _T("MIN"), clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(0), _T("BGM"), clText);
+	TextOut2(hDC, m_hFont, 32, WND_TEXT_Y(1), _T("効果音"), clText);
+	TextOut2(hDC, m_hFont, 32 + 72, WND_TEXT_Y(0), _T("MIN"), clText);
+	TextOut2(hDC, m_hFont, 32 + 72, WND_TEXT_Y(1), _T("MIN"), clText);
 	for (i = 0; i < 6; i ++) {
-		TextOut2(hDC, m_hFont, 32 + 72 + (16 * 3) + (i * 32), 16 + 16 * 0, apszTmp[i], clText);
-		TextOut2(hDC, m_hFont, 32 + 72 + (16 * 3) + (i * 32), 16 + 16 * 1, apszTmp[i], clText);
+		TextOut2(hDC, m_hFont, 32 + 72 + 48 + (i * 44), WND_TEXT_Y(0), apszTmp[i], clText);
+		TextOut2(hDC, m_hFont, 32 + 72 + 48 + (i * 44), WND_TEXT_Y(1), apszTmp[i], clText);
 	}
 
-	DrawCursor(32 + 24 + 72 + (m_nVolumeBgm * 32), 16 + 16 * 0);
-	DrawCursor(32 + 24 + 72 + (m_nVolumeSound * 32), 16 + 16 * 1);
+	DrawCursor(32 + 24 + 72 + (m_nVolumeBgm * 44), WND_LINE_Y(0));
+	DrawCursor(32 + 24 + 72 + (m_nVolumeSound * 44), WND_LINE_Y(1));
 
 	m_pDib->Unlock();
 
-	DrawCursor(8, 16 + 16 * m_nPos);
+	DrawCursor(8, WND_LINE_Y(m_nPos));
 	m_dwTimeDrawStart = timeGetTime();
 
 Exit:

@@ -462,13 +462,9 @@ void CWindowBase::TextOut2(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COL
 
 	// 縁取りする？
 	if (bDraw) {
-		ctx->textColor = (unsigned long)ColorFrame;
-		SdlFontTextOut(hDC, x - 1, y, pStr, nLen);
-		SdlFontTextOut(hDC, x + 1, y, pStr, nLen);
-		SdlFontTextOut(hDC, x, y - 1, pStr, nLen);
-		SdlFontTextOut(hDC, x, y + 1, pStr, nLen);
+		SdlFontTextOutFramed(hDC, x, y, pStr, nLen, (unsigned long)Color, (unsigned long)ColorFrame, false);
+		return;
 	}
-	// 本体
 	ctx->textColor = (unsigned long)Color;
 	SdlFontTextOut(hDC, x, y, pStr, nLen);
 }
@@ -491,14 +487,7 @@ void CWindowBase::TextOut3(HDC hDC, HFONT hFont, int x, int y, int cx, int cy, L
 	ctx->currentFont = (void*)hFont;
 
 	// 縁取り 4 方向
-	ctx->textColor = (unsigned long)RGB(10, 10, 10);
-	SdlFontTextOut(hDC, drawX - 1, drawY, pStr, nLen);
-	SdlFontTextOut(hDC, drawX + 1, drawY, pStr, nLen);
-	SdlFontTextOut(hDC, drawX, drawY - 1, pStr, nLen);
-	SdlFontTextOut(hDC, drawX, drawY + 1, pStr, nLen);
-	// 本体
-	ctx->textColor = (unsigned long)Color;
-	SdlFontTextOut(hDC, drawX, drawY, pStr, nLen);
+	SdlFontTextOutFramed(hDC, drawX, drawY, pStr, nLen, (unsigned long)Color, (unsigned long)RGB(10, 10, 10), false);
 }
 
 
@@ -513,34 +502,17 @@ void CWindowBase::TextOut4(HDC hDC, HFONT hFont, int x, int y, LPCTSTR pStr, COL
 	if (ctx == NULL) return;
 	ctx->currentFont = (void*)hFont;
 
-	// 縁取り 20 方向
-	ctx->textColor = (unsigned long)ColorFrame;
-	SdlFontTextOut(hDC, x - 2, y, pStr, nLen);
-	SdlFontTextOut(hDC, x - 1, y, pStr, nLen);
-	SdlFontTextOut(hDC, x - 1, y - 2, pStr, nLen);
-	SdlFontTextOut(hDC, x - 2, y - 1, pStr, nLen);
-	SdlFontTextOut(hDC, x - 1, y - 1, pStr, nLen);
-	SdlFontTextOut(hDC, x - 2, y + 1, pStr, nLen);
-	SdlFontTextOut(hDC, x - 1, y + 1, pStr, nLen);
-	SdlFontTextOut(hDC, x - 1, y + 2, pStr, nLen);
+	// 小さい文字（美咲 8 ドット）は太い縁取りだと字がつぶれるので、
+	// 縁の色で文字を描き、本来の文字色で細く縁取る（色の組み合わせは同じまま読みやすくする）
+	int nTextW = 0, nTextH = 0;
+	SdlFontGetTextExtent((void*)hFont, pStr, nLen, &nTextW, &nTextH);
+	if (nTextH <= 8 * SdlFontPixelScale()) {
+		SdlFontTextOutFramed(hDC, x, y, pStr, nLen, (unsigned long)ColorFrame, (unsigned long)Color, false);
+		return;
+	}
 
-	SdlFontTextOut(hDC, x + 2, y, pStr, nLen);
-	SdlFontTextOut(hDC, x + 1, y, pStr, nLen);
-	SdlFontTextOut(hDC, x + 1, y - 2, pStr, nLen);
-	SdlFontTextOut(hDC, x + 2, y - 1, pStr, nLen);
-	SdlFontTextOut(hDC, x + 1, y - 1, pStr, nLen);
-	SdlFontTextOut(hDC, x + 2, y + 1, pStr, nLen);
-	SdlFontTextOut(hDC, x + 1, y + 1, pStr, nLen);
-	SdlFontTextOut(hDC, x + 1, y + 2, pStr, nLen);
-
-	SdlFontTextOut(hDC, x, y - 2, pStr, nLen);
-	SdlFontTextOut(hDC, x, y - 1, pStr, nLen);
-	SdlFontTextOut(hDC, x, y + 2, pStr, nLen);
-	SdlFontTextOut(hDC, x, y + 1, pStr, nLen);
-
-	// 本体
-	ctx->textColor = (unsigned long)Color;
-	SdlFontTextOut(hDC, x, y, pStr, nLen);
+	// 縁取り 8 方向（太め）
+	SdlFontTextOutFramed(hDC, x, y, pStr, nLen, (unsigned long)Color, (unsigned long)ColorFrame, true);
 }
 
 
@@ -805,6 +777,36 @@ void CWindowBase::DrawFrame3(int x, int y, int cx, int cy, int nType)
 }
 
 
+void CWindowBase::DrawGauge(int x, int y, int cx, int nPercent, COLORREF clFill)
+{
+	int nWidth;
+
+	// 溝（角を 1 ドット落とした濃い茶色）
+	m_pDib->FillRect(x + 2, y, cx - 4, 8, RGB(69, 46, 13));
+	m_pDib->FillRect(x, y + 2, cx, 4, RGB(69, 46, 13));
+
+	// 中身は溝の内側 1 ドットあけて、2px 単位で伸ばす
+	nPercent = max(0, min(100, nPercent));
+	nWidth = ((cx - 4) * nPercent / 100) & ~1;
+	if (nWidth > 0) {
+		m_pDib->FillRect(x + 2, y + 2, nWidth, 4, clFill);
+	}
+}
+
+
+void CWindowBase::TextOutCenter(HDC hDC, HFONT hFont, int x, int cx, int y, LPCTSTR pStr, COLORREF Color)
+{
+	int nTextW, nTextH;
+
+	if ((pStr == NULL) || (hFont == NULL)) {
+		return;
+	}
+	nTextW = nTextH = 0;
+	SdlFontGetTextExtent((void *)hFont, pStr, lstrlen(pStr), &nTextW, &nTextH);
+	TextOut2(hDC, hFont, x + (((cx - nTextW) / 2) & ~1), y, pStr, Color);
+}
+
+
 void CWindowBase::DrawCursor(int x, int y)
 {
 //	if (m_bActive && (m_nCursorAnime == 0)) {
@@ -832,5 +834,8 @@ void CWindowBase::DrawInputFrame1(int x, int y, int cx, int cy, int nType)
 
 void CWindowBase::DrawIconFrame(int x, int y)
 {
-	m_pDib->BltFrom256(x, y, 34, 45, m_pDibSystem, 0, 883, TRUE);
+	// 1 ドット = 2px の枠で描く（茶色の縁と下の帯、中は 32x32 の絵を置く場所）
+	m_pDib->FillRect(x + 2, y, 32, 46, RGB(196, 140, 81));
+	m_pDib->FillRect(x, y + 2, 36, 42, RGB(196, 140, 81));
+	m_pDib->FillRect(x + 2, y + 2, 32, 32, RGB(255, 235, 200));
 }

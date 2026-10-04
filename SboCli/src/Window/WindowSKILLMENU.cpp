@@ -14,6 +14,11 @@
 #include "MgrWindow.h"
 #include "MgrSound.h"
 #include "WindowSKILLMENU.h"
+#include "../Platform/SdlFont.h"
+
+// 見出しタブの幅と間隔（「戦闘(F)」が 56px なので左右 4px の余白）
+#define SKILLMENU_TAB_W	(64)
+#define SKILLMENU_TAB_STEP	(66)
 
 #define MENUPOSY	(51)	// メニュー本体表示位置(縦)
 
@@ -25,8 +30,8 @@ CWindowSKILLMENU::CWindowSKILLMENU()
 	m_nID	= WINDOWTYPE_SKILLMENU;
 	m_ptViewPos.x	= 24;
 	m_ptViewPos.y	= 112;
-	m_sizeWindow.cx	= 208;
-	m_sizeWindow.cy	= 280;
+	m_sizeWindow.cx	= 232;
+	m_sizeWindow.cy	= 296;
 
 	m_nType	= 0;
 	m_nMode	= 1;
@@ -74,17 +79,17 @@ void CWindowSKILLMENU::Draw(PCImg32 pDst)
 	hDC	= m_pDib->Lock();
 	for (i = 0; i < 3; i ++) {
 		int nType = (m_nType == i) ? 7 : 5;
-		DrawFrame(7 + 49 * i, 7, 48, 24, nType);
-		TextOut2(hDC, m_hFont12, 7 + 5 + 49 * i, 7 + 4, aszTitle[i],
+		DrawFrame(6 + SKILLMENU_TAB_STEP * i, 6, SKILLMENU_TAB_W, 24, nType);
+		TextOut2(hDC, m_hFont12, 6 + 4 + SKILLMENU_TAB_STEP * i, 6 + 2, aszTitle[i],
 			(m_nType == i) ? RGB(255, 255, 255) : RGB(196, 140, 81));
 	}
 	m_pDib->Unlock();
 
-	DrawFrame(4, 23, 200, 248, 6);
+	DrawFrame(4, 24, 224, 264, 6);
 
 	for (y = 0; y < 5; y ++) {
 		for (x = 0; x < 5; x ++) {
-			DrawIconFrame(12 + 36 * x, 32 + 47 * y);
+			DrawIconFrame(12 + ICONFRAME_STEP_X * x, 32 + ICONFRAME_STEP_Y * y);
 		}
 	}
 
@@ -114,7 +119,7 @@ Exit:
 	pDst->BltLevel(m_ptViewPos.x + 32, m_ptViewPos.y + 32, m_sizeWindow.cx, m_sizeWindow.cy, m_pDib, 0, 0, nLevel, TRUE);
 	switch (m_nMode) {
 	case 0:
-		m_pMgrDraw->DrawCursor(pDst, m_ptViewPos.x + 32 + 49 * m_nType - 16, m_ptViewPos.y + 32 + 4, 0);
+		m_pMgrDraw->DrawCursor(pDst, m_ptViewPos.x + 32 + SKILLMENU_TAB_STEP * m_nType - 16, m_ptViewPos.y + 32 + 4, 0);
 		break;
 	case 1:
 		GetDrawPos(m_nPos, x, y);
@@ -129,7 +134,11 @@ Exit:
 		GetDrawPos(m_nPos, x, y);
 		x = m_ptViewPos.x + 32 + x - 8;
 		y = m_ptViewPos.y + 32 + y - 24;
-		DrawFrame2(x, y, m_strName.GetLength() * 6, 16, 0, pDst, 4);
+		x &= ~1;
+		y &= ~1;
+		int textW = 0, textH = 0;
+		SdlFontGetTextExtent((void*)m_hFont12, m_strName, m_strName.GetLength(), &textW, &textH);
+		DrawFrame2(x, y, textW, 16, 0, pDst, 4);
 		TextOut2(hDC, m_hFont12, x, y, (LPCTSTR)m_strName, RGB(10, 10, 10), FALSE);
 
 		pDst->Unlock();
@@ -382,6 +391,6 @@ void CWindowSKILLMENU::GetDrawPos(
 	int &nDstX,	// [out] X座標
 	int &nDstY)
 {
-	nDstX = 13 + 36 * (nPos % 5);
-	nDstY = 33 + 47 * (nPos / 5);
+	nDstX = 14 + ICONFRAME_STEP_X * (nPos % 5);
+	nDstY = 34 + ICONFRAME_STEP_Y * (nPos / 5);
 }
