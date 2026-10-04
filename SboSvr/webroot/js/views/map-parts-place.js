@@ -111,12 +111,12 @@ export function mount(container) {
     const toolbar = document.createElement("div");
     toolbar.className = "mpp-toolbar";
     toolbar.style.cssText =
-      "display:flex;align-items:center;gap:8px;flex-shrink:0;" +
+      "display:flex;flex-wrap:wrap;align-items:center;gap:8px;flex-shrink:0;" +
       "padding:8px 12px;border-bottom:1px solid var(--color-border,#333);";
 
     const h2 = document.createElement("h2");
     h2.textContent = "マップパーツ配置";
-    h2.style.cssText = "margin:0;font-size:1rem;flex:1;";
+    h2.style.cssText = "margin:0;font-size:1rem;flex:1 1 auto;white-space:nowrap;";
     toolbar.appendChild(h2);
 
     // 編集ボタン（パーツ選択中のみ有効）

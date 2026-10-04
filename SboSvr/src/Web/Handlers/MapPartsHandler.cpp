@@ -732,29 +732,43 @@ void BroadcastHistoryChanged()
                 std::string("}"));
 }
 
-// Undo/Redo 共通の適用処理。dwPartsId を復元/再適用してゲーム側へブロードキャストする。
-void ApplyHistoryEntry(CMgrData *pMgrData, const CMapPartsHistory::Entry &entry, DWORD dwPartsId)
+// Undo/Redo 共通の適用処理。全セルを復元/再適用してゲーム側へブロードキャストする。
+// bUndo=true: cells を逆順に oldPartsId、false: 正順に newPartsId を適用。
+// 最後に適用したセルを outLast / outPartsId に返す。適用0件なら false。
+bool ApplyHistoryEntry(CMgrData *pMgrData, const CMapPartsHistory::Entry &entry, bool bUndo, CMapPartsHistory::Cell &outLast, DWORD &outPartsId)
 {
         CLibInfoMapBase *pMapLib = pMgrData->GetLibInfoMap();
         CUraraSockTCPSBO *pSock = pMgrData->GetSock();
         if (pMapLib == NULL || pSock == NULL) {
-                return;
+                return false;
         }
 
         PCInfoMapBase pInfoMap = (PCInfoMapBase)pMapLib->GetPtr(entry.mapId);
         if (pInfoMap == NULL) {
-                return;
+                return false;
         }
 
-        if (entry.pile) {
-                pInfoMap->SetPartsPile(entry.x, entry.y, dwPartsId);
-        } else {
-                pInfoMap->SetParts(entry.x, entry.y, dwPartsId);
-        }
+        const int nCount = static_cast<int>(entry.cells.size());
+        bool bApplied = false;
+        for (int i = 0; i < nCount; i++) {
+                const CMapPartsHistory::Cell &cell = bUndo ? entry.cells[nCount - 1 - i] : entry.cells[i];
+                DWORD dwPartsId = bUndo ? cell.oldPartsId : cell.newPartsId;
 
-        CPacketMAP_SETPARTS packet;
-        packet.Make(entry.mapId, entry.x, entry.y, dwPartsId, entry.pile ? TRUE : FALSE);
-        pSock->SendTo(0, &packet);
+                if (entry.pile) {
+                        pInfoMap->SetPartsPile(cell.x, cell.y, dwPartsId);
+                } else {
+                        pInfoMap->SetParts(cell.x, cell.y, dwPartsId);
+                }
+
+                CPacketMAP_SETPARTS packet;
+                packet.Make(entry.mapId, cell.x, cell.y, dwPartsId, entry.pile ? TRUE : FALSE);
+                pSock->SendTo(0, &packet);
+
+                outLast = cell;
+                outPartsId = dwPartsId;
+                bApplied = true;
+        }
+        return bApplied;
 }
 }
 
@@ -826,7 +840,9 @@ void CMapPartsHistoryUndoHandler::Handle(const HttpRequest &request, HttpRespons
         }
 
         // Undo: 変更前の値（oldPartsId）へ戻す
-        ApplyHistoryEntry(m_pMgrData, entry, entry.oldPartsId);
+        CMapPartsHistory::Cell lastCell = {0, 0, 0, 0};
+        DWORD dwLastPartsId = 0;
+        ApplyHistoryEntry(m_pMgrData, entry, true, lastCell, dwLastPartsId);
 
         int nUndoCount = 0, nRedoCount = 0;
         CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
@@ -835,10 +851,11 @@ void CMapPartsHistoryUndoHandler::Handle(const HttpRequest &request, HttpRespons
         std::ostringstream oss;
         oss << "{\"applied\":true"
             << ",\"mapId\":" << entry.mapId
-            << ",\"x\":" << entry.x
-            << ",\"y\":" << entry.y
+            << ",\"x\":" << lastCell.x
+            << ",\"y\":" << lastCell.y
             << ",\"pile\":" << (entry.pile ? "true" : "false")
-            << ",\"partsId\":" << entry.oldPartsId
+            << ",\"partsId\":" << dwLastPartsId
+            << ",\"cellCount\":" << entry.cells.size()
             << ",\"undoCount\":" << nUndoCount
             << ",\"redoCount\":" << nRedoCount
             << "}";
@@ -892,7 +909,9 @@ void CMapPartsHistoryRedoHandler::Handle(const HttpRequest &request, HttpRespons
         }
 
         // Redo: 変更後の値（newPartsId）を再適用する
-        ApplyHistoryEntry(m_pMgrData, entry, entry.newPartsId);
+        CMapPartsHistory::Cell lastCell = {0, 0, 0, 0};
+        DWORD dwLastPartsId = 0;
+        ApplyHistoryEntry(m_pMgrData, entry, false, lastCell, dwLastPartsId);
 
         int nUndoCount = 0, nRedoCount = 0;
         CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
@@ -901,10 +920,11 @@ void CMapPartsHistoryRedoHandler::Handle(const HttpRequest &request, HttpRespons
         std::ostringstream oss;
         oss << "{\"applied\":true"
             << ",\"mapId\":" << entry.mapId
-            << ",\"x\":" << entry.x
-            << ",\"y\":" << entry.y
+            << ",\"x\":" << lastCell.x
+            << ",\"y\":" << lastCell.y
             << ",\"pile\":" << (entry.pile ? "true" : "false")
-            << ",\"partsId\":" << entry.newPartsId
+            << ",\"partsId\":" << dwLastPartsId
+            << ",\"cellCount\":" << entry.cells.size()
             << ",\"undoCount\":" << nUndoCount
             << ",\"redoCount\":" << nRedoCount
             << "}";

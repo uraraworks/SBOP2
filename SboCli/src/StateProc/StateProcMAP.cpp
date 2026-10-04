@@ -161,6 +161,12 @@ EM_JS(void, SBOP2_ConfirmAndLogoutDevice, (), {
 
 static CMgrData *s_pMgrDataForAdminMode = NULL;
 
+/// マップ画面生成前に Web管理画面から届いたモード／パーツIDの保留値
+static int  s_nPendingWebAdminMode = -1;
+static bool s_bPendingWebAdminMode = false;
+static WORD s_wPendingWebAdminPartsID = 0;
+static bool s_bPendingWebAdminPartsID = false;
+
 /// アクティブな CStateProcMAP インスタンスへのグローバルポインタ（ブラウザ版のみ）
 /// Create() でセット、デストラクタでクリアする
 static CStateProcMAP *s_pBrowserStateProcMAP = NULL;
@@ -168,12 +174,17 @@ static CStateProcMAP *s_pBrowserStateProcMAP = NULL;
 extern "C" {
 	EMSCRIPTEN_KEEPALIVE void SBOP2_SetWebAdminMode(int mode)
 	{
+		// マップ画面に入る前でも受け取れるよう保留値を常に更新する
+		s_nPendingWebAdminMode = mode;
+		s_bPendingWebAdminMode = true;
 		if (s_pMgrDataForAdminMode != NULL) {
 			s_pMgrDataForAdminMode->SetWebAdminMode(mode);
 		}
 	}
 	EMSCRIPTEN_KEEPALIVE void SBOP2_SetWebAdminSelectedPartsID(int partsId)
 	{
+		s_wPendingWebAdminPartsID = static_cast<WORD>(partsId);
+		s_bPendingWebAdminPartsID = true;
 		if (s_pMgrDataForAdminMode != NULL) {
 			s_pMgrDataForAdminMode->SetWebAdminSelectedPartsID(static_cast<WORD>(partsId));
 		}
@@ -384,6 +395,10 @@ CStateProcMAP::CStateProcMAP()
 
 	m_pPlayerChar		= NULL;
 	m_pMap				= NULL;
+	m_bPartsDrag		= FALSE;
+	m_dwPartsStrokeID	= 0;
+	m_nPartsDragX		= -1;
+	m_nPartsDragY		= -1;
 	m_pLibInfoChar		= NULL;
 	m_pLibInfoMap		= NULL;
 	m_pLibInfoItem		= NULL;
@@ -424,6 +439,13 @@ void CStateProcMAP::Create(CMgrData *pMgrData, CUraraSockTCPSBO *pSock)
 
 #if defined(__EMSCRIPTEN__)
 	s_pMgrDataForAdminMode = pMgrData;
+	// Create 前に受信済みの管理画面モード／パーツIDを反映する
+	if (s_bPendingWebAdminMode) {
+		pMgrData->SetWebAdminMode(s_nPendingWebAdminMode);
+	}
+	if (s_bPendingWebAdminPartsID) {
+		pMgrData->SetWebAdminSelectedPartsID(s_wPendingWebAdminPartsID);
+	}
 	s_pBrowserStateProcMAP = this;  // チャット送信ブリッジ用にインスタンスを登録
 #endif
 
@@ -1146,6 +1168,27 @@ void CStateProcMAP::OnWindowMsg(int nType, DWORD dwPara)
 
 
 
+// 1セルにパーツを配置してサーバーへ送信（範囲外・既に同じパーツなら何もしない）
+BOOL CStateProcMAP::PaintPartsCell(int nCellX, int nCellY, WORD wPartsID)
+{
+	if (m_pMap == NULL) {
+		return FALSE;
+	}
+	if ((nCellX < 0) || (nCellY < 0) || (nCellX >= m_pMap->m_sizeMap.cx) || (nCellY >= m_pMap->m_sizeMap.cy)) {
+		return FALSE;
+	}
+	if (m_pMap->GetParts(nCellX, nCellY) == wPartsID) {
+		return FALSE;	// Undo履歴を無駄に積まない
+	}
+	m_pMap->SetParts(nCellX, nCellY, wPartsID);
+	CPacketADMIN_MAP_SETPARTS Packet;
+	Packet.Make(m_pMap->m_dwMapID, nCellX, nCellY, wPartsID, FALSE, m_dwPartsStrokeID);
+	m_pSock->Send(&Packet);
+	return TRUE;
+}
+
+
+
 void CStateProcMAP::OnLButtonDown(int x, int y)
 {
 	int nMapX, nMapY, nType, xx, yy;
@@ -1174,10 +1217,16 @@ void CStateProcMAP::OnLButtonDown(int x, int y)
 				int nVisibleY = y - MAPPARTSSIZE + (pLayerMap->m_nViewY % MAPPARTSSIZE);
 				int nCellX = (nVisibleX / MAPPARTSSIZE) + nMapX;
 				int nCellY = (nVisibleY / MAPPARTSSIZE) + nMapY;
-				m_pMap->SetParts(nCellX, nCellY, wPartsID);
-				CPacketADMIN_MAP_SETPARTS Packet;
-				Packet.Make(m_pMap->m_dwMapID, nCellX, nCellY, wPartsID, FALSE);
-				m_pSock->Send(&Packet);
+				// 新しいストロークIDを発行（0は単発扱いなので飛ばす）
+				m_dwPartsStrokeID++;
+				if (m_dwPartsStrokeID == 0) {
+					m_dwPartsStrokeID = 1;
+				}
+				PaintPartsCell(nCellX, nCellY, wPartsID);
+				// ドラッグ塗りの起点を記録
+				m_bPartsDrag = TRUE;
+				m_nPartsDragX = nCellX;
+				m_nPartsDragY = nCellY;
 			}
 			return;	// 既存処理（pick 含む）はスキップ
 		}
@@ -1528,6 +1577,47 @@ void CStateProcMAP::OnMouseMove(int x, int y)
 	/* Phase 3: m_nViewX/Y はpx単位。サブタイル端数を加算 */
 	xx = x + (pLayerMap->m_nViewX % MAPPARTSSIZE);
 	yy = y + (pLayerMap->m_nViewY % MAPPARTSSIZE);
+
+	// Web管理 parts モード: 左ボタンを押したままドラッグして通過セルに連続配置
+	if (m_pMgrData->GetWebAdminMode() == 2) {
+		WORD wPartsID = m_pMgrData->GetWebAdminSelectedPartsID();
+		if (!IsLeftMousePressed() || !m_bPartsDrag) {
+			m_bPartsDrag = FALSE;
+			return;
+		}
+		if ((wPartsID == 0) || (m_pMap == NULL)) {
+			return;
+		}
+		/* x,y は CImg32 パディング +32 加算済み。OnLButtonDown と同じ式でセル換算 */
+		int nCellX = ((x - MAPPARTSSIZE + (pLayerMap->m_nViewX % MAPPARTSSIZE)) / MAPPARTSSIZE) + nMapX;
+		int nCellY = ((y - MAPPARTSSIZE + (pLayerMap->m_nViewY % MAPPARTSSIZE)) / MAPPARTSSIZE) + nMapY;
+		if ((nCellX == m_nPartsDragX) && (nCellY == m_nPartsDragY)) {
+			return;
+		}
+		// 前回セル→現在セルを Bresenham で補間（前回セルは除く、現在セルは含む）
+		int nCurX = m_nPartsDragX;
+		int nCurY = m_nPartsDragY;
+		int nDx = (nCellX > nCurX) ? (nCellX - nCurX) : (nCurX - nCellX);
+		int nDy = (nCellY > nCurY) ? (nCellY - nCurY) : (nCurY - nCellY);
+		int nSx = (nCurX < nCellX) ? 1 : -1;
+		int nSy = (nCurY < nCellY) ? 1 : -1;
+		int nErr = nDx - nDy;
+		while ((nCurX != nCellX) || (nCurY != nCellY)) {
+			int nE2 = nErr * 2;
+			if (nE2 > -nDy) {
+				nErr -= nDy;
+				nCurX += nSx;
+			}
+			if (nE2 < nDx) {
+				nErr += nDx;
+				nCurY += nSy;
+			}
+			PaintPartsCell(nCurX, nCurY, wPartsID);
+		}
+		m_nPartsDragX = nCellX;
+		m_nPartsDragY = nCellY;
+		return;
+	}
 
 	// 管理者 DLL がロードされていない場合は管理者枠描画・クリック通知をスキップ
 	if (!m_AdminUi.IsLoadedFromDll()) {

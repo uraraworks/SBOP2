@@ -17,29 +17,38 @@
 class CMapPartsHistory
 {
 public:
-	// 1回のパーツ配置変更を表す履歴エントリ
+	// 1セル分の変更
+	struct Cell
+	{
+		int	x;
+		int	y;
+		DWORD	oldPartsId;	// 変更前の値（Undo で復元する値）
+		DWORD	newPartsId;	// 変更後の値（Redo で再適用する値）
+	};
+
+	// 1回の操作（ひと塗り）を表す履歴エントリ。複数セルをまとめて持つ。
 	struct Entry
 	{
 		DWORD	mapId;
-		int	x;
-		int	y;
 		bool	pile;		// true: 重ね合わせパーツ(SetPartsPile), false: 通常パーツ(SetParts)
-		DWORD	oldPartsId;	// 変更前の値（Undo で復元する値）
-		DWORD	newPartsId;	// 変更後の値（Redo で再適用する値）
+		DWORD	sessionId;	// 操作したセッション（まとめ判定用）
+		DWORD	strokeId;	// ストロークID（0=単発）
+		std::vector<Cell>	cells;	// 変更順に格納
 	};
 
 	static CMapPartsHistory &Instance();
 
 	// 新しい変更を Undo スタックへ積む。Redo スタックはクリアする。
+	// strokeId != 0 で末尾エントリと sessionId/strokeId/mapId/pile が同じなら、そのエントリへ追記する。
 	// ※ Undo/Redo 自体の適用結果はここに積まないこと（無限ループ防止）。
-	void Push(DWORD mapId, int x, int y, bool pile, DWORD oldPartsId, DWORD newPartsId);
+	void Push(DWORD mapId, int x, int y, bool pile, DWORD oldPartsId, DWORD newPartsId, DWORD sessionId = 0, DWORD strokeId = 0);
 
 	// Undo スタックから1件取り出し、Redo スタックへ積む。
-	// outEntry.oldPartsId が「復元すべき値」になる。
+	// 各セルの oldPartsId を cells の逆順に適用して復元する。
 	bool Undo(Entry &outEntry);
 
 	// Redo スタックから1件取り出し、Undo スタックへ積む。
-	// outEntry.newPartsId が「再適用すべき値」になる。
+	// 各セルの newPartsId を cells の正順に適用して再適用する。
 	bool Redo(Entry &outEntry);
 
 	// 現在の Undo/Redo 件数を取得する
@@ -54,7 +63,7 @@ private:
 	CMapPartsHistory(const CMapPartsHistory &);
 	CMapPartsHistory &operator=(const CMapPartsHistory &);
 
-	static const size_t kMaxHistory = 200;	// 上限件数（超えたら古いものから捨てる）
+	static const size_t kMaxHistory = 200;	// 上限件数(操作単位。超えたら古いものから捨てる）
 
 	std::mutex		m_mutex;
 	std::vector<Entry>	m_undoStack;

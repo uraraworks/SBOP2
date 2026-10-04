@@ -326,7 +326,7 @@ void CMainFrame::RecvProcADMIN_MAP_SETPARTS(PBYTE pData, DWORD dwSessionID)
 	}
 
 	// Undo/Redo 履歴に積む
-	CMapPartsHistory::Instance().Push(Packet.m_dwMapID, Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_bPile ? true : false, dwOldPartsID, Packet.m_dwPartsID);
+	CMapPartsHistory::Instance().Push(Packet.m_dwMapID, Packet.m_ptPos.x, Packet.m_ptPos.y, Packet.m_bPile ? true : false, dwOldPartsID, Packet.m_dwPartsID, dwSessionID, Packet.m_dwStrokeID);
 	int nUndoCount = 0, nRedoCount = 0;
 	CMapPartsHistory::Instance().GetCounts(nUndoCount, nRedoCount);
 	CAdminWsHub::Instance().BroadcastJson(
