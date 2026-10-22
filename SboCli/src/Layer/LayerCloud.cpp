@@ -9,6 +9,7 @@
 #include "MgrLayer.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
+#include "MgrDraw.h"
 #include "Img32.h"
 #include "LayerMap.h"
 #include "LayerCloud.h"
@@ -60,7 +61,7 @@ void CLayerCloud::Create(
 
 void CLayerCloud::Draw(PCImg32 pDst)
 {
-	int i, x, y, xx, yy, cx, cy, nMoveX, nMoveY;
+	int i, x, y, xx, yy, cx, cy, nMoveX, nMoveY, nScale;
 	double dTmp, dPosX, dPosY, dX, dY;
 	int anPos[] = {
 			5, 10, 42, 26,
@@ -70,6 +71,8 @@ void CLayerCloud::Draw(PCImg32 pDst)
 		};
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aPosX[] = {0, 0, 1, -1, -1, -1, 1, 1}, aPosY[] = {1, -1, 0, 0, 1, -1, -1, 1};
+	// 論理座標で位置を計算し、描画先がワールドバッファなら nScale 倍で転送する
+	nScale = m_pMgrDraw->GetDrawScale(pDst);
 	nMoveX = 0;
 	nMoveY = 0;
 	dPosX = 0.0;
@@ -120,7 +123,7 @@ void CLayerCloud::Draw(PCImg32 pDst)
 
 		m_pDibBase->BltFrom256(0, 0, cx, cy, m_pDibCloud, xx, yy);
 		m_pDibBase->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, m_pDibBase, 0, 0, cx, cy);
-		pDst->BltAlpha(32 + x, 32 + y, cx * 2, cy * 2, m_pDibBase, 0, cy * 2, 75, TRUE);
+		pDst->BltAlphaScaled((32 + x) * nScale, (32 + y) * nScale, cx * 2, cy * 2, m_pDibBase, 0, cy * 2, 75, TRUE, nScale);
 	}
 }
 

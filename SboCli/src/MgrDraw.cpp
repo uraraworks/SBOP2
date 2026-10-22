@@ -101,7 +101,7 @@ static void LogMissingMapShadowAtlasOnce(
 #endif
 
 #if defined(__EMSCRIPTEN__)
-EM_JS(void, SBOP2_PresentToCanvas, (int pRgba, int width, int height), {
+EM_JS(void, SBOP2_PresentToCanvas, (int pRgba, int width, int height, int uiScale), {
 	// shell.html の pump fallback に「描画が生きている」ことを知らせる
 	// （このカウンタの未更新で fallback が誤動作し OnFrame が二重駆動されていた）
 	Module.sbop2OnDrawCount = (Module.sbop2OnDrawCount || 0) + 1;
@@ -153,6 +153,8 @@ EM_JS(void, SBOP2_PresentToCanvas, (int pRgba, int width, int height), {
 	const rectQueue = Module.sbop2RectQueue || [];
 	if (rectQueue.length > 0) {
 		ctx.save();
+		// rect/text キューは論理(UI)座標。canvas は uiScale 倍の解像度なので変換で合わせる
+		ctx.setTransform(uiScale, 0, 0, uiScale, 0, 0);
 		ctx.imageSmoothingEnabled = false;
 		for (const item of rectQueue) {
 			if (item.hasFill) {
@@ -172,6 +174,7 @@ EM_JS(void, SBOP2_PresentToCanvas, (int pRgba, int width, int height), {
 	const textQueue = Module.sbop2TextQueue || [];
 	if (textQueue.length > 0) {
 		ctx.save();
+		ctx.setTransform(uiScale, 0, 0, uiScale, 0, 0);
 		ctx.textBaseline = 'top';
 		ctx.imageSmoothingEnabled = false;
 		for (const item of textQueue) {
@@ -216,10 +219,15 @@ CMgrDraw::CMgrDraw()
 	m_pLibInfoMotionType	= NULL;
 	m_pBackTexture			= NULL;		// SDLテクスチャ（Lazy初期化）
 
+	m_bWorldDrawn			= FALSE;
+	m_nScaledCacheBytes		= 0;
+
 	m_pDibBack = new CImg32;
-	m_pDibBack->Create(SCRSIZEX + 64, SCRSIZEY + 64);
+	m_pDibBack->Create(SCRSIZEX + UI_MARGIN * 2, SCRSIZEY + UI_MARGIN * 2);
+	m_pDibWorld = new CImg32;
+	m_pDibWorld->Create(WORLD_BUFSIZEX, WORLD_BUFSIZEY);
 	m_pDibTmp = new CImg32;
-	m_pDibTmp->Create((SCRSIZEX + 64) * 2, (SCRSIZEY + 64) * 2);
+	m_pDibTmp->Create((SCRSIZEX + 64) * 2 * DRAW_SCALE, (SCRSIZEY + 64) * 2 * DRAW_SCALE);
 	m_pDibTmp->SetColorKey(RGB(255, 0, 255));
 }
 
@@ -230,7 +238,9 @@ CMgrDraw::~CMgrDraw()
 		SDL_DestroyTexture(m_pBackTexture);
 		m_pBackTexture = NULL;
 	}
+	ClearScaledCache();
 	SAFE_DELETE(m_pDibBack);
+	SAFE_DELETE(m_pDibWorld);
 	SAFE_DELETE(m_pDibTmp);
 }
 
@@ -262,12 +272,21 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 	DWORD dwT0 = SDL_GetTicks();
 #endif
 
+	// UI(論理解像度)バッファへレイヤー→ウィンドウの順に描く。
+	// ワールド(CLayerMap)は m_pDibWorld(DRAW_SCALE倍)へ直接描き、描き終えた時点で BeginUiOverlay を呼んで
+	// UIバッファをワールドの縮小で初期化する(半透明ウィンドウ等が背景と正しく混ざるように)。
+	m_bWorldDrawn = FALSE;
 	m_pMgrLayer->	Draw(m_pDibBack);		// レイヤー
 	m_pMgrWindow->	Draw(m_pDibBack);		// ウィンドウ
+	if (m_bWorldDrawn) {
+		CompositeUiOverlay();				// UIバッファの変更分だけワールドへ拡大して重ねる
+	} else {
+		UpscaleUiToWorld();					// ワールド非描画(タイトル等): UI全体を拡大して出力
+	}
 
 	// 明度指定あり？
 	if (m_byLevel < 100 && m_byLevel > 0) {
-		m_pDibBack->ChgLevel(32, 32, SCRSIZEX, SCRSIZEY, (m_byLevel == 1) ? 0 : m_byLevel);
+		m_pDibWorld->ChgLevel(WORLD_MARGIN, WORLD_MARGIN, WORLD_SCRSIZEX, WORLD_SCRSIZEY, (m_byLevel == 1) ? 0 : m_byLevel);
 	}
 
 #if defined(__EMSCRIPTEN__)
@@ -277,16 +296,16 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 		g_dwDrawLayerMs = dwT1 - dwT0;
 
 		static std::vector<unsigned char> aCanvasRgba;
-		const int nWidth = SCRSIZEX;
-		const int nHeight = SCRSIZEY;
-		const int nFullWidth = m_pDibBack->Width();
-		const int nFullHeight = m_pDibBack->Height();
-		const BYTE *pSrc = m_pDibBack->GetBits();
+		const int nWidth = WORLD_SCRSIZEX;
+		const int nHeight = WORLD_SCRSIZEY;
+		const int nFullWidth = m_pDibWorld->Width();
+		const int nFullHeight = m_pDibWorld->Height();
+		const BYTE *pSrc = m_pDibWorld->GetBits();
 
 		aCanvasRgba.resize((size_t)nWidth * (size_t)nHeight * 4);
 		for (int y = 0; y < nHeight; ++y) {
 			const uint32_t *pSrcRow = reinterpret_cast<const uint32_t *>(
-				pSrc + ((size_t)(nFullHeight - 1 - (32 + y)) * (size_t)nFullWidth + 32) * 4);
+				pSrc + ((size_t)(nFullHeight - 1 - (WORLD_MARGIN + y)) * (size_t)nFullWidth + WORLD_MARGIN) * 4);
 			uint32_t *pDstRow = reinterpret_cast<uint32_t *>(
 				&aCanvasRgba[(size_t)y * (size_t)nWidth * 4]);
 #if defined(__wasm_simd128__)
@@ -329,7 +348,7 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 		DWORD dwT2 = SDL_GetTicks();
 		g_dwDrawSwizzleMs = dwT2 - dwT1;
 
-		SBOP2_PresentToCanvas((int)(intptr_t)aCanvasRgba.data(), nWidth, nHeight);
+		SBOP2_PresentToCanvas((int)(intptr_t)aCanvasRgba.data(), nWidth, nHeight, DRAW_SCALE);
 
 		// 区間計測: Present 終了
 		DWORD dwT3 = SDL_GetTicks();
@@ -351,8 +370,8 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 		int			nW, nStride;
 		SDL_Rect	stDst;
 
-		pBits	= m_pDibBack->GetBits();
-		nW		= m_pDibBack->Width();
+		pBits	= m_pDibWorld->GetBits();
+		nW		= m_pDibWorld->Width();
 		nStride	= nW * 4;					// 1行あたりのバイト数（32bit BGRA）
 
 		// Lazy 初期化: テクスチャを初回のみ作成
@@ -363,8 +382,8 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 								pRenderer,
 								SDL_PIXELFORMAT_ARGB8888,
 								SDL_TEXTUREACCESS_STREAMING,
-								SCRSIZEX,
-								SCRSIZEY);
+								WORLD_SCRSIZEX,
+								WORLD_SCRSIZEY);
 			if (m_pBackTexture != NULL) {
 				// CImg32 はアルファ値を常に正しく管理していないため、
 				// ブラウザ側ではテクスチャを不透明・非ブレンド扱いに固定する。
@@ -376,20 +395,165 @@ void CMgrDraw::Draw(SDL_Renderer *pRenderer)
 			return;
 		}
 
-		// ボトムアップ DIB の (x=32, y=32) から SCRSIZEX × SCRSIZEY 行を転送
+		// ボトムアップ DIB の (x=WORLD_MARGIN, y=WORLD_MARGIN) から WORLD_SCRSIZEX × WORLD_SCRSIZEY 行を転送
 		// ボトムアップ DIBでは y=0 がメモリ先頭（画像の最下行）
-		// 下から 32行目（描画開始オフセット）: pBits + 32 * nStride + 32 * 4
+		// 下から WORLD_MARGIN 行目（描画開始オフセット）: pBits + WORLD_MARGIN * nStride + WORLD_MARGIN * 4
 		SDL_UpdateTexture(m_pBackTexture, NULL,
-							pBits + 32 * nStride + 32 * 4,
+							pBits + WORLD_MARGIN * nStride + WORLD_MARGIN * 4,
 							nStride);
 
 		// SDL_FLIP_VERTICAL で垂直フリップ → ボトムアップ DIB を正しい向きに
 		stDst.x = 0;
 		stDst.y = 0;
-		stDst.w = SCRSIZEX;
-		stDst.h = SCRSIZEY;
+		stDst.w = WORLD_SCRSIZEX;
+		stDst.h = WORLD_SCRSIZEY;
 		SDL_RenderCopyEx(pRenderer, m_pBackTexture, NULL, &stDst,
 							0.0, NULL, SDL_FLIP_VERTICAL);
+	}
+}
+
+
+CMgrDraw::STScaledCache *CMgrDraw::FindScaledCache(unsigned long long ullKey)
+{
+	std::unordered_map<unsigned long long, STScaledCache>::iterator it = m_mapScaledCache.find(ullKey);
+	if (it == m_mapScaledCache.end()) {
+		return NULL;
+	}
+	return &it->second;
+}
+
+
+CMgrDraw::STScaledCache *CMgrDraw::StoreScaledCache(unsigned long long ullKey, CImg32 *pSrc, int sx, int sy, int cx, int cy)
+{
+	const size_t nBytes = (size_t)cx * (size_t)cy * 4;
+	STScaledCache stNew;
+
+	// 上限(48MB)を超えたら全破棄して作り直す(ポインタは呼び出し側で都度取り直す)
+	if (m_nScaledCacheBytes + nBytes > (size_t)48 * 1024 * 1024) {
+		ClearScaledCache();
+	}
+
+	stNew.pImg = new CImg32;
+	stNew.pImg->CreateWithoutGdi(cx, cy);
+	stNew.pImg->SetColorKey(RGB(255, 0, 255));
+	stNew.pImg->Blt(0, 0, cx, cy, pSrc, sx, sy, FALSE);
+
+	// カラーキー画素の有無を調べる
+	stNew.bHasKey = FALSE;
+	{
+		const DWORD dwKey = stNew.pImg->GetColorKey();
+		const DWORD *pBits = reinterpret_cast<const DWORD *>(stNew.pImg->GetBits());
+		const size_t nCount = (size_t)cx * (size_t)cy;
+		for (size_t i = 0; i < nCount; ++i) {
+			if (pBits[i] == dwKey) {
+				stNew.bHasKey = TRUE;
+				break;
+			}
+		}
+	}
+
+	m_nScaledCacheBytes += nBytes;
+	std::pair<std::unordered_map<unsigned long long, STScaledCache>::iterator, bool> res =
+		m_mapScaledCache.insert(std::make_pair(ullKey, stNew));
+	return &res.first->second;
+}
+
+
+void CMgrDraw::ClearScaledCache(void)
+{
+	std::unordered_map<unsigned long long, STScaledCache>::iterator it;
+	for (it = m_mapScaledCache.begin(); it != m_mapScaledCache.end(); ++it) {
+		delete it->second.pImg;
+	}
+	m_mapScaledCache.clear();
+	m_nScaledCacheBytes = 0;
+}
+
+
+CImg32 *CMgrDraw::GetDibWorld(void)
+{
+	return m_pDibWorld;
+}
+
+
+int CMgrDraw::GetDrawScale(CImg32 *pDst)
+{
+	return (pDst == m_pDibWorld) ? DRAW_SCALE : 1;
+}
+
+
+void CMgrDraw::BeginUiOverlay(void)
+{
+	// UIバッファの可視領域を、ワールドの各 DRAW_SCALE x DRAW_SCALE ブロックの左上画素で初期化する。
+	// ボトムアップ DIB: ワールドのメモリ行 R と UI のメモリ行 r は R = r * DRAW_SCALE + (DRAW_SCALE - 1) で対応
+	// （ブロック内の画像上の左上画素）。列は C = c * DRAW_SCALE。
+	const int nUiW = m_pDibBack->Width();
+	const int nWorldW = m_pDibWorld->Width();
+	BYTE *pUi = m_pDibBack->GetBits();
+	const BYTE *pWorld = m_pDibWorld->GetBits();
+
+	m_bWorldDrawn = TRUE;
+
+	for (int r = UI_MARGIN; r < UI_MARGIN + SCRSIZEY; ++r) {
+		uint32_t *pDstRow = reinterpret_cast<uint32_t *>(pUi) + (size_t)r * nUiW;
+		const uint32_t *pSrcRow = reinterpret_cast<const uint32_t *>(pWorld) + (size_t)(r * DRAW_SCALE + (DRAW_SCALE - 1)) * nWorldW;
+		for (int c = UI_MARGIN; c < UI_MARGIN + SCRSIZEX; ++c) {
+			pDstRow[c] = pSrcRow[c * DRAW_SCALE];
+		}
+	}
+}
+
+
+void CMgrDraw::CompositeUiOverlay(void)
+{
+	// BeginUiOverlay で入れた値から変化したUI画素だけを、ワールドへ DRAW_SCALE 倍で書き込む
+	const int nUiW = m_pDibBack->Width();
+	const int nWorldW = m_pDibWorld->Width();
+	const uint32_t *pUi = reinterpret_cast<const uint32_t *>(m_pDibBack->GetBits());
+	uint32_t *pWorld = reinterpret_cast<uint32_t *>(m_pDibWorld->GetBits());
+
+	for (int r = UI_MARGIN; r < UI_MARGIN + SCRSIZEY; ++r) {
+		const uint32_t *pUiRow = pUi + (size_t)r * nUiW;
+		uint32_t *pWorldBase = pWorld + (size_t)(r * DRAW_SCALE) * nWorldW;
+		const uint32_t *pSample = pWorldBase + (size_t)(DRAW_SCALE - 1) * nWorldW;
+		for (int c = UI_MARGIN; c < UI_MARGIN + SCRSIZEX; ++c) {
+			const uint32_t dwPixel = pUiRow[c];
+			if (dwPixel == pSample[c * DRAW_SCALE]) {
+				continue;
+			}
+			for (int j = 0; j < DRAW_SCALE; ++j) {
+				uint32_t *pOut = pWorldBase + (size_t)j * nWorldW + c * DRAW_SCALE;
+				for (int i = 0; i < DRAW_SCALE; ++i) {
+					pOut[i] = dwPixel;
+				}
+			}
+		}
+	}
+}
+
+
+void CMgrDraw::UpscaleUiToWorld(void)
+{
+	// UIバッファ全体(余白込み)を最近傍で DRAW_SCALE 倍にしてワールドへ書く。
+	// UI 余白 = WORLD_MARGIN / DRAW_SCALE なので同じ添字の対応で拡大できる。
+	const int nUiW = m_pDibBack->Width();
+	const int nUiH = m_pDibBack->Height();
+	const int nWorldW = m_pDibWorld->Width();
+	const uint32_t *pUi = reinterpret_cast<const uint32_t *>(m_pDibBack->GetBits());
+	uint32_t *pWorld = reinterpret_cast<uint32_t *>(m_pDibWorld->GetBits());
+
+	for (int r = 0; r < nUiH; ++r) {
+		const uint32_t *pUiRow = pUi + (size_t)r * nUiW;
+		uint32_t *pOut0 = pWorld + (size_t)(r * DRAW_SCALE) * nWorldW;
+		for (int c = 0; c < nUiW; ++c) {
+			const uint32_t dwPixel = pUiRow[c];
+			for (int i = 0; i < DRAW_SCALE; ++i) {
+				pOut0[c * DRAW_SCALE + i] = dwPixel;
+			}
+		}
+		for (int j = 1; j < DRAW_SCALE; ++j) {
+			memcpy(pOut0 + (size_t)j * nWorldW, pOut0, (size_t)nWorldW * sizeof(uint32_t));
+		}
 	}
 }
 
@@ -402,10 +566,16 @@ void CMgrDraw::DrawChar(
 	BOOL bLock)/*TRUE*/				// [in] テンポラリをロックする
 {
 	WORD wGrpIDMain, wGrpIDSub, wGrpIDMainBase, wGrpIdNPC, wGrpID;
-	int cx, cy, cxChar, cyChar, nTmp, nDirection, nEyeID, i, nCount, nFadeLevel;
+	int cx, cy, cxChar, cyChar, nTmp, nDirection, nEyeID, i, nCount, nFadeLevel, sc, nSt;
 	POINT ptTmp;
 	PCInfoMotion pInfoMotion;
 	PCImg32 pSrc, pDibTmp;
+
+	// 描画先がワールドバッファなら DRAW_SCALE 倍で描く(x,y は論理座標で受け取る)
+	sc = GetDrawScale(pDst);
+	nSt = 2 * sc;
+	x *= sc;
+	y *= sc;
 
 	LockDibTmp();
 	pDibTmp = GetDibTmp();
@@ -469,11 +639,11 @@ void CMgrDraw::DrawChar(
 		m_pMgrGrpData->GetGrpPos(wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, ptTmp);
 		pSrc = m_pMgrGrpData->GetDib2x2CharShadow(0);
 		pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y);
-		pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * 2, cyChar * 2, pDibTmp, 0, 0, cxChar, cyChar);
+		pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * nSt, cyChar * nSt, pDibTmp, 0, 0, cxChar, cyChar);
 		pDst->BltAlpha(
-			x + pInfoMotion->m_ptDrawPosPile0.x,
-			y + pInfoMotion->m_ptDrawPosPile0.y,
-			cxChar * 2, cyChar * 2, pDibTmp, 0, cyChar * 2, 75, TRUE);
+			x + pInfoMotion->m_ptDrawPosPile0.x * sc,
+			y + pInfoMotion->m_ptDrawPosPile0.y * sc,
+			cxChar * nSt, cyChar * nSt, pDibTmp, 0, cyChar * 2, 75, TRUE);
 		break;
 
 	case GRPIDMAIN_2X2_NPC:
@@ -485,11 +655,11 @@ void CMgrDraw::DrawChar(
 		ptTmp.y += nTmp;
 		pSrc = m_pMgrGrpData->GetDib2x2NPCShadow(wGrpIdNPC);
 		pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y);
-		pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * 2, cyChar * 2, pDibTmp, 0, 0, cxChar, cyChar);
+		pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * nSt, cyChar * nSt, pDibTmp, 0, 0, cxChar, cyChar);
 		pDst->BltAlpha(
-			x + pInfoMotion->m_ptDrawPosPile0.x,
-			y + pInfoMotion->m_ptDrawPosPile0.y,
-			cxChar * 2, cyChar * 2, pDibTmp, 0, cyChar * 2, 75, TRUE);
+			x + pInfoMotion->m_ptDrawPosPile0.x * sc,
+			y + pInfoMotion->m_ptDrawPosPile0.y * sc,
+			cxChar * nSt, cyChar * nSt, pDibTmp, 0, cyChar * 2, 75, TRUE);
 		break;
 	}
 
@@ -509,7 +679,7 @@ void CMgrDraw::DrawChar(
 				ptTmp.y += nTmp;
 				// (1) 残像対策: 転写前に使用領域をカラーキー色でクリア（転写が空振りしても前キャラの残像が出ないようにする）
 				pDibTmp->FillRect(0, 0,          cxChar,     cyChar,     RGB(255, 0, 255));
-				pDibTmp->FillRect(0, cyChar * 2, cxChar * 2, cyChar * 2, RGB(255, 0, 255));
+				pDibTmp->FillRect(0, cyChar * 2, cxChar * nSt, cyChar * nSt, RGB(255, 0, 255));
 				if (wGrpIDMainBase == GRPIDMAIN_CHAR || ((wGrpIDMainBase == GRPIDMAIN_NPC) && (pInfoChar->m_bMotionDirection))) {
 					pSrc = pInfoChar->m_pDibChar;
 					pDibTmp->Blt(0, 0, cxChar, cyChar, pSrc, ptTmp.x, ptTmp.y);
@@ -525,11 +695,11 @@ void CMgrDraw::DrawChar(
 						pDibTmp->Blt(9,  10, 4, 2, pSrc, ptTmp.x +  9, 10, TRUE);
 					}
 				}
-				pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * 2, cyChar * 2, pDibTmp, 0, 0, cxChar, cyChar);
+				pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * nSt, cyChar * nSt, pDibTmp, 0, 0, cxChar, cyChar);
 				pDst->BltAlpha(
-					x + pInfoMotion->m_ptDrawPosPile0.x,
-					y + pInfoMotion->m_ptDrawPosPile0.y,
-					cxChar * 2, cyChar * 2, pDibTmp, 0, cyChar * 2, nFadeLevel, TRUE);
+					x + pInfoMotion->m_ptDrawPosPile0.x * sc,
+					y + pInfoMotion->m_ptDrawPosPile0.y * sc,
+					cxChar * nSt, cyChar * nSt, pDibTmp, 0, cyChar * 2, nFadeLevel, TRUE);
 
 			// 2x2サイズ
 			} else {
@@ -569,11 +739,11 @@ void CMgrDraw::DrawChar(
 					pSrc = m_pMgrGrpData->GetDib(GRPIDMAIN_2X2_EYE, 0, nEyeID);
 					pDibTmp->BltFrom256(0, 0, cxChar, cyChar, pSrc, ptTmp.x - 32 * 4, ptTmp.y, TRUE);
 				}
-				pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * 2, cyChar * 2, pDibTmp, 0, 0, cxChar, cyChar);
+				pDibTmp->BltStretchNearest(0, cyChar * 2, cxChar * nSt, cyChar * nSt, pDibTmp, 0, 0, cxChar, cyChar);
 				pDst->BltAlpha(
-					x + pInfoMotion->m_ptDrawPosPile0.x,
-					y + pInfoMotion->m_ptDrawPosPile0.y,
-					cxChar * 2, cyChar * 2, pDibTmp, 0, cyChar * 2, nFadeLevel, TRUE);
+					x + pInfoMotion->m_ptDrawPosPile0.x * sc,
+					y + pInfoMotion->m_ptDrawPosPile0.y * sc,
+					cxChar * nSt, cyChar * nSt, pDibTmp, 0, cyChar * 2, nFadeLevel, TRUE);
 			}
 			break;
 		case 1:		// 重ね画像１
@@ -595,11 +765,11 @@ void CMgrDraw::DrawChar(
 			m_pMgrGrpData->GetGrpPos(wGrpIDMain, wGrpIDSub - 1, ptTmp);
 			pDibTmp->BltFrom256(0, 0, cx, cy, pSrc, ptTmp.x, ptTmp.y);
 
-			pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
+			pDibTmp->BltStretchNearest(0, cy * 2, cx * nSt, cy * nSt, pDibTmp, 0, 0, cx, cy);
 			pDst->BltAlpha(
-				x + nTmp + pInfoMotion->m_ptDrawPosPile1.x,
-				y + nTmp + pInfoMotion->m_ptDrawPosPile1.y,
-				cx * 2, cy * 2, pDibTmp, 0, cy * 2, pInfoMotion->m_byLevel1, TRUE);
+				x + nTmp * sc + pInfoMotion->m_ptDrawPosPile1.x * sc,
+				y + nTmp * sc + pInfoMotion->m_ptDrawPosPile1.y * sc,
+				cx * nSt, cy * nSt, pDibTmp, 0, cy * 2, pInfoMotion->m_byLevel1, TRUE);
 			break;
 		case 2:		// 重ね画像２
 			wGrpIDMain = pInfoMotion->m_wGrpIDMainPile2;
@@ -620,11 +790,11 @@ void CMgrDraw::DrawChar(
 			m_pMgrGrpData->GetGrpPos(wGrpIDMain, wGrpIDSub - 1, ptTmp);
 			pDibTmp->BltFrom256(0, 0, cx, cy, pSrc, ptTmp.x, ptTmp.y);
 
-			pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
+			pDibTmp->BltStretchNearest(0, cy * 2, cx * nSt, cy * nSt, pDibTmp, 0, 0, cx, cy);
 			pDst->BltAlpha(
-				x + nTmp + pInfoMotion->m_ptDrawPosPile2.x,
-				y + nTmp + pInfoMotion->m_ptDrawPosPile2.y,
-				cx * 2, cy * 2, pDibTmp, 0, cy * 2, pInfoMotion->m_byLevel2, TRUE);
+				x + nTmp * sc + pInfoMotion->m_ptDrawPosPile2.x * sc,
+				y + nTmp * sc + pInfoMotion->m_ptDrawPosPile2.y * sc,
+				cx * nSt, cy * nSt, pDibTmp, 0, cy * 2, pInfoMotion->m_byLevel2, TRUE);
 			break;
 		case 3:		// 重ね画像３
 			wGrpIDMain = pInfoMotion->m_wGrpIDMainPile3;
@@ -645,11 +815,11 @@ void CMgrDraw::DrawChar(
 			m_pMgrGrpData->GetGrpPos(wGrpIDMain, wGrpIDSub - 1, ptTmp);
 			pDibTmp->BltFrom256(0, 0, cx, cy, pSrc, ptTmp.x, ptTmp.y);
 
-			pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
+			pDibTmp->BltStretchNearest(0, cy * 2, cx * nSt, cy * nSt, pDibTmp, 0, 0, cx, cy);
 			pDst->BltAlpha(
-				x + nTmp + pInfoMotion->m_ptDrawPosPile3.x,
-				y + nTmp + pInfoMotion->m_ptDrawPosPile3.y,
-				cx * 2, cy * 2, pDibTmp, 0, cy * 2, pInfoMotion->m_byLevel3, TRUE);
+				x + nTmp * sc + pInfoMotion->m_ptDrawPosPile3.x * sc,
+				y + nTmp * sc + pInfoMotion->m_ptDrawPosPile3.y * sc,
+				cx * nSt, cy * nSt, pDibTmp, 0, cy * 2, pInfoMotion->m_byLevel3, TRUE);
 			break;
 		}
 	}
@@ -665,8 +835,8 @@ ExitEffect:
 			nTmp = (cx - cxChar) * -1;
 		}
 		pDibTmp->BltFrom256(0, 0, cx, cy, pSrc, ptTmp.x, ptTmp.y);
-		pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
-		pDst->BltAlpha(x + nTmp, y + nTmp, cx * 2, cy * 2, pDibTmp, 0, cy * 2, pInfoChar->GetEfcLevel(), TRUE);
+		pDibTmp->BltStretchNearest(0, cy * 2, cx * nSt, cy * nSt, pDibTmp, 0, 0, cx, cy);
+		pDst->BltAlpha(x + nTmp * sc, y + nTmp * sc, cx * nSt, cy * nSt, pDibTmp, 0, cy * 2, pInfoChar->GetEfcLevel(), TRUE);
 	}
 
 Exit:
@@ -685,7 +855,7 @@ void CMgrDraw::DrawChar(
 	CInfoCharCli *pInfoChar)		// [in] キャラ情報
 {
 	BYTE byAnimeNoTmp;
-	int yy, cx, cy;
+	int yy, cx, cy, sc, nSt;
 	PCImg32 pSrc, pDibTmp;
 
 	yy		= 0;
@@ -694,6 +864,10 @@ void CMgrDraw::DrawChar(
 		return;
 	}
 
+	sc = GetDrawScale(pDst);
+	nSt = 2 * sc;
+	x *= sc;
+	y *= sc;
 	pDibTmp = GetDibTmp();
 	cx = 16;
 	cy = 16;
@@ -705,9 +879,9 @@ void CMgrDraw::DrawChar(
 
 	pDibTmp->Blt(0, 0, cx, cy, pSrc, (byDirection * 4 + byAnimeNoTmp) * cx, yy);
 
-	pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
+	pDibTmp->BltStretchNearest(0, cy * 2, cx * nSt, cy * nSt, pDibTmp, 0, 0, cx, cy);
 
-	pDst->BltAlpha(x, y, cx * 2, cy * 2, pDibTmp, 0, cy * 2, byLevel, TRUE);
+	pDst->BltAlpha(x, y, cx * nSt, cy * nSt, pDibTmp, 0, cy * 2, byLevel, TRUE);
 	ReleaseDibTmp();
 }
 
@@ -740,15 +914,21 @@ void CMgrDraw::DrawMapParts(
 	BOOL bLock,/*TRUE*/					// [in] テンポラリをロックする
 	BYTE byLevel)/*0*/					// [in] 透過レベル
 {
-	int nSize, nSizeDst;
+	int nSize, nSizeDst, sc, nSrcY;
+	BOOL bCache, bHasKey;
+	unsigned long long ullKey;
+	STScaledCache *pCache;
 	WORD wGrpIDBase, wGrpIDPile;
-	PCImg32 pImg, pDibTmp;
+	PCImg32 pImg, pDibTmp, pSrcImg;
 	PCInfoAnime pAnime;
 
+	sc = GetDrawScale(pDst);
+	x *= sc;
+	y *= sc;
 	nSize = 16;
-	nSizeDst = 32;
+	nSizeDst = 32 * sc;
 	if (bSingleSize) {
-		nSizeDst = 16;
+		nSizeDst = 16 * sc;
 	}
 
 	pDibTmp = GetDibTmp();
@@ -782,6 +962,26 @@ void CMgrDraw::DrawMapParts(
 		goto Exit;
 	}
 
+	// ワールド描画(拡大タイル)は拡大結果をキャッシュして使い回す
+	bCache = ((sc > 1) && (bSingleSize == FALSE)) ? TRUE : FALSE;
+	bHasKey = TRUE;
+	pSrcImg = pDibTmp;
+	nSrcY = nSizeDst;
+	ullKey = 0;
+	if (bCache) {
+		ullKey = ((unsigned long long)((nMode == 1) ? 0 : wGrpIDBase))
+			| ((unsigned long long)wGrpIDPile << 16)
+			| ((unsigned long long)nMode << 32)
+			| ((unsigned long long)sc << 40);
+		pCache = FindScaledCache(ullKey);
+		if (pCache != NULL) {
+			pSrcImg = pCache->pImg;
+			nSrcY = 0;
+			bHasKey = pCache->bHasKey;
+			goto Blit;
+		}
+	}
+
 	if (nMode != 1) {
 		pImg = m_pMgrGrpData->GetDibMapParts(wGrpIDBase / 1024);
 		if (pImg == NULL) {
@@ -807,10 +1007,18 @@ void CMgrDraw::DrawMapParts(
 
 	pDibTmp->BltStretchNearest(0, nSizeDst, nSizeDst, nSizeDst, pDibTmp, 0, 0, nSize, nSize);
 
+	if (bCache) {
+		pCache = StoreScaledCache(ullKey, pDibTmp, 0, nSizeDst, nSizeDst, nSizeDst);
+		pSrcImg = pCache->pImg;
+		nSrcY = 0;
+		bHasKey = pCache->bHasKey;
+	}
+
+Blit:
 	if (byLevel == 0) {
-		pDst->Blt(x, y, nSizeDst, nSizeDst, pDibTmp, 0, nSizeDst, bUseColorKey);
+		pDst->Blt(x, y, nSizeDst, nSizeDst, pSrcImg, 0, nSrcY, (bUseColorKey && bHasKey) ? TRUE : FALSE);
 	} else {
-		pDst->BltAlpha(x, y, nSizeDst, nSizeDst, pDibTmp, 0, nSizeDst, byLevel, bUseColorKey);
+		pDst->BltAlpha(x, y, nSizeDst, nSizeDst, pSrcImg, 0, nSrcY, byLevel, (bUseColorKey && bHasKey) ? TRUE : FALSE);
 	}
 
 Exit:
@@ -827,17 +1035,20 @@ void CMgrDraw::DrawMapShadow(
 	BOOL bUseColorKey,/*TRUE*/	// [in] TRUE:重ね合わせする
 	BOOL bLock)/*TRUE*/			// [in] テンポラリをロックする
 {
-	int nSize, nSizeDst;
+	int nSize, nSizeDst, sc;
 	WORD wGrpIDBase;
 	PCImg32 pImg, pDibTmp;
 	PCInfoMapShadow pInfoMapShadow;
 	PCInfoAnime pAnime;
 
 	pDibTmp = GetDibTmp();
+	sc = GetDrawScale(pDst);
+	x *= sc;
+	y *= sc;
 	nSize = 16;
-	nSizeDst = 32;
+	nSizeDst = 32 * sc;
 	if (bSingleSize) {
-		nSizeDst = 16;
+		nSizeDst = 16 * sc;
 	}
 
 	pInfoMapShadow = (PCInfoMapShadow)m_pLibInfoMapShadow->GetPtr(dwShadowID);
@@ -892,14 +1103,20 @@ void CMgrDraw::DrawMapObject(
 	BOOL bUseColorKey,/*TRUE*/	// [in] TRUE:重ね合わせする
 	BOOL bLock)/*TRUE*/			// [in] テンポラリをロックする
 {
-	int xx, yy;
+	int xx, yy, sc, nSrcY;
+	BOOL bCache, bComplete, bHasKey;
+	unsigned long long ullKey;
+	STScaledCache *pCache;
 	SIZE sizeSrc, sizeDst;
 	WORD wGrpID;
-	PCImg32 pImg, pDibTmp;
+	PCImg32 pImg, pDibTmp, pSrcImg;
 	PCInfoMapObject pInfo;
 	PSTMAPOBJECTANIMEINFO pAnimeInfo;
 	PCLibInfoMapObject pLibInfoMapObject;
 
+	sc = GetDrawScale(pDst);
+	x *= sc;
+	y *= sc;
 	pDibTmp = GetDibTmp();
 
 	pLibInfoMapObject = m_pMgrData->GetLibInfoMapObject();
@@ -916,14 +1133,38 @@ void CMgrDraw::DrawMapObject(
 	sizeSrc.cx *= 16;
 	sizeSrc.cy *= 16;
 	sizeDst = sizeSrc;
-	sizeDst.cx *= 2;
-	sizeDst.cy *= 2;
+	sizeDst.cx *= 2 * sc;
+	sizeDst.cy *= 2 * sc;
+
+	// ワールド描画は拡大結果をキャッシュ(キーはオブジェクトIDと構成グラフィックIDのハッシュ。定義編集にも追従)
+	bCache = (sc > 1) ? TRUE : FALSE;
+	bHasKey = TRUE;
+	bComplete = TRUE;
+	pSrcImg = pDibTmp;
+	nSrcY = sizeDst.cy;
+	ullKey = 0;
+	if (bCache) {
+		ullKey = 1469598103934665603ULL ^ (unsigned long long)dwObjectID;
+		ullKey = (ullKey * 1099511628211ULL) ^ (unsigned long long)sc;
+		for (yy = 0; yy < pInfo->m_sizeGrp.cx * pInfo->m_sizeGrp.cy; yy++) {
+			ullKey = (ullKey * 1099511628211ULL) ^ (unsigned long long)pAnimeInfo->pwGrpID[yy];
+		}
+		ullKey = (ullKey * 1099511628211ULL) ^ ((unsigned long long)pInfo->m_sizeGrp.cx << 8) ^ (unsigned long long)pInfo->m_sizeGrp.cy;
+		pCache = FindScaledCache(ullKey);
+		if (pCache != NULL) {
+			pSrcImg = pCache->pImg;
+			nSrcY = 0;
+			bHasKey = pCache->bHasKey;
+			goto Blit;
+		}
+	}
 
 	for (yy = 0; yy < pInfo->m_sizeGrp.cy; yy++) {
 		for (xx = 0; xx < pInfo->m_sizeGrp.cx; xx++) {
 			wGrpID = pAnimeInfo->pwGrpID[yy * pInfo->m_sizeGrp.cx + xx];
 			pImg = m_pMgrGrpData->GetDibMapParts(wGrpID / 1024);
 			if (pImg == NULL) {
+				bComplete = FALSE;
 				continue;
 			}
 			pDibTmp->BltFrom256(xx * 16, yy * 16, 16, 16, pImg, ((wGrpID % 1024) % 32) * 16, ((wGrpID % 1024) / 32) * 16);
@@ -932,7 +1173,15 @@ void CMgrDraw::DrawMapObject(
 
 	pDibTmp->BltStretchNearest(0, sizeDst.cy, sizeDst.cx, sizeDst.cy, pDibTmp, 0, 0, sizeSrc.cx, sizeSrc.cy);
 
-	pDst->Blt(x, y - (sizeDst.cy - 32), sizeDst.cx, sizeDst.cy, pDibTmp, 0, sizeDst.cy, bUseColorKey);
+	if (bCache && bComplete) {
+		pCache = StoreScaledCache(ullKey, pDibTmp, 0, sizeDst.cy, sizeDst.cx, sizeDst.cy);
+		pSrcImg = pCache->pImg;
+		nSrcY = 0;
+		bHasKey = pCache->bHasKey;
+	}
+
+Blit:
+	pDst->Blt(x, y - (sizeDst.cy - 32 * sc), sizeDst.cx, sizeDst.cy, pSrcImg, 0, nSrcY, (bUseColorKey && bHasKey) ? TRUE : FALSE);
 
 Exit:
 	ReleaseDibTmp();
@@ -965,8 +1214,13 @@ void CMgrDraw::DrawItem(
 	BYTE byLevel,/*0*/			// [in] 透明度
 	BOOL bLock)/*TRUE*/			// [in] テンポラリをロックする
 {
+	int sc, nSz;
 	PCImg32 pImg, pDibTmp;
 
+	sc = GetDrawScale(pDst);
+	nSz = 32 * sc;
+	x *= sc;
+	y *= sc;
 	pDibTmp = GetDibTmp();
 	if (pInfoItem == NULL) {
 		goto Exit;
@@ -978,12 +1232,12 @@ void CMgrDraw::DrawItem(
 	}
 	pDibTmp->BltFrom256(0, 0, 16, 16, pImg, (pInfoItem->m_dwGrpID % 32) * 16, (pInfoItem->m_dwGrpID / 32) * 16);
 
-	pDibTmp->BltStretchNearest(0, 32, 32, 32, pDibTmp, 0, 0, 16, 16);
+	pDibTmp->BltStretchNearest(0, nSz, nSz, nSz, pDibTmp, 0, 0, 16, 16);
 
 	if (byLevel == 0) {
-		pDst->Blt(x, y, 32, 32, pDibTmp, 0, 32, TRUE);
+		pDst->Blt(x, y, nSz, nSz, pDibTmp, 0, nSz, TRUE);
 	} else {
-		pDst->BltAlpha(x, y, 32, 32, pDibTmp, 0, 32, byLevel, TRUE);
+		pDst->BltAlpha(x, y, nSz, nSz, pDibTmp, 0, nSz, byLevel, TRUE);
 	}
 
 Exit:
@@ -997,10 +1251,14 @@ void CMgrDraw::DrawBalloon(
 	int y,					// [in] 描画位置(Y)
 	DWORD dwBalloonID)		// [in] 噴出しID
 {
-	int cx, cy;
+	int cx, cy, sc, nSt;
 	PCImg32 pImg, pDibTmp;
 	POINT ptTmp;
 
+	sc = GetDrawScale(pDst);
+	nSt = 2 * sc;
+	x *= sc;
+	y *= sc;
 	pDibTmp = GetDibTmp();
 	if (dwBalloonID == 0) {
 		goto Exit;
@@ -1015,9 +1273,9 @@ void CMgrDraw::DrawBalloon(
 	m_pMgrGrpData->GetGrpPos(GRPIDMAIN_EFCBALLOON, (WORD)dwBalloonID, ptTmp);
 	pDibTmp->BltFrom256(0, 0, 16, 16, pImg, ptTmp.x, ptTmp.y);
 
-	pDibTmp->BltStretchNearest(0, cy * 2, cx * 2, cy * 2, pDibTmp, 0, 0, cx, cy);
+	pDibTmp->BltStretchNearest(0, cy * 2, cx * nSt, cy * nSt, pDibTmp, 0, 0, cx, cy);
 
-	pDst->Blt(x, y, cx * 2, cy * 2, pDibTmp, 0, cy * 2, TRUE);
+	pDst->Blt(x, y, cx * nSt, cy * nSt, pDibTmp, 0, cy * 2, TRUE);
 
 Exit:
 	ReleaseDibTmp();
@@ -1032,10 +1290,13 @@ void CMgrDraw::DrawTextEffect(
 {
 	BOOL bResult;
 	BYTE byLevel;
-	int cx, cy, i, nCount;
+	int cx, cy, i, nCount, sc, nDx, nDy, nW, nH, nRowH;
 	PCImg32 pImg, pDibTmp;
 	POINT ptSrc, ptTmp;
 
+	sc = GetDrawScale(pDst);
+	x *= sc;
+	y *= sc;
 	pDibTmp = GetDibTmp();
 	if (pInfoTextEffect == NULL) {
 		goto Exit;
@@ -1071,10 +1332,19 @@ void CMgrDraw::DrawTextEffect(
 		pDibTmp->BltFrom256(cx * i + ptTmp.x, cy + ptTmp.y + 20, cx, cy, pImg, ptSrc.x, ptSrc.y);
 	}
 
+	// 数字列(論理サイズ)を組み立て済み。ワールド描画なら sc 倍に拡大して転送する
+	nRowH = cy * 2 + 20;
+	nDx = x - (cx * nCount / 2) * sc;
+	nDy = y - cy * sc;
+	nW = cx * nCount * sc;
+	nH = nRowH * sc;
+	if (sc > 1) {
+		pDibTmp->BltStretchNearest(0, nRowH, nW, nH, pDibTmp, 0, 0, cx * nCount, nRowH);
+	}
 	if (byLevel == 0) {
-		pDst->Blt(x - (cx * nCount / 2), y - cy, (cx * nCount), cy * 2 + 20, pDibTmp, 0, 0, TRUE);
+		pDst->Blt(nDx, nDy, nW, nH, pDibTmp, 0, (sc > 1) ? nRowH : 0, TRUE);
 	} else {
-		pDst->BltAlpha(x - (cx * nCount / 2), y - cy, (cx * nCount), cy * 2 + 20, pDibTmp, 0, 0, byLevel, TRUE);
+		pDst->BltAlpha(nDx, nDy, nW, nH, pDibTmp, 0, (sc > 1) ? nRowH : 0, byLevel, TRUE);
 	}
 
 Exit:
@@ -1291,6 +1561,7 @@ void CMgrDraw::SetFadeState(BYTE byFadeState)
 void CMgrDraw::Clear(void)
 {
 	m_pDibBack->Clear();
+	m_pDibWorld->Clear();
 }
 
 
@@ -1316,10 +1587,10 @@ void CMgrDraw::SaveScreenShot(void)
 
 	std::string szNameUtf8 = TStringToUtf8Std(szName);
 
-	cx = m_pDibBack->Width();
-	cy = m_pDibBack->Height();
-	ImgTmp.CreateWithoutGdi(SCRSIZEX, SCRSIZEY);
-	ImgTmp.Blt(0, 0, SCRSIZEX, SCRSIZEY, m_pDibBack, (cx - SCRSIZEX) / 2, (cy - SCRSIZEY) / 2);
+	cx = m_pDibWorld->Width();
+	cy = m_pDibWorld->Height();
+	ImgTmp.CreateWithoutGdi(WORLD_SCRSIZEX, WORLD_SCRSIZEY);
+	ImgTmp.Blt(0, 0, WORLD_SCRSIZEX, WORLD_SCRSIZEY, m_pDibWorld, (cx - WORLD_SCRSIZEX) / 2, (cy - WORLD_SCRSIZEY) / 2);
 	m_pMgrGrpData->Write(szNameUtf8.c_str(), &ImgTmp);
 }
 

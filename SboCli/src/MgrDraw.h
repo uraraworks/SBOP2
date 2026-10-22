@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <unordered_map>
+
 // SDL_Renderer / SDL_Texture の前方宣言（SDL2 の typedef に合わせる）
 // SboCliAdminMfc は SDL2 に依存しないため SDL.h はインクルード不可
 // MgrDraw.cpp 側で SDL.h をインクルードして SDL API を使用する
@@ -39,6 +41,9 @@ public:
 	void	Destroy(void);							// 破棄
 
 	void	Draw(SDL_Renderer *pRenderer);			// 描画（SDL_RenderCopy経由）
+	CImg32	*GetDibWorld(void);						// ワールド描画バッファ(DRAW_SCALE倍解像度)取得
+	int		GetDrawScale(CImg32 *pDst);				// 描画先の倍率(ワールドバッファなら DRAW_SCALE、それ以外は1)
+	void	BeginUiOverlay(void);					// ワールド描画完了通知。UIバッファをワールドの縮小で初期化し、以降のUI描画を重ね合わせ対象にする
 	void	DrawChar(CImg32 *pDst, int x, int y, CInfoCharCli *pInfoChar, BOOL bLock = TRUE);	// キャラを描画
 	void	DrawChar(CImg32 *pDst, int x, int y, BYTE byDirection, BYTE byAnimeNo, BYTE byLevel, CInfoCharCli *pInfoChar);	// キャラを描画
 
@@ -74,11 +79,30 @@ private:
 
 private:
 	BYTE				m_byLevel;					// 明度
+	BOOL				m_bWorldDrawn;				// このフレームでワールドを描いたか
 	BYTE				m_byFadeState;				// フェード状態
 	DWORD				m_dwLastFade;				// 前回のフェード処理
 
 	CmySection			m_CritDataLock;				// データロック用のクリティカルセクション
-	CImg32				*m_pDibBack,				// バックバッファ
+	// 描画先の座標規約: DrawXxx(pDst, x, y, ...) の x,y は常に「論理(UI)座標」(余白32px込み)で渡す。
+	// pDst がワールドバッファのとき DrawXxx 内部で DRAW_SCALE 倍して描く(サイズも倍率込みで拡大する)。
+	// 拡大済みタイル/オブジェクト画像のキャッシュ(ワールド描画のみ)。
+	// 16px素材を毎フレーム 作業域へ展開→拡大→転送 するのは4倍解像度では重いので、拡大結果を使い回す。
+	struct STScaledCache {
+		CImg32	*pImg;			// 拡大済み画像(カラーキーはマゼンタ)
+		BOOL	bHasKey;		// カラーキー画素を含むか(含まなければキー判定なしで高速転送できる)
+	};
+	STScaledCache	*FindScaledCache(unsigned long long ullKey);							// キャッシュ検索
+	STScaledCache	*StoreScaledCache(unsigned long long ullKey, CImg32 *pSrc, int sx, int sy, int cx, int cy);	// 作業域の矩形を複製して登録
+	void	ClearScaledCache(void);					// キャッシュ全破棄
+	std::unordered_map<unsigned long long, STScaledCache>	m_mapScaledCache;
+	size_t	m_nScaledCacheBytes;
+	void	UpscaleUiToWorld(void);					// UIバッファ全体をワールドへ最近傍で拡大(ワールド非描画時)
+	void	CompositeUiOverlay(void);				// ワールド上へUIバッファの変更分だけを拡大して重ねる
+
+private:
+	CImg32				*m_pDibWorld,				// ワールド描画バッファ(最終出力)
+						*m_pDibBack,				// UI用バッファ(論理解像度)
 						*m_pDibTmp;					// 描画用テンポラリ
 	SDL_Texture			*m_pBackTexture;			// バックバッファ用SDLテクスチャ（Lazy初期化）
 	CMgrData			*m_pMgrData;				// データマネージャ

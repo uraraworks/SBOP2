@@ -119,23 +119,24 @@ void CLayerMap::Create(
 	m_pLibInfoMapParts = m_pMgrData->GetLibInfoMapParts();
 	m_pLibInfoMapShadow = m_pMgrData->GetLibInfoMapShadow();
 
+	// 明度/ライト用バッファはワールド(DRAW_SCALE倍)バッファと同じ大きさ
 	m_pDibLevel = new CImg32;
-	m_pDibLevel->CreateWithoutGdi(SCRSIZEX + 64, SCRSIZEY + 64);
+	m_pDibLevel->CreateWithoutGdi(WORLD_BUFSIZEX, WORLD_BUFSIZEY);
 	m_pDibLevel->FillRect(0, 0, m_pDibLevel->Width(), m_pDibLevel->Height(), RGB(100, 0, 0));
 
 	m_pDibLevelTmp = new CImg32;
-	m_pDibLevelTmp->CreateWithoutGdi(SCRSIZEX + 64, SCRSIZEY + 64);
+	m_pDibLevelTmp->CreateWithoutGdi(WORLD_BUFSIZEX, WORLD_BUFSIZEY);
 
-	m_pDibLevelTmp->CircleGradation(0, 0, 64, 48, RGB(50, 0, 0));
+	m_pDibLevelTmp->CircleGradation(0, 0, 64 * DRAW_SCALE, 48 * DRAW_SCALE, RGB(50, 0, 0));
 
 	m_pDibLight = new CImg32;
-	m_pDibLight->CreateWithoutGdi(SCRSIZEX + 64, SCRSIZEY + 64);
+	m_pDibLight->CreateWithoutGdi(WORLD_BUFSIZEX, WORLD_BUFSIZEY);
 	m_pDibLight->FillRect(0, 0, m_pDibLight->Width(), m_pDibLight->Height(), RGB(0, 0, 0));
 
 	m_pDibLightTmp = new CImg32;
-	m_pDibLightTmp->CreateWithoutGdi(SCRSIZEX + 64, SCRSIZEY + 64);
+	m_pDibLightTmp->CreateWithoutGdi(WORLD_BUFSIZEX, WORLD_BUFSIZEY);
 	m_pDibLightTmp->FillRect(0, 0, m_pDibLightTmp->Width(), m_pDibLightTmp->Height(), RGB(0, 0, 0));
-	m_pDibLightTmp->MakeRadialLight(64, 64, 64, LIGHTING_TORCH_COLOR);
+	m_pDibLightTmp->MakeRadialLight(64 * DRAW_SCALE, 64 * DRAW_SCALE, 64 * DRAW_SCALE, LIGHTING_TORCH_COLOR);
 
 	m_pLayerCould = new CLayerCloud;
 	m_pLayerMisty = new CLayerMisty;
@@ -154,11 +155,17 @@ void CLayerMap::Draw(PCImg32 pDst)
 	int y;
 	PCInfoMapBase pMap;
 	PCLayerBase pLayer;
+	PCImg32 pWorld;
 
 	pMap = m_pMgrData->GetMap();
 	if (pMap == NULL) {
 		return;
 	}
+
+	// 世界(タイル・キャラ・影・天候・ライティング等)は DRAW_SCALE 倍のワールドバッファへ描く。
+	// pDst(UI用の論理解像度バッファ)にはHUD・ラベル・デバッグ枠だけを描く。
+	// 座標は常に論理座標(余白32px込み)で渡し、ワールドへの拡大は MgrDraw 側で行う。
+	pWorld = m_pMgrDraw->GetDibWorld();
 
 	if (pMap->m_byLevel != 0) {
 		RenewLevel();
@@ -168,20 +175,20 @@ void CLayerMap::Draw(PCImg32 pDst)
 	double dTile = 0.0, dChar = 0.0, dShadow = 0.0, dLight = 0.0;
 	Uint64 t;
 
-	t = PerfNow(); DrawPartsBase(pDst);       dTile += PerfMs(t, PerfNow());
-	t = PerfNow(); DrawMapPile(pDst);          dTile += PerfMs(t, PerfNow());
-	t = PerfNow(); DrawItem(pDst, 0);          dTile += PerfMs(t, PerfNow());
+	t = PerfNow(); DrawPartsBase(pWorld);       dTile += PerfMs(t, PerfNow());
+	t = PerfNow(); DrawMapPile(pWorld);          dTile += PerfMs(t, PerfNow());
+	t = PerfNow(); DrawItem(pWorld, 0);          dTile += PerfMs(t, PerfNow());
 	t = PerfNow(); PrepareMapObjectDraw();    dTile += PerfMs(t, PerfNow());
 	t = PerfNow(); PrepareCharDrawRows();     dChar += PerfMs(t, PerfNow());
 	for (y = -1; y < DRAW_PARTS_Y + 2; y ++) {
-		t = PerfNow(); DrawMapObject(pDst, y); dTile += PerfMs(t, PerfNow());
-		t = PerfNow(); DrawChar(pDst, y);      dChar += PerfMs(t, PerfNow());
-		t = PerfNow(); DrawPartsPile(pDst, y); dTile += PerfMs(t, PerfNow());
-		t = PerfNow(); DrawMapPile(pDst, y);   dTile += PerfMs(t, PerfNow());
+		t = PerfNow(); DrawMapObject(pWorld, y); dTile += PerfMs(t, PerfNow());
+		t = PerfNow(); DrawChar(pWorld, y);      dChar += PerfMs(t, PerfNow());
+		t = PerfNow(); DrawPartsPile(pWorld, y); dTile += PerfMs(t, PerfNow());
+		t = PerfNow(); DrawMapPile(pWorld, y);   dTile += PerfMs(t, PerfNow());
 	}
-	t = PerfNow(); DrawPartsPile(pDst);        dTile += PerfMs(t, PerfNow());
-	t = PerfNow(); DrawMapPile(pDst, -98);     dTile += PerfMs(t, PerfNow());
-	t = PerfNow(); DrawShadow(pDst);           dShadow += PerfMs(t, PerfNow());
+	t = PerfNow(); DrawPartsPile(pWorld);        dTile += PerfMs(t, PerfNow());
+	t = PerfNow(); DrawMapPile(pWorld, -98);     dTile += PerfMs(t, PerfNow());
+	t = PerfNow(); DrawShadow(pWorld);           dShadow += PerfMs(t, PerfNow());
 
 	pLayer = NULL;
 	switch (pMap->m_dwWeatherType) {
@@ -190,16 +197,22 @@ void CLayerMap::Draw(PCImg32 pDst)
 	case WEATHERTYPE_SNOW:   pLayer = m_pLayerSnow;  break;
 	}
 	if (pLayer) {
-		pLayer->Draw(pDst);
+		pLayer->Draw(pWorld);
 	}
 	if (pMap->m_byLevel != 0) {
-		t = PerfNow(); pDst->SetLevelEx(m_pDibLevel, m_pDibLight, LIGHTING_NIGHT_TINT, LIGHTING_GLOW_FLOOR); dLight += PerfMs(t, PerfNow());
+		t = PerfNow(); pWorld->SetLevelEx(m_pDibLevel, m_pDibLight, LIGHTING_NIGHT_TINT, LIGHTING_GLOW_FLOOR); dLight += PerfMs(t, PerfNow());
 	}
 
 	g_dDrawTileMs   = dTile;
 	g_dDrawCharMs   = dChar;
 	g_dDrawShadowMs = dShadow;
 	g_dDrawLightMs  = dLight;
+	DrawCharEffect(pWorld);
+
+	// ここまでがワールド。以降(HUD・名前/吹き出しラベル・デバッグ枠)はUIバッファへ描く。
+	// UIバッファをワールドの縮小で初期化し、以降の変更分だけが最終段でワールドへ重なる。
+	m_pMgrDraw->BeginUiOverlay();
+
 	DrawItem(pDst, 1);
 	DrawCharText(pDst);
 	DrawGauge(pDst);
@@ -702,8 +715,9 @@ void CLayerMap::RenewLevel(void)
 		r = cx * 2;
 		nTmp = (r - cx / 2);
 //		m_pDibLevel->CircleGradation(x - nTmp, y - nTmp, r, cx + cx / 2, RGB(50, 0, 0));
-		m_pDibLevel->BltPlus(x - nTmp, y - nTmp, r * 2, r * 2, m_pDibLevelTmp, 0, 0, 100, TRUE);
-		m_pDibLight->BltPlus(x - nTmp, y - nTmp, r * 2, r * 2, m_pDibLightTmp, 0, 0, 255, TRUE);
+		// 論理座標(x,y,r)をワールド解像度(DRAW_SCALE倍)へ変換して加算する
+		m_pDibLevel->BltPlus((x - nTmp) * DRAW_SCALE, (y - nTmp) * DRAW_SCALE, r * 2 * DRAW_SCALE, r * 2 * DRAW_SCALE, m_pDibLevelTmp, 0, 0, 100, TRUE);
+		m_pDibLight->BltPlus((x - nTmp) * DRAW_SCALE, (y - nTmp) * DRAW_SCALE, r * 2 * DRAW_SCALE, r * 2 * DRAW_SCALE, m_pDibLightTmp, 0, 0, 255, TRUE);
 //		m_pDibLevel->Circle(x - nTmp, y - nTmp, r, RGB(100, 0, 0));
 	}
 }
@@ -1002,9 +1016,9 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 			if (bPile && pInfoMapParts) {
 				if ((pInfoMapParts->m_dwPartsType & (BIT_PARTSHIT_PILE | BIT_PARTSHIT_PILEBACK)) == 0) {
 					pDst->FillRect(
-						32 + x * 32 + nMoveX,
-						32 + y * 32 + nMoveY,
-						32, 32, RGB(0, 0, 0));
+						(32 + x * 32 + nMoveX) * DRAW_SCALE,
+						(32 + y * 32 + nMoveY) * DRAW_SCALE,
+						32 * DRAW_SCALE, 32 * DRAW_SCALE, RGB(0, 0, 0));
 				}
 			}
 			m_pMgrDraw->DrawMapParts(
@@ -1202,20 +1216,20 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 				if (bPile) {
 					if (nDrawY != -99) {
 						pDst->ChgLevel(
-							32 + x * 32 + nMoveX,
-							32 + y * 32 + nMoveY,
-							32, 32, 50);
+							(32 + x * 32 + nMoveX) * DRAW_SCALE,
+							(32 + y * 32 + nMoveY) * DRAW_SCALE,
+							32 * DRAW_SCALE, 32 * DRAW_SCALE, 50);
 					}
 				}
 			}
 			if (byViewGrid && nDrawY == -99) {
 				if (byViewGrid == 1) {
-					pDst->Rectangle(32 + x * 32 + nMoveX, 32 + y * 32 + nMoveY, 32, 32, -1);
+					pDst->Rectangle((32 + x * 32 + nMoveX) * DRAW_SCALE, (32 + y * 32 + nMoveY) * DRAW_SCALE, 32 * DRAW_SCALE, 32 * DRAW_SCALE, -1);
 				} else {
-					pDst->Rectangle(32 + x * 32 + nMoveX,      32 + y * 32 + nMoveY,      16, 16, -1);
-					pDst->Rectangle(32 + x * 32 + nMoveX + 16, 32 + y * 32 + nMoveY,      16, 16, -1);
-					pDst->Rectangle(32 + x * 32 + nMoveX,      32 + y * 32 + nMoveY + 16, 16, 16, -1);
-					pDst->Rectangle(32 + x * 32 + nMoveX + 16, 32 + y * 32 + nMoveY + 16, 16, 16, -1);
+					pDst->Rectangle((32 + x * 32 + nMoveX)      * DRAW_SCALE, (32 + y * 32 + nMoveY)      * DRAW_SCALE, 16 * DRAW_SCALE, 16 * DRAW_SCALE, -1);
+					pDst->Rectangle((32 + x * 32 + nMoveX + 16) * DRAW_SCALE, (32 + y * 32 + nMoveY)      * DRAW_SCALE, 16 * DRAW_SCALE, 16 * DRAW_SCALE, -1);
+					pDst->Rectangle((32 + x * 32 + nMoveX)      * DRAW_SCALE, (32 + y * 32 + nMoveY + 16) * DRAW_SCALE, 16 * DRAW_SCALE, 16 * DRAW_SCALE, -1);
+					pDst->Rectangle((32 + x * 32 + nMoveX + 16) * DRAW_SCALE, (32 + y * 32 + nMoveY + 16) * DRAW_SCALE, 16 * DRAW_SCALE, 16 * DRAW_SCALE, -1);
 				}
 			}
 		}
@@ -1269,8 +1283,8 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 				if (pMap->m_byLevel != 0) {
 					r = 32 * 2;
 					nTmp = (r - 32 / 2);
-					m_pDibLevel->BltPlus(xx - nTmp, yy - nTmp, r * 2, r * 2, m_pDibLevelTmp, 0, 0, 100, TRUE);
-				m_pDibLight->BltPlus(xx - nTmp, yy - nTmp, r * 2, r * 2, m_pDibLightTmp, 0, 0, 255, TRUE);
+					m_pDibLevel->BltPlus((xx - nTmp) * DRAW_SCALE, (yy - nTmp) * DRAW_SCALE, r * 2 * DRAW_SCALE, r * 2 * DRAW_SCALE, m_pDibLevelTmp, 0, 0, 100, TRUE);
+					m_pDibLight->BltPlus((xx - nTmp) * DRAW_SCALE, (yy - nTmp) * DRAW_SCALE, r * 2 * DRAW_SCALE, r * 2 * DRAW_SCALE, m_pDibLightTmp, 0, 0, 255, TRUE);
 				}
 			} else {
 				m_pMgrDraw->DrawMapShadow(
@@ -1532,6 +1546,43 @@ void CLayerMap::DrawChar(PCImg32 pDst, int nDrawY)
 	m_pMgrDraw->UnLockDibTmp();
 }
 
+void CLayerMap::DrawCharEffect(PCImg32 pWorld)
+{
+	int j, nCount, nCount2, x, y, cy, i;
+	DWORD dwBalloonID;
+	POINT ptViewCharPos, ptDrawMapPos;
+	PCInfoCharCli pChar;
+	PCInfoTextEffect pInfoTextEffect;
+
+	nCount = m_pLibInfoChar->GetCount();
+	for (i = nCount - 1; i >= 0; i --) {
+		pChar = (PCInfoCharCli)m_pLibInfoChar->GetPtr(i);
+		if (pChar->m_nMoveType == CHARMOVETYPE_PUTNPC) {
+			if (m_pMgrData->GetAdminLevel() == ADMINLEVEL_NONE) {
+				continue;
+			}
+		}
+		pChar->GetDrawMapPos(ptDrawMapPos);
+		if (IsInScreen(ptDrawMapPos.x, ptDrawMapPos.y) == FALSE) {
+			continue;
+		}
+		x = y = 32;
+		GetDrawPos(pChar, x, y);
+		pChar->GetViewCharPos(ptViewCharPos);
+
+		nCount2 = pChar->GetTextEffectCount();
+		for (j = 0; j < nCount2; j ++) {
+			pInfoTextEffect = pChar->GetTextEffect(j);
+			m_pMgrDraw->DrawTextEffect(pWorld, x + pChar->m_nGrpSize, y - 20 - ptViewCharPos.y, pInfoTextEffect);
+		}
+
+		cy = m_pMgrGrpData->GetGrpSize(GRPIDMAIN_EFCBALLOON);
+		dwBalloonID = pChar->GetBalloonGrpID();
+		m_pMgrDraw->DrawBalloon(pWorld, x, y - (cy * 2) - ptViewCharPos.y, dwBalloonID);
+	}
+}
+
+
 void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 {
 	BOOL bResult, bDraw, bDrawChat;
@@ -1567,16 +1618,7 @@ void CLayerMap::DrawCharText(PCImg32 pDst, int nDrawY/*-1*/)
 		GetDrawPos(pChar, x, y);
 		pChar->GetViewCharPos(ptViewCharPos);
 
-		nCount2 = pChar->GetTextEffectCount();
-		for (j = 0; j < nCount2; j ++) {
-			pInfoTextEffect = pChar->GetTextEffect(j);
-			m_pMgrDraw->DrawTextEffect(pDst, x + pChar->m_nGrpSize, y - 20 - ptViewCharPos.y, pInfoTextEffect);
-		}
-
-		cy = m_pMgrGrpData->GetGrpSize(GRPIDMAIN_EFCBALLOON);
-		dwBalloonID = pChar->GetBalloonGrpID();
-		m_pMgrDraw->DrawBalloon(pDst, x, y - (cy * 2) - ptViewCharPos.y, dwBalloonID);
-
+		// 文字エフェクト・吹き出しはワールド側(DrawCharEffect)で描画済み。ここは名前/発言ラベル(UI)のみ
 		if (bDraw) {
 			nWidth = pChar->m_pDibName->Width();
 			nHeight = pChar->m_pDibName->Height();

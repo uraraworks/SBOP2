@@ -72,7 +72,8 @@ private:
 	void PrepareCharDrawRows(void); // 描画行ごとのキャラを毎描画時に再構築
 	void DrawChar(CImg32 *pDst, int nDrawY); // 描画(キャラ)
 	std::vector<std::vector<CInfoCharCli *> > m_aCharDrawRows; // 行内はライブラリの順序を維持
-	void DrawCharText(CImg32 *pDst, int nDrawY = -99); // 描画(キャラ関連のテキスト)
+	void DrawCharEffect(CImg32 *pWorld); // 描画(キャラ関連のエフェクト: 文字エフェクト・吹き出し。ワールドバッファへ)
+	void DrawCharText(CImg32 *pDst, int nDrawY = -99); // 描画(キャラ名・発言ラベル。UIバッファへ)
 	void DrawSystemIcon(CImg32 *pDst); // 描画(システムアイコン)
 	void DrawGauge(CImg32 *pDst); // 描画(ゲージ類)
 	void DrawMapName(CImg32 *pDst); // 描画(マップ名)

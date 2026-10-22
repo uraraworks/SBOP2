@@ -8,6 +8,7 @@
 #include "MgrLayer.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
+#include "MgrDraw.h"
 #include "Img32.h"
 #include "InfoMapBase.h"
 #include "LayerMisty.h"
@@ -35,13 +36,14 @@ void CLayerMisty::Create(
 
 void CLayerMisty::Draw(PCImg32 pDst)
 {
-	int cx, cy;
+	int cx, cy, nScale;
 
 	cx = m_pDibBase->Width();
 	cy = m_pDibBase->Height();
+	nScale = m_pMgrDraw->GetDrawScale(pDst);
 
-	pDst->BltAlpha(32,      32,      cx, cy, m_pDibBase, 0, 0, 50, TRUE);
-	pDst->BltAlpha(32 + cx, 32,      cx, cy, m_pDibBase, 0, 0, 50, TRUE);
-	pDst->BltAlpha(32,      32 + cx, cx, cy, m_pDibBase, 0, 0, 50, TRUE);
-	pDst->BltAlpha(32 + cx, 32 + cx, cx, cy, m_pDibBase, 0, 0, 50, TRUE);
+	pDst->BltAlphaScaled(32 * nScale,        32 * nScale,        cx, cy, m_pDibBase, 0, 0, 50, TRUE, nScale);
+	pDst->BltAlphaScaled((32 + cx) * nScale, 32 * nScale,        cx, cy, m_pDibBase, 0, 0, 50, TRUE, nScale);
+	pDst->BltAlphaScaled(32 * nScale,        (32 + cx) * nScale, cx, cy, m_pDibBase, 0, 0, 50, TRUE, nScale);
+	pDst->BltAlphaScaled((32 + cx) * nScale, (32 + cx) * nScale, cx, cy, m_pDibBase, 0, 0, 50, TRUE, nScale);
 }

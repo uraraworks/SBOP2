@@ -1109,7 +1109,7 @@
 
     <section class="panel canvas-wrap">
       <div class="canvas-stage">
-        <canvas id="canvas" width="480" height="480" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
+        <canvas id="canvas" width="960" height="960" tabindex="-1" oncontextmenu="event.preventDefault()"></canvas>
         <canvas id="canvasSharp" aria-hidden="true"></canvas>
         <textarea id="sbop2ImeInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
         <!-- Click to Start オーバーレイ（Autoplay Policy 対策） -->
@@ -1412,8 +1412,10 @@
     //   2) そうでなければ端数倍のまま「シャープ・バイリニア」表示
     //      (最近傍で整数倍まで拡大した中間バッファを #canvasSharp に描き、
     //       CSS で表示サイズへわずかに縮小する。ドット境界の滲みが 1 物理 px 程度に収まる)
-    // とする。ゲーム画面の実解像度は 480x480 固定。
+    // とする。ゲーム画面の論理サイズは 480x480 固定(CSS サイズや DOM オーバーレイ座標はこの論理座標で扱う)。
+    // canvas の物理解像度は論理の GAME_CANVAS_SCALE 倍(C++ の DRAW_SCALE と一致させる)。
     const GAME_NATIVE_SIZE = 480;
+    const GAME_CANVAS_SCALE = 2;
     // ゲーム画面まわりの余白(.layout の padding 20px + .canvas-wrap の padding 24px を上下左右)
     const GAME_VIEW_MARGIN = (20 + 24) * 2;
     // 整数倍へ吸着してよい差(CSS px)。これ以内なら少し小さくなっても整数倍でくっきり表示する
@@ -1440,8 +1442,8 @@
         return;
       }
       // 目標の物理 px 以上になる最小の整数倍まで最近傍で拡大しておく
-      const k = Math.max(1, Math.ceil((cssSize * dpr) / GAME_NATIVE_SIZE - 1e-6));
-      const bufSize = GAME_NATIVE_SIZE * k;
+      const k = Math.max(1, Math.ceil((cssSize * dpr) / (GAME_NATIVE_SIZE * GAME_CANVAS_SCALE) - 1e-6));
+      const bufSize = GAME_NATIVE_SIZE * GAME_CANVAS_SCALE * k;
       // width/height への代入は中身が消えるので、変わったときだけ代入する
       if (canvasSharpElement.width !== bufSize || canvasSharpElement.height !== bufSize) {
         canvasSharpElement.width = bufSize;
@@ -1532,7 +1534,7 @@
     // 変換開始時にアクティブな入力欄（キャラ名入力 or ゲーム内チャット入力行）の直下へ移動する。
     // 要素は 1x1 透明・pointer-events:none なので位置を動かしても表示や操作には影響しない。
     function placeImeInputForCandidates() {
-      const scale = canvasElement.getBoundingClientRect().width / canvasElement.width;
+      const scale = canvasElement.getBoundingClientRect().width / GAME_NATIVE_SIZE;
       let x, y;
       if (!charNameOverlay.hidden) {
         // キャラ名入力欄の直下（canvas-stage 内の絶対座標 = charNameInput と同じ座標系）
@@ -1859,8 +1861,8 @@
       }
 
       const canvasRect = canvasElement.getBoundingClientRect();
-      const scaleX = canvasRect.width / canvasElement.width;
-      const scaleY = canvasRect.height / canvasElement.height;
+      const scaleX = canvasRect.width / GAME_NATIVE_SIZE;
+      const scaleY = canvasRect.height / GAME_NATIVE_SIZE;
 
       loginOverlay.hidden = false;
       // canvas 上の実描画位置は C++ の報告座標より 32px 左上(ウィンドウ枠と DOM パネルを一致させる)
@@ -1910,8 +1912,8 @@
         return;
       }
       const canvasRect = canvasElement.getBoundingClientRect();
-      const scaleX = canvasRect.width / canvasElement.width;
-      const scaleY = canvasRect.height / canvasElement.height;
+      const scaleX = canvasRect.width / GAME_NATIVE_SIZE;
+      const scaleY = canvasRect.height / GAME_NATIVE_SIZE;
 
       charNameOverlay.hidden = false;
       // 画面合成時、ウィンドウは C++ が報告する座標より (32,32) 左上（= m_ptViewPos そのまま）に

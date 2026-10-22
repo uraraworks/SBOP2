@@ -34,6 +34,7 @@ public:
 	void	Blt(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);						// 矩形転送
 	void	BltLevel(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey = FALSE);	// 明度を変えながら矩形転送
 	void	BltAlpha(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey = FALSE);	// 混ぜ合わせ矩形転送
+	void	BltAlphaScaled(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey, int nScale);	// 整数倍(最近傍)に拡大しながら混ぜ合わせ矩形転送(cx,cy は転送元サイズ)
 	void	BltAlpha2(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevelAlpha, BOOL bColorKey = FALSE);	// カラーキーのみ混ぜ合わせ矩形転送
 	void	BltPlus(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, int nMax, BOOL bColorKey = FALSE);		// 矩形加算転送
 	void	BltTurnRightAndLeft(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);		// 左右反転して矩形転送

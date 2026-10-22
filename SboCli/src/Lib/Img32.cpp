@@ -931,6 +931,62 @@ void CImg32::BltAlpha(
 	}
 }
 
+void CImg32::BltAlphaScaled(
+	int dx,			// [in] 始点(X)(転送先の座標)
+	int dy,			// [in] 始点(Y)(転送先の座標)
+	int cx,			// [in] 転送元の幅
+	int cy,			// [in] 転送元の高さ
+	CImg32 *pSrc,	// [in] 転送元
+	int sx,			// [in] 転送元の始点(X)
+	int sy,			// [in] 転送元の始点(Y)
+	BYTE byLevel,	// [in] 割合
+	BOOL bColorKey,	// [in] カラーキーを使用
+	int nScale)		// [in] 拡大率(整数倍)
+{
+	int i, j, nDstW, nDstH, nBegX, nEndX, nBegY, nEndY;
+	DWORD dwKey, dwLineDst, dwLineSrc;
+	PBYTE pBitsDst, pBitsSrc;
+
+	if ((m_pBits == NULL) || (pSrc == NULL) || (nScale <= 0)) {
+		return;
+	}
+	if (nScale == 1) {
+		BltAlpha(dx, dy, cx, cy, pSrc, sx, sy, byLevel, bColorKey);
+		return;
+	}
+	if ((sx < 0) || (sy < 0) || (sx + cx > pSrc->Width()) || (sy + cy > pSrc->Height())) {
+		return;
+	}
+
+	pBitsDst = m_pBits;
+	pBitsSrc = pSrc->GetBits();
+	dwLineDst = BYTES_PER_LINE(Width());
+	dwLineSrc = BYTES_PER_LINE(pSrc->Width());
+	dwKey = pSrc->GetColorKey();
+	byLevel = PercentToHex(byLevel);
+
+	nDstW = cx * nScale;
+	nDstH = cy * nScale;
+	nBegX = max(0, -dx);
+	nEndX = min(nDstW, Width() - dx);
+	nBegY = max(0, -dy);
+	nEndY = min(nDstH, Height() - dy);
+
+	for (j = nBegY; j < nEndY; j ++) {
+		PBYTE pbyDst = pBitsDst + dwLineDst * (Height() - 1 - (dy + j)) + (dx + nBegX) * BYTES_PER_PIXEL;
+		PBYTE pbySrcLine = pBitsSrc + dwLineSrc * (pSrc->Height() - 1 - (sy + j / nScale)) + sx * BYTES_PER_PIXEL;
+		for (i = nBegX; i < nEndX; i ++) {
+			PBYTE pbySrc = pbySrcLine + (i / nScale) * BYTES_PER_PIXEL;
+			if ((!bColorKey) || memcmp(&dwKey, pbySrc, BYTES_PER_PIXEL)) {
+				pbyDst[2] = pbyDst[2] + ((int)(pbySrc[2] - pbyDst[2]) * (byLevel + 1) >> 8);
+				pbyDst[0] = pbyDst[0] + ((int)(pbySrc[0] - pbyDst[0]) * (byLevel + 1) >> 8);
+				pbyDst[1] = pbyDst[1] + ((int)(pbySrc[1] - pbyDst[1]) * (byLevel + 1) >> 8);
+			}
+			pbyDst += BYTES_PER_PIXEL;
+		}
+	}
+}
+
 void CImg32::BltAlpha2(
 	int dx,				// [in] 始点(X)
 	int dy,				// [in] 始点(Y)

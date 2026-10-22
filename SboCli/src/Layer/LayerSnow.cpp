@@ -10,6 +10,7 @@
 #include "MgrLayer.h"
 #include "MgrData.h"
 #include "MgrGrpData.h"
+#include "MgrDraw.h"
 #include "Img32.h"
 #include "InfoMapBase.h"
 #include "LayerMap.h"
@@ -52,10 +53,11 @@ void CLayerSnow::Create(
 void CLayerSnow::Draw(PCImg32 pDst)
 {
 	PSTLAYERSNOW_SNOWINFO pInfo;
-	int i, x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, nCount;
+	int i, x, y, xx, yy, nMoveX, nMoveY, nPosX, nPosY, nCount, nScale;
 	int aMoveX[] = {1, 1, 1, -1, -1, -1, 1, 1}, aMoveY[] = {1, -1, 1, 1, 1, -1, -1, 1},
 		aPosX[] = {0, 0, 1, -1, -1, -1, 1, 1}, aPosY[] = {1, -1, 0, 0, 1, -1, -1, 1};
 
+	nScale = m_pMgrDraw->GetDrawScale(pDst);	// 論理座標で計算し、ワールドバッファなら nScale 倍で転送する
 	nMoveX = 0;
 	nMoveY = 0;
 	nPosX = 0;
@@ -86,7 +88,7 @@ void CLayerSnow::Draw(PCImg32 pDst)
 		yy = (pInfo->y + (SCRSIZEY - y * 16)) % SCRSIZEY;
 		m_pImgTmp->FillRect(0, 0, pInfo->nSize * 2, pInfo->nSize * 2, RGB(0, 0, 0));
 		m_pImgTmp->Circle(0, 0, pInfo->nSize, RGB(255, 255, 255));
-		pDst->BltAlpha(32 + xx + nMoveX, 32 + yy + nMoveY, pInfo->nSize * 2, pInfo->nSize * 2, m_pImgTmp, 0, 0, pInfo->nLevel, TRUE);
+		pDst->BltAlphaScaled((32 + xx + nMoveX) * nScale, (32 + yy + nMoveY) * nScale, pInfo->nSize * 2, pInfo->nSize * 2, m_pImgTmp, 0, 0, pInfo->nLevel, TRUE, nScale);
 	}
 }
 

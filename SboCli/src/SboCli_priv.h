@@ -21,7 +21,17 @@
 #define DRAWCOUNT		(60)									// 既定の描画フレームレート(FPS)
 #define SCRSIZEX		(MAPPARTSSIZE * DRAW_PARTS_X)			// マップ表示サイズ(横)
 #define SCRSIZEY		(MAPPARTSSIZE * DRAW_PARTS_Y)			// マップ表示サイズ(縦)
-#define SCROLLSIZE		(16)									// スクロール単位（廃止予定：自由移動移行後は MAPPARTSSIZE に統一）
+// ワールド描画バッファの倍率(論理=ゲーム座標系の何倍の解像度で世界を描くか)。
+// 世界(CLayerMap が描くもの)は DRAW_SCALE 倍のバッファに描き、UI は従来の論理座標(SCRSIZE+余白)のまま
+// 最終段で DRAW_SCALE 倍(最近傍)にして重ねる。旧素材は拡大率が 2倍→(2*DRAW_SCALE)倍 になる。
+#define DRAW_SCALE			(2)											// ワールド描画バッファの倍率
+#define UI_MARGIN			(32)										// UI(論理)バッファの余白(片側)
+#define WORLD_MARGIN		(UI_MARGIN * DRAW_SCALE)					// ワールドバッファの余白(片側)
+#define WORLD_SCRSIZEX		(SCRSIZEX * DRAW_SCALE)						// 最終出力サイズ(横)
+#define WORLD_SCRSIZEY		(SCRSIZEY * DRAW_SCALE)						// 最終出力サイズ(縦)
+#define WORLD_BUFSIZEX		((SCRSIZEX + UI_MARGIN * 2) * DRAW_SCALE)	// ワールドバッファ全幅(余白込み)
+#define WORLD_BUFSIZEY		((SCRSIZEY + UI_MARGIN * 2) * DRAW_SCALE)	// ワールドバッファ全高(余白込み)
+#define SCROLLSIZE		(16)								// スクロール単位（廃止予定：自由移動移行後は MAPPARTSSIZE に統一）
 #define CHAR_MOVE_SPEED	(1)										// 基本移動量(px/更新)。低速移動では 0/1px 配分で使う
 #define CHAR_MOVE_SPEED_MAX	(1)									// 自キャラの端数補間時に使う最大移動量(px/更新)
 #define CHAR_MOVE_PIXELS_PER_SEC (128)							// 自キャラの実移動速度(px/sec)。2x2キャラ見た目幅(約64px)で約2体/秒相当
