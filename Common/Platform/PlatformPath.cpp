@@ -12,6 +12,11 @@
 #include <windows.h>
 #elif defined(__EMSCRIPTEN__)
 // ブラウザには実行ファイルの概念が無い。追加の include は不要。
+#elif defined(__APPLE__)
+#include <mach-o/dyld.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <unistd.h>
 #else
 #include <unistd.h>
 #endif
@@ -77,6 +82,17 @@ namespace SboPlatform
 			// 返していたダミー値("./sbocli.html")と同じにして、既存の ini
 			// 保存先(ブラウザ版の設定ファイル)を変えないようにする。
 			return std::string("./sbocli.html");
+#elif defined(__APPLE__)
+			// macOS には /proc が無いので _NSGetExecutablePath で取得し、realpath で正規化する。
+			char szRaw[1024];
+			std::memset(szRaw, 0, sizeof(szRaw));
+			uint32_t uSize = (uint32_t)sizeof(szRaw);
+			if (_NSGetExecutablePath(szRaw, &uSize) != 0) {
+				return std::string();
+			}
+			if (realpath(szRaw, szPath) == NULL) {
+				return std::string(szRaw);
+			}
 #else
 			ssize_t nLen = readlink("/proc/self/exe", szPath, sizeof(szPath) - 1);
 			if (nLen <= 0) {

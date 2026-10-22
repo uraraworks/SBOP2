@@ -236,15 +236,16 @@ OBJECTS=()
 TO_COMPILE=()
 FAILED=()
 SKIPPED=0
-declare -A SEEN_BASENAMES=()
+# bash 3.2(macOS 標準)には連想配列が無いので、改行区切り文字列で重複を検出する
+SEEN_BASENAMES=""
 for src in "${SOURCES[@]}"; do
     src_path="$REPO_ROOT/$src"
     base="$(basename "${src%.*}")"
     # .o はベース名で置くので同名ファイルがあると上書きし合う(ps1 版と同じ制約)
-    if [ -n "${SEEN_BASENAMES[$base]:-}" ]; then
-        die "ソース一覧にベース名の重複があります: $src と ${SEEN_BASENAMES[$base]}"
-    fi
-    SEEN_BASENAMES[$base]="$src"
+    case "$SEEN_BASENAMES" in
+        *"|$base|"*) die "ソース一覧にベース名の重複があります: $src (ベース名 $base)" ;;
+    esac
+    SEEN_BASENAMES="$SEEN_BASENAMES|$base|"
     obj="$OBJ_DIR/$base.o"
     OBJECTS+=("$obj")
     if [ ! -f "$src_path" ]; then
@@ -279,13 +280,14 @@ if [ "${#TO_COMPILE[@]}" -gt 0 ]; then
         fi
     }
     # 並列コンパイル。ジョブ数を超えたら 1 本終わるのを待つ
-    running=0
+    # (bash 3.2 は wait -n が無いので、最も古い PID を待つ)
+    pids=()
     for src in "${TO_COMPILE[@]}"; do
         compile_one "$src" &
-        running=$((running + 1))
-        if [ "$running" -ge "$JOBS" ]; then
-            wait -n || true
-            running=$((running - 1))
+        pids+=("$!")
+        if [ "${#pids[@]}" -ge "$JOBS" ]; then
+            wait "${pids[0]}" || true
+            pids=("${pids[@]:1}")
         fi
     done
     wait || true

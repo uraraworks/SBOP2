@@ -155,5 +155,10 @@ target_include_directories(SboSvrTest PRIVATE
 )
 target_compile_definitions(SboSvrTest PRIVATE ${SBO_COMMON_DEFINES})
 target_link_libraries(SboSvrTest PRIVATE ZLIB::ZLIB Threads::Threads ${CMAKE_DL_LIBS})
+if(APPLE)
+	# macOS では iconv が libiconv に分かれている
+	target_link_libraries(SboSvr PRIVATE iconv)
+	target_link_libraries(SboSvrTest PRIVATE iconv)
+endif()
 
 add_test(NAME SboSvrTest COMMAND SboSvrTest WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
