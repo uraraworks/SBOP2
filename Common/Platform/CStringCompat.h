@@ -15,6 +15,29 @@
 #include <cctype>
 #include <cwctype>
 #include <cwchar>
+#if defined(__APPLE__)
+#include <xlocale.h>
+#endif
+
+#if !defined(_WIN32)
+// -----------------------------------------------------------------------
+// vswprintf ラッパー（非 Windows 用）
+// macOS の vswprintf は C ロケール（setlocale 未呼び出し）だと、書式や %ls 引数に
+// 非 ASCII 文字があるだけで -1 (EILSEQ) を返す。プロセス全体のロケールは変えたくないので、
+// UTF-8 の locale_t を持って vswprintf_l で呼ぶ。glibc / Emscripten は素の vswprintf のまま。
+// -----------------------------------------------------------------------
+inline int PlatformVswprintf(wchar_t *pszDst, size_t nDstCount, const wchar_t *pszFormat, va_list args)
+{
+#if defined(__APPLE__)
+	// 取得に失敗したら NULL のまま通常の vswprintf にフォールバックする
+	static locale_t s_locale = newlocale(LC_CTYPE_MASK, "UTF-8", NULL);
+	if (s_locale != NULL) {
+		return vswprintf_l(pszDst, nDstCount, s_locale, pszFormat, args);
+	}
+#endif
+	return vswprintf(pszDst, nDstCount, pszFormat, args);
+}
+#endif
 
 // -----------------------------------------------------------------------
 // 大文字小文字変換ヘルパー（char / wchar_t 特殊化）
@@ -399,7 +422,7 @@ private:
 			nRet = _vsnwprintf_s(pszDst, nDstCount, _TRUNCATE, pszFormat, argCopy);
 		}
 #elif !defined(__EMSCRIPTEN__)
-		// Linux(glibc) のサーバー向け。
+		// Linux / macOS のサーバー向け（macOS は C ロケールだと非 ASCII で失敗するため PlatformVswprintf 経由）。
 		// - ワイド書式の %s / %c は、MSVC では wchar_t 文字列/文字だが POSIX では
 		//   char 側を指す。サーバーのコードは MSVC の意味で書かれているので %ls / %lc に直す。
 		// - vswprintf には「測定モード」が無く、収まらないと -1 を返すため、
@@ -411,7 +434,7 @@ private:
 			while (true) {
 				va_list argTry;
 				va_copy(argTry, argCopy);
-				nRet = vswprintf(tmp.data(), tmp.size(), strFormat.c_str(), argTry);
+				nRet = PlatformVswprintf(tmp.data(), tmp.size(), strFormat.c_str(), argTry);
 				va_end(argTry);
 				// -1 は「収まらない」か「変換できない文字」。後者で無限に広げないよう上限を置く
 				if ((nRet >= 0) || (tmp.size() >= (16u * 1024u * 1024u))) {
@@ -420,7 +443,7 @@ private:
 				tmp.resize(tmp.size() * 2);
 			}
 		} else {
-			nRet = vswprintf(pszDst, nDstCount, strFormat.c_str(), argCopy);
+			nRet = PlatformVswprintf(pszDst, nDstCount, strFormat.c_str(), argCopy);
 		}
 #else
 		// musl/Emscripten の vswprintf は vsnprintf と違い「測定モード」が無く、

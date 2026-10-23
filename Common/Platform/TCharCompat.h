@@ -140,7 +140,7 @@ inline int _stprintf_s(LPTSTR pszDst, size_t nDstCount, LPCTSTR pszFormat, ...)
 	}
 	va_list args;
 	va_start(args, pszFormat);
-	int nRet = vswprintf(pszDst, nDstCount, pszFormat, args);
+	int nRet = PlatformVswprintf(pszDst, nDstCount, pszFormat, args);
 	va_end(args);
 	if (nRet < 0) {
 		pszDst[0] = L'\0';
@@ -156,7 +156,7 @@ inline int _stprintf_s(LPTSTR pszDst, LPCTSTR pszFormat, ...)
 	}
 	va_list args;
 	va_start(args, pszFormat);
-	int nRet = vswprintf(pszDst, 1024, pszFormat, args);
+	int nRet = PlatformVswprintf(pszDst, 1024, pszFormat, args);
 	va_end(args);
 	if (nRet < 0) {
 		pszDst[0] = L'\0';
@@ -170,7 +170,7 @@ inline int _vsntprintf_s(LPTSTR pszDst, size_t nDstCount, size_t, LPCTSTR pszFor
 	if ((pszDst == NULL) || (nDstCount == 0) || (pszFormat == NULL)) {
 		return -1;
 	}
-	int nRet = vswprintf(pszDst, nDstCount, pszFormat, args);
+	int nRet = PlatformVswprintf(pszDst, nDstCount, pszFormat, args);
 	if (nRet < 0) {
 		pszDst[0] = L'\0';
 	}
