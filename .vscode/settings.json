@@ -1,0 +1,15 @@
+{
+  "cmake.useCMakePresets": "always",
+  "clangd.arguments": [
+    "--compile-commands-dir=${workspaceFolder}/out/cmake-mac",
+    "--header-insertion=never"
+  ],
+  "search.exclude": {
+    "out/**": true,
+    "**/obj/**": true
+  },
+  "files.watcherExclude": {
+    "out/**": true,
+    "**/obj/**": true
+  }
+}

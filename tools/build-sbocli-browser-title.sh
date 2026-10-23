@@ -119,10 +119,10 @@ precompress_assets() {
 }
 
 sync_to_webroot() {
-    # SboSvr の webroot/game へ同期する(webroot がある構成の時だけ)。
+    # SboSvr の webroot/game へ同期する(webroot がある構成の時だけ。Mac/Linux の CMake 構成は out/cmake-mac/webroot)。
     [ -f "$HTML_OUT" ] || return 0
     local webroot target
-    for webroot in "$REPO_ROOT/SboSvr/Debug/webroot" "$REPO_ROOT/SboSvr/Release/webroot"; do
+    for webroot in "$REPO_ROOT/SboSvr/Debug/webroot" "$REPO_ROOT/SboSvr/Release/webroot" "$REPO_ROOT/out/cmake-mac/webroot"; do
         [ -d "$webroot" ] || continue
         target="$webroot/game"
         mkdir -p "$target"

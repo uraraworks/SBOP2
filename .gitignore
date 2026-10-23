@@ -377,3 +377,5 @@ SDL2_ttf/
 
 # ステージングの設定(秘密情報を含む)
 deploy/staging/staging.env
+
+CMakeUserPresets.json

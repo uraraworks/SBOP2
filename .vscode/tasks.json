@@ -1,0 +1,130 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "サーバー: ビルド",
+      "type": "shell",
+      "command": "cmake --preset mac-debug && cmake --build --preset mac-debug -j && mkdir -p out/cmake-mac/webroot && cp -R SboSvr/webroot/. out/cmake-mac/webroot/",
+      "detail": "SboSvr / SboSvrTest をビルドし、webroot を out/cmake-mac へ同期する",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        {
+          "base": "$gcc",
+          "fileLocation": [
+            "absolute"
+          ]
+        }
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "サーバー: webroot 同期",
+      "type": "shell",
+      "command": "mkdir -p out/cmake-mac/webroot && cp -R SboSvr/webroot/. out/cmake-mac/webroot/",
+      "detail": "SboSvr/webroot を out/cmake-mac/webroot へコピーする（game/ は消さない）",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "サーバー: 起動（headless）",
+      "type": "shell",
+      "command": "./SboSvr --headless",
+      "detail": "サーバーを headless で起動する（ビルド後）",
+      "options": {
+        "cwd": "${workspaceFolder}/out/cmake-mac"
+      },
+      "problemMatcher": {
+        "owner": "sbosvr",
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "."
+        }
+      },
+      "isBackground": true,
+      "dependsOn": [
+        "サーバー: ビルド"
+      ]
+    },
+    {
+      "label": "サーバー: 停止",
+      "type": "shell",
+      "command": "./SboSvr --stop",
+      "detail": "サーバーを停止する。停止時に DB を書き戻すので、必ずこのタスクで止める",
+      "options": {
+        "cwd": "${workspaceFolder}/out/cmake-mac"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "サーバー: テスト",
+      "type": "shell",
+      "command": "ctest --preset mac-debug --output-on-failure",
+      "detail": "ctest で SboSvrTest を実行する",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "ブラウザ版: ビルド",
+      "type": "shell",
+      "command": "bash -lc 'E=$EMSDK; [ -n \"$E\" ] || E=$HOME/emsdk; source \"$E/emsdk_env.sh\" >/dev/null && tools/build-sbocli-browser-title.sh'",
+      "detail": "emsdk を読み込んでブラウザ版（out/browser-title）を差分ビルドする",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        {
+          "base": "$gcc",
+          "fileLocation": [
+            "absolute"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "ブラウザ版: 全再ビルド",
+      "type": "shell",
+      "command": "bash -lc 'E=$EMSDK; [ -n \"$E\" ] || E=$HOME/emsdk; source \"$E/emsdk_env.sh\" >/dev/null && tools/build-sbocli-browser-title.sh --force'",
+      "detail": "ブラウザ版を差分判定なしで全再ビルドする",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        {
+          "base": "$gcc",
+          "fileLocation": [
+            "absolute"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "全部ビルド",
+      "type": "shell",
+      "command": "echo done",
+      "detail": "サーバーとブラウザ版を順にビルドする",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "dependsOn": [
+        "サーバー: ビルド",
+        "ブラウザ版: ビルド"
+      ],
+      "dependsOrder": "sequence"
+    }
+  ]
+}

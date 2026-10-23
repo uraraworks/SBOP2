@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "SboSvr をデバッグ（headless）",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/cmake-mac/SboSvr",
+      "args": ["--headless"],
+      "cwd": "${workspaceFolder}/out/cmake-mac",
+      "preLaunchTask": "サーバー: ビルド"
+    },
+    {
+      "name": "SboSvrTest をデバッグ",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/out/cmake-mac/SboSvrTest",
+      "args": [],
+      "cwd": "${workspaceFolder}/out/cmake-mac",
+      "preLaunchTask": "サーバー: ビルド"
+    }
+  ]
+}
