@@ -261,6 +261,10 @@ CMgrGrpData::~CMgrGrpData()
 		SAFE_DELETE(it->second);
 	}
 	m_mapIllustObject.clear();
+	for (std::map<std::string, PCImg32>::iterator it = m_mapIllustChar.begin(); it != m_mapIllustChar.end(); ++it) {
+		delete it->second;
+	}
+	m_mapIllustChar.clear();
 	for (std::map<int, PCImg32>::iterator it = m_mapIllustGround.begin(); it != m_mapIllustGround.end(); ++it) {
 		SAFE_DELETE(it->second);
 	}
@@ -1348,6 +1352,78 @@ PCImg32 CMgrGrpData::GetDibIllustObject(LPCSTR pszName, BOOL bShadow)
 	pDibNew->BltStretchNearest(0, 0, width, height, pDibTmp, 0, 0, width, height);
 	delete pDibTmp;
 	m_mapIllustObject[strKey] = pDibNew;
+	return pDibNew;
+}
+
+
+/// イラスト版キャラ(SboGrpData/res/illust/char/<キー>.png, RGBA 512x512 = 4列x4行・1セル128px)を取得
+/// 読み込み規則は GetDibIllustObject と同じ(パス直指定・遅延読み込み・失敗もキャッシュ)。
+PCImg32 CMgrGrpData::GetDibIllustChar(LPCSTR pszName)
+{
+	std::string strKey;
+	std::map<std::string, PCImg32>::iterator it;
+	const char *p;
+	TCHAR szBasePath[MAX_PATH];
+	TCHAR szFileName[MAX_PATH];
+	TCHAR szFilePath[MAX_PATH];
+	std::vector<unsigned char> fileData, image;
+	unsigned width, height, x, y;
+	PCImg32 pDibNew, pDibTmp;
+	BYTE *pData;
+
+	if ((pszName == NULL) || (pszName[0] == '\0')) {
+		return NULL;
+	}
+	for (p = pszName; *p != '\0'; p++) {
+		const char c = *p;
+		if (!(((c >= '0') && (c <= '9')) || ((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z')) || (c == '_') || (c == '-'))) {
+			return NULL;
+		}
+	}
+	strKey = pszName;
+	it = m_mapIllustChar.find(strKey);
+	if (it != m_mapIllustChar.end()) {
+		return it->second;
+	}
+	m_mapIllustChar[strKey] = NULL;	// 先に失敗扱いで登録(読めたら下で差し替える)
+
+	if (!FindSboGrpResBasePath(szBasePath, _countof(szBasePath))) {
+		return NULL;
+	}
+	_tcscpy_s(szFileName, _countof(szFileName), _T("illust\\char\\"));
+	_tcscat_s(szFileName, _countof(szFileName), (LPCTSTR)AnsiToTString(strKey.c_str()));
+	_tcscat_s(szFileName, _countof(szFileName), _T(".png"));
+	BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, szFileName);
+	if (!ReadBinaryFile(szFilePath, fileData)) {
+		return NULL;
+	}
+	if (lodepng::decode(image, width, height, &fileData[0], fileData.size())) {
+		return NULL;
+	}
+	if ((width == 0) || (height == 0)) {
+		return NULL;
+	}
+
+	pDibNew = new CImg32;
+	pDibTmp = new CImg32;
+	pDibTmp->Create(width, height);
+	pDibNew->CreateWithoutGdi(width, height);
+	pData = pDibTmp->GetBits();
+	for (y = 0; y < height; y++) {
+		BYTE *pDst = pData + (height - y - 1) * width * 4;
+		const unsigned char *pSrc = &image[(size_t)y * width * 4];
+		for (x = 0; x < width; x++) {
+			pDst[0] = pSrc[2];
+			pDst[1] = pSrc[1];
+			pDst[2] = pSrc[0];
+			pDst[3] = pSrc[3];
+			pDst += 4;
+			pSrc += 4;
+		}
+	}
+	pDibNew->BltStretchNearest(0, 0, width, height, pDibTmp, 0, 0, width, height);
+	delete pDibTmp;
+	m_mapIllustChar[strKey] = pDibNew;
 	return pDibNew;
 }
 

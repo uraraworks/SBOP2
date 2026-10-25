@@ -32,6 +32,7 @@
 #include "myString.h"
 #include "MgrDraw.h"
 #include <set>
+#include <string>
 #include <vector>
 
 #if defined(__EMSCRIPTEN__)
@@ -568,10 +569,10 @@ void CMgrDraw::DrawChar(
 	BOOL bLock)/*TRUE*/				// [in] テンポラリをロックする
 {
 	WORD wGrpIDMain, wGrpIDSub, wGrpIDMainBase, wGrpIdNPC, wGrpID;
-	int cx, cy, cxChar, cyChar, nTmp, nDirection, nEyeID, i, nCount, nFadeLevel, sc, nSt;
+	int cx, cy, cxChar, cyChar, nTmp, nDirection, nEyeID, i, nCount, nFadeLevel, sc, nSt, nIllustCol, nIllustRow;
 	POINT ptTmp;
 	PCInfoMotion pInfoMotion;
-	PCImg32 pSrc, pDibTmp;
+	PCImg32 pSrc, pDibTmp, pImgIllust, pImgShadow;
 
 	// 描画先がワールドバッファなら DRAW_SCALE 倍で描く(x,y は論理座標で受け取る)
 	sc = GetDrawScale(pDst);
@@ -635,8 +636,46 @@ void CMgrDraw::DrawChar(
 		}
 	}
 
+	// イラスト版キャラ: 960描画・不透明のときだけ、res/illust/char/ の一枚絵があれば2x2合成の代わりに使う
+	pImgIllust = NULL;
+	nIllustCol = nIllustRow = 0;
+	if ((sc == 2) && (nFadeLevel == 0) &&
+		((wGrpIDMainBase == GRPIDMAIN_2X2_NPC) || (wGrpIDMainBase == GRPIDMAIN_2X2_CHAR))) {
+		char szKey[48];
+		szKey[0] = '\0';
+		if (wGrpIDMainBase == GRPIDMAIN_2X2_NPC) {
+			snprintf(szKey, sizeof(szKey), "npc_%u", (unsigned)wGrpIdNPC);
+		} else if (pInfoChar->m_wGrpIDTmpMain == 0) {
+			if (pInfoChar->m_wGrpIDSP == 0) {
+				snprintf(szKey, sizeof(szKey), "cloth_%u", (unsigned)pInfoChar->m_wGrpIDCloth);
+			} else {
+				snprintf(szKey, sizeof(szKey), "spcloth_%u", (unsigned)pInfoChar->m_wGrpIDSP);
+			}
+		}
+		if (szKey[0] != '\0') {
+#if defined(_DEBUG)
+			static std::set<std::string> s_setIllustCharKey;
+			if (s_setIllustCharKey.insert(szKey).second) {
+				SDL_Log("illust char key: %s", szKey);
+			}
+#endif
+			pImgIllust = m_pMgrGrpData->GetDibIllustChar(szKey);
+			if ((pImgIllust != NULL) && ((pImgIllust->Width() < 512) || (pImgIllust->Height() < 512))) {
+				pImgIllust = NULL;
+			}
+		}
+		if (pImgIllust != NULL) {
+			// 従来の frame(0-15: 上4/下4/左4/右4) = サブ番号の桁位置 → 行(下0,左1,右2,上3)・列(歩行4コマ)
+			static const int s_anRow[4] = { 3, 0, 1, 2 };
+			m_pMgrGrpData->GetGrpPos(wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, ptTmp);
+			nTmp = (ptTmp.x / cxChar) & 15;
+			nIllustRow = s_anRow[nTmp / 4];
+			nIllustCol = nTmp % 4;
+		}
+	}
+
 	// キャラ影の描画
-	switch (wGrpIDMainBase) {
+	if (pImgIllust == NULL) switch (wGrpIDMainBase) {
 	case GRPIDMAIN_2X2_CHAR:
 		m_pMgrGrpData->GetGrpPos(wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, ptTmp);
 		pSrc = m_pMgrGrpData->GetDib2x2CharShadow(0);
@@ -669,6 +708,21 @@ void CMgrDraw::DrawChar(
 	for (i = 0; i < nCount; i++) {
 		switch (pInfoMotion->m_anDrawList[i]) {
 		case 0:
+			if (pImgIllust != NULL) {
+				// 足元の影(res/illust/char/shadow.png、セルと同じ128px)。無ければ影なし
+				pImgShadow = m_pMgrGrpData->GetDibIllustChar("shadow");
+				if (pImgShadow != NULL) {
+					pDst->BltSrcOver(
+						x + pInfoMotion->m_ptDrawPosPile0.x * sc,
+						y + pInfoMotion->m_ptDrawPosPile0.y * sc,
+						pImgShadow->Width(), pImgShadow->Height(), pImgShadow, 0, 0);
+				}
+				pDst->BltSrcOver(
+					x + pInfoMotion->m_ptDrawPosPile0.x * sc,
+					y + pInfoMotion->m_ptDrawPosPile0.y * sc,
+					cxChar * nSt, cyChar * nSt, pImgIllust, nIllustCol * cxChar * nSt, nIllustRow * cyChar * nSt);
+				break;
+			}
 			// 2x2サイズ以外？
 			if (wGrpIDMainBase != GRPIDMAIN_2X2_CHAR) {
 				nTmp = 0;
