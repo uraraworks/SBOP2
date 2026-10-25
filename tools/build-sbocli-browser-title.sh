@@ -140,6 +140,10 @@ if [ "$FORCE" -eq 0 ] && [ -f "$HTML_OUT" ]; then
     newest="$(find "$REPO_ROOT/SboCli/src" "$REPO_ROOT/SboCli/StdAfx.h" "$REPO_ROOT/Common" "$REPO_ROOT/imgui" \
             -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' -o -name '*.c' -o -name '*.cc' \) -newer "$HTML_OUT" -print -quit 2>/dev/null || true)"
     if [ -z "$newest" ]; then
+        # 同梱する画像(res 配下)が増えた・変わった場合も作り直す
+        newest="$(find "$REPO_ROOT/SboGrpData/res" -type f -newer "$HTML_OUT" -print -quit 2>/dev/null || true)"
+    fi
+    if [ -z "$newest" ]; then
         # ビルドスクリプト群やシェルファイル等の補助ファイルもチェック
         newest="$(find "$SCRIPT_DIR" -type f \( -name '*.sh' -o -name '*.ps1' -o -name '*.js' -o -name '*.mjs' -o -name '*.html' -o -name '*.json' -o -name '*.txt' \) \
                 -newer "$HTML_OUT" -print -quit 2>/dev/null || true)"

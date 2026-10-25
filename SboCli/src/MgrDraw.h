@@ -51,6 +51,8 @@ public:
 	void	DrawMapParts(CImg32 *pDst, int x, int y, DWORD dwPartsID, int nMode, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BYTE byLevel = 0);			// マップパーツを描画
 	void	DrawMapParts(CImg32 *pDst, int x, int y, CInfoMapParts *pInfoMapParts, int nMode, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE, BYTE byLevel = 0);		// マップパーツを描画
 	void	DrawMapShadow(CImg32 *pDst, int x, int y, DWORD dwShadowID, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE);	// マップ影を描画
+	void	SetGroundMapPos(int nMapX, int nMapY) { m_nGroundMapX = nMapX; m_nGroundMapY = nMapY; }	// 次の DrawMapParts が描くマスのマップ座標(大判の地面テクスチャの切り出し用。未設定は(0,0))
+	void	DrawMapObjectDecal(CImg32 *pDst, int x, int y, DWORD dwObjectID);	// デカール(地面に描く一枚絵)の本体を描画
 	void	DrawMapObjectShadow(CImg32 *pDst, int x, int y, DWORD dwObjectID);	// 一枚絵オブジェクトの影を描画(影画像があるときだけ)
 	BOOL	DrawMapObjectIllust(CImg32 *pDst, int x, int y, CInfoMapObject *pInfo, BOOL bShadow);	// 一枚絵(RGBA)を描画。描けたらTRUE
 	void	DrawMapObject(CImg32 *pDst, int x, int y, DWORD dwObjectID, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE);			// マップオブジェクトを描画
@@ -100,6 +102,7 @@ private:
 	void	ClearScaledCache(void);					// キャッシュ全破棄
 	std::unordered_map<unsigned long long, STScaledCache>	m_mapScaledCache;
 	size_t	m_nScaledCacheBytes;
+	int		m_nGroundMapX, m_nGroundMapY;	// 大判の地面テクスチャ用: 描画中マスのマップ座標
 	void	UpscaleUiToWorld(void);					// UIバッファ全体をワールドへ最近傍で拡大(ワールド非描画時)
 	void	CompositeUiOverlay(void);				// ワールド上へUIバッファの変更分だけを拡大して重ねる
 

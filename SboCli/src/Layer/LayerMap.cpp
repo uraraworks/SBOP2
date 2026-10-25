@@ -1023,6 +1023,7 @@ void CLayerMap::DrawPartsBase(PCImg32 pDst, int nDrawY/*-1*/)
 						32 * DRAW_SCALE, 32 * DRAW_SCALE, RGB(0, 0, 0));
 				}
 			}
+			m_pMgrDraw->SetGroundMapPos(xx, yy);
 			m_pMgrDraw->DrawMapParts(
 					pDst,
 					32 + x * 32 + nMoveX,
@@ -1206,6 +1207,7 @@ void CLayerMap::DrawPartsPile(PCImg32 pDst, int nDrawY/*-99*/)
 				}
 			}
 			if (bDraw) {
+				m_pMgrDraw->SetGroundMapPos(xx, yy);
 				m_pMgrDraw->DrawMapParts(
 						pDst,
 						32 + x * 32 + nMoveX,
@@ -1360,10 +1362,24 @@ void CLayerMap::DrawMapObjectShadow(PCImg32 pDst)
 	nPosY = ptPos.y;
 
 	nCount = (int)m_aMapObjectDraw.size();
+	// デカール(地面に描く一枚絵)の本体を先に敷く(影より下)
 	for (i = 0; i < nCount; i ++) {
 		PCInfoMapObjectData pInfoData = m_aMapObjectDraw[i].pData;
 		PCInfoMapObject     pInfo     = m_aMapObjectDraw[i].pInfo;
-		if ((pInfo == NULL) || pInfo->m_strIllustFile.IsEmpty()) {
+		if ((pInfo == NULL) || pInfo->m_strIllustFile.IsEmpty() || ((pInfo->m_dwAttr & BIT_MAPOBJECT_GROUND) == 0)) {
+			continue;
+		}
+		if ((pInfoData->m_ptPos.x > nPosX + DRAW_PARTS_X + 2 + 4) || (pInfoData->m_ptPos.x + pInfo->m_sizeGrp.cx + 4 < nPosX)) {
+			continue;
+		}
+		x = pInfoData->m_ptPos.x - nPosX;
+		y = pInfoData->m_ptPos.y - nPosY;
+		m_pMgrDraw->DrawMapObjectDecal(pDst, 32 + x * 32 + nMoveX, 32 + y * 32 + nMoveY, pInfoData->m_dwObjectID);
+	}
+	for (i = 0; i < nCount; i ++) {
+		PCInfoMapObjectData pInfoData = m_aMapObjectDraw[i].pData;
+		PCInfoMapObject     pInfo     = m_aMapObjectDraw[i].pInfo;
+		if ((pInfo == NULL) || pInfo->m_strIllustFile.IsEmpty() || (pInfo->m_dwAttr & BIT_MAPOBJECT_GROUND)) {
 			continue;
 		}
 		if ((pInfoData->m_ptPos.x > nPosX + DRAW_PARTS_X + 2 + 4) || (pInfoData->m_ptPos.x + pInfo->m_sizeGrp.cx + 4 < nPosX)) {
@@ -1418,6 +1434,10 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 		pInfoData = m_aMapObjectDraw[i].pData;
 		pInfo     = m_aMapObjectDraw[i].pInfo;
 		if (pInfo == NULL) {
+			continue;
+		}
+		// デカール(地面に描く一枚絵)は DrawMapObjectShadow の段で描画済み
+		if ((pInfo->m_dwAttr & BIT_MAPOBJECT_GROUND) && !pInfo->m_strIllustFile.IsEmpty()) {
 			continue;
 		}
 		yTmp = m_aMapObjectDraw[i].nDrawY;

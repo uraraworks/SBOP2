@@ -18,6 +18,8 @@
 #define BIT_PARTSHIT_COUNTER	(0x00000020)	// カウンター
 
 #define ILLUSTTILE_HIDE			(0xFFFF)		// m_wGrpIDIllust: ワールド描画では描かない
+#define ILLUSTTILE_GROUND_BASE	(0xF000)		// m_wGrpIDIllust: 0xF000〜0xF0FF=大判の地面テクスチャ(n=id-0xF000、ground_(n+1).png をマップ座標で切り出す)
+#define ILLUSTTILE_GROUND_MAX	(0xF0FF)
 
 #define BIT_PARTSBLOCK_UP	(0x01)	// 上にぶつかる
 #define BIT_PARTSBLOCK_DOWN	(0x02)	// 下にぶつかる

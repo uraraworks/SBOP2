@@ -221,6 +221,8 @@ CMgrDraw::CMgrDraw()
 
 	m_bWorldDrawn			= FALSE;
 	m_nScaledCacheBytes		= 0;
+	m_nGroundMapX			= 0;
+	m_nGroundMapY			= 0;
 
 	m_pDibBack = new CImg32;
 	m_pDibBack->Create(SCRSIZEX + UI_MARGIN * 2, SCRSIZEY + UI_MARGIN * 2);
@@ -921,7 +923,11 @@ void CMgrDraw::DrawMapParts(
 	WORD wGrpIDBase, wGrpIDPile, wGrpIDIllust;
 	PCImg32 pImg, pDibTmp, pSrcImg, pImgIllust;
 	PCInfoAnime pAnime;
+	int nIllustSrcX, nIllustSrcY, nGroundNo, nGroundGX, nGroundGY;
 
+	nIllustSrcX = nIllustSrcY = 0;
+	nGroundNo = -1;
+	nGroundGX = nGroundGY = 0;
 	sc = GetDrawScale(pDst);
 	x *= sc;
 	y *= sc;
@@ -970,10 +976,28 @@ void CMgrDraw::DrawMapParts(
 	// イラスト版タイル: ワールド描画(sc=2・等倍指定なし)で、シートがあるときだけ使う
 	wGrpIDIllust = 0;
 	pImgIllust = NULL;
-	if ((nMode != 1) && (sc == 2) && (bSingleSize == FALSE) && (pInfoMapParts->m_wGrpIDIllust != 0) && (pInfoMapParts->m_wGrpIDIllust != ILLUSTTILE_HIDE)) {
+	if ((nMode != 1) && (sc == 2) && (bSingleSize == FALSE) && (pInfoMapParts->m_wGrpIDIllust >= ILLUSTTILE_GROUND_BASE) && (pInfoMapParts->m_wGrpIDIllust <= ILLUSTTILE_GROUND_MAX)) {
+		// 大判の地面テクスチャ: マップ座標(mod テクスチャのマス数)で64pxを切り出す
+		nGroundNo = pInfoMapParts->m_wGrpIDIllust - ILLUSTTILE_GROUND_BASE;
+		pImgIllust = m_pMgrGrpData->GetDibIllustGround(nGroundNo);
+		if (pImgIllust != NULL) {
+			const int nCellsX = pImgIllust->Width() / nSizeDst;
+			const int nCellsY = pImgIllust->Height() / nSizeDst;
+			nGroundGX = ((m_nGroundMapX % nCellsX) + nCellsX) % nCellsX;
+			nGroundGY = ((m_nGroundMapY % nCellsY) + nCellsY) % nCellsY;
+			nIllustSrcX = nGroundGX * nSizeDst;
+			nIllustSrcY = nGroundGY * nSizeDst;
+			wGrpIDIllust = pInfoMapParts->m_wGrpIDIllust;
+		} else {
+			nGroundNo = -1;
+		}
+	} else if ((nMode != 1) && (sc == 2) && (bSingleSize == FALSE) && (pInfoMapParts->m_wGrpIDIllust != 0) && (pInfoMapParts->m_wGrpIDIllust != ILLUSTTILE_HIDE)) {
 		pImgIllust = m_pMgrGrpData->GetDibIllustTile((pInfoMapParts->m_wGrpIDIllust - 1) / 256);
 		if (pImgIllust != NULL) {
 			wGrpIDIllust = pInfoMapParts->m_wGrpIDIllust;
+			const int nCellTmp = (wGrpIDIllust - 1) % 256;
+			nIllustSrcX = (nCellTmp % 16) * nSizeDst;
+			nIllustSrcY = (nCellTmp / 16) * nSizeDst;
 		}
 	}
 
@@ -989,6 +1013,17 @@ void CMgrDraw::DrawMapParts(
 			| ((unsigned long long)nMode << 32)
 			| ((unsigned long long)sc << 40)
 			| ((unsigned long long)wGrpIDIllust << 48);	// イラスト版を含めて別キャッシュにする
+		if (nGroundNo >= 0) {
+			// 大判の地面: テクスチャ番号と切り出し位置(mx mod 列数, my mod 行数)を含めて衝突させない
+			ullKey = ((unsigned long long)((nMode == 1) ? 0 : wGrpIDBase))
+				| ((unsigned long long)wGrpIDPile << 16)
+				| ((unsigned long long)(nMode & 3) << 32)
+				| ((unsigned long long)(sc & 3) << 34)
+				| (1ULL << 36)
+				| ((unsigned long long)(nGroundNo & 0xFF) << 37)
+				| ((unsigned long long)(nGroundGX & 0x1FF) << 45)
+				| ((unsigned long long)(nGroundGY & 0x1FF) << 54);
+		}
 		pCache = FindScaledCache(ullKey);
 		if (pCache != NULL) {
 			pSrcImg = pCache->pImg;
@@ -1023,9 +1058,8 @@ void CMgrDraw::DrawMapParts(
 
 	if (wGrpIDIllust != 0) {
 		// 下地(16px)を拡大して敷き、その上にイラスト版(64px)を画素アルファで重ね、最後にpileを重ねる
-		const int nCell = (wGrpIDIllust - 1) % 256;
 		pDibTmp->BltStretchNearest(0, nSizeDst, nSizeDst, nSizeDst, pDibTmp, 0, 0, nSize, nSize);
-		pDibTmp->BltSrcOver(0, nSizeDst, nSizeDst, nSizeDst, pImgIllust, (nCell % 16) * nSizeDst, (nCell / 16) * nSizeDst);
+		pDibTmp->BltSrcOver(0, nSizeDst, nSizeDst, nSizeDst, pImgIllust, nIllustSrcX, nIllustSrcY);
 		if (wGrpIDPile > 0) {
 			pDibTmp->FillRect(0, 0, nSize, nSize, RGB(255, 0, 255));
 			pImg = m_pMgrGrpData->GetDibMapParts(wGrpIDPile / 1024);
@@ -1154,6 +1188,19 @@ BOOL CMgrDraw::DrawMapObjectIllust(CImg32 *pDst, int x, int y, PCInfoMapObject p
 		nBottom - pImg->Height() + pInfo->m_nIllustOffY,
 		pImg->Width(), pImg->Height(), pImg, 0, 0);
 	return TRUE;
+}
+
+
+/// デカール(BIT_MAPOBJECT_GROUND)の本体を描く。位置は一枚絵と同じ基準
+void CMgrDraw::DrawMapObjectDecal(CImg32 *pDst, int x, int y, DWORD dwObjectID)
+{
+	PCInfoMapObject pInfo;
+
+	pInfo = (PCInfoMapObject)m_pMgrData->GetLibInfoMapObject()->GetPtr(dwObjectID);
+	if (pInfo == NULL) {
+		return;
+	}
+	DrawMapObjectIllust(pDst, x, y, pInfo, FALSE);
 }
 
 

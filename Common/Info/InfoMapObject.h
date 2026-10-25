@@ -10,6 +10,9 @@
 
 #include "InfoBase.h"
 
+// m_dwAttr のビット
+#define BIT_MAPOBJECT_GROUND	(0x00000001)	// 地面に描く(デカール。一枚絵を行ループでなく地面・重ねパーツの直後に描く)
+
 // 構造体定義
 
 // マップオブジェクトアニメ情報

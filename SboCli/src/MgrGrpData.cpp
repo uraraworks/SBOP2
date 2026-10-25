@@ -261,6 +261,10 @@ CMgrGrpData::~CMgrGrpData()
 		SAFE_DELETE(it->second);
 	}
 	m_mapIllustObject.clear();
+	for (std::map<int, PCImg32>::iterator it = m_mapIllustGround.begin(); it != m_mapIllustGround.end(); ++it) {
+		SAFE_DELETE(it->second);
+	}
+	m_mapIllustGround.clear();
 	FreeInfo(m_paImgNPC,			pImg);
 	FreeInfo(m_paImgBody,			pImg);
 	FreeInfo(m_paImgEar,			pImg);
@@ -1344,6 +1348,72 @@ PCImg32 CMgrGrpData::GetDibIllustObject(LPCSTR pszName, BOOL bShadow)
 	pDibNew->BltStretchNearest(0, 0, width, height, pDibTmp, 0, 0, width, height);
 	delete pDibTmp;
 	m_mapIllustObject[strKey] = pDibNew;
+	return pDibNew;
+}
+
+
+/// 大判の地面テクスチャ(SboGrpData/res/illust/ground/ground_NN.png, NN=nNo+1, RGBA)を取得
+/// 初めて必要になった時にファイルから読み、結果(失敗=NULL含む)をキャッシュする。
+/// パス直指定。幅・高さが64の倍数でないものは使わない。
+PCImg32 CMgrGrpData::GetDibIllustGround(int nNo)
+{
+	char szKey[32];
+	std::map<int, PCImg32>::iterator it;
+	TCHAR szBasePath[MAX_PATH];
+	TCHAR szFileName[MAX_PATH];
+	TCHAR szFilePath[MAX_PATH];
+	std::vector<unsigned char> fileData, image;
+	unsigned width, height, x, y;
+	PCImg32 pDibNew, pDibTmp;
+	BYTE *pData;
+
+	if ((nNo < 0) || (nNo > 254)) {
+		return NULL;
+	}
+	sprintf(szKey, "ground_%02d", nNo + 1);
+	it = m_mapIllustGround.find(nNo);
+	if (it != m_mapIllustGround.end()) {
+		return it->second;
+	}
+	m_mapIllustGround[nNo] = NULL;	// 先に失敗扱いで登録(読めたら下で差し替える)
+
+	if (!FindSboGrpResBasePath(szBasePath, _countof(szBasePath))) {
+		return NULL;
+	}
+	_tcscpy_s(szFileName, _countof(szFileName), _T("illust\\ground\\"));
+	_tcscat_s(szFileName, _countof(szFileName), (LPCTSTR)AnsiToTString(szKey));
+	_tcscat_s(szFileName, _countof(szFileName), _T(".png"));
+	BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, szFileName);
+	if (!ReadBinaryFile(szFilePath, fileData)) {
+		return NULL;
+	}
+	if (lodepng::decode(image, width, height, &fileData[0], fileData.size())) {
+		return NULL;
+	}
+	if ((width == 0) || (height == 0) || (width % 64 != 0) || (height % 64 != 0)) {
+		return NULL;
+	}
+
+	pDibNew = new CImg32;
+	pDibTmp = new CImg32;
+	pDibTmp->Create(width, height);
+	pDibNew->CreateWithoutGdi(width, height);
+	pData = pDibTmp->GetBits();
+	for (y = 0; y < height; y++) {
+		BYTE *pDst = pData + (height - y - 1) * width * 4;
+		const unsigned char *pSrc = &image[(size_t)y * width * 4];
+		for (x = 0; x < width; x++) {
+			pDst[0] = pSrc[2];
+			pDst[1] = pSrc[1];
+			pDst[2] = pSrc[0];
+			pDst[3] = pSrc[3];
+			pDst += 4;
+			pSrc += 4;
+		}
+	}
+	pDibNew->BltStretchNearest(0, 0, width, height, pDibTmp, 0, 0, width, height);
+	delete pDibTmp;
+	m_mapIllustGround[nNo] = pDibNew;
 	return pDibNew;
 }
 
