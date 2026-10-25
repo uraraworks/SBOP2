@@ -106,7 +106,9 @@
 - 画面全体の色補正: `SboGrpData/res/illust/grade.png`（256x1、x 番目の画素が入力 x の出力 R/G/B）があれば、960 のワールド描画の最後（夜ライティング・エフェクトの後、UI の前）にかける。全マップに効く（ドット絵のマップも少し落ち着いた色になる）
 - 表の作り方: `python3 tools/illust/make_grade.py <今の画面.png> <目標.png> SboGrpData/res/illust/grade.png 0.8`（チャンネルごとのヒストグラム合わせを強さ0.8で混ぜる）。素材を差し替えたら作り直す
 - 始まりの町（ローカルDBのみ）: 木(41,40) 5x5（当たり判定は幹の1マス）、茂み4つ
-- 残り: 木漏れ日・日だまりなどの大きな光と影、広場以外のタイル、シード DB への反映方法
+- 光と影: 建物の帯状の影と日だまりは、プログラムで作るデカール（`python3 tools/illust/make_light.py SboGrpData/res/illust/object` → decal_wallshadow / decal_sun / decal_sun_s）。始まりの町は ObjectID 50〜52 を8か所
+- イラスト版の地面（イラスト版タイル番号あり）の上では、ドット絵のマップ影（灰色のかたまり）を960描画で描かない
+- 残り: 広場以外のタイル、シード DB への反映方法
 
 ## リスク・注意
 

@@ -1285,6 +1285,13 @@ void CLayerMap::DrawShadow(PCImg32 pDst, int nDrawY/*-99*/)
 			if (wShadowID == 0) {
 				continue;
 			}
+			// イラスト版の地面(大判テクスチャ・イラスト版タイル)の上では、ドット絵のマップ影は描かない(影は一枚絵側で付ける)
+			if (m_pMgrDraw->GetDrawScale(pDst) == 2) {
+				PCInfoMapParts pBase = (PCInfoMapParts)m_pLibInfoMapParts->GetPtr(pMap->GetParts(xx, yy));
+				if ((pBase != NULL) && (pBase->m_wGrpIDIllust != 0) && (pBase->m_wGrpIDIllust != ILLUSTTILE_HIDE)) {
+					continue;
+				}
+			}
 			xx = 32 + x * 32 + nMoveX;
 			yy = 32 + y * 32 + nMoveY;
 			pInfoMapShadow = (PCInfoMapShadow)m_pLibInfoMapShadow->GetPtr((DWORD)wShadowID);
