@@ -676,10 +676,12 @@ void CMgrDraw::DrawChar(
 		if (pImgIllust != NULL) {
 			// 従来の frame(0-15: 上4/下4/左4/右4) = サブ番号の桁位置 → 行(下0,左1,右2,上3)・列(歩行4コマ)
 			static const int s_anRow[4] = { 3, 0, 1, 2 };
+			// 従来のシートは向きごとに 0=歩きA 1=歩きB 2=直立（歩きは A→直立→B→直立）。イラスト版の列 0=右足前 1=直立 2=左足前 へ並べ替える
+			static const int s_anCol[4] = { 0, 2, 1, 3 };
 			m_pMgrGrpData->GetGrpPos(wGrpIDMainBase, pInfoMotion->m_wGrpIDSubBase - 1, ptTmp);
 			nTmp = (ptTmp.x / cxChar) & 15;
 			nIllustRow = s_anRow[nTmp / 4];
-			nIllustCol = nTmp % 4;
+			nIllustCol = s_anCol[nTmp % 4];
 		}
 	}
 
