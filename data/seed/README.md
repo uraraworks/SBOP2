@@ -27,3 +27,13 @@ cp data/seed/SboData.db <実行ディレクトリ>/SBODATA/SboData.db
 作り直すときは、本番の SBODATA のコピーからアカウントとプレイヤーキャラを消し、`VACUUM` して
 消したデータがファイルに残らないようにしてください(`deploy/staging/sanitize-db.py` が参考になります)。
 入れる前に、メールアドレス・IP・パスワードハッシュなどが残っていないか `strings` などで確認します。
+
+## イラスト調のワールドデータ
+
+イラスト調移行（ブランチ `claude/illust-style`）で入れたデータ（パーツのイラスト版タイル番号、一枚絵オブジェクトとその配置）は
+`data/illust/world.json` が元で、この DB にも反映済みです。手元の DB で直したら書き出し直して、ここにも反映します。
+
+```bash
+python3 tools/illust/export_world.py <手元の SboData.db> data/seed/SboData.db data/illust/world.json
+python3 tools/illust/apply_world.py data/illust/world.json data/seed/SboData.db
+```

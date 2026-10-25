@@ -1,0 +1,1737 @@
+{
+ "parts": [
+  {
+   "partsId": 1,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 8,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 9,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 15,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 16,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 17,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 19,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 20,
+   "grpIdIllust": 2,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 28,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 48,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 51,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 57,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 61,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 62,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 67,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 74,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 79,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 81,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 83,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 84,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 85,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 86,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 87,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 88,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 89,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 90,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 91,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 92,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 93,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 94,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 95,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 103,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 104,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 106,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 114,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 116,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 132,
+   "grpIdIllust": 6,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 133,
+   "grpIdIllust": 6,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 142,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 146,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 152,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 155,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 156,
+   "grpIdIllust": 61440,
+   "clearPartsType": 18
+  },
+  {
+   "partsId": 157,
+   "grpIdIllust": 61440,
+   "clearPartsType": 18
+  },
+  {
+   "partsId": 158,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 159,
+   "grpIdIllust": 61440,
+   "clearPartsType": 18
+  },
+  {
+   "partsId": 160,
+   "grpIdIllust": 61440,
+   "clearPartsType": 18
+  },
+  {
+   "partsId": 161,
+   "grpIdIllust": 61440,
+   "clearPartsType": 18
+  },
+  {
+   "partsId": 162,
+   "grpIdIllust": 61440,
+   "clearPartsType": 18
+  },
+  {
+   "partsId": 163,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 167,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 168,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 170,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 171,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 173,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 175,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 176,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 177,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 178,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 179,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 182,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 184,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 185,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 186,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 195,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 201,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 202,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 203,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 206,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 207,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 208,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 221,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 222,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 223,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 226,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 227,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 228,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 249,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 250,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 252,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 253,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 258,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 259,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 268,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 269,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 272,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 273,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 277,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 278,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 279,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 282,
+   "grpIdIllust": 61440,
+   "clearPartsType": 18
+  },
+  {
+   "partsId": 283,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 284,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 285,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 286,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 288,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 289,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 290,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 293,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 294,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 296,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 304,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 305,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 306,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 307,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 308,
+   "grpIdIllust": 61440,
+   "clearPartsType": 18
+  },
+  {
+   "partsId": 309,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 319,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 359,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 361,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 366,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 386,
+   "grpIdIllust": 6,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 395,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 397,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 400,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 403,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 405,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 406,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 407,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 408,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 409,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 410,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 411,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 412,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 413,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 414,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 415,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 416,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 417,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 418,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 419,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 420,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 421,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 422,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 458,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 688,
+   "grpIdIllust": 6,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 691,
+   "grpIdIllust": 6,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 692,
+   "grpIdIllust": 6,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 693,
+   "grpIdIllust": 6,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 694,
+   "grpIdIllust": 6,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 722,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 723,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 724,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 727,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 732,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 738,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 739,
+   "grpIdIllust": 8,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 740,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 746,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 750,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 751,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 872,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 873,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 894,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 895,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 977,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 979,
+   "grpIdIllust": 2,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 980,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 982,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 983,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 984,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 985,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 986,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 987,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 988,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 989,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 990,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 991,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 992,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 995,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 996,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 997,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 998,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 999,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1000,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1001,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1002,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1003,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1004,
+   "grpIdIllust": 9,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1338,
+   "grpIdIllust": 65535,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1339,
+   "grpIdIllust": 65535,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1340,
+   "grpIdIllust": 65535,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1387,
+   "grpIdIllust": 65535,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1388,
+   "grpIdIllust": 65535,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1389,
+   "grpIdIllust": 65535,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1673,
+   "grpIdIllust": 1,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1678,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1679,
+   "grpIdIllust": 61440,
+   "clearPartsType": 2
+  },
+  {
+   "partsId": 1700,
+   "grpIdIllust": 61440,
+   "clearPartsType": 18
+  },
+  {
+   "partsId": 1702,
+   "grpIdIllust": 61440,
+   "clearPartsType": 16
+  },
+  {
+   "partsId": 1711,
+   "grpIdIllust": 61440,
+   "clearPartsType": 2
+  },
+  {
+   "partsId": 1904,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1906,
+   "grpIdIllust": 61440,
+   "clearPartsType": 2
+  },
+  {
+   "partsId": 1907,
+   "grpIdIllust": 61440,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 1910,
+   "grpIdIllust": 61440,
+   "clearPartsType": 2
+  },
+  {
+   "partsId": 2003,
+   "grpIdIllust": 7,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 2004,
+   "grpIdIllust": 7,
+   "clearPartsType": 0
+  },
+  {
+   "partsId": 2005,
+   "grpIdIllust": 7,
+   "clearPartsType": 0
+  }
+ ],
+ "objects": [
+  {
+   "objectId": 11,
+   "attr": 0,
+   "hideY": 0,
+   "grpCx": 5,
+   "grpCy": 8,
+   "hit": 0,
+   "name": "噴水(一枚絵)",
+   "hitData": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+   "illustFile": "fountain",
+   "illustOffX": 0,
+   "illustOffY": 34
+  },
+  {
+   "objectId": 12,
+   "attr": 0,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 3,
+   "hit": 0,
+   "name": "街灯(一枚絵)",
+   "hitData": "AAAA",
+   "illustFile": "lamp",
+   "illustOffX": 0,
+   "illustOffY": 58
+  },
+  {
+   "objectId": 13,
+   "attr": 0,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 4,
+   "hit": 0,
+   "name": "ベンチ縦(一枚絵)",
+   "hitData": "AAAAAA==",
+   "illustFile": "bench_v",
+   "illustOffX": 0,
+   "illustOffY": 74
+  },
+  {
+   "objectId": 14,
+   "attr": 0,
+   "hideY": 0,
+   "grpCx": 3,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "ベンチ横(一枚絵)",
+   "hitData": "AAAA",
+   "illustFile": "bench",
+   "illustOffX": 0,
+   "illustOffY": 36
+  },
+  {
+   "objectId": 15,
+   "attr": 0,
+   "hideY": 0,
+   "grpCx": 7,
+   "grpCy": 3,
+   "hit": 0,
+   "name": "入口(一枚絵)",
+   "hitData": "AAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+   "illustFile": "entrance",
+   "illustOffX": 0,
+   "illustOffY": 13
+  },
+  {
+   "objectId": 16,
+   "attr": 0,
+   "hideY": 0,
+   "grpCx": 2,
+   "grpCy": 2,
+   "hit": 0,
+   "name": "掲示板(一枚絵)",
+   "hitData": "AAAAAA==",
+   "illustFile": "board",
+   "illustOffX": 0,
+   "illustOffY": 8
+  },
+  {
+   "objectId": 17,
+   "attr": 0,
+   "hideY": 0,
+   "grpCx": 5,
+   "grpCy": 5,
+   "hit": 1,
+   "name": "木(一枚絵)",
+   "hitData": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA==",
+   "illustFile": "tree",
+   "illustOffX": 0,
+   "illustOffY": 23
+  },
+  {
+   "objectId": 18,
+   "attr": 0,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "茂み(一枚絵)",
+   "hitData": "AA==",
+   "illustFile": "bush",
+   "illustOffX": 0,
+   "illustOffY": 5
+  },
+  {
+   "objectId": 30,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール moss_l",
+   "hitData": "AA==",
+   "illustFile": "decal_moss_l",
+   "illustOffX": 0,
+   "illustOffY": 6
+  },
+  {
+   "objectId": 31,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール moss_s",
+   "hitData": "AA==",
+   "illustFile": "decal_moss_s",
+   "illustOffX": 0,
+   "illustOffY": -11
+  },
+  {
+   "objectId": 32,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール crack",
+   "hitData": "AA==",
+   "illustFile": "decal_crack",
+   "illustOffX": 0,
+   "illustOffY": 4
+  },
+  {
+   "objectId": 33,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール leaves",
+   "hitData": "AA==",
+   "illustFile": "decal_leaves",
+   "illustOffX": 0,
+   "illustOffY": 5
+  },
+  {
+   "objectId": 34,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール weed",
+   "hitData": "AA==",
+   "illustFile": "decal_weed",
+   "illustOffX": 0,
+   "illustOffY": -20
+  },
+  {
+   "objectId": 35,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール weed_row",
+   "hitData": "AA==",
+   "illustFile": "decal_weed_row",
+   "illustOffX": 0,
+   "illustOffY": -20
+  },
+  {
+   "objectId": 36,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール dirt",
+   "hitData": "AA==",
+   "illustFile": "decal_dirt",
+   "illustOffX": 0,
+   "illustOffY": -3
+  },
+  {
+   "objectId": 37,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール stain",
+   "hitData": "AA==",
+   "illustFile": "decal_stain",
+   "illustOffX": 0,
+   "illustOffY": 1
+  },
+  {
+   "objectId": 38,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール pebbles",
+   "hitData": "AA==",
+   "illustFile": "decal_pebbles",
+   "illustOffX": 0,
+   "illustOffY": -10
+  },
+  {
+   "objectId": 39,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール petals",
+   "hitData": "AA==",
+   "illustFile": "decal_petals",
+   "illustOffX": 0,
+   "illustOffY": -5
+  },
+  {
+   "objectId": 40,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール moss_joint",
+   "hitData": "AA==",
+   "illustFile": "decal_moss_joint",
+   "illustOffX": 0,
+   "illustOffY": 7
+  },
+  {
+   "objectId": 41,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール grass_up",
+   "hitData": "AA==",
+   "illustFile": "decal_grass_up",
+   "illustOffX": 0,
+   "illustOffY": -15
+  },
+  {
+   "objectId": 42,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール grass_down",
+   "hitData": "AA==",
+   "illustFile": "decal_grass_down",
+   "illustOffX": 0,
+   "illustOffY": -15
+  },
+  {
+   "objectId": 50,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 7,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール 建物の影",
+   "hitData": "AAAAAAAAAA==",
+   "illustFile": "decal_wallshadow",
+   "illustOffX": 0,
+   "illustOffY": 48
+  },
+  {
+   "objectId": 51,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール 日だまり",
+   "hitData": "AA==",
+   "illustFile": "decal_sun",
+   "illustOffX": 0,
+   "illustOffY": 108
+  },
+  {
+   "objectId": 52,
+   "attr": 1,
+   "hideY": 0,
+   "grpCx": 1,
+   "grpCy": 1,
+   "hit": 0,
+   "name": "デカール 日だまり小",
+   "hitData": "AA==",
+   "illustFile": "decal_sun_s",
+   "illustOffX": 0,
+   "illustOffY": 53
+  }
+ ],
+ "places": [
+  {
+   "mapId": 7,
+   "dataId": 100,
+   "objectId": 11,
+   "x": 45,
+   "y": 32
+  },
+  {
+   "mapId": 7,
+   "dataId": 101,
+   "objectId": 12,
+   "x": 41,
+   "y": 31
+  },
+  {
+   "mapId": 7,
+   "dataId": 102,
+   "objectId": 12,
+   "x": 53,
+   "y": 31
+  },
+  {
+   "mapId": 7,
+   "dataId": 103,
+   "objectId": 12,
+   "x": 38,
+   "y": 26
+  },
+  {
+   "mapId": 7,
+   "dataId": 104,
+   "objectId": 12,
+   "x": 56,
+   "y": 26
+  },
+  {
+   "mapId": 7,
+   "dataId": 105,
+   "objectId": 12,
+   "x": 40,
+   "y": 39
+  },
+  {
+   "mapId": 7,
+   "dataId": 106,
+   "objectId": 12,
+   "x": 54,
+   "y": 39
+  },
+  {
+   "mapId": 7,
+   "dataId": 107,
+   "objectId": 12,
+   "x": 44,
+   "y": 22
+  },
+  {
+   "mapId": 7,
+   "dataId": 108,
+   "objectId": 12,
+   "x": 50,
+   "y": 22
+  },
+  {
+   "mapId": 7,
+   "dataId": 109,
+   "objectId": 13,
+   "x": 44,
+   "y": 32
+  },
+  {
+   "mapId": 7,
+   "dataId": 110,
+   "objectId": 13,
+   "x": 50,
+   "y": 32
+  },
+  {
+   "mapId": 7,
+   "dataId": 111,
+   "objectId": 14,
+   "x": 46,
+   "y": 33
+  },
+  {
+   "mapId": 7,
+   "dataId": 120,
+   "objectId": 15,
+   "x": 44,
+   "y": 22
+  },
+  {
+   "mapId": 7,
+   "dataId": 121,
+   "objectId": 16,
+   "x": 51,
+   "y": 24
+  },
+  {
+   "mapId": 7,
+   "dataId": 130,
+   "objectId": 17,
+   "x": 41,
+   "y": 40
+  },
+  {
+   "mapId": 7,
+   "dataId": 131,
+   "objectId": 18,
+   "x": 51,
+   "y": 40
+  },
+  {
+   "mapId": 7,
+   "dataId": 132,
+   "objectId": 18,
+   "x": 56,
+   "y": 33
+  },
+  {
+   "mapId": 7,
+   "dataId": 133,
+   "objectId": 18,
+   "x": 37,
+   "y": 27
+  },
+  {
+   "mapId": 7,
+   "dataId": 134,
+   "objectId": 18,
+   "x": 57,
+   "y": 24
+  },
+  {
+   "mapId": 7,
+   "dataId": 140,
+   "objectId": 50,
+   "x": 36,
+   "y": 23
+  },
+  {
+   "mapId": 7,
+   "dataId": 141,
+   "objectId": 50,
+   "x": 43,
+   "y": 23
+  },
+  {
+   "mapId": 7,
+   "dataId": 142,
+   "objectId": 50,
+   "x": 50,
+   "y": 23
+  },
+  {
+   "mapId": 7,
+   "dataId": 143,
+   "objectId": 51,
+   "x": 47,
+   "y": 36
+  },
+  {
+   "mapId": 7,
+   "dataId": 144,
+   "objectId": 51,
+   "x": 40,
+   "y": 27
+  },
+  {
+   "mapId": 7,
+   "dataId": 145,
+   "objectId": 52,
+   "x": 54,
+   "y": 29
+  },
+  {
+   "mapId": 7,
+   "dataId": 146,
+   "objectId": 52,
+   "x": 52,
+   "y": 38
+  },
+  {
+   "mapId": 7,
+   "dataId": 147,
+   "objectId": 52,
+   "x": 39,
+   "y": 33
+  },
+  {
+   "mapId": 7,
+   "dataId": 200,
+   "objectId": 31,
+   "x": 39,
+   "y": 30
+  },
+  {
+   "mapId": 7,
+   "dataId": 201,
+   "objectId": 34,
+   "x": 55,
+   "y": 25
+  },
+  {
+   "mapId": 7,
+   "dataId": 202,
+   "objectId": 31,
+   "x": 42,
+   "y": 32
+  },
+  {
+   "mapId": 7,
+   "dataId": 203,
+   "objectId": 32,
+   "x": 53,
+   "y": 37
+  },
+  {
+   "mapId": 7,
+   "dataId": 204,
+   "objectId": 36,
+   "x": 49,
+   "y": 23
+  },
+  {
+   "mapId": 7,
+   "dataId": 205,
+   "objectId": 40,
+   "x": 57,
+   "y": 23
+  },
+  {
+   "mapId": 7,
+   "dataId": 206,
+   "objectId": 32,
+   "x": 56,
+   "y": 40
+  },
+  {
+   "mapId": 7,
+   "dataId": 207,
+   "objectId": 32,
+   "x": 51,
+   "y": 35
+  },
+  {
+   "mapId": 7,
+   "dataId": 208,
+   "objectId": 36,
+   "x": 53,
+   "y": 24
+  },
+  {
+   "mapId": 7,
+   "dataId": 209,
+   "objectId": 33,
+   "x": 43,
+   "y": 31
+  },
+  {
+   "mapId": 7,
+   "dataId": 210,
+   "objectId": 32,
+   "x": 50,
+   "y": 36
+  },
+  {
+   "mapId": 7,
+   "dataId": 211,
+   "objectId": 34,
+   "x": 53,
+   "y": 23
+  },
+  {
+   "mapId": 7,
+   "dataId": 212,
+   "objectId": 38,
+   "x": 43,
+   "y": 35
+  },
+  {
+   "mapId": 7,
+   "dataId": 213,
+   "objectId": 32,
+   "x": 40,
+   "y": 27
+  },
+  {
+   "mapId": 7,
+   "dataId": 214,
+   "objectId": 31,
+   "x": 46,
+   "y": 23
+  },
+  {
+   "mapId": 7,
+   "dataId": 215,
+   "objectId": 31,
+   "x": 42,
+   "y": 24
+  },
+  {
+   "mapId": 7,
+   "dataId": 216,
+   "objectId": 34,
+   "x": 51,
+   "y": 33
+  },
+  {
+   "mapId": 7,
+   "dataId": 217,
+   "objectId": 41,
+   "x": 40,
+   "y": 33
+  },
+  {
+   "mapId": 7,
+   "dataId": 218,
+   "objectId": 40,
+   "x": 56,
+   "y": 23
+  },
+  {
+   "mapId": 7,
+   "dataId": 219,
+   "objectId": 37,
+   "x": 54,
+   "y": 27
+  },
+  {
+   "mapId": 7,
+   "dataId": 220,
+   "objectId": 40,
+   "x": 43,
+   "y": 24
+  },
+  {
+   "mapId": 7,
+   "dataId": 221,
+   "objectId": 40,
+   "x": 41,
+   "y": 36
+  },
+  {
+   "mapId": 7,
+   "dataId": 222,
+   "objectId": 38,
+   "x": 41,
+   "y": 33
+  },
+  {
+   "mapId": 7,
+   "dataId": 223,
+   "objectId": 36,
+   "x": 54,
+   "y": 23
+  },
+  {
+   "mapId": 7,
+   "dataId": 224,
+   "objectId": 34,
+   "x": 44,
+   "y": 36
+  },
+  {
+   "mapId": 7,
+   "dataId": 225,
+   "objectId": 33,
+   "x": 41,
+   "y": 25
+  },
+  {
+   "mapId": 7,
+   "dataId": 226,
+   "objectId": 34,
+   "x": 43,
+   "y": 27
+  },
+  {
+   "mapId": 7,
+   "dataId": 227,
+   "objectId": 31,
+   "x": 48,
+   "y": 37
+  },
+  {
+   "mapId": 7,
+   "dataId": 228,
+   "objectId": 36,
+   "x": 47,
+   "y": 37
+  },
+  {
+   "mapId": 7,
+   "dataId": 229,
+   "objectId": 42,
+   "x": 41,
+   "y": 41
+  },
+  {
+   "mapId": 7,
+   "dataId": 230,
+   "objectId": 41,
+   "x": 49,
+   "y": 40
+  },
+  {
+   "mapId": 7,
+   "dataId": 231,
+   "objectId": 37,
+   "x": 48,
+   "y": 36
+  },
+  {
+   "mapId": 7,
+   "dataId": 232,
+   "objectId": 40,
+   "x": 43,
+   "y": 40
+  },
+  {
+   "mapId": 7,
+   "dataId": 233,
+   "objectId": 36,
+   "x": 55,
+   "y": 41
+  }
+ ]
+}

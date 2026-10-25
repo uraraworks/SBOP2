@@ -108,7 +108,13 @@
 - 始まりの町（ローカルDBのみ）: 木(41,40) 5x5（当たり判定は幹の1マス）、茂み4つ
 - 光と影: 建物の帯状の影と日だまりは、プログラムで作るデカール（`python3 tools/illust/make_light.py SboGrpData/res/illust/object` → decal_wallshadow / decal_sun / decal_sun_s）。始まりの町は ObjectID 50〜52 を8か所
 - イラスト版の地面（イラスト版タイル番号あり）の上では、ドット絵のマップ影（灰色のかたまり）を960描画で描かない
-- 残り: 広場以外のタイル、シード DB への反映方法
+- 残り: 広場以外のタイル
+
+## ワールドデータの反映（シード DB・本番）
+
+- 手元の DB で作ったデータは `tools/illust/export_world.py` で `data/illust/world.json` に書き出し、`tools/illust/apply_world.py` で別の DB に反映する（何度実行しても同じ。列が無ければ足す。一枚絵でない既存のオブジェクトや配置と番号がぶつかったら何も変えずに止まる）
+- シード DB（data/seed/SboData.db）には反映済み
+- 本番へ出すとき: このブランチのコードをデプロイ → サーバーを `--stop` で止める → 本番 DB のバックアップを取る → `apply_world.py` を本番 DB に実行 → 起動。本番で管理画面から足したオブジェクトと ObjectID（11〜52）がぶつかったら止まるので、そのときは番号を振り直す
 
 ## リスク・注意
 
