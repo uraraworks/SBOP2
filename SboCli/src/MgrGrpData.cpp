@@ -188,6 +188,8 @@ CMgrGrpData::CMgrGrpData()
 	m_hDll				= NULL;
 	m_nMapPartsCount	= 0;
 	m_nMapShadowCount	= 0;
+	m_bGradeLutTried	= FALSE;
+	m_bGradeLutValid	= FALSE;
 	m_pImgSystem		= NULL;
 	m_pImgIcon			= NULL;
 	m_pImgShadow		= NULL;
@@ -1425,6 +1427,43 @@ PCImg32 CMgrGrpData::GetDibIllustChar(LPCSTR pszName)
 	delete pDibTmp;
 	m_mapIllustChar[strKey] = pDibNew;
 	return pDibNew;
+}
+
+
+/// 色補正表(SboGrpData/res/illust/grade.png, RGBA 幅256・高さ1以上)を取得
+/// 1行目の x 番目の画素の R/G/B が、入力値 x に対する R/G/B の出力値。A は無視。
+/// 初めて必要になった時にファイルから読む(失敗もキャッシュ)。無ければ FALSE。
+BOOL CMgrGrpData::GetGradeLut(const BYTE **ppR, const BYTE **ppG, const BYTE **ppB)
+{
+	TCHAR szBasePath[MAX_PATH];
+	TCHAR szFilePath[MAX_PATH];
+	std::vector<unsigned char> fileData, image;
+	unsigned width, height, x;
+
+	if (!m_bGradeLutTried) {
+		m_bGradeLutTried = TRUE;
+		m_bGradeLutValid = FALSE;
+		if (FindSboGrpResBasePath(szBasePath, _countof(szBasePath))) {
+			BuildSboGrpResPath(szFilePath, _countof(szFilePath), szBasePath, _T("illust\\grade.png"));
+			if (ReadBinaryFile(szFilePath, fileData)
+			 && !lodepng::decode(image, width, height, &fileData[0], fileData.size())
+			 && (width == 256) && (height >= 1)) {
+				for (x = 0; x < 256; x++) {
+					m_aGradeLut[0][x] = image[x * 4 + 0];
+					m_aGradeLut[1][x] = image[x * 4 + 1];
+					m_aGradeLut[2][x] = image[x * 4 + 2];
+				}
+				m_bGradeLutValid = TRUE;
+			}
+		}
+	}
+	if (!m_bGradeLutValid) {
+		return FALSE;
+	}
+	*ppR = m_aGradeLut[0];
+	*ppG = m_aGradeLut[1];
+	*ppB = m_aGradeLut[2];
+	return TRUE;
 }
 
 

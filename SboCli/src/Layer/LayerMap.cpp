@@ -211,6 +211,14 @@ void CLayerMap::Draw(PCImg32 pDst)
 	g_dDrawLightMs  = dLight;
 	DrawCharEffect(pWorld);
 
+	// 色補正表(res/illust/grade.png)があればワールド全体に適用(UIを重ねる前・最後)。無ければ何もしない
+	{
+		const BYTE *pLutR, *pLutG, *pLutB;
+		if (m_pMgrGrpData->GetGradeLut(&pLutR, &pLutG, &pLutB)) {
+			t = PerfNow(); pWorld->ApplyLut(pLutR, pLutG, pLutB); g_dDrawLightMs += PerfMs(t, PerfNow());
+		}
+	}
+
 	// ここまでがワールド。以降(HUD・名前/吹き出しラベル・デバッグ枠)はUIバッファへ描く。
 	// UIバッファをワールドの縮小で初期化し、以降の変更分だけが最終段でワールドへ重なる。
 	m_pMgrDraw->BeginUiOverlay();

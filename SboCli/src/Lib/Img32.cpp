@@ -617,6 +617,24 @@ static void BuildLightMulTable(double dGlowFloor)
 	s_dLightMulFloor = dGlowFloor;
 }
 
+void CImg32::ApplyLut(const BYTE *pR, const BYTE *pG, const BYTE *pB)
+{
+	BYTE *p, *pEnd;
+
+	if ((m_pBits == NULL) || (pR == NULL) || (pG == NULL) || (pB == NULL)) {
+		return;
+	}
+	// 画素は B,G,R,A の並び。全体を一続きで走査する
+	p = m_pBits;
+	pEnd = p + (size_t)BYTES_PER_LINE(Width()) * Height();
+	for (; p < pEnd; p += 4) {
+		p[0] = pB[p[0]];
+		p[1] = pG[p[1]];
+		p[2] = pR[p[2]];
+	}
+}
+
+
 void CImg32::SetLevelEx(CImg32 *pLevel, CImg32 *pLight, COLORREF clNight, double dGlowFloor)
 {
 	int i, j, x, y, cx, cy;

@@ -34,6 +34,7 @@ public:
 	CImg32	*GetDibIllustTile(int nSheet);					// イラスト版タイルシート(RGBA)を取得。無ければNULL
 	CImg32	*GetDibIllustObject(LPCSTR pszName, BOOL bShadow);	// 一枚絵オブジェクト画像(RGBA)を取得。初回にファイルから読みキャッシュ。無ければNULL
 	CImg32	*GetDibIllustChar(LPCSTR pszName);			// イラスト版キャラ(RGBA 512x512)を取得。res/illust/char/<キー>.png。無ければNULL
+	BOOL	GetGradeLut(const BYTE **ppR, const BYTE **ppG, const BYTE **ppB);	// 色補正表(res/illust/grade.png)の R/G/B 各256要素表を取得。無ければ FALSE
 	CImg32	*GetDibIllustGround(int nNo);					// 大判の地面テクスチャ(RGBA, ground_(nNo+1).png)を取得。初回にファイルから読みキャッシュ。無ければNULL
 	void	LoadIllustTiles(void);							// イラスト版タイルシートを読み込む(無くてもエラーにしない)
 	CImg32	*GetDibShadow(void);							// 影画像イメージを取得
@@ -119,6 +120,8 @@ private:
 				*m_pImgNumS,			// 数字(S)
 				*m_pImgNumM,			// 数字(M)
 				*m_pImgNumL;			// 数字(L)
+	BOOL	m_bGradeLutTried, m_bGradeLutValid;		// 色補正表の読み込み試行済み/有効
+	BYTE	m_aGradeLut[3][256];						// 色補正表(R,G,B)
 	std::map<int, PCImg32>	m_mapIllustGround;	// 大判の地面テクスチャのキャッシュ(NULL=読めなかった)
 	std::map<std::string, PCImg32>	m_mapIllustChar;	// イラスト版キャラ画像のキャッシュ(NULL=読めなかった)
 	std::map<std::string, PCImg32>	m_mapIllustObject;	// 一枚絵オブジェクト画像のキャッシュ(NULL=読めなかった)
