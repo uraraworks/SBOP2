@@ -32,6 +32,7 @@ public:
 	void	SetLevelEx(CImg32 *pLevel, CImg32 *pLight, COLORREF clNight, double dGlowFloor);	// 夜色へ減光→加算ライト合成（暗さ連動）
 
 	void	Blt(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BOOL bColorKey = FALSE);						// 矩形転送
+	void	BltSrcOver(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy);										// 転送元の画素アルファで合成して矩形転送(src-over)
 	void	BltLevel(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey = FALSE);	// 明度を変えながら矩形転送
 	void	BltAlpha(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey = FALSE);	// 混ぜ合わせ矩形転送
 	void	BltAlphaScaled(int dx, int dy, int cx, int cy, CImg32 *pSrc, int sx, int sy, BYTE byLevel, BOOL bColorKey, int nScale);	// 整数倍(最近傍)に拡大しながら混ぜ合わせ矩形転送(cx,cy は転送元サイズ)

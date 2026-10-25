@@ -68,6 +68,7 @@ const SGrpLayoutDef kGrpLayoutTable[] = {
 	{ 0,                       "mapParts",    "マップパーツ",        "IDP_MAP_%02d",           NULL,          16,   32, 32, 1,    63  },
 	{ 0,                       "mapShadow",   "マップ影",           "IDP_MAPSHADOW_%02d",     NULL,          16,   32, 32, 1,    63  },
 	{ 0,                       "item",        "アイテム地面",        "IDP_ITEM_%02d",          NULL,          16,   32, 32, 1,    63  },
+	{ 0,                       "illustTile",  "イラスト版タイル",    "IDP_ILLUST_TILE_%02d",   NULL,          64,   16, 16, 1,    63  },
 };
 
 const size_t kGrpLayoutTableCount = sizeof(kGrpLayoutTable) / sizeof(kGrpLayoutTable[0]);
@@ -190,6 +191,7 @@ const SGrpResFileEntry kGrpResFileTable[] = {
 		{ "IDP_NUM_L",              "num_l.png" },
 		{ "IDP_EFC_32_01",          "efc_32_01.png" },
 		{ "IDP_EFC_64_01",          "efc_64_01.png" },
+		{ "IDP_ILLUST_TILE_01",     "illust\\tile_01.png" },
 };
 
 const size_t kGrpResFileTableCount = sizeof(kGrpResFileTable) / sizeof(kGrpResFileTable[0]);

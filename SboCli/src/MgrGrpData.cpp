@@ -196,6 +196,7 @@ CMgrGrpData::CMgrGrpData()
 	m_pImgNumM			= NULL;
 	m_pImgNumL			= NULL;
 	m_paImgMapParts		= new ARRAYCIMG;
+	m_paImgIllustTile	= new ARRAYCIMG;
 	m_paImgMapShadow	= new ARRAYCIMG;
 	m_paImgNPC			= new ARRAYCIMG;
 	m_paImgBody			= new ARRAYCIMG;
@@ -255,6 +256,7 @@ CMgrGrpData::~CMgrGrpData()
 	SAFE_DELETE(m_pImgNumL);
 	pImg = NULL;
 	FreeInfo(m_paImgMapParts,		pImg);
+	FreeInfo(m_paImgIllustTile,		pImg);
 	FreeInfo(m_paImgNPC,			pImg);
 	FreeInfo(m_paImgBody,			pImg);
 	FreeInfo(m_paImgEar,			pImg);
@@ -370,6 +372,9 @@ BOOL CMgrGrpData::Load(void)
 		m_paImgMapShadow->Add(pImg);
 	}
 	m_nMapShadowCount = i;
+
+	// イラスト版タイル(任意。無くてもよい)
+	LoadIllustTiles();
 
 	// 体
 	for (i = 0; ; i += 2) {
@@ -1116,6 +1121,9 @@ BOOL CMgrGrpData::LoadLocalTitleAssets(void)
 		m_paImgMapShadow->Add(pImg);
 	}
 	m_nMapShadowCount = i;
+
+	// イラスト版タイル（Web版の実際の読み込み経路。Load() にだけ足すと欠落する）
+	LoadIllustTiles();
 	// アイコン（CLayerMap::DrawSystemIcon が参照）
 	Read256("IDP_ICON", &m_pImgIcon, 1);
 	// アイテム画像
@@ -1234,6 +1242,38 @@ PCImg32 CMgrGrpData::GetDibIcon(void)
 PCImg32 CMgrGrpData::GetDibShadow(void)
 {
 	return m_pImgShadow;
+}
+
+
+void CMgrGrpData::LoadIllustTiles(void)
+{
+	int i;
+	char szTmp[64];
+	PCImg32 pImg;
+	BOOL bResult;
+
+	if (m_paImgIllustTile->size() > 0) {
+		return;
+	}
+	for (i = 0; ; i++) {
+		sprintf_s(szTmp, sizeof(szTmp), "IDP_ILLUST_TILE_%02d", i + 1);
+		pImg	= new CImg32;
+		bResult	= Read(szTmp, &pImg, 1);	// RGBA のまま読む(アルファ保持)
+		if (bResult == FALSE) {
+			delete pImg;
+			break;
+		}
+		m_paImgIllustTile->Add(pImg);
+	}
+}
+
+
+PCImg32 CMgrGrpData::GetDibIllustTile(int nSheet)
+{
+	if ((nSheet < 0) || (nSheet >= (int)m_paImgIllustTile->size())) {
+		return NULL;
+	}
+	return m_paImgIllustTile->at(nSheet);
 }
 
 

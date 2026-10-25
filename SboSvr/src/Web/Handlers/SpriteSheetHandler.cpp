@@ -813,7 +813,18 @@ void CSpriteSheetUploadHandler::Handle(const HttpRequest &request, HttpResponse 
             response.SetJsonBody("{\"error\":\"invalid_png\"}");
             return;
         }
-        if (decodeState.info_png.color.colortype != LCT_PALETTE ||
+        // イラスト版タイル(illustTile)だけは RGBA PNG を許可する(アルファ透過)。
+        // 配信側 MakeTransparentPng はパレット PNG 以外を無加工で通すので透過化処理も走らない。
+        const bool bIllustTile = (categoryKey == "illustTile");
+        if (bIllustTile) {
+            if (decodeState.info_png.color.colortype != LCT_RGBA) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody(
+                    "{\"error\":\"not_rgba_png\",\"message\":\""
+                    "イラスト版タイルはRGBA PNGで保存してください。\"}");
+                return;
+            }
+        } else if (decodeState.info_png.color.colortype != LCT_PALETTE ||
             decodeState.info_png.color.palettesize == 0 ||
             decodeState.info_png.color.palettesize > 256)
         {

@@ -33,6 +33,7 @@ CInfoMapParts::CInfoMapParts()
 	m_byMoveDirection	= 0;
 	m_wGrpIDBase	= 0;
 	m_wGrpIDPile	= 0;
+	m_wGrpIDIllust	= 0;
 	m_dwPartsID	= 0;
 	m_dwPartsType	= 0;
 	ZeroMemory(&m_ptViewPos, sizeof(m_ptViewPos));
@@ -304,6 +305,7 @@ DWORD CInfoMapParts::GetSendDataSize(void)
 			sizeof(m_byMoveDirection)	+
 			sizeof(m_wGrpIDBase)	+
 			sizeof(m_wGrpIDPile)	+
+			sizeof(m_wGrpIDIllust)	+
 			sizeof(m_dwPartsType)	+
 			sizeof(m_ptViewPos);
 
@@ -343,6 +345,7 @@ PBYTE CInfoMapParts::GetSendData(void)
 	CopyMemoryRenew(pDataTmp, &m_byMoveDirection,	sizeof(m_byMoveDirection),	pDataTmp);
 	CopyMemoryRenew(pDataTmp, &m_wGrpIDBase,	sizeof(m_wGrpIDBase),	pDataTmp);
 	CopyMemoryRenew(pDataTmp, &m_wGrpIDPile,	sizeof(m_wGrpIDPile),	pDataTmp);
+	CopyMemoryRenew(pDataTmp, &m_wGrpIDIllust,	sizeof(m_wGrpIDIllust),	pDataTmp);
 	CopyMemoryRenew(pDataTmp, &m_dwPartsType,	sizeof(m_dwPartsType),	pDataTmp);
 	CopyMemoryRenew(pDataTmp, &m_ptViewPos,	sizeof(m_ptViewPos),	pDataTmp);
 
@@ -376,6 +379,7 @@ PBYTE CInfoMapParts::SetSendData(PBYTE pSrc)
 	CopyMemoryRenew(&m_byMoveDirection,	pDataTmp, sizeof(m_byMoveDirection),	pDataTmp);
 	CopyMemoryRenew(&m_wGrpIDBase,	pDataTmp, sizeof(m_wGrpIDBase),	pDataTmp);
 	CopyMemoryRenew(&m_wGrpIDPile,	pDataTmp, sizeof(m_wGrpIDPile),	pDataTmp);
+	CopyMemoryRenew(&m_wGrpIDIllust,	pDataTmp, sizeof(m_wGrpIDIllust),	pDataTmp);
 	CopyMemoryRenew(&m_dwPartsType,	pDataTmp, sizeof(m_dwPartsType),	pDataTmp);
 	CopyMemoryRenew(&m_ptViewPos,	pDataTmp, sizeof(m_ptViewPos),	pDataTmp);
 

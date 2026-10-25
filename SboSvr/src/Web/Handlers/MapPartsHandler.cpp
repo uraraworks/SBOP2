@@ -197,6 +197,7 @@ void CMapPartsListHandler::AppendPartJson(std::ostringstream &oss, const CInfoMa
         oss << "\"animeType\":" << static_cast<unsigned int>(pInfo->m_byAnimeType) << ',';
         oss << "\"animeCount\":" << static_cast<unsigned int>(pInfo->m_byAnimeCount) << ',';
         oss << "\"level\":" << static_cast<unsigned int>(pInfo->m_byLevel) << ',';
+        oss << "\"grpIdIllust\":" << static_cast<unsigned int>(pInfo->m_wGrpIDIllust) << ',';
 
         oss << "\"viewPosition\":{";
         oss << "\"x\":" << pInfo->m_ptViewPos.x << ',';
@@ -424,6 +425,9 @@ void ApplyJsonToPartsInfo(const std::string &json, CInfoMapParts *pInfo)
         if (JsonUtils::TryGetInt(json, "grpIdPile", nVal)) {
                 pInfo->m_wGrpIDPile = static_cast<WORD>(nVal);
         }
+        if (JsonUtils::TryGetInt(json, "grpIdIllust", nVal)) {
+                pInfo->m_wGrpIDIllust = static_cast<WORD>(nVal);
+        }
         if (JsonUtils::TryGetInt(json, "viewPositionX", nVal)) {
                 pInfo->m_ptViewPos.x = nVal;
         }
@@ -496,6 +500,7 @@ void BuildSinglePartJson(std::ostringstream &oss, const CInfoMapParts *pInfo)
         oss << "\"level\":" << static_cast<unsigned int>(pInfo->m_byLevel) << ',';
         oss << "\"grpIdBase\":" << static_cast<unsigned int>(pInfo->m_wGrpIDBase) << ',';
         oss << "\"grpIdPile\":" << static_cast<unsigned int>(pInfo->m_wGrpIDPile) << ',';
+        oss << "\"grpIdIllust\":" << static_cast<unsigned int>(pInfo->m_wGrpIDIllust) << ',';
 
         oss << "\"viewPosition\":{";
         oss << "\"x\":" << pInfo->m_ptViewPos.x << ',';

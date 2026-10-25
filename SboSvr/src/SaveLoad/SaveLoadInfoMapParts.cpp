@@ -79,10 +79,27 @@ void CSaveLoadInfoMapParts::EnsureTable(void)
 		"  GrpIDPile       INTEGER,"				// m_wGrpIDPile
 		"  PartsType       INTEGER,"				// m_dwPartsType
 		"  ViewPosX        INTEGER,"				// m_ptViewPos.x
-		"  ViewPosY        INTEGER"				// m_ptViewPos.y
+		"  ViewPosY        INTEGER,"				// m_ptViewPos.y
+		"  GrpIDIllust     INTEGER DEFAULT 0"		// m_wGrpIDIllust (イラスト版タイル番号 0=なし)
 		");";
 
 	sqlite3_exec(s_pDb, pszMainSql, NULL, NULL, NULL);
+
+	// 既存 DB には GrpIDIllust 列が無いので、無ければ ALTER TABLE で追加する
+	{
+		bool bHas = false;
+		sqlite3_stmt* pStmt = NULL;
+		if (sqlite3_prepare_v2(s_pDb, "PRAGMA table_info(sys_map_parts);", -1, &pStmt, NULL) == SQLITE_OK) {
+			while (sqlite3_step(pStmt) == SQLITE_ROW) {
+				const char* pszCol = (const char*)sqlite3_column_text(pStmt, 1);
+				if (pszCol != NULL && strcmp(pszCol, "GrpIDIllust") == 0) { bHas = true; break; }
+			}
+			sqlite3_finalize(pStmt);
+		}
+		if (!bHas) {
+			sqlite3_exec(s_pDb, "ALTER TABLE sys_map_parts ADD COLUMN GrpIDIllust INTEGER DEFAULT 0;", NULL, NULL, NULL);
+		}
+	}
 
 	// サブテーブル: アニメーションコマ情報 (m_paAnimeInfo の可変長配列)
 	//   PartsID + Slot を複合主キーとし、配列インデックスを Slot に格納する
@@ -117,8 +134,8 @@ void CSaveLoadInfoMapParts::SaveToNormalTable(void)
 	const char* pszInsertMain =
 		"INSERT INTO sys_map_parts("
 		"  PartsID, ViewType, AnimeType, AnimeCount, Level, BlockDirection, MoveDirection,"
-		"  GrpIDBase, GrpIDPile, PartsType, ViewPosX, ViewPosY"
-		") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		"  GrpIDBase, GrpIDPile, PartsType, ViewPosX, ViewPosY, GrpIDIllust"
+		") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	sqlite3_stmt* pStmtMain = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsertMain, -1, &pStmtMain, NULL);
@@ -162,6 +179,7 @@ void CSaveLoadInfoMapParts::SaveToNormalTable(void)
 		sqlite3_bind_int(pStmtMain, 10, (int)pInfo->m_dwPartsType);
 		sqlite3_bind_int(pStmtMain, 11, (int)pInfo->m_ptViewPos.x);
 		sqlite3_bind_int(pStmtMain, 12, (int)pInfo->m_ptViewPos.y);
+		sqlite3_bind_int(pStmtMain, 13, (int)pInfo->m_wGrpIDIllust);
 
 		sqlite3_step(pStmtMain);
 		sqlite3_reset(pStmtMain);
@@ -201,7 +219,7 @@ BOOL CSaveLoadInfoMapParts::LoadFromNormalTable(PCLibInfoBase pDst)
 	// メインテーブル SELECT
 	const char* pszSelectMain =
 		"SELECT PartsID, ViewType, AnimeType, AnimeCount, Level, BlockDirection, MoveDirection,"
-		"       GrpIDBase, GrpIDPile, PartsType, ViewPosX, ViewPosY"
+		"       GrpIDBase, GrpIDPile, PartsType, ViewPosX, ViewPosY, IFNULL(GrpIDIllust, 0)"
 		" FROM sys_map_parts;";
 
 	sqlite3_stmt* pStmtMain = NULL;
@@ -243,6 +261,7 @@ BOOL CSaveLoadInfoMapParts::LoadFromNormalTable(PCLibInfoBase pDst)
 		pInfo->m_dwPartsType      = (DWORD)sqlite3_column_int(pStmtMain, 9);
 		pInfo->m_ptViewPos.x      = (LONG)sqlite3_column_int(pStmtMain, 10);
 		pInfo->m_ptViewPos.y      = (LONG)sqlite3_column_int(pStmtMain, 11);
+		pInfo->m_wGrpIDIllust     = (WORD)sqlite3_column_int(pStmtMain, 12);
 
 		// ---- サブテーブルからアニメーションコマを復元 ----
 		//   prepared statement を bind + reset で再利用

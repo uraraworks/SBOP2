@@ -918,8 +918,8 @@ void CMgrDraw::DrawMapParts(
 	BOOL bCache, bHasKey;
 	unsigned long long ullKey;
 	STScaledCache *pCache;
-	WORD wGrpIDBase, wGrpIDPile;
-	PCImg32 pImg, pDibTmp, pSrcImg;
+	WORD wGrpIDBase, wGrpIDPile, wGrpIDIllust;
+	PCImg32 pImg, pDibTmp, pSrcImg, pImgIllust;
 	PCInfoAnime pAnime;
 
 	sc = GetDrawScale(pDst);
@@ -962,6 +962,16 @@ void CMgrDraw::DrawMapParts(
 		goto Exit;
 	}
 
+	// イラスト版タイル: ワールド描画(sc=2・等倍指定なし)で、シートがあるときだけ使う
+	wGrpIDIllust = 0;
+	pImgIllust = NULL;
+	if ((nMode != 1) && (sc == 2) && (bSingleSize == FALSE) && (pInfoMapParts->m_wGrpIDIllust != 0)) {
+		pImgIllust = m_pMgrGrpData->GetDibIllustTile((pInfoMapParts->m_wGrpIDIllust - 1) / 256);
+		if (pImgIllust != NULL) {
+			wGrpIDIllust = pInfoMapParts->m_wGrpIDIllust;
+		}
+	}
+
 	// ワールド描画(拡大タイル)は拡大結果をキャッシュして使い回す
 	bCache = ((sc > 1) && (bSingleSize == FALSE)) ? TRUE : FALSE;
 	bHasKey = TRUE;
@@ -972,7 +982,8 @@ void CMgrDraw::DrawMapParts(
 		ullKey = ((unsigned long long)((nMode == 1) ? 0 : wGrpIDBase))
 			| ((unsigned long long)wGrpIDPile << 16)
 			| ((unsigned long long)nMode << 32)
-			| ((unsigned long long)sc << 40);
+			| ((unsigned long long)sc << 40)
+			| ((unsigned long long)wGrpIDIllust << 48);	// イラスト版を含めて別キャッシュにする
 		pCache = FindScaledCache(ullKey);
 		if (pCache != NULL) {
 			pSrcImg = pCache->pImg;
@@ -994,7 +1005,7 @@ void CMgrDraw::DrawMapParts(
 	} else {
 		pDibTmp->FillRect(0, 0, nSize, nSize, RGB(255, 0, 255));
 	}
-	if (wGrpIDPile > 0) {
+	if ((wGrpIDPile > 0) && (wGrpIDIllust == 0)) {
 		pImg = m_pMgrGrpData->GetDibMapParts(wGrpIDPile / 1024);
 		if (pImg == NULL) {
 #if defined(_DEBUG)
@@ -1005,7 +1016,22 @@ void CMgrDraw::DrawMapParts(
 		pDibTmp->BltFrom256(0, 0, nSize+1, nSize, pImg, ((wGrpIDPile % 1024) % 32) * nSize, ((wGrpIDPile % 1024) / 32) * nSize, TRUE);
 	}
 
-	pDibTmp->BltStretchNearest(0, nSizeDst, nSizeDst, nSizeDst, pDibTmp, 0, 0, nSize, nSize);
+	if (wGrpIDIllust != 0) {
+		// 下地(16px)を拡大して敷き、その上にイラスト版(64px)を画素アルファで重ね、最後にpileを重ねる
+		const int nCell = (wGrpIDIllust - 1) % 256;
+		pDibTmp->BltStretchNearest(0, nSizeDst, nSizeDst, nSizeDst, pDibTmp, 0, 0, nSize, nSize);
+		pDibTmp->BltSrcOver(0, nSizeDst, nSizeDst, nSizeDst, pImgIllust, (nCell % 16) * nSizeDst, (nCell / 16) * nSizeDst);
+		if (wGrpIDPile > 0) {
+			pDibTmp->FillRect(0, 0, nSize, nSize, RGB(255, 0, 255));
+			pImg = m_pMgrGrpData->GetDibMapParts(wGrpIDPile / 1024);
+			if (pImg != NULL) {
+				pDibTmp->BltFrom256(0, 0, nSize+1, nSize, pImg, ((wGrpIDPile % 1024) % 32) * nSize, ((wGrpIDPile % 1024) / 32) * nSize, TRUE);
+				pDibTmp->BltStretchNearest(0, nSizeDst, nSizeDst, nSizeDst, pDibTmp, 0, 0, nSize, nSize, TRUE);
+			}
+		}
+	} else {
+		pDibTmp->BltStretchNearest(0, nSizeDst, nSizeDst, nSizeDst, pDibTmp, 0, 0, nSize, nSize);
+	}
 
 	if (bCache) {
 		pCache = StoreScaledCache(ullKey, pDibTmp, 0, nSizeDst, nSizeDst, nSizeDst);

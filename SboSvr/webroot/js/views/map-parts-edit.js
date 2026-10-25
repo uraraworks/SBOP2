@@ -14,7 +14,7 @@ import { fetchMapPartsData, invalidateMapPartsData } from "../data/map-parts-dat
 import { createSpriteField } from "../components/sprite-picker.js";
 import { createDragList } from "../components/drag-list.js";
 import { createAnimePreview } from "../components/anime-preview.js";
-import { createSpriteThumbLazy } from "../components/sprite-thumb.js";
+import { createSpriteThumb, createSpriteThumbLazy } from "../components/sprite-thumb.js";
 import { loadCatalog, calcSpriteCoord, loadSheetImage } from "../data/assets.js";
 
 // ----------------------------------------------------------------
@@ -86,6 +86,7 @@ function normalizePart(raw) {
     partsId, viewType, animeType, animeCount, level,
     viewPosition: { x: posX, y: posY },
     movementDirection, flags, grpIdBase, grpIdPile, animeFrames,
+    grpIdIllust: Number(raw.grpIdIllust ?? 0),
   };
 }
 
@@ -151,6 +152,28 @@ function buildDetailForm(part) {
   });
   grpSection.appendChild(sfBase.el);
   grpSection.appendChild(sfPile.el);
+
+  // イラスト版タイル番号 (0=なし。1始まり: シート=(id-1)/256, セル=(id-1)%256)
+  const illustLabel = document.createElement("label");
+  illustLabel.className = "form-field";
+  illustLabel.style.cssText = "display:flex;gap:8px;align-items:center;";
+  const illustSpan = document.createElement("span");
+  illustSpan.textContent = "イラスト版タイル番号 (0=なし)";
+  const illustInput = document.createElement("input");
+  illustInput.type = "number";
+  illustInput.min = "0";
+  illustInput.max = "65535";
+  illustInput.value = String(part.grpIdIllust ?? 0);
+  const illustThumb = createSpriteThumb({ categoryKey: "illustTile", sub: Math.max(0, (part.grpIdIllust ?? 0) - 1), size: 64 });
+  const refreshIllustThumb = () => {
+    const id = Number(illustInput.value) || 0;
+    illustThumb.el.style.visibility = id > 0 ? "visible" : "hidden";
+    illustThumb.update({ categoryKey: "illustTile", sub: Math.max(0, id - 1) });
+  };
+  illustInput.addEventListener("input", refreshIllustThumb);
+  refreshIllustThumb();
+  illustLabel.append(illustSpan, illustInput, illustThumb.el);
+  grpSection.appendChild(illustLabel);
   wrap.appendChild(grpSection);
 
   // ---- 基本パラメータ ----
@@ -457,6 +480,7 @@ function buildDetailForm(part) {
       viewPositionY: Number(posYInput.value),
       grpIdBase: sfBase.getValue(),
       grpIdPile: sfPile.getValue(),
+      grpIdIllust: Number(illustInput.value) || 0,
       block: flagCheckboxes.block.checked,
       pile: flagCheckboxes.pile.checked,
       pileBack: flagCheckboxes.pileBack.checked,

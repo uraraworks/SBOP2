@@ -69,6 +69,7 @@ public:
 						m_byMoveDirection;	// 乗ると移動する方向
 	WORD	m_wGrpIDBase,	// グラフィックID(下地)
 						m_wGrpIDPile;	// グラフィックID(重ね合わせ用ID)
+	WORD	m_wGrpIDIllust;	// イラスト版タイル番号(0=なし、1始まり。シート=(id-1)/256、セル=(id-1)%256、16列)
 	DWORD	m_dwPartsID,	// パーツID
 						m_dwPartsType;	// パーツの属性
 	POINT	m_ptViewPos;	// 編集画面での表示位置

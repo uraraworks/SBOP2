@@ -794,6 +794,69 @@ void CImg32::Blt(
 	}
 }
 
+void CImg32::BltSrcOver(
+	int dx,			// [in] 始点(X)
+	int dy,			// [in] 始点(Y)
+	int cx,			// [in] 幅
+	int cy,			// [in] 高さ
+	CImg32 *pSrc,	// [in] 転送元(32bit・画素アルファ付き)
+	int sx,			// [in] 転送元の始点(X)
+	int sy)			// [in] 転送元の始点(Y)
+{
+	int i, j;
+	DWORD dwLineDst, dwLineSrc;
+	PBYTE pBitsDst, pBitsSrc, dst, src;
+
+	if ((m_pBits == NULL) || (pSrc == NULL)) {
+		return;
+	}
+
+	if (dx < 0) {
+		sx += (0 - dx);
+		cx -= (0 - dx);
+		dx = 0;
+	}
+	if (dy < 0) {
+		sy += (0 - dy);
+		cy -= (0 - dy);
+		dy = 0;
+	}
+
+	// 座標をクリッピング
+	ClipPos(dx, dy, cx, cy, pSrc, sx, sy);
+
+	pBitsDst = m_pBits;
+	pBitsSrc = pSrc->GetBits();
+	dwLineDst = BYTES_PER_LINE(Width());
+	dwLineSrc = BYTES_PER_LINE(pSrc->Width());
+
+	dx *= BYTES_PER_PIXEL;
+	dy = Height() - 1 - dy;
+	sx *= BYTES_PER_PIXEL;
+	sy = pSrc->Height() - 1 - sy;
+
+	for (j = 0; j < cy; j ++) {
+		dst = pBitsDst + dwLineDst * (dy - j) + dx;
+		src = pBitsSrc + dwLineSrc * (sy - j) + sx;
+		for (i = 0; i < cx; i ++) {
+			const unsigned a = src[3];
+			if (a == 255) {
+				dst[0] = src[0];
+				dst[1] = src[1];
+				dst[2] = src[2];
+			} else if (a != 0) {
+				dst[0] = (BYTE)((src[0] * a + dst[0] * (255 - a) + 127) / 255);
+				dst[1] = (BYTE)((src[1] * a + dst[1] * (255 - a) + 127) / 255);
+				dst[2] = (BYTE)((src[2] * a + dst[2] * (255 - a) + 127) / 255);
+			}
+			// 他の描画経路と揃えて出力のアルファは0のまま(カラーキー比較がDWORD全体のため)
+			dst[3] = 0;
+			dst += 4;
+			src += 4;
+		}
+	}
+}
+
 void CImg32::BltLevel(
 	int dx,			// [in] 始点(X)
 	int dy,			// [in] 始点(Y)

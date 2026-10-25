@@ -29,6 +29,8 @@ public:
 	void	Write(LPCSTR pszFileName, CImg32 *pSrc);	// PNGデータの保存
 	CImg32	*GetDibSystem(void);							// システム画像イメージを取得
 	CImg32	*GetDibIcon(void);								// アイコン画像イメージを取得
+	CImg32	*GetDibIllustTile(int nSheet);					// イラスト版タイルシート(RGBA)を取得。無ければNULL
+	void	LoadIllustTiles(void);							// イラスト版タイルシートを読み込む(無くてもエラーにしない)
 	CImg32	*GetDibShadow(void);							// 影画像イメージを取得
 	CImg32	*GetDibMapParts(int nNo);						// マップ画像イメージを取得
 	CImg32	*GetDibMapShadow(int nNo);						// マップ影画像イメージを取得
@@ -112,7 +114,8 @@ private:
 				*m_pImgNumS,			// 数字(S)
 				*m_pImgNumM,			// 数字(M)
 				*m_pImgNumL;			// 数字(L)
-	PARRAYCIMG	m_paImgMapParts,		// マップパーツ
+	PARRAYCIMG	m_paImgIllustTile,		// イラスト版タイル(RGBA 1024x1024)
+				m_paImgMapParts,		// マップパーツ
 				m_paImgMapShadow,		// マップ影
 				m_paImgNPC,				// NPC
 				m_paImgBody,			// 体
