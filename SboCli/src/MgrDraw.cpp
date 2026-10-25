@@ -652,6 +652,15 @@ void CMgrDraw::DrawChar(
 				snprintf(szKey, sizeof(szKey), "spcloth_%u", (unsigned)pInfoChar->m_wGrpIDSP);
 			}
 		}
+		// NPC は1体ごとに固定の絵(npcchar_<キャラID>)を優先し、無ければ上のキーで探す
+		// (m_bNPC はクライアントへ送られないので、NPC 画像を持つかで判断する)
+		if (pInfoChar->m_wGrpIDNPC != 0) {
+			char szKeyNpc[48];
+			snprintf(szKeyNpc, sizeof(szKeyNpc), "npcchar_%lu", (unsigned long)pInfoChar->m_dwCharID);
+			if (m_pMgrGrpData->GetDibIllustChar(szKeyNpc) != NULL) {
+				strcpy(szKey, szKeyNpc);
+			}
+		}
 		if (szKey[0] != '\0') {
 #if defined(_DEBUG)
 			static std::set<std::string> s_setIllustCharKey;

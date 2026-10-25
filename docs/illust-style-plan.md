@@ -99,7 +99,7 @@
 - 960描画・透明化なし・一時変身(m_wGrpIDTmpMain)なしのときだけ。足元の影は `res/illust/char/shadow.png`（128px）
 - 素材変換: `python3 tools/illust/make_char.py <生成.png> <出力.png>`（マゼンタ抜き、全コマ同倍率で高さ116px、足元をそろえる）。試作の少年を `cloth_1.png` に割り当て
 - _DEBUG ビルドでは初めて探したキーを SDL_Log に出す
-- 広場の NPC（カイ・リナ）は 2x2 NPC ではないので、今の命名規則では差し替わらない
+- 方針（2026-10-25 ユーザー決定）: NPC は1体ごとに固定の絵、プレイヤーは服で決める。NPC は `npcchar_<キャラID>` を優先して探す（m_bNPC はクライアントに来ないので m_wGrpIDNPC!=0 で判定）。カイ=npcchar_1476・リナ=npcchar_1288 を Codex で生成済み
 
 ## リスク・注意
 
