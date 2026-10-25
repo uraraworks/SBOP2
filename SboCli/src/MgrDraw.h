@@ -23,6 +23,7 @@ class CMgrLayer;
 class CMgrWindow;
 class CInfoCharCli;
 class CInfoItem;
+class CInfoMapObject;
 class CInfoMapParts;
 class CLibInfoMapParts;
 class CLibInfoMapShadow;
@@ -50,6 +51,8 @@ public:
 	void	DrawMapParts(CImg32 *pDst, int x, int y, DWORD dwPartsID, int nMode, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BYTE byLevel = 0);			// マップパーツを描画
 	void	DrawMapParts(CImg32 *pDst, int x, int y, CInfoMapParts *pInfoMapParts, int nMode, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE, BYTE byLevel = 0);		// マップパーツを描画
 	void	DrawMapShadow(CImg32 *pDst, int x, int y, DWORD dwShadowID, BOOL bSingleSize = FALSE, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE);	// マップ影を描画
+	void	DrawMapObjectShadow(CImg32 *pDst, int x, int y, DWORD dwObjectID);	// 一枚絵オブジェクトの影を描画(影画像があるときだけ)
+	BOOL	DrawMapObjectIllust(CImg32 *pDst, int x, int y, CInfoMapObject *pInfo, BOOL bShadow);	// 一枚絵(RGBA)を描画。描けたらTRUE
 	void	DrawMapObject(CImg32 *pDst, int x, int y, DWORD dwObjectID, BOOL bUseColorKey = TRUE, BOOL bLock = TRUE);			// マップオブジェクトを描画
 	void	DrawItem(CImg32 *pDst, int x, int y, DWORD dwItemID, BYTE byLevel = 0);			// アイテムを描画
 	void	DrawItem(CImg32 *pDst, int x, int y, CInfoItem *pInfoItem, BYTE byLevel = 0, BOOL bLock = TRUE);	// アイテムを描画

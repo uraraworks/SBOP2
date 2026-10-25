@@ -163,8 +163,27 @@ void BuildTemplateJson(std::ostringstream &oss, const CInfoMapObject *pInfo)
         oss << "\"hasCollision\":" << (pInfo->m_bHit ? "true" : "false") << ',';
         oss << "\"hideY\":" << pInfo->m_nHideY << ',';
         oss << "\"width\":" << pInfo->m_sizeGrp.cx << ',';
-        oss << "\"height\":" << pInfo->m_sizeGrp.cy;
+        oss << "\"height\":" << pInfo->m_sizeGrp.cy << ',';
+        oss << "\"illustFile\":\"" << JsonUtils::Escape(ToUtf8String(pInfo->m_strIllustFile)) << "\",";
+        oss << "\"illustOffX\":" << pInfo->m_nIllustOffX << ',';
+        oss << "\"illustOffY\":" << pInfo->m_nIllustOffY;
         oss << '}';
+}
+
+// JSON の illustFile が英数字/_/- のみか検証する（無い・空は OK）
+bool IsValidIllustFileInJson(const std::string &json)
+{
+        std::string file;
+        if (!JsonUtils::TryGetString(json, "illustFile", file)) {
+                return true;
+        }
+        for (size_t i = 0; i < file.size(); i++) {
+                const char c = file[i];
+                const bool ok = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+                                (c >= '0' && c <= '9') || c == '_' || c == '-';
+                if (!ok) return false;
+        }
+        return true;
 }
 
 // JSON から CInfoMapObject へ値を適用する
@@ -190,6 +209,16 @@ void ApplyJsonToTemplate(const std::string &json, CInfoMapObject *pInfo)
         }
         if (JsonUtils::TryGetInt(json, "height", nVal)) {
                 pInfo->m_sizeGrp.cy = nVal;
+        }
+        std::string illustFile;
+        if (JsonUtils::TryGetString(json, "illustFile", illustFile)) {
+                SetStringFromUtf8(pInfo->m_strIllustFile, illustFile);
+        }
+        if (JsonUtils::TryGetInt(json, "illustOffX", nVal)) {
+                pInfo->m_nIllustOffX = nVal;
+        }
+        if (JsonUtils::TryGetInt(json, "illustOffY", nVal)) {
+                pInfo->m_nIllustOffY = nVal;
         }
 }
 }
@@ -574,6 +603,12 @@ void CMapObjectTemplateCreateHandler::Handle(const HttpRequest &request, HttpRes
                 return;
         }
 
+        if (!IsValidIllustFileInJson(request.body)) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_illustFile\"}");
+                return;
+        }
+
         pObjectLib->Enter();
 
         PCInfoMapObject pInfo = static_cast<PCInfoMapObject>(pObjectLib->GetNew());
@@ -634,6 +669,12 @@ void CMapObjectTemplateUpdateHandler::Handle(const HttpRequest &request, HttpRes
         if (!JsonUtils::TryGetInt(request.body, "objectId", nObjectId) || nObjectId <= 0) {
                 response.statusLine = "HTTP/1.1 400 Bad Request";
                 response.SetJsonBody("{\"error\":\"missing_or_invalid_objectId\"}");
+                return;
+        }
+
+        if (!IsValidIllustFileInJson(request.body)) {
+                response.statusLine = "HTTP/1.1 400 Bad Request";
+                response.SetJsonBody("{\"error\":\"invalid_illustFile\"}");
                 return;
         }
 

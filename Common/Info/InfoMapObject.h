@@ -58,6 +58,9 @@ public:
 	SIZE	m_sizeGrp;	// 画像サイズ
 	BOOL	m_bHit;	// 当たり判定
 	CmyString	m_strName;	// オブジェクト名
+	CmyString	m_strIllustFile;	// 一枚絵ファイル名(拡張子なし。空=一枚絵なし)
+	int	m_nIllustOffX,	// 一枚絵の位置補正X(960描画px)
+			m_nIllustOffY;	// 一枚絵の位置補正Y(960描画px)
 	BYTE	*m_pHit;	// 当たり判定データ
 
 	ARRAYMAPOBJECTANIMEINFO	m_aInfoAnime;	// オブジェクトアニメ情報

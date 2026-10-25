@@ -66,6 +66,7 @@ private:
 	};
 	std::vector<STMapObjectDraw> m_aMapObjectDraw; // 並び順はライブラリの順序そのまま
 	void PrepareMapObjectDraw(void); // 上表を作り直す
+	void DrawMapObjectShadow(CImg32 *pDst); // 一枚絵オブジェクトの影(地面の直後・オブジェクトやキャラより前)
 	void DrawMapObject(CImg32 *pDst, int nDrawY = -99); // 描画(マップオブジェクト)
 	void DrawItem(CImg32 *pDst, int nType, int nDrawY = -99); // 描画(アイテム)
 	void GetDrawPos(CInfoCharCli *pChar, int &nDstX, int &nDstY); // 描画位置を取得

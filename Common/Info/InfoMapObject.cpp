@@ -20,6 +20,9 @@ static LPCSTR s_aszName[] = {
 	"anime_byWait",	// 待ち時間(×１０ミリ秒)
 	"anime_byLevel",	// 透明度
 	"anime_pwGrpID",	// 画像ID
+	"m_strIllustFile",	// 一枚絵ファイル名
+	"m_nIllustOffX",	// 一枚絵補正X
+	"m_nIllustOffY",	// 一枚絵補正Y
 	NULL
 };
 
@@ -29,6 +32,8 @@ CInfoMapObject::CInfoMapObject()
 	m_dwAttr	= 0;	// オブジェクトの属性
 	m_nHideY	= 0;	// 隠れる上からのマス数
 	m_bHit	= FALSE;	// 当たり判定
+	m_nIllustOffX	= 0;	// 一枚絵補正X
+	m_nIllustOffY	= 0;	// 一枚絵補正Y
 	m_pHit	= NULL;	// 当たり判定データ
 	ZeroMemory(&m_sizeGrp, sizeof(m_sizeGrp));	// 画像サイズ
 
@@ -98,6 +103,9 @@ DWORD CInfoMapObject::GetDataSizeNo(int nNo)
 	case 10:	// 画像ID
 		dwRet = sizeof(WORD) * m_sizeGrp.cx * m_sizeGrp.cy * nTmp;
 		break;
+	case 11:	dwRet = m_strIllustFile.GetStoreLength() + 1;	break;	// 一枚絵ファイル名
+	case 12:	dwRet = sizeof(m_nIllustOffX);	break;	// 一枚絵補正X
+	case 13:	dwRet = sizeof(m_nIllustOffY);	break;	// 一枚絵補正Y
 	}
 
 	return dwRet;
@@ -165,6 +173,9 @@ PBYTE CInfoMapObject::GetWriteData(int nNo, PDWORD pdwSize)
 			CopyMemoryRenew(pTmp, (PBYTE)pInfo->pwGrpID, dwSize, pTmp);
 		}
 		break;
+	case 11:	pSrc = (PBYTE)m_strIllustFile.GetUtf8Pointer();	break;	// 一枚絵ファイル名
+	case 12:	pSrc = (PBYTE)&m_nIllustOffX;	break;	// 一枚絵補正X
+	case 13:	pSrc = (PBYTE)&m_nIllustOffY;	break;	// 一枚絵補正Y
 	}
 
 	if (pSrc) {
@@ -238,6 +249,12 @@ DWORD CInfoMapObject::ReadElementData(
 			dwSize += dwSizeTmp;
 		}
 		break;
+	case 11:	// 一枚絵ファイル名
+		m_strIllustFile = (LPCTSTR)Utf8ToTString((LPCSTR)pSrc);
+		dwSize = (DWORD)(strlen((LPCSTR)pSrc) + 1);
+		break;
+	case 12:	pDst = (PBYTE)&m_nIllustOffX;	dwSize = sizeof(m_nIllustOffX);	break;	// 一枚絵補正X
+	case 13:	pDst = (PBYTE)&m_nIllustOffY;	dwSize = sizeof(m_nIllustOffY);	break;	// 一枚絵補正Y
 	}
 
 	if (pDst) {
@@ -300,6 +317,11 @@ PBYTE CInfoMapObject::GetSendData(void)
 		CopyMemoryRenew(pDataTmp, (PBYTE)pInfo->pwGrpID, dwSizeTmp, pDataTmp);	// 画像ID
 	}
 
+	// 一枚絵(イラスト調): アニメの後ろに追記
+	strcpyRenew((LPSTR)pDataTmp, m_strIllustFile, pDataTmp);	// 一枚絵ファイル名
+	CopyMemoryRenew(pDataTmp, &m_nIllustOffX,	sizeof(m_nIllustOffX),	pDataTmp);	// 一枚絵補正X
+	CopyMemoryRenew(pDataTmp, &m_nIllustOffY,	sizeof(m_nIllustOffY),	pDataTmp);	// 一枚絵補正Y
+
 	return pData;
 }
 
@@ -337,6 +359,11 @@ PBYTE CInfoMapObject::SetSendData(PBYTE pSrc)
 		CopyMemoryRenew(&pInfo->byLevel,	pDataTmp, sizeof(pInfo->byLevel), pDataTmp);	// 透明度
 		CopyMemoryRenew((PBYTE)pInfo->pwGrpID, pDataTmp, dwSizeTmp, pDataTmp);	// 画像ID
 	}
+
+	// 一枚絵(イラスト調)
+	StoreRenew(m_strIllustFile, (LPCSTR)pDataTmp, pDataTmp);	// 一枚絵ファイル名
+	CopyMemoryRenew(&m_nIllustOffX,	pDataTmp, sizeof(m_nIllustOffX),	pDataTmp);	// 一枚絵補正X
+	CopyMemoryRenew(&m_nIllustOffY,	pDataTmp, sizeof(m_nIllustOffY),	pDataTmp);	// 一枚絵補正Y
 
 	return pDataTmp;
 }

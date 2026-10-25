@@ -962,10 +962,15 @@ void CMgrDraw::DrawMapParts(
 		goto Exit;
 	}
 
+	// イラスト版タイル番号 ILLUSTTILE_HIDE は「ワールド描画では描かない」(一枚絵オブジェクトに置き換えた重ねパーツ用)
+	if ((sc == 2) && (bSingleSize == FALSE) && (pInfoMapParts->m_wGrpIDIllust == ILLUSTTILE_HIDE)) {
+		goto Exit;
+	}
+
 	// イラスト版タイル: ワールド描画(sc=2・等倍指定なし)で、シートがあるときだけ使う
 	wGrpIDIllust = 0;
 	pImgIllust = NULL;
-	if ((nMode != 1) && (sc == 2) && (bSingleSize == FALSE) && (pInfoMapParts->m_wGrpIDIllust != 0)) {
+	if ((nMode != 1) && (sc == 2) && (bSingleSize == FALSE) && (pInfoMapParts->m_wGrpIDIllust != 0) && (pInfoMapParts->m_wGrpIDIllust != ILLUSTTILE_HIDE)) {
 		pImgIllust = m_pMgrGrpData->GetDibIllustTile((pInfoMapParts->m_wGrpIDIllust - 1) / 256);
 		if (pImgIllust != NULL) {
 			wGrpIDIllust = pInfoMapParts->m_wGrpIDIllust;
@@ -1121,6 +1126,49 @@ Exit:
 }
 
 
+/// 一枚絵オブジェクトを描く。
+/// 基準位置: 一枚絵の「下端中央」を、オブジェクト格子(m_sizeGrp マス)の下端中央に合わせ、
+/// (m_nIllustOffX, m_nIllustOffY)[960描画px]を足す。(x,y)は DrawMapObject と同じ論理座標
+/// (格子の左端 / 最下行の上端。m_ptPos は格子の左下マス)。等倍(sc==2 のワールド描画)のときだけ有効。
+/// @return 描いたらTRUE(一枚絵なし・画像なし・sc!=2 はFALSEで従来描画へ)
+BOOL CMgrDraw::DrawMapObjectIllust(CImg32 *pDst, int x, int y, PCInfoMapObject pInfo, BOOL bShadow)
+{
+	int sc, nCenterX, nBottom;
+	PCImg32 pImg;
+
+	if ((pInfo == NULL) || (pInfo->m_strIllustFile.IsEmpty())) {
+		return FALSE;
+	}
+	sc = GetDrawScale(pDst);
+	if (sc != 2) {
+		return FALSE;
+	}
+	pImg = m_pMgrGrpData->GetDibIllustObject((LPCSTR)pInfo->m_strIllustFile, bShadow);
+	if (pImg == NULL) {
+		return FALSE;
+	}
+	nCenterX = x * sc + pInfo->m_sizeGrp.cx * 32 * sc / 2;
+	nBottom  = y * sc + 32 * sc;
+	pDst->BltSrcOver(
+		nCenterX - pImg->Width() / 2 + pInfo->m_nIllustOffX,
+		nBottom - pImg->Height() + pInfo->m_nIllustOffY,
+		pImg->Width(), pImg->Height(), pImg, 0, 0);
+	return TRUE;
+}
+
+
+void CMgrDraw::DrawMapObjectShadow(CImg32 *pDst, int x, int y, DWORD dwObjectID)
+{
+	PCInfoMapObject pInfo;
+
+	pInfo = (PCInfoMapObject)m_pMgrData->GetLibInfoMapObject()->GetPtr(dwObjectID);
+	if (pInfo == NULL) {
+		return;
+	}
+	DrawMapObjectIllust(pDst, x, y, pInfo, TRUE);
+}
+
+
 void CMgrDraw::DrawMapObject(
 	CImg32 *pDst,				// [in] 描画先
 	int x,						// [in] 描画位置(X)
@@ -1148,6 +1196,10 @@ void CMgrDraw::DrawMapObject(
 	pLibInfoMapObject = m_pMgrData->GetLibInfoMapObject();
 	pInfo = (PCInfoMapObject)pLibInfoMapObject->GetPtr(dwObjectID);
 	if (pInfo == NULL) {
+		goto Exit;
+	}
+	// 一枚絵モード: 画像があれば16pxパーツ格子の代わりにこれを描く(無ければ従来描画へ)
+	if (DrawMapObjectIllust(pDst, x / sc, y / sc, pInfo, FALSE)) {
 		goto Exit;
 	}
 	pAnimeInfo = pInfo->GetAnimePtr(0);

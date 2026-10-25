@@ -180,6 +180,12 @@ function createTemplatePanel({ onTemplatesChange }) {
         <input type="number" name="height" value="1" min="1" /></label>
       <label class="form-field"><span>当たり判定</span>
         <input type="checkbox" name="hasCollision" /></label>
+      <label class="form-field"><span>一枚絵ファイル名 <small>(res/illust/object/名前.png の名前。空=なし)</small></span>
+        <input type="text" name="illustFile" pattern="[A-Za-z0-9_-]*" /></label>
+      <label class="form-field"><span>一枚絵 位置補正X</span>
+        <input type="number" name="illustOffX" value="0" /></label>
+      <label class="form-field"><span>一枚絵 位置補正Y</span>
+        <input type="number" name="illustOffY" value="0" /></label>
     </div>
     <div class="form-actions">
       <button type="submit" class="button primary">保存</button>
@@ -252,6 +258,9 @@ function createTemplatePanel({ onTemplatesChange }) {
       form.width.value         = tmpl.width || 1;
       form.height.value        = tmpl.height || 1;
       form.hasCollision.checked = Boolean(tmpl.hasCollision);
+      form.illustFile.value    = tmpl.illustFile || "";
+      form.illustOffX.value    = tmpl.illustOffX || 0;
+      form.illustOffY.value    = tmpl.illustOffY || 0;
       delBtn.disabled = false;
     } else {
       clearForm();
@@ -267,6 +276,9 @@ function createTemplatePanel({ onTemplatesChange }) {
     form.width.value    = 1;
     form.height.value   = 1;
     form.hasCollision.checked = false;
+    form.illustFile.value = "";
+    form.illustOffX.value = 0;
+    form.illustOffY.value = 0;
     delBtn.disabled = true;
   }
 
@@ -301,7 +313,13 @@ function createTemplatePanel({ onTemplatesChange }) {
       width:        Number(form.width.value)      || 1,
       height:       Number(form.height.value)     || 1,
       hasCollision: form.hasCollision.checked,
+      illustFile:   form.illustFile.value.trim(),
+      illustOffX:   Number(form.illustOffX.value) || 0,
+      illustOffY:   Number(form.illustOffY.value) || 0,
     };
+    if (!/^[A-Za-z0-9_-]*$/.test(payload.illustFile)) {
+      setFeedback(feedbackEl, "一枚絵ファイル名は英数字/_/- のみです", "error"); return;
+    }
     if (isUpdate) payload.objectId = objectId;
     setFeedback(feedbackEl, "保存中...", null);
     const { response, data } = await fetchJson("/api/maps/objects/templates", {

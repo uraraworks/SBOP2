@@ -64,10 +64,32 @@ void CSaveLoadInfoMapObject::EnsureTable(void)
 		"  GrpCY     INTEGER,"				// m_sizeGrp.cy
 		"  Hit       INTEGER,"				// m_bHit (当たり判定フラグ)
 		"  Name      TEXT,"					// m_strName (SJIS バイト列)
-		"  HitData   BLOB"					// m_pHit (cx*cy バイト、折衷 BLOB)
+		"  HitData   BLOB,"				// m_pHit (cx*cy バイト、折衷 BLOB)
+		"  IllustFile TEXT DEFAULT '',"		// m_strIllustFile (一枚絵ファイル名)
+		"  IllustOffX INTEGER DEFAULT 0,"	// m_nIllustOffX
+		"  IllustOffY INTEGER DEFAULT 0"	// m_nIllustOffY
 		");";
 
 	sqlite3_exec(s_pDb, pszMainSql, NULL, NULL, NULL);
+
+	// 既存 DB には一枚絵列が無いので、無ければ ALTER TABLE で追加する
+	{
+		bool bFile = false, bOffX = false, bOffY = false;
+		sqlite3_stmt* pStmt = NULL;
+		if (sqlite3_prepare_v2(s_pDb, "PRAGMA table_info(sys_map_object);", -1, &pStmt, NULL) == SQLITE_OK) {
+			while (sqlite3_step(pStmt) == SQLITE_ROW) {
+				const char* pszCol = (const char*)sqlite3_column_text(pStmt, 1);
+				if (pszCol == NULL) continue;
+				if (strcmp(pszCol, "IllustFile") == 0) bFile = true;
+				else if (strcmp(pszCol, "IllustOffX") == 0) bOffX = true;
+				else if (strcmp(pszCol, "IllustOffY") == 0) bOffY = true;
+			}
+			sqlite3_finalize(pStmt);
+		}
+		if (!bFile) sqlite3_exec(s_pDb, "ALTER TABLE sys_map_object ADD COLUMN IllustFile TEXT DEFAULT '';", NULL, NULL, NULL);
+		if (!bOffX) sqlite3_exec(s_pDb, "ALTER TABLE sys_map_object ADD COLUMN IllustOffX INTEGER DEFAULT 0;", NULL, NULL, NULL);
+		if (!bOffY) sqlite3_exec(s_pDb, "ALTER TABLE sys_map_object ADD COLUMN IllustOffY INTEGER DEFAULT 0;", NULL, NULL, NULL);
+	}
 
 	// サブテーブル: アニメーションコマ情報 (m_aInfoAnime の可変長配列)
 	//   ObjectID + Slot を複合主キーとし、配列インデックスを Slot に格納する
@@ -101,8 +123,8 @@ void CSaveLoadInfoMapObject::SaveToNormalTable(void)
 	// メインテーブル INSERT 文
 	const char* pszInsertMain =
 		"INSERT INTO sys_map_object("
-		"  ObjectID, Attr, HideY, GrpCX, GrpCY, Hit, Name, HitData"
-		") VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
+		"  ObjectID, Attr, HideY, GrpCX, GrpCY, Hit, Name, HitData, IllustFile, IllustOffX, IllustOffY"
+		") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	sqlite3_stmt* pStmtMain = NULL;
 	int nRet = sqlite3_prepare_v2(s_pDb, pszInsertMain, -1, &pStmtMain, NULL);
@@ -152,6 +174,11 @@ void CSaveLoadInfoMapObject::SaveToNormalTable(void)
 			sqlite3_bind_null(pStmtMain, 8);
 		}
 
+		// 一枚絵モード
+		sqlite3_bind_text(pStmtMain, 9, pInfo->m_strIllustFile.GetUtf8Pointer(), -1, SQLITE_TRANSIENT);
+		sqlite3_bind_int(pStmtMain, 10, (int)pInfo->m_nIllustOffX);
+		sqlite3_bind_int(pStmtMain, 11, (int)pInfo->m_nIllustOffY);
+
 		sqlite3_step(pStmtMain);
 		sqlite3_reset(pStmtMain);
 
@@ -197,7 +224,8 @@ BOOL CSaveLoadInfoMapObject::LoadFromNormalTable(PCLibInfoBase pDst)
 
 	// メインテーブル SELECT
 	const char* pszSelectMain =
-		"SELECT ObjectID, Attr, HideY, GrpCX, GrpCY, Hit, Name, HitData"
+		"SELECT ObjectID, Attr, HideY, GrpCX, GrpCY, Hit, Name, HitData,"
+		"       IFNULL(IllustFile, ''), IFNULL(IllustOffX, 0), IFNULL(IllustOffY, 0)"
 		" FROM sys_map_object;";
 
 	sqlite3_stmt* pStmtMain = NULL;
@@ -251,6 +279,14 @@ BOOL CSaveLoadInfoMapObject::LoadFromNormalTable(PCLibInfoBase pDst)
 			pInfo->m_pHit = new BYTE[nHitSize];
 			CopyMemory(pInfo->m_pHit, pHitBlob, nHitSize);
 		}
+
+		// 一枚絵モード
+		const char* pszIllust = (const char*)sqlite3_column_text(pStmtMain, 8);
+		if (pszIllust != NULL && pszIllust[0] != '\0') {
+			pInfo->m_strIllustFile = (LPCTSTR)Utf8ToTString(pszIllust);
+		}
+		pInfo->m_nIllustOffX = (int)sqlite3_column_int(pStmtMain, 9);
+		pInfo->m_nIllustOffY = (int)sqlite3_column_int(pStmtMain, 10);
 
 		// ---- サブテーブルからアニメーションコマを復元 ----
 		//   prepared statement を bind + reset で再利用

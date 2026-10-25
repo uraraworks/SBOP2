@@ -179,6 +179,8 @@ void CLayerMap::Draw(PCImg32 pDst)
 	t = PerfNow(); DrawMapPile(pWorld);          dTile += PerfMs(t, PerfNow());
 	t = PerfNow(); DrawItem(pWorld, 0);          dTile += PerfMs(t, PerfNow());
 	t = PerfNow(); PrepareMapObjectDraw();    dTile += PerfMs(t, PerfNow());
+	// 一枚絵オブジェクトの影は地面の直後に全部まとめて敷く(オブジェクト本体・キャラはその上)
+	t = PerfNow(); DrawMapObjectShadow(pWorld);  dTile += PerfMs(t, PerfNow());
 	t = PerfNow(); PrepareCharDrawRows();     dChar += PerfMs(t, PerfNow());
 	for (y = -1; y < DRAW_PARTS_Y + 2; y ++) {
 		t = PerfNow(); DrawMapObject(pWorld, y); dTile += PerfMs(t, PerfNow());
@@ -1338,9 +1340,46 @@ void CLayerMap::PrepareMapObjectDraw(void)
 }
 
 
+void CLayerMap::DrawMapObjectShadow(PCImg32 pDst)
+{
+	int i, nCount, x, y, nMoveX, nMoveY, nPosX, nPosY;
+	POINT ptMove, ptPos;
+	PCInfoMapBase pMap;
+
+	pMap = m_pMgrData->GetMap();
+	if ((pMap == NULL) || (pMap->m_pLibInfoMapObjectData == NULL)) {
+		return;
+	}
+	if ((int)m_aMapObjectDraw.size() != pMap->m_pLibInfoMapObjectData->GetCount()) {
+		PrepareMapObjectDraw();
+	}
+	GetDrawMovePos(ptMove, ptPos);
+	nMoveX = ptMove.x;
+	nMoveY = ptMove.y;
+	nPosX = ptPos.x;
+	nPosY = ptPos.y;
+
+	nCount = (int)m_aMapObjectDraw.size();
+	for (i = 0; i < nCount; i ++) {
+		PCInfoMapObjectData pInfoData = m_aMapObjectDraw[i].pData;
+		PCInfoMapObject     pInfo     = m_aMapObjectDraw[i].pInfo;
+		if ((pInfo == NULL) || pInfo->m_strIllustFile.IsEmpty()) {
+			continue;
+		}
+		if ((pInfoData->m_ptPos.x > nPosX + DRAW_PARTS_X + 2 + 4) || (pInfoData->m_ptPos.x + pInfo->m_sizeGrp.cx + 4 < nPosX)) {
+			continue;
+		}
+		x = pInfoData->m_ptPos.x - nPosX;
+		y = pInfoData->m_ptPos.y - nPosY;
+		m_pMgrDraw->DrawMapObjectShadow(pDst, 32 + x * 32 + nMoveX, 32 + y * 32 + nMoveY, pInfoData->m_dwObjectID);
+	}
+}
+
+
 void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 {
 	DWORD dwObjectID;
+	int nMargin;
 	int i, nCount, x, y, yy, yTmp, nMoveX, nMoveY, nPosX, nPosY;
 	POINT ptMove, ptPos;
 	PCInfoMapBase pMap;
@@ -1394,10 +1433,12 @@ void CLayerMap::DrawMapObject(PCImg32 pDst, int nDrawY/*-99*/)
 			}
 		}
 		x = pInfoData->m_ptPos.x - nPosX;
-		if (pInfoData->m_ptPos.x > nPosX + DRAW_PARTS_X + 2) {
+		// 一枚絵は格子の左右にはみ出すので、判定を少し広げる
+		nMargin = pInfo->m_strIllustFile.IsEmpty() ? 0 : 4;
+		if (pInfoData->m_ptPos.x > nPosX + DRAW_PARTS_X + 2 + nMargin) {
 			continue;
 		}
-		if (pInfoData->m_ptPos.x + pInfo->m_sizeGrp.cx < nPosX) {
+		if (pInfoData->m_ptPos.x + pInfo->m_sizeGrp.cx + nMargin < nPosX) {
 			continue;
 		}
 		x = pInfoData->m_ptPos.x - nPosX;
