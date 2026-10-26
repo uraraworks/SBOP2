@@ -1125,7 +1125,8 @@ void CMgrDraw::DrawMapParts(
 		// 下地(16px)を拡大して敷き、その上にイラスト版(64px)を画素アルファで重ね、最後にpileを重ねる
 		pDibTmp->BltStretchNearest(0, nSizeDst, nSizeDst, nSizeDst, pDibTmp, 0, 0, nSize, nSize);
 		pDibTmp->BltSrcOver(0, nSizeDst, nSizeDst, nSizeDst, pImgIllust, nIllustSrcX, nIllustSrcY);
-		if (wGrpIDPile > 0) {
+		// 下地が空(0)で重ね側に本体の絵を持つパーツ(壁など)は、その絵ごとイラスト版に置き換えたので重ねない
+		if ((wGrpIDPile > 0) && (wGrpIDBase != 0)) {
 			pDibTmp->FillRect(0, 0, nSize, nSize, RGB(255, 0, 255));
 			pImg = m_pMgrGrpData->GetDibMapParts(wGrpIDPile / 1024);
 			if (pImg != NULL) {

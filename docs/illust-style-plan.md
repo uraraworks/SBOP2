@@ -81,7 +81,7 @@
 - マップオブジェクトに `m_strIllustFile` / `m_nIllustOffX` / `m_nIllustOffY`（DB列 IllustFile/IllustOffX/IllustOffY、API illustFile/illustOffX/illustOffY）。画像は `SboGrpData/res/illust/object/<名前>.png` と影 `<名前>_shadow.png`（同じキャンバスサイズ）。`obj/` は .gitignore に当たるので `object/`
 - 基準: 一枚絵の下端中央を格子の下端中央（m_ptPos は格子の左下マス）に合わせ、補正を足す。前後関係は既存の行ループ（m_nHideY=0 なら最下行で並ぶ）
 - 影は地面と重ねパーツの直後、オブジェクト・キャラより前にまとめて描く
-- 素材変換: `python3 tools/illust/make_obj.py tmp/illust_trial SboGrpData/res/illust/object`（マゼンタ抜き・縮小・影生成。出力の offY を位置補正Yに入れる）。横に広い物はずらし影、細い物は右下へ倒した影
+- 素材変換: `python3 tools/illust/make_obj.py <生成物のフォルダ> SboGrpData/res/illust/object [名前 ...]`（マゼンタ抜き・縮小・影生成。出力の offY を位置補正Yに入れる）。横に広い物はずらし影、細い物は右下へ倒した影
 - 既存のタイルで組んだ噴水などを置き換えるときは、そのパーツのイラスト版タイル番号を石畳にして下地だけ残し（当たり判定は既存パーツのまま）、重ねパーツは `ILLUSTTILE_HIDE`(0xFFFF) で960描画から消す。「重なる」系ビットも外す
 - 始まりの町（ローカルDBのみ）: 噴水(45,32) 5x8、街灯8本 1x3、縦ベンチ2 1x4、横ベンチ(46,33) 3x1
 
@@ -108,6 +108,8 @@
 - 始まりの町（ローカルDBのみ）: 木(41,40) 5x5（当たり判定は幹の1マス）、茂み4つ
 - 光と影: 建物の帯状の影と日だまりは、プログラムで作るデカール（`python3 tools/illust/make_light.py SboGrpData/res/illust/object` → decal_wallshadow / decal_sun / decal_sun_s）。始まりの町は ObjectID 50〜52 を8か所
 - イラスト版の地面（イラスト版タイル番号あり）の上では、ドット絵のマップ影（灰色のかたまり）を960描画で描かない
+- 広場上部（2026-10-26）: 門を目標画像に合わせた控えめなもの（gate）に、左右の石段（stairs2 / 左右反転の stairs2_r）と壁ぎわの花壇（planter2）を一枚絵に。壁面は城壁の大判テクスチャ ground_02（0xF001）。花壇パーツ 2003〜2005 は地面にして一枚絵を重ねる（マップ7と16）
+- 下地が空(0)で重ね側に本体の絵を持つパーツ（壁 732/872/873 など）は、イラスト版にしたら重ね側の絵を描かない
 - 残り: 広場以外のタイル
 
 ## ワールドデータの反映（シード DB・本番）
