@@ -1,7 +1,8 @@
 """Codex で生成した地面テクスチャを、縁の枠を落として継ぎ目なし(上下左右に並べられる)にし、
 参考画像の色味に寄せて SboGrpData/res/illust/ground/ に書き出す。
 
-使い方: python3 tools/illust/make_ground.py <入力.png> <出力.png> [色の参考画像.png x0 y0 x1 y1]
+使い方: python3 tools/illust/make_ground.py <入力.png> <出力.png> [色の参考画像.png x0 y0 x1 y1 | --mean R,G,B]
+--mean は明るさのばらつきはそのままで、平均の色だけを指定値に合わせる(色補正表を通した後の色から逆算して使う)
 """
 import sys
 
@@ -36,7 +37,10 @@ def main():
 	src, dst = sys.argv[1], sys.argv[2]
 	a = np.asarray(Image.open(src).convert("RGB")).astype(np.float32)[CROP:-CROP, CROP:-CROP]
 	a = seamless(a)
-	if len(sys.argv) >= 8:
+	if len(sys.argv) >= 5 and sys.argv[3] == "--mean":
+		a = a - a.mean((0, 1)) + np.array([float(v) for v in sys.argv[4].split(",")])
+		a = np.clip(a, 0, 255)
+	elif len(sys.argv) >= 8:
 		x0, y0, x1, y1 = map(int, sys.argv[4:8])
 		ref = np.asarray(Image.open(sys.argv[3]).convert("RGB").crop((x0, y0, x1, y1))).astype(np.float32)
 		a = match_color(a, ref)
