@@ -682,6 +682,10 @@ void CMgrDraw::DrawChar(
 			nTmp = (ptTmp.x / cxChar) & 15;
 			nIllustRow = s_anRow[nTmp / 4];
 			nIllustCol = s_anCol[nTmp % 4];
+			// NPC 専用の絵(npcchar_)は正面だけ使う(向きが変わっても正面のまま)
+			if (strncmp(szKey, "npcchar_", 8) == 0) {
+				nIllustRow = 0;
+			}
 		}
 	}
 
